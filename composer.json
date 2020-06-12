@@ -1,0 +1,13 @@
+{
+    "name": "curriki/currikitsugi",
+    "description": "This tool provide Curriki Programs/Playlist/Activity",
+    "autoload": {
+        "psr-4": {
+            "CurrikiTsugi\\":"src/"           
+        }
+    },
+    "require": {
+        "pimple/pimple": "~3.0",
+        "symfony/http-foundation": "^5.1"
+    }
+}
