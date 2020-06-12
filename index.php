@@ -1,5 +1,6 @@
 <?php
 require_once "../config.php";
+require_once "../../admin/admin_util.php";
 require_once "vendor/autoload.php";
 
 use Pimple\Container;
@@ -17,7 +18,7 @@ $container[Request::class] = function($c){
 
 $container[Response::class] = function($c){
     $response = new Response(
-        'Content',
+        null,
         Response::HTTP_OK,
         ['content-type' => 'text/html']
     );
