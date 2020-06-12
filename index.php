@@ -2,8 +2,6 @@
 require_once "../config.php";
 require_once "vendor/autoload.php";
 
-use Tsugi\Core\LTIX;
-use Tsugi\Core\Launch;
 use Pimple\Container;
 use CurrikiTsugi\App;
 use CurrikiTsugi\Interfaces\ControllerInterface;
@@ -26,11 +24,6 @@ $container[Response::class] = function($c){
     return $response;  
 };
 
-$container[Launch::class] = function($c){
-    $lti_launch = LTIX::requireData();    
-    return $lti_launch;
-};
-
 $container[ControllerInterface::class] = function($c){
     $controller = null;
     if(isset($_REQUEST['ctrl'])){
@@ -47,7 +40,7 @@ $container[ControllerInterface::class] = function($c){
 };
 
 $container[App::class] = function($c){    
-    return new App($c[Launch::class], $c[ControllerInterface::class]);
+    return new App($c[ControllerInterface::class]);
 };
 
 $app = $container[App::class];
