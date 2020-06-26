@@ -2,6 +2,7 @@
 require_once "../config.php";
 require_once "../../admin/admin_util.php";
 require_once "vendor/autoload.php";
+require_once "config.php";
 
 use Pimple\Container;
 use CurrikiTsugi\App;

@@ -26,7 +26,7 @@ class RegisterPlatform implements ControllerInterface
             "lti13_oidc_auth" => "http://moodlemac.local:8282/mod/lti/auth.php",
             "lti13_pubkey" => "",
             "lti13_privkey" => "",
-            "key_key" => "q00IMucTe2uSuzcXXXAA",
+            "key_key" => "chsbdduhR87LNdB",
             "secret" => "",
             "deploy_key" => "3",
             "issuer_id" => "",
@@ -40,7 +40,20 @@ class RegisterPlatform implements ControllerInterface
             $issureRespository = new IssuerRepository();
             $tenantRepository = new TenantRepository();
             $tenant = null;
-            $issure = $issureRespository->create($data);            
+            
+            $issure = $issureRespository->create($data);
+            if(is_null($issure)){
+                $issure = $issureRespository->getByKey($data['issuer_key']);
+            }
+
+            if(!is_null($issure)){
+                $data['issuer_id'] = $issure['issuer_id'];
+                $tenant = $tenantRepository->create($data,$issure);
+            }
+            
+            var_dump($issure);
+            var_dump($tenant);
+            /*
             if(!is_null($issure)){
                 $data['issuer_id'] = $issure['issuer_id'];
                 $tenant = $tenantRepository->create($data,$issure);                
@@ -49,7 +62,7 @@ class RegisterPlatform implements ControllerInterface
                 $data['issuer_id'] = $issure['issuer_id'];
                 $tenant = $tenantRepository->create($data,$issure);
             }
-
+            */
             //var_dump($tenant);
             echo "Platform Registered!";
            
