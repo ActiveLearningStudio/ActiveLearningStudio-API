@@ -1,6 +1,8 @@
 <?php
 namespace CurrikiTsugi;
 use Tsugi\Core\LTIX;
+use \Tsugi\Core\Result;
+use \Tsugi\Grades\GradeUtil;
 use CurrikiTsugi\Interfaces\ControllerInterface;
 
 class App
@@ -37,6 +39,19 @@ class App
                 header("Location: $redirect_to_studio_url");
             }else{
                 echo "<h1>Curriki LTI Tool</h1>";
+                echo "<pre>"; 
+                //$LTI->var_dump();
+                $lti_data = $_SESSION['lti'];                
+                $grade_params['issuer_client'] = $lti_data['issuer_client'];
+                $grade_params['lti13_privkey'] = $lti_data['lti13_privkey'];
+                $grade_params['lti13_lineitem'] = $lti_data['lti13_lineitem'];
+                $grade_params['lti13_token_url'] = $lti_data['lti13_token_url'];
+                $grade_params['lti13_token_audience'] = $lti_data['lti13_token_audience'];
+                $grade_params['lti13_pubkey'] = $lti_data['lti13_pubkey'];                
+                
+                var_dump($LTI->result->gradeSend(0.95, $grade_params));
+                die;
+                
             }
 
         }
