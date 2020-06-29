@@ -16,9 +16,10 @@ class App
     public function bootstrap()
     {        
         if(!is_null($this->controller)){
+            global $path_info_parts;            
             //execute controller instead LTI Launch
-            if (isset($_GET['act']) && method_exists($this->controller, $_GET['act'])) {
-                call_user_func(array($this->controller, $_GET['act']));
+            if (isset($path_info_parts[1]) && method_exists($this->controller, $path_info_parts[1])) {
+                call_user_func(array($this->controller, $path_info_parts[1]));
             }else {
                 call_user_func(array($this->controller, 'index'));
             }            
@@ -40,7 +41,7 @@ class App
             }else{
                 echo "<h1>Curriki LTI Tool</h1>";
                 echo "<pre>"; 
-                //$LTI->var_dump();
+                $LTI->var_dump();
                 $lti_data = $_SESSION['lti'];                
                 $grade_params['issuer_client'] = $lti_data['issuer_client'];
                 $grade_params['lti13_privkey'] = $lti_data['lti13_privkey'];
@@ -48,9 +49,10 @@ class App
                 $grade_params['lti13_token_url'] = $lti_data['lti13_token_url'];
                 $grade_params['lti13_token_audience'] = $lti_data['lti13_token_audience'];
                 $grade_params['lti13_pubkey'] = $lti_data['lti13_pubkey'];                
+                $grade_params['subject_key'] = $lti_data['subject_key'];                
+                $grade_params['note'] = "Hey You Graded";                
                 
-                var_dump($LTI->result->gradeSend(0.95, $grade_params));
-                die;
+                //var_dump($LTI->result->gradeSend(0.25, $grade_params));
                 
             }
 

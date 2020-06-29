@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use CurrikiTsugi\Repositories\IssuerRepository;
 use CurrikiTsugi\Repositories\TenantRepository;
+use Tsugi\Core\LTIX;
 
 class RegisterPlatform implements ControllerInterface
 {
@@ -15,7 +16,7 @@ class RegisterPlatform implements ControllerInterface
 
     public function index()
     {
-        
+        die("test");   
         $data = [];
         $data = [
             "issuer_key" => "http://moodlemac.local:8282",
