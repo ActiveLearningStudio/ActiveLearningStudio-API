@@ -16,28 +16,35 @@ class RegisterPlatform implements ControllerInterface
 
     public function index()
     {
-        die("test");   
-        $data = [];
-        $data = [
-            "issuer_key" => "http://moodlemac.local:8282",
-            "issuer_client" => "q00IMucTe2uSuzc",
-            "lti13_keyset_url" => "http://moodlemac.local:8282/mod/lti/certs.php",
-            "lti13_token_url" => "http://moodlemac.local:8282/mod/lti/token.php",
-            "lti13_token_audience" => "",
-            "lti13_oidc_auth" => "http://moodlemac.local:8282/mod/lti/auth.php",
-            "lti13_pubkey" => "",
-            "lti13_privkey" => "",
-            "key_key" => "chsbdduhR87LNdB",
-            "secret" => "",
-            "deploy_key" => "3",
-            "issuer_id" => "",
-            "caliper_url" => "",
-            "caliper_key" => "",
-            "user_id" => "",
-            "doSave" => "Save"
-        ];        
         
-        if( isset($data['issuer_key']) && strlen($data['issuer_key']) > 0 ){
+        $is_valid_input_request = $this->request->request->get('issuer_key')
+            && $this->request->request->get('issuer_client')
+            && $this->request->request->get('lti13_keyset_url')
+            && $this->request->request->get('lti13_token_url')
+            && $this->request->request->get('lti13_oidc_auth')
+            && $this->request->request->get('deploy_key');
+        
+        if ($is_valid_input_request) {
+            
+            $data = [
+                "issuer_key" => $this->request->request->get('issuer_key'),
+                "issuer_client" => $this->request->request->get('issuer_client'),
+                "lti13_keyset_url" => $this->request->request->get('lti13_keyset_url'),
+                "lti13_token_url" => $this->request->request->get('lti13_token_url'),
+                "lti13_token_audience" => "",
+                "lti13_oidc_auth" => $this->request->request->get('lti13_oidc_auth'),
+                "lti13_pubkey" => "",
+                "lti13_privkey" => "",
+                "key_key" => $this->request->request->get('issuer_client'),
+                "secret" => "",
+                "deploy_key" => $this->request->request->get('deploy_key'),
+                "issuer_id" => "",
+                "caliper_url" => "",
+                "caliper_key" => "",
+                "user_id" => "",
+                "doSave" => "Save"
+            ];
+
             $issureRespository = new IssuerRepository();
             $tenantRepository = new TenantRepository();
             $tenant = null;
@@ -52,33 +59,17 @@ class RegisterPlatform implements ControllerInterface
                 $tenant = $tenantRepository->create($data,$issure);
             }
             
-            var_dump($issure);
-            var_dump($tenant);
-            /*
-            if(!is_null($issure)){
-                $data['issuer_id'] = $issure['issuer_id'];
-                $tenant = $tenantRepository->create($data,$issure);                
-            }else {
-                $issure = $issureRespository->getByKey($data['issuer_key']);
-                $data['issuer_id'] = $issure['issuer_id'];
-                $tenant = $tenantRepository->create($data,$issure);
-            }
-            */
-            //var_dump($tenant);
-            echo "Platform Registered!";
-           
-        }else {
-            //$this->resp
-            $this->response->setContent('issur_key not defined');
+            $this->response->setContent( json_encode(['issure' => $issure, 'tenant' => $tenant]) );            
+            $this->response->headers->set('Content-Type', 'application/json');
+            $this->response->setStatusCode($this->response::HTTP_OK);
+            $this->response->send();
+        } else {
+            $this->response->setContent('Invalid request parameters');
             $this->response->setStatusCode($this->response::HTTP_NOT_FOUND);
             $this->response->send();
         }
         
     }    
 
-    public function store()
-    {
-        echo 'me store....';
-    }
 }
 
