@@ -15,8 +15,8 @@ class RegisterPlatform implements ControllerInterface
     }
 
     public function index()
-    {
-        
+    {        
+
         $is_valid_input_request = $this->request->request->get('issuer_key')
             && $this->request->request->get('issuer_client')
             && $this->request->request->get('lti13_keyset_url')
