@@ -7,6 +7,16 @@ use Tsugi\UI\CrudForm;
 
 class IssuerRepository
 {
+
+    public function getAll()
+    {
+        global $CFG;
+        $PDOX = LTIX::getConnection();        
+        $sql = "SELECT * FROM {$CFG->dbprefix}lti_issuer";
+        $rows = $PDOX->allRowsDie($sql);
+        return $rows;
+    }
+
     public function getByKey($key)
     {
         global $CFG;
@@ -42,4 +52,5 @@ class IssuerRepository
         
         return is_array($issure_new) ? $issure_new : null;
     }
+
 }
