@@ -24,4 +24,4 @@ Installation
 
 5 - Optional - For hosted CurrikiStudio set CURRIKI_STUDIO_HOST in config.php
 
-    define('CURRIKI_STUDIO_HOST', 'https://your-host.com');
+    define('CURRIKI_STUDIO_HOST', 'https://your-currikistudio-host.com');
