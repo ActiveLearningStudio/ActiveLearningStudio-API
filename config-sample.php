@@ -1,2 +1,2 @@
 <?php
-define('CURRIKI_STUDIO_HOST', 'http://localhost:8082');
+define('CURRIKI_STUDIO_HOST', 'https://create.curriki.org');
