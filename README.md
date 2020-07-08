@@ -1,5 +1,5 @@
 
-CurrikiStudio Tsugi Tool
+CurrikiGo Tsugi Tool
 ==========================
 
 This tool (a tsugi module) serve CurrikiStudio Programs / Playlists / Activites.
