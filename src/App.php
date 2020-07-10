@@ -36,7 +36,7 @@ class App
             }else{
                 echo "<h1>Curriki LTI Tool</h1>";
                 echo "<pre>"; 
-                $LTI->var_dump();
+                //$LTI->var_dump();
                 $lti_data = $_SESSION['lti'];                
                 $grade_params['issuer_client'] = $lti_data['issuer_client'];
                 $grade_params['lti13_privkey'] = $lti_data['lti13_privkey'];
@@ -47,7 +47,7 @@ class App
                 $grade_params['subject_key'] = $lti_data['subject_key'];                
                 $grade_params['note'] = "Hey You Graded";                
                 
-                //var_dump($LTI->result->gradeSend(0.25, $grade_params));
+                var_dump($LTI->result->gradeSend(0.61, $grade_params));
                 
             }
 
