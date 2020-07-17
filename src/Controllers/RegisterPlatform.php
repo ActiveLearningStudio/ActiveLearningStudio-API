@@ -15,8 +15,8 @@ class RegisterPlatform implements ControllerInterface
     }
 
     public function index()
-    {        
-
+    {
+        
         $is_valid_input_request = $this->request->request->get('issuer_key')
             && $this->request->request->get('issuer_client')
             && $this->request->request->get('lti13_keyset_url')
@@ -29,6 +29,7 @@ class RegisterPlatform implements ControllerInterface
             $data = [
                 "issuer_key" => $this->request->request->get('issuer_key'),
                 "issuer_client" => $this->request->request->get('issuer_client'),
+                "issuer_guid" => createGUID(),
                 "lti13_keyset_url" => $this->request->request->get('lti13_keyset_url'),
                 "lti13_token_url" => $this->request->request->get('lti13_token_url'),
                 "lti13_token_audience" => "",
@@ -42,7 +43,7 @@ class RegisterPlatform implements ControllerInterface
                 "caliper_url" => "",
                 "caliper_key" => "",
                 "user_id" => "",
-                "doSave" => "Save"
+                "doSave" => "Save",
             ];
 
             $issureRespository = new IssuerRepository();
@@ -51,7 +52,7 @@ class RegisterPlatform implements ControllerInterface
             
             $issure = $issureRespository->create($data);
             if(is_null($issure)){
-                $issure = $issureRespository->getByKey($data['issuer_key']);
+                $issure = $issureRespository->getByKeyAndClient($data['issuer_key'], $data['issuer_client']);
             }
 
             if(!is_null($issure)){

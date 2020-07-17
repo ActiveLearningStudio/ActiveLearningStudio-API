@@ -21,14 +21,24 @@ class IssuerRepository
     {
         global $CFG;
         $PDOX = LTIX::getConnection();        
-        $row = $PDOX->rowDie("SELECT issuer_id, issuer_key, issuer_client, issuer_sha256, lti13_keyset_url, lti13_token_url, lti13_token_audience, lti13_oidc_auth, lti13_platform_pubkey, lti13_pubkey, lti13_privkey, created_at, updated_at FROM {$CFG->dbprefix}lti_issuer WHERE issuer_key = :KEY", array('KEY' => $key));
+        $row = $PDOX->rowDie("SELECT issuer_id, issuer_key, issuer_client, issuer_sha256, lti13_keyset_url, lti13_token_url, lti13_token_audience, lti13_oidc_auth, lti13_platform_pubkey, lti13_pubkey, lti13_privkey, created_at, updated_at, issuer_guid FROM {$CFG->dbprefix}lti_issuer WHERE issuer_key = :KEY", array('KEY' => $key));
+        return $row;
+    }
+
+    public function getByKeyAndClient($key, $client_id)
+    {
+        global $CFG;
+        $PDOX = LTIX::getConnection();        
+        $row = $PDOX->rowDie("SELECT issuer_id, issuer_key, issuer_client, issuer_sha256, lti13_keyset_url, lti13_token_url, lti13_token_audience, lti13_oidc_auth, lti13_platform_pubkey, lti13_pubkey, lti13_privkey, created_at, updated_at, issuer_guid FROM {$CFG->dbprefix}lti_issuer 
+                                WHERE issuer_key = :KEY AND issuer_client = :issuer_client", 
+                                array('KEY' => $key, 'issuer_client' => $client_id));
         return $row;
     }
 
     public function create($data)
     {
         $issure_new = null;
-        $issure = $this->getByKey($data['issuer_key']);
+        $issure = $this->getByKeyAndClient($data['issuer_key'], $data['issuer_client']);
         if(!$issure){
             $_POST = $data;
             if ( U::get($_POST,'issuer_key') ) {
@@ -41,12 +51,12 @@ class IssuerRepository
 
                 global $CFG;
                 $tablename = "{$CFG->dbprefix}lti_issuer";
-                $fields = array("issuer_key", "issuer_client", "issuer_sha256",
+                $fields = array("issuer_key", "issuer_client", "issuer_guid", "issuer_sha256",
                     "lti13_keyset_url", "lti13_token_url", "lti13_token_audience", "lti13_oidc_auth",
                     "lti13_pubkey", "lti13_privkey",
                     "created_at", "updated_at");                
                 $retval = CrudForm::handleInsert($tablename, $fields);    
-                $issure_new = $this->getByKey($data['issuer_key']);            
+                $issure_new = $this->getByKeyAndClient($data['issuer_key'], $data['issuer_client']);            
             }
         }    
         
