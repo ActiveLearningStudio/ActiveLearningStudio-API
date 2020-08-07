@@ -17,7 +17,7 @@ class App
     {        
         if(!is_null($this->controller)){
             global $path_info_parts;            
-            //execute controller instead LTI Launch
+            //execute controller instead LTI Launch - also set controller action
             if (isset($path_info_parts[1]) && method_exists($this->controller, $path_info_parts[1])) {
                 call_user_func(array($this->controller, $path_info_parts[1]));
             }else {
@@ -28,7 +28,13 @@ class App
             //exectute LTI Launch                        
             $LTI = LTIX::requireData();
             $playlist_id = ParamValidate::playlistInCustom($_SESSION) ?: ParamValidate::playlistInQueryString($_SESSION);
-            if ($playlist_id) {
+            $project_id = ParamValidate::projectInCustom($_SESSION) ?: ParamValidate::projectInQueryString($_SESSION);
+            if($project_id) {
+                $lti_token_params = http_build_query($_SESSION['lti_post']);
+                $project_studio_link = CURRIKI_STUDIO_HOST."/project/preview2/$project_id";
+                $redirect_to_studio_url = $project_studio_link . "?" . $lti_token_params;
+                header("Location: $redirect_to_studio_url");
+            }elseif ($playlist_id) {
                 $lti_token_params = http_build_query($_SESSION['lti_post']);
                 $playlist_studio_link = CURRIKI_STUDIO_HOST."/playlist/lti/preview/$playlist_id";
                 $redirect_to_studio_url = $playlist_studio_link . "?" . $lti_token_params;

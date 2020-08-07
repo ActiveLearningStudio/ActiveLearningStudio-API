@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule ^content$ index.php/content [L,QSA]
+    RewriteRule ^content/processtolms$ index.php/content/processtolms [L,QSA]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    FallbackResource index.php
+</IfModule>
