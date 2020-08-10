@@ -124,9 +124,16 @@ class Content implements ControllerInterface
         $retval->addLtiLinkItem($path, $title, $text, $icon, $fa_icon, $custom, $points, $activity_id, $additionalParams);
 
         $iframeattr=false; $endform=false;
-        $content = $retval->prepareResponse($endform, $this->debug, $iframeattr);
+        $content = "<center>Redirecting.....</center>";
+        $content .= "<style>p,pre {display:none !important;}</style>";
+        $content .= $retval->prepareResponse($endform, $this->debug, $iframeattr);
+        $content .= " <script type=\"text/javascript\"> \n" .
+                    "  //<![CDATA[ \n" .
+                    "    document.getElementsByTagName(\""."form"."\")[0].style.display = \"none\";\n" .
+                    "    document.getElementsByTagName(\""."form"."\")[0].submit(); \n" .
+                    "  //]]> \n" .
+                    " </script> \n";
         echo($content);
-        
     }
 
 }
