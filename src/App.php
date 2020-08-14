@@ -29,6 +29,7 @@ class App
             $LTI = LTIX::requireData();
             $playlist_id = ParamValidate::playlistInCustom($_SESSION) ?: ParamValidate::playlistInQueryString($_SESSION);
             $project_id = ParamValidate::projectInCustom($_SESSION) ?: ParamValidate::projectInQueryString($_SESSION);
+            $activity_id = ParamValidate::activityInCustom($_SESSION) ?: ParamValidate::activityInQueryString($_SESSION);
             if($project_id) {
                 $lti_token_params = http_build_query($_SESSION['lti_post']);
                 $project_studio_link = CURRIKI_STUDIO_HOST."/project/preview2/$project_id";
