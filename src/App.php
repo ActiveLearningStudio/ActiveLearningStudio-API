@@ -35,18 +35,19 @@ class App
                 $project_studio_link = CURRIKI_STUDIO_HOST."/project/preview2/$project_id";
                 $redirect_to_studio_url = $project_studio_link . "?" . $lti_token_params;
                 header("Location: $redirect_to_studio_url");
-            }elseif ($playlist_id) {
+            }elseif ($playlist_id && is_null($activity_id)) {
                 $lti_token_params = http_build_query($_SESSION['lti_post']);
                 $playlist_studio_link = CURRIKI_STUDIO_HOST."/playlist/lti/preview/$playlist_id";
                 $redirect_to_studio_url = $playlist_studio_link . "?" . $lti_token_params;
                 header("Location: $redirect_to_studio_url");
-            }elseif ($activity_id) {
+            }elseif ($activity_id && $playlist_id) {
                 $lti_token_params = http_build_query($_SESSION['lti_post']);
-                $activity_studio_link = CURRIKI_STUDIO_HOST."/activity/lti/preview/$activity_id";
+                $activity_studio_link = CURRIKI_STUDIO_HOST."/playlist/lti/preview/$playlist_id/resource/$activity_id";
                 $redirect_to_studio_url = $activity_studio_link . "?" . $lti_token_params;
                 header("Location: $redirect_to_studio_url");
             }else{
                 echo "<h1>Curriki LTI Tool</h1>";
+                echo "</p>No CurrikiStudio paramters sent.</p>";
                 echo "<pre>"; 
                 $LTI->var_dump();
                 $lti_data = $_SESSION['lti'];                
