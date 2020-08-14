@@ -79,7 +79,7 @@ class Content implements ControllerInterface
     public function processtolms()
     {        
         global $CFG;
-        $title = U::get($_GET, "title");
+        $title = urldecode(U::get($_GET, "title"));
         $text =  U::get($_GET, "text");
         $fa_icon = isset($this->tool['FontAwesome']) ? $this->tool['FontAwesome'] : false;
         $presentationDocumentTarget = U::get($_GET, "presentationDocumentTarget");
