@@ -13,6 +13,7 @@ use \Tsugi\Core\DeepLinkResponse;
 use \Tsugi\Util\LTI;
 use \Tsugi\Util\LTI13;
 use \Tsugi\UI\Lessons;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Content implements ControllerInterface
 {
@@ -69,6 +70,18 @@ class Content implements ControllerInterface
         $port = parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_PORT) ? ':'.parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_PORT):'';
         $lms_url = parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_SCHEME)
                     .'://'.parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_HOST).$port;
+        
+        $studio_url = CURRIKI_STUDIO_HOST.'/lti/content/'.urlencode($lms_url).'/'.$lti_client_id.'/'.urlencode($redirect_url);
+        $response = new RedirectResponse($studio_url);
+        $response->send();
+        
+        //$redirect_url
+        //$lti_client_id
+        //$lms_url
+        //
+        //die($lms_url)
+        //studio.currki.org/playlist/lti/preview/activity-id/
+        //studio.currki.org/lti/content/$lms_url/$lti_client_id/$redirect_url
         
         echo "<h2>CurrikiStudio Projects<h2>";
         echo "<ul>";
