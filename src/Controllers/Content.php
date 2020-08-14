@@ -74,28 +74,6 @@ class Content implements ControllerInterface
         $studio_url = CURRIKI_STUDIO_HOST.'/lti/content/'.urlencode($lms_url).'/'.$lti_client_id.'/'.urlencode($redirect_url);
         $response = new RedirectResponse($studio_url);
         $response->send();
-        
-        //$redirect_url
-        //$lti_client_id
-        //$lms_url
-        //
-        //die($lms_url)
-        //studio.currki.org/playlist/lti/preview/activity-id/
-        //studio.currki.org/lti/content/$lms_url/$lti_client_id/$redirect_url
-        
-        echo "<h2>CurrikiStudio Projects<h2>";
-        echo "<ul>";
-            echo '<li><a href="'.$redirect_url.'&title=The Basics Of Investing&projectid=5ed7034deed58f676319990b'.'">The Basics Of Investing</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=Exploring Our National Parks&projectid=5ed87c682ca48c1b4666ceb4'.'">Exploring Our National Parks</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=Globalization Robots And You&projectid=5ed88320e3e1042dc64d7a5e'.'">Globalization Robots And You</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=Electronics Tech. AAS Prep (Year 1)&projectid=5ed8fa36d6a2ad0bd543455f'.'">Electronics Tech. AAS Prep (Year 1)</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=How to Use CurrikiStudio&projectid=5eeae4ab75ce27706d2d18f4'.'">How to Use CurrikiStudio</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=UBS Keys To Your Future Demo&projectid=5eee38a0b51a5323cb2c2592'.'">UBS Keys To Your Future Demo</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=Financial Literacy for Kids&projectid=5efb8f8e7e7d7f10ca210dc3'.'">Financial Literacy for Kids</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=Chemistry - Part I&projectid=5f0df6586e5331109376618f'.'">Chemistry - Part I</a></li>';
-            echo '<li><a href="'.$redirect_url.'&title=Pre Algebra&projectid=5f11d0d6863db22c051b3ddc'.'">Pre Algebra</a></li>';
-        echo "</ul>";
-        echo "<p>" . $lms_url . " | " . $lti_client_id . "</p>";
     }
 
     public function processtolms()
@@ -136,9 +114,10 @@ class Content implements ControllerInterface
         }
         
         $custom = false;
-        $projectid = U::get($_GET, "projectid");
-        $custom = $projectid ? ['project' => $projectid] : null;
-        $path = $this->tool['url'] . '?project='.$projectid;
+        $id = U::get($_GET, "id");
+        $entity = U::get($_GET, "entity");
+        $custom = $id ? [$entity => $id] : null;
+        $path = $this->tool['url'] . '?'.$entity.'='.$id;
         
         $retval->addLtiLinkItem($path, $title, $text, $icon, $fa_icon, $custom, $points, $activity_id, $additionalParams);
 
