@@ -39,8 +39,8 @@ class VerifyEmail extends Notification
     {
         $verificationUrl = $this->verificationUrl($notifiable);
 
-        $urlPieces = explode('api', $verificationUrl);
-        $verificationUrl = config('app.front_end_url') . $urlPieces[1];
+//        $urlPieces = explode('api', $verificationUrl);
+//        $verificationUrl = config('app.front_end_url') . $urlPieces[1];
 
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
