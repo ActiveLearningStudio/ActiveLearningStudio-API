@@ -39,7 +39,7 @@ class VerifyEmail extends Notification
     {
         $verification_url = $this->verificationUrl($notifiable);
 
-        $api_url = config('app.front_end_url') . '/api';
+        $api_url = config('app.url') . '/api';
         $verification_url = str_replace($api_url, config('app.front_end_url'), $verification_url);
 
         if (static::$toMailCallback) {
