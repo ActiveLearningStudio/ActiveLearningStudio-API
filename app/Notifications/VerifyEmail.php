@@ -37,19 +37,19 @@ class VerifyEmail extends Notification
      */
     public function toMail($notifiable)
     {
-        $verificationUrl = $this->verificationUrl($notifiable);
+        $verification_url = $this->verificationUrl($notifiable);
 
-//        $urlPieces = explode('api', $verificationUrl);
-//        $verificationUrl = config('app.front_end_url') . $urlPieces[1];
+        $api_url = config('app.front_end_url') . '/api';
+        $verification_url = str_replace($api_url, config('app.front_end_url'), $verification_url);
 
         if (static::$toMailCallback) {
-            return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
+            return call_user_func(static::$toMailCallback, $notifiable, $verification_url);
         }
 
         return (new MailMessage)
             ->subject(Lang::get('Verify Email Address'))
             ->line(Lang::get('Please click the button below to verify your email address.'))
-            ->action(Lang::get('Verify Email Address'), $verificationUrl)
+            ->action(Lang::get('Verify Email Address'), $verification_url)
             ->line(Lang::get('If you did not create an account, no further action is required.'));
     }
 
