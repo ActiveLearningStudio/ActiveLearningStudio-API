@@ -29,15 +29,14 @@
     25 => 'Laravel\\Passport\\PassportServiceProvider',
     26 => 'Laravel\\Tinker\\TinkerServiceProvider',
     27 => 'Laravel\\Ui\\UiServiceProvider',
-    28 => 'Collective\\Html\\HtmlServiceProvider',
-    29 => 'Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider',
-    30 => 'Carbon\\Laravel\\ServiceProvider',
-    31 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    32 => 'App\\Providers\\AppServiceProvider',
-    33 => 'App\\Providers\\AuthServiceProvider',
-    34 => 'App\\Providers\\EventServiceProvider',
-    35 => 'App\\Providers\\RouteServiceProvider',
-    36 => 'App\\Providers\\RepositoryServiceProvider',
+    28 => 'Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider',
+    29 => 'Carbon\\Laravel\\ServiceProvider',
+    30 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    31 => 'App\\Providers\\AppServiceProvider',
+    32 => 'App\\Providers\\AuthServiceProvider',
+    33 => 'App\\Providers\\EventServiceProvider',
+    34 => 'App\\Providers\\RouteServiceProvider',
+    35 => 'App\\Providers\\RepositoryServiceProvider',
   ),
   'eager' => 
   array (
@@ -173,10 +172,6 @@
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
-    'html' => 'Collective\\Html\\HtmlServiceProvider',
-    'form' => 'Collective\\Html\\HtmlServiceProvider',
-    'Collective\\Html\\HtmlBuilder' => 'Collective\\Html\\HtmlServiceProvider',
-    'Collective\\Html\\FormBuilder' => 'Collective\\Html\\HtmlServiceProvider',
   ),
   'when' => 
   array (
@@ -217,9 +212,6 @@
     array (
     ),
     'Laravel\\Tinker\\TinkerServiceProvider' => 
-    array (
-    ),
-    'Collective\\Html\\HtmlServiceProvider' => 
     array (
     ),
   ),
