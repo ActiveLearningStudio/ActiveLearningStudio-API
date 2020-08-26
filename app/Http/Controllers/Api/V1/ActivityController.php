@@ -200,7 +200,7 @@ class ActivityController extends Controller
     {
         $authenticated_user = auth()->user();
 
-        $allowed = $authenticated_user->role === 'admin';
+        $allowed = $authenticated_user->isAdmin();
         if (!$allowed) {
             $project = $playlist->project;
             $project_users = $project->users;

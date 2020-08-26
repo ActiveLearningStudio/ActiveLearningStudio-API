@@ -61,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
     }
 
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
     /**
      * Cascade on delete the user
      */

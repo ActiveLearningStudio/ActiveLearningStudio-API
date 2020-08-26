@@ -22,6 +22,9 @@ class PlaylistController extends Controller
     public function __construct(PlaylistRepositoryInterface $playlistRepository)
     {
         $this->playlistRepository = $playlistRepository;
+
+        // $this->middleware('can:view,project');
+        $this->authorizeResource(Playlist::class, 'playlist');
     }
 
     /**
@@ -32,13 +35,7 @@ class PlaylistController extends Controller
      */
     public function index(Project $project)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to access other user\'s playlists.'],
-            ], 403);
-        }
+        $this->authorize('view', $project);
 
         return response([
             'playlists' => PlaylistResource::collection($project->playlists),
@@ -54,18 +51,12 @@ class PlaylistController extends Controller
      */
     public function store(Request $request, Project $project)
     {
+        $this->authorize('view', $project);
+
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'order' => 'integer',
         ]);
-
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to create playlist on other user\'s project.'],
-            ], 403);
-        }
 
         $playlist = $project->playlists()->create($data);
 
@@ -89,14 +80,6 @@ class PlaylistController extends Controller
      */
     public function show(Project $project, Playlist $playlist)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to access to other user\'s playlist.'],
-            ], 403);
-        }
-
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist Id.'],
@@ -118,14 +101,6 @@ class PlaylistController extends Controller
      */
     public function update(Request $request, Project $project, Playlist $playlist)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to update other user\'s playlist.'],
-            ], 403);
-        }
-
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist Id.'],
@@ -157,14 +132,6 @@ class PlaylistController extends Controller
      */
     public function destroy(Project $project, Playlist $playlist)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to delete other user\'s playlist.'],
-            ], 403);
-        }
-
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist Id.'],
@@ -182,22 +149,5 @@ class PlaylistController extends Controller
         return response([
             'errors' => ['Failed to delete playlist.'],
         ], 500);
-    }
-
-    private function checkPermission(Project $project)
-    {
-        $authenticated_user = auth()->user();
-
-        $allowed = $authenticated_user->role === 'admin';
-        if (!$allowed) {
-            $project_users = $project->users;
-            foreach ($project_users as $user) {
-                if ($user->id === $authenticated_user->id) {
-                    $allowed = true;
-                }
-            }
-        }
-
-        return $allowed;
     }
 }
