@@ -24,6 +24,7 @@ class CreateH5pEventLogsTable extends Migration
             $table->unsignedBigInteger('library_id');
             $table->foreign('library_id')->references('id')->on('h5p_libraries');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

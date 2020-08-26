@@ -37,6 +37,7 @@ class CreateH5pContentsTable extends Migration
             $table->longText('changes')->nullable();
             $table->string('default_language', 32)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

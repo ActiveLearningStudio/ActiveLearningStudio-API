@@ -36,6 +36,7 @@ class CreateH5pLibrariesHubCacheTable extends Migration
             $table->string('owner', 511)->nullable();
             $table->timestamps();
             $table->index(['machine_name', 'major_version', 'minor_version', 'patch_version'], 'name_version');
+            $table->softDeletes();
         });
     }
 

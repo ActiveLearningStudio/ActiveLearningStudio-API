@@ -22,6 +22,7 @@ class CreateH5pContentsLibrariesTable extends Migration
             $table->unsignedInteger('weight')->default(0);
             $table->boolean('drop_css');
             $table->primary(['content_id', 'library_id', 'dependency_type'], 'fk_primary');
+            $table->softDeletes();
         });
     }
 

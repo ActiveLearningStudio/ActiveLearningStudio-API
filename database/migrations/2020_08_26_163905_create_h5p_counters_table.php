@@ -19,6 +19,7 @@ class CreateH5pCountersTable extends Migration
             $table->foreign('library_id')->references('id')->on('h5p_libraries');
             $table->unsignedInteger('num');
             $table->primary(['type', 'library_id'], 'fk_primary');
+            $table->softDeletes();
         });
     }
 

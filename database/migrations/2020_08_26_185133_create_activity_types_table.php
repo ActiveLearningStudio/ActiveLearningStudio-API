@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateH5pLibrariesCachedAssetsTable extends Migration
+class CreateActivityTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateH5pLibrariesCachedAssetsTable extends Migration
      */
     public function up()
     {
-        Schema::create('h5p_libraries_cached_assets', function (Blueprint $table) {
-            $table->unsignedInteger('library_id');
-            $table->string('hash', 64);
-            $table->primary(['library_id', 'hash'], 'fk_primary');
+        Schema::create('activity_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->integer('order')->nullable()->default(null);
+            $table->string('image')->nullable()->default(null);
+            $table->timestamps();
             $table->softDeletes();
         });
     }
@@ -28,6 +30,6 @@ class CreateH5pLibrariesCachedAssetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('h5p_libraries_cached_assets');
+        Schema::dropIfExists('activity_types');
     }
 }

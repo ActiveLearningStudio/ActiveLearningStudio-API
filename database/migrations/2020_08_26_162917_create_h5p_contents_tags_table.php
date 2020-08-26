@@ -19,6 +19,7 @@ class CreateH5pContentsTagsTable extends Migration
             $table->unsignedInteger('tag_id');
             $table->foreign('tag_id')->references('id')->on('h5p_tags');
             $table->primary(['content_id', 'tag_id']);
+            $table->softDeletes();
         });
     }
 

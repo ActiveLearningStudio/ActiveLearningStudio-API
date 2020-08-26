@@ -25,6 +25,7 @@ class CreateH5pResultsTable extends Migration
             $table->unsignedInteger('finished')->unsigned();
             $table->unsignedInteger('time')->unsigned();
             $table->index(['content_id', 'user_id'], 'content_user');
+            $table->softDeletes();
         });
     }
 

@@ -17,6 +17,7 @@ class CreateH5pTagsTable extends Migration
             $table->id();
             $table->string('name', 31);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

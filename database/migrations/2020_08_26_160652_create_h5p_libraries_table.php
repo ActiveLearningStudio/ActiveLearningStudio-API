@@ -32,6 +32,7 @@ class CreateH5pLibrariesTable extends Migration
             $table->unsignedInteger('has_icon')->default(0);
             $table->index(['name', 'major_version', 'minor_version', 'patch_version']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

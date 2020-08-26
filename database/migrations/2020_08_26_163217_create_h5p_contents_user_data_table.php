@@ -25,6 +25,7 @@ class CreateH5pContentsUserDataTable extends Migration
             $table->boolean('invalidate')->default(0);
             $table->timestamp('updated_at');
             $table->primary(['content_id', 'user_id', 'sub_content_id', 'data_id'], 'fk_primary');
+            $table->softDeletes();
         });
     }
 

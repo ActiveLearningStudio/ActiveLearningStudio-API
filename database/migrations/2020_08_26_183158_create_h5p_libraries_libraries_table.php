@@ -21,6 +21,7 @@ class CreateH5pLibrariesLibrariesTable extends Migration
             $table->string('dependency_type', 31);
             $table->timestamps();
             $table->primary(['library_id', 'required_library_id'], 'fk_primary');
+            $table->softDeletes();
         });
     }
 

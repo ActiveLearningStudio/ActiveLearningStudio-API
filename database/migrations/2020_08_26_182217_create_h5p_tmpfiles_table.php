@@ -18,6 +18,7 @@ class CreateH5pTmpfilesTable extends Migration
             $table->string('path');
             $table->timestamps();
             $table->index(['created_at'], 'created_at');
+            $table->softDeletes();
         });
     }
 
