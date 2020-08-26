@@ -23,6 +23,8 @@ class ProjectController extends Controller
     public function __construct(ProjectRepositoryInterface $projectRepository)
     {
         $this->projectRepository = $projectRepository;
+
+        $this->authorizeResource(Project::class, 'project');
     }
 
     /**
@@ -34,7 +36,7 @@ class ProjectController extends Controller
     {
         $authenticated_user = auth()->user();
 
-        if ($authenticated_user->role === 'admin') {
+        if ($authenticated_user->isAdmin()) {
             return response([
                 'projects' => ProjectResource::collection($this->projectRepository->all()),
             ], 200);
@@ -106,14 +108,6 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to access other user\'s project.'],
-            ], 403);
-        }
-
         return response([
             'project' => new ProjectResource($project),
         ], 200);
@@ -128,14 +122,6 @@ class ProjectController extends Controller
      */
     public function share(Request $request, Project $project)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to change other user\'s project.'],
-            ], 403);
-        }
-
         $is_updated = $this->projectRepository->update([
             'shared' => true,
         ], $project->id);
@@ -160,14 +146,6 @@ class ProjectController extends Controller
      */
     public function removeShare(Request $request, Project $project)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to change other user\'s project.'],
-            ], 403);
-        }
-
         $is_updated = $this->projectRepository->update([
             'shared' => false,
         ], $project->id);
@@ -192,14 +170,6 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to change other user\'s project.'],
-            ], 403);
-        }
-
         $is_updated = $this->projectRepository->update($request->only([
             'name',
             'description',
@@ -225,14 +195,6 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to delete other user\'s project.'],
-            ], 403);
-        }
-
         $is_deleted = $this->projectRepository->delete($project->id);
 
         if ($is_deleted) {
@@ -244,22 +206,5 @@ class ProjectController extends Controller
         return response([
             'errors' => ['Failed to delete project.'],
         ], 500);
-    }
-
-    private function checkPermission(Project $project)
-    {
-        $authenticated_user = auth()->user();
-
-        $allowed = $authenticated_user->role === 'admin';
-        if (!$allowed) {
-            $project_users = $project->users;
-            foreach ($project_users as $user) {
-                if ($user->id === $authenticated_user->id) {
-                    $allowed = true;
-                }
-            }
-        }
-
-        return $allowed;
     }
 }
