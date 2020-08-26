@@ -36,11 +36,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('playlists.activities', 'ActivityController');
 
         // Google Share
-        Route::post('save-access-token', 'GoogleClassroomController@saveAccessToken');
-        Route::get('courses', 'GoogleClassroomController@getCourses');
-        Route::post('copy-project', 'GoogleClassroomController@copyProject');
-            
-        
+        Route::post('google-classroom/access-token', 'GoogleClassroomController@saveAccessToken');
+        Route::get('google-classroom/courses', 'GoogleClassroomController@getCourses');
+        Route::post('google-classroom/projects/{project}/copy', 'GoogleClassroomController@copyProject');
     });
 
     Route::get('error', 'ErrorController@show')->name('api/error');

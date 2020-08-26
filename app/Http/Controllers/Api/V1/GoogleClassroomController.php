@@ -17,10 +17,13 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\GCCourseResource;
+use App\Http\Resources\V1\GCTopicResource;
+use App\Http\Resources\V1\GCCourseWorkResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\User;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use GuzzleHttp\Exception\GuzzleException;
@@ -136,108 +139,119 @@ class GoogleClassroomController extends Controller
     /**
      * Copy whole project to google classroom
      */
-    public function copyProject(Request $request){
+    public function copyProject(Project $project, Request $request){
+        $allowed = $this->checkPermission($project);
+
+        if (!$allowed) {
+            return response([
+                'errors' => ['Forbidden. You are trying to share other user\'s project.'],
+            ], 403);
+        }
+
         try {
-            
-            $validator = Validator::make($request->all(), [
-                //'currentuser' => 'required',
-                'projectId' => 'required',
-            ]);
-    
-            if ($validator->fails()) {
-                return responseError([], 'Validation errors occured');
-            }
+           
             $authenticated_user = auth()->user();
             
             $return = [];
-            $projectId = $request->input('projectId');
-            $project = $this->projectRepository->find($projectId);
-            dd($project);
-            // Classroom ID - if available.
-            $courseId = $request->input('courseId');
             
-            if(!$project){ 
-                return false;
-            }
-            $client = $this->googleClassroom->gapiClient($authenticated_user->gapi_access_token);
-            $service = new \Google_Service_Classroom($client);
+            //dd($project);
+            // Classroom ID - if available.
+            $courseId = $request->input('course_id');
+            $service = new GoogleClassroom();
 
             // If course already exists 
             $course = NULL;
             if ($courseId) {
-                $course = $service->courses->get($courseId);
+                $course = $service->getCourse($courseId);
             } else {
-                $course = new \Google_Service_Classroom_Course(array(
+                $courseData = [
                     'name' => $project->name,
                     'descriptionHeading' => $project->description,
                     'description' => $project->description,
                     'room' => '1', // optional
                     'ownerId' => 'me',
                     'courseState' => 'PROVISIONED'
-                ));
-                
-                $course = $service->courses->create($course);
+                ];
+                $course = $service->createCourse($courseData);
             }
+            //$return['course'] = (array) $course;
             
-            $return['course'] = (array) $course;
+            $return['course'] = GCCourseResource::make($course)->resolve();
             // inserting playlists/topics to Classroom
-            //$playlists = Playlist::where(['projectid'=>$project->_id])->get();
             $playlists = $project->playlists;
             $count = 0;
             $return['course']['topics'] = [];
             foreach($playlists as $playlist){
-                $topic = new \Google_Service_Classroom_Topic(array(
+                if (empty($playlist->title)) {
+                    continue;
+                }
+                // Check for duplicate topic here...
+                $topicData = [
                     'courseId' => $course->id,
                     'name'=> $playlist->title
-                ));
-                $topic = $service->courses_topics->create($course->id, $topic);
+                ];
+                $topic = $service->getOrCreateTopic($topicData);
                 
-                $return['course']['topics'][$count] = (array) $topic;
+                $return['course']['topics'][$count] = GCTopicResource::make($topic)->resolve();
 
-                //activities
+                // activities
 
-                $activities = $playlist->activities;//Activity::where(['playlistid'=> $playlist->_id])->get();
+                $activities = $playlist->activities;
                 $courseWorkCount = 0;
                 foreach($activities as $activity) {
-                    //$updated_activity = Activity::where(['_id'=>$activity->_id])->update(['shared'=> true]);
+                    if (empty($activity->title)) {
+                        continue;
+                    }
                     $activity->shared = true;
                     $activity->save();
 
                     //$updated_activity = Activity::where(['_id'=>$activity->_id])->update(['shared'=> true]);
 
-
-                    $courseWork = new \Google_Service_Classroom_CourseWork();
-                    $courseWork->setCourseId($course->id);
-                    $courseWork->setTopicId($topic->topicId);
-                    /*$h5p_activity = \DB::connection('mysql')
-                            ->table('h5p_contents')
-                            ->select('title')
-                            ->where(['id'=>$activity->mysqlid])->first();
-                    $courseWork->setTitle($h5p_activity->title);*/
-                    $courseWork->setTitle($activity->title);
-                    $courseWork->setWorkType('ASSIGNMENT');
-                    $courseWork->setMaterials([
-                        'link'=> [
-                            'url' => config('constants.front-url').'/shared/activity/'.$activity->id
-                        ]
-                    ]);
-                    $courseWork->setState('PUBLISHED');
-
-                    $courseWork = $service->courses_courseWork->create($course->id, $courseWork);
-                    $return['course']['topics'][$count]['courseWork'] = [];
-                    $return['course']['topics'][$count]['courseWork'][$courseWorkCount] = (array) $courseWork;
+                    $courseWorkData = [
+                        'course_id' => $course->id,
+                        'topic_id' => $topic->topicId,
+                        'activity_id' => $activity->id,
+                        'activity_title' => $activity->title
+                    ];        
+                    $courseWork = $service->createCourseWork($courseWorkData);
+                    
+                    $return['course']['topics'][$count]['course_work'] = [];
+                    $return['course']['topics'][$count]['course_work'][$courseWorkCount] = GCCourseWorkResource::make($courseWork)->resolve();
                     $courseWorkCount++;
                 }
                 $count++;
             }
             
+            return response([
+                'data'=> $return,
+                'status' => 'success'
+            ], 200);
 
-            return responseSuccess($return);
-            
         } catch(\Google_Service_Exception $ex){
-            return responseFail(['message' => $ex->getMessage()]);
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
         } catch (\Exception $ex){
-            return responseFail(['message' => $ex->getMessage()]);
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
         }
+    }
+
+    private function checkPermission(Project $project)
+    {
+        $authenticated_user = auth()->user();
+
+        $allowed = $authenticated_user->role === 'admin';
+        if (!$allowed) {
+            $project_users = $project->users;
+            foreach ($project_users as $user) {
+                if ($user->id === $authenticated_user->id) {
+                    $allowed = true;
+                }
+            }
+        }
+
+        return $allowed;
     }
 }

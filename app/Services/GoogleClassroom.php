@@ -78,4 +78,79 @@ class GoogleClassroom {
         // return as a resource.
         return $courses; 
     }
+
+    public function getCourse($courseId)
+    {
+        return $this->service->courses->get($courseId);
+    }
+
+    public function createCourse($data) {
+        $course = new \Google_Service_Classroom_Course($data);
+        return $this->service->courses->create($course);
+    }
+
+    public function createTopic($data) {
+        // Check for duplicate topic here...
+        $topic = new \Google_Service_Classroom_Topic($data);
+        return $this->service->courses_topics->create($data['courseId'], $topic);
+    }
+
+    public function createCourseWork($data) {
+
+        $courseWork = new \Google_Service_Classroom_CourseWork();
+        $courseWork->setCourseId($data['course_id']);
+        $courseWork->setTopicId($data['topic_id']);
+        /*$h5p_activity = \DB::connection('mysql')
+                ->table('h5p_contents')
+                ->select('title')
+                ->where(['id'=>$activity->mysqlid])->first();
+        $courseWork->setTitle($h5p_activity->title);*/
+        $courseWork->setTitle($data['activity_title']);
+        $courseWork->setWorkType('ASSIGNMENT');
+        $courseWork->setMaterials([
+            'link'=> [
+                'url' => config('constants.front-url').'/shared/activity/'.$data['activity_id']
+            ]
+        ]);
+        $courseWork->setState('PUBLISHED');
+
+        return $this->service->courses_courseWork->create($data['course_id'], $courseWork);
+    }
+
+    public function getTopics($courseId) {
+        $pageToken = NULL;
+        $topics = array();
+
+        do {
+            $params['pageToken'] = $pageToken;
+            
+            $response = $this->service->courses_topics->listCoursesTopics($courseId, $params);
+            
+            $topics = array_merge($topics, $response->getTopic());
+            $pageToken = $response->nextPageToken;
+        } while (!empty($pageToken));
+
+        return $topics; 
+    }
+
+    public function getOrCreateTopic($data) {
+        $topics = $this->getTopics($data['courseId']);
+        $topic = null;
+        if ($topics) {
+            // Find a duplicate..
+            foreach($topics as $topic) {
+                if ($topic->name === $data['name']) 
+                    break;
+            }
+        }
+
+        if ($topic)  {
+            return $topic;
+        }
+        else {
+            // Check for duplicate topic here...
+            $topic = new \Google_Service_Classroom_Topic($data);
+            return $this->service->courses_topics->create($data['courseId'], $topic);
+        }
+    }
 }
