@@ -30,7 +30,7 @@ class UpdateActivitiesTable extends Migration
     public function down()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->dropColumn(['starter_project']);
+            $table->dropColumn(['h5p_content_id', 'thumb_url', 'subject_id', 'education_level_id']);
         });
     }
 }

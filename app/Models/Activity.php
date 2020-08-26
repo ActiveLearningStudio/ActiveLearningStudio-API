@@ -21,6 +21,10 @@ class Activity extends Model
         'content',
         'shared',
         'order',
+        'thumb_url',
+        'subject_id',
+        'education_level_id',
+        'h5p_content_id',
     ];
 
     /**
@@ -30,4 +34,12 @@ class Activity extends Model
     {
         return $this->belongsTo('App\Models\Playlist', 'playlist_id');
     }
+
+//    /**
+//     * Get the H5P Content that owns the activity
+//     */
+//    public function h5pContent()
+//    {
+//        return $this->hasOne('App\Models\H5pContent', 'h5p_content_id');
+//    }
 }

@@ -14,9 +14,9 @@ class AddSubscribeToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('hubspot')->nullable()->after('role');
-            $table->boolean('subscribed')->nullable()->after('hubspot');
-            $table->string('subscribed_ip')->nullable()->after('privacy_subscribed');
+            $table->boolean('hubspot')->default(false)->after('role');
+            $table->boolean('subscribed')->default(false)->after('hubspot');
+            $table->string('subscribed_ip')->nullable()->after('subscribed');
         });
     }
 
@@ -28,7 +28,7 @@ class AddSubscribeToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn(['hubspot', 'subscribed', 'subscribed_ip']);
         });
     }
 }

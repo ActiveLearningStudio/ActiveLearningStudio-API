@@ -102,6 +102,9 @@ class UserController extends Controller
             'job_title',
             'address',
             'phone_number',
+            'hubspot',
+            'subscribed',
+            'subscribed_ip',
         ]), $user->id);
 
         if ($is_updated) {
