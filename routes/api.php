@@ -35,6 +35,17 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::apiResource('playlists.activities', 'ActivityController');
+
+        //CurrikiGo
+        Route::group(["prefix" => "go"], function(){
+            
+            //LMS Settings
+            Route::group(["prefix" => "lms-settings"], function(){
+                Route::get('user/me', 'CurrikiGo\LmsSettingController@my');
+            });
+            
+        });
+
     });
 
     Route::get('error', 'ErrorController@show')->name('api/error');
