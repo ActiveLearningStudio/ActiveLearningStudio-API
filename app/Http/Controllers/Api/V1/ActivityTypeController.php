@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityType;
+use App\Http\Resources\V1\ActivityItemResource;
 use App\Http\Resources\V1\ActivityTypeResource;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use Illuminate\Http\Request;
@@ -101,6 +102,19 @@ class ActivityTypeController extends Controller
     {
         return response([
             'activityType' => new ActivityTypeResource($activityType),
+        ], 200);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param ActivityType $activityType
+     * @return Response
+     */
+    public function items(ActivityType $activityType)
+    {
+        return response([
+            'activityItems' => ActivityItemResource::collection($activityType->activityItems),
         ], 200);
     }
 

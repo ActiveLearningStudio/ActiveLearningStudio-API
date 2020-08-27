@@ -29,6 +29,6 @@ class ActivityItem extends Model
      */
     public function activityType()
     {
-        return $this->hasOne('App\Models\ActivityType', 'activity_type_id');
+        return $this->belongsTo('App\Models\ActivityType', 'activity_type_id');
     }
 }

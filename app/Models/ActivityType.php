@@ -19,4 +19,12 @@ class ActivityType extends Model
         'order',
         'image',
     ];
+
+    /**
+     * Get the activity items for activity type
+     */
+    public function activityItems()
+    {
+        return $this->hasMany('App\Models\ActivityItem', 'activity_type_id');
+    }
 }

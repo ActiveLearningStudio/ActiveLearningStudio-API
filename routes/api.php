@@ -36,6 +36,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::apiResource('playlists.activities', 'ActivityController');
 
+        Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
 
         Route::apiResource('activity-items', 'ActivityItemController');

@@ -20,6 +20,7 @@ class ActivityTypeResource extends JsonResource
             'title' => $this->title,
             'order' => $this->order,
             'image' => $this->image,
+            'activityItems' => $this->activityItems,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
