@@ -83,6 +83,31 @@ class UserController extends Controller
     }
 
     /**
+     * Subscribe.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function subscribe(Request $request)
+    {
+        $authenticated_user = auth()->user();
+        $is_subscribed = $this->userRepository->update([
+            'subscribed' => true,
+            'subscribed_ip' => $request->ip(),
+        ], $authenticated_user->id);
+
+        if ($is_subscribed) {
+            return response([
+                'user' => new UserResource($this->userRepository->find($authenticated_user->id)),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to subscribe.'],
+        ], 500);
+    }
+
+    /**
      * Update the specified user in storage.
      *
      * @param Request $request

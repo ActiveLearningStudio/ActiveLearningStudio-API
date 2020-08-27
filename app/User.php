@@ -32,6 +32,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'job_title',
         'address',
         'phone_number',
+        'hubspot',
+        'subscribed',
+        'subscribed_ip',
         'email_verified_at'
     ];
 

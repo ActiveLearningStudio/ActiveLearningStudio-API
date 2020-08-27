@@ -21,6 +21,7 @@ class ProjectResource extends JsonResource
             'description' => $this->description,
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
+            'starter_project' => $this->starter_project,
             'playlists' => $this->playlists,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
