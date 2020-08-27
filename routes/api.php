@@ -23,6 +23,7 @@ Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
+        Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::apiResource('users', 'UserController');
 
