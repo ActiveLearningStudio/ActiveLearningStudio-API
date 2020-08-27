@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Services;
 
-use Auth;
-
+/**
+ * Google Classroom Service class
+ */
 class GoogleClassroom {
 
     protected $service;
@@ -75,7 +75,6 @@ class GoogleClassroom {
             $pageToken = $response->nextPageToken;
         } while (!empty($pageToken));
 
-        // return as a resource.
         return $courses; 
     }
 
@@ -90,7 +89,6 @@ class GoogleClassroom {
     }
 
     public function createTopic($data) {
-        // Check for duplicate topic here...
         $topic = new \Google_Service_Classroom_Topic($data);
         return $this->service->courses_topics->create($data['courseId'], $topic);
     }
@@ -100,11 +98,6 @@ class GoogleClassroom {
         $courseWork = new \Google_Service_Classroom_CourseWork();
         $courseWork->setCourseId($data['course_id']);
         $courseWork->setTopicId($data['topic_id']);
-        /*$h5p_activity = \DB::connection('mysql')
-                ->table('h5p_contents')
-                ->select('title')
-                ->where(['id'=>$activity->mysqlid])->first();
-        $courseWork->setTitle($h5p_activity->title);*/
         $courseWork->setTitle($data['activity_title']);
         $courseWork->setWorkType('ASSIGNMENT');
         $courseWork->setMaterials([
@@ -135,22 +128,21 @@ class GoogleClassroom {
 
     public function getOrCreateTopic($data) {
         $topics = $this->getTopics($data['courseId']);
-        $topic = null;
+        $foundTopic = null;
         if ($topics) {
             // Find a duplicate..
             foreach($topics as $topic) {
-                if ($topic->name === $data['name']) 
+                if ($topic->name === $data['name'])  {
+                    $foundTopic = $topic;
                     break;
+                }
             }
         }
 
-        if ($topic)  {
-            return $topic;
+        if ($foundTopic)  {
+            return $foundTopic;
         }
-        else {
-            // Check for duplicate topic here...
-            $topic = new \Google_Service_Classroom_Topic($data);
-            return $this->service->courses_topics->create($data['courseId'], $topic);
-        }
+        
+        return $this->createTopic($data);
     }
 }
