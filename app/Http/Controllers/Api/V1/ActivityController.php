@@ -14,7 +14,6 @@ use Illuminate\Http\Response;
 class ActivityController extends Controller
 {
     private $projectRepository;
-
     private $activityRepository;
 
     /**
@@ -80,7 +79,7 @@ class ActivityController extends Controller
 
         if ($activity) {
             return response([
-                'activity' => $activity,
+                'activity' => new ActivityResource($activity),
             ], 201);
         }
 

@@ -35,6 +35,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::apiResource('playlists.activities', 'ActivityController');
+
+        Route::apiResource('activity-types', 'ActivityTypeController');
+
+        Route::apiResource('activity-items', 'ActivityItemController');
     });
 
     Route::get('error', 'ErrorController@show')->name('api/error');

@@ -62,7 +62,7 @@ class PlaylistController extends Controller
 
         if ($playlist) {
             return response([
-                'playlist' => $playlist,
+                'playlist' => new PlaylistResource($playlist),
             ], 201);
         }
 

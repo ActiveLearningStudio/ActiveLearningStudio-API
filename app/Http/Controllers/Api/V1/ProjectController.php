@@ -91,7 +91,7 @@ class ProjectController extends Controller
 
         if ($project) {
             return response([
-                'project' => $project,
+                'project' => new ProjectResource($project),
             ], 201);
         }
 
