@@ -139,10 +139,6 @@ class GoogleClassroom {
             }
         }
 
-        if ($foundTopic)  {
-            return $foundTopic;
-        }
-        
-        return $this->createTopic($data);
+        return ($foundTopic ? $foundTopic : $this->createTopic($data));
     }
 }

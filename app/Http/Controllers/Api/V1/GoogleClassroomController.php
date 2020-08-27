@@ -114,12 +114,12 @@ class GoogleClassroomController extends Controller
     }
 
     /**
-	 * Copy whole project to google classroom
+	 * Copy project to Google Classroom
 	 *
 	 * Copy whole project to google classroom either as a new course
      * or into an existing course.
 	 *
-     * @urlParam    project required The ID of the project.
+     * @urlParam    project required The ID of the project. Example: 9
      * @bodyParam   course_id string ID of an existing Google Classroom course. Example: 123
      * @responseFile  responses/google-classroom.copyproject.json
      * 
@@ -197,7 +197,7 @@ class GoogleClassroomController extends Controller
                 }
 
                 $return['course']['topics'][$count] = GCTopicResource::make($topic)->resolve();
-                
+
                 // Iterate over activities
                 $activities = $playlist->activities;
                 $courseWorkCount = 0;
