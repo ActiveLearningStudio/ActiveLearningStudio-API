@@ -167,7 +167,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Djoudi\LaravelH5p\LaravelH5pServiceProvider::class,
 
         /*
          * Application Service Providers...
