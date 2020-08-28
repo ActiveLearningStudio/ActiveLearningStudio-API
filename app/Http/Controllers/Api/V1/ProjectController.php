@@ -43,7 +43,7 @@ class ProjectController extends Controller
         }
 
         return response([
-            'projects' => $authenticated_user->projects,
+            'projects' => ProjectResource::collection($authenticated_user->projects),
         ], 200);
     }
 
