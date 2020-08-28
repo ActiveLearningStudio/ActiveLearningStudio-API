@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
+use ElasticScoutDriverPlus\CustomSearch;
+use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
+use App\Models\QueryBuilders\SearchFormQueryBuilder;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 
 class Activity extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Searchable, CustomSearch;
 
     /**
      * The attributes that are mass assignable.
@@ -24,10 +29,76 @@ class Activity extends Model
     ];
 
     /**
+     * Get the attributes to be indexed in Elasticsearch
+     */
+    public function toSearchableArray()
+    {
+        $searchableArray = [
+            'playlist_id' => $this->playlist_id,
+            'title' => $this->title,
+            'type' => $this->type,
+            'content' => $this->content,
+            'h5p_content_id' => $this->h5p_content_id,
+            'subject_id' => $this->subject_id,
+            'education_level_id' => $this->education_level_id,
+            'shared' => $this->shared,
+            'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
+            'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
+        ];
+
+        if ($this->playlist) {
+            $searchableArray['project_id'] = $this->playlist->project_id;
+        }
+
+        $activityRepository = resolve(ActivityRepositoryInterface::class);
+        $searchableArray = $searchableArray + $activityRepository->getH5pElasticsearchFields($this->h5pContent);
+
+        return $searchableArray;
+    }
+
+    /**
+     * Get the search request
+     */
+    public static function searchForm(): SearchRequestBuilder
+    {
+        return new SearchRequestBuilder(new static(), new SearchFormQueryBuilder());
+    }
+
+    /**
      * Get the playlist that owns the activity
      */
     public function playlist()
     {
         return $this->belongsTo('App\Models\Playlist', 'playlist_id');
+    }
+
+    /**
+     * Get the h5p content that owns the activity.
+     */
+    public function h5pContent()
+    {
+        return $this->belongsTo('App\Models\H5pContent');
+    }
+
+    /**
+     * Get the activity's project's user.
+     *
+     * @return object
+     */
+    public function getUserAttribute(){
+        if (isset($this->playlist) && isset($this->playlist->project) && isset($this->playlist->project->users)) {
+            return $this->playlist->project->users()->wherePivot('role', 'teacher')->first();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the model type.
+     *
+     * @return string
+     */
+    public function getModelTypeAttribute(){
+        return 'Activity';
     }
 }
