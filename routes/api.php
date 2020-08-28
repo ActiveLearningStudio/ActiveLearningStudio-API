@@ -32,6 +32,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/remove-share-project', 'ProjectController@removeShare');
         Route::apiResource('projects', 'ProjectController');
 
+        Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::apiResource('playlists.activities', 'ActivityController');
