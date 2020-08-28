@@ -16,7 +16,6 @@ class CreateH5pTagsTable extends Migration
         Schema::create('h5p_tags', function (Blueprint $table) {
             $table->id();
             $table->string('name', 31);
-            $table->timestamps();
             $table->softDeletes();
         });
     }

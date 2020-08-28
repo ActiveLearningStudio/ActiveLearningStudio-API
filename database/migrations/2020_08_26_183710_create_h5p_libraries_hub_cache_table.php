@@ -25,6 +25,7 @@ class CreateH5pLibrariesHubCacheTable extends Migration
             $table->string('summary', 65535);
             $table->string('description', 65535);
             $table->string('icon', 511);
+            $table->timestamps();
             $table->unsignedInteger('is_recommended');
             $table->unsignedInteger('popularity');
             $table->string('screenshots', 65535)->nullable();
@@ -34,7 +35,6 @@ class CreateH5pLibrariesHubCacheTable extends Migration
             $table->string('keywords', 65535)->nullable();
             $table->string('categories', 65535)->nullable();
             $table->string('owner', 511)->nullable();
-            $table->timestamps();
             $table->index(['machine_name', 'major_version', 'minor_version', 'patch_version'], 'name_version');
             $table->softDeletes();
         });
