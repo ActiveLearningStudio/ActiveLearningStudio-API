@@ -15,6 +15,7 @@ class CreateH5pLibrariesTable extends Migration
     {
         Schema::create('h5p_libraries', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->string('name', 127);
             $table->string('title');
             $table->unsignedInteger('major_version');
@@ -31,7 +32,6 @@ class CreateH5pLibrariesTable extends Migration
             $table->string('tutorial_url', 1023);
             $table->unsignedInteger('has_icon')->default(0);
             $table->index(['name', 'major_version', 'minor_version', 'patch_version']);
-            $table->timestamps();
             $table->softDeletes();
         });
     }

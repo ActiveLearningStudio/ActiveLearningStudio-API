@@ -15,6 +15,7 @@ class CreateH5pContentsTable extends Migration
     {
         Schema::create('h5p_contents', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('library_id');
@@ -36,7 +37,6 @@ class CreateH5pContentsTable extends Migration
             $table->longText('author_comments')->nullable();
             $table->longText('changes')->nullable();
             $table->string('default_language', 32)->nullable();
-            $table->timestamps();
             $table->softDeletes();
         });
     }
