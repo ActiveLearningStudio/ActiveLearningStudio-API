@@ -18,7 +18,7 @@ class CreateH5pCountersTable extends Migration
             $table->string('library_name', 127);
             $table->string('library_version', 31);
             $table->unsignedInteger('num');
-            $table->primary(['type', 'library_name','library_version'], 'fk_primary');
+            $table->primary(['type', 'library_name', 'library_version'], 'fk_primary');
             $table->softDeletes();
         });
     }
