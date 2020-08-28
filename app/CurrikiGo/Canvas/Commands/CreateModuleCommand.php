@@ -5,7 +5,7 @@ use App\CurrikiGo\Canvas\Contracts\Command;
 class CreateModuleCommand implements Command
 {
     public $api_url;
-    public $asscess_token;
+    public $access_token;
     public $http_client;
     private $course_id;
     private $module_data;
@@ -20,7 +20,7 @@ class CreateModuleCommand implements Command
         $response = null;
         try {            
             $response = $this->http_client->request('POST', $this->api_url.'/courses/'.$this->course_id.'/modules', [
-                    'headers' => ['Authorization' => "Bearer {$this->asscess_token}", 'Accept' => 'application/json'],
+                    'headers' => ['Authorization' => "Bearer {$this->access_token}", 'Accept' => 'application/json'],
                     'json' => $this->module_data
                 ])->getBody()->getContents();
             $response = json_decode($response);

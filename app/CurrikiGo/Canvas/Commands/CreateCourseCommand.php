@@ -5,7 +5,7 @@ use App\CurrikiGo\Canvas\Contracts\Command;
 class CreateCourseCommand implements Command
 {
     public $api_url;
-    public $asscess_token;
+    public $access_token;
     public $http_client;
     private $account_id;
     private $course_data;
@@ -20,7 +20,7 @@ class CreateCourseCommand implements Command
         $response = null;
         try {            
             $response = $this->http_client->request('POST', $this->api_url.'/accounts/'.$this->account_id.'/courses', [
-                    'headers' => ['Authorization' => "Bearer {$this->asscess_token}", 'Accept' => 'application/json'],
+                    'headers' => ['Authorization' => "Bearer {$this->access_token}", 'Accept' => 'application/json'],
                     'json' => $this->course_data
                 ])->getBody()->getContents();
             $response = json_decode($response);

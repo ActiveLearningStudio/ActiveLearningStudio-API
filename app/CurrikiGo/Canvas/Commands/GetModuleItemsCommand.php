@@ -5,7 +5,7 @@ use App\CurrikiGo\Canvas\Contracts\Command;
 class GetModuleItemsCommand implements Command
 {
     public $api_url;
-    public $asscess_token;
+    public $access_token;
     public $http_client;
     private $course_id;
     private $module_id;
@@ -21,7 +21,7 @@ class GetModuleItemsCommand implements Command
         try {
             $url = $this->api_url.'/courses/'.$this->course_id.'/modules/'.$this->module_id.'/items';
             $response = $this->http_client->request('GET', $url, [
-                    'headers' => ['Authorization' => "Bearer {$this->asscess_token}", 'Accept' => 'application/json']
+                    'headers' => ['Authorization' => "Bearer {$this->access_token}", 'Accept' => 'application/json']
                 ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}

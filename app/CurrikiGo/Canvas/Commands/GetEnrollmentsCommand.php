@@ -5,7 +5,7 @@ use App\CurrikiGo\Canvas\Contracts\Command;
 class GetEnrollmentsCommand implements Command
 {
     public $api_url;
-    public $asscess_token;
+    public $access_token;
     public $http_client;
 
     public function __construct($user) {
@@ -17,7 +17,7 @@ class GetEnrollmentsCommand implements Command
         $response = null;
         try {
             $response = $this->http_client->request('GET', $this->api_url.'/users/'.$this->user->id.'/enrollments', [
-                    'headers' => ['Authorization' => "Bearer {$this->asscess_token}"]
+                    'headers' => ['Authorization' => "Bearer {$this->access_token}"]
                 ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}
