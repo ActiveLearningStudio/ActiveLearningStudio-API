@@ -202,6 +202,8 @@ class SearchController extends Controller
             'query' => 'required|string|max:255',
             'negativeQuery' => 'string|max:255',
             'userIds' => 'array|exists:App\User,id',
+            'subjectIds' => 'array|exists:App\Models\Activity,subject_id',
+            'educationLevelIds' => 'array|exists:App\Models\Activity,education_level_id',
             'model' => 'in:activities,playlists,projects',
             'sort' => 'in:created_at',
             'order' => 'in:asc,desc',

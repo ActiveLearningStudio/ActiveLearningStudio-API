@@ -115,6 +115,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                             ])
                             ->shared(true)
                             ->type($request->input('type', 0))
+                            ->subjectIds($request->input('subjectIds', []))
+                            ->educationLevelIds($request->input('educationLevelIds', []))
                             ->projectIds($projectIds)
                             ->negativeQuery($request->input('negativeQuery', 0))
                             ->sort($request->input('sort', '_id'), $request->input('order', 'desc'))

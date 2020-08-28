@@ -42,6 +42,28 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     /**
      * @var array
      */
+    private $subjectIds;
+
+    public function subjectIds(array $subjectIds): self
+    {
+        $this->subjectIds = $subjectIds;
+        return $this;
+    }
+
+    /**
+     * @var array
+     */
+    private $educationLevelIds;
+
+    public function educationLevelIds(array $educationLevelIds): self
+    {
+        $this->educationLevelIds = $educationLevelIds;
+        return $this;
+    }
+
+    /**
+     * @var array
+     */
     private $playlistIds;
 
     public function playlistIds(array $playlistIds): self
@@ -91,6 +113,22 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             $andQueries[] = [
                 'term' => [
                     'type' => $this->type
+                ]
+            ];
+        }
+
+        if (isset($this->subjectIds) && !empty($this->subjectIds)) {
+            $andQueries[] = [
+                'terms' => [
+                    'subject_id' => $this->subjectIds
+                ]
+            ];
+        }
+
+        if (isset($this->educationLevelIds) && !empty($this->educationLevelIds)) {
+            $andQueries[] = [
+                'terms' => [
+                    'education_level_id' => $this->educationLevelIds
                 ]
             ];
         }
