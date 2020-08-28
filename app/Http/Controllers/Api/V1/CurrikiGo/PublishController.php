@@ -66,7 +66,7 @@ class PublishController extends Controller
         
         if ($outcome){            
             return response([
-                'playlists' => $outcome,
+                'playlist' => $outcome,
             ], 200);
         } else {
             return response([
