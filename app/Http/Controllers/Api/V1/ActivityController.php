@@ -107,7 +107,7 @@ class ActivityController extends Controller
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
-                'errors' => ['Invalid playlist or activity Id.'],
+                'errors' => ['Invalid playlist or activity id.'],
             ], 400);
         }
 
@@ -136,7 +136,7 @@ class ActivityController extends Controller
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
-                'errors' => ['Invalid playlist or activity Id.'],
+                'errors' => ['Invalid playlist or activity id.'],
             ], 400);
         }
 
@@ -178,7 +178,7 @@ class ActivityController extends Controller
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
-                'errors' => ['Invalid playlist or activity Id.'],
+                'errors' => ['Invalid playlist or activity id.'],
             ], 400);
         }
 
