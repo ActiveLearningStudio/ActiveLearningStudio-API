@@ -43,8 +43,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::group(["prefix" => "lms-settings"], function(){
                 Route::get('user/me', 'CurrikiGo\LmsSettingController@my');
             });
+            Route::group(["prefix" => "canvas"], function(){
+                Route::post('playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToCanvas');
+                //Route::post('fetch/course', 'CurrikiGo\CourseController@fetchFromCanvas');
+            });
             
         });
+        
 
     });
 
