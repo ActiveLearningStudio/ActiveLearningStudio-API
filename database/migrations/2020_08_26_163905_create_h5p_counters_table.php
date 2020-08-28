@@ -16,7 +16,7 @@ class CreateH5pCountersTable extends Migration
         Schema::create('h5p_counters', function (Blueprint $table) {
             $table->string('type', 63);
             $table->string('library_name', 127);
-			$table->string('library_version', 31);
+            $table->string('library_version', 31);
             $table->unsignedInteger('num');
             $table->primary(['type', 'library_name','library_version'], 'fk_primary');
             $table->softDeletes();
