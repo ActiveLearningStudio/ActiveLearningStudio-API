@@ -4,50 +4,33 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
-use App\Models\Playlist;
 use App\Http\Resources\V1\ActivityResource;
 use App\Repositories\Activity\ActivityRepositoryInterface;
-use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ActivityController extends Controller
 {
-    private $projectRepository;
     private $activityRepository;
 
     /**
      * ActivityController constructor.
      *
-     * @param ProjectRepositoryInterface $projectRepository
      * @param ActivityRepositoryInterface $activityRepository
      */
-    public function __construct(
-        ProjectRepositoryInterface $projectRepository,
-        ActivityRepositoryInterface $activityRepository
-    ) {
-        $this->projectRepository = $projectRepository;
+    public function __construct(ActivityRepositoryInterface $activityRepository) {
         $this->activityRepository = $activityRepository;
     }
 
     /**
      * Display a listing of the activity.
      *
-     * @param Playlist $playlist
      * @return Response
      */
-    public function index(Playlist $playlist)
+    public function index()
     {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to access other user\'s activities.'],
-            ], 403);
-        }
-
         return response([
-            'activities' => ActivityResource::collection($playlist->activities),
+            'activities' => ActivityResource::collection($this->activityRepository->all()),
         ], 200);
     }
 
@@ -55,27 +38,19 @@ class ActivityController extends Controller
      * Store a newly created activity in storage.
      *
      * @param Request $request
-     * @param Playlist $playlist
      * @return Response
      */
-    public function store(Request $request, Playlist $playlist)
+    public function store(Request $request)
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'content' => 'required|string|max:255',
+            'playlist_id' => 'integer',
             'order' => 'integer',
         ]);
 
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to create activity on other user\'s playlist.'],
-            ], 403);
-        }
-
-        $activity = $playlist->activities()->create($data);
+        $activity = $this->activityRepository->create($data);
 
         if ($activity) {
             return response([
@@ -91,26 +66,11 @@ class ActivityController extends Controller
     /**
      * Display the specified activity.
      *
-     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function show(Playlist $playlist, Activity $activity)
+    public function show(Activity $activity)
     {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to access to other user\'s activity.'],
-            ], 403);
-        }
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity id.'],
-            ], 400);
-        }
-
         return response([
             'activity' => new ActivityResource($activity),
         ], 200);
@@ -120,29 +80,15 @@ class ActivityController extends Controller
      * Update the specified activity in storage.
      *
      * @param Request $request
-     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function update(Request $request, Playlist $playlist, Activity $activity)
+    public function update(Request $request, Activity $activity)
     {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to update other user\'s activity.'],
-            ], 403);
-        }
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity id.'],
-            ], 400);
-        }
-
         $is_updated = $this->activityRepository->update($request->only([
             'title',
             'type',
+            'playlist_id',
             'content',
             'shared',
             'order',
@@ -162,26 +108,11 @@ class ActivityController extends Controller
     /**
      * Remove the specified activity from storage.
      *
-     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function destroy(Playlist $playlist, Activity $activity)
+    public function destroy(Activity $activity)
     {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to delete other user\'s activity.'],
-            ], 403);
-        }
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity id.'],
-            ], 400);
-        }
-
         $is_deleted = $this->activityRepository->delete($activity->id);
 
         if ($is_deleted) {
@@ -193,23 +124,5 @@ class ActivityController extends Controller
         return response([
             'errors' => ['Failed to delete activity.'],
         ], 500);
-    }
-
-    private function checkPermission(Playlist $playlist)
-    {
-        $authenticated_user = auth()->user();
-
-        $allowed = $authenticated_user->isAdmin();
-        if (!$allowed) {
-            $project = $playlist->project;
-            $project_users = $project->users;
-            foreach ($project_users as $user) {
-                if ($user->id === $authenticated_user->id) {
-                    $allowed = true;
-                }
-            }
-        }
-
-        return $allowed;
     }
 }
