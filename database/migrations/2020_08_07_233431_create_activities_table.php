@@ -15,12 +15,12 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('playlist_id');
+            $table->unsignedBigInteger('playlist_id')->nullable();
             $table->foreign('playlist_id')->references('id')->on('playlists');
             $table->string('title');
             $table->string('type');
             $table->string('content');
-            $table->boolean('shared')->after('thumb_url')->default(false);
+            $table->boolean('shared')->default(false);
             $table->integer('order')->nullable()->default(null);
             $table->timestamps();
             $table->softDeletes();
