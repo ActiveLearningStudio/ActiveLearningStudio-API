@@ -1,16 +1,13 @@
 <?php
 
-Route::group(['middleware' => ['api']], function () {
+/*Route::group(['middleware' => ['api']], function () {
 	Route::resource('api/h5p', "Djoudi\LaravelH5p\Http\Controllers\H5pApiController");
-});
+});*/
 
 Route::group(['middleware' => ['web']], function () {
-	//Route::resource('api/h5p', "Djoudi\LaravelH5p\Http\Controllers\H5pApiController");
 	if (config('laravel-h5p.use_router') == 'EDITOR' || config('laravel-h5p.use_router') == 'ALL') {
 		Route::group(['middleware' => ['auth']], function () {
 			Route::resource('/h5p', "Djoudi\LaravelH5p\Http\Controllers\H5pController");			
-//            Route::get('h5p/export', 'Djoudi\LaravelH5p\Http\Controllers\H5pController@export')->name("h5p.export");
-
 			Route::get('library', "Djoudi\LaravelH5p\Http\Controllers\LibraryController@index")->name("h5p.library.index");
 			Route::get('library/show/{id}', "Djoudi\LaravelH5p\Http\Controllers\LibraryController@show")->name("h5p.library.show");
 			Route::post('library/store', "Djoudi\LaravelH5p\Http\Controllers\LibraryController@store")->name("h5p.library.store");
@@ -36,9 +33,9 @@ Route::group(['middleware' => ['web']], function () {
 	}
 
 	// export
-	//    if (config('laravel-h5p.use_router') == 'EXPORT' || config('laravel-h5p.use_router') == 'ALL') {
+	//if (config('laravel-h5p.use_router') == 'EXPORT' || config('laravel-h5p.use_router') == 'ALL') {
 	Route::get('h5p/embed/{id}', 'Djoudi\LaravelH5p\Http\Controllers\EmbedController')->name("h5p.embed");
 	Route::get('h5p/export/{id}', 'Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
 	Route::get('h5p/content-params/{id}', "Djoudi\LaravelH5p\Http\Controllers\H5pController@contentParams");
-//    }
+	//}
 });
