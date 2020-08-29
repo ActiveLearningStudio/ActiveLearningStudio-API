@@ -12,11 +12,11 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'ajax/library-install',
-        'ajax/files',
-        'ajax/library-upload',
-        'ajax/filter',
-        'ajax/content-user-data',
-        'ajax/finish'
+        'h5p/ajax/library-install',
+        'h5p/ajax/files',
+        'h5p/ajax/library-upload',
+        'h5p/ajax/filter',
+        'h5p/ajax/content-user-data',
+        'h5p/ajax/finish'
     ];
 }
