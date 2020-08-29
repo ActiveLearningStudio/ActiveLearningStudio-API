@@ -227,8 +227,8 @@ class LaravelH5p
             'url' => self::get_h5p_storage(), // for uploaded
             'postUserStatistics' => config('laravel-h5p.h5p_track_user') && Auth::check(),
             'ajax' => array(
-                'setFinished' => url('/') . '/ajax/url',
-                'contentUserData' => url('/') . '/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
+                'setFinished' => url('/') . '/h5p/ajax/url',
+                'contentUserData' => url('/') . '/h5p/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
                 // 'contentUserData' => route('h5p.ajax.content-user-data', ['content_id' => ':contentId', 'data_type' => ':dataType', 'sub_content_id' => ':subContentId']),
             ),
             'saveFreq' => config('laravel-h5p.h5p_save_content_state', FALSE) ? config('laravel-h5p.h5p_save_content_frequency', 30) : FALSE,
@@ -296,7 +296,7 @@ class LaravelH5p
                 'width' => 50,
                 'height' => 50,
             ),
-            'ajaxPath' => url('/') . '/ajax/',
+            'ajaxPath' => url('/') . '/h5p/ajax/',
             // for checkeditor,
             'libraryUrl' => self::get_h5peditor_url() . '/',
             'copyrightSemantics' => self::$contentvalidator->getCopyrightSemantics(),
