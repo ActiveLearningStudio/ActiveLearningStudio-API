@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\EmailVerificationRequest;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -48,19 +49,14 @@ class VerificationController extends Controller
     /**
      * Mark the authenticated user's email address as verified.
      *
-     * @param  Request $request
+     * @param EmailVerificationRequest $emailVerificationRequest
      * @return Response
      *
      * @throws AuthorizationException
      */
-    public function verify(Request $request)
+    public function verify(EmailVerificationRequest $emailVerificationRequest)
     {
-        $data = $request->validate([
-            'id' => 'required',
-            'hash' => 'required',
-            'signature' => 'required',
-            'expires' => 'required',
-        ]);
+        $data = $emailVerificationRequest->validated();
 
         $user = User::find($data['id']);
 
@@ -77,10 +73,10 @@ class VerificationController extends Controller
         }
 
         if ($user->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+            event(new Verified($emailVerificationRequest->user()));
         }
 
-        if ($response = $this->verified($request)) {
+        if ($response = $this->verified($emailVerificationRequest)) {
             return $response;
         }
 
