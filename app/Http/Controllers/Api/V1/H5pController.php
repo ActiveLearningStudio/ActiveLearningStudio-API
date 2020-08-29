@@ -1,6 +1,6 @@
 <?php
 
-namespace Djoudi\LaravelH5p\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
@@ -11,9 +11,24 @@ use H5pCore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * @group  H5P
+ * @authenticated
+ *
+ * APIs for H5P
+ */
 
 class H5pController extends Controller
 {
+    /**
+     * List of H5Ps
+     * 
+     * Display a listing of the H5Ps
+     *
+     * @return Response
+     */
     public function index(Request $request)
     {
         $where = H5pContent::orderBy('h5p_contents.id', 'desc');
@@ -34,9 +49,17 @@ class H5pController extends Controller
 
         $entries = $where->paginate(10);
         $entries->appends(['sf' => $request->query('sf'), 's' => $request->query('s')]);
-        return view('h5p.content.index', compact('entries', 'request', 'search_fields'));
+
+        return response()->json(compact('entries', 'request', 'search_fields'), 200);
     }
 
+
+    /**
+     * H5P create settings
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function create(Request $request)
     {
         $h5p = App::make('LaravelH5p');
@@ -48,7 +71,6 @@ class H5pController extends Controller
             $library = $request->get('machineName') . ' ' . $request->get('majorVersion') . '.' . $request->get('minorVersion');
         }
 
-        // $parameters = $this->get_input('parameters', '{"params":' . ($contentExists ? $core->filterParameters($this->content) : '{}') . ',"metadata":' . ($contentExists ? json_encode((object)$this->content['metadata']) : '{}') . '}');
         $parameters = '{"params":{},"metadata":{}}';
 
         $display_options = $core->getDisplayOptionsForEdit(NULL);
@@ -60,36 +82,39 @@ class H5pController extends Controller
         event(new H5pEvent('content', 'new'));
 
         $user = Auth::user();
-        return view('h5p.content.create', compact('settings', 'user', 'library', 'parameters', 'display_options'));
+
+        if (is_null($user) && $request->get('api_token')) {
+            $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
+        }
+
+        return response()->json( ['h5p' => compact('settings', 'user', 'library', 'parameters', 'display_options')], 200 );
     }
 
+    /**
+     * Store H5P
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function store(Request $request)
     {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $editor = $h5p::$h5peditor;
 
-        $this->validate($request, [
-            // 'title' => 'required|max:250',
-            'action' => 'required',
-        ], [], [
-            // 'title' => trans('laravel-h5p.content.title'),
-            'action' => trans('laravel-h5p.content.action'),
-        ]);
+        $this->validate(
+            $request,
+            ['action' => 'required'],
+            [],
+            ['action' => trans('laravel-h5p.content.action')]
+        );
 
         $oldLibrary = NULL;
         $oldParams = NULL;
         $event_type = 'create';
         $content = array(
             'disable' => H5PCore::DISABLE_NONE,
-            // 'user_id' => Auth::id(),
-            // 'title' => $request->get('title'),
-            // 'embed_type' => 'div',
-            // 'filtered' => '',
-            // 'slug' => config('laravel-h5p.slug'),
         );
-
-        // $content['filtered'] = '';
 
         try {
             if ($request->get('action') === 'create') {
@@ -137,16 +162,6 @@ class H5pController extends Controller
 
                 // Move images and find all content dependencies
                 $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
-
-                // event(new H5pEvent(
-                //     'content',
-                //     $event_type,
-                //     $content['id'],
-                //     $content['title'],
-                //     $content['library']['machineName'],
-                //     $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
-                // ));
-
                 $return_id = $content['id'];
             } elseif ($request->get('action') === 'upload') {
                 $content['uploaded'] = true;
@@ -155,24 +170,40 @@ class H5pController extends Controller
 
                 // Handle file upload
                 $return_id = $this->handle_upload($content);
+                if (intval($return_id) > 0) {
+                    return response()->json([
+                        'success' => trans('laravel-h5p.content.created'),
+                        'id' => $return_id,
+                        'type' => 'h5p'
+                    ]);
+                } else {
+                    return response()->json(['fail' => trans('laravel-h5p.content.can_not_created')]);
+                }
             }
 
             if ($return_id) {
-                return redirect()
-                    ->route('h5p.edit', $return_id)
-                    ->with('success', trans('laravel-h5p.content.created'));
+                return response()->json([
+                    'success' => trans('laravel-h5p.content.created'),
+                    'id' => $return_id,
+                    'title' => $content['metadata']->title,
+                    'type' => 'h5p'
+                ], 200);
             } else {
-                return redirect()
-                    ->route('h5p.create')
-                    ->with('fail', trans('laravel-h5p.content.can_not_created'));
+                return response()->json(['fail' => trans('laravel-h5p.content.can_not_created')], 400);
             }
         } catch (H5PException $ex) {
-            return redirect()
-                ->route('h5p.create')
-                ->with('fail', trans('laravel-h5p.content.can_not_created'));
+            return response()->json(['fail' => trans('laravel-h5p.content.can_not_created')], 400);
         }
     }
 
+    /**
+     * Retrive H5P based on id
+     *
+     * @param Request $request
+     * @param int $request
+     * 
+     * @return Response
+     */
     public function edit(Request $request, $id)
     {
         $h5p = App::make('LaravelH5p');
@@ -199,63 +230,48 @@ class H5pController extends Controller
         ));
 
         $user = Auth::user();
-        return view('h5p.content.edit', compact('settings', 'user', 'id', 'content', 'library', 'parameters', 'display_options'));
+        if (is_null($user) && $request->get('api_token')) {
+            $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
+        }
+
+        return response()->json([
+            'settings' => $settings,
+            'user' => $user,
+            'id' => $id,
+            'content' => $content,
+            'library' => $library,
+            'parameters' => $parameters,
+            'display_options' => $display_options
+        ]);
     }
 
-    public function contentParams(Request $request, $id)
-    {
-        $h5p = App::make('LaravelH5p');
-        $core = $h5p::$core;
-        $editor = $h5p::$h5peditor;
-        $content = $h5p->load_content($id);
-
-        // Prepare form
-        $library = $content['library'] ? H5PCore::libraryToString($content['library']) : 0;
-        $parameters = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
-
-        // dd($parameters);
-        return $parameters;
-
-        // $display_options = $core->getDisplayOptionsForEdit($content['disable']);
-
-        // view Get the file and settings to print from
-        // $settings = $h5p::get_editor($content);
-
-        // create event dispatch
-        // event(new H5pEvent(
-        //     'content',
-        //     'edit',
-        //     $content['id'],
-        //     $content['title'],
-        //     $content['library']['name'],
-        //     $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
-        // ));
-
-        // $user = Auth::user();
-        // return view('h5p.content.edit', compact('settings', 'user', 'id', 'content', 'library', 'parameters', 'display_options'));
-    }
-
+    /**
+     * Update H5P based on id
+     *
+     * @param Request $request
+     * @param int $request
+     * 
+     * @return Response
+     */
     public function update(Request $request, $id)
     {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $editor = $h5p::$h5peditor;
 
-        $this->validate($request, [
-            // 'title' => 'required|max:250',
-            'action' => 'required',
-        ], [], [
-            'title' => trans('laravel-h5p.content.title'),
-            'action' => trans('laravel-h5p.content.action'),
-        ]);
+        $this->validate(
+            $request,
+            ['action' => 'required'],
+            [],
+            [
+                'title' => trans('laravel-h5p.content.title'),
+                'action' => trans('laravel-h5p.content.action'),
+            ]
+        );
 
         $event_type = 'update';
         $content = $h5p->load_content($id);
-        // $content['embed_type'] = 'div';
-        // $content['user_id'] = Auth::id();
         $content['disable'] = H5PCore::DISABLE_NONE;
-        // $content['title'] = $request->get('title');
-        // $content['filtered'] = '';
 
         $oldLibrary = $content['library'];
         $oldParams = json_decode($content['params']);
@@ -305,16 +321,7 @@ class H5pController extends Controller
                 $core->saveContent($content);
 
                 // Move images and find all content dependencies
-                $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
-
-                // event(new H5pEvent(
-                //     'content',
-                //     $event_type,
-                //     $content['id'],
-                //     $content['title'],
-                //     $content['library']['machineName'],
-                //     $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
-                // ));
+                $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);                
 
                 $return_id = $content['id'];
             } elseif ($request->get('action') === 'upload') {
@@ -327,31 +334,40 @@ class H5pController extends Controller
             }
 
             if ($return_id) {
-                return redirect()
-                    ->route('h5p.edit', $return_id)
-                    ->with('success', trans('laravel-h5p.content.updated'));
+                return response()->json([
+                    'success' => trans('laravel-h5p.content.updated'),
+                    'id' => $return_id
+                ], 200);
             } else {
-                return redirect()
-                    ->back()
-                    ->with('fail', trans('laravel-h5p.content.can_not_updated'));
+                return response()->json(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
             }
         } catch (H5PException $ex) {
-            return redirect()
-                ->back()
-                ->with('fail', trans('laravel-h5p.content.can_not_updated'));
+            return response()->json(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
         }
     }
 
+    /**
+     * Retrive H5P based on id to display
+     *
+     * @param Request $request
+     * @param int $request
+     * 
+     * @return Response
+     */
     public function show(Request $request, $id)
     {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();
         $content = $h5p->load_content($id);
+        $content['disable'] = 8; // always enable H5P frame which include 'Reuse' and 'Embed' links
         $embed = $h5p->get_embed($content, $settings);
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
         $user = Auth::user();
+        if (is_null($user) && $request->get('api_token')) {
+            $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
+        }
 
         // create event dispatch
         event(new H5pEvent(
@@ -363,7 +379,41 @@ class H5pController extends Controller
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
         ));
 
-        return view('h5p.content.show', compact('settings', 'user', 'embed_code'));
+        return response()->json([
+            'settings' => $settings,
+            'user' => $user,
+            'embed_code' => $embed_code
+        ], 200);
+    }
+
+    /**
+     * Retrive H5P embed parameters
+     *
+     * @param Request $request
+     * @param int $request
+     * 
+     * @return Response
+     */
+    public function embed(Request $request, $id)
+    {
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->get_content($id);
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+
+        event(new H5pEvent(
+            'content',
+            NULL,
+            $content['id'],
+            $content['title'],
+            $content['library']['name'],
+            $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+        ));
+
+        return response()->json(compact('settings', 'embed_code'), 200);
     }
 
     public function destroy(Request $request, $id)
@@ -453,5 +503,4 @@ class H5pController extends Controller
         @unlink($interface->getUploadedH5pPath());
         return FALSE;
     }
-    
 }

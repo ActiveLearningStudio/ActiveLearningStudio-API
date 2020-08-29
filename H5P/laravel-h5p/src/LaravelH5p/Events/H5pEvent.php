@@ -39,7 +39,7 @@ class H5pEvent extends H5PEventBase
         if (is_null($user) && request()->get('api_token')) {
             $user = DB::table('users')->where('api_token', request()->get('api_token'))->first();
         }
-        $this->user = 1; //$user->id;
+        $this->user = $user->id;
         parent::__construct($type, $sub_type, $content_id, $content_title, $library_name, $library_version);
     }
 
@@ -54,7 +54,7 @@ class H5pEvent extends H5PEventBase
         if (is_null($user) && request()->get('api_token')) {
             $user = DB::table('users')->where('api_token', request()->get('api_token'))->first();
         }
-        $data['user_id'] = 1; //$user->id;
+        $data['user_id'] = $user->id;
 
         // Insert into DB
         return H5pEventLog::create($data);
