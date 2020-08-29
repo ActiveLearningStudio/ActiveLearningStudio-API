@@ -223,16 +223,16 @@ class LaravelH5p
     private static function get_core_settings()
     {
         $settings = array(
-            'baseUrl' => config('laravel-h5p.H5P_URL'),
+            'baseUrl' => url('/'),
             'url' => self::get_h5p_storage(), // for uploaded
             'postUserStatistics' => config('laravel-h5p.h5p_track_user') && Auth::check(),
             'ajax' => array(
-                'setFinished' => config('laravel-h5p.H5P_URL') . '/ajax/url',
-                'contentUserData' => config('laravel-h5p.H5P_URL') . '/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
+                'setFinished' => url('/') . '/ajax/url',
+                'contentUserData' => url('/') . '/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
                 // 'contentUserData' => route('h5p.ajax.content-user-data', ['content_id' => ':contentId', 'data_type' => ':dataType', 'sub_content_id' => ':subContentId']),
             ),
             'saveFreq' => config('laravel-h5p.h5p_save_content_state', FALSE) ? config('laravel-h5p.h5p_save_content_frequency', 30) : FALSE,
-            'siteUrl' => config('laravel-h5p.H5P_URL'),
+            'siteUrl' => url('/'),
             'l10n' => array(
                 'H5P' => trans('laravel-h5p.h5p'),
             ),
@@ -296,7 +296,7 @@ class LaravelH5p
                 'width' => 50,
                 'height' => 50,
             ),
-            'ajaxPath' => config('laravel-h5p.H5P_URL') . '/ajax/',
+            'ajaxPath' => url('/') . '/ajax/',
             // for checkeditor,
             'libraryUrl' => self::get_h5peditor_url() . '/',
             'copyrightSemantics' => self::$contentvalidator->getCopyrightSemantics(),
@@ -379,8 +379,8 @@ class LaravelH5p
             'library' => H5PCore::libraryToString($content['library']),
             'jsonContent' => $safe_parameters,
             'fullScreen' => $content['library']['fullscreen'],
-            'exportUrl' => config('laravel-h5p.h5p_export') ? config('laravel-h5p.H5P_URL') . '/h5p/export/' . $content['id'] : '',
-            'embedCode' => '<iframe src="' . config('laravel-h5p.H5P_URL') . '/h5p/embed/' . $content['id'] . '" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen"></iframe>',
+            'exportUrl' => config('laravel-h5p.h5p_export') ? url('/') . '/h5p/export/' . $content['id'] : '',
+            'embedCode' => '<iframe src="' . config('laravel-h5p.FRONT_END_URL') . '/h5p/embed/' . $content['id'] . '" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen"></iframe>',
             'resizeCode' => '<script src="' . self::get_h5pcore_url('/js/h5p-resizer.js') . '" charset="UTF-8"></script>',
             'url' => route('h5p.embed', ['id' => $content['id']]),
             'title' => $content['title'],
