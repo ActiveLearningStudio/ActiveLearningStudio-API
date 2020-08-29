@@ -354,7 +354,6 @@ class H5pController extends Controller
      * 
      * @return Response
      */
-
     public function show(Request $request, $id)
     {
         $h5p = App::make('LaravelH5p');
@@ -385,6 +384,36 @@ class H5pController extends Controller
             'user' => $user,
             'embed_code' => $embed_code
         ], 200);
+    }
+
+    /**
+     * Retrive H5P embed parameters
+     *
+     * @param Request $request
+     * @param int $request
+     * 
+     * @return Response
+     */
+    public function embed(Request $request, $id)
+    {
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->get_content($id);
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+
+        event(new H5pEvent(
+            'content',
+            NULL,
+            $content['id'],
+            $content['title'],
+            $content['library']['name'],
+            $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+        ));
+
+        return response()->json(compact('settings', 'embed_code'), 200);
     }
 
     public function destroy(Request $request, $id)

@@ -45,6 +45,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::group(['prefix' => 'h5p'], function () {
             Route::resource('/', "H5pController");
             Route::get('settings', "H5pController@create");
+            Route::get('embed/{id}', "H5pController@embed");
         });
     });
 

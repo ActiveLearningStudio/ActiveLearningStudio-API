@@ -11,6 +11,7 @@
  */
 
 return [
+	'FRONT_END_URL' => env('FRONT_END_URL'),
 	'H5P_DEV' => FALSE,
 	'language' => 'en',
 	'domain' => 'https://refactored.curriki.org',
