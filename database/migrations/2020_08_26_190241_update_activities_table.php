@@ -14,7 +14,7 @@ class UpdateActivitiesTable extends Migration
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->unsignedBigInteger('h5p_content_id');
+            $table->unsignedBigInteger('h5p_content_id')->nullable();
             $table->foreign('h5p_content_id')->references('id')->on('h5p_contents');
             $table->string('thumb_url')->nullable()->default(null);
             $table->string('subject_id')->nullable()->default(null);

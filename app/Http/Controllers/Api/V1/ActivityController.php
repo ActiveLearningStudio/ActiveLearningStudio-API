@@ -48,6 +48,10 @@ class ActivityController extends Controller
             'content' => 'required|string|max:255',
             'playlist_id' => 'integer',
             'order' => 'integer',
+            'h5p_content_id' => 'integer',
+            'thumb_url' => 'string',
+            'subject_id' => 'string',
+            'education_level_id' => 'string',
         ]);
 
         $activity = $this->activityRepository->create($data);
@@ -86,12 +90,16 @@ class ActivityController extends Controller
     public function update(Request $request, Activity $activity)
     {
         $is_updated = $this->activityRepository->update($request->only([
+            'playlist_id',
             'title',
             'type',
-            'playlist_id',
             'content',
             'shared',
             'order',
+            'thumb_url',
+            'subject_id',
+            'education_level_id',
+            'h5p_content_id',
         ]), $activity->id);
 
         if ($is_updated) {
