@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
@@ -27,20 +29,12 @@ class AuthController extends Controller
     /**
      * Register
      *
-     * @param Request $request
+     * @param RegisterRequest $registerRequest
      * @return Response
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $registerRequest)
     {
-        $data = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'name' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'organization_name' => 'required|string|min:2|max:50',
-            'job_title' => 'required|string|max:255',
-        ]);
+        $data = $registerRequest->validated();
 
         $data['password'] = bcrypt($data['password']);
         $data['remember_token'] = Str::random(64);
@@ -63,15 +57,12 @@ class AuthController extends Controller
     /**
      * Login
      *
-     * @param Request $request
+     * @param LoginRequest $loginRequest
      * @return Response
      */
-    public function login(Request $request)
+    public function login(LoginRequest $loginRequest)
     {
-        $data = $request->validate([
-            'email' => 'email|required',
-            'password' => 'required'
-        ]);
+        $data = $loginRequest->validated();
 
         if (!auth()->attempt($data)) {
             return response([
