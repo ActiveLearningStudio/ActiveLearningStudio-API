@@ -4,15 +4,20 @@ namespace Djoudi\LaravelH5p\Eloquents;
 
 use Illuminate\Database\Eloquent\Model;
 
-class H5pContentsLibrary extends Model {
+class H5pContentsLibrary extends Model
+{
+    protected $primaryKey = ['content_id', 'library_id', 'dependency_type'];
 
-	protected $primaryKey = ['content_id', 'library_id', 'dependency_type'];
-	protected $fillable = [
-		'content_id',
-		'library_id',
-		'dependency_type',
-		'weight',
-		'drop_css',
-	];
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'content_id',
+        'library_id',
+        'dependency_type',
+        'weight',
+        'drop_css',
+    ];
 }

@@ -4,14 +4,19 @@ namespace Djoudi\LaravelH5p\Eloquents;
 
 use Illuminate\Database\Eloquent\Model;
 
-class H5pCounter extends Model {
+class H5pCounter extends Model
+{
+    protected $primaryKey = ['type', 'library_name', 'library_version'];
 
-	protected $primaryKey = ['type', 'library_name', 'library_version'];
-	protected $fillable = [
-		'type',
-		'library_name',
-		'library_version',
-		'num',
-	];
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'type',
+        'library_name',
+        'library_version',
+        'num',
+    ];
 }

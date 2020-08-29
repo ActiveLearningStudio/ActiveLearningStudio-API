@@ -4,9 +4,9 @@ namespace Djoudi\LaravelH5p\Eloquents;
 
 use Illuminate\Database\Eloquent\Model;
 
-class H5pTag extends Model
+class H5pLibrariesCachedAsset extends Model
 {
-    protected $primaryKey = ['type', 'library_name', 'library_version'];
+    protected $primaryKey = ['library_id', 'hash'];
 
     /**
      * The attributes that are mass assignable.
@@ -14,9 +14,7 @@ class H5pTag extends Model
      * @var array
      */
     protected $fillable = [
-        'type',
-        'library_name',
-        'library_version',
-        'num',
+        'library_id',
+        'hash',
     ];
 }
