@@ -11,10 +11,10 @@
  */
 
 return [
-	'H5P_URL'=>'http://curriki-studio-api.local:8888',
+	'FRONT_END_URL' => env('FRONT_END_URL'),
 	'H5P_DEV' => FALSE,
 	'language' => 'en',
-	'domain' => 'http://curriki-studio-api.local:8888',
+	'domain' => config('app.url'),
 	'h5p_public_path' => '/vendor',
 	'slug' => 'laravel-h5p',
 	'views' => 'h5p', // h5p view path

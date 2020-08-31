@@ -36,9 +36,6 @@ class H5pEvent extends H5PEventBase
     function __construct($type, $sub_type = NULL, $content_id = NULL, $content_title = NULL, $library_name = NULL, $library_version = NULL)
     {
         $user = Auth::user();
-        if (is_null($user) && request()->get('api_token')) {
-            $user = DB::table('users')->where('api_token', request()->get('api_token'))->first();
-        }
         $this->user = $user->id;
         parent::__construct($type, $sub_type, $content_id, $content_title, $library_name, $library_version);
     }
@@ -50,10 +47,7 @@ class H5pEvent extends H5PEventBase
     {
         // Get data in array format without NULL values
         $data = $this->getDataArray();
-        $user = Auth::user();
-        if (is_null($user) && request()->get('api_token')) {
-            $user = DB::table('users')->where('api_token', request()->get('api_token'))->first();
-        }
+        $user = Auth::user();        
         $data['user_id'] = $user->id;
 
         // Insert into DB
