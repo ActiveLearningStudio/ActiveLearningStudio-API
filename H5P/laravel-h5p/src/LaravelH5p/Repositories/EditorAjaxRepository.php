@@ -24,7 +24,7 @@ class EditorAjaxRepository implements H5PEditorAjaxInterface
         global $wpdb;
         $recently_used = array();
         $user = Auth::user();
-        $user_id = is_object($user) ? $user->id : 1;
+        $user_id = $user->id;
         $result = DB::select("
             SELECT library_name, max(created_at) AS max_created_at
             FROM h5p_events
