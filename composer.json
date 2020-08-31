@@ -14,6 +14,8 @@
         "fruitcake/laravel-cors": "^1.0",
         "google/apiclient": "^2.7",
         "guzzlehttp/guzzle": "^6.3",
+        "h5p/h5p-core": "^1.24",
+        "h5p/h5p-editor": "^1.24",
         "laravel/framework": "^7.0",
         "laravel/passport": "^9.3",
         "laravel/tinker": "^2.0",
@@ -34,11 +36,18 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [],
+            "providers": [
+                "Djoudi\\LaravelH5p\\LaravelH5pServiceProvider"
+            ],
+            "aliases": {
+                "LaravelH5p": "Djoudi\\LaravelH5p\\Facades"
+            }
         }
     },
     "autoload": {
         "psr-4": {
+            "Djoudi\\LaravelH5p\\": "H5P/laravel-h5p/src/LaravelH5p",
             "App\\": "app/"
         },
         "classmap": [
@@ -48,6 +57,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Djoudi\\LaravelH5p\\": "H5P/laravel-h5p/src/LaravelH5p",
             "Tests\\": "tests/"
         }
     },

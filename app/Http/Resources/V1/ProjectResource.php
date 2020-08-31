@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Http\Resources\V1\ProjectUserResource;
+use App\Http\Resources\V1\ProjectPlaylistResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,7 +24,8 @@ class ProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
-            'playlists' => $this->playlists,
+            'users' => ProjectUserResource::collection($this->users),
+            'playlists' => ProjectPlaylistResource::collection($this->playlists->sortBy('order')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

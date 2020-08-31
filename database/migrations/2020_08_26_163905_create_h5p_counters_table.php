@@ -15,10 +15,10 @@ class CreateH5pCountersTable extends Migration
     {
         Schema::create('h5p_counters', function (Blueprint $table) {
             $table->string('type', 63);
-            $table->unsignedBigInteger('library_id');
-            $table->foreign('library_id')->references('id')->on('h5p_libraries');
+            $table->string('library_name', 127);
+            $table->string('library_version', 31);
             $table->unsignedInteger('num');
-            $table->primary(['type', 'library_id'], 'fk_primary');
+            $table->primary(['type', 'library_name', 'library_version'], 'fk_primary');
             $table->softDeletes();
         });
     }

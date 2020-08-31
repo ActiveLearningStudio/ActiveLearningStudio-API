@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\ActivityItem\ActivityItemRepository;
+use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
+use App\Repositories\ActivityType\ActivityTypeRepository;
+use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\EloquentRepositoryInterface;
 use App\Repositories\Activity\ActivityRepository;
@@ -30,6 +34,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
         $this->app->bind(PlaylistRepositoryInterface::class, PlaylistRepository::class);
         $this->app->bind(ActivityRepositoryInterface::class, ActivityRepository::class);
+        $this->app->bind(ActivityTypeRepositoryInterface::class, ActivityTypeRepository::class);
+        $this->app->bind(ActivityItemRepositoryInterface::class, ActivityItemRepository::class);
         $this->app->bind(LmsSettingRepositoryInterface::class, LmsSettingRepository::class);
     }
 

@@ -17,12 +17,13 @@ class CreateH5pEventLogsTable extends Migration
             $table->id();
             $table->string('type');
             $table->string('sub_type');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('content_id');
             $table->foreign('content_id')->references('id')->on('h5p_contents');
-            $table->unsignedBigInteger('library_id');
-            $table->foreign('library_id')->references('id')->on('h5p_libraries');
+            $table->string('content_title');
+            $table->string('library_name');
+            $table->string('library_version');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });
