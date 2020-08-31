@@ -16,14 +16,321 @@ toc_footers:
 # Info
 
 Welcome to the generated API reference.
-[Get Postman Collection](http://localhost:8000/docs/collection.json)
+[Get Postman Collection](http://currikiapi.localhost/docs/collection.json)
 
 <!-- END_INFO -->
+
+#CurrikiGo
+
+
+<!-- START_83cdba63ab1e5c866e17cd2146376a02 -->
+## Publish a Playlist to Canvas
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```bash
+curl -X POST \
+    "http://currikiapi.localhost/api/v1/go/canvas/projects/dolores/playlists/debitis/publish" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"setting_id":11,"counter":14}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/go/canvas/projects/dolores/playlists/debitis/publish"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "setting_id": 11,
+    "counter": 14
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": "Invalid project or playlist Id."
+}
+```
+> Example response (403):
+
+```json
+{
+    "errors": "You are not authorized to perform this action."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": "Error sending playlists to canvas."
+}
+```
+> Example response (200):
+
+```json
+{
+    "playlist": {
+        "id": 112,
+        "title": "Development Setup",
+        "position": 4,
+        "type": "ExternalTool",
+        "module_id": 26,
+        "content_id": 0,
+        "html_url": "https:\/\/canvas2.curriki.org\/courses\/32\/modules\/items\/112",
+        "url": "https:\/\/canvas2.curriki.org\/api\/v1\/courses\/32\/external_tools\/sessionless_launch?launch_type=module_item&module_item_id=112",
+        "external_url": "https:\/\/tsugi.curriki.org\/mod\/curriki\/?playlist=5",
+        "new_tab": false,
+        "completion_requirement": {
+            "type": "must_view"
+        },
+        "published": false,
+        "indent": 0
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/go/canvas/projects/{project}/playlists/{playlist}/publish`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `project` |  required  | The ID of the project
+    `playlist` |  required  | The ID of the playlist.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `setting_id` | integer |  optional  | The id of the LMS setting.
+        `counter` | integer |  optional  | The counter for uniqueness of the title
+    
+<!-- END_83cdba63ab1e5c866e17cd2146376a02 -->
+
+<!-- START_782eed28046b7e5741ad6b964688c0e6 -->
+## Fetch a course from Canvas
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```bash
+curl -X POST \
+    "http://currikiapi.localhost/api/v1/go/canvas/projects/voluptate/fetch" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"setting_id":9}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/go/canvas/projects/voluptate/fetch"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "setting_id": 9
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": "Validation error"
+}
+```
+> Example response (403):
+
+```json
+{
+    "errors": "You are not authorized to perform this action."
+}
+```
+> Example response (200):
+
+```json
+{
+    "project": {
+        "course": "How to build a playlist in CurrikiStudio",
+        "playlists": [
+            "Development Setup",
+            "Development Setup",
+            "Development Setup",
+            "Development Setup"
+        ]
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/go/canvas/projects/{project}/fetch`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `project` |  required  | The ID of the project.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `setting_id` | integer |  optional  | The id of the LMS setting.
+    
+<!-- END_782eed28046b7e5741ad6b964688c0e6 -->
+
+#LMS Settings
+
+
+<!-- START_2e23d1fbefc018b7f63a6c0e4827c8df -->
+## Authenticated user LMS settings
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Display a listing of the LMS settings for authenticated user
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/go/lms-settings/user/me" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/go/lms-settings/user/me"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "lms_url": "https:\/\/canvas2.curriki.org",
+            "lms_access_token": "oi89oAJfM9ppmR1xtXuqnCOMUkouhZdRprIBaQvSgZcxh6Uf8B4W3AtLv4JjSYhQ",
+            "site_name": "Curriki Canvas Site #2",
+            "lms_name": "canvas",
+            "lms_access_key": null,
+            "lms_access_secret": null,
+            "description": "Curriki Canvas Site 2",
+            "user_id": 2,
+            "created_at": "2020-08-28T17:51:54.000000Z",
+            "updated_at": "2020-08-28T17:51:54.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 1,
+            "lms_url": "https:\/\/canvas2.curriki.org",
+            "lms_access_token": "oi89oAJfM9ppmR1xtXuqnCOMUkouhZdRprIBaQvSgZcxh6Uf8B4W3AtLv4JjSYhQ",
+            "site_name": "Curriki Canvas Site #2",
+            "lms_name": "canvas",
+            "lms_access_key": null,
+            "lms_access_secret": null,
+            "description": "Curriki Canvas Site 2",
+            "user_id": 2,
+            "created_at": "2020-08-28T17:51:54.000000Z",
+            "updated_at": "2020-08-28T17:51:54.000000Z",
+            "deleted_at": null
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/go/lms-settings/user/me`
+
+
+<!-- END_2e23d1fbefc018b7f63a6c0e4827c8df -->
 
 #User management
 
 
 APIs for managing users
+<!-- START_ae759839bebb25703d47273f4486ce12 -->
+## Subscribe.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://currikiapi.localhost/api/v1/subscribe" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/subscribe"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/v1/subscribe`
+
+
+<!-- END_ae759839bebb25703d47273f4486ce12 -->
+
 <!-- START_dfb8fbb6facf7c68af221b2363bceb9e -->
 ## Display the authenticated user.
 
@@ -31,14 +338,14 @@ APIs for managing users
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/users/me" \
+    -G "http://currikiapi.localhost/api/v1/users/me" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/users/me"
+    "http://currikiapi.localhost/api/v1/users/me"
 );
 
 let headers = {
@@ -76,14 +383,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/users" \
+    -G "http://currikiapi.localhost/api/v1/users" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/users"
+    "http://currikiapi.localhost/api/v1/users"
 );
 
 let headers = {
@@ -121,14 +428,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/users" \
+    "http://currikiapi.localhost/api/v1/users" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/users"
+    "http://currikiapi.localhost/api/v1/users"
 );
 
 let headers = {
@@ -159,14 +466,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/users/1" \
+    -G "http://currikiapi.localhost/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/users/1"
+    "http://currikiapi.localhost/api/v1/users/1"
 );
 
 let headers = {
@@ -204,14 +511,14 @@ fetch(url, {
 
 ```bash
 curl -X PUT \
-    "http://localhost:8000/api/v1/users/1" \
+    "http://currikiapi.localhost/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/users/1"
+    "http://currikiapi.localhost/api/v1/users/1"
 );
 
 let headers = {
@@ -244,14 +551,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/api/v1/users/1" \
+    "http://currikiapi.localhost/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/users/1"
+    "http://currikiapi.localhost/api/v1/users/1"
 );
 
 let headers = {
@@ -278,6 +585,50 @@ fetch(url, {
 #general
 
 
+<!-- START_cd4a874127cd23508641c63b640ee838 -->
+## doc.json
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://currikiapi.localhost/doc.json" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/doc.json"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (500):
+
+```json
+{
+    "message": "Server Error"
+}
+```
+
+### HTTP Request
+`GET doc.json`
+
+
+<!-- END_cd4a874127cd23508641c63b640ee838 -->
+
 <!-- START_0c068b4037fb2e47e71bd44bd36e3e2a -->
 ## Authorize a client to access the user&#039;s account.
 
@@ -285,14 +636,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/oauth/authorize" \
+    -G "http://currikiapi.localhost/oauth/authorize" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/authorize"
+    "http://currikiapi.localhost/oauth/authorize"
 );
 
 let headers = {
@@ -330,14 +681,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/oauth/authorize" \
+    "http://currikiapi.localhost/oauth/authorize" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/authorize"
+    "http://currikiapi.localhost/oauth/authorize"
 );
 
 let headers = {
@@ -368,14 +719,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/oauth/authorize" \
+    "http://currikiapi.localhost/oauth/authorize" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/authorize"
+    "http://currikiapi.localhost/oauth/authorize"
 );
 
 let headers = {
@@ -406,14 +757,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/oauth/token" \
+    "http://currikiapi.localhost/oauth/token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/token"
+    "http://currikiapi.localhost/oauth/token"
 );
 
 let headers = {
@@ -444,14 +795,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/oauth/tokens" \
+    -G "http://currikiapi.localhost/oauth/tokens" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/tokens"
+    "http://currikiapi.localhost/oauth/tokens"
 );
 
 let headers = {
@@ -489,14 +840,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/oauth/tokens/1" \
+    "http://currikiapi.localhost/oauth/tokens/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/tokens/1"
+    "http://currikiapi.localhost/oauth/tokens/1"
 );
 
 let headers = {
@@ -527,14 +878,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/oauth/token/refresh" \
+    "http://currikiapi.localhost/oauth/token/refresh" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/token/refresh"
+    "http://currikiapi.localhost/oauth/token/refresh"
 );
 
 let headers = {
@@ -565,14 +916,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/oauth/clients" \
+    -G "http://currikiapi.localhost/oauth/clients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/clients"
+    "http://currikiapi.localhost/oauth/clients"
 );
 
 let headers = {
@@ -610,14 +961,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/oauth/clients" \
+    "http://currikiapi.localhost/oauth/clients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/clients"
+    "http://currikiapi.localhost/oauth/clients"
 );
 
 let headers = {
@@ -648,14 +999,14 @@ fetch(url, {
 
 ```bash
 curl -X PUT \
-    "http://localhost:8000/oauth/clients/1" \
+    "http://currikiapi.localhost/oauth/clients/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/clients/1"
+    "http://currikiapi.localhost/oauth/clients/1"
 );
 
 let headers = {
@@ -686,14 +1037,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/oauth/clients/1" \
+    "http://currikiapi.localhost/oauth/clients/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/clients/1"
+    "http://currikiapi.localhost/oauth/clients/1"
 );
 
 let headers = {
@@ -724,14 +1075,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/oauth/scopes" \
+    -G "http://currikiapi.localhost/oauth/scopes" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/scopes"
+    "http://currikiapi.localhost/oauth/scopes"
 );
 
 let headers = {
@@ -769,14 +1120,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/oauth/personal-access-tokens" \
+    -G "http://currikiapi.localhost/oauth/personal-access-tokens" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/personal-access-tokens"
+    "http://currikiapi.localhost/oauth/personal-access-tokens"
 );
 
 let headers = {
@@ -814,14 +1165,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/oauth/personal-access-tokens" \
+    "http://currikiapi.localhost/oauth/personal-access-tokens" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/personal-access-tokens"
+    "http://currikiapi.localhost/oauth/personal-access-tokens"
 );
 
 let headers = {
@@ -852,14 +1203,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/oauth/personal-access-tokens/1" \
+    "http://currikiapi.localhost/oauth/personal-access-tokens/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/oauth/personal-access-tokens/1"
+    "http://currikiapi.localhost/oauth/personal-access-tokens/1"
 );
 
 let headers = {
@@ -890,14 +1241,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/register" \
+    "http://currikiapi.localhost/api/register" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/register"
+    "http://currikiapi.localhost/api/register"
 );
 
 let headers = {
@@ -928,14 +1279,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/login" \
+    "http://currikiapi.localhost/api/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/login"
+    "http://currikiapi.localhost/api/login"
 );
 
 let headers = {
@@ -966,14 +1317,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/forgot-password" \
+    "http://currikiapi.localhost/api/forgot-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/forgot-password"
+    "http://currikiapi.localhost/api/forgot-password"
 );
 
 let headers = {
@@ -1004,14 +1355,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/reset-password" \
+    "http://currikiapi.localhost/api/reset-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/reset-password"
+    "http://currikiapi.localhost/api/reset-password"
 );
 
 let headers = {
@@ -1042,14 +1393,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/verify-email" \
+    "http://currikiapi.localhost/api/verify-email" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/verify-email"
+    "http://currikiapi.localhost/api/verify-email"
 );
 
 let headers = {
@@ -1080,14 +1431,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/verify-email/resend" \
+    "http://currikiapi.localhost/api/verify-email/resend" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/verify-email/resend"
+    "http://currikiapi.localhost/api/verify-email/resend"
 );
 
 let headers = {
@@ -1118,14 +1469,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/logout" \
+    "http://currikiapi.localhost/api/logout" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/logout"
+    "http://currikiapi.localhost/api/logout"
 );
 
 let headers = {
@@ -1156,14 +1507,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/projects/upload-thumb" \
+    "http://currikiapi.localhost/api/v1/projects/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/upload-thumb"
+    "http://currikiapi.localhost/api/v1/projects/upload-thumb"
 );
 
 let headers = {
@@ -1194,14 +1545,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/projects/1/share-project" \
+    "http://currikiapi.localhost/api/v1/projects/1/share-project" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/share-project"
+    "http://currikiapi.localhost/api/v1/projects/1/share-project"
 );
 
 let headers = {
@@ -1232,14 +1583,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/projects/1/remove-share-project" \
+    "http://currikiapi.localhost/api/v1/projects/1/remove-share-project" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/remove-share-project"
+    "http://currikiapi.localhost/api/v1/projects/1/remove-share-project"
 );
 
 let headers = {
@@ -1270,14 +1621,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/projects" \
+    -G "http://currikiapi.localhost/api/v1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects"
+    "http://currikiapi.localhost/api/v1/projects"
 );
 
 let headers = {
@@ -1315,14 +1666,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/projects" \
+    "http://currikiapi.localhost/api/v1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects"
+    "http://currikiapi.localhost/api/v1/projects"
 );
 
 let headers = {
@@ -1353,14 +1704,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1" \
+    -G "http://currikiapi.localhost/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1"
+    "http://currikiapi.localhost/api/v1/projects/1"
 );
 
 let headers = {
@@ -1398,14 +1749,14 @@ fetch(url, {
 
 ```bash
 curl -X PUT \
-    "http://localhost:8000/api/v1/projects/1" \
+    "http://currikiapi.localhost/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1"
+    "http://currikiapi.localhost/api/v1/projects/1"
 );
 
 let headers = {
@@ -1438,14 +1789,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/api/v1/projects/1" \
+    "http://currikiapi.localhost/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1"
+    "http://currikiapi.localhost/api/v1/projects/1"
 );
 
 let headers = {
@@ -1476,14 +1827,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1/playlists" \
+    -G "http://currikiapi.localhost/api/v1/projects/1/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists"
 );
 
 let headers = {
@@ -1521,14 +1872,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/projects/1/playlists" \
+    "http://currikiapi.localhost/api/v1/projects/1/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists"
 );
 
 let headers = {
@@ -1559,14 +1910,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1/playlists/1" \
+    -G "http://currikiapi.localhost/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists/1"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -1604,14 +1955,14 @@ fetch(url, {
 
 ```bash
 curl -X PUT \
-    "http://localhost:8000/api/v1/projects/1/playlists/1" \
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists/1"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -1644,14 +1995,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/api/v1/projects/1/playlists/1" \
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists/1"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -1675,6 +2026,212 @@ fetch(url, {
 
 <!-- END_feb1f1225dc03ec1052829032b6fc7b5 -->
 
+<!-- START_c238d6cdfdd62f3aae5a627422fe3427 -->
+## Display a listing of the activity.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/playlists/1/activities" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/v1/playlists/{playlist}/activities`
+
+
+<!-- END_c238d6cdfdd62f3aae5a627422fe3427 -->
+
+<!-- START_2a7a430e931750bac16a4f433def76c7 -->
+## Store a newly created activity in storage.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://currikiapi.localhost/api/v1/playlists/1/activities" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/v1/playlists/{playlist}/activities`
+
+
+<!-- END_2a7a430e931750bac16a4f433def76c7 -->
+
+<!-- START_33a2e7decc039b04e96d21e0fae0e6b1 -->
+## Display the specified activity.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/playlists/1/activities/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/v1/playlists/{playlist}/activities/{activity}`
+
+
+<!-- END_33a2e7decc039b04e96d21e0fae0e6b1 -->
+
+<!-- START_2c284aa499dc018e9876b34be26974fe -->
+## Update the specified activity in storage.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`PUT api/v1/playlists/{playlist}/activities/{activity}`
+
+`PATCH api/v1/playlists/{playlist}/activities/{activity}`
+
+
+<!-- END_2c284aa499dc018e9876b34be26974fe -->
+
+<!-- START_4b91bf4495723f1f78bc403ac627bdaf -->
+## Remove the specified activity from storage.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`DELETE api/v1/playlists/{playlist}/activities/{activity}`
+
+
+<!-- END_4b91bf4495723f1f78bc403ac627bdaf -->
+
 <!-- START_b455a0ec0acd6c04cdc310209814381d -->
 ## Display error
 
@@ -1682,14 +2239,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/error" \
+    -G "http://currikiapi.localhost/api/v1/error" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/error"
+    "http://currikiapi.localhost/api/v1/error"
 );
 
 let headers = {
