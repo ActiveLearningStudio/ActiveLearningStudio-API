@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Http\Resources\V1\ActivityResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,9 +19,8 @@ class PlaylistResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'project' => $this->project,
-            'activities' => $this->activities,
             'order' => $this->order,
+            'activities' => ActivityResource::collection($this->activities->sortBy('order')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

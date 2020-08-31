@@ -32,6 +32,13 @@ interface EloquentRepositoryInterface
     public function find($id);
 
     /**
+     * @param $field
+     * @param $value
+     * @return Model
+     */
+    public function findByField($field, $value);
+
+    /**
      * @param $id
      * @return int
      */

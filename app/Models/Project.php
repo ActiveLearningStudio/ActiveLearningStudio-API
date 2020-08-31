@@ -22,7 +22,8 @@ class Project extends Model
         'name',
         'description',
         'thumb_url',
-        'shared'
+        'shared',
+        'starter_project',
     ];
 
     /**

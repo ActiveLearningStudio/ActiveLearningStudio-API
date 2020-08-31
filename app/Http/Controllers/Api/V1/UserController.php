@@ -9,6 +9,11 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * @group  User management
+ *
+ * APIs for managing users
+ */
 class UserController extends Controller
 {
     private $userRepository;
@@ -21,6 +26,8 @@ class UserController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
+
+        $this->authorizeResource(User::class, 'user');
     }
 
     /**
@@ -30,17 +37,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $authenticated_user = auth()->user();
-
-        if ($authenticated_user->role === 'admin') {
-            return response([
-                'users' => UserResource::collection($this->userRepository->all()),
-            ], 200);
-        }
-
         return response([
-            'errors' => ['Forbidden.'],
-        ], 403);
+            'users' => UserResource::collection($this->userRepository->all()),
+        ], 200);
     }
 
     /**
@@ -51,7 +50,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: do we need user create functionality for admin
+        // TODO: do we need user create functionality for admin ?
         return response([
             'errors' => ['Forbidden. Please user register to create new user.'],
         ], 403);
@@ -65,17 +64,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $authenticated_user = auth()->user();
-
-        if ($authenticated_user->role === 'admin' || $authenticated_user->id === $user->id) {
-            return response([
-                'user' => new UserResource($user),
-            ], 200);
-        }
-
         return response([
-            'errors' => ['Forbidden. You are trying to get other user\'s profile.'],
-        ], 403);
+            'user' => new UserResource($user),
+        ], 200);
     }
 
     /**
@@ -92,6 +83,31 @@ class UserController extends Controller
     }
 
     /**
+     * Subscribe.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function subscribe(Request $request)
+    {
+        $authenticated_user = auth()->user();
+        $is_subscribed = $this->userRepository->update([
+            'subscribed' => true,
+            'subscribed_ip' => $request->ip(),
+        ], $authenticated_user->id);
+
+        if ($is_subscribed) {
+            return response([
+                'user' => new UserResource($this->userRepository->find($authenticated_user->id)),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to subscribe.'],
+        ], 500);
+    }
+
+    /**
      * Update the specified user in storage.
      *
      * @param Request $request
@@ -100,14 +116,6 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $authenticated_user = auth()->user();
-
-        if ($authenticated_user->role !== 'admin' && $authenticated_user->id !== $user->id) {
-            return response([
-                'errors' => ['Forbidden. You are trying to change other user\'s profile.'],
-            ], 403);
-        }
-
         $is_updated = $this->userRepository->update($request->only([
             'first_name',
             'last_name',
@@ -140,14 +148,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $authenticated_user = auth()->user();
-
-        if ($authenticated_user->role !== 'admin' && $authenticated_user->id !== $user->id) {
-            return response([
-                'errors' => ['Forbidden. You are trying to delete other user\'s profile.'],
-            ], 403);
-        }
-
         $is_deleted = $this->userRepository->delete($user->id);
 
         if ($is_deleted) {

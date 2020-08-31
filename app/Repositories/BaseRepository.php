@@ -24,6 +24,8 @@ class BaseRepository implements EloquentRepositoryInterface
     }
 
     /**
+     * Get all models in storage
+     *
      * @return Collection
      */
     public function all()
@@ -32,6 +34,8 @@ class BaseRepository implements EloquentRepositoryInterface
     }
 
     /**
+     * Create model in storage
+     *
      * @param array $attributes
      * @return Model
      */
@@ -41,6 +45,8 @@ class BaseRepository implements EloquentRepositoryInterface
     }
 
     /**
+     * Update model in storage
+     *
      * @param array $attributes
      * @param $id
      * @return Model
@@ -51,6 +57,8 @@ class BaseRepository implements EloquentRepositoryInterface
     }
 
     /**
+     * Find model by id
+     *
      * @param $id
      * @return Model
      */
@@ -60,6 +68,8 @@ class BaseRepository implements EloquentRepositoryInterface
     }
 
     /**
+     * Find model by field
+     *
      * @param $field
      * @param $value
      * @return Model
@@ -70,6 +80,8 @@ class BaseRepository implements EloquentRepositoryInterface
     }
 
     /**
+     * Delete model in storage
+     *
      * @param $id
      * @return int
      */
