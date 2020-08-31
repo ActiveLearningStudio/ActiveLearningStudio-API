@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
 use App\Services\GoogleClassroom;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * @group  Google Classroom
@@ -132,14 +133,13 @@ class GoogleClassroomController extends Controller
      * }
 	 */
     public function copyProject(Project $project, Request $request){
-        $allowed = $this->checkPermission($project);
-
-        if (!$allowed) {
+        $authenticated_user = auth()->user();
+        if (Gate::forUser($authenticated_user)->denies('publish-to-lms', $project)) {
             return response([
                 'errors' => ['Forbidden. You are trying to share other user\'s project.'],
             ], 403);
         }
-
+       
         try {
             $return = [];
             // Classroom ID - if available.
@@ -236,31 +236,5 @@ class GoogleClassroomController extends Controller
                 'errors' => [$ex->getMessage()],
             ], 500);
         }
-    }
-
-    /**
-	 * Check Permission
-	 *
-	 * Check whether the authenticated user has access to the project or not.
-	 *
-     * @param   project The project model instance.
-     * @access  private
-     * @return  boolean
-	 */
-    private function checkPermission(Project $project)
-    {
-        $authenticated_user = auth()->user();
-
-        $allowed = $authenticated_user->role === 'admin';
-        if (!$allowed) {
-            $project_users = $project->users;
-            foreach ($project_users as $user) {
-                if ($user->id === $authenticated_user->id) {
-                    $allowed = true;
-                }
-            }
-        }
-
-        return $allowed;
-    }
+    }    
 }
