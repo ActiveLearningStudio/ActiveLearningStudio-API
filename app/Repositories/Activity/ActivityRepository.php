@@ -49,7 +49,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                             ->execute()
                             ->models();
 
-        foreach($searchedModels as $modelId => $searchedModel){
+        foreach ($searchedModels as $modelId => $searchedModel) {
             $modelName = class_basename($searchedModel);
 
             if ($modelName == 'Project' && !isset($projects[$searchedModel->id])) {
@@ -58,28 +58,33 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             } else if ($modelName == 'Playlist' && !isset($projects[$searchedModel->project_id]['playlists'][$searchedModel->id])) {
                 $playlistProjectid = $searchedModel->project_id;
 
-                if(!isset($projects[$playlistProjectid])) {
+                if (!isset($projects[$playlistProjectid])) {
                     $projects[$playlistProjectid] = $searchedModel->project->attributesToArray();
                     $projects[$playlistProjectid]['playlists'] = [];
                 }
 
                 $projects[$playlistProjectid]['playlists'][$searchedModel->id] = $searchedModel->attributesToArray();
                 $projects[$playlistProjectid]['playlists'][$searchedModel->id]['activities'] = [];
-            } else if ($modelName == 'Activity' && !isset($projects[$searchedModel->playlist->project_id]['playlists'][$searchedModel->playlist->id]['activities'][$searchedModel->id])) {
+            } else if ($modelName == 'Activity') {
+                $activityId = $searchedModel->id;
                 $activityPlaylist = $searchedModel->playlist;
+                $activityPlaylistId = $activityPlaylist->id;
                 $activityPlaylistProjectid = $activityPlaylist->project_id;
 
-                if(!isset($projects[$activityPlaylistProjectid])) {
-                    $projects[$activityPlaylistProjectid] = $activityPlaylist->project->attributesToArray();
-                    $projects[$activityPlaylistProjectid]['playlists'] = [];
-                }
+                if (!isset($projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId]['activities'][$activityId])) {
+                    if (!isset($projects[$activityPlaylistProjectid])) {
+                        $projects[$activityPlaylistProjectid] = $activityPlaylist->project->attributesToArray();
+                        $projects[$activityPlaylistProjectid]['playlists'] = [];
+                    }
 
-                if(!isset($projects[$activityPlaylistProjectid]['playlists'][$activityPlaylist->id])) {
-                    $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylist->id] = $activityPlaylist->attributesToArray();
-                    $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylist->id]['activities'] = [];
-                }
+                    if (!isset($projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId])) {
+                        $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId] = $activityPlaylist->attributesToArray();
+                        $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId]['activities'] = [];
+                    }
 
-                $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylist->id]['activities'][$searchedModel->id] = $searchedModel->attributesToArray();
+                    $activityModel = $searchedModel->attributesToArray();
+                    $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId]['activities'][$activityId] = $activityModel;
+                }
             }
         }
 
@@ -133,7 +138,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $countByIndex = $aggregations->get('count_by_index');
 
         if (isset($countByIndex["buckets"])) {
-            foreach($countByIndex["buckets"] as $indexData){
+            foreach ($countByIndex["buckets"] as $indexData) {
                 $counts[$indexData["key"]] = $indexData["doc_count"];
             }
         }
@@ -154,7 +159,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     {
         $h5pElasticsearchFieldsArray = [];
 
-        if($h5pContent['parameters']) {
+        if ($h5pContent['parameters']) {
             $parameters = json_decode($h5pContent['parameters'], true);
 
             $h5pElasticsearchFields = $this->h5pElasticsearchFieldRepository->model->where([
@@ -165,19 +170,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             foreach ($h5pElasticsearchFields as $h5pElasticsearchField) {
                 $h5pElasticsearchFieldArray = explode('.group.nested.array.', $h5pElasticsearchField->path);
 
-                if(count($h5pElasticsearchFieldArray) > 1) {
+                if (count($h5pElasticsearchFieldArray) > 1) {
                     $h5pElasticsearchFieldValueArrays = Arr::get($parameters, $h5pElasticsearchFieldArray[0]);
 
-                    if(is_array($h5pElasticsearchFieldValueArrays)){
+                    if (is_array($h5pElasticsearchFieldValueArrays)){
                         foreach ($h5pElasticsearchFieldValueArrays as $h5pElasticsearchFieldValueArray) {
-                            if(isset($h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]]))
-                                $h5pElasticsearchFieldsArray[$h5pElasticsearchField->path][] = $h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]];
+                            if (isset($h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]])) {
+                                $h5pElasticsearchFieldValue = $h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]];
+                                $h5pElasticsearchFieldsArray[$h5pElasticsearchField->path][] = $h5pElasticsearchFieldValue;
+                            }
                         }
                     }
                 } else {
                     $h5pElasticsearchFieldValue = Arr::get($parameters, $h5pElasticsearchField->path, null);
 
-                    if($h5pElasticsearchFieldValue !== null)
+                    if ($h5pElasticsearchFieldValue !== null)
                         $h5pElasticsearchFieldsArray[$h5pElasticsearchField->path] = $h5pElasticsearchFieldValue;
                 }
             }

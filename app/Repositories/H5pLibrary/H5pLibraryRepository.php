@@ -58,7 +58,7 @@ class H5pLibraryRepository extends BaseRepository implements H5pLibraryRepositor
             return;
         }
 
-        if(isset($array['name']) && isset($array['type'])) {
+        if (isset($array['name']) && isset($array['type'])) {
             $pathName[] = $array['name'];
             $pathType[] = $array['type'];
         }
@@ -114,7 +114,11 @@ class H5pLibraryRepository extends BaseRepository implements H5pLibraryRepositor
                         unset($pathType[$pathTypeCount - 1]);
                         unset($pathName[$pathTypeCount - 1]);
 
-                        if (isset($pathType[$pathTypeCount - 3]) && $pathType[$pathTypeCount - 3] == 'group' && isset($pathType[$pathTypeCount - 4]) && $pathType[$pathTypeCount - 4] == 'list') {
+                        if (isset($pathType[$pathTypeCount - 3])
+                            && $pathType[$pathTypeCount - 3] == 'group'
+                            && isset($pathType[$pathTypeCount - 4])
+                            && $pathType[$pathTypeCount - 4] == 'list'
+                        ) {
                             unset($pathType[$pathTypeCount - 3]);
                             unset($pathName[$pathTypeCount - 3]);
                         }
@@ -144,10 +148,10 @@ class H5pLibraryRepository extends BaseRepository implements H5pLibraryRepositor
                     $fields['name'] = $array['name'];
                     $fields['type'] = $array['type'];
 
-                    if(isset($array['label']))
+                    if (isset($array['label']))
                         $fields['label'] = $array['label'];
 
-                    if(isset($array['description']))
+                    if (isset($array['description']))
                         $fields['description'] = $array['description'];
 
                     $fields['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
@@ -160,10 +164,10 @@ class H5pLibraryRepository extends BaseRepository implements H5pLibraryRepositor
                 $fields['name'] = $array['name'];
                 $fields['type'] = $array['type'];
 
-                if(isset($array['label']))
+                if (isset($array['label']))
                     $fields['label'] = $array['label'];
 
-                if(isset($array['description']))
+                if (isset($array['description']))
                     $fields['description'] = $array['description'];
 
                 $fields['created_at'] = Carbon::now()->format('Y-m-d H:i:s');

@@ -45,7 +45,7 @@ class SearchController extends Controller
      *        "457":{
      *           "id":457,
      *           "name":"Text Structure Lesson 2 Problem and Solution",
-     *           "description":"Learning Objective\nThe learner will define and describe the main characteristics of the text structure problem and solution.",
+     *           "description":"Learning Objective\nThe learner will define and describe the main characteristics...",
      *           "thumb_url":"/storage/uploads/3zjZuLoQrRk0MZ5wP7UPyOut5zUybf3tW3a4Q2M1.png",
      *           "mongo_userid":"5ef5300e41668b53ea5ed1b3",
      *           "starter_project":false,
@@ -142,7 +142,7 @@ class SearchController extends Controller
      *             "id": 457,
      *             "thumb_url": "/storage/uploads/3zjZuLoQrRk0MZ5wP7UPyOut5zUybf3tW3a4Q2M1.png",
      *             "title": "Text Structure Lesson 2 Problem and Solution",
-     *             "description": "Learning Objective\nThe learner will define and describe the main characteristics of the text structure problem and solution.",
+     *             "description": "Learning Objective\nThe learner will define and describe the main characteristics...",
      *             "model": "Project",
      *             "user": {
      *                 "id": 1,
