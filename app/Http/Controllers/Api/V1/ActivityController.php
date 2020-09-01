@@ -78,12 +78,12 @@ class ActivityController extends Controller
     {        
         $data = ['h5p_parameters' =>  null,  'user_name' => null,  'user_id' => null];   
         
-        if( $activity->playlist->project->user ){
+        if ( $activity->playlist->project->user ) {
             $data['user_name'] = $activity->playlist->project->user;
             $data['user_id'] = $activity->playlist->project->id;
         }
 
-        if( $activity->type === 'h5p' ){
+        if ( $activity->type === 'h5p' ) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $editor = $h5p::$h5peditor;		
