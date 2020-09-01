@@ -24,7 +24,7 @@ class LmsSetting extends Model
         'lms_access_secret',
         'description',
         'lti_client_id',
-        'userid'
+        'user_id'
     ];
     
     /**
@@ -32,6 +32,6 @@ class LmsSetting extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'userid');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

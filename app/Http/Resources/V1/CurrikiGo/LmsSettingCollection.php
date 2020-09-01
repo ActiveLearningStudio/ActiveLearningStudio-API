@@ -14,6 +14,6 @@ class LmsSettingCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return ['data' => $this->collection];
+        return ['settings' => $this->collection];
     }
 }

@@ -6,14 +6,15 @@ use App\CurrikiGo\Canvas\Contracts\Command;
 
 class CreateModuleItemCommand implements Command
 {
+    const MODULE_TYPE = 'ExternalTool';
+
     public $apiURL;
     public $accessToken;
     public $httpClient;
     private $courseId;
     private $moduleId;
     private $itemData;
-    const MODULE_TYPE = 'ExternalTool';
-
+    
     public function __construct($courseId, $moduleId, $itemData)
     {
         $this->courseId = $courseId;

@@ -10,9 +10,10 @@ use App\Http\Resources\V1\CurrikiGo\LmsSettingResource;
 
 class Client
 {
-    private $lmsSetting;
     const CURRIKI_MODULE_NAME = 'Curriki Playlists';
     const API_VERSION = 'v1';
+    
+    private $lmsSetting;
     
     public function __construct(LmsSetting $lmsSetting)
     {
