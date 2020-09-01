@@ -125,7 +125,7 @@ class AjaxController extends Controller
         // }
 
         $user = Auth::user();
-        $user_id = 1; /*$user->id*/
+        $user_id = $user->id; /*1*/
 
         $rs = DB::select("
             SELECT id
@@ -245,13 +245,13 @@ class AjaxController extends Controller
                     AND user_id = ?
                     AND data_id = ?
                     AND sub_content_id = ?
-                ", [$content_id, 1 /*$current_user->id*/, $data_id, $sub_content_id]);
+                ", [$content_id, $current_user->id, $data_id, $sub_content_id]);
 
                 if ($update === NULL || count($update) === 0) {
                     // Insert new data
                     DB::table('h5p_contents_user_data')->insert(
                         array(
-                            'user_id' => 1 /*$current_user->id*/,
+                            'user_id' => $current_user->id,
                             'content_id' => $content_id,
                             'sub_content_id' => $sub_content_id,
                             'data_id' => $data_id,
@@ -271,7 +271,7 @@ class AjaxController extends Controller
                             'updated_at' => current_time('mysql', 1)
                         ),
                         array(
-                            'user_id' => 1 /*$current_user->id*/,
+                            'user_id' => $current_user->id,
                             'content_id' => $content_id,
                             'data_id' => $data_id,
                             'sub_content_id' => $sub_content_id
@@ -281,7 +281,7 @@ class AjaxController extends Controller
                     );
 
                     DB::table('h5p_contents_user_data')
-                        ->where('user_id', 1 /*$current_user->id*/)
+                        ->where('user_id', $current_user->id)
                         ->where('content_id', $content_id)
                         ->where('data_id', $data_id)
                         ->where('sub_content_id', $sub_content_id)
@@ -308,7 +308,7 @@ class AjaxController extends Controller
                 AND content_id = ?
                 AND data_id = ?
                 AND sub_content_id = ?
-            ", [1/*$current_user->id*/, $content_id, $data_id, $sub_content_id]);
+            ", [$current_user->id, $content_id, $data_id, $sub_content_id]);
 
             $response->data = count($rows) > 0 ? $rows[0]->data : NULL;
 

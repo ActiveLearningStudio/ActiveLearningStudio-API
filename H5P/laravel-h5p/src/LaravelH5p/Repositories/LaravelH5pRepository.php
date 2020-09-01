@@ -421,11 +421,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
      */
     public function updateContent($content, $contentMainId = NULL)
     {
-        $user = Auth::user();
-        if (is_null($user) && request()->get('api_token')) {
-            $user = DB::table('users')->where('api_token', request()->get('api_token'))->first();
-        }
-
+        $user = Auth::user();        
         $current_date = date('Y-m-d H:i:s');
         $metadata = (array)$content['metadata'];
         $table = 'h5p_contents';

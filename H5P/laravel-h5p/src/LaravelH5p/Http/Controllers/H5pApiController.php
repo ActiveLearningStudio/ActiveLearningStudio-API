@@ -61,11 +61,6 @@ class H5pApiController extends Controller
         event(new H5pEvent('content', 'new'));
 
         $user = Auth::user();
-
-        if (is_null($user) && $request->get('api_token')) {
-            $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
-        }
-
         return response()->json(compact('settings', 'user', 'library', 'parameters', 'display_options'));
     }
 
@@ -204,10 +199,7 @@ class H5pApiController extends Controller
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
         ));
 
-        $user = Auth::user();
-        if (is_null($user) && $request->get('api_token')) {
-            $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
-        }
+        $user = Auth::user();        
 
         return response()->json([
             'settings' => $settings,
@@ -333,9 +325,6 @@ class H5pApiController extends Controller
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
         $user = Auth::user();
-        if (is_null($user) && $request->get('api_token')) {
-            $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
-        }
 
         // create event dispatch
         event(new H5pEvent(

@@ -14,7 +14,7 @@ return [
 	'FRONT_END_URL' => env('FRONT_END_URL'),
 	'H5P_DEV' => FALSE,
 	'language' => 'en',
-	'domain' => 'https://refactored.curriki.org',
+	'domain' => config('app.url'),
 	'h5p_public_path' => '/vendor',
 	'slug' => 'laravel-h5p',
 	'views' => 'h5p', // h5p view path
@@ -39,6 +39,6 @@ return [
 	],
 	'h5p_content_type_cache_updated_at' => 0,
 	'h5p_check_h5p_requirements' => FALSE,
-	'h5p_hub_is_enabled' => TRUE,
+	'h5p_hub_is_enabled' => FALSE,
 	'h5p_version' => '1.8.2',
 ];
