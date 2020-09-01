@@ -15,6 +15,10 @@ class AjaxController extends Controller
 {
     public function libraries(Request $request)
     {
+        // headers for CORS
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+        
         $machineName = $request->get('machineName');
         $major_version = $request->get('majorVersion');
         $minor_version = $request->get('minorVersion');
@@ -44,6 +48,7 @@ class AjaxController extends Controller
                 $machineName,
                 $major_version . '.' . $minor_version
             ));
+            exit;
         } else {
             // Otherwise retrieve all libraries
             $editor->ajax->action(H5PEditorEndpoints::LIBRARIES);
