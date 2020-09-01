@@ -56,4 +56,9 @@ class H5pLibrary extends Model
         $usage = $interface->getLibraryUsage($this->id, $interface->getNumNotFiltered() ? TRUE : FALSE);
         return intval($usage['libraries']);
     }
+
+    public function content()
+    {
+        return $this->hasOne(H5pContent::class, 'id');
+    }
 }

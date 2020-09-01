@@ -39,4 +39,15 @@ class H5pContent extends Model
     {
         return (object) DB::table('users')->where('id', $this->user_id)->first();
     }
+
+    public function activity()
+    {
+        return $this->hasOne('App\Models\Activity', 'id');
+    }
+
+    public function library()
+    {
+        return $this->belongsTo(H5pLibrary::class, 'library_id');
+    }
+
 }
