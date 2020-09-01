@@ -8,6 +8,7 @@ use App\Http\Resources\V1\ActivityResource;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\App;
 
 class ActivityController extends Controller
 {
@@ -74,9 +75,25 @@ class ActivityController extends Controller
      * @return Response
      */
     public function show(Activity $activity)
-    {
+    {        
+        $data = ['h5p_parameters' =>  null,  'user_name' => null,  'user_id' => null];   
+        
+        if( $activity->playlist->project->user ){
+            $data['user_name'] = $activity->playlist->project->user;
+            $data['user_id'] = $activity->playlist->project->id;
+        }
+
+        if( $activity->type === 'h5p' ){
+            $h5p = App::make('LaravelH5p');
+            $core = $h5p::$core;
+            $editor = $h5p::$h5peditor;		
+            $content = $h5p->load_content($activity->h5p_content_id);		
+            $library = $content['library'] ? \H5PCore::libraryToString($content['library']) : 0;				
+            $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
+        }
+        
         return response([
-            'activity' => new ActivityResource($activity),
+            'activity' => new ActivityResource($activity, $data),
         ], 200);
     }
 
