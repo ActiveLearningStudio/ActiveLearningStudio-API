@@ -1,27 +1,30 @@
 <?php
+
 namespace App\CurrikiGo\Canvas\Commands;
+
 use App\CurrikiGo\Canvas\Contracts\Command;
 
 class CreateCourseCommand implements Command
 {
-    public $api_url;
-    public $access_token;
-    public $http_client;
-    private $account_id;
-    private $course_data;
+    public $apiURL;
+    public $accessToken;
+    public $httpClient;
+    private $accountId;
+    private $courseData;
 
-    public function __construct($account_id, $course_data) {
-        $this->account_id = $account_id;
-        $this->course_data = $this->prepareCourseData($course_data);
+    public function __construct($accountId, $courseData)
+    {
+        $this->accountId = $accountId;
+        $this->courseData = $this->prepareCourseData($courseData);
     }
 
     public function execute()
     {
         $response = null;
         try {            
-            $response = $this->http_client->request('POST', $this->api_url.'/accounts/'.$this->account_id.'/courses', [
-                    'headers' => ['Authorization' => "Bearer {$this->access_token}", 'Accept' => 'application/json'],
-                    'json' => $this->course_data
+            $response = $this->httpClient->request('POST', $this->apiURL . '/accounts/' . $this->accountId . '/courses', [
+                    'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json'],
+                    'json' => $this->courseData
                 ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}
@@ -34,14 +37,13 @@ class CreateCourseCommand implements Command
         $course["name"] = $data['name'];
         $short_name = strtolower(implode('-', explode(' ', $data['name'])));
         $course["course_code"] = $short_name;
-        $course["sis_course_id"] = $short_name.'-'.uniqid();
+        $course["sis_course_id"] = $short_name . '-' . uniqid();
         $course["license"] = "public_domain";
         $course["public_syllabus_to_auth"] = true;
-        $course["public_description"] = $course["name"]." by CurrikiStudio";
+        $course["public_description"] = $course["name"] . " by CurrikiStudio";
         $course["default_view"] = "modules";
         $course["course_format"] = "online";
-        $enroll_me = true;
-        return ["course" => $course, "enroll_me" => $enroll_me];
+        $enrollMe = true;
+        return ["course" => $course, "enroll_me" => $enrollMe];
     }
-
 }

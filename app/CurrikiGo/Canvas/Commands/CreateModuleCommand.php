@@ -1,27 +1,30 @@
 <?php
+
 namespace App\CurrikiGo\Canvas\Commands;
+
 use App\CurrikiGo\Canvas\Contracts\Command;
 
 class CreateModuleCommand implements Command
 {
-    public $api_url;
-    public $access_token;
-    public $http_client;
-    private $course_id;
-    private $module_data;
+    public $apiURL;
+    public $accessToken;
+    public $httpClient;
+    private $courseId;
+    private $moduleData;
 
-    public function __construct($course_id, $module_data) {
-        $this->course_id = $course_id;
-        $this->module_data = $this->prepareModuleData($module_data);
+    public function __construct($courseId, $moduleData)
+    {
+        $this->courseId = $courseId;
+        $this->moduleData = $this->prepareModuleData($moduleData);
     }
 
     public function execute()
     {
         $response = null;
         try {            
-            $response = $this->http_client->request('POST', $this->api_url.'/courses/'.$this->course_id.'/modules', [
-                    'headers' => ['Authorization' => "Bearer {$this->access_token}", 'Accept' => 'application/json'],
-                    'json' => $this->module_data
+            $response = $this->httpClient->request('POST', $this->apiURL . '/courses/' . $this->courseId . '/modules', [
+                    'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json'],
+                    'json' => $this->moduleData
                 ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}
@@ -35,5 +38,4 @@ class CreateModuleCommand implements Command
         $module["publish_final_grade"] = true;
         return ["module" => $module];
     }
-
 }

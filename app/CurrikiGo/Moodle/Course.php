@@ -1,26 +1,29 @@
 <?php
+
 namespace App\CurrikiGo\Moodle;
+
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
 
 class Course
 {
-    private $setting_id;
+    private $settingId;
     private $client;
 
-    public function __construct($setting_id) {
-        $this->setting_id = $setting_id;
+    public function __construct($settingId)
+    {
+        $this->settingId = $settingId;
         $this->client = new \GuzzleHttp\Client();
     }
 
     public function fetch($data)
     {        
         $project = Project::where('_id',$data["project_id"])->first();
-        if(!$project){
+        if (!$project) {
             return null;
         }
 
-        $lms_setting = LmsSetting::where('_id', $this->setting_id)->first();
+        $lms_setting = LmsSetting::where('_id', $this->settingId)->first();
         $web_service_token = $lms_setting->lms_access_token;
         $lms_host = $lms_setting->lms_url;
         $web_service_function = "local_curriki_moodle_plugin_fetch_course";

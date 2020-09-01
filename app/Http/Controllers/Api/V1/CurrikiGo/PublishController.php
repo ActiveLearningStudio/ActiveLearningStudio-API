@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * This file contains handlers for LMS publishing.
+ */
+
 namespace App\Http\Controllers\Api\V1\CurrikiGo;
 
 use App\Http\Controllers\Controller;
@@ -35,8 +40,6 @@ class PublishController extends Controller
     public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository)
     {
         $this->lmsSettingRepository = $lmsSettingRepository;
-
-        //$this->authorizeResource(Project::class, 'project');
     }
 
     /**
@@ -44,7 +47,6 @@ class PublishController extends Controller
      */
     public function playlistToMoodle(Request $request)
     {                
-
         $validator = Validator::make($request->all(), ['setting_id' => 'required', 'playlist_id'=> 'required']);
 
         if ($validator->fails()) {
@@ -52,24 +54,28 @@ class PublishController extends Controller
             return response()->json(['error' => $messages]);
         }
         
-        $moodle_palylist = new MoodlePlaylist($request->input("setting_id"));
-        $counter = $request->input("counter") ? $request->input("counter") : 0;
-        $response = $moodle_palylist->send(['playlist_id' => $request->input("playlist_id"), 'counter' => intval($counter)]);
+        $moodle_playlist = new MoodlePlaylist($request->setting_id);
+        $counter = $request->counter ? $request->counter : 0;
+        $response = $moodle_playlist->send(['playlist_id' => $request->playlist_id, 'counter' => intval($counter)]);
 
         $code = $response->getStatusCode();
-        if($code == 200){
+        if ($code == 200) {
             $outcome = $response->getBody()->getContents();
-            return responseSuccess( json_decode($outcome) );
-        }else {
-            return responseError(['message'=>'Error sending playlists to Moodle']);
+            return response([
+                'data' => json_decode($outcome),
+            ], 200);
+        } else {
+            return response([
+                'errors' => ['Error sending playlists to Moodle'],
+            ], 500);
         }
     }
 
     /**
-	 * Publish a Playlist to Canvas
-	 *
+     * Publish a Playlist to Canvas
+     *
      * @urlParam  project required The ID of the project
-	 * @urlParam  playlist required The ID of the playlist.
+     * @urlParam  playlist required The ID of the playlist.
      * @bodyParam  setting_id int The id of the LMS setting.
      * @bodyParam  counter int The counter for uniqueness of the title
      * 
@@ -83,7 +89,7 @@ class PublishController extends Controller
      * @response  500 {
      *  "errors": "Error sending playlists to canvas."
      * }
-	 */
+     */
     public function playlistToCanvas(Project $project, Playlist $playlist, Request $request)
     {
         if ($playlist->project_id !== $project->id) {
@@ -92,8 +98,8 @@ class PublishController extends Controller
             ], 400);
         }
 
-        $authenticated_user = auth()->user();
-        if (Gate::forUser($authenticated_user)->allows('publish-to-lms', $project)) {
+        $authUser = auth()->user();
+        if (Gate::forUser($authUser)->allows('publish-to-lms', $project)) {
             // User can publish
             $validator = Validator::make($request->all(), ['setting_id' => 'required']);
             
@@ -104,19 +110,19 @@ class PublishController extends Controller
                 ], 400);
             }
 
-            $lmsSettings = $this->lmsSettingRepository->find($request->input('setting_id'));
-            $canvas_client = new Client($lmsSettings);
-            $canvas_playlist = new CanvasPlaylist($canvas_client);
-            $counter = $request->input("counter") ? $request->input("counter") : 0;
-            $outcome = $canvas_playlist->send($playlist, ['counter' => intval($counter)]);
+            $lmsSettings = $this->lmsSettingRepository->find($request->setting_id);
+            $canvasClient = new Client($lmsSettings);
+            $canvasPlaylist = new CanvasPlaylist($canvasClient);
+            $counter = $request->counter ? $request->counter : 0;
+            $outcome = $canvasPlaylist->send($playlist, ['counter' => intval($counter)]);
             
-            if ($outcome){            
+            if ($outcome) {            
                 return response([
                     'playlist' => $outcome,
                 ], 200);
             } else {
                 return response([
-                    'errors' => ['Error sending playlists to canvas.'],
+                    'errors' => ['Error sending playlists to Canvas.'],
                 ], 500);
             }
         }

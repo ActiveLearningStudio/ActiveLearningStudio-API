@@ -1,5 +1,7 @@
 <?php
+
 namespace App\CurrikiGo\Canvas;
+
 use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\Commands\GetCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetModulesCommand;
@@ -9,32 +11,32 @@ use App\Models\Project;
 
 class Course
 {
-    private $canvas_client;
+    private $canvasClient;
 
-    public function __construct(Client $client) {
-        $this->canvas_client = $client;        
+    public function __construct(Client $client)
+    {
+        $this->canvasClient = $client;
     }
 
     public function fetch(Project $project)
     {
         $playlist = null;
-        $module_name = "Curriki Playlists";        
-        $account_id = "self";
-        $courses = $this->canvas_client->run(new GetCoursesCommand($account_id, $project->name));
+        $moduleName = Client::CURRIKI_MODULE_NAME;
+        $accountId = "self";
+        $courses = $this->canvasClient->run(new GetCoursesCommand($accountId, $project->name));
         $course = CourseHelper::getByName($courses, $project->name);
         
-        $module_items = [];
+        $moduleItems = [];
         if ($course) {
-            $modules = $this->canvas_client->run(new GetModulesCommand($course->id, $module_name));
-            $module = CourseHelper::getModulesByName($modules, $module_name);
-            $m_itms = $this->canvas_client->run(new GetModuleItemsCommand($course->id, $module->id));
-            foreach ($m_itms as $key => $item) {
-                $module_items[] = $item->title;
+            $modules = $this->canvasClient->run(new GetModulesCommand($course->id, $moduleName));
+            $module = CourseHelper::getModuleByName($modules, $moduleName);
+            $items = $this->canvasClient->run(new GetModuleItemsCommand($course->id, $module->id));
+            foreach ($items as $key => $item) {
+                $moduleItems[] = $item->title;
             }
-            return ['course' => $course->name, 'playlists' => $module_items];
+            return ['course' => $course->name, 'playlists' => $moduleItems];
         } else {
             return ['course' => null, 'playlists' => []];
         }
-
     }
 }

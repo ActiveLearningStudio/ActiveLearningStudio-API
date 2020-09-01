@@ -1,4 +1,5 @@
 <?php
+
 namespace App\CurrikiGo\Canvas\Contracts;
 
 interface Command

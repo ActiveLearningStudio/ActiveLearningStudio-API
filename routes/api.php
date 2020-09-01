@@ -48,10 +48,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::get('embed/{id}', "H5pController@embed");
         });
 
-        //CurrikiGo
+        // CurrikiGo
         Route::group(["prefix" => "go"], function(){
-            
-            //LMS Settings
+            // LMS Settings
             Route::group(["prefix" => "lms-settings"], function(){
                 Route::get('user/me', 'CurrikiGo\LmsSettingController@my');
             });
@@ -59,10 +58,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToCanvas');
                 Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromCanvas');
             });
-            
         });
-        
-
     });
 
     Route::get('error', 'ErrorController@show')->name('api/error');

@@ -1,30 +1,34 @@
 <?php
+
 namespace App\CurrikiGo\Canvas\Commands;
+
 use App\CurrikiGo\Canvas\Contracts\Command;
 
 class CreateModuleItemCommand implements Command
 {
-    public $api_url;
-    public $access_token;
-    public $http_client;
-    private $course_id;
-    private $module_id;
-    private $item_data;
+    public $apiURL;
+    public $accessToken;
+    public $httpClient;
+    private $courseId;
+    private $moduleId;
+    private $itemData;
+    const MODULE_TYPE = 'ExternalTool';
 
-    public function __construct($course_id, $module_id, $item_data) {
-        $this->course_id = $course_id;
-        $this->module_id = $module_id;
-        $this->item_data = $this->prepareModuleItemData($item_data);
+    public function __construct($courseId, $moduleId, $itemData)
+    {
+        $this->courseId = $courseId;
+        $this->moduleId = $moduleId;
+        $this->itemData = $this->prepareModuleItemData($itemData);
     }
 
     public function execute()
     {
         $response = null;
         try {            
-            $url = $this->api_url.'/courses/'.$this->course_id.'/modules/'.$this->module_id.'/items';
-            $response = $this->http_client->request('POST', $url, [
-                    'headers' => ['Authorization' => "Bearer {$this->access_token}", 'Accept' => 'application/json'],
-                    'json' => $this->item_data
+            $url = $this->apiURL . '/courses/' . $this->courseId . '/modules/' . $this->moduleId . '/items';
+            $response = $this->httpClient->request('POST', $url, [
+                    'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json'],
+                    'json' => $this->itemData
                 ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}
@@ -34,14 +38,12 @@ class CreateModuleItemCommand implements Command
 
     public function prepareModuleItemData($data)
     {
-
-        $module_item['title'] = $data['title'];
-        $module_item['type'] = "ExternalTool";
-        $module_item['content_id'] = $data["content_id"];
-        $module_item['external_url'] = $data["external_url"];
-        $module_item['new_tab'] = false;
-        $module_item['completion_requirement']['type'] = 'must_view';
-        return ["module_item" => $module_item];
+        $moduleItem['title'] = $data['title'];
+        $moduleItem['type'] = self::MODULE_TYPE;
+        $moduleItem['content_id'] = $data["content_id"];
+        $moduleItem['external_url'] = $data["external_url"];
+        $moduleItem['new_tab'] = false;
+        $moduleItem['completion_requirement']['type'] = 'must_view';
+        return ["module_item" => $moduleItem];
     }
-
 }

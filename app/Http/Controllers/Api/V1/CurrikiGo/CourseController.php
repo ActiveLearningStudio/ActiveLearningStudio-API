@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * This file contains handlers for searching LMS courses.
+ */
+
 namespace App\Http\Controllers\Api\V1\CurrikiGo;
 
 use App\Http\Controllers\Controller;
@@ -21,6 +26,9 @@ use Illuminate\Support\Facades\Gate;
  */
 class CourseController extends Controller
 {
+    /**
+     * $lmsSettingRepository
+     */
     private $lmsSettingRepository;
 
     /**
@@ -34,7 +42,7 @@ class CourseController extends Controller
     }
 
     /**
-	 * Fetch a course from Canvas
+     * Fetch a course from Canvas
      * 
      * @urlParam  project required The ID of the project.
      * @bodyParam  setting_id int The id of the LMS setting.
@@ -46,11 +54,11 @@ class CourseController extends Controller
      * @response  403 {
      *  "errors": "You are not authorized to perform this action."
      * }
-	 */
+     */
     public function fetchFromCanvas(Project $project, Request $request)
     {                
-        $authenticated_user = auth()->user();
-        if (Gate::forUser($authenticated_user)->allows('fetch-lms-course', $project)) {
+        $authUser = auth()->user();
+        if (Gate::forUser($authUser)->allows('fetch-lms-course', $project)) {
             $validator = Validator::make($request->all(), ['setting_id' => 'required']);
             
             if ($validator->fails()) {
@@ -59,10 +67,11 @@ class CourseController extends Controller
                     'errors' => [$messages],
                 ], 400);
             }
-            $lmsSettings = $this->lmsSettingRepository->find($request->input('setting_id'));
-            $canvas_client = new Client($lmsSettings);
-            $canvas_course = new CanvasCourse($canvas_client);
-            $outcome = $canvas_course->fetch($project);
+            
+            $lmsSettings = $this->lmsSettingRepository->find($request->setting_id);
+            $canvasClient = new Client($lmsSettings);
+            $canvasCourse = new CanvasCourse($canvasClient);
+            $outcome = $canvasCourse->fetch($project);
 
             return response([
                 'project' => $outcome,
@@ -76,27 +85,33 @@ class CourseController extends Controller
 
     public function fetchFromMoodle(Request $request)
     {                
-
-        $validator = Validator::make($request->all(), ['setting_id' => 'required', 'project_id'=> 'required']);
+        $validator = Validator::make($request->all(), ['setting_id' => 'required', 'project_id' => 'required']);
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return response()->json(['error' => $messages]);
+            return response([
+                'errors' => [$messages],
+            ], 400);
         }
         
-        $moodle_course = new MoodleCourse($request->input("setting_id"));
-        $response = $moodle_course->fetch(['project_id' => $request->input("project_id")]);
-        if(is_null($response)){
-            return responseError(null,"No Project Found");
+        $moodleCourse = new MoodleCourse($request->setting_id);
+        $response = $moodleCourse->fetch(['project_id' => $request->project_id]);
+        if (is_null($response)) {
+            return response([
+                'errors' => ["No Project Found"],
+            ], 400);
         }
         
         $code = $response->getStatusCode();
-        if($code == 200){
+        if ($code == 200) {
             $outcome = $response->getBody()->getContents();
-            return responseSuccess( json_decode($outcome) );
-        }else {
-            return responseError(null,"Moodle API Request Failed");
+            return response([
+                'data' => json_decode($outcome),
+            ], 200);
+        } else {
+            return response([
+                'errors' => ["Moodle API Request Failed"],
+            ], 500);
         }
     }
-
 }

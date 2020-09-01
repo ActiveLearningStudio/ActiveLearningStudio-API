@@ -26,7 +26,8 @@ class LmsSettingController extends Controller
      *
      * @bodyParam $lmsSettingRepository LmsSettingRepositoryInterface required repository functions
      */
-    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository) {
+    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository)
+    {
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->authorizeResource(LmsSetting::class, 'lms_setting');
     }
@@ -39,9 +40,9 @@ class LmsSettingController extends Controller
      * @apiResourceCollection   App\Http\Resources\V1\CurrikiGo\LmsSettingCollection
      * @apiResourceModel    App\Models\CurrikiGo\LmsSetting
      */
-    public function my(){
+    public function my()
+    {
         $lms_settings = $this->lmsSettingRepository->fetchAllByUserId(auth()->user()->id);
         return response(new LmsSettingCollection($lms_settings), 200);
     }
-
 }

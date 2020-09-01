@@ -1,28 +1,31 @@
 <?php
+
 namespace App\CurrikiGo\Canvas\Commands;
+
 use App\CurrikiGo\Canvas\Contracts\Command;
 
 class GetModulesCommand implements Command
 {
-    public $api_url;
-    public $access_token;
-    public $http_client;
-    private $course_id;
-    private $module_name;
+    public $apiURL;
+    public $accessToken;
+    public $httpClient;
+    private $courseId;
+    private $moduleName;
 
-    public function __construct($course_id, $module_name = null) {
-        $this->course_id = $course_id;
-        $this->module_name = $module_name;
+    public function __construct($courseId, $moduleName = null)
+    {
+        $this->courseId = $courseId;
+        $this->moduleName = $moduleName;
     }
 
     public function execute()
     {
         $response = null;
         try {
-            $url = $this->api_url.'/courses/'.$this->course_id.'/modules';
-            $url .= $this->module_name ? '?search_term='.$this->module_name : '';
-            $response = $this->http_client->request('GET', $url, [
-                    'headers' => ['Authorization' => "Bearer {$this->access_token}", 'Accept' => 'application/json']
+            $url = $this->apiURL . '/courses/' . $this->courseId . '/modules';
+            $url .= $this->moduleName ? '?search_term=' . $this->moduleName : '';
+            $response = $this->httpClient->request('GET', $url, [
+                    'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json']
                 ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}

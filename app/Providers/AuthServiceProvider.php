@@ -66,9 +66,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     private function hasPermission(User $user, Project $project, $role = null)
     {
-        $project_users = $project->users;
-        foreach ($project_users as $project_user) {
-            if ($user->id === $project_user->id && (!$role || $role === $project_user->pivot->role)) {
+        $projectUsers = $project->users;
+        foreach ($projectUsers as $projectUser) {
+            if ($user->id === $projectUser->id && (!$role || $role === $projectUser->pivot->role)) {
                 return true;
             }
         }

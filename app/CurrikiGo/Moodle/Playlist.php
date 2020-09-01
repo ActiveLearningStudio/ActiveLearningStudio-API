@@ -1,22 +1,25 @@
 <?php
+
 namespace App\CurrikiGo\Moodle;
+
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Playlist as PlaylistModel;
 
 class Playlist
 {
-    private $setting_id;
+    private $settingId;
     private $client;
 
-    public function __construct($setting_id) {
-        $this->setting_id = $setting_id;
+    public function __construct($settingId)
+    {
+        $this->settingId = $settingId;
         $this->client = new \GuzzleHttp\Client();
     }
 
     public function send($data)
     {        
         $playlist = PlaylistModel::where('_id',$data["playlist_id"])->first();
-        $lms_setting = LmsSetting::where('_id', $this->setting_id)->first();
+        $lms_setting = LmsSetting::where('_id', $this->settingId)->first();
         $web_service_token = $lms_setting->lms_access_token;
         $lms_host = $lms_setting->lms_url;
         $web_service_function = "local_curriki_moodle_plugin_create_playlist";
@@ -26,7 +29,7 @@ class Playlist
             "wstoken" => $web_service_token,
             "wsfunction" => $web_service_function, 
             "moodlewsrestformat" => "json",
-            "entity_name" => $playlist->title . ($data['counter'] > 0 ? ' ('.$data['counter'].')' : ''),
+            "entity_name" => $playlist->title . ($data['counter'] > 0 ? ' (' .$data['counter'] . ')' : ''),
             "entity_type" => "playlist",
             "entity_id" => $playlist->_id,
             "parent_name" => $playlist->project->name,
