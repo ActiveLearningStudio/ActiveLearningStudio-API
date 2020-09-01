@@ -179,6 +179,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\RepositoryServiceProvider::class,
+        // MetricsServiceProvider provides services for SaaS features in CurrikiStudio
+        App\Providers\MetricsServiceProvider::class,
 
     ],
 

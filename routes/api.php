@@ -42,6 +42,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::apiResource('activity-items', 'ActivityItemController');
 
+        Route::get('users/{user}/metrics', 'UserMetricsController@show');
+        Route::get('users/{user}/membership', 'UserMembershipController@show');
+
         Route::group(['prefix' => 'h5p'], function () {
             Route::resource('/', "H5pController");
             Route::get('settings', "H5pController@create");
