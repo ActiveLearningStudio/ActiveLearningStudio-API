@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * This File defines handlers for Google classroom.
+ */
+
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
@@ -24,6 +29,9 @@ use Illuminate\Support\Facades\Gate;
  */
 class GoogleClassroomController extends Controller
 {
+    /**
+     * $userRepository User repository object
+     */
     private $userRepository;
 
     /**
@@ -46,7 +54,8 @@ class GoogleClassroomController extends Controller
      * }
      * 
 	 */
-    public function getCourses(Request $request){
+    public function getCourses(Request $request)
+    {
         $courses = [];
         try {
             $service = new GoogleClassroom();
@@ -56,14 +65,14 @@ class GoogleClassroomController extends Controller
                 'courseStates' => 'ACTIVE'
             );
             $courses = $service->getCourses($params);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return response([
                 'errors' => [$e->getMessage()],
             ], 500);
         }
         
         return response([
-            'status'=> 'success',
+            'status' => 'success',
             'data' => GCCourseResource::collection($courses)
         ], 200);
     }
@@ -86,9 +95,10 @@ class GoogleClassroomController extends Controller
      *  "errors": "Failed to save the token."
      * }
 	 */
-    public function saveAccessToken(Request $request){
+    public function saveAccessToken(Request $request)
+    {
         $validator = Validator::make($request->all(), [
-            'access_token'=> 'required'
+            'access_token' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -97,15 +107,14 @@ class GoogleClassroomController extends Controller
             ], 500);
         }
 
-        $authenticated_user = auth()->user();
-
-        $is_updated = $this->userRepository->update([
+        $authUser = auth()->user();
+        $isUpdated = $this->userRepository->update([
             'gapi_access_token' => $request->input('access_token')
-        ], $authenticated_user->id);
+        ], $authUser->id);
         
-        if ($is_updated) {
+        if ($isUpdated) {
             return response([
-                'message'=> 'Access Token Saved successfully',
+                'message' => 'Access Token Saved successfully',
             ], 200);
         }
 
@@ -132,9 +141,10 @@ class GoogleClassroomController extends Controller
      *  "errors": "Failed to save the token."
      * }
 	 */
-    public function copyProject(Project $project, Request $request){
-        $authenticated_user = auth()->user();
-        if (Gate::forUser($authenticated_user)->denies('publish-to-lms', $project)) {
+    public function copyProject(Project $project, Request $request)
+    {
+        $authUser = auth()->user();
+        if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {
             return response([
                 'errors' => ['Forbidden. You are trying to share other user\'s project.'],
             ], 403);
@@ -179,8 +189,8 @@ class GoogleClassroomController extends Controller
                 $topic = null;
                 if (!empty($existingTopics)) {
                     // Find a duplicate..
-                    foreach($existingTopics as $oneTopic) {
-                        if ($oneTopic->name === $playlist->title)  {
+                    foreach ($existingTopics as $oneTopic) {
+                        if ($oneTopic->name === $playlist->title) {
                             $topic = $oneTopic;
                             break;
                         }
@@ -223,11 +233,11 @@ class GoogleClassroomController extends Controller
             }
             
             return response([
-                'data'=> $return,
+                'data' => $return,
                 'status' => 'success'
             ], 200);
 
-        } catch(\Google_Service_Exception $ex) {
+        } catch (\Google_Service_Exception $ex) {
             return response([
                 'errors' => [$ex->getMessage()],
             ], 500);

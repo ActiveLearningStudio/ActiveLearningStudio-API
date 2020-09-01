@@ -19,7 +19,6 @@ class GCTopicResource extends JsonResource
             'topic_id' => $this->topicId,
             'name'  => $this->name,
             'course_work' => (isset($this->course_work) ? $this->course_work : [])
-            //'calendar_id' => $this->calendarId 
         ];
     }
 }

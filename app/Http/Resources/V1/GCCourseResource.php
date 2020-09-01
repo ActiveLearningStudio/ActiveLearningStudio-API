@@ -18,8 +18,6 @@ class GCCourseResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            //'calendar_id' => $this->calendarId 
         ];
-        //return parent::toArray($request);
     }
 }

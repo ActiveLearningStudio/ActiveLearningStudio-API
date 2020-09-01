@@ -1,15 +1,16 @@
 <?php
+
 namespace App\Services;
 
 /**
  * Google Classroom Service class
  */
-class GoogleClassroom {
-
+class GoogleClassroom 
+{
     protected $service;
 
-    function __construct() {
-
+    function __construct() 
+    {
         $client = new \Google_Client();
         $client->setApplicationName(config('google.gapi_application_name'));
         $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS]);
@@ -54,12 +55,11 @@ class GoogleClassroom {
             // }
             // file_put_contents($tokenPath, json_encode($client->getAccessToken()));
         }
-        
         $this->service = new \Google_Service_Classroom($client);
-
     }
 
-    public function getClient() {
+    public function getClient()
+    {
         return $this->service->getClient();
     }
 
@@ -83,18 +83,20 @@ class GoogleClassroom {
         return $this->service->courses->get($courseId);
     }
 
-    public function createCourse($data) {
+    public function createCourse($data)
+    {
         $course = new \Google_Service_Classroom_Course($data);
         return $this->service->courses->create($course);
     }
 
-    public function createTopic($data) {
+    public function createTopic($data)
+    {
         $topic = new \Google_Service_Classroom_Topic($data);
         return $this->service->courses_topics->create($data['courseId'], $topic);
     }
 
-    public function createCourseWork($data) {
-
+    public function createCourseWork($data)
+    {
         $courseWork = new \Google_Service_Classroom_CourseWork();
         $courseWork->setCourseId($data['course_id']);
         $courseWork->setTopicId($data['topic_id']);
@@ -102,7 +104,7 @@ class GoogleClassroom {
         $courseWork->setWorkType('ASSIGNMENT');
         $courseWork->setMaterials([
             'link'=> [
-                'url' => config('constants.front-url').'/shared/activity/'.$data['activity_id']
+                'url' => config('constants.front-url') . '/shared/activity/' . $data['activity_id']
             ]
         ]);
         $courseWork->setState('PUBLISHED');
@@ -110,15 +112,14 @@ class GoogleClassroom {
         return $this->service->courses_courseWork->create($data['course_id'], $courseWork);
     }
 
-    public function getTopics($courseId) {
+    public function getTopics($courseId)
+    {
         $pageToken = NULL;
         $topics = array();
 
         do {
             $params['pageToken'] = $pageToken;
-            
             $response = $this->service->courses_topics->listCoursesTopics($courseId, $params);
-            
             $topics = array_merge($topics, $response->getTopic());
             $pageToken = $response->nextPageToken;
         } while (!empty($pageToken));
@@ -126,19 +127,19 @@ class GoogleClassroom {
         return $topics; 
     }
 
-    public function getOrCreateTopic($data) {
+    public function getOrCreateTopic($data)
+    {
         $topics = $this->getTopics($data['courseId']);
         $foundTopic = null;
         if ($topics) {
             // Find a duplicate..
-            foreach($topics as $topic) {
-                if ($topic->name === $data['name'])  {
+            foreach ($topics as $topic) {
+                if ($topic->name === $data['name']) {
                     $foundTopic = $topic;
                     break;
                 }
             }
         }
-
         return ($foundTopic ? $foundTopic : $this->createTopic($data));
     }
 }
