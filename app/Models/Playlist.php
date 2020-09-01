@@ -18,6 +18,7 @@ class Playlist extends Model
         'title',
         'project_id',
         'order',
+        'is_public',
     ];
 
     /**

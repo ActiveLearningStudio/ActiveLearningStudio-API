@@ -29,12 +29,15 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::post('projects/{project}/share-project', 'ProjectController@share');
+        Route::post('projects/{project}/clone-project', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share-project', 'ProjectController@removeShare');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
+        Route::post('projects/{project}/playlists/{playlist}/clone-playlist', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
-
+        
+        Route::post('activities/{activity}/clone-activity', 'ActivityController@clone');
         Route::apiResource('activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');

@@ -20,6 +20,7 @@ class Project extends Model
         'thumb_url',
         'shared',
         'starter_project',
+        'is_public',
     ];
 
     /**
