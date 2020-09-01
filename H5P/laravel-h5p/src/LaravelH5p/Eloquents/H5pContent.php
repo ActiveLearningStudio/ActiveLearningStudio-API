@@ -42,7 +42,7 @@ class H5pContent extends Model
 
     public function activity()
     {
-        return $this->hasOne('App\Models\Activity', 'id');
+        return $this->hasOne('App\Models\Activity', 'h5p_content_id');
     }
 
     public function library()

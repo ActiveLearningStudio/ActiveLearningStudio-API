@@ -59,6 +59,6 @@ class H5pLibrary extends Model
 
     public function content()
     {
-        return $this->hasOne(H5pContent::class, 'id');
+        return $this->hasOne(H5pContent::class, 'library_id');
     }
 }
