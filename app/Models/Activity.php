@@ -36,11 +36,11 @@ class Activity extends Model
         return $this->belongsTo('App\Models\Playlist', 'playlist_id');
     }
 
-//    /**
-//     * Get the H5P Content that owns the activity
-//     */
-//    public function h5pContent()
-//    {
-//        return $this->hasOne('App\Models\H5pContent', 'h5p_content_id');
-//    }
+    /**
+    * Get the H5P Content relation
+    */
+    public function h5p_content()
+    {
+        return $this->belongsTo('Djoudi\LaravelH5p\Eloquents\H5pContent', 'h5p_content_id');
+    }
 }
