@@ -18,11 +18,11 @@ class ActivityResource extends JsonResource
     {        
         $h5p_parameters = $user_name = $user_id = null;
         
-        if($this->playlist->project->user){
+        if( $this->playlist->project->user ){
             $user_name = $this->playlist->project->user;
             $user_id = $this->playlist->project->id;
         }
-        if($this->type === 'h5p'){
+        if( $this->type === 'h5p' ){
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $editor = $h5p::$h5peditor;		
