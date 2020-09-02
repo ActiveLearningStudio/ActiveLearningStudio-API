@@ -56,4 +56,12 @@ class H5pLibrary extends Model
         $usage = $interface->getLibraryUsage($this->id, $interface->getNumNotFiltered() ? TRUE : FALSE);
         return intval($usage['libraries']);
     }
+
+    /**
+     * Get the fields for the library.
+     */
+    public function fields()
+    {
+        return $this->hasMany('App\Models\H5pElasticsearchField', 'library_id');
+    }
 }

@@ -15,7 +15,8 @@ class CreateH5pElasticsearchFieldsTable extends Migration
     {
         Schema::create('h5p_elasticsearch_fields', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('library_id')->unsigned();
+            $table->unsignedBigInteger('library_id');
+            $table->foreign('library_id')->references('id')->on('h5p_libraries');
             $table->string('name');
             $table->string('type');
             $table->string('label');

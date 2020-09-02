@@ -17,7 +17,7 @@ final class CreateProjectsIndex implements MigrationInterface
             $mapping->keyword('project_id');
             $mapping->text('name');
             $mapping->text('description');
-            $mapping->boolean('shared');
+            $mapping->boolean('is_public');
             $mapping->date('created_at');
             $mapping->date('updated_at');
         });

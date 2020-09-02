@@ -45,7 +45,7 @@ class Activity extends Model
             'h5p_content_id' => $this->h5p_content_id,
             'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
-            'shared' => $this->shared,
+            'is_public' => $this->is_public,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
@@ -55,7 +55,7 @@ class Activity extends Model
         }
 
         $activityRepository = resolve(ActivityRepositoryInterface::class);
-        $searchableArray = $searchableArray + $activityRepository->getH5pElasticsearchFields($this->h5pContent);
+        $searchableArray = $searchableArray + $activityRepository->getH5pElasticsearchFields($this->h5p_content);
 
         return $searchableArray;
     }
@@ -77,19 +77,12 @@ class Activity extends Model
     }
 
     /**
-     * Get the h5p content that owns the activity.
-     */
-    public function h5pContent()
-    {
-        return $this->belongsTo('App\Models\H5pContent');
-    }
-
-    /**
      * Get the activity's project's user.
      *
      * @return object
      */
-    public function getUserAttribute(){
+    public function getUserAttribute()
+    {
         if (isset($this->playlist) && isset($this->playlist->project) && isset($this->playlist->project->users)) {
             return $this->playlist->project->users()->wherePivot('role', 'teacher')->first();
         }
@@ -102,7 +95,8 @@ class Activity extends Model
      *
      * @return string
      */
-    public function getModelTypeAttribute(){
+    public function getModelTypeAttribute()
+    {
         return 'Activity';
     }
 

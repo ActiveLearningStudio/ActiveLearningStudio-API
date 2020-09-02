@@ -2,7 +2,7 @@
 
 namespace App\Repositories\H5pLibrary;
 
-use App\Models\H5pLibrary;
+use Djoudi\LaravelH5p\Eloquents\H5pLibrary;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pLibrary\H5pLibraryRepositoryInterface;
 use Illuminate\Support\Collection;

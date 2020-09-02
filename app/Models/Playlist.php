@@ -21,8 +21,7 @@ class Playlist extends Model
     protected $fillable = [
         'title',
         'project_id',
-        'order',
-        'shared'
+        'order'
     ];
 
     /**
@@ -33,7 +32,7 @@ class Playlist extends Model
         $searchableArray = [
             'title' => $this->title,
             'project_id' => $this->project_id,
-            'shared' => $this->shared,
+            'is_public' => $this->is_public,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
@@ -89,7 +88,8 @@ class Playlist extends Model
      *
      * @return object
      */
-    public function getUserAttribute(){
+    public function getUserAttribute()
+    {
         if (isset($this->project) && isset($this->project->users)) {
             return $this->project->users()->wherePivot('role', 'teacher')->first();
         }
@@ -102,7 +102,8 @@ class Playlist extends Model
      *
      * @return string
      */
-    public function getModelTypeAttribute(){
+    public function getModelTypeAttribute()
+    {
         return 'Playlist';
     }
 }

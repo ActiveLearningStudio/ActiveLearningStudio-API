@@ -20,11 +20,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     /**
      * @var boolean
      */
-    private $shared;
+    private $isPublic;
 
-    public function shared(bool $shared): self
+    public function isPublic(bool $isPublic): self
     {
-        $this->shared = $shared;
+        $this->isPublic = $isPublic;
         return $this;
     }
 
@@ -101,10 +101,10 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         $andQueries = [];
         $boolQueries = [];
 
-        if (isset($this->shared) && !empty($this->shared)) {
+        if (isset($this->isPublic) && !empty($this->isPublic)) {
             $andQueries[] = [
                 'term' => [
-                    'shared' => $this->shared
+                    'is_public' => $this->isPublic
                 ]
             ];
         }

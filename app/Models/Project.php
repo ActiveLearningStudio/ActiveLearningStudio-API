@@ -35,7 +35,7 @@ class Project extends Model
             'project_id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'shared' => $this->shared,
+            'is_public' => $this->is_public,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
         ];
@@ -87,7 +87,8 @@ class Project extends Model
      *
      * @return object
      */
-    public function getUserAttribute(){
+    public function getUserAttribute()
+    {
         if (isset($this->users)) {
             return $this->users()->wherePivot('role', 'teacher')->first();
         }
@@ -100,7 +101,8 @@ class Project extends Model
      *
      * @return string
      */
-    public function getModelTypeAttribute(){
+    public function getModelTypeAttribute()
+    {
         return 'Project';
     }
 }

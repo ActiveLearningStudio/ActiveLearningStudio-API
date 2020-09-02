@@ -18,6 +18,6 @@ class H5pElasticsearchField extends Model
      */
     public function library()
     {
-        return $this->belongsTo('App\Models\H5pLibrary');
+        return $this->belongsTo('Djoudi\LaravelH5p\Eloquents\H5pLibrary');
     }
 }

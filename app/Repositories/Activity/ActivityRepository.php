@@ -32,17 +32,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     /**
      * Get the search request
      *
-     * @param  Request  $request
+     * @param  SearchRequest  $request
      * @return Collection
      */
     public function searchForm($request)
     {
         $projects = [];
 
-        $searchedModels = Activity::searchForm()
+        $searchedModels = $this->model->searchForm()
                             ->query($request->input('query', 0))
                             ->join(Project::class, Playlist::class)
-                            ->shared(true)
+                            ->isPublic(true)
                             ->sort($request->input('sort', '_id'), $request->input('order', 'desc'))
                             ->from($request->input('from', 0))
                             ->size($request->input('size', 10))
@@ -94,7 +94,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     /**
      * Get the advance search request
      *
-     * @param  Request  $request
+     * @param  SearchRequest  $request
      * @return Collection
      */
     public function advanceSearchForm($request)
@@ -110,7 +110,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             })->pluck('id')->toArray();
         }
 
-        $searchResultQuery = Activity::searchForm()
+        $searchResultQuery = $this->model->searchForm()
                             ->query($request->input('query', 0))
                             ->join(Project::class, Playlist::class)
                             ->aggregate('count_by_index', [
@@ -118,7 +118,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                                     'field' => '_index',
                                 ]
                             ])
-                            ->shared(true)
+                            ->isPublic(true)
                             ->type($request->input('type', 0))
                             ->subjectIds($request->input('subjectIds', []))
                             ->educationLevelIds($request->input('educationLevelIds', []))
