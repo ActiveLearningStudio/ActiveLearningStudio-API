@@ -35,7 +35,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone-playlist', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
-        
+
+        Route::get('activities/{activity}/detail', 'ActivityController@detail');
         Route::post('playlists/{playlist}/activities/{activity}/clone-activity', 'ActivityController@clone');
         Route::apiResource('activities', 'ActivityController');
 
