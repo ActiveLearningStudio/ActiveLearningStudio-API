@@ -64,4 +64,9 @@ class H5pLibrary extends Model
     {
         return $this->hasMany('App\Models\H5pElasticsearchField', 'library_id');
     }
+
+    public function content()
+    {
+        return $this->hasOne(H5pContent::class, 'library_id');
+    }
 }
