@@ -30,12 +30,16 @@ use Illuminate\Support\Facades\Gate;
 class GoogleClassroomController extends Controller
 {
     /**
-     * $userRepository User repository object
+     * User repository object
+     * 
+     * @var \App\Repositories\User\UserRepositoryInterface
      */
     private $userRepository;
 
     /**
      * Instantiate a GoogleClassroom instance.
+     * 
+     * @param App\Repositories\User\UserRepositoryInterface $userRepository
      */
     public function __construct(UserRepositoryInterface $userRepository)
     {
