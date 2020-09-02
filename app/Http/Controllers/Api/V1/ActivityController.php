@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\Playlist;
+use App\Models\Project;
 use App\Http\Resources\V1\ActivityResource;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Illuminate\Http\Request;
@@ -132,5 +134,27 @@ class ActivityController extends Controller
         return response([
             'errors' => ['Failed to delete activity.'],
         ], 500);
+    }
+    
+    public function clone( Playlist $playlist,Activity $activity)
+    {
+        if ($activity->is_public) {
+            return response([
+                'errors' => ['Not a Public PlayList.'],
+                    ], 500);
+        }
+        $activity_data = [
+                    'title' => $activity->title,
+                    'type' => $activity->type,
+                    'content' => $activity->content,
+                    'playlist_id' => $playlist->id,
+                    'order' => $activity->order,
+                    'h5p_content_id' => $activity->h5p_content_id,
+                    'thumb_url' => $activity->thumb_url,
+                    'subject_id' => $activity->subject_id,
+                    'education_level_id' => $activity->education_level_id,
+                ];
+
+        $cloned_activity = $this->activityRepository->create($activity_data);
     }
 }

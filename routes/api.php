@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,7 +36,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/playlists/{playlist}/clone-playlist', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
         
-        Route::post('activities/{activity}/clone-activity', 'ActivityController@clone');
+        Route::post('playlists/{playlist}/activities/{activity}/clone-activity', 'ActivityController@clone');
         Route::apiResource('activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
