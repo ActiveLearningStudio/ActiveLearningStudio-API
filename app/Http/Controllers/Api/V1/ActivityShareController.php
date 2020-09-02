@@ -25,7 +25,6 @@ class ActivityShareController extends Controller
     /**
      * Share the specified activity.
      *
-     * @param Request $request
      * @param Activity $activity
      * @return Response
      */
@@ -49,7 +48,6 @@ class ActivityShareController extends Controller
     /**
      * Remove share specified activity.
      *
-     * @param Request $request
      * @param Activity $activity
      * @return Response
      */
