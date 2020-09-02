@@ -2,8 +2,18 @@
 
 namespace App\CurrikiGo\Canvas\Helpers;
 
+/**
+ * A Helper class for searching entities
+ */
 class Course 
 {
+    /**
+     * Get a course from a list
+     * 
+     * @param array $list A list of courses
+     * @param string $name The course name to search in the list.
+     * @return string|null
+     */
     public static function getByName($list, $name)
     {
         $course = null;
@@ -16,6 +26,13 @@ class Course
         return $course;
     }
 
+    /**
+     * Get a module from a list
+     * 
+     * @param array $list A list of courses
+     * @param string $name The module name to search in the list.
+     * @return string|null
+     */
     public static function getModuleByName($list, $name)
     {
         $module = null;

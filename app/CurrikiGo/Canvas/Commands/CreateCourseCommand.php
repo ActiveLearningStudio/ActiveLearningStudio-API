@@ -4,20 +4,60 @@ namespace App\CurrikiGo\Canvas\Commands;
 
 use App\CurrikiGo\Canvas\Contracts\Command;
 
+/**
+ * This class handles course creation via API in Canvas
+ */
 class CreateCourseCommand implements Command
 {
+    /**
+     * API URL
+     * 
+     * @var string
+     */
     public $apiURL;
+    /**
+     * Access Token for api requests
+     * 
+     * @var string
+     */
     public $accessToken;
+    /**
+     * HTTP Client instance
+     * 
+     * @var \GuzzleHttp\Client
+     */
     public $httpClient;
+    /**
+     * Account Id
+     * 
+     * @var int|string
+     */
     private $accountId;
+    /**
+     * Course data
+     * 
+     * @var array
+     */
     private $courseData;
 
+    /**
+     * Creates an instance of the command class
+     * 
+     * @param string|int $accountId
+     * @param array $courseData
+     * @return void
+     */
     public function __construct($accountId, $courseData)
     {
         $this->accountId = $accountId;
         $this->courseData = $this->prepareCourseData($courseData);
     }
 
+    /**
+     * Execute an API request for creating a course
+     * 
+     * @return string|null
+     */
     public function execute()
     {
         $response = null;
@@ -32,6 +72,12 @@ class CreateCourseCommand implements Command
         return $response;
     }
 
+    /**
+     * Prepare course data for API payload
+     * 
+     * @param array $data
+     * @return array
+     */
     public function prepareCourseData($data)
     {
         $course["name"] = $data['name'];

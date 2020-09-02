@@ -24,7 +24,7 @@ class LmsSettingController extends Controller
     /**
      * LmsSettingController constructor.
      *
-     * @bodyParam $lmsSettingRepository LmsSettingRepositoryInterface required repository functions
+     * @param $lmsSettingRepository LmsSettingRepositoryInterface
      */
     public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository)
     {

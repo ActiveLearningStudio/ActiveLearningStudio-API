@@ -17,6 +17,7 @@ use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\CurrikiGo\Canvas\Client;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CurrikiGo\FetchCourseRequest;
 
 /**
  * @group  CurrikiGo
@@ -54,21 +55,17 @@ class CourseController extends Controller
      * @response  403 {
      *  "errors": "You are not authorized to perform this action."
      * }
+     * 
+     * @param Project $project The project model object
+     * @param FetchCourseRequest $fetchRequest The request object
+     * @return Response
      */
-    public function fetchFromCanvas(Project $project, Request $request)
+    public function fetchFromCanvas(Project $project, FetchCourseRequest $fetchRequest)
     {                
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->allows('fetch-lms-course', $project)) {
-            $validator = Validator::make($request->all(), ['setting_id' => 'required']);
-            
-            if ($validator->fails()) {
-                $messages = $validator->messages();
-                return response([
-                    'errors' => [$messages],
-                ], 400);
-            }
-            
-            $lmsSettings = $this->lmsSettingRepository->find($request->setting_id);
+            $data = $fetchRequest->validated();
+            $lmsSettings = $this->lmsSettingRepository->find($data['setting_id']);
             $canvasClient = new Client($lmsSettings);
             $canvasCourse = new CanvasCourse($canvasClient);
             $outcome = $canvasCourse->fetch($project);
@@ -83,6 +80,12 @@ class CourseController extends Controller
         ], 403);
     }
 
+    /**
+     * Fetch course from Moodle
+     * 
+     * @param Request $request
+     * @return Response
+     */
     public function fetchFromMoodle(Request $request)
     {                
         $validator = Validator::make($request->all(), ['setting_id' => 'required', 'project_id' => 'required']);

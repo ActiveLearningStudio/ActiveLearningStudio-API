@@ -14,15 +14,35 @@ use App\CurrikiGo\Canvas\Helpers\Course as CourseHelper;
 use App\Models\Playlist as PlaylistModel;
 use App\HTTP\Resources\V1\CurrikiGo\CanvasPlaylistResource;
 
+/**
+ * Playlist class for handling playlist publishing to Canvas LMS
+ */
 class Playlist
 {
+    /**
+     * Canvas Client instance
+     * 
+     * @var \App\CurrikiGo\Canvas\Client
+     */
     private $canvasClient;
     
+    /**
+     * Make an instance of the class
+     * 
+     * @param \App\CurrikiGo\Canvas\Client $client
+     */
     public function __construct(Client $client)
     {
         $this->canvasClient = $client;
     }
 
+    /**
+     * Send a playlist to Canvas LMS
+     * 
+     * @param \App\Models\Playlist $playlist
+     * @param array $data 
+     * @return array
+     */
     public function send(PlaylistModel $playlist, $data)
     {
         $playlistItem = null;

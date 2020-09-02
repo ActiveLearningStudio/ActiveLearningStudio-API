@@ -18,6 +18,7 @@ use App\CurrikiGo\Canvas\Client;
 use Validator;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CurrikiGo\PublishPlaylistRequest;
 
 /**
  * @group  CurrikiGo
@@ -44,6 +45,9 @@ class PublishController extends Controller
 
     /**
      * Publish a Playlist to Moodle
+     * 
+     * @param Request $request
+     * @return Response
      */
     public function playlistToMoodle(Request $request)
     {                
@@ -89,8 +93,13 @@ class PublishController extends Controller
      * @response  500 {
      *  "errors": "Error sending playlists to canvas."
      * }
+     * 
+     * @param Project $project The project model object
+     * @param Playlist $playlist The playlist model object
+     * @param PublishPlaylistRequest $publishRequest The request object
+     * @return Response
      */
-    public function playlistToCanvas(Project $project, Playlist $playlist, Request $request)
+    public function playlistToCanvas(Project $project, Playlist $playlist, PublishPlaylistRequest $publishRequest)
     {
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -101,20 +110,12 @@ class PublishController extends Controller
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->allows('publish-to-lms', $project)) {
             // User can publish
-            $validator = Validator::make($request->all(), ['setting_id' => 'required']);
-            
-            if ($validator->fails()) {
-                $messages = $validator->messages();
-                return response([
-                    'errors' => [$messages],
-                ], 400);
-            }
-
-            $lmsSettings = $this->lmsSettingRepository->find($request->setting_id);
+            $data = $publishRequest->validated();
+            $lmsSettings = $this->lmsSettingRepository->find($data['setting_id']);
             $canvasClient = new Client($lmsSettings);
             $canvasPlaylist = new CanvasPlaylist($canvasClient);
-            $counter = $request->counter ? $request->counter : 0;
-            $outcome = $canvasPlaylist->send($playlist, ['counter' => intval($counter)]);
+            $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
+            $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter]);
             
             if ($outcome) {            
                 return response([

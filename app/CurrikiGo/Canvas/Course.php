@@ -9,15 +9,34 @@ use App\CurrikiGo\Canvas\Commands\GetModuleItemsCommand;
 use App\CurrikiGo\Canvas\Helpers\Course as CourseHelper;
 use App\Models\Project;
 
+/**
+ * Class for fetching courses from Canvas LMS
+ */
 class Course
 {
+    /**
+     * Canvas Client instance
+     * 
+     * @var \App\CurrikiGo\Canvas\Client
+     */
     private $canvasClient;
-
+    
+    /**
+     * Make an instance of the class
+     * 
+     * @param \App\CurrikiGo\Canvas\Client $client
+     */
     public function __construct(Client $client)
     {
         $this->canvasClient = $client;
     }
 
+    /**
+     * Fetch a course from Canvas LMS
+     * 
+     * @param \App\Models\Project $project
+     * @return array
+     */
     public function fetch(Project $project)
     {
         $playlist = null;
