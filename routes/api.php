@@ -35,6 +35,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
+        Route::get('activities/{activity}/share', 'ActivityShareController@share');
+        Route::get('activities/{activity}/remove-share', 'ActivityShareController@removeShare');
         Route::get('activities/{activity}/detail', 'ActivityController@detail');
         Route::apiResource('activities', 'ActivityController');
 
@@ -47,6 +49,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::resource('/', "H5pController");
             Route::get('settings', "H5pController@create");
             Route::get('embed/{id}', "H5pController@embed");
+            Route::get('activity/{activity}', "H5pController@showByActivity");
             //H5P Ajax calls
             //Route::get('ajax/libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraries')->name("h5p.ajax.libraries");
             Route::match(['GET', 'POST'], 'ajax/libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraries')->name("h5p.ajax.libraries");
