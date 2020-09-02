@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Activity;
+use App\Http\Resources\V1\H5pActivityResource;
 
 /**
  * @group  H5P
@@ -243,6 +245,41 @@ class H5pController extends Controller
             'parameters' => $parameters,
             'display_options' => $display_options
         ]);
+    }
+
+    /**
+     * Retrive H5P based on Activity
+     *
+     * @param Activity $activity
+     * 
+     * @return Response
+     */
+    public function showByActivity(Activity $activity)
+    {
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->load_content($activity->h5p_content_id);
+        $content['disable'] = 8; // always enable H5P frame which include 'Reuse' and 'Embed' links
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+        $user = Auth::user();
+
+        // create event dispatch
+        event(new H5pEvent(
+            'content',
+            NULL,
+            $content['id'],
+            $content['title'],
+            $content['library']['name'],
+            $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+        ));
+
+        $h5p_data = ['settings' => $settings, 'user' => $user->only(['id', 'name', 'email']) , 'embed_code' => $embed_code];
+        return response([
+            'h5p_activity' => new H5pActivityResource($activity, $h5p_data),
+        ], 200);
     }
 
     /**
