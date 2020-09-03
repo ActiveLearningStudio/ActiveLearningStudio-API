@@ -9,23 +9,26 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\GCCourseResource;
-use App\Http\Resources\V1\GCTopicResource;
-use App\Http\Resources\V1\GCCourseWorkResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Validator;
 use App\Services\GoogleClassroom;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\{
+    GCCopyProjectRequest,
+    GCSaveAccessTokenRequest
+};
+
 
 /**
  * @group  Google Classroom
  * @authenticated
+ * 
  * @author Aqeel
  *
- * APIs for sharing projects in Google Classroom
+ * This class handles sharing projects in Google Classroom via a service
  */
 class GoogleClassroomController extends Controller
 {
@@ -57,6 +60,8 @@ class GoogleClassroomController extends Controller
      *  "errors": "Service exception error"
      * }
      * 
+     * @param Request $request
+     * @return Response
 	 */
     public function getCourses(Request $request)
     {
@@ -66,7 +71,7 @@ class GoogleClassroomController extends Controller
             $params = array(
                 // if pageSize is not set, then server will set the maximum limit, so we need to iterate through all pages
                 'pageSize' => 100, 
-                'courseStates' => 'ACTIVE'
+                'courseStates' => GoogleClassroom::COURSE_STATE_ACTIVE
             );
             $courses = $service->getCourses($params);
         } catch (Exception $e) {
@@ -76,8 +81,7 @@ class GoogleClassroomController extends Controller
         }
         
         return response([
-            'status' => 'success',
-            'data' => GCCourseResource::collection($courses)
+            'courses' => GCCourseResource::collection($courses)
         ], 200);
     }
     
@@ -98,22 +102,17 @@ class GoogleClassroomController extends Controller
      * @response  500 {
      *  "errors": "Failed to save the token."
      * }
+     * 
+     * @param \App\Http\Requests\GCSaveAccessTokenRequest $accessTokenRequest
+     * @return Response
 	 */
-    public function saveAccessToken(Request $request)
+    public function saveAccessToken(GCSaveAccessTokenRequest $accessTokenRequest)
     {
-        $validator = Validator::make($request->all(), [
-            'access_token' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => ['Validation error: Access token is required'],
-            ], 500);
-        }
+        $data = $accessTokenRequest->validated();
 
         $authUser = auth()->user();
         $isUpdated = $this->userRepository->update([
-            'gapi_access_token' => $request->input('access_token')
+            'gapi_access_token' => $data['access_token']
         ], $authUser->id);
         
         if ($isUpdated) {
@@ -144,8 +143,12 @@ class GoogleClassroomController extends Controller
      * @response  500 {
      *  "errors": "Failed to save the token."
      * }
+     * 
+     * @param \App\Models\Project $project
+     * @param \App\Http\Requests\GCCopyProjectRequest $copyProjectRequest
+     * @return Response
 	 */
-    public function copyProject(Project $project, Request $request)
+    public function copyProject(Project $project, GCCopyProjectRequest $copyProjectRequest)
     {
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {
@@ -155,92 +158,14 @@ class GoogleClassroomController extends Controller
         }
        
         try {
-            $return = [];
-            // Classroom ID - if available.
-            $courseId = $request->input('course_id');
-            
+            $data = $copyProjectRequest->validated();
+            $courseId = $data['course_id'] ?? 0;
             $service = new GoogleClassroom();
-            // If course already exists 
-            $course = NULL;
-            if ($courseId) {
-                $course = $service->getCourse($courseId);
-            } else {
-                $courseData = [
-                    'name' => $project->name,
-                    'descriptionHeading' => $project->description,
-                    'description' => $project->description,
-                    'room' => '1', // optional
-                    'ownerId' => 'me',
-                    'courseState' => 'PROVISIONED'
-                ];
-                $course = $service->createCourse($courseData);
-            }
-            
-            $return['course'] = GCCourseResource::make($course)->resolve();
-            // inserting playlists/topics to Classroom
-            $playlists = $project->playlists;
-            $count = 0;
-            $return['course']['topics'] = [];
-
-            // Existing topics that the course has.
-            $existingTopics = $service->getTopics($course->id);
-            foreach ($playlists as $playlist) {
-                if (empty($playlist->title)) {
-                    continue;
-                }
-
-                // Check for duplicate topic here...
-                $topic = null;
-                if (!empty($existingTopics)) {
-                    // Find a duplicate..
-                    foreach ($existingTopics as $oneTopic) {
-                        if ($oneTopic->name === $playlist->title) {
-                            $topic = $oneTopic;
-                            break;
-                        }
-                    }
-                }
-                if (!$topic) {
-                    $topicData = [
-                        'courseId' => $course->id,
-                        'name' => $playlist->title
-                    ];
-                    $topic = $service->createTopic($topicData);
-                    // Pushing to existing topics
-                    $existingTopics[] = $topic;
-                }
-
-                $return['course']['topics'][$count] = GCTopicResource::make($topic)->resolve();
-
-                // Iterate over activities
-                $activities = $playlist->activities;
-                $courseWorkCount = 0;
-                foreach ($activities as $activity) {
-                    if (empty($activity->title)) {
-                        continue;
-                    }
-                    $activity->shared = true;
-                    $activity->save();
-
-                    $courseWorkData = [
-                        'course_id' => $course->id,
-                        'topic_id' => $topic->topicId,
-                        'activity_id' => $activity->id,
-                        'activity_title' => $activity->title
-                    ];        
-                    $courseWork = $service->createCourseWork($courseWorkData);
-                    
-                    $return['course']['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
-                    $courseWorkCount++;
-                }
-                $count++;
-            }
+            $course = $service->createProjectAsCourse($project, $courseId);
             
             return response([
-                'data' => $return,
-                'status' => 'success'
+                'course' => $course,
             ], 200);
-
         } catch (\Google_Service_Exception $ex) {
             return response([
                 'errors' => [$ex->getMessage()],
