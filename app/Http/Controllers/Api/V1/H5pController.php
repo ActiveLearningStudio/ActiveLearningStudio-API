@@ -267,7 +267,7 @@ class H5pController extends Controller
         $settings = $embed['settings'];
         $user = Auth::user();
 
-        if($user && is_null($visibility)){
+        if ( $user && is_null($visibility) ) {
             // create event dispatch
             event(new H5pEvent(
                 'content',
@@ -278,7 +278,7 @@ class H5pController extends Controller
                 $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
             ));
             $user_data = $user->only(['id', 'name', 'email']);
-        }else{
+        } else {
             $user_data = null;
         }
 
