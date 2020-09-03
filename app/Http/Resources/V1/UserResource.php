@@ -29,6 +29,7 @@ class UserResource extends JsonResource
             'subscribed' => $this->subscribed,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'gapi_access_token' => $this->gapi_access_token
         ];
     }
 }
