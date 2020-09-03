@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class H5pActivityResource extends JsonResource
 {
+    private $h5p_data = null;
 
     public function __construct($resource, $h5p_data)
     {
