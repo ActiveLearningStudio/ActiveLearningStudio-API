@@ -1,10 +1,7 @@
 *
 !apidoc/
-!public/activity-types/audio.png
-!public/activity-types/images.png
-!public/activity-types/informational.png
-!public/activity-types/mathematics.png
-!public/activity-types/multimedia.png
-!public/activity-types/questions.png
 !public/projects/
+!public/activities/
+!public/activity-items/
+!public/activity-types/
 !.gitignore

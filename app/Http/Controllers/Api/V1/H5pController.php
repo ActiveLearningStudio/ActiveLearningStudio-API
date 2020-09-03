@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\H5pActivityResource;
+use App\Models\Activity;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Djoudi\LaravelH5p\LaravelH5p;
 use H5pCore;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Activity;
-use App\Http\Resources\V1\H5pActivityResource;
+use Illuminate\Validation\ValidationException;
 
 /**
  * @group  H5P
@@ -21,26 +24,25 @@ use App\Http\Resources\V1\H5pActivityResource;
  *
  * APIs for H5P
  */
-
 class H5pController extends Controller
 {
     /**
      * List of H5Ps
-     * 
+     *
      * Display a listing of the H5Ps
      *
-     * @return Response
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
-        $where = H5pContent::orderBy('h5p_contents.id', 'desc');
+        $query = H5pContent::orderBy('h5p_contents.id', 'desc');
 
         if ($request->query('sf') && $request->query('s')) {
             if ($request->query('sf') == 'title') {
-                $where->where('h5p_contents.title', $request->query('s'));
+                $query->where('h5p_contents.title', $request->query('s'));
             }
             if ($request->query('sf') == 'creator') {
-                $where->leftJoin('users', 'users.id', 'h5p_contents.user_id')->where('users.name', 'like', '%' . $request->query('s') . '%');
+                $query->leftJoin('users', 'users.id', 'h5p_contents.user_id')->where('users.name', 'like', '%' . $request->query('s') . '%');
             }
         }
 
@@ -49,12 +51,11 @@ class H5pController extends Controller
             'creator' => trans('laravel-h5p.content.creator'),
         ];
 
-        $entries = $where->paginate(10);
+        $entries = $query->paginate(10);
         $entries->appends(['sf' => $request->query('sf'), 's' => $request->query('s')]);
 
         return response()->json(compact('entries', 'request', 'search_fields'), 200);
     }
-
 
     /**
      * H5P create settings
@@ -89,7 +90,9 @@ class H5pController extends Controller
             $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
         }
 
-        return response()->json( ['h5p' => compact('settings', 'user', 'library', 'parameters', 'display_options')], 200 );
+        return response([
+            'h5p' => compact('settings', 'user', 'library', 'parameters', 'display_options')
+        ], 200);
     }
 
     /**
@@ -97,6 +100,7 @@ class H5pController extends Controller
      *
      * @param Request $request
      * @return Response
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -173,37 +177,43 @@ class H5pController extends Controller
                 // Handle file upload
                 $return_id = $this->handle_upload($content);
                 if (intval($return_id) > 0) {
-                    return response()->json([
+                    return response([
                         'success' => trans('laravel-h5p.content.created'),
                         'id' => $return_id,
                         'type' => 'h5p'
-                    ]);
+                    ], 201);
                 } else {
-                    return response()->json(['fail' => trans('laravel-h5p.content.can_not_created')]);
+                    return response([
+                        'fail' => trans('laravel-h5p.content.can_not_created')
+                    ], 422);
                 }
             }
 
             if ($return_id) {
-                return response()->json([
+                return response([
                     'success' => trans('laravel-h5p.content.created'),
                     'id' => $return_id,
                     'title' => $content['metadata']->title,
                     'type' => 'h5p'
-                ], 200);
+                ], 201);
             } else {
-                return response()->json(['fail' => trans('laravel-h5p.content.can_not_created')], 400);
+                return response([
+                    'fail' => trans('laravel-h5p.content.can_not_created')
+                ], 400);
             }
         } catch (H5PException $ex) {
-            return response()->json(['fail' => trans('laravel-h5p.content.can_not_created')], 400);
+            return response([
+                'fail' => trans('laravel-h5p.content.can_not_created')
+            ], 400);
         }
     }
 
     /**
-     * Retrive H5P based on id
+     * Retrieve H5P based on id
      *
      * @param Request $request
      * @param int $request
-     * 
+     *
      * @return Response
      */
     public function edit(Request $request, $id)
@@ -236,7 +246,7 @@ class H5pController extends Controller
             $user = DB::table('users')->where('api_token', $request->get('api_token'))->first();
         }
 
-        return response()->json([
+        return response([
             'settings' => $settings,
             'user' => $user,
             'id' => $id,
@@ -244,7 +254,7 @@ class H5pController extends Controller
             'library' => $library,
             'parameters' => $parameters,
             'display_options' => $display_options
-        ]);
+        ], 200);
     }
 
     /**
@@ -252,11 +262,11 @@ class H5pController extends Controller
      *
      * @param Activity $activity
      * @param $visibility
-     * 
+     *
      * @return Response
      */
     public function showByActivity(Activity $activity, $visibility = null)
-    {        
+    {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();
@@ -267,7 +277,7 @@ class H5pController extends Controller
         $settings = $embed['settings'];
         $user = Auth::user();
 
-        if ( $user && is_null($visibility) ) {
+        if ($user && is_null($visibility)) {
             // create event dispatch
             event(new H5pEvent(
                 'content',
@@ -282,7 +292,7 @@ class H5pController extends Controller
             $user_data = null;
         }
 
-        $h5p_data = ['settings' => $settings, 'user' => $user_data , 'embed_code' => $embed_code];
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         return response([
             'h5p_activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);
@@ -292,9 +302,9 @@ class H5pController extends Controller
      * Update H5P based on id
      *
      * @param Request $request
-     * @param int $request
-     * 
+     * @param int $id
      * @return Response
+     * @throws ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -364,7 +374,7 @@ class H5pController extends Controller
                 $core->saveContent($content);
 
                 // Move images and find all content dependencies
-                $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);                
+                $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
 
                 $return_id = $content['id'];
             } elseif ($request->get('action') === 'upload') {
@@ -377,15 +387,15 @@ class H5pController extends Controller
             }
 
             if ($return_id) {
-                return response()->json([
+                return response([
                     'success' => trans('laravel-h5p.content.updated'),
                     'id' => $return_id
                 ], 200);
             } else {
-                return response()->json(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
+                return response(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
             }
         } catch (H5PException $ex) {
-            return response()->json(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
+            return response(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
         }
     }
 
@@ -393,8 +403,8 @@ class H5pController extends Controller
      * Retrive H5P based on id to display
      *
      * @param Request $request
-     * @param int $request
-     * 
+     * @param int $id
+     *
      * @return Response
      */
     public function show(Request $request, $id)
@@ -422,7 +432,7 @@ class H5pController extends Controller
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
         ));
 
-        return response()->json([
+        return response([
             'settings' => $settings,
             'user' => $user,
             'embed_code' => $embed_code
@@ -433,8 +443,8 @@ class H5pController extends Controller
      * Retrive H5P embed parameters
      *
      * @param Request $request
-     * @param int $request
-     * 
+     * @param int $id
+     *
      * @return Response
      */
     public function embed(Request $request, $id)
@@ -456,14 +466,14 @@ class H5pController extends Controller
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
         ));
 
-        return response()->json(compact('settings', 'embed_code'), 200);
+        return response(compact('settings', 'embed_code'), 200);
     }
 
     public function destroy(Request $request, $id)
     {
         try {
             $content = H5pContent::findOrFail($id);
-            $content->delete();
+            return $content->delete();
         } catch (Exception $ex) {
             return trans('laravel-h5p.content.can_not_delete');
         }
