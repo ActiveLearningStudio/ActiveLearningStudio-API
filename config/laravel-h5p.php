@@ -41,4 +41,5 @@ return [
 	'h5p_check_h5p_requirements' => FALSE,
 	'h5p_hub_is_enabled' => FALSE,
 	'h5p_version' => '1.8.2',
+	'h5p_preview_flag' => 8,
 ];
