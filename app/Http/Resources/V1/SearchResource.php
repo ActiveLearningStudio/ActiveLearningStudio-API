@@ -22,7 +22,7 @@ class SearchResource extends JsonResource
             'title' => (isset($this->title) ? $this->title : $this->name ),
             'description' => $this->when(isset($this->description), $this->description),
             'model' => $this->modelType,
-            'user' => $this->user,
+            'user' => new UserResource($this->user)
         ];
     }
 }

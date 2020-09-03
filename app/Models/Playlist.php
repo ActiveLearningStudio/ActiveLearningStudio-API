@@ -21,7 +21,8 @@ class Playlist extends Model
     protected $fillable = [
         'title',
         'project_id',
-        'order'
+        'order',
+        'elasticsearch'
     ];
 
     /**
@@ -33,6 +34,7 @@ class Playlist extends Model
             'title' => $this->title,
             'project_id' => $this->project_id,
             'is_public' => $this->is_public,
+            'elasticsearch' => $this->elasticsearch,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];

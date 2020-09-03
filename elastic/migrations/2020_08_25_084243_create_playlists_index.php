@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use ElasticAdapter\Indices\Mapping;
@@ -17,6 +18,7 @@ final class CreatePlaylistsIndex implements MigrationInterface
             $mapping->text('title');
             $mapping->keyword('project_id');
             $mapping->boolean('is_public');
+            $mapping->boolean('elasticsearch');
             $mapping->date('created_at');
             $mapping->date('updated_at');
         });

@@ -32,40 +32,41 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     /**
      * Get the search request
      *
-     * @param  SearchRequest  $request
+     * @param  array  $data
      * @return Collection
      */
-    public function searchForm($request)
+    public function searchForm($data)
     {
         $projects = [];
 
         $searchedModels = $this->model->searchForm()
-                            ->query($request->input('query', 0))
+                            ->query(Arr::get($data, 'query', 0))
                             ->join(Project::class, Playlist::class)
                             ->isPublic(true)
-                            ->sort($request->input('sort', '_id'), $request->input('order', 'desc'))
-                            ->from($request->input('from', 0))
-                            ->size($request->input('size', 10))
+                            ->elasticsearch(true)
+                            ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
+                            ->from(Arr::get($data, 'from', 0))
+                            ->size(Arr::get($data, 'size', 10))
                             ->execute()
                             ->models();
 
         foreach ($searchedModels as $modelId => $searchedModel) {
             $modelName = class_basename($searchedModel);
 
-            if ($modelName == 'Project' && !isset($projects[$searchedModel->id])) {
-                $projects[$searchedModel->id] = $searchedModel->attributesToArray();
+            if ($modelName === 'Project' && !isset($projects[$searchedModel->id])) {
+                $projects[$searchedModel->id] = SearchResource::make($searchedModel)->resolve();
                 $projects[$searchedModel->id]['playlists'] = [];
-            } else if ($modelName == 'Playlist' && !isset($projects[$searchedModel->project_id]['playlists'][$searchedModel->id])) {
+            } elseif ($modelName === 'Playlist' && !isset($projects[$searchedModel->project_id]['playlists'][$searchedModel->id])) {
                 $playlistProjectid = $searchedModel->project_id;
 
                 if (!isset($projects[$playlistProjectid])) {
-                    $projects[$playlistProjectid] = $searchedModel->project->attributesToArray();
+                    $projects[$playlistProjectid] = SearchResource::make($searchedModel->project)->resolve();
                     $projects[$playlistProjectid]['playlists'] = [];
                 }
 
-                $projects[$playlistProjectid]['playlists'][$searchedModel->id] = $searchedModel->attributesToArray();
+                $projects[$playlistProjectid]['playlists'][$searchedModel->id] = SearchResource::make($searchedModel)->resolve();
                 $projects[$playlistProjectid]['playlists'][$searchedModel->id]['activities'] = [];
-            } else if ($modelName == 'Activity') {
+            } elseif ($modelName === 'Activity') {
                 $activityId = $searchedModel->id;
                 $activityPlaylist = $searchedModel->playlist;
                 $activityPlaylistId = $activityPlaylist->id;
@@ -73,17 +74,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
                 if (!isset($projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId]['activities'][$activityId])) {
                     if (!isset($projects[$activityPlaylistProjectid])) {
-                        $projects[$activityPlaylistProjectid] = $activityPlaylist->project->attributesToArray();
+                        $projects[$activityPlaylistProjectid] = SearchResource::make($activityPlaylist->project)->resolve();
                         $projects[$activityPlaylistProjectid]['playlists'] = [];
                     }
 
                     if (!isset($projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId])) {
-                        $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId] = $activityPlaylist->attributesToArray();
+                        $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId] = SearchResource::make($activityPlaylist)->resolve();
                         $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId]['activities'] = [];
                     }
 
                     $activityModel = $searchedModel->attributesToArray();
-                    $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId]['activities'][$activityId] = $activityModel;
+                    $projects[$activityPlaylistProjectid]['playlists'][$activityPlaylistId]['activities'][$activityId] = SearchResource::make($activityModel)->resolve();
                 }
             }
         }
@@ -94,16 +95,16 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     /**
      * Get the advance search request
      *
-     * @param  SearchRequest  $request
+     * @param  array  $data
      * @return Collection
      */
-    public function advanceSearchForm($request)
+    public function advanceSearchForm($data)
     {
         $counts = [];
         $projectIds = [];
 
-        if ($request->has('userIds') && $request->filled('userIds')) {
-            $userIds = $request->input('userIds');
+        if (isset($data['userIds']) && !empty($data['userIds'])) {
+            $userIds = $data['userIds'];
 
             $projectIds = Project::whereHas('users', function (Builder $query) use($userIds) {
                 $query->whereIn('id', $userIds);
@@ -111,7 +112,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $searchResultQuery = $this->model->searchForm()
-                            ->query($request->input('query', 0))
+                            ->query(Arr::get($data, 'query', 0))
                             ->join(Project::class, Playlist::class)
                             ->aggregate('count_by_index', [
                                 'terms' => [
@@ -119,17 +120,18 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                                 ]
                             ])
                             ->isPublic(true)
-                            ->type($request->input('type', 0))
-                            ->subjectIds($request->input('subjectIds', []))
-                            ->educationLevelIds($request->input('educationLevelIds', []))
+                            ->elasticsearch(true)
+                            ->type(Arr::get($data, 'type', 0))
+                            ->subjectIds(Arr::get($data, 'subjectIds', []))
+                            ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
                             ->projectIds($projectIds)
-                            ->negativeQuery($request->input('negativeQuery', 0))
-                            ->sort($request->input('sort', '_id'), $request->input('order', 'desc'))
-                            ->from($request->input('from', 0))
-                            ->size($request->input('size', 10));
+                            ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
+                            ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
+                            ->from(Arr::get($data, 'from', 0))
+                            ->size(Arr::get($data, 'size', 10));
 
-        if ($request->has('model') && $request->filled('model')) {
-            $searchResultQuery = $searchResultQuery->postFilter('term', ['_index' => $request->input('model')]);
+        if (isset($data['model']) && !empty($data['model'])) {
+            $searchResultQuery = $searchResultQuery->postFilter('term', ['_index' => $data['model']]);
         }
 
         $searchResult = $searchResultQuery->execute();
@@ -173,7 +175,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 if (count($h5pElasticsearchFieldArray) > 1) {
                     $h5pElasticsearchFieldValueArrays = Arr::get($parameters, $h5pElasticsearchFieldArray[0]);
 
-                    if (is_array($h5pElasticsearchFieldValueArrays)){
+                    if (is_array($h5pElasticsearchFieldValueArrays)) {
                         foreach ($h5pElasticsearchFieldValueArrays as $h5pElasticsearchFieldValueArray) {
                             if (isset($h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]])) {
                                 $h5pElasticsearchFieldValue = $h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]];
@@ -184,8 +186,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 } else {
                     $h5pElasticsearchFieldValue = Arr::get($parameters, $h5pElasticsearchField->path, null);
 
-                    if ($h5pElasticsearchFieldValue !== null)
+                    if ($h5pElasticsearchFieldValue !== null) {
                         $h5pElasticsearchFieldsArray[$h5pElasticsearchField->path] = $h5pElasticsearchFieldValue;
+                    }
                 }
             }
         }

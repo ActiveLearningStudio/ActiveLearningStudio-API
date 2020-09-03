@@ -62,7 +62,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         });
 
         Route::get('search', 'SearchController@search');
-        Route::get('search/advance', 'SearchController@advance');
+        Route::get('search/advanced', 'SearchController@advance');
     });
 
     Route::get('error', 'ErrorController@show')->name('api/error');

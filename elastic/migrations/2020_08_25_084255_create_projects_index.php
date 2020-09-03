@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use ElasticAdapter\Indices\Mapping;
@@ -18,6 +19,7 @@ final class CreateProjectsIndex implements MigrationInterface
             $mapping->text('name');
             $mapping->text('description');
             $mapping->boolean('is_public');
+            $mapping->boolean('elasticsearch');
             $mapping->date('created_at');
             $mapping->date('updated_at');
         });

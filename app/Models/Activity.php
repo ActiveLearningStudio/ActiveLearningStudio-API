@@ -30,6 +30,7 @@ class Activity extends Model
         'subject_id',
         'education_level_id',
         'h5p_content_id',
+        'elasticsearch',
     ];
 
     /**
@@ -46,6 +47,7 @@ class Activity extends Model
             'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
             'is_public' => $this->is_public,
+            'elasticsearch' => $this->elasticsearch,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];

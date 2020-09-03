@@ -11,16 +11,51 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
      */
     private $query;
 
+    /**
+     * @var boolean
+     */
+    private $isPublic;
+
+    /**
+     * @var boolean
+     */
+    private $elasticsearch;
+
+    /**
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @var array
+     */
+    private $subjectIds;
+
+    /**
+     * @var array
+     */
+    private $educationLevelIds;
+
+    /**
+     * @var array
+     */
+    private $playlistIds;
+
+    /**
+     * @var array
+     */
+    private $projectIds;
+
+    /**
+     * @var string
+     */
+    private $negativeQuery;
+
     public function query(string $query): self
     {
         $this->query = $query;
         return $this;
     }
-
-    /**
-     * @var boolean
-     */
-    private $isPublic;
 
     public function isPublic(bool $isPublic): self
     {
@@ -28,10 +63,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-    /**
-     * @var string
-     */
-    private $type;
+    public function elasticsearch(bool $elasticsearch): self
+    {
+        $this->elasticsearch = $elasticsearch;
+        return $this;
+    }
 
     public function type(string $type): self
     {
@@ -39,21 +75,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-    /**
-     * @var array
-     */
-    private $subjectIds;
-
     public function subjectIds(array $subjectIds): self
     {
         $this->subjectIds = $subjectIds;
         return $this;
     }
-
-    /**
-     * @var array
-     */
-    private $educationLevelIds;
 
     public function educationLevelIds(array $educationLevelIds): self
     {
@@ -61,32 +87,17 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-    /**
-     * @var array
-     */
-    private $playlistIds;
-
     public function playlistIds(array $playlistIds): self
     {
         $this->playlistIds = $playlistIds;
         return $this;
     }
 
-    /**
-     * @var array
-     */
-    private $projectIds;
-
     public function projectIds(array $projectIds): self
     {
         $this->projectIds = $projectIds;
         return $this;
     }
-
-    /**
-     * @var string
-     */
-    private $negativeQuery;
 
     public function negativeQuery(string $negativeQuery): self
     {
@@ -105,6 +116,14 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             $andQueries[] = [
                 'term' => [
                     'is_public' => $this->isPublic
+                ]
+            ];
+        }
+
+        if (isset($this->elasticsearch) && !empty($this->elasticsearch)) {
+            $andQueries[] = [
+                'term' => [
+                    'elasticsearch' => $this->elasticsearch
                 ]
             ];
         }

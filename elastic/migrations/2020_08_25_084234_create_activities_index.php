@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use ElasticAdapter\Indices\Mapping;
@@ -22,6 +23,7 @@ final class CreateActivitiesIndex implements MigrationInterface
             $mapping->keyword('subject_id');
             $mapping->keyword('education_level_id');
             $mapping->boolean('is_public');
+            $mapping->boolean('elasticsearch');
             $mapping->date('created_at');
             $mapping->date('updated_at');
             $mapping->keyword('project_id');

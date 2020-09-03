@@ -10,4 +10,11 @@ use Illuminate\Support\Collection;
 interface H5pLibraryRepositoryInterface extends EloquentRepositoryInterface
 {
 
+    /**
+     * Get the libraries's fields semantics.
+     *
+     * @param Object $h5pLibraryObject
+     * @return array
+     */
+    public function getFieldSemantics($h5pLibraryObject);
 }

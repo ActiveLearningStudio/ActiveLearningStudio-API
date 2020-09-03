@@ -101,7 +101,7 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
-        $projects = $this->activityRepository->searchForm($searchRequest);
+        $projects = $this->activityRepository->searchForm($data);
 
         return response([
             'projects' => $projects,
@@ -189,7 +189,7 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
-        $results = $this->activityRepository->advanceSearchForm($searchRequest);
+        $results = $this->activityRepository->advanceSearchForm($data);
 
         return $results;
     }

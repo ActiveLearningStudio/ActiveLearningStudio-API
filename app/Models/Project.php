@@ -24,6 +24,7 @@ class Project extends Model
         'thumb_url',
         'shared',
         'starter_project',
+        'elasticsearch'
     ];
 
     /**
@@ -36,6 +37,7 @@ class Project extends Model
             'name' => $this->name,
             'description' => $this->description,
             'is_public' => $this->is_public,
+            'elasticsearch' => $this->elasticsearch,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
         ];
