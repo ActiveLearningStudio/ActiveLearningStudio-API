@@ -11,6 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         $this->call(ActivityTypeSeeder::class);
+        $this->call([
+            ActivityTypeSeeder::class,
+            H5pElasticsearchFieldsTableSeeder::class
+        ]);
     }
 }

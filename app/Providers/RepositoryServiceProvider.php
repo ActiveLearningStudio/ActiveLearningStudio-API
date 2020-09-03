@@ -14,8 +14,14 @@ use App\Repositories\Playlist\PlaylistRepository;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\Repositories\Project\ProjectRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
+use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepository;
+use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
+use App\Repositories\H5pLibrary\H5pLibraryRepository;
+use App\Repositories\H5pLibrary\H5pLibraryRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -34,6 +40,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ActivityRepositoryInterface::class, ActivityRepository::class);
         $this->app->bind(ActivityTypeRepositoryInterface::class, ActivityTypeRepository::class);
         $this->app->bind(ActivityItemRepositoryInterface::class, ActivityItemRepository::class);
+        $this->app->bind(LmsSettingRepositoryInterface::class, LmsSettingRepository::class);
+        $this->app->bind(H5pElasticsearchFieldRepositoryInterface::class, H5pElasticsearchFieldRepository::class);
+        $this->app->bind(H5pLibraryRepositoryInterface::class, H5pLibraryRepository::class);
     }
 
     /**
