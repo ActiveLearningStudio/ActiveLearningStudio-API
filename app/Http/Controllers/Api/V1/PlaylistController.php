@@ -180,7 +180,7 @@ class PlaylistController extends Controller {
      */
     public function clone(Request $request,Project $project, Playlist $playlist) {
 
-        if ($playlist->is_public) {
+        if (!$playlist->is_public) {
             return response([
                 'errors' => ['Not a Public Playlist.'],
                     ], 500);

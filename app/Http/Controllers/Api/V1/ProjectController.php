@@ -222,7 +222,7 @@ class ProjectController extends Controller {
     public function clone(Request $request,Project $project) 
     {
         
-        if ($project->is_public) {
+        if (!$project->is_public) {
             return response([
                 'errors' => ['Not a Public Project.'],
                     ], 500);

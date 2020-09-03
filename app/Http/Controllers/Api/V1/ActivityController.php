@@ -178,7 +178,7 @@ class ActivityController extends Controller {
      * }
      */
     public function clone(Request $request,Playlist $playlist, Activity $activity) {
-        if ($activity->is_public) {
+        if (!$activity->is_public) {
             return response([
                 'errors' => ['Not a Public Activity.'],
                     ], 500);
