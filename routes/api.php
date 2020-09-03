@@ -63,6 +63,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         });
     });
 
+    //H5P Activity public route
+    Route::get('h5p/activity/{activity}/{visibility}', "H5pController@showByActivity");
     //Route to support H5P Editor's core js library fileupload with "new XMLHttpRequest()"   
     Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name("h5p.ajax.files");
     Route::get('error', 'ErrorController@show')->name('api/error');

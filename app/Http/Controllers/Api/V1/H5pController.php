@@ -251,10 +251,11 @@ class H5pController extends Controller
      * Retrive H5P based on Activity
      *
      * @param Activity $activity
+     * @param $visibility
      * 
      * @return Response
      */
-    public function showByActivity(Activity $activity)
+    public function showByActivity(Activity $activity, $visibility = null)
     {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
@@ -266,17 +267,22 @@ class H5pController extends Controller
         $settings = $embed['settings'];
         $user = Auth::user();
 
-        // create event dispatch
-        event(new H5pEvent(
-            'content',
-            NULL,
-            $content['id'],
-            $content['title'],
-            $content['library']['name'],
-            $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
-        ));
+        if($user && is_null($visibility)){
+            // create event dispatch
+            event(new H5pEvent(
+                'content',
+                NULL,
+                $content['id'],
+                $content['title'],
+                $content['library']['name'],
+                $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+            ));
+            $user_data = $user->only(['id', 'name', 'email']);
+        }else{
+            $user_data = null;
+        }
 
-        $h5p_data = ['settings' => $settings, 'user' => $user->only(['id', 'name', 'email']) , 'embed_code' => $embed_code];
+        $h5p_data = ['settings' => $settings, 'user' => $user_data , 'embed_code' => $embed_code];
         return response([
             'h5p_activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);
