@@ -62,6 +62,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/content-user-data', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentUserData')->name("h5p.ajax.content-user-data");
         });
 
+        // Elasticsearch
+        Route::get('search', 'SearchController@search');
+        Route::get('search/advanced', 'SearchController@advance');
+
         // CurrikiGo
         Route::group(["prefix" => "go"], function(){
             // LMS Settings

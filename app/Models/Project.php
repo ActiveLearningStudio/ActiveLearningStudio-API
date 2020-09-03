@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
+use ElasticScoutDriverPlus\CustomSearch;
+use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
+use App\Models\QueryBuilders\SearchFormQueryBuilder;
 
 class Project extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Searchable, CustomSearch;
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +24,34 @@ class Project extends Model
         'thumb_url',
         'shared',
         'starter_project',
+        'elasticsearch'
     ];
+
+    /**
+     * Get the attributes to be indexed in Elasticsearch
+     */
+    public function toSearchableArray()
+    {
+        $searchableArray = [
+            'project_id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'is_public' => $this->is_public,
+            'elasticsearch' => $this->elasticsearch,
+            'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
+            'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
+        ];
+
+        return $searchableArray;
+    }
+
+    /**
+     * Get the search request
+     */
+    public static function searchForm(): SearchRequestBuilder
+    {
+        return new SearchRequestBuilder(new static(), new SearchFormQueryBuilder());
+    }
 
     /**
      * Get the users for the projects
@@ -51,5 +82,29 @@ class Project extends Model
                 $playlist->delete();
             }
         });
+    }
+
+    /**
+     * Get the activity's project's user.
+     *
+     * @return object
+     */
+    public function getUserAttribute()
+    {
+        if (isset($this->users)) {
+            return $this->users()->wherePivot('role', 'teacher')->first();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the model type.
+     *
+     * @return string
+     */
+    public function getModelTypeAttribute()
+    {
+        return 'Project';
     }
 }

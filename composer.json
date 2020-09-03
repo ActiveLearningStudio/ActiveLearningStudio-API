@@ -10,6 +10,9 @@
     "require": {
         "php": "^7.2.5",
         "doctrine/dbal": "^2.10",
+        "babenkoivan/elastic-migrations": "^1.2",
+        "babenkoivan/elastic-scout-driver": "^1.2",
+        "babenkoivan/elastic-scout-driver-plus": "^1.7",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "google/apiclient": "^2.7",
@@ -18,6 +21,7 @@
         "h5p/h5p-editor": "^1.24",
         "laravel/framework": "^7.0",
         "laravel/passport": "^9.3",
+        "laravel/scout": "^8.2",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1"
     },
