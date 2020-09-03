@@ -77,6 +77,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromCanvas');
             });
         });
+
+        // Google Share
+        Route::post('google-classroom/access-token', 'GoogleClassroomController@saveAccessToken');
+        Route::get('google-classroom/courses', 'GoogleClassroomController@getCourses');
+        Route::post('google-classroom/projects/{project}/copy', 'GoogleClassroomController@copyProject');
     });
 
     //H5P Activity public route
