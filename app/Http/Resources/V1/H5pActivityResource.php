@@ -5,7 +5,6 @@ namespace App\Http\Resources\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 class H5pActivityResource extends JsonResource
 {
     private $h5p_data = null;
