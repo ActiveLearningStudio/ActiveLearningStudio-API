@@ -3,10 +3,12 @@
 namespace App\Repositories\Project;
 
 use App\Models\Project;
+use Storage;
 use App\Repositories\BaseRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Support\Collection;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use Illuminate\Http\Request;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface {
     
@@ -21,19 +23,19 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         parent::__construct($model);
     }
 
-    public function clone(Project $project) {
+    public function clone(Request $request,Project $project) {
         
         
         $authenticated_user = auth()->user();
-        
-        
-        if( Storage::disk('public')->exists( 'uploads/'.basename($project->thumb_url) ) && is_file(storage_path("app/public/uploads/".basename($project->thumb_url))) ){
+        $token =  $request->bearerToken();
+        $new_image_url = config('app.default_thumb_url');
+        if( Storage::disk('public')->exists( 'projects/'.basename($project->thumb_url) ) && is_file(storage_path("app/public/projects/".basename($project->thumb_url))) ){
                 $ext = pathinfo(basename($project->thumb_url), PATHINFO_EXTENSION);
                 $new_image_name = uniqid().'.'.$ext;
                 ob_start();                
-                \File::copy(storage_path("app/public/uploads/".basename($project->thumb_url)) , storage_path("app/public/uploads/".$new_image_name) );                
+                \File::copy(storage_path("app/public/projects/".basename($project->thumb_url)) , storage_path("app/public/projects/".$new_image_name) );                
                 ob_get_clean();
-                $new_image_url = "/storage/uploads/".$new_image_name;
+                $new_image_url = "/storage/projects/".$new_image_name;
                 
             } 
         $data = [
@@ -62,16 +64,18 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
             $activites = $playlist->activities;
             foreach ($activites as $activity) {
-                
-                $h5P_res = $this->activityRepository->download_and_upload_h5p('19356');
-                $new_thumb_url = '';
-                if( Storage::disk('public')->exists( 'uploads/'.basename($activity->thumb_url) ) && is_file(storage_path("app/public/uploads/".basename($activity->thumb_url))) ){
+                $h5P_res = Null;
+                if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0){ 
+                    $h5P_res = $this->activityRepository->download_and_upload_h5p($token,$activity->h5p_content_id);
+                }
+                $new_thumb_url = config('app.default_thumb_url');
+                if( Storage::disk('public')->exists( 'projects/'.basename($activity->thumb_url) ) && is_file(storage_path("app/public/projects/".basename($activity->thumb_url))) ){
                         $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
                         $new_image_name_mtd = uniqid().'.'.$ext;
                         ob_start();
-                        \File::copy(storage_path("app/public/uploads/".basename($activity->thumb_url)) , storage_path("app/public/uploads/".$new_image_name_mtd) );                
+                        \File::copy(storage_path("app/public/projects/".basename($activity->thumb_url)) , storage_path("app/public/projects/".$new_image_name_mtd) );                
                         ob_get_clean();
-                        $new_thumb_url = "/storage/uploads/".$new_image_name_mtd;                        
+                        $new_thumb_url = "/storage/projects/".$new_image_name_mtd;                        
                     }
                 
                 $activity_data = [

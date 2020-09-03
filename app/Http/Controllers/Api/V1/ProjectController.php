@@ -201,10 +201,17 @@ class ProjectController extends Controller {
     }
 
     /**
-     * @apiResourceCollection  Mpociot\ApiDoc\Tests\Fixtures\ProjectResource
-     * @apiResourceModel  Mpociot\ApiDoc\Tests\Fixtures\Project
+     * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
+     * @apiResourceModel  App\Models\Project
+     * 
+     * @response  {
+     *  "message": "Project is cloned successfully",
+     * },
+     *  {
+     *  "errors": "Not a Public Project",
+     * }
      */
-    public function clone(Project $project) {
+    public function clone(Request $request,Project $project) {
         
         if ($project->is_public) {
             return response([
@@ -212,7 +219,7 @@ class ProjectController extends Controller {
                     ], 500);
         }
 
-        $this->projectRepository->clone($project);
+        $this->projectRepository->clone($request,$project);
         return response([
             'message' => 'Project is cloned successfully.',
                 ], 200);

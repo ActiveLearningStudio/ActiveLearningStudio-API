@@ -55,6 +55,7 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'front_end_url' => env('FRONT_END_URL', 'http://localhost:3000'),
+    'default_thumb_url' => env('DEFAULT_THUMB_URL'),
 
     'asset_url' => env('ASSET_URL', null),
 

@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 
-class ActivityController extends Controller
-{
+class ActivityController extends Controller {
+
     private $activityRepository;
 
     /**
@@ -31,11 +31,10 @@ class ActivityController extends Controller
      *
      * @return Response
      */
-    public function index()
-    {
+    public function index() {
         return response([
             'activities' => ActivityResource::collection($this->activityRepository->all()),
-        ], 200);
+                ], 200);
     }
 
     /**
@@ -44,8 +43,7 @@ class ActivityController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
@@ -57,18 +55,18 @@ class ActivityController extends Controller
             'subject_id' => 'string',
             'education_level_id' => 'string',
         ]);
-
+        
         $activity = $this->activityRepository->create($data);
 
         if ($activity) {
             return response([
                 'activity' => new ActivityResource($activity),
-            ], 201);
+                    ], 201);
         }
 
         return response([
             'errors' => ['Could not create activity. Please try again later.'],
-        ], 500);
+                ], 500);
     }
 
     /**
@@ -77,11 +75,10 @@ class ActivityController extends Controller
      * @param Activity $activity
      * @return Response
      */
-    public function show(Activity $activity)
-    {        
+    public function show(Activity $activity) {
         return response([
             'activity' => new ActivityResource($activity),
-        ], 200);
+                ], 200);
     }
 
     /**
@@ -91,30 +88,29 @@ class ActivityController extends Controller
      * @param Activity $activity
      * @return Response
      */
-    public function update(Request $request, Activity $activity)
-    {
+    public function update(Request $request, Activity $activity) {
         $is_updated = $this->activityRepository->update($request->only([
-            'playlist_id',
-            'title',
-            'type',
-            'content',
-            'shared',
-            'order',
-            'thumb_url',
-            'subject_id',
-            'education_level_id',
-            'h5p_content_id',
-        ]), $activity->id);
+                    'playlist_id',
+                    'title',
+                    'type',
+                    'content',
+                    'shared',
+                    'order',
+                    'thumb_url',
+                    'subject_id',
+                    'education_level_id',
+                    'h5p_content_id',
+                ]), $activity->id);
 
         if ($is_updated) {
             return response([
                 'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
-            ], 200);
+                    ], 200);
         }
 
         return response([
             'errors' => ['Failed to update activity.'],
-        ], 500);
+                ], 500);
     }
 
     /**
@@ -123,27 +119,26 @@ class ActivityController extends Controller
      * @param Activity $activity
      * @return Response
      */
-    public function detail(Activity $activity)
-    {        
-        $data = ['h5p_parameters' =>  null,  'user_name' => null,  'user_id' => null];   
-        
-        if ( $activity->playlist->project->user ) {
+    public function detail(Activity $activity) {
+        $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
+
+        if ($activity->playlist->project->user) {
             $data['user_name'] = $activity->playlist->project->user;
             $data['user_id'] = $activity->playlist->project->id;
         }
 
-        if ( $activity->type === 'h5p' ) {
+        if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
-            $editor = $h5p::$h5peditor;		
-            $content = $h5p->load_content($activity->h5p_content_id);		
-            $library = $content['library'] ? \H5PCore::libraryToString($content['library']) : 0;				
-            $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
+            $editor = $h5p::$h5peditor;
+            $content = $h5p->load_content($activity->h5p_content_id);
+            $library = $content['library'] ? \H5PCore::libraryToString($content['library']) : 0;
+            $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object) $content['metadata']) . '}';
         }
-        
+
         return response([
             'activity' => new ActivityDetailResource($activity, $data),
-        ], 200);
+                ], 200);
     }
 
     /**
@@ -152,59 +147,54 @@ class ActivityController extends Controller
      * @param Activity $activity
      * @return Response
      */
-    public function destroy(Activity $activity)
-    {
+    public function destroy(Activity $activity) {
         $is_deleted = $this->activityRepository->delete($activity->id);
 
         if ($is_deleted) {
             return response([
                 'message' => 'Activity is deleted successfully.',
-            ], 200);
+                    ], 200);
         }
 
         return response([
             'errors' => ['Failed to delete activity.'],
-        ], 500);
+                ], 500);
     }
-    
-    public function clone( Playlist $playlist,Activity $activity)
-    {
+
+    /**
+     * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
+     * @apiResourceCollection  App\Http\Resources\V1\ActivityResource
+     * @apiResourceModel  App\Models\Playlist
+     * @apiResourceModel  App\Models\Activity
+     * 
+     *  @response  {
+     *  "message": "Activity is cloned successfully",
+     * },
+     *  {
+     *  "errors": "Not a Public PlayList",
+     * },
+     *  {
+     *  "errors": "Failed to clone activity.",
+     * }
+     */
+    public function clone(Request $request,Playlist $playlist, Activity $activity) {
         if ($activity->is_public) {
             return response([
-                'errors' => ['Not a Public PlayList.'],
+                'errors' => ['Not a Public Activity.'],
                     ], 500);
         }
-        $h5P_res = Null;
-        if(!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0){
-            $h5P_res = $this->activityRepository->download_and_upload_h5p($activity->h5p_content_id);
-        }
 
-            
-            $new_thumb_url = '';
-            if (Storage::disk('public')->exists('uploads/' . basename($activity->thumb_url)) && is_file(storage_path("app/public/uploads/" . basename($activity->thumb_url)))) {
-                $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
-                $new_image_name_mtd = uniqid() . '.' . $ext;
-                ob_start();
-                \File::copy(storage_path("app/public/uploads/" . basename($activity->thumb_url)), storage_path("app/public/uploads/" . $new_image_name_mtd));
-                ob_get_clean();
-                $new_thumb_url = "/storage/uploads/" . $new_image_name_mtd;
-            }
-        $activity_data = [
-                    'title' => $activity->title,
-                    'type' => $activity->type,
-                    'content' => $activity->content,
-                    'playlist_id' => $playlist->id,
-                    'order' => $activity->order,
-                    'h5p_content_id' => $activity->h5p_content_id,
-                    'thumb_url' => $new_thumb_url,
-                    'subject_id' => $activity->subject_id,
-                    'education_level_id' => $activity->education_level_id,
-                ];
+        $cloned_activity = $this->activityRepository->clone($request,$playlist, $activity);
 
-        $cloned_activity = $this->activityRepository->create($activity_data);
-        
-        return response([
+        if ($cloned_activity) {
+            return response([
                 'message' => 'Activity is cloned successfully.',
                     ], 200);
+        }
+        
+        return response([
+            'errors' => ['Failed to clone activity.'],
+                ], 500);
     }
+
 }

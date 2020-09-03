@@ -165,15 +165,27 @@ class PlaylistController extends Controller {
             'errors' => ['Failed to delete playlist.'],
                 ], 500);
     }
-
-    public function clone(Request $request, Project $project, Playlist $playlist) {
+    /**
+     * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
+     * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
+     * @apiResourceModel  App\Models\Project
+     * @apiResourceModel  App\Models\Playlist
+     * 
+     * @response  {
+     *  "message": "Playlist is cloned successfully",
+     * },
+     *  {
+     *  "errors": "Not a Public Playlist",
+     * }
+     */
+    public function clone(Request $request,Project $project, Playlist $playlist) {
 
         if ($playlist->is_public) {
             return response([
-                'errors' => ['Not a Public PlayList.'],
+                'errors' => ['Not a Public Playlist.'],
                     ], 500);
         }
-        $this->playlistRepository->clone($project, $playlist);
+        $this->playlistRepository->clone($request,$project, $playlist);
 
         return response([
             'message' => 'Playlist is cloned successfully.',
