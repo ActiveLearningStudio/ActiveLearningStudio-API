@@ -23,12 +23,23 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     public function clone(Project $project) {
         
-        $this->activityRepository->download_and_upload_h5p('30'); die('26');
+        
         $authenticated_user = auth()->user();
+        
+        
+        if( Storage::disk('public')->exists( 'uploads/'.basename($project->thumb_url) ) && is_file(storage_path("app/public/uploads/".basename($project->thumb_url))) ){
+                $ext = pathinfo(basename($project->thumb_url), PATHINFO_EXTENSION);
+                $new_image_name = uniqid().'.'.$ext;
+                ob_start();                
+                \File::copy(storage_path("app/public/uploads/".basename($project->thumb_url)) , storage_path("app/public/uploads/".$new_image_name) );                
+                ob_get_clean();
+                $new_image_url = "/storage/uploads/".$new_image_name;
+                
+            } 
         $data = [
             'name' => $project->name,
             'description' => $project->description,
-            'thumb_url' => $project->thumb_url,
+            'thumb_url' => $new_image_url,
             //'shared' => $project->shared,
             'starter_project' => $project->starter_project,
             'is_public' => $project->is_public,
@@ -52,12 +63,16 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $activites = $playlist->activities;
             foreach ($activites as $activity) {
                 
-                
-                
-                $h5p = App::make('LaravelH5p');
-                $core = $h5p::$core;
-                $editor = $h5p::$h5peditor;
-                $content = $h5p->load_content($id);
+                $h5P_res = $this->activityRepository->download_and_upload_h5p('19356');
+                $new_thumb_url = '';
+                if( Storage::disk('public')->exists( 'uploads/'.basename($activity->thumb_url) ) && is_file(storage_path("app/public/uploads/".basename($activity->thumb_url))) ){
+                        $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
+                        $new_image_name_mtd = uniqid().'.'.$ext;
+                        ob_start();
+                        \File::copy(storage_path("app/public/uploads/".basename($activity->thumb_url)) , storage_path("app/public/uploads/".$new_image_name_mtd) );                
+                        ob_get_clean();
+                        $new_thumb_url = "/storage/uploads/".$new_image_name_mtd;                        
+                    }
                 
                 $activity_data = [
                     'title' => $activity->title,
@@ -65,8 +80,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     'content' => $activity->content,
                     'playlist_id' => $cloned_playlist->id,
                     'order' => $activity->order,
-                    'h5p_content_id' => $activity->h5p_content_id,
-                    'thumb_url' => $activity->thumb_url,
+                    'h5p_content_id' => $h5P_res === null ? 0 : $h5P_res->id,
+                    'thumb_url' => $new_thumb_url,
                     'subject_id' => $activity->subject_id,
                     'education_level_id' => $activity->education_level_id,
                 ];

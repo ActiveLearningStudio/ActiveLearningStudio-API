@@ -174,6 +174,21 @@ class ActivityController extends Controller
                 'errors' => ['Not a Public PlayList.'],
                     ], 500);
         }
+        $h5P_res = Null;
+        if(!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0){
+            $h5P_res = $this->activityRepository->download_and_upload_h5p($activity->h5p_content_id);
+        }
+
+            
+            $new_thumb_url = '';
+            if (Storage::disk('public')->exists('uploads/' . basename($activity->thumb_url)) && is_file(storage_path("app/public/uploads/" . basename($activity->thumb_url)))) {
+                $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
+                $new_image_name_mtd = uniqid() . '.' . $ext;
+                ob_start();
+                \File::copy(storage_path("app/public/uploads/" . basename($activity->thumb_url)), storage_path("app/public/uploads/" . $new_image_name_mtd));
+                ob_get_clean();
+                $new_thumb_url = "/storage/uploads/" . $new_image_name_mtd;
+            }
         $activity_data = [
                     'title' => $activity->title,
                     'type' => $activity->type,
@@ -181,11 +196,15 @@ class ActivityController extends Controller
                     'playlist_id' => $playlist->id,
                     'order' => $activity->order,
                     'h5p_content_id' => $activity->h5p_content_id,
-                    'thumb_url' => $activity->thumb_url,
+                    'thumb_url' => $new_thumb_url,
                     'subject_id' => $activity->subject_id,
                     'education_level_id' => $activity->education_level_id,
                 ];
 
         $cloned_activity = $this->activityRepository->create($activity_data);
+        
+        return response([
+                'message' => 'Activity is cloned successfully.',
+                    ], 200);
     }
 }

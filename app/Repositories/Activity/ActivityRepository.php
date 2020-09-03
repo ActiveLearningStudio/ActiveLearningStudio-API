@@ -24,11 +24,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     
     public function download_and_upload_h5p($h5p_content_id)
     {  
-        
         $new_h5p_file = uniqid().".h5p";
+        
         $response = null;
         try {
-            $response = $this->client->request('GET', config('constants.h5p-api-url').'/h5p/export/'.$h5p_content_id , ['sink' => storage_path("app/public/uploads/".$new_h5p_file) , 'http_errors' => false]);    
+            $response = $this->client->request('GET', config('app.url').'/h5p/export/'.$h5p_content_id , ['sink' => storage_path("app/public/uploads/".$new_h5p_file) , 'http_errors' => false]);    
         } catch (Exception $ex) {
             
         }

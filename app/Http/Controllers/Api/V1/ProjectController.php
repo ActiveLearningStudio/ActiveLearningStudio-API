@@ -12,11 +12,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\V1\H5pController;
 
-
 class ProjectController extends Controller {
 
     private $projectRepository;
-    
+
     /**
      * ProjectController constructor.
      *
@@ -24,7 +23,7 @@ class ProjectController extends Controller {
      */
     public function __construct(ProjectRepositoryInterface $projectRepository) {
         $this->projectRepository = $projectRepository;
-        
+
         $this->authorizeResource(Project::class, 'project');
     }
 
@@ -201,16 +200,22 @@ class ProjectController extends Controller {
                 ], 500);
     }
 
-    public function clone(Request $request, Project $project) {
-
+    /**
+     * @apiResourceCollection  Mpociot\ApiDoc\Tests\Fixtures\ProjectResource
+     * @apiResourceModel  Mpociot\ApiDoc\Tests\Fixtures\Project
+     */
+    public function clone(Project $project) {
+        
         if ($project->is_public) {
             return response([
                 'errors' => ['Not a Public Project.'],
                     ], 500);
         }
-        
+
         $this->projectRepository->clone($project);
-        
+        return response([
+            'message' => 'Project is cloned successfully.',
+                ], 200);
     }
 
 }
