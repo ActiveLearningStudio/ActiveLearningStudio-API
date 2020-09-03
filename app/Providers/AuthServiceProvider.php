@@ -2,11 +2,21 @@
 
 namespace App\Providers;
 
+use App\Models\Activity;
+use App\Models\ActivityItem;
+use App\Models\ActivityType;
+use App\Models\Playlist;
+use App\Models\Project;
+use App\Policies\ActivityItemPolicy;
+use App\Policies\ActivityPolicy;
+use App\Policies\ActivityTypePolicy;
+use App\Policies\PlaylistPolicy;
+use App\Policies\ProjectPolicy;
+use App\Policies\UserPolicy;
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
-use App\User;
-use App\Models\Project;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,7 +26,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        User::class => UserPolicy::class,
+        Project::class => ProjectPolicy::class,
+        Playlist::class => PlaylistPolicy::class,
+        Activity::class => ActivityPolicy::class,
+        ActivityType::class => ActivityTypePolicy::class,
+        ActivityItem::class => ActivityItemPolicy::class,
     ];
 
     /**
@@ -30,6 +45,10 @@ class AuthServiceProvider extends ServiceProvider
 
         // Adding Gates for Publishing
         Gate::define('publish-to-lms', function ($user, $project) {
+            return $user->isAdmin() || $this->hasPermission($user, $project);
+        });
+
+        Gate::define('fetch-lms-course', function ($user, $project) {
             return $user->isAdmin() || $this->hasPermission($user, $project);
         });
 
@@ -47,9 +66,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     private function hasPermission(User $user, Project $project, $role = null)
     {
-        $project_users = $project->users;
-        foreach ($project_users as $project_user) {
-            if ($user->id === $project_user->id && (!$role || $role === $project_user->pivot->role)) {
+        $projectUsers = $project->users;
+        foreach ($projectUsers as $projectUser) {
+            if ($user->id === $projectUser->id && (!$role || $role === $projectUser->pivot->role)) {
                 return true;
             }
         }

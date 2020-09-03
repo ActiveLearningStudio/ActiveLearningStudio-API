@@ -4,51 +4,35 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
-use App\Models\Playlist;
 use App\Http\Resources\V1\ActivityResource;
+use App\Http\Resources\V1\ActivityDetailResource;
 use App\Repositories\Activity\ActivityRepositoryInterface;
-use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\App;
 
 class ActivityController extends Controller
 {
-    private $projectRepository;
-
     private $activityRepository;
 
     /**
      * ActivityController constructor.
      *
-     * @param ProjectRepositoryInterface $projectRepository
      * @param ActivityRepositoryInterface $activityRepository
      */
-    public function __construct(
-        ProjectRepositoryInterface $projectRepository,
-        ActivityRepositoryInterface $activityRepository
-    ) {
-        $this->projectRepository = $projectRepository;
+    public function __construct(ActivityRepositoryInterface $activityRepository) {
         $this->activityRepository = $activityRepository;
     }
 
     /**
      * Display a listing of the activity.
      *
-     * @param Playlist $playlist
      * @return Response
      */
-    public function index(Playlist $playlist)
+    public function index()
     {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to access other user\'s activities.'],
-            ], 403);
-        }
-
         return response([
-            'activities' => ActivityResource::collection($playlist->activities),
+            'activities' => ActivityResource::collection($this->activityRepository->all()),
         ], 200);
     }
 
@@ -56,31 +40,27 @@ class ActivityController extends Controller
      * Store a newly created activity in storage.
      *
      * @param Request $request
-     * @param Playlist $playlist
      * @return Response
      */
-    public function store(Request $request, Playlist $playlist)
+    public function store(Request $request)
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'content' => 'required|string|max:255',
+            'playlist_id' => 'integer',
             'order' => 'integer',
+            'h5p_content_id' => 'integer',
+            'thumb_url' => 'string',
+            'subject_id' => 'string',
+            'education_level_id' => 'string',
         ]);
 
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to create activity on other user\'s playlist.'],
-            ], 403);
-        }
-
-        $activity = $playlist->activities()->create($data);
+        $activity = $this->activityRepository->create($data);
 
         if ($activity) {
             return response([
-                'activity' => $activity,
+                'activity' => new ActivityResource($activity),
             ], 201);
         }
 
@@ -92,26 +72,11 @@ class ActivityController extends Controller
     /**
      * Display the specified activity.
      *
-     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function show(Playlist $playlist, Activity $activity)
-    {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to access to other user\'s activity.'],
-            ], 403);
-        }
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity Id.'],
-            ], 400);
-        }
-
+    public function show(Activity $activity)
+    {        
         return response([
             'activity' => new ActivityResource($activity),
         ], 200);
@@ -121,32 +86,22 @@ class ActivityController extends Controller
      * Update the specified activity in storage.
      *
      * @param Request $request
-     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function update(Request $request, Playlist $playlist, Activity $activity)
+    public function update(Request $request, Activity $activity)
     {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to update other user\'s activity.'],
-            ], 403);
-        }
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity Id.'],
-            ], 400);
-        }
-
         $is_updated = $this->activityRepository->update($request->only([
+            'playlist_id',
             'title',
             'type',
             'content',
             'shared',
             'order',
+            'thumb_url',
+            'subject_id',
+            'education_level_id',
+            'h5p_content_id',
         ]), $activity->id);
 
         if ($is_updated) {
@@ -161,28 +116,42 @@ class ActivityController extends Controller
     }
 
     /**
-     * Remove the specified activity from storage.
+     * Display the specified activity in detail.
      *
-     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function destroy(Playlist $playlist, Activity $activity)
+    public function detail(Activity $activity)
+    {        
+        $data = ['h5p_parameters' =>  null,  'user_name' => null,  'user_id' => null];   
+        
+        if ( $activity->playlist->project->user ) {
+            $data['user_name'] = $activity->playlist->project->user;
+            $data['user_id'] = $activity->playlist->project->id;
+        }
+
+        if ( $activity->type === 'h5p' ) {
+            $h5p = App::make('LaravelH5p');
+            $core = $h5p::$core;
+            $editor = $h5p::$h5peditor;		
+            $content = $h5p->load_content($activity->h5p_content_id);		
+            $library = $content['library'] ? \H5PCore::libraryToString($content['library']) : 0;				
+            $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
+        }
+        
+        return response([
+            'activity' => new ActivityDetailResource($activity, $data),
+        ], 200);
+    }
+
+    /**
+     * Remove the specified activity from storage.
+     *
+     * @param Activity $activity
+     * @return Response
+     */
+    public function destroy(Activity $activity)
     {
-        $allowed = $this->checkPermission($playlist);
-
-        if (!$allowed) {
-            return response([
-                'errors' => ['Forbidden. You are trying to delete other user\'s activity.'],
-            ], 403);
-        }
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity Id.'],
-            ], 400);
-        }
-
         $is_deleted = $this->activityRepository->delete($activity->id);
 
         if ($is_deleted) {
@@ -194,23 +163,5 @@ class ActivityController extends Controller
         return response([
             'errors' => ['Failed to delete activity.'],
         ], 500);
-    }
-
-    private function checkPermission(Playlist $playlist)
-    {
-        $authenticated_user = auth()->user();
-
-        $allowed = $authenticated_user->role === 'admin';
-        if (!$allowed) {
-            $project = $playlist->project;
-            $project_users = $project->users;
-            foreach ($project_users as $user) {
-                if ($user->id === $authenticated_user->id) {
-                    $allowed = true;
-                }
-            }
-        }
-
-        return $allowed;
     }
 }

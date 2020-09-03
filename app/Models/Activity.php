@@ -21,6 +21,10 @@ class Activity extends Model
         'content',
         'shared',
         'order',
+        'thumb_url',
+        'subject_id',
+        'education_level_id',
+        'h5p_content_id',
     ];
 
     /**
@@ -29,5 +33,13 @@ class Activity extends Model
     public function playlist()
     {
         return $this->belongsTo('App\Models\Playlist', 'playlist_id');
+    }
+
+    /**
+    * Get the H5P Content relation
+    */
+    public function h5p_content()
+    {
+        return $this->belongsTo('Djoudi\LaravelH5p\Eloquents\H5pContent', 'h5p_content_id');
     }
 }
