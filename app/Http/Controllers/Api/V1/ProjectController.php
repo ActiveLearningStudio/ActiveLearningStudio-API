@@ -32,7 +32,8 @@ class ProjectController extends Controller {
      *
      * @return Response
      */
-    public function index() {
+    public function index() 
+    {
         $authenticated_user = auth()->user();
 
         if ($authenticated_user->isAdmin()) {
@@ -52,7 +53,8 @@ class ProjectController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function uploadThumb(Request $request) {
+    public function uploadThumb(Request $request) 
+    {
         $validator = Validator::make($request->all(), [
                     'thumb' => 'required|image',
         ]);
@@ -76,7 +78,8 @@ class ProjectController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request) {
+    public function store(Request $request) 
+    {
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
@@ -103,7 +106,8 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function show(Project $project) {
+    public function show(Project $project) 
+    {
         return response([
             'project' => new ProjectResource($project),
                 ], 200);
@@ -116,7 +120,8 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function share(Request $request, Project $project) {
+    public function share(Request $request, Project $project) 
+    {
         $is_updated = $this->projectRepository->update([
             'shared' => true,
                 ], $project->id);
@@ -139,7 +144,8 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function removeShare(Request $request, Project $project) {
+    public function removeShare(Request $request, Project $project) 
+    {
         $is_updated = $this->projectRepository->update([
             'shared' => false,
                 ], $project->id);
@@ -162,7 +168,8 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function update(Request $request, Project $project) {
+    public function update(Request $request, Project $project) 
+    {
         $is_updated = $this->projectRepository->update($request->only([
                     'name',
                     'description',
@@ -186,7 +193,8 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function destroy(Project $project) {
+    public function destroy(Project $project) 
+    {
         $is_deleted = $this->projectRepository->delete($project->id);
 
         if ($is_deleted) {
@@ -211,7 +219,8 @@ class ProjectController extends Controller {
      *  "errors": "Not a Public Project",
      * }
      */
-    public function clone(Request $request,Project $project) {
+    public function clone(Request $request,Project $project) 
+    {
         
         if ($project->is_public) {
             return response([

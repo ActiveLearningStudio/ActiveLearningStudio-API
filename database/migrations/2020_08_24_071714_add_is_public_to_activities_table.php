@@ -14,7 +14,7 @@ class AddIsPublicToActivitiesTable extends Migration
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->boolean('is_public')->default(0);
+            $table->boolean('is_public')->default(false)->after('shared');
         });
     }
 

@@ -18,14 +18,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param Project $model
      */
-    public function __construct(Project $model,ActivityRepositoryInterface $activityRepository) {
+    public function __construct(Project $model,ActivityRepositoryInterface $activityRepository) 
+    {
         $this->activityRepository = $activityRepository;
         parent::__construct($model);
     }
 
-    public function clone(Request $request,Project $project) {
-        
-        
+    public function clone(Request $request,Project $project) 
+    {
         $authenticated_user = auth()->user();
         $token =  $request->bearerToken();
         $new_image_url = config('app.default_thumb_url');
@@ -42,7 +42,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             'name' => $project->name,
             'description' => $project->description,
             'thumb_url' => $new_image_url,
-            //'shared' => $project->shared,
+            'shared' => $project->shared,
             'starter_project' => $project->starter_project,
             'is_public' => $project->is_public,
         ];

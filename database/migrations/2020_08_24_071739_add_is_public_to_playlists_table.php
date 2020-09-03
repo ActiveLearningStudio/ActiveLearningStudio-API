@@ -14,7 +14,7 @@ class AddIsPublicToPlaylistsTable extends Migration
     public function up()
     {
         Schema::table('playlists', function (Blueprint $table) {
-            $table->boolean('is_public')->default(0);
+            $table->boolean('is_public')->default(false)->after('order');
         });
     }
 

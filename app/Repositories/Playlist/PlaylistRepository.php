@@ -20,7 +20,8 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      *
      * @param Playlist $model
      */
-    public function __construct(Playlist $model, ActivityRepositoryInterface $activityRepository) {
+    public function __construct(Playlist $model, ActivityRepositoryInterface $activityRepository) 
+    {
         $this->activityRepository = $activityRepository;
         parent::__construct($model);
     }
@@ -31,7 +32,8 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      * @param Project $project
      * @return int
      */
-    public function getOrder(Project $project) {
+    public function getOrder(Project $project) 
+    {
         $playlist = $this->model->where('project_id', $project->id)
                 ->orderBy('order', 'desc')
                 ->first();
@@ -44,7 +46,8 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      *
      * @param array $playlists
      */
-    public function saveList(array $playlists) {
+    public function saveList(array $playlists) 
+    {
         foreach ($playlists as $playlist) {
             $this->update([
                 'order' => $playlist['order'],

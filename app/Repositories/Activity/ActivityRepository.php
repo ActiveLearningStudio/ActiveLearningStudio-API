@@ -76,7 +76,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 $response_h5p = $this->client->request('POST', config('app.url') . '/api/v1/h5p', [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token,
-                    //'Accept' => 'application/json',
                     ],
                     'multipart' => [
                         [
