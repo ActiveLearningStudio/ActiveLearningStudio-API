@@ -37,7 +37,7 @@ class ActivityController extends Controller
      *
      * @return Response
      */
-    public function index() 
+    public function index()
     {
         return response([
             'activities' => ActivityResource::collection($this->activityRepository->all()),
@@ -75,7 +75,7 @@ class ActivityController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -122,20 +122,20 @@ class ActivityController extends Controller
      * @param Activity $activity
      * @return Response
      */
-    public function update(Request $request, Activity $activity) 
+    public function update(Request $request, Activity $activity)
     {
         $is_updated = $this->activityRepository->update($request->only([
-                    'playlist_id',
-                    'title',
-                    'type',
-                    'content',
-                    'shared',
-                    'order',
-                    'thumb_url',
-                    'subject_id',
-                    'education_level_id',
-                    'h5p_content_id',
-                ]), $activity->id);
+            'playlist_id',
+            'title',
+            'type',
+            'content',
+            'shared',
+            'order',
+            'thumb_url',
+            'subject_id',
+            'education_level_id',
+            'h5p_content_id',
+        ]), $activity->id);
 
         if ($is_updated) {
             return response([
@@ -183,7 +183,7 @@ class ActivityController extends Controller
      * @param Activity $activity
      * @return Response
      */
-    public function destroy(Activity $activity) 
+    public function destroy(Activity $activity)
     {
         $is_deleted = $this->activityRepository->delete($activity->id);
 
@@ -214,7 +214,7 @@ class ActivityController extends Controller
      *  "errors": "Failed to clone activity.",
      * }
      */
-    public function clone(Request $request,Playlist $playlist, Activity $activity) 
+    public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
         if (!$activity->is_public) {
             return response([
@@ -222,7 +222,7 @@ class ActivityController extends Controller
             ], 500);
         }
 
-        $cloned_activity = $this->activityRepository->clone($request,$playlist, $activity);
+        $cloned_activity = $this->activityRepository->clone($request, $playlist, $activity);
 
         if ($cloned_activity) {
             return response([

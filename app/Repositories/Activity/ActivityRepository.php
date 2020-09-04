@@ -27,8 +27,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      */
     public function __construct(Activity $model, H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository)
     {
-        $this->client = new \GuzzleHttp\Client();
         parent::__construct($model);
+        $this->client = new \GuzzleHttp\Client();
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
     }
 
@@ -198,10 +198,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         return $h5pElasticsearchFieldsArray;
     }
-
-    public function clone(Request $request, Playlist $playlist, Activity $activity) 
+    
+    /**
+     * To clone Activity
+     * @param Request $request
+     * @param Playlist $playlist
+     * @param Activity $activity
+     * @return type
+     */
+    public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
-        $h5P_res = Null;
+        $h5P_res = null;
         $token = $request->bearerToken();
         if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) {
             $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
@@ -233,8 +240,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         return $cloned_activity['id'];
     }
-
-    public function download_and_upload_h5p($token, $h5p_content_id) 
+    
+    /**
+     * To export and import an H5p File
+     * @param type $token
+     * @param type $h5p_content_id
+     * @return type
+     */
+    public function download_and_upload_h5p($token, $h5p_content_id)
     {
         $new_h5p_file = uniqid() . ".h5p";
 

@@ -11,7 +11,7 @@ use App\Repositories\Activity\ActivityRepositoryInterface;
 use Storage;
 use Illuminate\Http\Request;
 
-class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInterface 
+class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInterface
 {
 
     private $activityRepository;
@@ -21,10 +21,10 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      *
      * @param Playlist $model
      */
-    public function __construct(Playlist $model, ActivityRepositoryInterface $activityRepository) 
+    public function __construct(Playlist $model, ActivityRepositoryInterface $activityRepository)
     {
-        $this->activityRepository = $activityRepository;
         parent::__construct($model);
+        $this->activityRepository = $activityRepository;
     }
 
     /**
@@ -33,7 +33,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      * @param Project $project
      * @return int
      */
-    public function getOrder(Project $project) 
+    public function getOrder(Project $project)
     {
         $playlist = $this->model->where('project_id', $project->id)
                 ->orderBy('order', 'desc')
@@ -47,18 +47,22 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      *
      * @param array $playlists
      */
-    public function saveList(array $playlists) 
+    public function saveList(array $playlists)
     {
         foreach ($playlists as $playlist) {
             $this->update([
                 'order' => $playlist['order'],
-                    ], $playlist['id']);
+            ], $playlist['id']);
         }
     }
-
-    public function clone(Request $request,Project $project, Playlist $playlist) 
+    /**
+     * To Clone Playlist and associated activites
+     * @param Request $request
+     * @param Project $project
+     * @param Playlist $playlist
+     */
+    public function clone(Request $request, Project $project, Playlist $playlist)
     {
-        
         $play_list_data = ['title' => $playlist->title,
             'order' => $playlist->order,
             'is_public' => $playlist->is_public
@@ -68,9 +72,9 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
 
         $activites = $playlist->activities;
         foreach ($activites as $activity) {
-            $h5P_res = Null;
-            if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0){
-                $h5P_res = $this->activityRepository->download_and_upload_h5p($token,$activity->h5p_content_id);
+            $h5P_res = null;
+            if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) {
+                $h5P_res = $this->activityRepository->download_and_upload_h5p($token, $activity->h5p_content_id);
             }
                 
             $new_thumb_url = config('app.default_thumb_url');

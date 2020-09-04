@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\V1\H5pController;
 
-class ProjectController extends Controller {
+class ProjectController extends Controller 
+{
 
     private $projectRepository;
 
@@ -21,7 +22,7 @@ class ProjectController extends Controller {
      *
      * @param ProjectRepositoryInterface $projectRepository
      */
-    public function __construct(ProjectRepositoryInterface $projectRepository) 
+    public function __construct(ProjectRepositoryInterface $projectRepository)
     {
         $this->projectRepository = $projectRepository;
 
@@ -33,7 +34,7 @@ class ProjectController extends Controller {
      *
      * @return Response
      */
-    public function index() 
+    public function index()
     {
         $authenticated_user = auth()->user();
 
@@ -54,10 +55,10 @@ class ProjectController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function uploadThumb(Request $request) 
+    public function uploadThumb(Request $request)
     {
         $validator = Validator::make($request->all(), [
-                    'thumb' => 'required|image',
+            'thumb' => 'required|image',
         ]);
 
         if ($validator->fails()) {
@@ -79,7 +80,7 @@ class ProjectController extends Controller {
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -107,7 +108,7 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function show(Project $project) 
+    public function show(Project $project)
     {
         return response([
             'project' => new ProjectResource($project),
@@ -121,11 +122,11 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function share(Request $request, Project $project) 
+    public function share(Request $request, Project $project)
     {
         $is_updated = $this->projectRepository->update([
             'shared' => true,
-                ], $project->id);
+        ], $project->id);
 
         if ($is_updated) {
             return response([
@@ -145,11 +146,11 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function removeShare(Request $request, Project $project) 
+    public function removeShare(Request $request, Project $project)
     {
         $is_updated = $this->projectRepository->update([
             'shared' => false,
-                ], $project->id);
+        ], $project->id);
 
         if ($is_updated) {
             return response([
@@ -169,13 +170,13 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function update(Request $request, Project $project) 
+    public function update(Request $request, Project $project)
     {
         $is_updated = $this->projectRepository->update($request->only([
-                    'name',
-                    'description',
-                    'thumb_url',
-                ]), $project->id);
+            'name',
+            'description',
+            'thumb_url',
+        ]), $project->id);
 
         if ($is_updated) {
             return response([
@@ -194,7 +195,7 @@ class ProjectController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function destroy(Project $project) 
+    public function destroy(Project $project)
     {
         $is_deleted = $this->projectRepository->delete($project->id);
 
@@ -220,16 +221,15 @@ class ProjectController extends Controller {
      *  "errors": "Not a Public Project",
      * }
      */
-    public function clone(Request $request,Project $project) 
+    public function clone(Request $request, Project $project)
     {
-        
         if (!$project->is_public) {
             return response([
                 'errors' => ['Not a Public Project.'],
             ], 500);
         }
 
-        $this->projectRepository->clone($request,$project);
+        $this->projectRepository->clone($request, $project);
         return response([
             'message' => 'Project is cloned successfully.',
         ], 200);

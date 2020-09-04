@@ -15,6 +15,7 @@ class PlaylistController extends Controller
 {
 
     private $playlistRepository;
+    
     private $activityRepository;
 
     /**
@@ -22,7 +23,7 @@ class PlaylistController extends Controller
      *
      * @param PlaylistRepositoryInterface $playlistRepository
      */
-    public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository) 
+    public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository)
     {
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
@@ -37,7 +38,7 @@ class PlaylistController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function index(Project $project) 
+    public function index(Project $project)
     {
         $this->authorize('view', $project);
 
@@ -53,7 +54,7 @@ class PlaylistController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function store(Request $request, Project $project) 
+    public function store(Request $request, Project $project)
     {
         $this->authorize('view', $project);
 
@@ -83,7 +84,7 @@ class PlaylistController extends Controller
      * @param Playlist $playlist
      * @return Response
      */
-    public function show(Project $project, Playlist $playlist) 
+    public function show(Project $project, Playlist $playlist)
     {
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -104,7 +105,7 @@ class PlaylistController extends Controller
      * @param Playlist $playlist
      * @return Response
      */
-    public function reorder(Request $request, Project $project) 
+    public function reorder(Request $request, Project $project)
     {
         $this->playlistRepository->saveList($request->playlists);
 
@@ -121,7 +122,7 @@ class PlaylistController extends Controller
      * @param Playlist $playlist
      * @return Response
      */
-    public function update(Request $request, Project $project, Playlist $playlist) 
+    public function update(Request $request, Project $project, Playlist $playlist)
     {
 
         if ($playlist->project_id !== $project->id) {
@@ -131,9 +132,9 @@ class PlaylistController extends Controller
         }
 
         $is_updated = $this->playlistRepository->update($request->only([
-                    'title',
-                    'order',
-                ]), $playlist->id);
+            'title',
+            'order',
+        ]), $playlist->id);
 
         if ($is_updated) {
             return response([
@@ -153,7 +154,7 @@ class PlaylistController extends Controller
      * @param Playlist $playlist
      * @return Response
      */
-    public function destroy(Project $project, Playlist $playlist) 
+    public function destroy(Project $project, Playlist $playlist)
     {
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -186,7 +187,7 @@ class PlaylistController extends Controller
      *  "errors": "Not a Public Playlist",
      * }
      */
-    public function clone(Request $request,Project $project, Playlist $playlist) 
+    public function clone(Request $request, Project $project, Playlist $playlist)
     {
 
         if (!$playlist->is_public) {
@@ -194,7 +195,7 @@ class PlaylistController extends Controller
                 'errors' => ['Not a Public Playlist.'],
             ], 500);
         }
-        $this->playlistRepository->clone($request,$project, $playlist);
+        $this->playlistRepository->clone($request, $project, $playlist);
 
         return response([
             'message' => 'Playlist is cloned successfully.',

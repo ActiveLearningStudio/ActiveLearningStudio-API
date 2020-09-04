@@ -19,22 +19,28 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param Project $model
      */
-    public function __construct(Project $model,ActivityRepositoryInterface $activityRepository) 
+    public function __construct(Project $model, ActivityRepositoryInterface $activityRepository)
     {
         $this->activityRepository = $activityRepository;
         parent::__construct($model);
     }
-
-    public function clone(Request $request,Project $project) 
+    
+    /**
+     * To clone project and associated playlists
+     * @param Request $request
+     * @param Project $project
+     * @return type
+     */
+    public function clone(Request $request, Project $project)
     {
         $authenticated_user = auth()->user();
         $token =  $request->bearerToken();
         $new_image_url = config('app.default_thumb_url');
-        if( Storage::disk('public')->exists( 'projects/'.basename($project->thumb_url) ) && is_file(storage_path("app/public/projects/".basename($project->thumb_url))) ){
+        if (Storage::disk('public')->exists( 'projects/'.basename($project->thumb_url) ) && is_file(storage_path("app/public/projects/".basename($project->thumb_url)))) {
                 $ext = pathinfo(basename($project->thumb_url), PATHINFO_EXTENSION);
                 $new_image_name = uniqid().'.'.$ext;
                 ob_start();                
-                \File::copy(storage_path("app/public/projects/".basename($project->thumb_url)) , storage_path("app/public/projects/".$new_image_name) );                
+                \File::copy(storage_path("app/public/projects/".basename($project->thumb_url)), storage_path("app/public/projects/".$new_image_name));                
                 ob_get_clean();
                 $new_image_url = "/storage/projects/".$new_image_name;
                 
@@ -65,16 +71,16 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
             $activites = $playlist->activities;
             foreach ($activites as $activity) {
-                $h5P_res = Null;
-                if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0){ 
-                    $h5P_res = $this->activityRepository->download_and_upload_h5p($token,$activity->h5p_content_id);
+                $h5P_res = null;
+                if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) { 
+                    $h5P_res = $this->activityRepository->download_and_upload_h5p($token, $activity->h5p_content_id);
                 }
                 $new_thumb_url = config('app.default_thumb_url');
-                if( Storage::disk('public')->exists( 'projects/'.basename($activity->thumb_url) ) && is_file(storage_path("app/public/projects/".basename($activity->thumb_url))) ){
+                if (Storage::disk('public')->exists( 'projects/'.basename($activity->thumb_url) ) && is_file(storage_path("app/public/projects/".basename($activity->thumb_url)))) {
                         $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
                         $new_image_name_mtd = uniqid().'.'.$ext;
                         ob_start();
-                        \File::copy(storage_path("app/public/projects/".basename($activity->thumb_url)) , storage_path("app/public/projects/".$new_image_name_mtd) );                
+                        \File::copy(storage_path("app/public/projects/".basename($activity->thumb_url)) , storage_path("app/public/projects/".$new_image_name_mtd));                
                         ob_get_clean();
                         $new_thumb_url = "/storage/projects/".$new_image_name_mtd;                        
                     }
