@@ -20,14 +20,14 @@ class DownloadController extends Controller
         $content['filtered'] = '';
         $params = $core->filterParameters($content);
 
-        event(new H5pEvent(
+        /*event(new H5pEvent(
             'download',
             NULL,
             $content['id'],
             $content['title'],
             $content['library']['name'],
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
-        ));
+        ));*/
 
         return response()->download($interface->_download_file, '', [
             'Content-Type' => 'application/zip',

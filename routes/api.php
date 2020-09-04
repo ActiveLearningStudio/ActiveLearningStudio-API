@@ -20,6 +20,7 @@ Route::post('reset-password', 'Auth\ResetPasswordController@reset');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verify-email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
+Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
@@ -29,15 +30,23 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::post('projects/{project}/share-project', 'ProjectController@share');
+        Route::post('projects/{project}/clone-project', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share-project', 'ProjectController@removeShare');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
+        Route::post('projects/{project}/playlists/{playlist}/clone-playlist', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
+        Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
         Route::get('activities/{activity}/share', 'ActivityShareController@share');
         Route::get('activities/{activity}/remove-share', 'ActivityShareController@removeShare');
         Route::get('activities/{activity}/detail', 'ActivityController@detail');
+        Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
+        Route::post('playlists/{playlist}/activities/{activity}/clone-activity', 'ActivityController@clone');
+        Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
+        Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
+        Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
         Route::apiResource('activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
@@ -67,12 +76,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('search/advanced', 'SearchController@advance');
 
         // CurrikiGo
-        Route::group(["prefix" => "go"], function(){
+        Route::group(['prefix' => 'go'], function () {
             // LMS Settings
-            Route::group(["prefix" => "lms-settings"], function(){
+            Route::group(['prefix' => 'lms-settings'], function () {
                 Route::get('user/me', 'CurrikiGo\LmsSettingController@my');
             });
-            Route::group(["prefix" => "canvas"], function(){
+
+            Route::group(['prefix' => 'canvas'], function () {
                 Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToCanvas');
                 Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromCanvas');
             });
@@ -86,7 +96,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
     //H5P Activity public route
     Route::get('h5p/activity/{activity}/visibility/{visibility}', "H5pController@showByActivity");
-    //Route to support H5P Editor's core js library fileupload with "new XMLHttpRequest()"   
+    //Route to support H5P Editor's core js library fileupload with "new XMLHttpRequest()"
     Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name("h5p.ajax.files");
     Route::get('error', 'ErrorController@show')->name('api/error');
 });
