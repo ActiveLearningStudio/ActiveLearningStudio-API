@@ -23,13 +23,20 @@ interface PlaylistRepositoryInterface extends EloquentRepositoryInterface
      * @param array $playlists
      */
     public function saveList(array $playlists);
-    
+
     /**
      * Clone Project,PlayList and activities
      * @param Request $request
      * @param Project $project
      * @param Playlist $playlist
-     * 
+     *
      */
     public function clone(Request $request, Project $project, Playlist $playlist);
+
+    /**
+     * Get Playlists for Preview
+     *
+     * @param Playlist $playlist
+     */
+    public function getPlaylistForPreview(Playlist $playlist);
 }

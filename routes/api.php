@@ -28,21 +28,22 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('users', 'UserController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
-        Route::post('projects/{project}/share-project', 'ProjectController@share');
-        Route::post('projects/{project}/clone-project', 'ProjectController@clone');
-        Route::post('projects/{project}/remove-share-project', 'ProjectController@removeShare');
+        Route::post('projects/{project}/share', 'ProjectController@share');
+        Route::post('projects/{project}/clone', 'ProjectController@clone');
+        Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
-        Route::post('projects/{project}/playlists/{playlist}/clone-playlist', 'PlaylistController@clone');
+        Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
+        Route::get('/playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
+        Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
         Route::get('activities/{activity}/share', 'ActivityShareController@share');
         Route::get('activities/{activity}/remove-share', 'ActivityShareController@removeShare');
         Route::get('activities/{activity}/detail', 'ActivityController@detail');
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
-        Route::post('playlists/{playlist}/activities/{activity}/clone-activity', 'ActivityController@clone');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
