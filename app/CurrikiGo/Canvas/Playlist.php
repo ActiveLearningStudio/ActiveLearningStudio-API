@@ -12,7 +12,7 @@ use App\CurrikiGo\Canvas\Commands\CreateModuleCommand;
 use App\CurrikiGo\Canvas\Commands\CreateModuleItemCommand;
 use App\CurrikiGo\Canvas\Helpers\Course as CourseHelper;
 use App\Models\Playlist as PlaylistModel;
-use App\HTTP\Resources\V1\CurrikiGo\CanvasPlaylistResource;
+use App\Http\Resources\V1\CurrikiGo\CanvasPlaylistResource;
 
 /**
  * Playlist class for handling playlist publishing to Canvas LMS
