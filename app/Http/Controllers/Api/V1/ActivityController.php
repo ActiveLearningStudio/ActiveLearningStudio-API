@@ -16,6 +16,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Djoudi\LaravelH5p\Events\H5pEvent;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\V1\H5pActivityResource;
 
 class ActivityController extends Controller 
 {
@@ -198,7 +201,8 @@ class ActivityController extends Controller
         ], 500);
     }
 
-    /**
+     /**
+     * 
      * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
      * @apiResourceCollection  App\Http\Resources\V1\ActivityResource
      * @apiResourceModel  App\Models\Playlist
@@ -233,6 +237,43 @@ class ActivityController extends Controller
         return response([
             'errors' => ['Failed to clone activity.'],
         ], 500);
+    }
+
+    /**
+     * Activity H5P
+     *
+     * @param Activity $activity
+     *
+     * @return Response
+     */
+    public function h5p(Activity $activity)
+    {
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->load_content($activity->h5p_content_id);
+        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+        $user = Auth::user();
+        
+        // create event dispatch
+        event(new H5pEvent(
+            'content',
+            NULL,
+            $content['id'],
+            $content['title'],
+            $content['library']['name'],
+            $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+        ));
+        $user_data = $user->only(['id', 'name', 'email']);
+
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+        return response([
+            'activity' => new H5pActivityResource($activity, $h5p_data),
+            'playlist' => new PlaylistResource($activity->playlist),
+        ], 200);
     }
 
     /**
