@@ -134,6 +134,7 @@ class PlaylistController extends Controller
         $is_updated = $this->playlistRepository->update($request->only([
             'title',
             'order',
+            'is_public',
         ]), $playlist->id);
 
         if ($is_updated) {
