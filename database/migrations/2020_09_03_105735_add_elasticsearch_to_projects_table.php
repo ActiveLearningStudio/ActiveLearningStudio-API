@@ -14,7 +14,7 @@ class AddElasticsearchToProjectsTable extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->boolean('elasticsearch')->nullable()->after('is_public');
+            $table->boolean('elasticsearch')->default(false)->after('is_public');
         });
     }
 
