@@ -21,7 +21,8 @@ class ProjectController extends Controller {
      *
      * @param ProjectRepositoryInterface $projectRepository
      */
-    public function __construct(ProjectRepositoryInterface $projectRepository) {
+    public function __construct(ProjectRepositoryInterface $projectRepository) 
+    {
         $this->projectRepository = $projectRepository;
 
         $this->authorizeResource(Project::class, 'project');
@@ -39,12 +40,12 @@ class ProjectController extends Controller {
         if ($authenticated_user->isAdmin()) {
             return response([
                 'projects' => ProjectResource::collection($this->projectRepository->all()),
-                    ], 200);
+            ], 200);
         }
 
         return response([
             'projects' => ProjectResource::collection($authenticated_user->projects),
-                ], 200);
+        ], 200);
     }
 
     /**
@@ -62,14 +63,14 @@ class ProjectController extends Controller {
         if ($validator->fails()) {
             return response([
                 'errors' => ['Invalid image.']
-                    ], 400);
+            ], 400);
         }
 
         $path = $request->file('thumb')->store('/public/projects');
 
         return response([
             'thumbUrl' => Storage::url($path),
-                ], 200);
+        ], 200);
     }
 
     /**
@@ -92,12 +93,12 @@ class ProjectController extends Controller {
         if ($project) {
             return response([
                 'project' => new ProjectResource($project),
-                    ], 201);
+            ], 201);
         }
 
         return response([
             'errors' => ['Could not create project. Please try again later.'],
-                ], 500);
+        ], 500);
     }
 
     /**
@@ -110,7 +111,7 @@ class ProjectController extends Controller {
     {
         return response([
             'project' => new ProjectResource($project),
-                ], 200);
+        ], 200);
     }
 
     /**
@@ -129,12 +130,12 @@ class ProjectController extends Controller {
         if ($is_updated) {
             return response([
                 'project' => new ProjectResource($this->projectRepository->find($project->id)),
-                    ], 200);
+            ], 200);
         }
 
         return response([
             'errors' => ['Failed to share project.'],
-                ], 500);
+        ], 500);
     }
 
     /**
@@ -153,12 +154,12 @@ class ProjectController extends Controller {
         if ($is_updated) {
             return response([
                 'project' => new ProjectResource($this->projectRepository->find($project->id)),
-                    ], 200);
+            ], 200);
         }
 
         return response([
             'errors' => ['Failed to remove share project.'],
-                ], 500);
+        ], 500);
     }
 
     /**
@@ -179,12 +180,12 @@ class ProjectController extends Controller {
         if ($is_updated) {
             return response([
                 'project' => new ProjectResource($this->projectRepository->find($project->id)),
-                    ], 200);
+            ], 200);
         }
 
         return response([
             'errors' => ['Failed to update project.'],
-                ], 500);
+        ], 500);
     }
 
     /**
@@ -200,12 +201,12 @@ class ProjectController extends Controller {
         if ($is_deleted) {
             return response([
                 'message' => 'Project is deleted successfully.',
-                    ], 200);
+            ], 200);
         }
 
         return response([
             'errors' => ['Failed to delete project.'],
-                ], 500);
+        ], 500);
     }
 
     /**
@@ -225,13 +226,13 @@ class ProjectController extends Controller {
         if (!$project->is_public) {
             return response([
                 'errors' => ['Not a Public Project.'],
-                    ], 500);
+            ], 500);
         }
 
         $this->projectRepository->clone($request,$project);
         return response([
             'message' => 'Project is cloned successfully.',
-                ], 200);
+        ], 200);
     }
 
 }

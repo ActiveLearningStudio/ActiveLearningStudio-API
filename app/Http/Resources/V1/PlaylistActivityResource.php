@@ -5,7 +5,7 @@ namespace App\Http\Resources\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ActivityResource extends JsonResource
+class PlaylistActivityResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,6 @@ class ActivityResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'playlist' => $this->playlist,
             'title' => $this->title,
             'type' => $this->type,
             'content' => $this->content,
@@ -27,7 +26,6 @@ class ActivityResource extends JsonResource
             'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
             'h5p_content' => $this->h5p_content,
-            'is_public' => $this->is_public,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

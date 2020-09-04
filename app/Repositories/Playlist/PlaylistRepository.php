@@ -11,7 +11,8 @@ use App\Repositories\Activity\ActivityRepositoryInterface;
 use Storage;
 use Illuminate\Http\Request;
 
-class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInterface {
+class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInterface 
+{
 
     private $activityRepository;
 

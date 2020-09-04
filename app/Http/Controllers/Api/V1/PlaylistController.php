@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 
-class PlaylistController extends Controller {
+class PlaylistController extends Controller 
+{
 
     private $playlistRepository;
     private $activityRepository;
@@ -21,7 +22,8 @@ class PlaylistController extends Controller {
      *
      * @param PlaylistRepositoryInterface $playlistRepository
      */
-    public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository) {
+    public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository) 
+    {
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
 
@@ -35,12 +37,13 @@ class PlaylistController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function index(Project $project) {
+    public function index(Project $project) 
+    {
         $this->authorize('view', $project);
 
         return response([
             'playlists' => PlaylistResource::collection($project->playlists()->orderBy('order')->get()),
-                ], 200);
+        ], 200);
     }
 
     /**
@@ -50,7 +53,8 @@ class PlaylistController extends Controller {
      * @param Project $project
      * @return Response
      */
-    public function store(Request $request, Project $project) {
+    public function store(Request $request, Project $project) 
+    {
         $this->authorize('view', $project);
 
         $data = $request->validate([
@@ -64,12 +68,12 @@ class PlaylistController extends Controller {
         if ($playlist) {
             return response([
                 'playlist' => new PlaylistResource($playlist),
-                    ], 201);
+            ], 201);
         }
 
         return response([
             'errors' => ['Could not create playlist. Please try again later.'],
-                ], 500);
+        ], 500);
     }
 
     /**
@@ -79,16 +83,17 @@ class PlaylistController extends Controller {
      * @param Playlist $playlist
      * @return Response
      */
-    public function show(Project $project, Playlist $playlist) {
+    public function show(Project $project, Playlist $playlist) 
+    {
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
-                    ], 400);
+            ], 400);
         }
 
         return response([
             'playlist' => new PlaylistResource($playlist),
-                ], 200);
+        ], 200);
     }
 
     /**
@@ -99,12 +104,13 @@ class PlaylistController extends Controller {
      * @param Playlist $playlist
      * @return Response
      */
-    public function reorder(Request $request, Project $project) {
+    public function reorder(Request $request, Project $project) 
+    {
         $this->playlistRepository->saveList($request->playlists);
 
         return response([
             'playlists' => PlaylistResource::collection($project->playlists()->orderBy('order')->get()),
-                ], 200);
+        ], 200);
     }
 
     /**
@@ -115,12 +121,13 @@ class PlaylistController extends Controller {
      * @param Playlist $playlist
      * @return Response
      */
-    public function update(Request $request, Project $project, Playlist $playlist) {
+    public function update(Request $request, Project $project, Playlist $playlist) 
+    {
 
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
-                    ], 400);
+            ], 400);
         }
 
         $is_updated = $this->playlistRepository->update($request->only([
@@ -131,12 +138,12 @@ class PlaylistController extends Controller {
         if ($is_updated) {
             return response([
                 'playlist' => new PlaylistResource($this->playlistRepository->find($playlist->id)),
-                    ], 200);
+            ], 200);
         }
 
         return response([
             'errors' => ['Failed to update playlist.'],
-                ], 500);
+        ], 500);
     }
 
     /**
@@ -146,11 +153,12 @@ class PlaylistController extends Controller {
      * @param Playlist $playlist
      * @return Response
      */
-    public function destroy(Project $project, Playlist $playlist) {
+    public function destroy(Project $project, Playlist $playlist) 
+    {
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
-                    ], 400);
+            ], 400);
         }
 
         $is_deleted = $this->playlistRepository->delete($playlist->id);
@@ -158,12 +166,12 @@ class PlaylistController extends Controller {
         if ($is_deleted) {
             return response([
                 'message' => 'Playlist is deleted successfully.',
-                    ], 200);
+            ], 200);
         }
 
         return response([
             'errors' => ['Failed to delete playlist.'],
-                ], 500);
+        ], 500);
     }
     /**
      * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
@@ -178,18 +186,19 @@ class PlaylistController extends Controller {
      *  "errors": "Not a Public Playlist",
      * }
      */
-    public function clone(Request $request,Project $project, Playlist $playlist) {
+    public function clone(Request $request,Project $project, Playlist $playlist) 
+    {
 
         if (!$playlist->is_public) {
             return response([
                 'errors' => ['Not a Public Playlist.'],
-                    ], 500);
+            ], 500);
         }
         $this->playlistRepository->clone($request,$project, $playlist);
 
         return response([
             'message' => 'Playlist is cloned successfully.',
-                ], 200);
+        ], 200);
     }
 
 }

@@ -10,7 +10,8 @@ use Illuminate\Support\Collection;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Illuminate\Http\Request;
 
-class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface {
+class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface 
+{
     
     private $activityRepository;
     /**
@@ -51,7 +52,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         if (!$clonned_project) {
             return response([
                 'errors' => ['Could not create project. Please try again later.'],
-                    ], 500);
+            ], 500);
         }
         
         $playlists = $project->playlists;

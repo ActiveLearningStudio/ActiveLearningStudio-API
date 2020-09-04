@@ -164,7 +164,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     {
         $h5pElasticsearchFieldsArray = [];
 
-        if ($h5pContent['parameters']) {
+        if (isset($h5pContent) && $h5pContent['parameters']) {
             $parameters = json_decode($h5pContent['parameters'], true);
 
             $h5pElasticsearchFields = $this->h5pElasticsearchFieldRepository->model->where([
