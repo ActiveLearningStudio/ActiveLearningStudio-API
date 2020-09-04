@@ -44,7 +44,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 ob_get_clean();
                 $new_image_url = "/storage/projects/".$new_image_name;
                 
-            } 
+        } 
         $data = [
             'name' => $project->name,
             'description' => $project->description,
