@@ -31,6 +31,7 @@ class Activity extends Model
         'education_level_id',
         'h5p_content_id',
         'elasticsearch',
+        'is_public',
     ];
 
     /**

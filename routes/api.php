@@ -20,6 +20,7 @@ Route::post('reset-password', 'Auth\ResetPasswordController@reset');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verify-email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
+Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
@@ -29,10 +30,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::post('projects/{project}/share-project', 'ProjectController@share');
+        Route::post('projects/{project}/clone-project', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share-project', 'ProjectController@removeShare');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
+        Route::post('projects/{project}/playlists/{playlist}/clone-playlist', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
@@ -40,6 +43,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/remove-share', 'ActivityShareController@removeShare');
         Route::get('activities/{activity}/detail', 'ActivityController@detail');
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
+        Route::post('playlists/{playlist}/activities/{activity}/clone-activity', 'ActivityController@clone');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');

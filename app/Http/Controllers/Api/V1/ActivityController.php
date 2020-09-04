@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Models\Activity;
+use App\Models\Playlist;
+use App\Models\Project;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
-use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\User;
 use Illuminate\Http\Request;
@@ -19,8 +20,9 @@ use Djoudi\LaravelH5p\Events\H5pEvent;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\V1\H5pActivityResource;
 
-class ActivityController extends Controller
+class ActivityController extends Controller 
 {
+
     private $activityRepository;
 
     /**
@@ -89,7 +91,7 @@ class ActivityController extends Controller
             'subject_id' => 'string',
             'education_level_id' => 'string',
         ]);
-
+        
         $activity = $this->activityRepository->create($data);
 
         if ($activity) {
@@ -196,6 +198,44 @@ class ActivityController extends Controller
 
         return response([
             'errors' => ['Failed to delete activity.'],
+        ], 500);
+    }
+
+     /**
+     * 
+     * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
+     * @apiResourceCollection  App\Http\Resources\V1\ActivityResource
+     * @apiResourceModel  App\Models\Playlist
+     * @apiResourceModel  App\Models\Activity
+     * 
+     *  @response  {
+     *  "message": "Activity is cloned successfully",
+     * },
+     *  {
+     *  "errors": "Not a Public PlayList",
+     * },
+     *  {
+     *  "errors": "Failed to clone activity.",
+     * }
+     */
+    public function clone(Request $request, Playlist $playlist, Activity $activity)
+    {
+        if (!$activity->is_public) {
+            return response([
+                'errors' => ['Not a Public Activity.'],
+            ], 500);
+        }
+
+        $cloned_activity = $this->activityRepository->clone($request, $playlist, $activity);
+
+        if ($cloned_activity) {
+            return response([
+                'message' => 'Activity is cloned successfully.',
+            ], 200);
+        }
+        
+        return response([
+            'errors' => ['Failed to clone activity.'],
         ], 500);
     }
 

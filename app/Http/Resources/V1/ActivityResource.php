@@ -27,6 +27,7 @@ class ActivityResource extends JsonResource
             'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
             'h5p_content' => $this->h5p_content,
+            'is_public' => $this->is_public,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

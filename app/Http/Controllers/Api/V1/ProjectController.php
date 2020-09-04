@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Api\V1\H5pController;
 
-class ProjectController extends Controller
+class ProjectController extends Controller 
 {
+
     private $projectRepository;
 
     /**
@@ -207,4 +209,30 @@ class ProjectController extends Controller
             'errors' => ['Failed to delete project.'],
         ], 500);
     }
+
+    /**
+     * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
+     * @apiResourceModel  App\Models\Project
+     * 
+     * @response  {
+     *  "message": "Project is cloned successfully",
+     * },
+     *  {
+     *  "errors": "Not a Public Project",
+     * }
+     */
+    public function clone(Request $request, Project $project)
+    {
+        if (!$project->is_public) {
+            return response([
+                'errors' => ['Not a Public Project.'],
+            ], 500);
+        }
+
+        $this->projectRepository->clone($request, $project);
+        return response([
+            'message' => 'Project is cloned successfully.',
+        ], 200);
+    }
+
 }

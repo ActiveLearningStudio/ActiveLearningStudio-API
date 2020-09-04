@@ -26,6 +26,7 @@ class ProjectResource extends JsonResource
             'starter_project' => $this->starter_project,
             'users' => ProjectUserResource::collection($this->users),
             'playlists' => ProjectPlaylistResource::collection($this->playlists->sortBy('order')),
+            'is_public' => $this->is_public,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
