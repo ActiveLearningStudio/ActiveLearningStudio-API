@@ -231,7 +231,8 @@ class ActivityController extends Controller
 
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         return response([
-            'activity' => new H5pActivityResource($activity, $h5p_data)
+            'activity' => new H5pActivityResource($activity, $h5p_data),
+            'playlist' => new PlaylistResource($activity->playlist),
         ], 200);
     }
 
