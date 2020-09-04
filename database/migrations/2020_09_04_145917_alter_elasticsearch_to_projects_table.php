@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddElasticsearchToPlaylistsTable extends Migration
+class AlterElasticsearchToProjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddElasticsearchToPlaylistsTable extends Migration
      */
     public function up()
     {
-        Schema::table('playlists', function (Blueprint $table) {
-            $table->boolean('elasticsearch')->nullable()->after('is_public');
+        Schema::table('projects', function (Blueprint $table) {
+            $table->boolean('elasticsearch')->default(false)->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddElasticsearchToPlaylistsTable extends Migration
      */
     public function down()
     {
-        Schema::table('playlists', function (Blueprint $table) {
-            $table->dropColumn(['elasticsearch']);
+        Schema::table('projects', function (Blueprint $table) {
+            //
         });
     }
 }

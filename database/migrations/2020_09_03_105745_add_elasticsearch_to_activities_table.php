@@ -14,7 +14,7 @@ class AddElasticsearchToActivitiesTable extends Migration
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->boolean('elasticsearch')->default(false)->after('is_public');
+            $table->boolean('elasticsearch')->nullable()->after('is_public');
         });
     }
 
