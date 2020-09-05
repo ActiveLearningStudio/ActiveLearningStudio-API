@@ -9,19 +9,24 @@ use App\Http\Resources\V1\PlaylistResource;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 
 class PlaylistController extends Controller
 {
+
     private $playlistRepository;
+
+    private $activityRepository;
 
     /**
      * PlaylistController constructor.
      *
      * @param PlaylistRepositoryInterface $playlistRepository
      */
-    public function __construct(PlaylistRepositoryInterface $playlistRepository)
+    public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository)
     {
         $this->playlistRepository = $playlistRepository;
+        $this->activityRepository = $activityRepository;
 
         // $this->middleware('can:view,project');
         $this->authorizeResource(Playlist::class, 'playlist');
@@ -93,11 +98,30 @@ class PlaylistController extends Controller
     }
 
     /**
+     * Display the specified playlist.
+     *
+     * @param Project $project
+     * @param Playlist $playlist
+     * @return Response
+     */
+    public function loadShared(Project $project, Playlist $playlist)
+    {
+        if (!$playlist->project->shared) {
+            return response([
+                'errors' => ['No shareable Project found.'],
+            ], 400);
+        }
+
+        return response([
+            'playlist' => $this->playlistRepository->getPlaylistForPreview($playlist),
+        ], 200);
+    }
+
+    /**
      * Reorder playlists in storage.
      *
      * @param Request $request
      * @param Project $project
-     * @param Playlist $playlist
      * @return Response
      */
     public function reorder(Request $request, Project $project)
@@ -119,6 +143,7 @@ class PlaylistController extends Controller
      */
     public function update(Request $request, Project $project, Playlist $playlist)
     {
+
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
@@ -128,6 +153,7 @@ class PlaylistController extends Controller
         $is_updated = $this->playlistRepository->update($request->only([
             'title',
             'order',
+            'is_public',
         ]), $playlist->id);
 
         if ($is_updated) {
@@ -168,4 +194,32 @@ class PlaylistController extends Controller
             'errors' => ['Failed to delete playlist.'],
         ], 500);
     }
+    /**
+     * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
+     * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
+     * @apiResourceModel  App\Models\Project
+     * @apiResourceModel  App\Models\Playlist
+     *
+     * @response  {
+     *  "message": "Playlist is cloned successfully",
+     * },
+     *  {
+     *  "errors": "Not a Public Playlist",
+     * }
+     */
+    public function clone(Request $request, Project $project, Playlist $playlist)
+    {
+
+        if (!$playlist->is_public) {
+            return response([
+                'errors' => ['Not a Public Playlist.'],
+            ], 500);
+        }
+        $this->playlistRepository->clone($request, $project, $playlist);
+
+        return response([
+            'message' => 'Playlist is cloned successfully.',
+        ], 200);
+    }
+
 }

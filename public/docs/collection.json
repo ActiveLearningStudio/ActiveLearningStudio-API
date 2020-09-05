@@ -2,78 +2,22 @@
     "variables": [],
     "info": {
         "name": "Curriki API",
-        "_postman_id": "f5d76889-206f-4529-a935-661aa7000251",
+        "_postman_id": "0f498dac-a941-4af1-85c0-905593434474",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
     "item": [
         {
-            "name": "User management",
-            "description": "\nAPIs for managing users",
+            "name": "Google Classroom",
+            "description": "",
             "item": [
                 {
-                    "name": "Display the authenticated user.",
+                    "name": "Save Access Token",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/users\/me",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display a listing of the user.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/users",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Store a newly created user in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/users",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/google-classroom\/access-token",
                             "query": []
                         },
                         "method": "POST",
@@ -89,19 +33,19 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "[]"
+                            "raw": "{\n    \"access_token\": \"est\"\n}"
                         },
-                        "description": "",
+                        "description": "Save GAPI access token in the database.",
                         "response": []
                     }
                 },
                 {
-                    "name": "Display the specified user.",
+                    "name": "Get Courses",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/users\/:user",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/google-classroom\/courses",
                             "query": []
                         },
                         "method": "GET",
@@ -119,20 +63,28 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
+                        "description": "Get all existing Google Classroom Courses",
                         "response": []
                     }
                 },
                 {
-                    "name": "Update the specified user in storage.",
+                    "name": "Copy project to Google Classroom",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/users\/:user",
-                            "query": []
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/google-classroom\/projects\/:project\/copy",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "9",
+                                    "description": "The ID of the project."
+                                }
+                            ]
                         },
-                        "method": "PUT",
+                        "method": "POST",
                         "header": [
                             {
                                 "key": "Content-Type",
@@ -145,37 +97,9 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "[]"
+                            "raw": "{\n    \"course_id\": \"123\"\n}"
                         },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Remove the specified user from storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/users\/:user",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
+                        "description": "Copy whole project to google classroom either as a new course\nor into an existing course.",
                         "response": []
                     }
                 }
@@ -190,7 +114,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/authorize",
                             "query": []
                         },
@@ -218,7 +142,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/authorize",
                             "query": []
                         },
@@ -246,7 +170,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/authorize",
                             "query": []
                         },
@@ -274,7 +198,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/token",
                             "query": []
                         },
@@ -302,7 +226,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/tokens",
                             "query": []
                         },
@@ -330,7 +254,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/tokens\/:token_id",
                             "query": []
                         },
@@ -358,7 +282,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/token\/refresh",
                             "query": []
                         },
@@ -386,7 +310,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/clients",
                             "query": []
                         },
@@ -414,7 +338,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/clients",
                             "query": []
                         },
@@ -442,7 +366,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/clients\/:client_id",
                             "query": []
                         },
@@ -470,7 +394,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/clients\/:client_id",
                             "query": []
                         },
@@ -498,7 +422,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/scopes",
                             "query": []
                         },
@@ -526,7 +450,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/personal-access-tokens",
                             "query": []
                         },
@@ -554,7 +478,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/personal-access-tokens",
                             "query": []
                         },
@@ -582,7 +506,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "oauth\/personal-access-tokens\/:token_id",
                             "query": []
                         },
@@ -610,7 +534,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/register",
                             "query": []
                         },
@@ -638,7 +562,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/login",
                             "query": []
                         },
@@ -666,7 +590,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/forgot-password",
                             "query": []
                         },
@@ -694,7 +618,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/reset-password",
                             "query": []
                         },
@@ -722,7 +646,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/verify-email",
                             "query": []
                         },
@@ -750,7 +674,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/verify-email\/resend",
                             "query": []
                         },
@@ -778,7 +702,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/logout",
                             "query": []
                         },
@@ -802,11 +726,179 @@
                     }
                 },
                 {
+                    "name": "Display the authenticated user.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/users\/me",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Display a listing of the user.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/users",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Store a newly created user in storage.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/users",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Display the specified user.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/users\/:user",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update the specified user in storage.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/users\/:user",
+                            "query": []
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove the specified user from storage.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/users\/:user",
+                            "query": []
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
                     "name": "Upload thumb image for project",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/upload-thumb",
                             "query": []
                         },
@@ -834,7 +926,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project\/share-project",
                             "query": []
                         },
@@ -862,7 +954,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project\/remove-share-project",
                             "query": []
                         },
@@ -890,7 +982,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects",
                             "query": []
                         },
@@ -918,7 +1010,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects",
                             "query": []
                         },
@@ -946,7 +1038,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project",
                             "query": []
                         },
@@ -974,7 +1066,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project",
                             "query": []
                         },
@@ -1002,7 +1094,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project",
                             "query": []
                         },
@@ -1030,7 +1122,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project\/playlists",
                             "query": []
                         },
@@ -1058,7 +1150,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project\/playlists",
                             "query": []
                         },
@@ -1086,7 +1178,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
                             "query": []
                         },
@@ -1114,7 +1206,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
                             "query": []
                         },
@@ -1142,8 +1234,148 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
+                            "query": []
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Display a listing of the activity.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/playlists\/:playlist\/activities",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Store a newly created activity in storage.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/playlists\/:playlist\/activities",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Display the specified activity.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/playlists\/:playlist\/activities\/:activity",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update the specified activity in storage.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/playlists\/:playlist\/activities\/:activity",
+                            "query": []
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove the specified activity from storage.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "currikiapi.localhost",
+                            "path": "api\/v1\/playlists\/:playlist\/activities\/:activity",
                             "query": []
                         },
                         "method": "DELETE",
@@ -1170,7 +1402,7 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "localhost:8000",
+                            "host": "currikiapi.localhost",
                             "path": "api\/v1\/error",
                             "query": []
                         },

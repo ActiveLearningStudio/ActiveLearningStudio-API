@@ -15,6 +15,10 @@ class AjaxController extends Controller
 {
     public function libraries(Request $request)
     {
+        // headers for CORS
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+        
         $machineName = $request->get('machineName');
         $major_version = $request->get('majorVersion');
         $minor_version = $request->get('minorVersion');
@@ -44,6 +48,7 @@ class AjaxController extends Controller
                 $machineName,
                 $major_version . '.' . $minor_version
             ));
+            exit;
         } else {
             // Otherwise retrieve all libraries
             $editor->ajax->action(H5PEditorEndpoints::LIBRARIES);
@@ -196,127 +201,6 @@ class AjaxController extends Controller
 
     public function contentUserData(Request $request)
     {
-        global $wpdb;
-
-        $content_id = $request->get('content_id');
-        $data_id = $request->get('data_type');
-        $sub_content_id = $request->get('sub_content_id');
-        $current_user = Auth::user();
-
-        if (
-            $content_id === NULL ||
-            $data_id === NULL ||
-            $sub_content_id === NULL /*||
-			!$current_user->id*/
-        ) {
-            return; // Missing parameters
-        }
-
-        $response = (object) array(
-            'success' => TRUE
-        );
-
-        $data = $request->input('data');
-        $preload = $request->input('preload');
-        $invalidate = $request->input('invalidate');
-        if ($data !== NULL && $preload !== NULL && $invalidate !== NULL) {
-            // if (!wp_verify_nonce(filter_input(INPUT_GET, 'token'), 'h5p_contents_user_data')) {
-            //     H5PCore::ajaxError(__('Invalid security token', $this->plugin_slug));
-            //     exit;
-            // }
-
-            if ($data === '0') {
-                // Remove data
-                DB::table('h5p_contents_user_data')
-                    ->where('content_id', $content_id)
-                    ->where('data_id', $data_id)
-                    ->where('user_id', $current_user->id)
-                    ->where('sub_content_id', $sub_content_id)
-                    ->delete();
-            } else {
-                // Wash values to ensure 0 or 1.
-                $preload = ($preload === '0' ? 0 : 1);
-                $invalidate = ($invalidate === '0' ? 0 : 1);
-
-                // Determine if we should update or insert
-                $update = DB::select("
-                    SELECT content_id FROM h5p_contents_user_data
-                    WHERE content_id = ?
-                    AND user_id = ?
-                    AND data_id = ?
-                    AND sub_content_id = ?
-                ", [$content_id, $current_user->id, $data_id, $sub_content_id]);
-
-                if ($update === NULL || count($update) === 0) {
-                    // Insert new data
-                    DB::table('h5p_contents_user_data')->insert(
-                        array(
-                            'user_id' => $current_user->id,
-                            'content_id' => $content_id,
-                            'sub_content_id' => $sub_content_id,
-                            'data_id' => $data_id,
-                            'data' => $data,
-                            'preload' => $preload,
-                            'invalidate' => $invalidate,
-                            // 'updated_at' => current_time('mysql', 1)
-                        )
-                    );
-                } else {
-                    // Update old data
-                    $wpdb->update($wpdb->prefix . 'h5p_contents_user_data',
-                        array(
-                            'data' => $data,
-                            'preload' => $preload,
-                            'invalidate' => $invalidate,
-                            'updated_at' => current_time('mysql', 1)
-                        ),
-                        array(
-                            'user_id' => $current_user->id,
-                            'content_id' => $content_id,
-                            'data_id' => $data_id,
-                            'sub_content_id' => $sub_content_id
-                        ),
-                        array('%s', '%d', '%d', '%s'),
-                        array('%d', '%d', '%s', '%d')
-                    );
-
-                    DB::table('h5p_contents_user_data')
-                        ->where('user_id', $current_user->id)
-                        ->where('content_id', $content_id)
-                        ->where('data_id', $data_id)
-                        ->where('sub_content_id', $sub_content_id)
-                        ->update(
-                            array(
-                                'data' => $data,
-                                'preload' => $preload,
-                                'invalidate' => $invalidate,
-                                'updated_at' => current_time('mysql', 1)
-                            )
-                        );
-                }
-            }
-
-            // Inserted, updated or deleted
-            \H5PCore::ajaxSuccess();
-            exit;
-        } else {
-            // Fetch data
-            $rows = DB::select("
-                SELECT hcud.data
-                FROM h5p_contents_user_data hcud
-                WHERE user_id = ?
-                AND content_id = ?
-                AND data_id = ?
-                AND sub_content_id = ?
-            ", [$current_user->id, $content_id, $data_id, $sub_content_id]);
-
-            $response->data = count($rows) > 0 ? $rows[0]->data : NULL;
-
-            if ($response->data === NULL) {
-                unset($response->data);
-            }
-        }
-
-        return response()->json($response);
+        return response()->json($request->all());
     }
 }

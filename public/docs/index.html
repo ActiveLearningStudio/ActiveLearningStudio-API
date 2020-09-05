@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>API Reference</title>
 
-    <link rel="stylesheet" href="{{ asset('/docs/css/style.css') }}" />
-    <script src="{{ asset('/docs/js/all.js') }}"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/all.js"></script>
 
 
           <script>
@@ -21,11 +21,11 @@
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="/docs/images/navbar.png" />
+        <img src="images/navbar.png" />
       </span>
     </a>
     <div class="tocify-wrapper">
-        <img src="/docs/images/logo.png" />
+        <img src="images/logo.png" />
                     <div class="lang-selector">
                                   <a href="#" data-language-name="bash">bash</a>
                                   <a href="#" data-language-name="javascript">javascript</a>
@@ -46,87 +46,24 @@
           <!-- START_INFO -->
 <h1>Info</h1>
 <p>Welcome to the generated API reference.
-<a href="{{ route("apidoc.json") }}">Get Postman Collection</a></p>
+<a href="http://currikiapi.localhost/docs/collection.json">Get Postman Collection</a></p>
 <!-- END_INFO -->
-<h1>User management</h1>
-<p>APIs for managing users</p>
-<!-- START_dfb8fbb6facf7c68af221b2363bceb9e -->
-<h2>Display the authenticated user.</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/users/me" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/users/me"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
-<blockquote>
-<p>Example response (401):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "message": "Unauthenticated."
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>GET api/v1/users/me</code></p>
-<!-- END_dfb8fbb6facf7c68af221b2363bceb9e -->
-<!-- START_1aff981da377ba9a1bbc56ff8efaec0d -->
-<h2>Display a listing of the user.</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/users" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/users"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
-<blockquote>
-<p>Example response (401):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "message": "Unauthenticated."
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>GET api/v1/users</code></p>
-<!-- END_1aff981da377ba9a1bbc56ff8efaec0d -->
-<!-- START_4194ceb9a20b7f80b61d14d44df366b4 -->
-<h2>Store a newly created user in storage.</h2>
+<h1>Google Classroom</h1>
+<!-- START_e1403a4791b2f9419c8bb0bea0c91ceb -->
+<h2>Save Access Token</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Save GAPI access token in the database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/users" \
+    "http://currikiapi.localhost/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"access_token":"est"}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/users"
+    "http://currikiapi.localhost/api/v1/google-classroom/access-token"
 );
 
 let headers = {
@@ -134,26 +71,70 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "access_token": "est"
+}
+
 fetch(url, {
     method: "POST",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Access Token Saved successfully"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": "Validation error: Access token is required"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": "Failed to save the token."
+}</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/users</code></p>
-<!-- END_4194ceb9a20b7f80b61d14d44df366b4 -->
-<!-- START_cedc85e856362e0e3b46f5dcd9f8f5d0 -->
-<h2>Display the specified user.</h2>
+<p><code>POST api/v1/google-classroom/access-token</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_token</code></td>
+<td>string</td>
+<td>required</td>
+<td>The stringified JSON of the GAPI access token object</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e1403a4791b2f9419c8bb0bea0c91ceb -->
+<!-- START_679513c6d9a3e7633325d5e35620d09d -->
+<h2>Get Courses</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get all existing Google Classroom Courses</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/users/1" \
+    -G "http://currikiapi.localhost/api/v1/google-classroom/courses" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/users/1"
+    "http://currikiapi.localhost/api/v1/google-classroom/courses"
 );
 
 let headers = {
@@ -168,25 +149,50 @@ fetch(url, {
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "errors": "Service exception error"
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "status": "success",
+    "data": [
+        {
+            "id": "1",
+            "name": "Course 1"
+        },
+        {
+            "id": "2",
+            "name": "Course 2"
+        },
+        {
+            "id": "3",
+            "name": "Course 3"
+        }
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/users/{user}</code></p>
-<!-- END_cedc85e856362e0e3b46f5dcd9f8f5d0 -->
-<!-- START_296fac4bf818c99f6dd42a4a0eb56b58 -->
-<h2>Update the specified user in storage.</h2>
+<p><code>GET api/v1/google-classroom/courses</code></p>
+<!-- END_679513c6d9a3e7633325d5e35620d09d -->
+<!-- START_3f6177f199294bd05304ded78263e7fc -->
+<h2>Copy project to Google Classroom</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Copy whole project to google classroom either as a new course
+or into an existing course.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
-<pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8000/api/v1/users/1" \
+<pre><code class="language-bash">curl -X POST \
+    "http://currikiapi.localhost/api/v1/google-classroom/projects/9/copy" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"course_id":"123"}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/users/1"
+    "http://currikiapi.localhost/api/v1/google-classroom/projects/9/copy"
 );
 
 let headers = {
@@ -194,43 +200,159 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "course_id": "123"
+}
+
 fetch(url, {
-    method: "PUT",
+    method: "POST",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
-<h3>HTTP Request</h3>
-<p><code>PUT api/v1/users/{user}</code></p>
-<p><code>PATCH api/v1/users/{user}</code></p>
-<!-- END_296fac4bf818c99f6dd42a4a0eb56b58 -->
-<!-- START_22354fc95c42d81a744eece68f5b9b9a -->
-<h2>Remove the specified user from storage.</h2>
 <blockquote>
-<p>Example request:</p>
+<p>Example response (403):</p>
 </blockquote>
-<pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8000/api/v1/users/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/users/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-json">{
+    "errors": "Forbidden. You are trying to share other user's project."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": "Failed to save the token."
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "course": {
+            "id": "151999547900",
+            "name": "How to build a playlist in CurrikiStudio",
+            "topics": [
+                {
+                    "course_id": "151999547900",
+                    "topic_id": "152025014649",
+                    "name": "Development Setup",
+                    "course_work": [
+                        {
+                            "id": "152023207873",
+                            "course_id": "151999547900",
+                            "description": null,
+                            "topic_id": "152025014649",
+                            "title": "Activity B - 0",
+                            "state": "PUBLISHED",
+                            "work_type": "ASSIGNMENT",
+                            "materials": [
+                                {
+                                    "link": {
+                                        "thumbnailUrl": null,
+                                        "title": null,
+                                        "url": "http:\/\/localhost:8082\/shared\/activity\/12"
+                                    }
+                                }
+                            ],
+                            "max_points": null
+                        }
+                    ]
+                },
+                {
+                    "course_id": "151999547900",
+                    "topic_id": "152020569111",
+                    "name": "Building Conent Type",
+                    "course_work": [
+                        {
+                            "id": "152022313831",
+                            "course_id": "151999547900",
+                            "description": null,
+                            "topic_id": "152020569111",
+                            "title": "Activity B - 0",
+                            "state": "PUBLISHED",
+                            "work_type": "ASSIGNMENT",
+                            "materials": [
+                                {
+                                    "link": {
+                                        "thumbnailUrl": null,
+                                        "title": null,
+                                        "url": "http:\/\/localhost:8082\/shared\/activity\/17"
+                                    }
+                                }
+                            ],
+                            "max_points": null
+                        },
+                        {
+                            "id": "152004039772",
+                            "course_id": "151999547900",
+                            "description": null,
+                            "topic_id": "152020569111",
+                            "title": "Activity B - 2",
+                            "state": "PUBLISHED",
+                            "work_type": "ASSIGNMENT",
+                            "materials": [
+                                {
+                                    "link": {
+                                        "thumbnailUrl": null,
+                                        "title": null,
+                                        "url": "http:\/\/localhost:8082\/shared\/activity\/19"
+                                    }
+                                }
+                            ],
+                            "max_points": null
+                        }
+                    ]
+                },
+                {
+                    "course_id": "151999547900",
+                    "topic_id": "152002276754",
+                    "name": "This is Week 3",
+                    "course_work": []
+                }
+            ]
+        }
+    },
+    "status": "success"
+}</code></pre>
 <h3>HTTP Request</h3>
-<p><code>DELETE api/v1/users/{user}</code></p>
-<!-- END_22354fc95c42d81a744eece68f5b9b9a -->
+<p><code>POST api/v1/google-classroom/projects/{project}/copy</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>project</code></td>
+<td>required</td>
+<td>The ID of the project.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>course_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>ID of an existing Google Classroom course.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_3f6177f199294bd05304ded78263e7fc -->
 <h1>general</h1>
 <!-- START_0c068b4037fb2e47e71bd44bd36e3e2a -->
 <h2>Authorize a client to access the user&#039;s account.</h2>
@@ -238,11 +360,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/oauth/authorize" \
+    -G "http://currikiapi.localhost/oauth/authorize" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/authorize"
+    "http://currikiapi.localhost/oauth/authorize"
 );
 
 let headers = {
@@ -271,11 +393,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/oauth/authorize" \
+    "http://currikiapi.localhost/oauth/authorize" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/authorize"
+    "http://currikiapi.localhost/oauth/authorize"
 );
 
 let headers = {
@@ -298,11 +420,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8000/oauth/authorize" \
+    "http://currikiapi.localhost/oauth/authorize" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/authorize"
+    "http://currikiapi.localhost/oauth/authorize"
 );
 
 let headers = {
@@ -325,11 +447,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/oauth/token" \
+    "http://currikiapi.localhost/oauth/token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/token"
+    "http://currikiapi.localhost/oauth/token"
 );
 
 let headers = {
@@ -352,11 +474,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/oauth/tokens" \
+    -G "http://currikiapi.localhost/oauth/tokens" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/tokens"
+    "http://currikiapi.localhost/oauth/tokens"
 );
 
 let headers = {
@@ -385,11 +507,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8000/oauth/tokens/1" \
+    "http://currikiapi.localhost/oauth/tokens/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/tokens/1"
+    "http://currikiapi.localhost/oauth/tokens/1"
 );
 
 let headers = {
@@ -412,11 +534,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/oauth/token/refresh" \
+    "http://currikiapi.localhost/oauth/token/refresh" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/token/refresh"
+    "http://currikiapi.localhost/oauth/token/refresh"
 );
 
 let headers = {
@@ -439,11 +561,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/oauth/clients" \
+    -G "http://currikiapi.localhost/oauth/clients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/clients"
+    "http://currikiapi.localhost/oauth/clients"
 );
 
 let headers = {
@@ -472,11 +594,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/oauth/clients" \
+    "http://currikiapi.localhost/oauth/clients" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/clients"
+    "http://currikiapi.localhost/oauth/clients"
 );
 
 let headers = {
@@ -499,11 +621,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8000/oauth/clients/1" \
+    "http://currikiapi.localhost/oauth/clients/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/clients/1"
+    "http://currikiapi.localhost/oauth/clients/1"
 );
 
 let headers = {
@@ -526,11 +648,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8000/oauth/clients/1" \
+    "http://currikiapi.localhost/oauth/clients/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/clients/1"
+    "http://currikiapi.localhost/oauth/clients/1"
 );
 
 let headers = {
@@ -553,11 +675,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/oauth/scopes" \
+    -G "http://currikiapi.localhost/oauth/scopes" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/scopes"
+    "http://currikiapi.localhost/oauth/scopes"
 );
 
 let headers = {
@@ -586,11 +708,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/oauth/personal-access-tokens" \
+    -G "http://currikiapi.localhost/oauth/personal-access-tokens" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/personal-access-tokens"
+    "http://currikiapi.localhost/oauth/personal-access-tokens"
 );
 
 let headers = {
@@ -619,11 +741,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/oauth/personal-access-tokens" \
+    "http://currikiapi.localhost/oauth/personal-access-tokens" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/personal-access-tokens"
+    "http://currikiapi.localhost/oauth/personal-access-tokens"
 );
 
 let headers = {
@@ -646,11 +768,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8000/oauth/personal-access-tokens/1" \
+    "http://currikiapi.localhost/oauth/personal-access-tokens/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/oauth/personal-access-tokens/1"
+    "http://currikiapi.localhost/oauth/personal-access-tokens/1"
 );
 
 let headers = {
@@ -673,11 +795,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/register" \
+    "http://currikiapi.localhost/api/register" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/register"
+    "http://currikiapi.localhost/api/register"
 );
 
 let headers = {
@@ -700,11 +822,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/login" \
+    "http://currikiapi.localhost/api/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/login"
+    "http://currikiapi.localhost/api/login"
 );
 
 let headers = {
@@ -727,11 +849,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/forgot-password" \
+    "http://currikiapi.localhost/api/forgot-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/forgot-password"
+    "http://currikiapi.localhost/api/forgot-password"
 );
 
 let headers = {
@@ -754,11 +876,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/reset-password" \
+    "http://currikiapi.localhost/api/reset-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/reset-password"
+    "http://currikiapi.localhost/api/reset-password"
 );
 
 let headers = {
@@ -781,11 +903,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/verify-email" \
+    "http://currikiapi.localhost/api/verify-email" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/verify-email"
+    "http://currikiapi.localhost/api/verify-email"
 );
 
 let headers = {
@@ -808,11 +930,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/verify-email/resend" \
+    "http://currikiapi.localhost/api/verify-email/resend" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/verify-email/resend"
+    "http://currikiapi.localhost/api/verify-email/resend"
 );
 
 let headers = {
@@ -835,11 +957,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/logout" \
+    "http://currikiapi.localhost/api/logout" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/logout"
+    "http://currikiapi.localhost/api/logout"
 );
 
 let headers = {
@@ -856,17 +978,198 @@ fetch(url, {
 <h3>HTTP Request</h3>
 <p><code>POST api/logout</code></p>
 <!-- END_61739f3220a224b34228600649230ad1 -->
+<!-- START_dfb8fbb6facf7c68af221b2363bceb9e -->
+<h2>Display the authenticated user.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/users/me" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/users/me"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/users/me</code></p>
+<!-- END_dfb8fbb6facf7c68af221b2363bceb9e -->
+<!-- START_1aff981da377ba9a1bbc56ff8efaec0d -->
+<h2>Display a listing of the user.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/users" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/users</code></p>
+<!-- END_1aff981da377ba9a1bbc56ff8efaec0d -->
+<!-- START_4194ceb9a20b7f80b61d14d44df366b4 -->
+<h2>Store a newly created user in storage.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://currikiapi.localhost/api/v1/users" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/users</code></p>
+<!-- END_4194ceb9a20b7f80b61d14d44df366b4 -->
+<!-- START_cedc85e856362e0e3b46f5dcd9f8f5d0 -->
+<h2>Display the specified user.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/users/{user}</code></p>
+<!-- END_cedc85e856362e0e3b46f5dcd9f8f5d0 -->
+<!-- START_296fac4bf818c99f6dd42a4a0eb56b58 -->
+<h2>Update the specified user in storage.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://currikiapi.localhost/api/v1/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/users/{user}</code></p>
+<p><code>PATCH api/v1/users/{user}</code></p>
+<!-- END_296fac4bf818c99f6dd42a4a0eb56b58 -->
+<!-- START_22354fc95c42d81a744eece68f5b9b9a -->
+<h2>Remove the specified user from storage.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://currikiapi.localhost/api/v1/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/users/{user}</code></p>
+<!-- END_22354fc95c42d81a744eece68f5b9b9a -->
 <!-- START_57b4a66cc415c7809e03a83e2dfa7039 -->
 <h2>Upload thumb image for project</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/projects/upload-thumb" \
+    "http://currikiapi.localhost/api/v1/projects/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/upload-thumb"
+    "http://currikiapi.localhost/api/v1/projects/upload-thumb"
 );
 
 let headers = {
@@ -889,11 +1192,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/projects/1/share-project" \
+    "http://currikiapi.localhost/api/v1/projects/1/share-project" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/share-project"
+    "http://currikiapi.localhost/api/v1/projects/1/share-project"
 );
 
 let headers = {
@@ -916,11 +1219,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/projects/1/remove-share-project" \
+    "http://currikiapi.localhost/api/v1/projects/1/remove-share-project" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/remove-share-project"
+    "http://currikiapi.localhost/api/v1/projects/1/remove-share-project"
 );
 
 let headers = {
@@ -943,11 +1246,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/projects" \
+    -G "http://currikiapi.localhost/api/v1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects"
+    "http://currikiapi.localhost/api/v1/projects"
 );
 
 let headers = {
@@ -976,11 +1279,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/projects" \
+    "http://currikiapi.localhost/api/v1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects"
+    "http://currikiapi.localhost/api/v1/projects"
 );
 
 let headers = {
@@ -1003,11 +1306,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1" \
+    -G "http://currikiapi.localhost/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1"
+    "http://currikiapi.localhost/api/v1/projects/1"
 );
 
 let headers = {
@@ -1036,11 +1339,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8000/api/v1/projects/1" \
+    "http://currikiapi.localhost/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1"
+    "http://currikiapi.localhost/api/v1/projects/1"
 );
 
 let headers = {
@@ -1064,11 +1367,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8000/api/v1/projects/1" \
+    "http://currikiapi.localhost/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1"
+    "http://currikiapi.localhost/api/v1/projects/1"
 );
 
 let headers = {
@@ -1091,11 +1394,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1/playlists" \
+    -G "http://currikiapi.localhost/api/v1/projects/1/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists"
 );
 
 let headers = {
@@ -1124,11 +1427,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/projects/1/playlists" \
+    "http://currikiapi.localhost/api/v1/projects/1/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists"
 );
 
 let headers = {
@@ -1151,11 +1454,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1/playlists/1" \
+    -G "http://currikiapi.localhost/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists/1"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -1184,11 +1487,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8000/api/v1/projects/1/playlists/1" \
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists/1"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -1212,11 +1515,11 @@ fetch(url, {
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8000/api/v1/projects/1/playlists/1" \
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/1/playlists/1"
+    "http://currikiapi.localhost/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -1233,17 +1536,165 @@ fetch(url, {
 <h3>HTTP Request</h3>
 <p><code>DELETE api/v1/projects/{project}/playlists/{playlist}</code></p>
 <!-- END_feb1f1225dc03ec1052829032b6fc7b5 -->
+<!-- START_c238d6cdfdd62f3aae5a627422fe3427 -->
+<h2>Display a listing of the activity.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/playlists/1/activities" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/playlists/{playlist}/activities</code></p>
+<!-- END_c238d6cdfdd62f3aae5a627422fe3427 -->
+<!-- START_2a7a430e931750bac16a4f433def76c7 -->
+<h2>Store a newly created activity in storage.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://currikiapi.localhost/api/v1/playlists/1/activities" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/playlists/{playlist}/activities</code></p>
+<!-- END_2a7a430e931750bac16a4f433def76c7 -->
+<!-- START_33a2e7decc039b04e96d21e0fae0e6b1 -->
+<h2>Display the specified activity.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://currikiapi.localhost/api/v1/playlists/1/activities/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/playlists/{playlist}/activities/{activity}</code></p>
+<!-- END_33a2e7decc039b04e96d21e0fae0e6b1 -->
+<!-- START_2c284aa499dc018e9876b34be26974fe -->
+<h2>Update the specified activity in storage.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/playlists/{playlist}/activities/{activity}</code></p>
+<p><code>PATCH api/v1/playlists/{playlist}/activities/{activity}</code></p>
+<!-- END_2c284aa499dc018e9876b34be26974fe -->
+<!-- START_4b91bf4495723f1f78bc403ac627bdaf -->
+<h2>Remove the specified activity from storage.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://currikiapi.localhost/api/v1/playlists/1/activities/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/playlists/{playlist}/activities/{activity}</code></p>
+<!-- END_4b91bf4495723f1f78bc403ac627bdaf -->
 <!-- START_b455a0ec0acd6c04cdc310209814381d -->
 <h2>Display error</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/error" \
+    -G "http://currikiapi.localhost/api/v1/error" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/error"
+    "http://currikiapi.localhost/api/v1/error"
 );
 
 let headers = {
