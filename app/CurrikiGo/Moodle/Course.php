@@ -5,6 +5,9 @@ namespace App\CurrikiGo\Moodle;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
 
+/**
+ * Class for fetching courses from Moodle LMS
+ */
 class Course
 {
     private $lmsSetting;
@@ -16,7 +19,13 @@ class Course
         $this->client = new \GuzzleHttp\Client();
     }
 
-    public function fetch($project)
+    /**
+     * Fetch a course from Moodle LMS
+     * 
+     * @param \App\Models\Project $project
+     * @return array
+     */
+    public function fetch(Project $project)
     {
         $web_service_token = $this->lmsSetting->lms_access_token;
         $lms_host = $this->lmsSetting->lms_url;
