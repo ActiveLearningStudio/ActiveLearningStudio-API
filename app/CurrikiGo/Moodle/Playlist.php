@@ -16,7 +16,7 @@ class Playlist
         $this->client = new \GuzzleHttp\Client();
     }
 
-    public function send($playlist, $data)
+    public function send(PlaylistModel $playlist, $data)
     {        
         $web_service_token = $this->lmsSetting->lms_access_token;
         $lms_host = $this->lmsSetting->lms_url;

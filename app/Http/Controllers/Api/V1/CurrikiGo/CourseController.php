@@ -94,11 +94,11 @@ class CourseController extends Controller
      *  "errors": "You are not authorized to perform this action."
      * }
      * 
-     * @param Project $project The project model object
      * @param FetchCourseRequest $fetchRequest The request object
+     * @param Project $project The project model object     
      * @return Response
      */
-    public function fetchFromMoodle(Project $project, FetchCourseRequest $fetchRequest)
+    public function fetchFromMoodle(FetchCourseRequest $fetchRequest, Project $project)
     {
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->allows('fetch-lms-course', $project)) {
