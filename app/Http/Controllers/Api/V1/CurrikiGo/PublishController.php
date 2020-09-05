@@ -44,7 +44,7 @@ class PublishController extends Controller
     }
 
     /**
-     * Publish a Playlist to Canvas
+     * Publish a Playlist to Moodle
      *
      * @urlParam  project required The ID of the project
      * @urlParam  playlist required The ID of the playlist.
