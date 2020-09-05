@@ -44,9 +44,16 @@ class PublishController extends Controller
     }
 
     /**
-     * Publish a Playlist to Moodle
+     * Publish a Playlist to Canvas
+     *
+     * @urlParam  project required The ID of the project
+     * @urlParam  playlist required The ID of the playlist.
+     * @bodyParam  setting_id int The id of the LMS setting.
+     * @bodyParam  counter int The counter for uniqueness of the title
      * 
-     * @param Request $request
+     * @param Project $project The project model object
+     * @param Playlist $playlist The playlist model object
+     * @param PublishPlaylistRequest $publishRequest The request object
      * @return Response
      */
     public function playlistToMoodle(Project $project, Playlist $playlist, PublishPlaylistRequest $publishRequest)
