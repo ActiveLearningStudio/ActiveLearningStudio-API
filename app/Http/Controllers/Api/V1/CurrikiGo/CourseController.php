@@ -81,40 +81,39 @@ class CourseController extends Controller
     }
 
     /**
-     * Fetch course from Moodle
+     * Fetch a course from Moodle
      * 
-     * @param Request $request
+     * @urlParam  project required The ID of the project.
+     * @bodyParam  setting_id int The id of the LMS setting.
+     * 
+     * @responseFile  responses/fetchfromcanvas.post.json
+     * @response  400 {
+     *  "errors": "Validation error"
+     * }
+     * @response  403 {
+     *  "errors": "You are not authorized to perform this action."
+     * }
+     * 
+     * @param Project $project The project model object
+     * @param FetchCourseRequest $fetchRequest The request object
      * @return Response
      */
-    public function fetchFromMoodle(Request $request)
-    {                
-        $validator = Validator::make($request->all(), ['setting_id' => 'required', 'project_id' => 'required']);
-
-        if ($validator->fails()) {
-            $messages = $validator->messages();
-            return response([
-                'errors' => [$messages],
-            ], 400);
-        }
-        
-        $moodleCourse = new MoodleCourse($request->setting_id);
-        $response = $moodleCourse->fetch(['project_id' => $request->project_id]);
-        if (is_null($response)) {
-            return response([
-                'errors' => ["No Project Found"],
-            ], 400);
-        }
-        
-        $code = $response->getStatusCode();
-        if ($code == 200) {
+    public function fetchFromMoodle(Project $project, FetchCourseRequest $fetchRequest)
+    {
+        $authUser = auth()->user();
+        if (Gate::forUser($authUser)->allows('fetch-lms-course', $project)) {
+            $data = $fetchRequest->validated();
+            $lmsSetting = $this->lmsSettingRepository->find($data['setting_id']);
+            $moodleCourse = new MoodleCourse($lmsSetting);
+            $response = $moodleCourse->fetch($project);
             $outcome = $response->getBody()->getContents();
             return response([
-                'data' => json_decode($outcome),
+                'project' => json_decode($outcome),
             ], 200);
-        } else {
-            return response([
-                'errors' => ["Moodle API Request Failed"],
-            ], 500);
         }
+
+        return response([
+            'errors' => ['You are not authorized to perform this action.'],
+        ], 403);
     }
 }
