@@ -51,12 +51,12 @@ class PublishController extends Controller
      * @bodyParam  setting_id int The id of the LMS setting.
      * @bodyParam  counter int The counter for uniqueness of the title
      * 
+     * @param PublishPlaylistRequest $publishRequest The request object
      * @param Project $project The project model object
      * @param Playlist $playlist The playlist model object
-     * @param PublishPlaylistRequest $publishRequest The request object
      * @return Response
      */
-    public function playlistToMoodle(Project $project, Playlist $playlist, PublishPlaylistRequest $publishRequest)
+    public function playlistToMoodle(PublishPlaylistRequest $publishRequest, Project $project, Playlist $playlist)
     {                
         if ($playlist->project_id !== $project->id) {
             return response([
