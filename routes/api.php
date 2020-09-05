@@ -86,6 +86,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToCanvas');
                 Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromCanvas');
             });
+
+            Route::group(['prefix' => 'moodle'], function () {
+                Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToMoodle');
+                Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromMoodle');
+            });
         });
 
         // Google Share
