@@ -14,7 +14,7 @@ class AddMembershipTypeToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedTinyInteger('membership_type_id')->default(1);
+            $table->unsignedTinyInteger('membership_type_id')->default(1);  // Should default to demo membership type created by seeder
         });
     }
 

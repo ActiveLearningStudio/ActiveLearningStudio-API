@@ -18,8 +18,9 @@ class CreateMembershipTypesTable extends Migration
             $table->string('name');
             $table->string('label');
             $table->text('description');
-            $table->unsignedBigInteger('total_storage');
-            $table->unsignedBigInteger('total_bandwidth');
+            $table->unsignedBigInteger('total_storage');    // bytes
+            $table->unsignedBigInteger('total_bandwidth');  // bytes
+            $table->unsignedBigInteger('price');  // cents
             $table->timestamps();
         });
     }

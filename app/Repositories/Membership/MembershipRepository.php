@@ -22,6 +22,7 @@ class MembershipRepository
             'used_storage' => ActivityMetric::whereIn('activity_id', $activityIds)->sum('used_storage'),
             'total_bandwidth' => $user->membership->total_bandwidth,
             'used_bandwidth' => ActivityMetric::whereIn('activity_id', $activityIds)->sum('used_bandwidth'),
+            'price' => $user->membership->price
         ];
     }
 }

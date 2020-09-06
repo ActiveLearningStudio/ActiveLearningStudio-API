@@ -14,8 +14,8 @@ class ActivityMetric extends Model
         'activity_id',
         'view_count',   // Amount of times the activity has been viewed by users (Final consumers, not CurrikiStudio)
         'share_count',  // Amount of times the activity has been published/shared
-        'used_storage', // The amount of storage space the activity is using (in kilobytes)
-        'used_bandwidth'// The amount of bandwidth viewers of the activity have consumed over time (in kilobytes)
+        'used_storage', // The amount of storage space the activity is using (in bytes)
+        'used_bandwidth'// The amount of bandwidth viewers of the activity have consumed over time (in bytes)
     ];
 
     public function activity()

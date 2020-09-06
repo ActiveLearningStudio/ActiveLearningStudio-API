@@ -11,7 +11,11 @@ class MembershipType extends Model
 {
     protected $fillable = [
         'name',
-        'label'
+        'label',
+        'description',
+        'total_storage',	// bytes
+        'total_bandwidth',	// bytes
+        'price'				// cents
     ];
 
     public function users()
