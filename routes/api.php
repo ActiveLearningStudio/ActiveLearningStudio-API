@@ -54,6 +54,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::apiResource('activity-items', 'ActivityItemController');
 
+        Route::get('users/{user}/metrics', 'UserMetricsController@show');
+        Route::get('users/{user}/membership', 'UserMembershipController@show');
+
         Route::group(['prefix' => 'h5p'], function () {
             Route::resource('/', "H5pController");
             Route::get('settings', "H5pController@create");
@@ -85,6 +88,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::group(['prefix' => 'canvas'], function () {
                 Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToCanvas');
                 Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromCanvas');
+            });
+
+            Route::group(['prefix' => 'moodle'], function () {
+                Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToMoodle');
+                Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromMoodle');
             });
         });
 

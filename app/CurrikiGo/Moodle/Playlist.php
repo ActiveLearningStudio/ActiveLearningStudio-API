@@ -7,21 +7,19 @@ use App\Models\Playlist as PlaylistModel;
 
 class Playlist
 {
-    private $settingId;
+    private $lmsSetting;
     private $client;
 
-    public function __construct($settingId)
+    public function __construct($lmsSetting)
     {
-        $this->settingId = $settingId;
+        $this->lmsSetting = $lmsSetting;
         $this->client = new \GuzzleHttp\Client();
     }
 
-    public function send($data)
+    public function send(PlaylistModel $playlist, $data)
     {        
-        $playlist = PlaylistModel::where('_id',$data["playlist_id"])->first();
-        $lms_setting = LmsSetting::where('_id', $this->settingId)->first();
-        $web_service_token = $lms_setting->lms_access_token;
-        $lms_host = $lms_setting->lms_url;
+        $web_service_token = $this->lmsSetting->lms_access_token;
+        $lms_host = $this->lmsSetting->lms_url;
         $web_service_function = "local_curriki_moodle_plugin_create_playlist";
 
         $web_service_url = $lms_host . "/webservice/rest/server.php";
@@ -31,11 +29,10 @@ class Playlist
             "moodlewsrestformat" => "json",
             "entity_name" => $playlist->title . ($data['counter'] > 0 ? ' (' .$data['counter'] . ')' : ''),
             "entity_type" => "playlist",
-            "entity_id" => $playlist->_id,
+            "entity_id" => $playlist->id,
             "parent_name" => $playlist->project->name,
             "parent_type" => "program",
         ];
-
         $response = $this->client->request('GET', $web_service_url, ['query' => $rquest_params]);
         return $response;
     }

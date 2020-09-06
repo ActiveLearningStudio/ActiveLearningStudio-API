@@ -45,33 +45,46 @@ class PublishController extends Controller
 
     /**
      * Publish a Playlist to Moodle
+     *
+     * @urlParam  project required The ID of the project
+     * @urlParam  playlist required The ID of the playlist.
+     * @bodyParam  setting_id int The id of the LMS setting.
+     * @bodyParam  counter int The counter for uniqueness of the title
      * 
-     * @param Request $request
+     * @param PublishPlaylistRequest $publishRequest The request object
+     * @param Project $project The project model object
+     * @param Playlist $playlist The playlist model object
      * @return Response
      */
-    public function playlistToMoodle(Request $request)
+    public function playlistToMoodle(PublishPlaylistRequest $publishRequest, Project $project, Playlist $playlist)
     {                
-        $validator = Validator::make($request->all(), ['setting_id' => 'required', 'playlist_id'=> 'required']);
-
-        if ($validator->fails()) {
-            $messages = $validator->messages();
-            return response()->json(['error' => $messages]);
+        if ($playlist->project_id !== $project->id) {
+            return response([
+                'errors' => ['Invalid project or playlist Id.'],
+            ], 400);
         }
         
-        $moodle_playlist = new MoodlePlaylist($request->setting_id);
-        $counter = $request->counter ? $request->counter : 0;
-        $response = $moodle_playlist->send(['playlist_id' => $request->playlist_id, 'counter' => intval($counter)]);
+        $authUser = auth()->user();
+        if (Gate::forUser($authUser)->allows('publish-to-lms', $project)) {
+            $data = $publishRequest->validated();
+            $lmsSetting = $this->lmsSettingRepository->find($data['setting_id']);
+            $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
+            
+            $moodle_playlist = new MoodlePlaylist($lmsSetting);
+            $response = $moodle_playlist->send($playlist, ['counter' => intval($counter)]);
 
-        $code = $response->getStatusCode();
-        if ($code == 200) {
-            $outcome = $response->getBody()->getContents();
-            return response([
-                'data' => json_decode($outcome),
-            ], 200);
-        } else {
-            return response([
-                'errors' => ['Error sending playlists to Moodle'],
-            ], 500);
+            $code = $response->getStatusCode();
+            if ($code == 200) {
+                $outcome = $response->getBody()->getContents();
+                return response([
+                    'data' => json_decode($outcome),
+                ], 200);
+            } else {
+                return response([
+                    'errors' => ['Error sending playlists to Moodle'],
+                ], 500);
+            }
+            
         }
     }
 
