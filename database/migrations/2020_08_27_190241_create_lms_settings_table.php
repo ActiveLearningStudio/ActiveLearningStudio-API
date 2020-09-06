@@ -24,6 +24,7 @@ class CreateLmsSettingsTable extends Migration
             $table->string('description')->nullable()->default(null);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->string('lti_client_id');
             $table->timestamps();
             $table->softDeletes();
         });
