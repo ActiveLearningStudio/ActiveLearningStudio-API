@@ -176,6 +176,7 @@ class ProjectController extends Controller
             'name',
             'description',
             'thumb_url',
+            'is_public'
         ]), $project->id);
 
         if ($is_updated) {

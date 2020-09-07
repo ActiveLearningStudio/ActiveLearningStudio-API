@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 
-class PlaylistController extends Controller 
+class PlaylistController extends Controller
 {
 
     private $playlistRepository;
-    
+
     private $activityRepository;
 
     /**
@@ -98,11 +98,30 @@ class PlaylistController extends Controller
     }
 
     /**
+     * Display the specified playlist.
+     *
+     * @param Project $project
+     * @param Playlist $playlist
+     * @return Response
+     */
+    public function loadShared(Project $project, Playlist $playlist)
+    {
+        if (!$playlist->project->shared) {
+            return response([
+                'errors' => ['No shareable Project found.'],
+            ], 400);
+        }
+
+        return response([
+            'playlist' => $this->playlistRepository->getPlaylistForPreview($playlist),
+        ], 200);
+    }
+
+    /**
      * Reorder playlists in storage.
      *
      * @param Request $request
      * @param Project $project
-     * @param Playlist $playlist
      * @return Response
      */
     public function reorder(Request $request, Project $project)
@@ -134,6 +153,7 @@ class PlaylistController extends Controller
         $is_updated = $this->playlistRepository->update($request->only([
             'title',
             'order',
+            'is_public',
         ]), $playlist->id);
 
         if ($is_updated) {
@@ -179,7 +199,7 @@ class PlaylistController extends Controller
      * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
      * @apiResourceModel  App\Models\Project
      * @apiResourceModel  App\Models\Playlist
-     * 
+     *
      * @response  {
      *  "message": "Playlist is cloned successfully",
      * },

@@ -20,7 +20,7 @@ use Djoudi\LaravelH5p\Events\H5pEvent;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\V1\H5pActivityResource;
 
-class ActivityController extends Controller 
+class ActivityController extends Controller
 {
 
     private $activityRepository;
@@ -91,7 +91,7 @@ class ActivityController extends Controller
             'subject_id' => 'string',
             'education_level_id' => 'string',
         ]);
-        
+
         $activity = $this->activityRepository->create($data);
 
         if ($activity) {
@@ -138,6 +138,7 @@ class ActivityController extends Controller
             'subject_id',
             'education_level_id',
             'h5p_content_id',
+            'is_public',
         ]), $activity->id);
 
         if ($is_updated) {
@@ -202,12 +203,12 @@ class ActivityController extends Controller
     }
 
      /**
-     * 
+     *
      * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
      * @apiResourceCollection  App\Http\Resources\V1\ActivityResource
      * @apiResourceModel  App\Models\Playlist
      * @apiResourceModel  App\Models\Activity
-     * 
+     *
      *  @response  {
      *  "message": "Activity is cloned successfully",
      * },
@@ -233,7 +234,7 @@ class ActivityController extends Controller
                 'message' => 'Activity is cloned successfully.',
             ], 200);
         }
-        
+
         return response([
             'errors' => ['Failed to clone activity.'],
         ], 500);
@@ -257,7 +258,7 @@ class ActivityController extends Controller
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
         $user = Auth::user();
-        
+
         // create event dispatch
         event(new H5pEvent(
             'content',

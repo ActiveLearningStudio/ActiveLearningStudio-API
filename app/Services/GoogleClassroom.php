@@ -155,7 +155,7 @@ class GoogleClassroom implements GoogleClassroomInterface
         $courseWork->setWorkType(self::COURSEWORK_TYPE);
         $courseWork->setMaterials([
             'link'=> [
-                'url' => config('constants.front-url') . '/shared/activity/' . $data['activity_id']
+                'url' => config('constants.front-url') . '/activity/' . $data['activity_id'] . '/shared'
             ]
         ]);
         $courseWork->setState(self::COURSEWORK_STATE_PUBLISHED);
