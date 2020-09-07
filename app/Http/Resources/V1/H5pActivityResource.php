@@ -24,7 +24,8 @@ class H5pActivityResource extends JsonResource
      */
     public function toArray($request)
     {    
-           
+          
+        //set playlist with project relation
         $playlist = $this->playlist;
         $playlist->project = $this->playlist->project;
         
