@@ -116,6 +116,26 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display the specified project.
+     *
+     * @param Project $project
+     * @param Playlist $project
+     * @return Response
+     */
+    public function loadShared(Project $project)
+    {
+        if (!$project->shared) {
+            return response([
+                'errors' => ['No shareable Project found.'],
+            ], 400);
+        }
+
+        return response([
+            'project' => $this->projectRepository->getProjectForPreview($project),
+        ], 200);
+    }
+
+    /**
      * Share the specified project.
      *
      * @param Request $request
