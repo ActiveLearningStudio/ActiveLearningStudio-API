@@ -72,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
   
     public function membership()
     {
-        return $this->belongsTo('App\Models\MembershipType');
+        return $this->belongsTo('App\Models\MembershipType', 'membership_type_id');
     }
 
     public function isAdmin()

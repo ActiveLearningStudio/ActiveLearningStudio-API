@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Repositories\Membership\MembershipRepository;
 use App\User;
+
 use Illuminate\Http\Response;
 
 class UserMembershipController extends Controller

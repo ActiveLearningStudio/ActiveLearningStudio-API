@@ -21,6 +21,9 @@ Route::post('verify-email', 'Auth\VerificationController@verify')->name('verific
 Route::post('verify-email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 
+// Metrics
+Route::get('activity/{activity}/logview', 'Api\V1\MetricsController@logview'); // Comes from consumers (see tsugi plugin). Will not be logged in
+
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
@@ -54,6 +57,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::apiResource('activity-items', 'ActivityItemController');
 
+        // Metrics
         Route::get('users/{user}/metrics', 'UserMetricsController@show');
         Route::get('users/{user}/membership', 'UserMembershipController@show');
 

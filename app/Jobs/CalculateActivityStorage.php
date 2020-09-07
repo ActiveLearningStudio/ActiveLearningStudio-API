@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Activity;
-use App\Models\ActivityViewLog;
+use App\Models\ActivityMetrics;
 
 class CalculateActivityStorage implements ShouldQueue
 {
@@ -23,6 +23,33 @@ class CalculateActivityStorage implements ShouldQueue
 
     public function handle()
     {
-        // Doing nothing for now
+        // All uploaded content files by users of H5P are stored in this path where the final directory
+        // is the h5p_content_id
+
+        $path = storage_path('app/public/h5p/content/'.$this->activty->h5p_content_id);
+        $bytes = $this->GetDirectorySize($path);
+
+        $metrics = ActivityMetrics::firstOrNew(
+            ['activity_id' => $activity->id],
+            [
+                'view_count' => 0,
+                'share_count' => 0,
+                'used_storage' => 0,
+                'used_bandwidth' => 0,
+            ]
+        );
+        $metrics->used_storage = $bytes;
+        $metrics->save();
+    }
+
+    private function GetDirectorySize($path){
+        $bytestotal = 0;
+        $path = realpath($path);
+        if($path!==false && $path!='' && file_exists($path)){
+            foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)) as $object){
+                $bytestotal += $object->getSize();
+            }
+        }
+        return $bytestotal;
     }
 }

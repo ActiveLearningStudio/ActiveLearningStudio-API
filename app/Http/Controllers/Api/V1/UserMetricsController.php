@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Repositories\Metrics\MetricsRepository;
 use App\User;
+
 use Illuminate\Http\Response;
 
 class UserMetricsController extends Controller
