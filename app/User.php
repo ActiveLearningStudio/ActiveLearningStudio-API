@@ -35,7 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'hubspot',
         'subscribed',
         'subscribed_ip',
-        'email_verified_at'
+        'email_verified_at',
+        'membership_type_id'
     ];
 
     /**
@@ -67,6 +68,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function lmssetting()
     {
         return $this->hasOne('App\Models\CurrikiGo\LmsSetting');
+    }
+  
+    public function membership()
+    {
+        return $this->belongsTo('App\Models\MembershipType');
     }
 
     public function isAdmin()

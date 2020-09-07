@@ -35,7 +35,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
-        Route::get('/playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+        Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
@@ -53,6 +53,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('activity-types', 'ActivityTypeController');
 
         Route::apiResource('activity-items', 'ActivityItemController');
+
+        Route::get('users/{user}/metrics', 'UserMetricsController@show');
+        Route::get('users/{user}/membership', 'UserMembershipController@show');
 
         Route::group(['prefix' => 'h5p'], function () {
             Route::resource('/', "H5pController");
