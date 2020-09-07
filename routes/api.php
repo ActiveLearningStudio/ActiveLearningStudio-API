@@ -38,7 +38,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
-        Route::get('/playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+        Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
@@ -112,5 +112,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name("h5p.ajax.files");
     //H5P export public route for H5P toolbar and cloning
     Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
+    //Public route used for LTI previews
+    Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     Route::get('error', 'ErrorController@show')->name('api/error');
 });
