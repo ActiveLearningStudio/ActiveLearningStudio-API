@@ -115,5 +115,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
     //Public route used for LTI previews
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
+    //LTI Playlist
+    Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     Route::get('error', 'ErrorController@show')->name('api/error');
 });
