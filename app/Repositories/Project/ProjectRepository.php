@@ -103,6 +103,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
     }
 
+
+    /**
+     * To fetch project based on LMS settings
+     * @param $lms_url
+     * @param $lti_client_id
+     * @return Project $project
+     */
     public function fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id)
     {
         $projects = $this->model->whereHas('users', function ($query_user) use ($lms_url, $lti_client_id) {

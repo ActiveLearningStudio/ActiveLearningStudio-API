@@ -16,4 +16,12 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @param Project $project
      */
     public function clone(Request $request, Project $project);
+
+    /**
+     * To fetch project based on LMS settings
+     * @param $lms_url
+     * @param $lti_client_id
+     * @return Project $project
+     */
+    public function fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id);
 }
