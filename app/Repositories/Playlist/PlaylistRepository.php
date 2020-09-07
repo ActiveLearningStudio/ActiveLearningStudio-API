@@ -169,4 +169,17 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
 
         return $plist;
     }
+
+    /**
+     * Get Playlists for Preview
+     *
+     * @param Playlist $playlist
+     * @return array
+     */
+    public function getPlaylistWithProject(Playlist $playlist)
+    {
+        return $this->model->where('id', $playlist->id)
+            ->with('project')
+            ->first();
+    }
 }
