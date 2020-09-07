@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Activity;
-use App\Models\ActivityMetrics;
+use App\Models\ActivityMetric;
 
 class CalculateActivityStorage implements ShouldQueue
 {
@@ -26,11 +26,11 @@ class CalculateActivityStorage implements ShouldQueue
         // All uploaded content files by users of H5P are stored in this path where the final directory
         // is the h5p_content_id
 
-        $path = storage_path('app/public/h5p/content/'.$this->activty->h5p_content_id);
+        $path = storage_path('app/public/h5p/content/'.$this->activity->h5p_content_id);
         $bytes = $this->GetDirectorySize($path);
 
-        $metrics = ActivityMetrics::firstOrNew(
-            ['activity_id' => $activity->id],
+        $metrics = ActivityMetric::firstOrNew(
+            ['activity_id' => $this->activity->id],
             [
                 'view_count' => 0,
                 'share_count' => 0,
