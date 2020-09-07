@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
-
 use App\Repositories\Membership\MembershipRepository;
 use App\User;
-
+use Illuminate\Http\Response;
 
 class UserMembershipController extends Controller
 {
-
     private $MembershipRepository;
 
     public function __construct(MembershipRepository $MembershipRepository)
@@ -24,10 +21,11 @@ class UserMembershipController extends Controller
     {
         $authenticated_user = auth()->user();
 
-        if (!$authenticated_user->isAdmin() && $authenticated_user->id != $user->id)
+        if (!$authenticated_user->isAdmin() && $authenticated_user->id != $user->id) {
             return response([
                 'errors' => ['Unauthorized.'],
             ], 401);
+        }
 
         return response([
             'membership' => $this->MembershipRepository->getUserMembership($user),

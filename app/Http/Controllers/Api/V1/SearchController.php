@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\SearchRequest;
-use Illuminate\Http\Response;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 /**
  * @authenticated
- * 
+ *
  * @group  Search API
  *
  * APIs for search
@@ -34,13 +34,13 @@ class SearchController extends Controller
      * Deep Linking Search
      *
      * Search projects, playlists and activities for deep linking
-     * 
+     *
      * @queryParam  query required Query to search. Example: test
      * @queryParam  sort Field to sort by. Example: created_at
      * @queryParam  order Order to sort by. Example: desc
      * @queryParam  from Index where the pagination start from. Example: 0
      * @queryParam  size Number of records to return. Example: 10
-     * 
+     *
      * @response  {
      *     "projects": {
      *        "457": {
@@ -112,7 +112,7 @@ class SearchController extends Controller
      * Advance search
      *
      * Advance search for projects, playlists and activities
-     * 
+     *
      * @queryParam  query required Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
      * @queryParam  userIds Array of user ids to match. Example: [1]
@@ -121,10 +121,10 @@ class SearchController extends Controller
      * @queryParam  order Order to sort by. Example: desc
      * @queryParam  from Index where the pagination start from. Example: 0
      * @queryParam  size Number of records to return. Example: 10
-     * 
+     *
      * @apiResourceCollection  App\Http\Resources\V1\SearchResource
      * @apiResourceModel  App\Models\Activity
-     * 
+     *
      * @response  {
      *     "data": [
      *         {
@@ -181,7 +181,7 @@ class SearchController extends Controller
      *         ]
      *     }
      * }
-     * 
+     *
      * @param SearchRequest $searchRequest
      * @return Response
      */
