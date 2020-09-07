@@ -138,7 +138,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $proj["name"] = $project['name'];
         $proj["thumb_url"] = $project['thumb_url'];
         $proj["updated_at"] = $project['updated_at'];
-        $proj["userid"] = $project['userid'];
+        $proj["user_id"] = $project->user->id;
         $proj["shared"] = isset($project['shared']) ? $project['shared'] : false;
 
         $proj["playlists"] = [];
@@ -147,7 +147,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $plist = [];
             $plist["id"] = $playlist['id'];
             $plist["title"] = $playlist['title'];
-            $plist["projectid"] = $playlist['projectid'];
+            $plist["project_id"] = $playlist->project->id;
             $plist["updated_at"] = $playlist['updated_at'];
             $plist["created_at"] = $playlist['created_at'];
             $plist['title'] = $playlist['title'];
