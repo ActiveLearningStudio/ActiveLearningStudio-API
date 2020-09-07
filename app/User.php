@@ -65,6 +65,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
     }
 
+    public function lmssetting()
+    {
+        return $this->hasOne('App\Models\CurrikiGo\LmsSetting');
+    }
+  
     public function membership()
     {
         return $this->belongsTo('App\Models\MembershipType');

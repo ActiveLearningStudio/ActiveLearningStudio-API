@@ -9,6 +9,7 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Support\Collection;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Illuminate\Http\Request;
+use App\Models\CurrikiGo\LmsSetting;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface 
 {
@@ -100,6 +101,23 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $cloned_activity = $this->activityRepository->create($activity_data);
             }
         }
+    }
+
+
+    /**
+     * To fetch project based on LMS settings
+     * @param $lms_url
+     * @param $lti_client_id
+     * @return Project $project
+     */
+    public function fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id)
+    {
+        $projects = $this->model->whereHas('users', function ($query_user) use ($lms_url, $lti_client_id) {
+                                    $query_user->whereHas('lmssetting', function($query_lmssetting) use ($lms_url, $lti_client_id){
+                                        $query_lmssetting->where('lms_url', $lms_url)->where('lti_client_id', $lti_client_id);
+                                    });
+                                })->get();
+        return $projects;
     }
 
 }
