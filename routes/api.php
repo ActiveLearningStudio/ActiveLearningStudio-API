@@ -25,6 +25,9 @@ Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(
 Route::get('activity/{activity}/logview', 'Api\V1\MetricsController@logview'); // Comes from consumers (see tsugi plugin). Will not be logged in
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
+    Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
+    Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
@@ -34,12 +37,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
-        Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
-        Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
