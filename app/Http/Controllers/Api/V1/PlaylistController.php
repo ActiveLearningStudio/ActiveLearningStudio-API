@@ -118,6 +118,19 @@ class PlaylistController extends Controller
     }
 
     /**
+     * Display the lti playlist.
+     *
+     * @param Playlist $playlist
+     * @return Response
+     */
+    public function loadLti(Playlist $playlist)
+    {
+        return response([
+            'playlist' => $this->playlistRepository->getPlaylistWithProject($playlist),
+        ], 200);
+    }
+
+    /**
      * Reorder playlists in storage.
      *
      * @param Request $request
