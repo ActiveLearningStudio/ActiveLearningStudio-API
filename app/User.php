@@ -35,7 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'hubspot',
         'subscribed',
         'subscribed_ip',
-        'email_verified_at'
+        'email_verified_at',
+        'membership_type_id'
     ];
 
     /**
@@ -62,6 +63,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
+    }
+
+    public function membership()
+    {
+        return $this->belongsTo('App\Models\MembershipType');
     }
 
     public function isAdmin()
