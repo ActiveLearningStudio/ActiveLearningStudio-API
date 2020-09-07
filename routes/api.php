@@ -22,7 +22,7 @@ Route::post('verify-email/resend', 'Auth\VerificationController@resend')->name('
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 
 // Metrics
-Route::get('activity/{activity}/logview', 'MetricsController@logview'); // Comes from consumers (see tsugi plugin). Will not be logged in
+Route::get('activity/{activity}/logview', 'Api\V1\MetricsController@logview'); // Comes from consumers (see tsugi plugin). Will not be logged in
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
