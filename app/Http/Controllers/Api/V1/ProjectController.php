@@ -119,7 +119,6 @@ class ProjectController extends Controller
      * Display the specified project.
      *
      * @param Project $project
-     * @param Playlist $project
      * @return Response
      */
     public function loadShared(Project $project)
