@@ -120,4 +120,59 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $projects;
     }
 
+
+    /**
+     * To fetch project based on LMS settings
+     * @param Project $project
+     */
+    public function getProjectForPreview(Project $project)
+    {
+        $project = Project::where(['id'=> $project->id])
+            ->with('playlists.activities')
+            ->first();
+
+        $proj = [];
+        $proj["id"] = $project['id'];
+        $proj["created_at"] = $project['created_at'];
+        $proj["description"] = $project['description'];
+        $proj["name"] = $project['name'];
+        $proj["thumb_url"] = $project['thumb_url'];
+        $proj["updated_at"] = $project['updated_at'];
+        $proj["shared"] = isset($project['shared']) ? $project['shared'] : false;
+
+        $proj["playlists"] = [];
+
+        foreach($project['playlists'] as $playlist){
+            $plist = [];
+            $plist["id"] = $playlist['id'];
+            $plist["title"] = $playlist['title'];
+            $plist["project_id"] = $playlist->project->id;
+            $plist["updated_at"] = $playlist['updated_at'];
+            $plist["created_at"] = $playlist['created_at'];
+            $plist['title'] = $playlist['title'];
+            $plist['activities'] = [];
+            
+            foreach($playlist['activities'] as $act){
+                $activity = \DB::table('h5p_contents')
+                ->select(['h5p_contents.title', 'h5p_libraries.name'])
+                ->where(['h5p_contents.id' =>  $act->h5p_content_id])
+                ->join('h5p_libraries', 'h5p_contents.library_id', '=', 'h5p_libraries.id')->first();
+                if($activity == null){
+                    continue;
+                }
+                $plistActivity = [];
+                $plistActivity['id'] = $act['id'];
+                $plistActivity['type'] = $act['type'];
+                $plistActivity['title'] = $activity->title;
+                $plistActivity['library_name'] = $activity->name;
+                $plistActivity['thumb_url'] = $act->thumb_url;
+                $plist['activities'][] = $plistActivity;
+            }
+            $proj["playlists"][] = $plist;
+            
+        }
+        
+        return $proj;
+    }
+
 }
