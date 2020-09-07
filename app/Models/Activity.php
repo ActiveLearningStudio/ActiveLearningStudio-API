@@ -110,4 +110,9 @@ class Activity extends Model
     {
         return $this->belongsTo('Djoudi\LaravelH5p\Eloquents\H5pContent', 'h5p_content_id');
     }
+
+    public function metrics()
+    {
+        return $this->hasOne('App\Models\ActivityMetric');
+    }
 }
