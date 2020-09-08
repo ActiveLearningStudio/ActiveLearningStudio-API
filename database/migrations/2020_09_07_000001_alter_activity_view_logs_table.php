@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterProjectTable extends Migration
+class AlterActivityViewLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterProjectTable extends Migration
      */
     public function up()
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->boolean('shared')->default(false);
+        Schema::table('activity_view_logs', function (Blueprint $table) {
+            $table->text('message')->default('')->change();
         });
     }
 
@@ -25,8 +25,6 @@ class AlterProjectTable extends Migration
      */
     public function down()
     {
-        Schema::table('projects', function (Blueprint $table) {
-            $table->dropColumn('shared');
-        });
+        //
     }
 }
