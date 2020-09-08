@@ -50,6 +50,39 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display a listing of the recent projects.
+     *
+     * @return Response
+     */
+    public function recent()
+    {
+        return response([
+            'projects' => $this->projectRepository->fetchRecentPublic(5),
+        ], 200);
+    }
+
+    /**
+     * Display a listing of the default projects.
+     *
+     * @return Response
+     */
+    public function default()
+    {
+
+        $defaultEmail = config('constants.curriki-demo-email');
+
+        if (is_null($defaultEmail)) {
+            return response([
+                'errors' => ['please set CURRIKI_DEMO_EMAIL in .env'],
+            ], 500);
+        }
+        
+        return response([
+            'projects' => $this->projectRepository->fetchDefault($defaultEmail),
+        ], 200);
+    }
+
+    /**
      * Upload thumb image for project
      *
      * @param Request $request
@@ -86,8 +119,10 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'thumb_url' => 'required',
+            'is_public' => 'required',
+            
         ]);
-
+        
         $authenticated_user = auth()->user();
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
 
@@ -194,8 +229,7 @@ class ProjectController extends Controller
         $is_updated = $this->projectRepository->update($request->only([
             'name',
             'description',
-            'thumb_url',
-            'is_public'
+            'thumb_url'
         ]), $project->id);
 
         if ($is_updated) {
