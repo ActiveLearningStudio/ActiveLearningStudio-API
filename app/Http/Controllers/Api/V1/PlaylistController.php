@@ -127,7 +127,7 @@ class PlaylistController extends Controller
     public function loadLti(Playlist $playlist)
     {
         return response([
-            'playlist' => $this->playlistRepository->getPlaylistWithProject($playlist),
+            'playlist' => new PlaylistResource($this->playlistRepository->getPlaylistWithProject($playlist)),
         ], 200);
     }
 
