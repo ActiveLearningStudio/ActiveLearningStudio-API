@@ -86,8 +86,10 @@ class ProjectController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'thumb_url' => 'required',
+            'is_public' => 'required',
+            
         ]);
-
+        
         $authenticated_user = auth()->user();
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
 
@@ -194,8 +196,7 @@ class ProjectController extends Controller
         $is_updated = $this->projectRepository->update($request->only([
             'name',
             'description',
-            'thumb_url',
-            'is_public'
+            'thumb_url'
         ]), $project->id);
 
         if ($is_updated) {
