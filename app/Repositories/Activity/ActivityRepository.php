@@ -291,5 +291,15 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             return null;
         }
     }
+    
+    /**
+     *  To get the is_public value for parent playlist of activity
+     * @param type $playlistId
+     * @return type
+     */
+    public function getPlaylistIsPublicValue($playlistId)
+    {
+        return Playlist::where('id',$playlistId)->value('is_public'); 
+    }
 
 }
