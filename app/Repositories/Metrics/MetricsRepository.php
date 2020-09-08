@@ -29,16 +29,16 @@ class MetricsRepository
 
         return [
             'project_count' => $projectIds->count(),
-            'project_shares' => $projectSharesSum,
-            'project_views' => $projectViewsSum,
+            'project_shares' => intval($projectSharesSum),
+            'project_views' => intval($projectViewsSum),
 
             'playlist_count' => $playlistIds->count(),
-            'playlist_shares' => $playlistSharesSum,
-            'playlist_views' => $playlistViewsSum,
+            'playlist_shares' => intval($playlistSharesSum),
+            'playlist_views' => intval($playlistViewsSum),
 
             'activity_count' => $activityIds->count(),
-            'activity_shares' => $activitySharesSum,
-            'activity_views' => $activityViewsSum,
+            'activity_shares' => intval($activitySharesSum),
+            'activity_views' => intval($activityViewsSum),
         ];
     }
     
