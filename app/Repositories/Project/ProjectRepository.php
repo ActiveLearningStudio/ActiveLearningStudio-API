@@ -178,4 +178,23 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $proj;
     }
 
+    /**
+     * To fetch recent public project
+     * @return Project $projects
+     */
+    public function fetchRecentPublic($limit){
+        return $this->model->where('is_public', true)->orderBy('created_at', 'desc')->limit($limit)->get();
+    }
+
+    /**
+     * To fetch default projects
+     * @return Project $projects
+     */
+    public function fetchDefault($defaultEmail){
+        $projects = $this->model->whereHas('users', function ($query_user) use ($defaultEmail) {
+            $query_user->where('email', $defaultEmail);
+        })->get();
+        return $projects;
+    }
+
 }

@@ -24,4 +24,16 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return Project $project
      */
     public function fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id);
+
+    /**
+     * To fetch recent public project
+     * @return Project $projects
+     */
+    public function fetchRecentPublic($limit);
+
+    /**
+     * To fetch recent public projects
+     * @return Project $projects
+     */
+    public function fetchDefault($defaultEmail);
 }
