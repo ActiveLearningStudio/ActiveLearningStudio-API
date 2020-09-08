@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -58,6 +59,44 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * @param $password
+     */
+    public function setPasswordAttribute($password) : void
+    {
+        // If password was accidentally passed in already hashed, try not to double hash it
+        if (
+            (\strlen($password) === 60 && preg_match('/^\$2y\$/', $password)) ||
+            (\strlen($password) === 95 && preg_match('/^\$argon2i\$/', $password))
+        ) {
+            $hash = $password;
+        } else {
+            $hash = Hash::make($password);
+        }
+
+        $this->attributes['password'] = $hash;
+    }
+
+    /**
+     * Combine first and last name for Name column
+     * @param $name
+     */
+    public function setNameAttribute($name) : void
+    {
+        $this->attributes['name'] = $this->attributes['first_name'].' '.$this->attributes['last_name'];
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getNameAttribute($name){
+        if (! $name || empty($name)){
+            return "{$this->first_name} {$this->last_name}";
+        }
+        return $name;
+    }
+
+    /**
      * Get the projects for the user
      */
     public function projects()
@@ -69,7 +108,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne('App\Models\CurrikiGo\LmsSetting');
     }
-  
+
     public function membership()
     {
         return $this->belongsTo('App\Models\MembershipType');

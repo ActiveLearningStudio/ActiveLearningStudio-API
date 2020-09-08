@@ -111,4 +111,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     //Public route used for LTI previews
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     Route::get('error', 'ErrorController@show')->name('api/error');
+
+    /*********************** ADMIN PANEL ROUTES ************************/
+    Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin'], function () {
+        // users
+        Route::resource('users', 'UserController');
+    });
 });
