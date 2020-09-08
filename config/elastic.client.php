@@ -2,6 +2,10 @@
 
 return [
     'hosts' => [
-        env('ELASTIC_HOST', 'localhost:9200'),
+        [
+            'host' => env('ELASTIC_HOST', 'localhost:9200'),
+            'user' => env('ELASTIC_USER', 'user'),
+            'pass' => env('ELASTIC_PASS', 'pass')
+        ]
     ]
 ];

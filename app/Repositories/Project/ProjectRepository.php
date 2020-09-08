@@ -28,6 +28,24 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     }
 
     /**
+     * Update model in storage
+     *
+     * @param array $attributes
+     * @param $id
+     * @return Model
+     */
+    public function update(array $attributes, $id)
+    {
+        $is_updated = $this->model->where('id', $id)->update($attributes);
+
+        if ($is_updated) {
+            $this->model->where('id', $id)->searchable();
+        }
+
+        return $is_updated;
+    }
+
+    /**
      * To clone project and associated playlists
      * @param Request $request
      * @param Project $project
@@ -176,6 +194,25 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
 
         return $proj;
+    }
+
+    /**
+     * To fetch recent public project
+     * @return Project $projects
+     */
+    public function fetchRecentPublic($limit){
+        return $this->model->where('is_public', true)->orderBy('created_at', 'desc')->limit($limit)->get();
+    }
+
+    /**
+     * To fetch default projects
+     * @return Project $projects
+     */
+    public function fetchDefault($defaultEmail){
+        $projects = $this->model->whereHas('users', function ($query_user) use ($defaultEmail) {
+            $query_user->where('email', $defaultEmail);
+        })->get();
+        return $projects;
     }
 
 }

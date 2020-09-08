@@ -7,6 +7,7 @@ use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCTopicResource;
 use App\Http\Resources\V1\GCCourseWorkResource;
 use App\Models\Project;
+use Illuminate\Http\Request;
 
 /**
  * Google Classroom Service class
@@ -155,7 +156,7 @@ class GoogleClassroom implements GoogleClassroomInterface
         $courseWork->setWorkType(self::COURSEWORK_TYPE);
         $courseWork->setMaterials([
             'link'=> [
-                'url' => config('constants.front-url') . '/activity/' . $data['activity_id'] . '/shared'
+                'url' => $data['activity_link']
             ]
         ]);
         $courseWork->setState(self::COURSEWORK_STATE_PUBLISHED);
@@ -216,6 +217,7 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @return array
      */
     public function createProjectAsCourse(Project $project, $courseId = null) {
+        $frontURL = $this->getFrontURL();
         $return = [];
         // If course already exists 
         $course = NULL;
@@ -284,7 +286,8 @@ class GoogleClassroom implements GoogleClassroomInterface
                     'course_id' => $course->id,
                     'topic_id' => $topic->topicId,
                     'activity_id' => $activity->id,
-                    'activity_title' => $activity->title
+                    'activity_title' => $activity->title,
+                    'activity_link' => $frontURL . '/activity/' . $activity->id . '/shared'
                 ];        
                 $courseWork = $this->createCourseWork($courseWorkData);
                 
@@ -295,5 +298,25 @@ class GoogleClassroom implements GoogleClassroomInterface
         }
         
         return $return;
+    }
+
+    /**
+     * Determine front URL of the application.
+     * 
+     * @todo Move it to a helper class.
+     * 
+     * @return string
+     */
+    private function getFrontURL() {
+        $front_url = config('constants.front-url');
+        if (strpos($front_url,'://') === false) {
+            // If not an absolute path, then get the origin.
+            $front_url = request()->headers->get('origin');
+            if (!$front_url) {
+                // If nothing works, take the http host
+                $front_url = request()->getSchemeAndHttpHost();
+            }
+        }
+        return $front_url;
     }
 }
