@@ -53,13 +53,7 @@ class BaseRepository implements EloquentRepositoryInterface
      */
     public function update(array $attributes, $id)
     {
-        $is_updated = $this->model->where('id', $id)->update($attributes);
-
-        if ($is_updated) {
-            $this->model->where('id', $id)->searchable();
-        }
-
-        return $is_updated;
+        return $this->model->where('id', $id)->update($attributes);
     }
 
     /**
