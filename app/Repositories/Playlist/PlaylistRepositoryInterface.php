@@ -39,4 +39,12 @@ interface PlaylistRepositoryInterface extends EloquentRepositoryInterface
      * @param Playlist $playlist
      */
     public function getPlaylistForPreview(Playlist $playlist);
+
+    /**
+     * Get Playlists for Preview
+     *
+     * @param Playlist $playlist
+     * @return array
+     */
+    public function getPlaylistWithProject(Playlist $playlist);
 }

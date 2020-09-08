@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -289,6 +290,18 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         } else {
             return null;
         }
+    }
+    
+    /**
+     *  To get the is_public value for parent playlist of activity
+     * @param type $playlistId
+     * @return type
+     */
+    public function getPlaylistIsPublicValue($playlistId)
+    {
+        $playlist =  Playlist::where('id',$playlistId)->value('is_public'); 
+        
+        return ($playlist) ? $playlist : false;
     }
 
 }
