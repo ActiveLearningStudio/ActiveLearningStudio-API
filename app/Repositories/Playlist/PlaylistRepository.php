@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Playlist;
 
+use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\BaseRepository;
@@ -57,6 +58,14 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             $this->update([
                 'order' => $playlist['order'],
             ], $playlist['id']);
+
+            // Reorder activities
+            foreach($playlist['activities'] as $activity){
+                $act = Activity::find($activity['id']);
+                $act->order = $activity['order'];
+                $act->playlist_id = $playlist['id'];
+                $act->save();
+            }
         }
     }
 
@@ -159,5 +168,18 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         }
 
         return $plist;
+    }
+
+    /**
+     * Get Playlists for Preview
+     *
+     * @param Playlist $playlist
+     * @return array
+     */
+    public function getPlaylistWithProject(Playlist $playlist)
+    {
+        return $this->model->where('id', $playlist->id)
+            ->with('project')
+            ->first();
     }
 }

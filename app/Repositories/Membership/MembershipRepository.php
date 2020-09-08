@@ -3,7 +3,9 @@
 namespace App\Repositories\Membership;
 
 use App\User;
-use App\ActivityMetric;
+use App\Models\ActivityMetric;
+use App\Models\Playlist;
+use App\Models\Activity;
 
 class MembershipRepository
 {

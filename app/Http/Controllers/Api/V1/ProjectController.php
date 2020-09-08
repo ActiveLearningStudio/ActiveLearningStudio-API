@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\V1\H5pController;
 
-class ProjectController extends Controller 
+class ProjectController extends Controller
 {
 
     private $projectRepository;
@@ -116,6 +116,25 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display the specified project.
+     *
+     * @param Project $project
+     * @return Response
+     */
+    public function loadShared(Project $project)
+    {
+        if (!$project->shared) {
+            return response([
+                'errors' => ['No shareable Project found.'],
+            ], 400);
+        }
+
+        return response([
+            'project' => $this->projectRepository->getProjectForPreview($project),
+        ], 200);
+    }
+
+    /**
      * Share the specified project.
      *
      * @param Request $request
@@ -214,7 +233,7 @@ class ProjectController extends Controller
     /**
      * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
      * @apiResourceModel  App\Models\Project
-     * 
+     *
      * @response  {
      *  "message": "Project is cloned successfully",
      * },

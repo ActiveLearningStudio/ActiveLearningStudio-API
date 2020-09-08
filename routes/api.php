@@ -21,7 +21,13 @@ Route::post('verify-email', 'Auth\VerificationController@verify')->name('verific
 Route::post('verify-email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 
+// Metrics
+Route::get('activity/{activity}/logview', 'Api\V1\MetricsController@logview'); // Comes from consumers (see tsugi plugin). Will not be logged in
+
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
+    Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
+    Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
@@ -35,7 +41,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
-        Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
@@ -54,6 +59,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::apiResource('activity-items', 'ActivityItemController');
 
+        // Metrics
         Route::get('users/{user}/metrics', 'UserMetricsController@show');
         Route::get('users/{user}/membership', 'UserMembershipController@show');
 
@@ -108,5 +114,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name("h5p.ajax.files");
     //H5P export public route for H5P toolbar and cloning
     Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
+    //Public route used for LTI previews
+    Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
+    //LTI Playlist
+    Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     Route::get('error', 'ErrorController@show')->name('api/error');
 });
