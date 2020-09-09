@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\V1\H5pActivityResource;
+use H5pCore;
 
 class ActivityController extends Controller
 {
@@ -141,6 +142,7 @@ class ActivityController extends Controller
         ]), $activity->id);
 
         if ($is_updated) {
+            $this->update_h5p($request->get('data'), $activity->h5p_content_id);
             return response([
                 'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
             ], 200);
@@ -149,6 +151,106 @@ class ActivityController extends Controller
         return response([
             'errors' => ['Failed to update activity.'],
         ], 500);
+    }
+
+
+    /**
+     * Update H5P
+     *
+     * @param $request
+     * @param int $id
+     */
+    public function update_h5p($request, $id)
+    {
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $editor = $h5p::$h5peditor;
+
+        /*$this->validate(
+            $request,
+            ['action' => 'required'],
+            [],
+            [
+                'title' => trans('laravel-h5p.content.title'),
+                'action' => trans('laravel-h5p.content.action'),
+            ]
+        );*/
+
+        $event_type = 'update';
+        $content = $h5p->load_content($id);
+        $content['disable'] = H5PCore::DISABLE_NONE;
+
+        $oldLibrary = $content['library'];
+        $oldParams = json_decode($content['params']);
+
+        try {
+            if ($request['action'] === 'create') {
+                $content['library'] = $core->libraryFromString($request['library']);
+                if (!$content['library']) {
+                    throw new H5PException('Invalid library.');
+                }
+
+                // Check if library exists.
+                $content['library']['libraryId'] = $core->h5pF->getLibraryId(
+                    $content['library']['machineName'],
+                    $content['library']['majorVersion'],
+                    $content['library']['minorVersion']
+                );
+                if (!$content['library']['libraryId']) {
+                    throw new H5PException('No such library');
+                }
+
+                $content['params'] = $request['parameters'];
+                $params = json_decode($content['params']);
+                // $content['title'] = $params->metadata->title;
+
+                if ($params === NULL) {
+                    throw new H5PException('Invalid parameters');
+                }
+
+                $content['params'] = json_encode($params->params);
+                $content['metadata'] = $params->metadata;
+
+                // Trim title and check length
+                $trimmed_title = empty($content['metadata']->title) ? '' : trim($content['metadata']->title);
+                if ($trimmed_title === '') {
+                    throw new H5PException('Missing title');
+                }
+
+                if (strlen($trimmed_title) > 255) {
+                    throw new H5PException('Title is too long. Must be 256 letters or shorter.');
+                }
+
+                // Set disabled features
+                $this->get_disabled_content_features($core, $content);
+
+                // Save new content
+                $core->saveContent($content);
+
+                // Move images and find all content dependencies
+                $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
+
+                $return_id = $content['id'];
+            } elseif ($request->get('action') === 'upload') {
+                $content['uploaded'] = true;
+
+                $this->get_disabled_content_features($core, $content);
+
+                // Handle file upload
+                $return_id = $this->handle_upload($content);
+            }
+
+            if ($return_id) {
+                return response([
+                    'success' => trans('laravel-h5p.content.updated'),
+                    'id' => $return_id
+                ], 200);
+            } else {
+                return response(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
+            }
+        } catch (H5PException $ex) {
+            return response(['fail' => trans('laravel-h5p.content.can_not_updated')], 400);
+        }
     }
 
     /**
