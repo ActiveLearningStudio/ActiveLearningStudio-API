@@ -255,7 +255,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'education_level_id' => $activity->education_level_id,
         ];
 
-        $cloned_activity = $this->activityRepository->create($activity_data);
+        $cloned_activity = $this->create($activity_data);
 
         return $cloned_activity['id'];
     }
