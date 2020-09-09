@@ -2,15 +2,21 @@
 
 namespace App\Repositories\Metrics;
 
+use Illuminate\Http\Request;
+
 use App\User;
 use App\Models\Activity;
 use App\Models\ActivityMetric;
+use App\Models\ActivityViewLog;
 use App\Models\Playlist;
 use App\Models\PlaylistMetric;
+use App\Models\PlaylistViewLog;
 use App\Models\Project;
 use App\Models\ProjectMetric;
+use App\Models\ProjectViewLog;
+use App\Repositories\Metrics\MetricsRepositoryInterface;
 
-class MetricsRepository
+class MetricsRepository implements MetricsRepositoryInterface
 {
 
     // Returns several project metrics for the specified user
@@ -41,5 +47,63 @@ class MetricsRepository
             'activity_views' => intval($activityViewsSum),
         ];
     }
+
+    public function activityLogView(Request $req, Activity $activity){
+        $metrics = ActivityMetric::firstOrNew(
+            ['activity_id' => $activity->id],
+            [
+                'view_count' => 0,
+                'share_count' => 0,
+                'used_storage' => 0,
+                'used_bandwidth' => 0,
+            ]
+        );
+        $metrics->view_count++;
+        $metrics->save();
+
+        ActivityViewLog::create([
+            'activity_id' => $activity->id,
+            'message' => json_encode($req->server->all())
+        ]);
+    }
+
+    public function playlistLogView(Request $req, Playlist $playlist)
+    {
+        $metrics = PlaylistMetric::firstOrNew(
+            ['playlist_id' => $playlist->id],
+            [
+                'view_count' => 0,
+                'share_count' => 0,
+                'used_storage' => 0,
+                'used_bandwidth' => 0,
+            ]
+        );
+        $metrics->view_count++;
+        $metrics->save();
+
+        PlaylistViewLog::create([
+            'playlist_id' => $playlist->id,
+            'message' => json_encode($req->server->all())
+        ]);
+    }
     
+    public function projectLogView(Request $req, Project $project)
+    {
+        $metrics = ProjectMetric::firstOrNew(
+            ['project_id' => $project->id],
+            [
+                'view_count' => 0,
+                'share_count' => 0,
+                'used_storage' => 0,
+                'used_bandwidth' => 0,
+            ]
+        );
+        $metrics->view_count++;
+        $metrics->save();
+
+        ProjectViewLog::create([
+            'project_id' => $project->id,
+            'message' => json_encode($req->server->all())
+        ]);
+    }
 }

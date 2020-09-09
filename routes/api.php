@@ -26,9 +26,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
 
     // Metrics
-    Route::get('activities/{activity}/logview', 'MetricsController@activity_logview');
-    Route::get('playlists/{playlist}/logview', 'MetricsController@playlist_logview');
-    Route::get('projects/{project}/logview', 'MetricsController@project_logview');
+    Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView');
+    Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView');
+    Route::get('projects/{project}/log-view', 'MetricsController@projectLogView');
 
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
