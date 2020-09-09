@@ -37,7 +37,8 @@ class App
                 header("Location: $redirect_to_studio_url");
             }elseif ($playlist_id) {
                 $lti_token_params = http_build_query($_SESSION['lti_post']);
-                $playlist_studio_link = CURRIKI_STUDIO_HOST."/playlist/lti/preview/$playlist_id";
+                //$playlist_studio_link = CURRIKI_STUDIO_HOST."/playlist/lti/preview/$playlist_id";
+                $playlist_studio_link = CURRIKI_STUDIO_HOST."/playlist/$playlist_id/preview/lti";
                 $redirect_to_studio_url = $playlist_studio_link . "?" . $lti_token_params;
                 header("Location: $redirect_to_studio_url");
             }elseif ($activity_id) {
