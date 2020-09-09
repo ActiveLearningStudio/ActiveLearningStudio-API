@@ -5,31 +5,37 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+
 use App\Models\Activity;
-use App\Models\ActivityMetric;
-use App\Models\ActivityViewLog;
+use App\Models\Playlist;
+use App\Models\Project;
+use App\Repositories\Metrics\MetricsRepositoryInterface;
 
 class MetricsController extends Controller
 {
 
-    public function logview(Request $req, Activity $activity)
-    {
-        $metrics = ActivityMetric::firstOrNew(
-            ['activity_id' => $activity->id],
-            [
-                'view_count' => 0,
-                'share_count' => 0,
-                'used_storage' => 0,
-                'used_bandwidth' => 0,
-            ]
-        );
-        $metrics->view_count++;
-        $metrics->save();
+    private $metricsRepository;
 
-        ActivityViewLog::create([
-            'activity_id' => $activity->id,
-            'message' => json_encode($req->server->all())
-        ]);
+    public function __construct(MetricsRepositoryInterface $metricsRepository)
+    {
+        $this->metricsRepository = $metricsRepository;
+    }
+
+    public function activityLogView(Request $req, Activity $activity)
+    {
+        $this->metricsRepository->activityLogView($req, $activity);
+        return response(['message' => 'OK'], 200);
+    }
+
+    public function playlistLogView(Request $req, Playlist $playlist)
+    {
+        $this->metricsRepository->playlistLogView($req, $playlist);
+        return response(['message' => 'OK'], 200);
+    }
+
+    public function projectLogView(Request $req, Project $project)
+    {
+        $this->metricsRepository->projectLogView($req, $project);
         return response(['message' => 'OK'], 200);
     }
 }
