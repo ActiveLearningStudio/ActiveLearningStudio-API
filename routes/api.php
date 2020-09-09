@@ -55,7 +55,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
-        Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
+        
         Route::apiResource('activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
@@ -112,6 +112,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('google-classroom/projects/{project}/copy', 'GoogleClassroomController@copyProject');
     });
 
+    Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
     //H5P Activity public route
     Route::get('h5p/activity/{activity}/visibility/{visibility}', "H5pController@showByActivity");
     //Route to support H5P Editor's core js library fileupload with "new XMLHttpRequest()"
