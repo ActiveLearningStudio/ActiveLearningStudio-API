@@ -165,7 +165,7 @@ class ActivityController extends Controller
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $editor = $h5p::$h5peditor;
-
+        $request['action'] = 'create';
         /*$this->validate(
             $request,
             ['action' => 'required'],
