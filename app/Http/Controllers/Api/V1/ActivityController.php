@@ -418,15 +418,19 @@ class ActivityController extends Controller
             ], 400);
         }
 
-        if ($activity->type === 'h5p') {
-            $h5p = App::make('LaravelH5p');
-            $core = $h5p::$core;
-            $editor = $h5p::$h5peditor;
-            $content = $h5p->load_content($activity->h5p_content_id);
-        }
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->load_content($activity->h5p_content_id);
+        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+        $user_data = null;
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];        
 
         return response([
-            'h5p' => $content,
+            'h5p' => $h5p_data,
             'activity' => new ActivityResource($activity),
             'playlist' => new PlaylistResource($activity->playlist),
         ], 200);
