@@ -32,4 +32,14 @@ class UserMembershipController extends Controller
             'membership' => $this->MembershipRepository->getUserMembership($user),
         ], 200);
     }
+
+    public function redeemOffer($offerName){
+        $user = auth()->user();
+        $result = $this->MembershipRepository->redeemOffer($user, $offerName);
+
+        if($result['error'])
+            return response(['errors' => [$result['error']]], 401);
+
+        return response(['success'], 200);
+    }
 }

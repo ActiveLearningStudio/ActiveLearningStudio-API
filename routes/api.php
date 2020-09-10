@@ -33,6 +33,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
+        // Membership
+        Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer');
+
         Route::apiResource('users', 'UserController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
