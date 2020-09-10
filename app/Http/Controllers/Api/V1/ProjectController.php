@@ -68,7 +68,6 @@ class ProjectController extends Controller
      */
     public function default()
     {
-
         $defaultEmail = config('constants.curriki-demo-email');
 
         if (is_null($defaultEmail)) {
@@ -76,7 +75,7 @@ class ProjectController extends Controller
                 'errors' => ['please set CURRIKI_DEMO_EMAIL in .env'],
             ], 500);
         }
-        
+
         return response([
             'projects' => $this->projectRepository->fetchDefault($defaultEmail),
         ], 200);
@@ -120,9 +119,8 @@ class ProjectController extends Controller
             'description' => 'required|string|max:255',
             'thumb_url' => 'required',
             'is_public' => 'required',
-            
         ]);
-        
+
         $authenticated_user = auth()->user();
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
 
