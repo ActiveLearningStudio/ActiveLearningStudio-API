@@ -65,6 +65,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        return response(['deleted' => $this->userRepository->destroyUser($id)], 200);
+        return response(['message' => $this->userRepository->destroyUser($id)], 200);
     }
 }

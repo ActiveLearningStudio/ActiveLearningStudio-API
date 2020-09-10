@@ -80,7 +80,8 @@ class UserRepository extends BaseRepository
 //            throw new GeneralException('You cannot delete your own user');
 //        }
         try {
-            return $this->model->find($id)->delete();
+             $this->model->find($id)->delete();
+             return 'User Deleted!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());
