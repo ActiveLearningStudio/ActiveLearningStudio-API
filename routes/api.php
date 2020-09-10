@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', 'Auth\AuthController@register')->name('register');
 Route::post('login', 'Auth\AuthController@login')->name('login');
+Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('reset-password', 'Auth\ResetPasswordController@reset');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
@@ -33,6 +34,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
+        Route::post('users/update-password', 'UserController@updatePassword');
         Route::apiResource('users', 'UserController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
@@ -55,7 +57,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
-        
+
         Route::apiResource('activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
