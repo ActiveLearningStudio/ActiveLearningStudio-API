@@ -11,6 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -36,6 +37,15 @@ class UserController extends Controller
         return UserResource::collection($this->userRepository->getUsers($request->start, $request->length));
     }
 
+    /**
+     * @param $id
+     * @return UserResource
+     */
+    public function edit($id)
+    {
+        $user = $this->userRepository->find($id);
+        return new UserResource($user);
+    }
 
     /**
      * @param StoreUser $request

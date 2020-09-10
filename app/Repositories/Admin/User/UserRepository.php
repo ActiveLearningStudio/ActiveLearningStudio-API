@@ -30,7 +30,16 @@ class UserRepository extends BaseRepository
     public function getUsers($start = 0, $length = 25)
     {
         request()->request->add(['page' => ($start / $length) + 1]);
-        return $this->model->paginate($length);
+        return $this->model->when(isset(request()->order[0]['dir']), function ($query) {
+            return $query->orderBy(request()->columns[request()->order[0]['column']]['name'], request()->order[0]['dir']);
+        })->when(isset(request()->search['value']) && request()->search['value'], function ($query) {
+            foreach (request()->columns as $column) {
+                if ($column['searchable'] && $column['searchable'] !== 'false') {
+                    $query->orWhere($column['name'], 'LIKE', '%' . request()->search['value'] . '%');
+                }
+            }
+            return $query;
+        })->paginate($length);
     }
 
     /**
@@ -46,6 +55,18 @@ class UserRepository extends BaseRepository
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());
         }
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function find($id)
+    {
+        if ($user = $this->model->whereId($id)->with('projects')->first()){
+            return $user;
+        }
+        throw new GeneralException('User Not found.');
     }
 
     /**

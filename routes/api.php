@@ -126,5 +126,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin'], function () {
         // users
         Route::resource('users', 'UserController');
+        // projects
+        Route::resource('projects', 'ProjectController');
     });
 });
