@@ -118,7 +118,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
                 ob_start();
                 \File::copy(storage_path('app/public/projects/' . basename($activity->thumb_url)), storage_path('app/public/projects/' . $new_image_name_mtd));
                 ob_get_clean();
-                $new_thumb_url = '/storage/projects/' . $new_image_name_mtd;
+                $new_thumb_url = '/api/storage/projects/' . $new_image_name_mtd;
             }
             $activity_data = [
                 'title' => $activity->title,

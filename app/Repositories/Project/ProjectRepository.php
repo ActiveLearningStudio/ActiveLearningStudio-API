@@ -62,7 +62,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             ob_start();
             \File::copy(storage_path("app/public/projects/" . basename($project->thumb_url)), storage_path("app/public/projects/" . $new_image_name));
             ob_get_clean();
-            $new_image_url = "/storage/projects/" . $new_image_name;
+            $new_image_url = "/api/storage/projects/" . $new_image_name;
 
         }
         $data = [
@@ -96,13 +96,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $h5P_res = $this->activityRepository->download_and_upload_h5p($token, $activity->h5p_content_id);
                 }
                 $new_thumb_url = config('app.default_thumb_url');
-                if (Storage::disk('public')->exists('projects/' . basename($activity->thumb_url)) && is_file(storage_path("app/public/projects/" . basename($activity->thumb_url)))) {
+                if (Storage::disk('public')->exists('activities/' . basename($activity->thumb_url)) && is_file(storage_path("app/public/activities/" . basename($activity->thumb_url)))) {
                     $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
                     $new_image_name_mtd = uniqid() . '.' . $ext;
                     ob_start();
-                    \File::copy(storage_path("app/public/projects/" . basename($activity->thumb_url)), storage_path("app/public/projects/" . $new_image_name_mtd));
+                    \File::copy(storage_path("app/public/activities/" . basename($activity->thumb_url)), storage_path("app/public/activities/" . $new_image_name_mtd));
                     ob_get_clean();
-                    $new_thumb_url = "/storage/projects/" . $new_image_name_mtd;
+                    $new_thumb_url = "/api/storage/activities/" . $new_image_name_mtd;
                 }
 
                 $activity_data = [

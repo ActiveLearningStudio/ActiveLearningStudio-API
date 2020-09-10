@@ -241,7 +241,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ob_start();
             \File::copy(storage_path('app/public/activities/' . basename($activity->thumb_url)), storage_path('app/public/activities/' . $new_image_name_mtd));
             ob_get_clean();
-            $new_thumb_url = '/storage/activities/' . $new_image_name_mtd;
+            $new_thumb_url = '/api/storage/activities/' . $new_image_name_mtd;
         }
         $activity_data = [
             'title' => $activity->title,
@@ -272,7 +272,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $response = null;
         try {
-            $response = $this->client->request('GET', config('app.url') . '/api/h5p/export/' . $h5p_content_id, ['sink' => storage_path('app/public/uploads/' . $new_h5p_file), 'http_errors' => false]);
+            $response = $this->client->request('GET', config('app.url') . '/api/v1/h5p/export/' . $h5p_content_id, ['sink' => storage_path('app/public/uploads/' . $new_h5p_file), 'http_errors' => false]);
         } catch (Exception $ex) {
 
         }
@@ -298,8 +298,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             } catch (Excecption $ex) {
 
             }
-
-            if (!is_null($response_h5p) && $response_h5p->getStatusCode() == 200) {
+            
+            if (!is_null($response_h5p) && $response_h5p->getStatusCode() == 201) {
                 unlink(storage_path('app/public/uploads/' . $new_h5p_file));
                 return json_decode($response_h5p->getBody()->getContents());
             } else {
