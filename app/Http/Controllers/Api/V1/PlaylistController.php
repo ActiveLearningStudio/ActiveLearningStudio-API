@@ -63,6 +63,7 @@ class PlaylistController extends Controller
         ]);
 
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
+        $data['is_public'] = $project->is_public;
 
         $playlist = $project->playlists()->create($data);
 
@@ -126,7 +127,7 @@ class PlaylistController extends Controller
     public function loadLti(Playlist $playlist)
     {
         return response([
-            'playlist' => $this->playlistRepository->getPlaylistWithProject($playlist),
+            'playlist' => new PlaylistResource($this->playlistRepository->getPlaylistWithProject($playlist)),
         ], 200);
     }
 
@@ -166,7 +167,6 @@ class PlaylistController extends Controller
         $is_updated = $this->playlistRepository->update($request->only([
             'title',
             'order',
-            'is_public',
         ]), $playlist->id);
 
         if ($is_updated) {

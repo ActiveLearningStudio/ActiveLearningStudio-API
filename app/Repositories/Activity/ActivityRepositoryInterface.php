@@ -49,4 +49,11 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * @param type $h5p_content_id
      */
     public function download_and_upload_h5p($token, $h5p_content_id);
+    
+    /**
+     * 
+     * @param type $playlistId
+     * @return is_public value
+     */
+    public function getPlaylistIsPublicValue($playlistId);
 }

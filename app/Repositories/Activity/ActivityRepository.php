@@ -34,6 +34,24 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     }
 
     /**
+     * Update model in storage
+     *
+     * @param array $attributes
+     * @param $id
+     * @return Model
+     */
+    public function update(array $attributes, $id)
+    {
+        $is_updated = $this->model->where('id', $id)->update($attributes);
+
+        if ($is_updated) {
+            $this->model->where('id', $id)->searchable();
+        }
+
+        return $is_updated;
+    }
+
+    /**
      * Get the search request
      *
      * @param array $data
@@ -217,11 +235,13 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
 
         $new_thumb_url = config('app.default_thumb_url');
-        if (Storage::disk('public')->exists('activities/' . basename($activity->thumb_url)) && is_file(storage_path('app/public/activities/' . basename($activity->thumb_url)))) {
+        $activites_source_file = storage_path("app/public/".(str_replace('/storage/','',$activity->thumb_url)));
+        if (file_exists($activites_source_file)) {
             $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
             $new_image_name_mtd = uniqid() . '.' . $ext;
             ob_start();
-            \File::copy(storage_path('app/public/activities/' . basename($activity->thumb_url)), storage_path('app/public/activities/' . $new_image_name_mtd));
+            $activites_destination_file = str_replace("uploads","activities",str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file));
+            \File::copy($activites_source_file, $activites_destination_file);
             ob_get_clean();
             $new_thumb_url = '/storage/activities/' . $new_image_name_mtd;
         }
@@ -235,9 +255,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'thumb_url' => $new_thumb_url,
             'subject_id' => $activity->subject_id,
             'education_level_id' => $activity->education_level_id,
+            'is_public' => $activity->is_public,
+            'elasticsearch' => $activity->elasticsearch,
+            'shared' => $activity->shared,
         ];
 
-        $cloned_activity = $this->activityRepository->create($activity_data);
+        $cloned_activity = $this->create($activity_data);
 
         return $cloned_activity['id'];
     }
@@ -254,7 +277,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $response = null;
         try {
-            $response = $this->client->request('GET', config('app.url') . '/api/h5p/export/' . $h5p_content_id, ['sink' => storage_path('app/public/uploads/' . $new_h5p_file), 'http_errors' => false]);
+            $response = $this->client->request('GET', config('app.url') . '/api/v1/h5p/export/' . $h5p_content_id, ['sink' => storage_path('app/public/uploads/' . $new_h5p_file), 'http_errors' => false]);
         } catch (Exception $ex) {
 
         }
@@ -280,8 +303,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             } catch (Excecption $ex) {
 
             }
-
-            if (!is_null($response_h5p) && $response_h5p->getStatusCode() == 200) {
+            
+            if (!is_null($response_h5p) && $response_h5p->getStatusCode() == 201) {
                 unlink(storage_path('app/public/uploads/' . $new_h5p_file));
                 return json_decode($response_h5p->getBody()->getContents());
             } else {
@@ -290,6 +313,18 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         } else {
             return null;
         }
+    }
+    
+    /**
+     *  To get the is_public value for parent playlist of activity
+     * @param type $playlistId
+     * @return type
+     */
+    public function getPlaylistIsPublicValue($playlistId)
+    {
+        $playlist =  Playlist::where('id',$playlistId)->value('is_public'); 
+        
+        return ($playlist) ? $playlist : false;
     }
 
 }

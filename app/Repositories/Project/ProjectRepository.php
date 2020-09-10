@@ -28,25 +28,46 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     }
 
     /**
+     * Update model in storage
+     *
+     * @param array $attributes
+     * @param $id
+     * @return Model
+     */
+    public function update(array $attributes, $id)
+    {
+        $is_updated = $this->model->where('id', $id)->update($attributes);
+
+        if ($is_updated) {
+            $this->model->where('id', $id)->searchable();
+        }
+
+        return $is_updated;
+    }
+
+    /**
      * To clone project and associated playlists
      * @param Request $request
      * @param Project $project
      * @return type
      */
     public function clone(Request $request, Project $project)
-    {
+    {   
         $authenticated_user = auth()->user();
         $token = $request->bearerToken();
         $new_image_url = config('app.default_thumb_url');
-        if (Storage::disk('public')->exists('projects/' . basename($project->thumb_url)) && is_file(storage_path("app/public/projects/" . basename($project->thumb_url)))) {
+        $source_file = storage_path("app/public/".(str_replace('/storage/','',$project->thumb_url)));
+        if (file_exists($source_file)) {
             $ext = pathinfo(basename($project->thumb_url), PATHINFO_EXTENSION);
             $new_image_name = uniqid() . '.' . $ext;
             ob_start();
-            \File::copy(storage_path("app/public/projects/" . basename($project->thumb_url)), storage_path("app/public/projects/" . $new_image_name));
+            $destination_file = str_replace("uploads","projects",str_replace(basename($project->thumb_url),$new_image_name,$source_file));
+            
+            \File::copy($source_file, $destination_file);
             ob_get_clean();
             $new_image_url = "/storage/projects/" . $new_image_name;
 
-        }
+        } 
         $data = [
             'name' => $project->name,
             'description' => $project->description,
@@ -62,7 +83,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'errors' => ['Could not create project. Please try again later.'],
             ], 500);
         }
-
+        
         $playlists = $project->playlists;
         foreach ($playlists as $playlist) {
             $play_list_data = ['title' => $playlist->title,
@@ -78,13 +99,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $h5P_res = $this->activityRepository->download_and_upload_h5p($token, $activity->h5p_content_id);
                 }
                 $new_thumb_url = config('app.default_thumb_url');
-                if (Storage::disk('public')->exists('projects/' . basename($activity->thumb_url)) && is_file(storage_path("app/public/projects/" . basename($activity->thumb_url)))) {
+                $activites_source_file = storage_path("app/public/".(str_replace('/storage/','',$activity->thumb_url)));
+                if (file_exists($activites_source_file)) {
                     $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
                     $new_image_name_mtd = uniqid() . '.' . $ext;
                     ob_start();
-                    \File::copy(storage_path("app/public/projects/" . basename($activity->thumb_url)), storage_path("app/public/projects/" . $new_image_name_mtd));
+                    $activites_destination_file = str_replace("uploads","activities",str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file));
+                    \File::copy($activites_source_file, $activites_destination_file);
                     ob_get_clean();
-                    $new_thumb_url = "/storage/projects/" . $new_image_name_mtd;
+                    $new_thumb_url = "/storage/activities/" . $new_image_name_mtd;
                 }
 
                 $activity_data = [
@@ -97,6 +120,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     'thumb_url' => $new_thumb_url,
                     'subject_id' => $activity->subject_id,
                     'education_level_id' => $activity->education_level_id,
+                    'is_public' => $activity->is_public,
+                    'elasticsearch' => $activity->elasticsearch,
+                    'shared' => $activity->shared,
                 ];
 
                 $cloned_activity = $this->activityRepository->create($activity_data);
@@ -176,6 +202,25 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
 
         return $proj;
+    }
+
+    /**
+     * To fetch recent public project
+     * @return Project $projects
+     */
+    public function fetchRecentPublic($limit){
+        return $this->model->where('is_public', true)->orderBy('created_at', 'desc')->limit($limit)->get();
+    }
+
+    /**
+     * To fetch default projects
+     * @return Project $projects
+     */
+    public function fetchDefault($defaultEmail){
+        $projects = $this->model->whereHas('users', function ($query_user) use ($defaultEmail) {
+            $query_user->where('email', $defaultEmail);
+        })->get();
+        return $projects;
     }
 
 }
