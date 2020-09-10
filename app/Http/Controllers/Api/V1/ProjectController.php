@@ -158,15 +158,15 @@ class ProjectController extends Controller
      */
     public function loadShared(Project $project)
     {
-        if (!$project->shared) {
+        if ($project->shared || $project->is_public) {
             return response([
-                'errors' => ['No shareable Project found.'],
-            ], 400);
+                'project' => $this->projectRepository->getProjectForPreview($project),
+            ], 200);
         }
 
         return response([
-            'project' => $this->projectRepository->getProjectForPreview($project),
-        ], 200);
+            'errors' => ['No shareable Project found.'],
+        ], 400);
     }
 
     /**

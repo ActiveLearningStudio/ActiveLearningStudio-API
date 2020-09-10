@@ -21,12 +21,14 @@ Route::post('verify-email', 'Auth\VerificationController@verify')->name('verific
 Route::post('verify-email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 
-// Metrics
-Route::get('activity/{activity}/logview', 'Api\V1\MetricsController@logview'); // Comes from consumers (see tsugi plugin). Will not be logged in
-
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+
+    // Metrics
+    Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView');
+    Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView');
+    Route::get('projects/{project}/log-view', 'MetricsController@projectLogView');
 
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
@@ -53,7 +55,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
-        Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
+        
         Route::apiResource('activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
@@ -110,6 +112,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('google-classroom/projects/{project}/copy', 'GoogleClassroomController@copyProject');
     });
 
+    Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
     //H5P Activity public route
     Route::get('h5p/activity/{activity}/visibility/{visibility}', "H5pController@showByActivity");
     //Route to support H5P Editor's core js library fileupload with "new XMLHttpRequest()"

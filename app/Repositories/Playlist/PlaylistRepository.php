@@ -173,14 +173,11 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             $plistActivity['id'] = $act->id;
             $plistActivity['type'] = $act->type;
             $plistActivity['h5p_content_id'] = $act->h5p_content_id;
-            $plistActivity['title'] = $content['title'];
+            $plistActivity['title'] = $act->title;
             $plistActivity['library_name'] = $library;
             $plistActivity['created_at'] = $act->created_at;
             $plistActivity['shared'] = isset($act->shared) ? $act->shared : false;
-            $metadata = $content['metadata'];
-            if ($metadata && isset($metadata['thumb_url'])) {
-                $plistActivity['thumb_url'] = $metadata['thumb_url'];
-            }
+            $plistActivity['thumb_url'] = $act->thumb_url;
 
             $plist['activities'][] = $plistActivity;
         }
