@@ -235,13 +235,15 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
 
         $new_thumb_url = config('app.default_thumb_url');
-        if (Storage::disk('public')->exists('activities/' . basename($activity->thumb_url)) && is_file(storage_path('app/public/activities/' . basename($activity->thumb_url)))) {
+        $activites_source_file = storage_path("app/public/".(str_replace('/storage/','',$activity->thumb_url)));
+        if (file_exists($activites_source_file)) {
             $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
             $new_image_name_mtd = uniqid() . '.' . $ext;
             ob_start();
-            \File::copy(storage_path('app/public/activities/' . basename($activity->thumb_url)), storage_path('app/public/activities/' . $new_image_name_mtd));
+            $activites_destination_file = str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file);
+            \File::copy($activites_source_file, $activites_destination_file);
             ob_get_clean();
-            $new_thumb_url = '/api/storage/activities/' . $new_image_name_mtd;
+            $new_thumb_url = '/storage/activities/' . $new_image_name_mtd;
         }
         $activity_data = [
             'title' => $activity->title,
@@ -253,6 +255,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'thumb_url' => $new_thumb_url,
             'subject_id' => $activity->subject_id,
             'education_level_id' => $activity->education_level_id,
+            'is_public' => $activity->is_public,
+            'elasticsearch' => $activity->elasticsearch,
+            'shared' => $activity->shared,
         ];
 
         $cloned_activity = $this->create($activity_data);
