@@ -95,7 +95,7 @@ class AuthController extends Controller
     public function loginWithGoogle(Request $request)
     {
         $client = new \Google_Client();
-        $client->setClientId(config('constants.gapi_client_id'));
+        $client->setClientId(config('google.gapi_client_id'));
         $result = $client->verifyIdToken($request->tokenId);
 
         if ($result) {
@@ -113,7 +113,7 @@ class AuthController extends Controller
                     'job_title' => ' ',
                 ]);
             }
-            $user->gapi_access_token = $request->token;
+            $user->gapi_access_token = $request->tokenObj;
             $user->save();
 
             $accessToken = $user->createToken('auth_token')->accessToken;
