@@ -181,24 +181,21 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $plist['title'] = $playlist['title'];
             $plist['activities'] = [];
 
-            foreach ($playlist['activities'] as $act) {
-                $activity = \DB::table('h5p_contents')
-                    ->select(['h5p_contents.title', 'h5p_libraries.name'])
-                    ->where(['h5p_contents.id' => $act->h5p_content_id])
+            foreach ($playlist['activities'] as $activity) {
+                $h5pContent = \DB::table('h5p_contents')
+                    ->select(['h5p_contents.title', 'h5p_libraries.name as library_name'])
+                    ->where(['h5p_contents.id' => $activity->h5p_content_id])
                     ->join('h5p_libraries', 'h5p_contents.library_id', '=', 'h5p_libraries.id')->first();
-                if ($activity == null) {
-                    continue;
-                }
+
                 $plistActivity = [];
-                $plistActivity['id'] = $act['id'];
-                $plistActivity['type'] = $act['type'];
+                $plistActivity['id'] = $activity->id;
+                $plistActivity['type'] = $activity->type;
                 $plistActivity['title'] = $activity->title;
-                $plistActivity['library_name'] = $activity->name;
-                $plistActivity['thumb_url'] = $act->thumb_url;
+                $plistActivity['library_name'] = $h5pContent ? $h5pContent->library_name : null;
+                $plistActivity['thumb_url'] = $activity->thumb_url;
                 $plist['activities'][] = $plistActivity;
             }
             $proj["playlists"][] = $plist;
-
         }
 
         return $proj;
