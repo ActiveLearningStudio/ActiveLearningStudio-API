@@ -9,6 +9,7 @@ use App\Rules\StrongPassword;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @group  User management
@@ -155,14 +156,14 @@ class UserController extends Controller
         ]);
 
         $authenticated_user = auth()->user();
-        if (bcrypt($data['current_password']) !== $authenticated_user->password) {
+        if (!Hash::check($data['current_password'], $authenticated_user->password)) {
             return response([
                 'errors' => ['Invalid request.'],
             ], 400);
         }
 
         $is_updated = $this->userRepository->update([
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
         ], $authenticated_user->id);
 
         if ($is_updated) {

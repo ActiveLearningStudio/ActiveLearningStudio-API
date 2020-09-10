@@ -10,6 +10,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -36,7 +37,7 @@ class AuthController extends Controller
     {
         $data = $registerRequest->validated();
 
-        $data['password'] = bcrypt($data['password']);
+        $data['password'] = Hash::make($data['password']);
         $data['remember_token'] = Str::random(64);
 
         $user = $this->userRepository->create($data);
@@ -106,7 +107,7 @@ class AuthController extends Controller
                     'first_name' => $result['name'],
                     'last_name' => '',
                     'email' => $result['email'],
-                    'password' => bcrypt($password),
+                    'password' => Hash::make($password),
                     'temp_password' => $password,
                     'remember_token' => Str::random(64),
                     'organization_name' => ' ',
