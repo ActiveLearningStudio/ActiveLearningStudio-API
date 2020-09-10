@@ -27,6 +27,7 @@ class ProjectResource extends JsonResource
             'users' => ProjectUserResource::collection($this->whenLoaded('users')),
             'playlists' => ProjectPlaylistResource::collection($this->whenLoaded('playlists')),
             'is_public' => $this->is_public,
+            'elasticsearch' => $this->elasticsearch,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

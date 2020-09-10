@@ -4,6 +4,7 @@ namespace App\Repositories\Admin\User;
 
 use App\Exceptions\GeneralException;
 use App\Repositories\Admin\BaseRepository;
+use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
 use Illuminate\Support\Facades\Log;
 
@@ -13,13 +14,19 @@ use Illuminate\Support\Facades\Log;
 class UserRepository extends BaseRepository
 {
     /**
+     * @var ProjectRepository
+     */
+    private $projectRepository;
+
+    /**
      * UserRepository constructor.
      *
      * @param User $model
      */
-    public function __construct(User $model)
+    public function __construct(User $model, ProjectRepository $projectRepository)
     {
         $this->model = $model;
+        $this->projectRepository = $projectRepository;
     }
 
     /**
@@ -55,6 +62,22 @@ class UserRepository extends BaseRepository
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());
         }
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     * @throws GeneralException
+     */
+    public function updateUser($id, $data, $clone_project_id)
+    {
+        $user = $this->model->find($id);
+        // update the user data
+        if($user->update($data) && $clone_project_id){
+            // if clone project id provided - clone the project
+          return $this->projectRepository->clone($clone_project_id);
+        }
+        return 'User data update failed!';
     }
 
     /**
