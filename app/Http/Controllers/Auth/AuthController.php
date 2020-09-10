@@ -87,6 +87,49 @@ class AuthController extends Controller
     }
 
     /**
+     * Login with Google
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function loginWithGoogle(Request $request)
+    {
+        $client = new \Google_Client();
+        $client->setClientId(config('google.gapi_client_id'));
+        $result = $client->verifyIdToken($request->tokenId);
+
+        if ($result) {
+            $user = $this->userRepository->findByField('email', $result['email']);
+            if (!$user) {
+                $password = Str::random(10);
+                $user = $this->userRepository->create([
+                    'first_name' => $result['name'],
+                    'last_name' => '',
+                    'email' => $result['email'],
+                    'password' => bcrypt($password),
+                    'temp_password' => $password,
+                    'remember_token' => Str::random(64),
+                    'organization_name' => ' ',
+                    'job_title' => ' ',
+                ]);
+            }
+            $user->gapi_access_token = $request->tokenObj;
+            $user->save();
+
+            $accessToken = $user->createToken('auth_token')->accessToken;
+
+            return response([
+                'user' => new UserResource($user),
+                'access_token' => $accessToken,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Unable to login with Google'],
+        ], 400);
+    }
+
+    /**
      * Logout
      *
      * @param Request $request
