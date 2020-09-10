@@ -240,7 +240,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
             $new_image_name_mtd = uniqid() . '.' . $ext;
             ob_start();
-            $activites_destination_file = str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file);
+            $activites_destination_file = str_replace("uploads","activities",str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file));
             \File::copy($activites_source_file, $activites_destination_file);
             ob_get_clean();
             $new_thumb_url = '/storage/activities/' . $new_image_name_mtd;
