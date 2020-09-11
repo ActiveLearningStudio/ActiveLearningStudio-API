@@ -22,7 +22,8 @@ class PlaylistResource extends JsonResource
             'title' => $this->title,
             'order' => $this->order,
             'is_public' => $this->is_public,
-            'project_id' => $this->project_id,
+            'project_id' => $this->project_id
+            'activities' => ActivityResource::collection($this->activities->sortBy('order')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
