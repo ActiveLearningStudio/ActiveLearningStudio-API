@@ -35,6 +35,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::post('users/update-password', 'UserController@updatePassword');
+        // Membership
+        Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer');
+
         Route::apiResource('users', 'UserController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
