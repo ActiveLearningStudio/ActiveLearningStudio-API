@@ -10,6 +10,7 @@ use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -21,6 +22,7 @@ class ProjectRepository extends BaseRepository
      * @var Playlist
      */
     private $playlistModel;
+
     /**
      * @var Activity
      */
@@ -49,24 +51,28 @@ class ProjectRepository extends BaseRepository
         })->where('is_public', true)->orderBy('created_at', 'desc')->paginate(100);
     }
 
-    /************* IN PROGRESS ****************/
     /**
-     * This function is not completed - [IN-PROGRESS]
      * @param $project_id
+     * @return string
      * @throws GeneralException
      */
-    public function clone($project_id)
+    public function clone($user_id, $project_id)
     {
+        $project = $this->model->find($project_id);
+        $pivot_data = $project->users->find($user_id);
+        $linked_user_id = $pivot_data ? $pivot_data->pivot->value('user_id') : 0;
+        if ((int)$user_id === $linked_user_id) {
+            throw new GeneralException('Project already linked to this user');
+        }
         try {
-            $project = $this->model->find($project_id)->first();
+            // resolving this object one-time
+            // as it might only needed here - so no dependency injection in constructor
             resolve(ProjectRepositoryInterface::class)->clone(request(), $project);
-            return 'Project cloned!';
-            // update the user data
+            return 'User data updated and Project cloning successful!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());
         }
-        throw new GeneralException('Cloning of the project failed!');
     }
 
     /**
@@ -98,7 +104,7 @@ class ProjectRepository extends BaseRepository
      */
     public function de_index_projects($projects = []): void
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         // get current user projects - if specific project IDs are not provided
         $user_all_projects = !empty($projects) ? $projects : $user->projects->modelKeys();
         $playlists = $this->playlistModel->whereIn('project_id', $user_all_projects)->get('id');

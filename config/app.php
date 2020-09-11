@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,8 +55,8 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'front_end_url' => env('FRONT_END_URL', 'http://localhost:3000'),
-    
-    'default_thumb_url' => env('DEFAULT_THUMB_URL'),
+
+    'default_thumb_url' => env('DEFAULT_THUMB_URL', 'https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280'),
 
     'asset_url' => env('ASSET_URL', null),
 

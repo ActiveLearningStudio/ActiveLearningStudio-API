@@ -48,7 +48,7 @@ class GeneralException extends Exception
      */
     public function render($request)
     {
-        if ($request->ajax() || $request->is('api/*')) {
+        if ($request->ajax() || $request->is('api/*') || $request->wantsJson()) {
             return response(['errors' => [$this->message],], 500);
         }
         // All instances of GeneralException redirect back with a flash message to show a bootstrap alert-error

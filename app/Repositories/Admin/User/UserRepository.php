@@ -75,7 +75,7 @@ class UserRepository extends BaseRepository
         // update the user data
         if($user->update($data) && $clone_project_id){
             // if clone project id provided - clone the project
-          return $this->projectRepository->clone($clone_project_id);
+          return $this->projectRepository->clone($id, $clone_project_id);
         }
         return 'User data updated!';
     }
@@ -99,9 +99,9 @@ class UserRepository extends BaseRepository
      */
     public function destroyUser($id)
     {
-//        if ((int)$id === \Auth::user()->id) {
-//            throw new GeneralException('You cannot delete your own user');
-//        }
+        if ((int)$id === auth()->id()) {
+            throw new GeneralException('You cannot delete your own user');
+        }
         try {
              $this->model->find($id)->delete();
              return 'User Deleted!';
