@@ -129,4 +129,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     //LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     Route::get('error', 'ErrorController@show')->name('api/error');
+
+    /*********************** ADMIN PANEL ROUTES ************************/
+    Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin', 'middleware' => ['auth:api', 'verified', 'admin']], function () {
+        // users
+        Route::resource('users', 'UserController');
+        // projects
+        Route::resource('projects', 'ProjectController');
+        Route::post('projects/indexes/{id}', 'ProjectController@updateIndexes');
+    });
 });
