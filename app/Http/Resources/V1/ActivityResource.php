@@ -17,7 +17,7 @@ class ActivityResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'playlist' => $this->playlist,
+            'playlist_id' => $this->playlist_id,
             'title' => $this->title,
             'type' => $this->type,
             'content' => $this->content,
