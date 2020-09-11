@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GCSaveAccessTokenRequest extends FormRequest
+class GCCopyProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class GCSaveAccessTokenRequest extends FormRequest
     public function rules()
     {
         return [
-            'access_token' => 'required'
+            'course_id' => 'sometimes|integer'
         ];
     }
 }
