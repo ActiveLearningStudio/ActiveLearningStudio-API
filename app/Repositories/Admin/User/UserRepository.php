@@ -71,13 +71,13 @@ class UserRepository extends BaseRepository
      */
     public function updateUser($id, $data, $clone_project_id)
     {
-        $user = $this->model->find($id);
+        $user = $this->find($id);
         // update the user data
         if($user->update($data) && $clone_project_id){
             // if clone project id provided - clone the project
           return $this->projectRepository->clone($clone_project_id);
         }
-        return 'User data update failed!';
+        return 'User data updated!';
     }
 
     /**

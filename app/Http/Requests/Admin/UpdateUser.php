@@ -27,7 +27,7 @@ class UpdateUser extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email'=> 'required|email',
-            'password'=>'required|min:8'
+            'password'=>'sometimes|required|min:8'
         ];
     }
 }

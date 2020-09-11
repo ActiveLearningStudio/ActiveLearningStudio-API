@@ -123,7 +123,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('error', 'ErrorController@show')->name('api/error');
 
     /*********************** ADMIN PANEL ROUTES ************************/
-    Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin'], function () {
+    Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin', 'middleware' => ['auth:api']], function () {
         // users
         Route::resource('users', 'UserController');
         // projects

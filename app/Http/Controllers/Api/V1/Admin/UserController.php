@@ -9,9 +9,11 @@ use App\Http\Requests\Admin\UpdateUser;
 use App\Http\Resources\V1\Admin\UserResource;
 use App\Repositories\Admin\User\UserRepository;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
@@ -61,13 +63,13 @@ class UserController extends Controller
 
     /**
      * @param StoreUser $request
-     * @return UserResource
+     * @return UserResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
     public function update(UpdateUser $request, $id)
     {
-        $user = $this->userRepository->updateUser($id, $request->only('email', 'password', 'first_name', 'last_name', 'name'), $request->clone_project_id);
-        return new UserResource($user);
+        $response = $this->userRepository->updateUser($id, $request->only('email', 'password', 'first_name', 'last_name', 'name'), $request->clone_project_id);
+        return response(['message' => $response], 200);
     }
 
     /**

@@ -7,6 +7,9 @@ use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Admin\BaseRepository;
+use App\Repositories\Project\ProjectRepositoryInterface;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -55,25 +58,9 @@ class ProjectRepository extends BaseRepository
     public function clone($project_id)
     {
         try {
-            $project = $this->model->find($project_id)->with(['playlists', 'playlists.activities']);
-            if ($user = auth('api')->user()) {
-                Log::info('here');
-                // clone the project data
-                $cloned_project = $user->projects()->create($project->except('mongo_userid', ['role' => 'owner']));
-                Log::info($cloned_project);
-
-                // loop through original project playlists
-                foreach ($project->playlists as $playlist) {
-                    // clone the playlist one by one
-                    $cloned_playlist = $cloned_project->playlists()->create($playlist);
-                    Log::info($cloned_playlist);
-                    // loop through playlist activities
-                    foreach ($playlist->activities as $activity) {
-                        // clone the activity one by one
-                        $cloned_playlist->activities()->create($activity);
-                    }
-                }
-            }
+            $project = $this->model->find($project_id)->first();
+            resolve(ProjectRepositoryInterface::class)->clone(request(), $project);
+            return 'Project cloned!';
             // update the user data
         } catch (\Exception $e) {
             Log::info($e->getMessage());
@@ -90,21 +77,19 @@ class ProjectRepository extends BaseRepository
      */
     public function updateIndexes($projects)
     {
-        if ($projects) {
-            try {
-                // first de-index the all projects of the users
-                $this->de_index_projects();
+        try {
+            // first de-index the all projects of the users
+            $this->de_index_projects();
 
+            if ($projects) {
                 // index the selected projects
                 $this->index_projects($projects);
-
-                return 'Indexes Updated Successfully!';
-            } catch (\Exception $e) {
-                Log::info($e->getMessage());
-                throw new GeneralException('Unable to update indexes, please try again later!');
             }
+            return 'Indexes Updated Successfully!';
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+            throw new GeneralException('Unable to update indexes, please try again later!');
         }
-        throw new GeneralException('Projects not found!');
     }
 
     /**
