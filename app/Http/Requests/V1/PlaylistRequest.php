@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GCCopyProjectRequest extends FormRequest
+class PlaylistRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class GCCopyProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => 'sometimes|integer'
+            'title' => 'required|string|max:255',
+            'order' => 'integer',
         ];
     }
 }

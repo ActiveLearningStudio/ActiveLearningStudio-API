@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\CurrikiGo;
+namespace App\Http\Requests\V1\CurrikiGo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
