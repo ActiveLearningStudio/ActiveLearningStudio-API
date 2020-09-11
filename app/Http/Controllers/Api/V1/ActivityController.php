@@ -57,7 +57,7 @@ class ActivityController extends Controller
     public function uploadThumb(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image',
+            'thumb' => 'required|image|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -153,12 +153,12 @@ class ActivityController extends Controller
         ], 500);
     }
 
-
     /**
      * Update H5P
      *
      * @param $request
      * @param int $id
+     * @return mixed
      */
     public function update_h5p($request, $id)
     {
@@ -204,7 +204,7 @@ class ActivityController extends Controller
         if ($trimmed_title === '') {
             throw new H5PException('Missing title');
         }
-        
+
         if (strlen($trimmed_title) > 255) {
             throw new H5PException('Title is too long. Must be 256 letters or shorter.');
         }
@@ -427,7 +427,7 @@ class ActivityController extends Controller
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
         $user_data = null;
-        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];        
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
 
         return response([
             'h5p' => $h5p_data,

@@ -92,7 +92,7 @@ class ProjectController extends Controller
     public function uploadThumb(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image',
+            'thumb' => 'required|image|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -222,7 +222,7 @@ class ProjectController extends Controller
     public function update(ProjectEditRequest $projectEditRequest, Project $project)
     {
         $data = $projectEditRequest->validated();
-       
+
         $is_updated = $this->projectRepository->update($data, $project->id);
 
         if ($is_updated) {
