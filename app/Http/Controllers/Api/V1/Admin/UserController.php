@@ -11,10 +11,10 @@ use App\Repositories\Admin\User\UserRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function __construct(UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
+        $this->userRepository = resolve(UserRepository::class);
 //        $this->authorizeResource(User::class, 'user');
     }
 

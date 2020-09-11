@@ -22,6 +22,7 @@ class UserRepository extends BaseRepository
      * UserRepository constructor.
      *
      * @param User $model
+     * @param ProjectRepository $projectRepository
      */
     public function __construct(User $model, ProjectRepository $projectRepository)
     {
@@ -36,7 +37,8 @@ class UserRepository extends BaseRepository
      */
     public function getUsers($start = 0, $length = 25)
     {
-        request()->request->add(['page' => ($start / $length) + 1]);
+        $page = empty($length) ? 0 : ($start / $length);
+        request()->request->add(['page' => $page + 1]);
         return $this->model->when(isset(request()->order[0]['dir']), function ($query) {
             return $query->orderBy(request()->columns[request()->order[0]['column']]['name'], request()->order[0]['dir']);
         })->when(isset(request()->search['value']) && request()->search['value'], function ($query) {

@@ -41,7 +41,7 @@ class ProjectController extends Controller
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function updateIndexes(Request $request){
-        return response(['message' =>  $this->projectRepository->updateIndexes($request->projects)], 200);
+    public function updateIndexes(Request $request, $id){
+        return response(['message' =>  $this->projectRepository->updateIndexes($request->projects, $id)], 200);
     }
 }

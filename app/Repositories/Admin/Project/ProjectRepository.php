@@ -7,11 +7,9 @@ use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Admin\BaseRepository;
+use App\Repositories\Admin\User\UserRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -30,16 +28,23 @@ class ProjectRepository extends BaseRepository
     private $activityModel;
 
     /**
+     * @var User
+     */
+    private $userModel;
+
+    /**
      * ProjectRepository constructor.
      * @param Project $model
      * @param Playlist $playlistModel
      * @param Activity $activityModel
+     * @param User $userModel
      */
-    public function __construct(Project $model, Playlist $playlistModel, Activity $activityModel)
+    public function __construct(Project $model, Playlist $playlistModel, Activity $activityModel, User $userModel)
     {
         $this->model = $model;
         $this->playlistModel = $playlistModel;
         $this->activityModel = $activityModel;
+        $this->userModel = $userModel;
     }
 
     /**
@@ -82,14 +87,15 @@ class ProjectRepository extends BaseRepository
     /**
      * Update Indexes for projects and related models
      * @param $projects
+     * @param $user_id
      * @return string
      * @throws GeneralException
      */
-    public function updateIndexes($projects)
+    public function updateIndexes($projects, $user_id)
     {
         try {
             // first de-index the all projects of the users
-            $this->de_index_projects();
+            $this->de_index_projects([], $user_id);
 
             if ($projects) {
                 // index the selected projects
@@ -103,12 +109,15 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
-     * @param $projects
+     * @param array $projects
      * De Indexing of the projects
+     * @param string $user_id
+     * @throws GeneralException
      */
-    public function de_index_projects($projects = []): void
+    public function de_index_projects($projects = [], $user_id = ''): void
     {
-        $user = auth()->user();
+        $user = $user_id ? $this->userModel->find($user_id) : auth()->user();
+
         // get current user projects - if specific project IDs are not provided
         $user_all_projects = !empty($projects) ? $projects : $user->projects->modelKeys();
         $playlists = $this->playlistModel->whereIn('project_id', $user_all_projects)->get('id');
