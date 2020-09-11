@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Rules\StrongPassword;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @group  User management
@@ -137,6 +139,41 @@ class UserController extends Controller
 
         return response([
             'errors' => ['Failed to update profile.'],
+        ], 500);
+    }
+
+    /**
+     * Update password of the specified user in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function updatePassword(Request $request)
+    {
+        $data = $request->validate([
+            'current_password' => ['required'],
+            'password' => ['required', 'confirmed', new StrongPassword],
+        ]);
+
+        $authenticated_user = auth()->user();
+        if (!Hash::check($data['current_password'], $authenticated_user->password)) {
+            return response([
+                'errors' => ['Invalid request.'],
+            ], 400);
+        }
+
+        $is_updated = $this->userRepository->update([
+            'password' => Hash::make($data['password']),
+        ], $authenticated_user->id);
+
+        if ($is_updated) {
+            return response([
+                'message' => 'Password has been updated successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update password.'],
         ], 500);
     }
 

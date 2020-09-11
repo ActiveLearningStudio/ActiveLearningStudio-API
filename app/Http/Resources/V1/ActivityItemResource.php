@@ -24,6 +24,8 @@ class ActivityItemResource extends JsonResource
             'type' => $this->type,
             'h5pLib' => $this->h5pLib,
             'image' => $this->image,
+            'demo_activity_id' => $this->demo_activity_id,
+            'demo_video_id' => $this->demo_video_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

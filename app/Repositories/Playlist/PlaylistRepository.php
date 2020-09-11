@@ -33,6 +33,24 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
     }
 
     /**
+     * Update model in storage
+     *
+     * @param array $attributes
+     * @param $id
+     * @return Model
+     */
+    public function update(array $attributes, $id)
+    {
+        $is_updated = $this->model->where('id', $id)->update($attributes);
+
+        if ($is_updated) {
+            $this->model->where('id', $id)->searchable();
+        }
+
+        return $is_updated;
+    }
+
+    /**
      * Get latest order of playlist for Project
      *
      * @param Project $project
@@ -81,7 +99,8 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         $play_list_data = [
             'title' => $playlist->title,
             'order' => $playlist->order,
-            'is_public' => $playlist->is_public
+            'is_public' => $playlist->is_public,
+            'elasticsearch' => $playlist->elasticsearch,
         ];
         $token = $request->bearerToken();
         $cloned_playlist = $project->playlists()->create($play_list_data);
@@ -94,13 +113,15 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             }
 
             $new_thumb_url = config('app.default_thumb_url');
-            if (Storage::disk('public')->exists('projects/' . basename($activity->thumb_url)) && is_file(storage_path('app/public/projects/' . basename($activity->thumb_url)))) {
+            $activites_source_file = storage_path("app/public/".(str_replace('/storage/','',$activity->thumb_url)));
+                if (file_exists($activites_source_file)) {
                 $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
                 $new_image_name_mtd = uniqid() . '.' . $ext;
                 ob_start();
-                \File::copy(storage_path('app/public/projects/' . basename($activity->thumb_url)), storage_path('app/public/projects/' . $new_image_name_mtd));
+                $activites_destination_file = str_replace("uploads","activities",str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file));
+                \File::copy($activites_source_file, $activites_destination_file);
                 ob_get_clean();
-                $new_thumb_url = '/storage/projects/' . $new_image_name_mtd;
+                $new_thumb_url = '/storage/activities/' . $new_image_name_mtd;
             }
             $activity_data = [
                 'title' => $activity->title,
@@ -111,6 +132,10 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
                 'h5p_content_id' => $h5P_res === null ? 0 : $h5P_res->id,
                 'thumb_url' => $new_thumb_url,
                 'subject_id' => $activity->subject_id,
+                'education_level_id' => $activity->education_level_id,
+                'is_public' => $activity->is_public,
+                'elasticsearch' => $activity->elasticsearch,
+                'shared' => $activity->shared,
                 'education_level_id' => $activity->education_level_id,
             ];
 
@@ -155,14 +180,11 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             $plistActivity['id'] = $act->id;
             $plistActivity['type'] = $act->type;
             $plistActivity['h5p_content_id'] = $act->h5p_content_id;
-            $plistActivity['title'] = $content['title'];
+            $plistActivity['title'] = $act->title;
             $plistActivity['library_name'] = $library;
             $plistActivity['created_at'] = $act->created_at;
             $plistActivity['shared'] = isset($act->shared) ? $act->shared : false;
-            $metadata = $content['metadata'];
-            if ($metadata && isset($metadata['thumb_url'])) {
-                $plistActivity['thumb_url'] = $metadata['thumb_url'];
-            }
+            $plistActivity['thumb_url'] = $act->thumb_url;
 
             $plist['activities'][] = $plistActivity;
         }

@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'temp_password',
         'remember_token',
         'organization_name',
         'organization_type',
@@ -37,7 +38,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'subscribed',
         'subscribed_ip',
         'email_verified_at',
-        'membership_type_id'
+        'membership_type_id',
+        'gapi_access_token',
     ];
 
     /**
