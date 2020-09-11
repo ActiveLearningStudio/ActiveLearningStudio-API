@@ -215,11 +215,11 @@ class ProjectController extends Controller
     /**
      * Update the specified project in storage.
      *
-     * @param Project $project
      * @param ProjectEditRequest $projectEditRequest
+     * @param Project $project
      * @return Response
      */
-    public function update(Project $project, ProjectEditRequest $projectEditRequest)
+    public function update(ProjectEditRequest $projectEditRequest, Project $project)
     {
         $data = $projectEditRequest->validated();
        
