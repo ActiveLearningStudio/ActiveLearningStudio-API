@@ -52,8 +52,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @return type
      */
     public function clone(Request $request, Project $project)
-    {   
-        $authenticated_user = auth()->user();
+    {
+        // request has is implemented to support other than auth users
+        $authenticated_user = $request->has('clone_user') ? $request->clone_user :auth()->user();
         $token = $request->bearerToken();
         $new_image_url = config('app.default_thumb_url');
         $source_file = storage_path("app/public/".(str_replace('/storage/','',$project->thumb_url)));
@@ -62,12 +63,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $new_image_name = uniqid() . '.' . $ext;
             ob_start();
             $destination_file = str_replace("uploads","projects",str_replace(basename($project->thumb_url),$new_image_name,$source_file));
-            
+
             \File::copy($source_file, $destination_file);
             ob_get_clean();
             $new_image_url = "/storage/projects/" . $new_image_name;
 
-        } 
+        }
         $data = [
             'name' => $project->name,
             'description' => $project->description,
@@ -83,7 +84,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'errors' => ['Could not create project. Please try again later.'],
             ], 500);
         }
-        
+
         $playlists = $project->playlists;
         foreach ($playlists as $playlist) {
             $play_list_data = ['title' => $playlist->title,

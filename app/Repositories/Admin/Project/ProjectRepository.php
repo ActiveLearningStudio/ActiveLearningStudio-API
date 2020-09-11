@@ -8,6 +8,7 @@ use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -52,19 +53,22 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
+     * @param User $user
      * @param $project_id
      * @return string
      * @throws GeneralException
      */
-    public function clone($user_id, $project_id)
+    public function clone(User $user, $project_id)
     {
         $project = $this->model->find($project_id);
-        $pivot_data = $project->users->find($user_id);
+        $pivot_data = $project->users->find($user->id);
         $linked_user_id = $pivot_data ? $pivot_data->pivot->value('user_id') : 0;
-        if ((int)$user_id === $linked_user_id) {
+        if ((int)$user->id === $linked_user_id) {
             throw new GeneralException('Project already linked to this user');
         }
         try {
+            // adding user model to request - because use existing clone method
+            request()->request->add(['clone_user' => $user]);
             // resolving this object one-time
             // as it might only needed here - so no dependency injection in constructor
             resolve(ProjectRepositoryInterface::class)->clone(request(), $project);
