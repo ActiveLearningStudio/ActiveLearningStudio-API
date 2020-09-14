@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Resources\V1;
+namespace App\Http\Resources\V1\Admin;
 
-use App\Http\Resources\V1\ActivityResource;
-use App\Http\Resources\V1\PlaylistProjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PlaylistResource extends JsonResource
+class ProjectPlaylistResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,10 +19,7 @@ class PlaylistResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'order' => $this->order,
-            'is_public' => $this->is_public,
-            'project_id' => $this->project_id,
-            'project' => new PlaylistProjectResource($this->project),
-            'activities' => ActivityResource::collection($this->activities->sortBy('order')),
+            'activities' => PlaylistActivityResource::collection($this->whenLoaded('activities')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
