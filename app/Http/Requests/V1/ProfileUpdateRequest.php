@@ -29,7 +29,7 @@ class ProfileUpdateRequest extends FormRequest
             // 'email' => 'required|email|max:255|unique:users',
             'organization_name' => 'required|string|min:2|max:50',
             'organization_type' => 'string|max:255',
-            'website' => 'string|max:255',
+            'website' => 'url|max:255',
             'job_title' => 'required|string|max:255',
             'address' => 'string|max:255',
             'phone_number' => 'string|max:255',
