@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
@@ -112,28 +113,20 @@ class UserController extends Controller
     /**
      * Update the specified user in storage.
      *
-     * @param Request $request
+     * @param ProfileUpdateRequest $profileUpdateRequest
      * @param User $user
      * @return Response
      */
-    public function update(Request $request, User $user)
+    public function update(ProfileUpdateRequest $profileUpdateRequest, User $user)
     {
-        $is_updated = $this->userRepository->update($request->only([
-            'first_name',
-            'last_name',
-            // 'name',
-            // 'email',
-            'organization_name',
-            'organization_type',
-            'website',
-            'job_title',
-            'address',
-            'phone_number',
-        ]), $user->id);
+        $data = $profileUpdateRequest->validated();
+
+        $is_updated = $this->userRepository->update($data, $user->id);
 
         if ($is_updated) {
             return response([
                 'user' => new UserResource($this->userRepository->find($user->id)),
+                'message' => 'Profile has been updated successfully.',
             ], 200);
         }
 

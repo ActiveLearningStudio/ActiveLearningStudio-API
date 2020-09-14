@@ -275,14 +275,14 @@ class ActivityController extends Controller
         ], 500);
     }
 
-     /**
+    /**
      *
      * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
      * @apiResourceCollection  App\Http\Resources\V1\ActivityResource
      * @apiResourceModel  App\Models\Playlist
      * @apiResourceModel  App\Models\Activity
      *
-     *  @response  {
+     * @response  {
      *  "message": "Activity is cloned successfully",
      * },
      *  {
@@ -422,7 +422,7 @@ class ActivityController extends Controller
             $embed_code = $embed['embed'];
             $settings = $embed['settings'];
             $user_data = null;
-            $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];        
+            $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
 
             return response([
                 'h5p' => $h5p_data,
@@ -430,7 +430,7 @@ class ActivityController extends Controller
                 'playlist' => new PlaylistResource($activity->playlist),
             ], 200);
         }
-      
+
         return response([
             'errors' => ['Activity not found.']
         ], 400);
