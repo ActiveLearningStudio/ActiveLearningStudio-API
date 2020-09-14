@@ -456,16 +456,6 @@ class H5pController extends Controller
         $embed = $h5p->get_embed($content, $settings);
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
-
-        event(new H5pEvent(
-            'content',
-            NULL,
-            $content['id'],
-            $content['title'],
-            $content['library']['name'],
-            $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
-        ));
-
         return response(compact('settings', 'embed_code'), 200);
     }
 

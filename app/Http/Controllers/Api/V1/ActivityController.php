@@ -275,14 +275,14 @@ class ActivityController extends Controller
         ], 500);
     }
 
-     /**
+    /**
      *
      * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
      * @apiResourceCollection  App\Http\Resources\V1\ActivityResource
      * @apiResourceModel  App\Models\Playlist
      * @apiResourceModel  App\Models\Activity
      *
-     *  @response  {
+     * @response  {
      *  "message": "Activity is cloned successfully",
      * },
      *  {
@@ -412,28 +412,28 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsShared(Activity $activity)
     {
-        if (!$activity->shared) {
+        if ($activity->shared || $activity->playlist->project->is_public) {
+            $h5p = App::make('LaravelH5p');
+            $core = $h5p::$core;
+            $settings = $h5p::get_editor();
+            $content = $h5p->load_content($activity->h5p_content_id);
+            $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+            $embed = $h5p->get_embed($content, $settings);
+            $embed_code = $embed['embed'];
+            $settings = $embed['settings'];
+            $user_data = null;
+            $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
             return response([
-                'errors' => ['Activity not found.']
-            ], 400);
+                'h5p' => $h5p_data,
+                'activity' => new ActivityResource($activity),
+                'playlist' => new PlaylistResource($activity->playlist),
+            ], 200);
         }
 
-        $h5p = App::make('LaravelH5p');
-        $core = $h5p::$core;
-        $settings = $h5p::get_editor();
-        $content = $h5p->load_content($activity->h5p_content_id);
-        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
-        $embed = $h5p->get_embed($content, $settings);
-        $embed_code = $embed['embed'];
-        $settings = $embed['settings'];
-        $user_data = null;
-        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
-
         return response([
-            'h5p' => $h5p_data,
-            'activity' => new ActivityResource($activity),
-            'playlist' => new PlaylistResource($activity->playlist),
-        ], 200);
+            'errors' => ['Activity not found.']
+        ], 400);
     }
 
     private function hasPermission(Activity $activity)
