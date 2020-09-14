@@ -380,7 +380,7 @@ class LaravelH5p
             'library' => H5PCore::libraryToString($content['library']),
             'jsonContent' => $safe_parameters,
             'fullScreen' => $content['library']['fullscreen'],
-            'exportUrl' => config('laravel-h5p.h5p_export') ? config('app.url') . '/h5p/export/' . $content['id'] : '',
+            'exportUrl' => config('laravel-h5p.h5p_export') ? config('app.url') . '/api/v1/h5p/export/' . $content['id'] : '',
             'embedCode' => '<iframe src="' . config('laravel-h5p.FRONT_END_URL') . '/h5p/embed/' . $content['id'] . '" width=":w" height=":h" frameborder="0" allowfullscreen="allowfullscreen"></iframe>',
             'resizeCode' => '<script src="' . self::get_h5pcore_url('/js/h5p-resizer.js') . '" charset="UTF-8"></script>',
             'url' => route('h5p.embed', ['id' => $content['id']]),
