@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProjectResource;
+use App\Http\Resources\V1\ProjectDetailedResource;
 use App\Models\Project;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectEditRequest;
@@ -48,6 +49,26 @@ class ProjectController extends Controller
 
         return response([
             'projects' => ProjectResource::collection($authenticated_user->projects),
+        ], 200);
+    }
+
+    /**
+     * Display a listing of the project with detail.
+     *
+     * @return Response
+     */
+    public function listDetailed()
+    {
+        $authenticated_user = auth()->user();
+
+        if ($authenticated_user->isAdmin()) {
+            return response([
+                'projects' => ProjectDetailedResource::collection($this->projectRepository->all()),
+            ], 200);
+        }
+
+        return response([
+            'projects' => ProjectDetailedResource::collection($authenticated_user->projects),
         ], 200);
     }
 
