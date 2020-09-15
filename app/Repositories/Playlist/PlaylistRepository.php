@@ -99,8 +99,6 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         $play_list_data = [
             'title' => $playlist->title,
             'order' => $playlist->order,
-            'is_public' => $playlist->is_public,
-            'elasticsearch' => $playlist->elasticsearch,
         ];
         $token = $request->bearerToken();
         $cloned_playlist = $project->playlists()->create($play_list_data);
@@ -133,8 +131,6 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
                 'thumb_url' => $new_thumb_url,
                 'subject_id' => $activity->subject_id,
                 'education_level_id' => $activity->education_level_id,
-                'is_public' => $activity->is_public,
-                'elasticsearch' => $activity->elasticsearch,
                 'shared' => $activity->shared,
                 'education_level_id' => $activity->education_level_id,
             ];
