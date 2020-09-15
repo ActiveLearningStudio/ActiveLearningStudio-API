@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SearchRequest;
+use App\Http\Requests\V1\SearchRequest;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -183,7 +184,7 @@ class SearchController extends Controller
      * }
      *
      * @param SearchRequest $searchRequest
-     * @return Response
+     * @return Collection
      */
     public function advance(SearchRequest $searchRequest)
     {

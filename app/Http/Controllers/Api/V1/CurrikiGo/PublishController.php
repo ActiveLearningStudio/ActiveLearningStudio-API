@@ -6,24 +6,23 @@
 
 namespace App\Http\Controllers\Api\V1\CurrikiGo;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\CurrikiGo\Moodle\Playlist as MoodlePlaylist;
+use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\Playlist as CanvasPlaylist;
+use App\CurrikiGo\Moodle\Playlist as MoodlePlaylist;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\CurrikiGo\PublishPlaylistRequest;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
-use App\CurrikiGo\Canvas\Client;
-use Validator;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
-use App\Http\Requests\CurrikiGo\PublishPlaylistRequest;
 
 /**
  * @group  CurrikiGo
  * @authenticated
- * 
+ *
  * APIs for publishing playlists to other LMSs
  */
 class PublishController extends Controller
@@ -50,26 +49,26 @@ class PublishController extends Controller
      * @urlParam  playlist required The ID of the playlist.
      * @bodyParam  setting_id int The id of the LMS setting.
      * @bodyParam  counter int The counter for uniqueness of the title
-     * 
-     * @param PublishPlaylistRequest $publishRequest The request object
-     * @param Project $project The project model object
-     * @param Playlist $playlist The playlist model object
+     *
+     * @param PublishPlaylistRequest $publishRequest
+     * @param Project $project
+     * @param Playlist $playlist
      * @return Response
      */
     public function playlistToMoodle(PublishPlaylistRequest $publishRequest, Project $project, Playlist $playlist)
-    {                
+    {
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist Id.'],
             ], 400);
         }
-        
+
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->allows('publish-to-lms', $project)) {
             $data = $publishRequest->validated();
             $lmsSetting = $this->lmsSettingRepository->find($data['setting_id']);
             $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
-            
+
             $moodle_playlist = new MoodlePlaylist($lmsSetting);
             $response = $moodle_playlist->send($playlist, ['counter' => intval($counter)]);
 
@@ -79,12 +78,11 @@ class PublishController extends Controller
                 return response([
                     'data' => json_decode($outcome),
                 ], 200);
-            } else {
-                return response([
-                    'errors' => ['Error sending playlists to Moodle'],
-                ], 500);
             }
-            
+
+            return response([
+                'errors' => ['Error sending playlists to Moodle'],
+            ], 500);
         }
     }
 
@@ -95,7 +93,7 @@ class PublishController extends Controller
      * @urlParam  playlist required The ID of the playlist.
      * @bodyParam  setting_id int The id of the LMS setting.
      * @bodyParam  counter int The counter for uniqueness of the title
-     * 
+     *
      * @responseFile  responses/playlisttocanvas.post.json
      * @response  400 {
      *  "errors": "Invalid project or playlist Id."
@@ -106,10 +104,10 @@ class PublishController extends Controller
      * @response  500 {
      *  "errors": "Error sending playlists to canvas."
      * }
-     * 
-     * @param Project $project The project model object
-     * @param Playlist $playlist The playlist model object
-     * @param PublishPlaylistRequest $publishRequest The request object
+     *
+     * @param Project $project
+     * @param Playlist $playlist
+     * @param PublishPlaylistRequest $publishRequest
      * @return Response
      */
     public function playlistToCanvas(Project $project, Playlist $playlist, PublishPlaylistRequest $publishRequest)
@@ -129,8 +127,8 @@ class PublishController extends Controller
             $canvasPlaylist = new CanvasPlaylist($canvasClient);
             $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
             $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter]);
-            
-            if ($outcome) {            
+
+            if ($outcome) {
                 return response([
                     'playlist' => $outcome,
                 ], 200);

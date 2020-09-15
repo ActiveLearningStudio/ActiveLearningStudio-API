@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Resources\V1;
+namespace App\Http\Resources\V1\Admin;
 
-use App\Http\Resources\V1\ProjectUserResource;
+use App\Http\Resources\V1\Admin\ProjectUserResource;
 use App\Http\Resources\V1\ProjectPlaylistResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,7 +24,10 @@ class ProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
+            'users' => ProjectUserResource::collection($this->whenLoaded('users')),
+            'playlists' => ProjectPlaylistResource::collection($this->whenLoaded('playlists')),
             'is_public' => $this->is_public,
+            'elasticsearch' => $this->elasticsearch,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

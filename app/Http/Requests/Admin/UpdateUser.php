@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GCCopyProjectRequest extends FormRequest
+class UpdateUser extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,10 @@ class GCCopyProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => 'sometimes|integer'
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email'=> 'required|email',
+            'password'=>'sometimes|required|min:8'
         ];
     }
 }

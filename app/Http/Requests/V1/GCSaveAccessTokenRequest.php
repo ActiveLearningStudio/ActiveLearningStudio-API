@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\CurrikiGo;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FetchCourseRequest extends FormRequest
+class GCSaveAccessTokenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class FetchCourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'setting_id' => 'required',
+            'access_token' => 'required'
         ];
     }
 }

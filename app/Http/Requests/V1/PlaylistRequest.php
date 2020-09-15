@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\CurrikiGo;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PublishPlaylistRequest extends FormRequest
+class PlaylistRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class PublishPlaylistRequest extends FormRequest
     public function rules()
     {
         return [
-            'setting_id' => 'required',
-            'counter' => 'sometimes|integer'
+            'title' => 'required|string|max:255',
+            'order' => 'integer',
         ];
     }
 }

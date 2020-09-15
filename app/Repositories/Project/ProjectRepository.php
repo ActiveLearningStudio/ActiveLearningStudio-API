@@ -52,8 +52,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @return type
      */
     public function clone(Request $request, Project $project)
-    {   
-        $authenticated_user = auth()->user();
+    {
+        // request has is implemented to support other than auth users
+        $authenticated_user = $request->has('clone_user') ? $request->clone_user :auth()->user();
         $token = $request->bearerToken();
         $new_image_url = config('app.default_thumb_url');
         $source_file = storage_path("app/public/".(str_replace('/storage/','',$project->thumb_url)));
@@ -62,7 +63,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $new_image_name = uniqid() . '.' . $ext;
             ob_start();
             $destination_file = str_replace("uploads","projects",str_replace(basename($project->thumb_url),$new_image_name,$source_file));
-            
             \File::copy($source_file, $destination_file);
             ob_get_clean();
             $new_image_url = "/storage/projects/" . $new_image_name;
@@ -74,7 +74,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             'thumb_url' => $new_image_url,
             'shared' => $project->shared,
             'starter_project' => $project->starter_project,
-            'is_public' => $project->is_public,
         ];
 
         $clonned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
@@ -181,24 +180,21 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $plist['title'] = $playlist['title'];
             $plist['activities'] = [];
 
-            foreach ($playlist['activities'] as $act) {
-                $activity = \DB::table('h5p_contents')
-                    ->select(['h5p_contents.title', 'h5p_libraries.name'])
-                    ->where(['h5p_contents.id' => $act->h5p_content_id])
+            foreach ($playlist['activities'] as $activity) {
+                $h5pContent = \DB::table('h5p_contents')
+                    ->select(['h5p_contents.title', 'h5p_libraries.name as library_name'])
+                    ->where(['h5p_contents.id' => $activity->h5p_content_id])
                     ->join('h5p_libraries', 'h5p_contents.library_id', '=', 'h5p_libraries.id')->first();
-                if ($activity == null) {
-                    continue;
-                }
+
                 $plistActivity = [];
-                $plistActivity['id'] = $act['id'];
-                $plistActivity['type'] = $act['type'];
+                $plistActivity['id'] = $activity->id;
+                $plistActivity['type'] = $activity->type;
                 $plistActivity['title'] = $activity->title;
-                $plistActivity['library_name'] = $activity->name;
-                $plistActivity['thumb_url'] = $act->thumb_url;
+                $plistActivity['library_name'] = $h5pContent ? $h5pContent->library_name : null;
+                $plistActivity['thumb_url'] = $activity->thumb_url;
                 $plist['activities'][] = $plistActivity;
             }
             $proj["playlists"][] = $plist;
-
         }
 
         return $proj;

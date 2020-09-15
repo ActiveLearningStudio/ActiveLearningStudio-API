@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProjectResource;
 use App\Models\Project;
+use App\Http\Requests\V1\ProjectRequest;
+use App\Http\Requests\V1\ProjectEditRequest;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -90,7 +92,7 @@ class ProjectController extends Controller
     public function uploadThumb(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image',
+            'thumb' => 'required|image|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -109,17 +111,12 @@ class ProjectController extends Controller
     /**
      * Store a newly created project in storage.
      *
-     * @param Request $request
+     * @param ProjectRequest $projectRequest
      * @return Response
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $projectRequest)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'thumb_url' => 'required',
-            'is_public' => 'required',
-        ]);
+        $data = $projectRequest->validated();
 
         $authenticated_user = auth()->user();
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
@@ -218,17 +215,15 @@ class ProjectController extends Controller
     /**
      * Update the specified project in storage.
      *
-     * @param Request $request
+     * @param ProjectEditRequest $projectEditRequest
      * @param Project $project
      * @return Response
      */
-    public function update(Request $request, Project $project)
+    public function update(ProjectEditRequest $projectEditRequest, Project $project)
     {
-        $is_updated = $this->projectRepository->update($request->only([
-            'name',
-            'description',
-            'thumb_url'
-        ]), $project->id);
+        $data = $projectEditRequest->validated();
+
+        $is_updated = $this->projectRepository->update($data, $project->id);
 
         if ($is_updated) {
             return response([
