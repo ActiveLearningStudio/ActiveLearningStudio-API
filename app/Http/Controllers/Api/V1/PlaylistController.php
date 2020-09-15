@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Http\Requests\V1\PlaylistRequest;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Repositories\Activity\ActivityRepositoryInterface;
 
 class PlaylistController extends Controller
 {
@@ -37,6 +39,7 @@ class PlaylistController extends Controller
      *
      * @param Project $project
      * @return Response
+     * @throws AuthorizationException
      */
     public function index(Project $project)
     {
@@ -50,18 +53,16 @@ class PlaylistController extends Controller
     /**
      * Store a newly created playlist in storage.
      *
-     * @param Request $request
+     * @param PlaylistRequest $playlistRequest
      * @param Project $project
      * @return Response
+     * @throws AuthorizationException
      */
-    public function store(Request $request, Project $project)
+    public function store(PlaylistRequest $playlistRequest, Project $project)
     {
         $this->authorize('view', $project);
 
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
-
+        $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
         $data['is_public'] = $project->is_public;
 
@@ -101,11 +102,10 @@ class PlaylistController extends Controller
     /**
      * Display the specified playlist.
      *
-     * @param Project $project
      * @param Playlist $playlist
      * @return Response
      */
-    public function loadShared(Project $project, Playlist $playlist)
+    public function loadShared(Playlist $playlist)
     {
         if (!$playlist->project->shared) {
             return response([
@@ -150,24 +150,21 @@ class PlaylistController extends Controller
     /**
      * Update the specified playlist in storage.
      *
-     * @param Request $request
+     * @param PlaylistRequest $playlistRequest
      * @param Project $project
      * @param Playlist $playlist
      * @return Response
      */
-    public function update(Request $request, Project $project, Playlist $playlist)
+    public function update(PlaylistRequest $playlistRequest, Project $project, Playlist $playlist)
     {
-
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
             ], 400);
         }
 
-        $is_updated = $this->playlistRepository->update($request->only([
-            'title',
-            'order',
-        ]), $playlist->id);
+        $data = $playlistRequest->validated();
+        $is_updated = $this->playlistRepository->update($data, $playlist->id);
 
         if ($is_updated) {
             return response([
@@ -207,6 +204,7 @@ class PlaylistController extends Controller
             'errors' => ['Failed to delete playlist.'],
         ], 500);
     }
+
     /**
      * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
      * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
@@ -222,12 +220,12 @@ class PlaylistController extends Controller
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
-
         if (!$playlist->is_public) {
             return response([
-                'errors' => ['Not a Public Playlist.'],
+                'errors' => ['Not a public Playlist.'],
             ], 500);
         }
+
         $this->playlistRepository->clone($request, $project, $playlist);
 
         return response([

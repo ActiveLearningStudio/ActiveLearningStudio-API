@@ -16,23 +16,23 @@ class GoogleClassroom implements GoogleClassroomInterface
 {
     /**
      * Google Classroom Serivce object
-     * 
+     *
      * @var \Google_Service_Classroom
      */
     protected $service;
 
     /**
-     * Creates an instance of the class 
-     * 
+     * Creates an instance of the class
+     *
      * @return void
      */
-    function __construct() 
+    function __construct()
     {
         $client = new \Google_Client();
         $client->setApplicationName(config('google.gapi_application_name'));
         $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS]);
         $credentials = config('google.gapi_class_credentials');
-        
+
         $client->setAuthConfig(json_decode($credentials, true));
         // $client->setAuthConfig(public_path().'/googleapi/credentials.json');
         $client->setAccessType('offline');
@@ -43,7 +43,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             $accessToken = json_decode(auth()->user()->gapi_access_token, true);
             $client->setAccessToken($accessToken);
         }
-        
+
         if ($client->isAccessTokenExpired()) {
             // Refresh the token if possible, else fetch a new one.
             if ($client->getRefreshToken()) {
@@ -56,11 +56,11 @@ class GoogleClassroom implements GoogleClassroomInterface
                 // printf("Open the following link in your browser:\n%s\n", $authUrl);
                 // print 'Enter verification code: ';
                 $authCode = $_GET['code'];
-    
+
                 // Exchange authorization code for an access token.
                 $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
                 $client->setAccessToken($accessToken);
-    
+
                 // Check to see if there was an error.
                 if (array_key_exists('error', $accessToken)) {
                     throw new Exception(join(', ', $accessToken));
@@ -77,7 +77,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Get Google Client object
-     * 
+     *
      * @return \Google_Client
      */
     public function getClient()
@@ -87,7 +87,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Get Google Classroom courses
-     * 
+     *
      * @param array $params
      * @return array
      */
@@ -103,12 +103,12 @@ class GoogleClassroom implements GoogleClassroomInterface
             $pageToken = $response->nextPageToken;
         } while (!empty($pageToken));
 
-        return $courses; 
+        return $courses;
     }
 
     /**
      * Get a course by id
-     * 
+     *
      * @param int $courseId
      * @return \Google_Service_Classroom_Course
      */
@@ -119,7 +119,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Create a course in Google Classroom
-     * 
+     *
      * @param array $data The course data
      * @return \Google_Service_Classroom_Course
      */
@@ -131,7 +131,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Create a topic in Google Classroom
-     * 
+     *
      * @param array $data The topic data
      * @return \Google_Service_Classroom_Topic
      */
@@ -143,7 +143,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Create a course work in Google Classroom
-     * 
+     *
      * @param array $data The course work data
      * @return \Google_Service_Classroom_CourseWork
      */
@@ -166,7 +166,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Get Topics by course id
-     * 
+     *
      * @param int $courseId The id of the course
      * @return array
      */
@@ -182,12 +182,12 @@ class GoogleClassroom implements GoogleClassroomInterface
             $pageToken = $response->nextPageToken;
         } while (!empty($pageToken));
 
-        return $topics; 
+        return $topics;
     }
 
     /**
      * Get or Create a topic in a course.
-     * 
+     *
      * @param array $data
      * @return \Google_Service_Classroom_Topic
      */
@@ -211,15 +211,15 @@ class GoogleClassroom implements GoogleClassroomInterface
      * Get whole project as a course in Google Classroom
      * It will create playlists as topics, and activities as assignments.
      * If a course already exists, then playlists and activities will be created in that.
-     * 
-     * @param Project $project The project model object
+     *
+     * @param Project $project
      * @param int|null $courseId The id of the course
      * @return array
      */
     public function createProjectAsCourse(Project $project, $courseId = null) {
         $frontURL = $this->getFrontURL();
         $return = [];
-        // If course already exists 
+        // If course already exists
         $course = NULL;
         if ($courseId) {
             $course = $this->getCourse($courseId);
@@ -234,9 +234,9 @@ class GoogleClassroom implements GoogleClassroomInterface
             ];
             $course = $this->createCourse($courseData);
         }
-        
+
         $return = GCCourseResource::make($course)->resolve();
-        
+
         // inserting playlists/topics to Classroom
         $playlists = $project->playlists;
         $count = 0;
@@ -288,23 +288,23 @@ class GoogleClassroom implements GoogleClassroomInterface
                     'activity_id' => $activity->id,
                     'activity_title' => $activity->title,
                     'activity_link' => $frontURL . '/activity/' . $activity->id . '/shared'
-                ];        
+                ];
                 $courseWork = $this->createCourseWork($courseWorkData);
-                
+
                 $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
                 $courseWorkCount++;
             }
             $count++;
         }
-        
+
         return $return;
     }
 
     /**
      * Determine front URL of the application.
-     * 
+     *
      * @todo Move it to a helper class.
-     * 
+     *
      * @return string
      */
     private function getFrontURL() {

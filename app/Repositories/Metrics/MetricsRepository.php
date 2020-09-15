@@ -24,26 +24,36 @@ class MetricsRepository implements MetricsRepositoryInterface
         $projectIds = $user->projects()->pluck('id');
         $playlistIds = Playlist::whereIn('project_id', $projectIds)->pluck('id');
         $activityIds = Activity::whereIn('playlist_id', $playlistIds)->pluck('id');
+
         $activityViewsSum = ActivityMetric::whereIn('activity_id', $activityIds)->sum('view_count');
-        $activitySharesSum = ActivityMetric::whereIn('activity_id', $activityIds)->sum('share_count');
-
         $playlistViewsSum = PlaylistMetric::whereIn('playlist_id', $playlistIds)->sum('view_count');
-        $playlistSharesSum = PlaylistMetric::whereIn('playlist_id', $playlistIds)->sum('share_count');
-
         $projectViewsSum = ProjectMetric::whereIn('project_id', $projectIds)->sum('view_count');
-        $projectSharesSum = ProjectMetric::whereIn('project_id', $projectIds)->sum('share_count');
+        
+        // These sums are meant for a different way of accounting for "shares" where we count separately each share to each different platform
+        // But right now we're only counting whether a project/playlist/activity has been shared or not, not how many platforms it has
+        // been shared to.
+        //$activitySharesSum = ActivityMetric::whereIn('activity_id', $activityIds)->sum('share_count');
+        //$playlistSharesSum = PlaylistMetric::whereIn('playlist_id', $playlistIds)->sum('share_count');
+        //$projectSharesSum = ProjectMetric::whereIn('project_id', $projectIds)->sum('share_count');
+
+        // Playlists don't have a shared column so I need to fetch all the shared projects (not just count them) in order to 
+        // count the shared playlists
+        $sharedProjectsIds = $user->projects()->where('shared', true)->pluck('id');
+        $sharedProjectsCount = count($sharedProjectsIds);
+        $sharedPlaylistsCount = Playlist::whereIn('project_id', $sharedProjectsIds)->count();
+        $sharedActivitiesCount = Activity::whereIn('playlist_id', $playlistIds)->where('shared', true)->count();
 
         return [
             'project_count' => $projectIds->count(),
-            'project_shares' => intval($projectSharesSum),
+            'project_shares' => intval($sharedProjectsCount),
             'project_views' => intval($projectViewsSum),
 
             'playlist_count' => $playlistIds->count(),
-            'playlist_shares' => intval($playlistSharesSum),
+            'playlist_shares' => intval($sharedPlaylistsCount),
             'playlist_views' => intval($playlistViewsSum),
 
             'activity_count' => $activityIds->count(),
-            'activity_shares' => intval($activitySharesSum),
+            'activity_shares' => intval($sharedActivitiesCount),
             'activity_views' => intval($activityViewsSum),
         ];
     }

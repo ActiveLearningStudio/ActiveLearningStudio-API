@@ -7,8 +7,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GCCopyProjectRequest;
-use App\Http\Requests\GCSaveAccessTokenRequest;
+use App\Http\Requests\V1\GCCopyProjectRequest;
+use App\Http\Requests\V1\GCSaveAccessTokenRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\GCCourseResource;
 use App\Models\Project;
@@ -139,8 +139,8 @@ class GoogleClassroomController extends Controller
      *  "errors": "Failed to save the token."
      * }
      *
-     * @param \App\Models\Project $project
-     * @param \App\Http\Requests\GCCopyProjectRequest $copyProjectRequest
+     * @param Project $project
+     * @param GCCopyProjectRequest $copyProjectRequest
      * @return Response
 	 */
     public function copyProject(Project $project, GCCopyProjectRequest $copyProjectRequest)

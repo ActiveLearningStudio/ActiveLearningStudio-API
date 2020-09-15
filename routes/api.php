@@ -35,6 +35,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::post('users/update-password', 'UserController@updatePassword');
+        // Membership
+        Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer');
+
         Route::apiResource('users', 'UserController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
@@ -72,7 +75,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::group(['prefix' => 'h5p'], function () {
             Route::resource('/', "H5pController");
             Route::get('settings', "H5pController@create");
-            Route::get('embed/{id}', "H5pController@embed");
             Route::get('activity/{activity}', "H5pController@showByActivity");
             //H5P Ajax calls
             Route::match(['GET', 'POST'], 'ajax/libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraries')->name("h5p.ajax.libraries");
@@ -121,6 +123,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name("h5p.ajax.files");
     //H5P export public route for H5P toolbar and cloning
     Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
+    //H5P embed
+    Route::get('h5p/embed/{id}', "H5pController@embed");
     //Public route used for LTI previews
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     //LTI Playlist

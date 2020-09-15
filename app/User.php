@@ -63,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @param $password
      */
-    public function setPasswordAttribute($password): void
+    public function setPasswordAttribute($password) : void
     {
         // If password was accidentally passed in already hashed, try not to double hash it
         if (
@@ -82,18 +82,17 @@ class User extends Authenticatable implements MustVerifyEmail
      * Combine first and last name for Name column
      * @param $name
      */
-    public function setNameAttribute($name): void
+    public function setNameAttribute($name) : void
     {
-        $this->attributes['name'] = $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
+        $this->attributes['name'] = $this->attributes['first_name'].' '.$this->attributes['last_name'];
     }
 
     /**
      * @param $name
      * @return mixed
      */
-    public function getNameAttribute($name)
-    {
-        if (!$name || empty($name)) {
+    public function getNameAttribute($name){
+        if (! $name || empty($name)){
             return "{$this->first_name} {$this->last_name}";
         }
         return $name;

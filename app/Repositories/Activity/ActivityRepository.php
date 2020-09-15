@@ -255,8 +255,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'thumb_url' => $new_thumb_url,
             'subject_id' => $activity->subject_id,
             'education_level_id' => $activity->education_level_id,
-            'is_public' => $activity->is_public,
-            'elasticsearch' => $activity->elasticsearch,
             'shared' => $activity->shared,
         ];
 

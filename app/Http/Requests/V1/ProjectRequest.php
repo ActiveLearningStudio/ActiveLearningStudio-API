@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\CurrikiGo;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FetchCourseRequest extends FormRequest
+class ProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,10 @@ class FetchCourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'setting_id' => 'required',
+            'name' => 'required|string|max:80',
+            'description' => 'required|string|max:1000',
+            'thumb_url' => 'required',
+            'is_public' => 'required',
         ];
     }
 }

@@ -63,7 +63,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $new_image_name = uniqid() . '.' . $ext;
             ob_start();
             $destination_file = str_replace("uploads","projects",str_replace(basename($project->thumb_url),$new_image_name,$source_file));
-
             \File::copy($source_file, $destination_file);
             ob_get_clean();
             $new_image_url = "/storage/projects/" . $new_image_name;
@@ -75,7 +74,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             'thumb_url' => $new_image_url,
             'shared' => $project->shared,
             'starter_project' => $project->starter_project,
-            'is_public' => $project->is_public,
         ];
 
         $clonned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
