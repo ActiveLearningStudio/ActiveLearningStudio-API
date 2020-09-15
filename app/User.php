@@ -63,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @param $password
      */
-    public function setPasswordAttribute($password) : void
+    public function setPasswordAttribute($password): void
     {
         // If password was accidentally passed in already hashed, try not to double hash it
         if (
@@ -82,17 +82,18 @@ class User extends Authenticatable implements MustVerifyEmail
      * Combine first and last name for Name column
      * @param $name
      */
-    public function setNameAttribute($name) : void
+    public function setNameAttribute($name): void
     {
-        $this->attributes['name'] = $this->attributes['first_name'].' '.$this->attributes['last_name'];
+        $this->attributes['name'] = $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
     }
 
     /**
      * @param $name
      * @return mixed
      */
-    public function getNameAttribute($name){
-        if (! $name || empty($name)){
+    public function getNameAttribute($name)
+    {
+        if (!$name || empty($name)) {
             return "{$this->first_name} {$this->last_name}";
         }
         return $name;
@@ -153,5 +154,36 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new MailResetPasswordNotification($token));
+    }
+
+    /**
+     * @param $query
+     * @param $value
+     * @return mixed
+     * Scope for combine first and last name search
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->orWhereRaw("CONCAT(first_name,' ',last_name) ILIKE '%" . $value . "%'");
+    }
+
+    /**
+     * @param $query
+     * @param $columns
+     * @param $value
+     * @return mixed
+     * Scope for searching in specific columns
+     */
+    public function scopeSearch($query, $columns, $value)
+    {
+        foreach ($columns as $column) {
+            // no need to perform search if searchable is false
+            if (isset($column['searchable']) && $column['searchable'] === 'false') {
+                continue;
+            }
+            $column = $column['name'] ?? $column;
+            $query->orWhere($column, 'ILIKE', '%' . $value . '%');
+        }
+        return $query;
     }
 }

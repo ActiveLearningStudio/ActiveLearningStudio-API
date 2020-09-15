@@ -159,4 +159,10 @@ class ProjectRepository extends BaseRepository
         $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->searchable();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getStarterProjects(){
+        return $this->model->where('starter_project', true)->get();
+    }
 }
