@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
-use App\Http\Resources\V1\ProjectPlaylistResource;
+use App\Http\Resources\V1\ProjectPlaylistOnlyResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,7 +24,7 @@ class ProjectDetailResource extends JsonResource
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
             'is_public' => $this->is_public,
-            'playlists' => ProjectPlaylistResource::collection($this->playlists),
+            'playlists' => ProjectPlaylistOnlyResource::collection($this->playlists),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
