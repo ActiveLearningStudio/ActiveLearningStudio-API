@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProjectResource;
-use App\Http\Resources\V1\ProjectDetailedResource;
+use App\Http\Resources\V1\ProjectDetailResource;
 use App\Models\Project;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectEditRequest;
@@ -57,18 +57,18 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function listDetailed()
+    public function detail()
     {
         $authenticated_user = auth()->user();
 
         if ($authenticated_user->isAdmin()) {
             return response([
-                'projects' => ProjectDetailedResource::collection($this->projectRepository->all()),
+                'projects' => ProjectDetailResource::collection($this->projectRepository->all()),
             ], 200);
         }
 
         return response([
-            'projects' => ProjectDetailedResource::collection($authenticated_user->projects),
+            'projects' => ProjectDetailResource::collection($authenticated_user->projects),
         ], 200);
     }
 
