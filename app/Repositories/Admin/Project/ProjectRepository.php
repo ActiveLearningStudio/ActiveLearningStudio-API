@@ -124,7 +124,7 @@ class ProjectRepository extends BaseRepository
 
         // elasticsearch set false for projects and related models
         $this->model->whereIn('id', $user_all_projects)->update(['elasticsearch' => false]);
-        $playlists->toQuery()->update(['elasticsearch' => false]);
+        $this->playlistModel->whereIn('project_id', $user_all_projects)->update(['elasticsearch' => false]);
         $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->update(['elasticsearch' => false]);
 
         // scout searchable update the indexes
@@ -151,7 +151,7 @@ class ProjectRepository extends BaseRepository
         $playlists = $this->playlistModel->whereIn('project_id', $projects)->get('id');
 
         // prepare the query builder from collections and perform update
-        $playlists->toQuery()->update(['elasticsearch' => true]);
+        $this->playlistModel->whereIn('project_id', $projects)->update(['elasticsearch' => true]);
         $this->playlistModel->whereIn('project_id', $projects)->searchable();
 
         // update related activities by getting keys of parent playlists

@@ -14,6 +14,17 @@ class LmsSettingResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'lms_url' => $this->lms_url,
+            'lms_access_token' => $this->lms_access_token,
+            'site_name' => $this->site_name,
+            'lms_name' => $this->lms_name,
+            'lms_access_key' => $this->lms_access_key,
+            'lms_access_secret' => $this->lms_access_secret,
+            'description' => $this->description,
+            'user_id' => $this->user_id,
+            'user' =>  new UserResource($this->user),
+        ];
     }
 }
