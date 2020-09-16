@@ -15,6 +15,7 @@ class AlterUsersTableNullableCols extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('organization_name')->nullable()->change();
+            $table->string('job_title')->nullable()->change();
         });
     }
 
@@ -27,6 +28,7 @@ class AlterUsersTableNullableCols extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('organization_name')->change();
+            $table->string('job_title')->change();
         });
     }
 }
