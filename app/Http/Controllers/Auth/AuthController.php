@@ -46,7 +46,7 @@ class AuthController extends Controller
             event(new Registered($user));
 
             return response([
-                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio! \r\nCheck your email and follow the instructions to verify your account!"
+                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"
             ], 201);
         }
 
