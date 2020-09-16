@@ -29,7 +29,7 @@ class RegisterRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => ['required', 'string', new StrongPassword],
-            'organization_name' => 'string|min:2|max:50',
+            'organization_name' => 'string|max:50',
             'job_title' => 'string|max:255',
         ];
     }
