@@ -87,7 +87,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         foreach ($playlists as $playlist) {
             $play_list_data = ['title' => $playlist->title,
                 'order' => $playlist->order,
-                'is_public' => $playlist->is_public
+                // is_public will always be FALSE when cloning, so we don't need to cascade it.
+                // 'is_public' => $playlist->is_public
             ];
             $cloned_playlist = $clonned_project->playlists()->create($play_list_data);
 
@@ -119,8 +120,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     'thumb_url' => $new_thumb_url,
                     'subject_id' => $activity->subject_id,
                     'education_level_id' => $activity->education_level_id,
-                    'is_public' => $activity->is_public,
-                    'elasticsearch' => $activity->elasticsearch,
+                    // is_public & elasticsearch will always be FALSE when cloning, so we don't need to cascade it.
+                    // 'is_public' => $activity->is_public,
+                    // 'elasticsearch' => $activity->elasticsearch,
                     'shared' => $activity->shared,
                 ];
 
