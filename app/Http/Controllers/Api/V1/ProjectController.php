@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\V1\H5pController;
 
+/**
+ * @group Project management
+ *
+ * APIs for managing projects
+ */
 class ProjectController extends Controller
 {
 
@@ -155,6 +160,8 @@ class ProjectController extends Controller
 
     /**
      * Display the specified project.
+     *
+     * @queryParam projectId required This is id of a project.
      *
      * @param Project $project
      * @return Response
