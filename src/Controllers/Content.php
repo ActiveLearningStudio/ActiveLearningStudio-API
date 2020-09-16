@@ -118,7 +118,10 @@ class Content implements ControllerInterface
         $entity = U::get($_GET, "entity");
         $custom = $id ? [$entity => $id] : null;
         $path = $this->tool['url'] . '?'.$entity.'='.$id;
-        
+        $playlist =  U::get($_GET, "playlist");
+        if ($playlist) {
+            $path .= "&playlist=$playlist";
+        }
         $retval->addLtiLinkItem($path, $title, $text, $icon, $fa_icon, $custom, $points, $activity_id, $additionalParams);
 
         $iframeattr=false; $endform=false;
