@@ -179,8 +179,11 @@ class ProjectRepository extends BaseRepository
      */
     public function updateIndex($project): string
     {
-        $project->elasticsearch = ! $project->elasticsearch;
-        $project->save();
+        if ($project->elasticsearch) {
+            $this->de_index_projects([$project->id]);
+        } else {
+            $this->index_projects([$project->id]);
+        }
         return 'Index Status Changed Successfully!';
     }
 }
