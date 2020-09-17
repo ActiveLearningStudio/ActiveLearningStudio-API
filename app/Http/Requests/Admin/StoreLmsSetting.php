@@ -24,14 +24,14 @@ class StoreLmsSetting extends FormRequest
     public function rules()
     {
         return [
-            'lms_url' => 'required|url',
-            'lms_access_token' => 'required|min:20',
-            'site_name' => 'required|string',
+            'lms_url' => 'required|url|max:255',
+            'lms_access_token' => 'required|min:20|max:255',
+            'site_name' => 'required|string|max:255',
             'user_id' => 'required|exists:users,id',
-            'lms_name' => 'nullable|string',
-            'lms_access_key' => 'nullable|string',
-            'lms_access_secret' => 'required_with:lms_access_key',
-            'description' => 'nullable|max:500',
+            'lms_name' => 'nullable|string|max:255',
+            'lms_access_key' => 'nullable|string|max:255',
+            'lms_access_secret' => 'required_with:lms_access_key|max:255',
+            'description' => 'nullable|max:255',
         ];
     }
 }

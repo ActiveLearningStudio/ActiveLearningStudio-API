@@ -9,6 +9,7 @@ use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * Class UserRepository.
@@ -53,7 +54,7 @@ class UserRepository extends BaseRepository
             return $query->search(request()->columns, request()->search['value']);
         })->when(request()->q, function ($query) {
             $query->search(['email', 'name'], request()->q);
-            $query->name( request()->q );
+            $query->name(request()->q);
             return $query;
         })->paginate($length);
     }
@@ -66,6 +67,8 @@ class UserRepository extends BaseRepository
     public function createUser($data)
     {
         try {
+            $data['remember_token'] = Str::random(64);
+            $data['email_verified_at'] = now();
             $user = $this->model->create($data);
 //            $this->dispatch((new AssignStarterProjects($user))); For now - not needed
             return $user;
