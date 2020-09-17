@@ -39,14 +39,18 @@ class AuthController extends Controller
 
         $data['password'] = Hash::make($data['password']);
         $data['remember_token'] = Str::random(64);
+        $data['email_verified_at'] = now();
 
         $user = $this->userRepository->create($data);
 
         if ($user) {
-            event(new Registered($user));
-
+//            event(new Registered($user));
+//
+//            return response([
+//                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"
+//            ], 201);
             return response([
-                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"
+                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
             ], 201);
         }
 
