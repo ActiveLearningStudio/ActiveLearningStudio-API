@@ -113,7 +113,7 @@ class ProjectController extends Controller
     public function uploadThumb(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image|max:1024',
+            'thumb' => 'required|image|max:102400',
         ]);
 
         if ($validator->fails()) {
