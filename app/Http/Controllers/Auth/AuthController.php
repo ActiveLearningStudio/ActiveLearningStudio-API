@@ -109,13 +109,12 @@ class AuthController extends Controller
                 $password = Str::random(10);
                 $user = $this->userRepository->create([
                     'first_name' => $result['name'],
-                    'last_name' => '',
+                    'last_name' => ' ',
                     'email' => $result['email'],
                     'password' => Hash::make($password),
                     'temp_password' => $password,
                     'remember_token' => Str::random(64),
-                    'organization_name' => ' ',
-                    'job_title' => ' ',
+                    'email_verified_at' => now(),
                 ]);
             }
             $user->gapi_access_token = $request->tokenObj;
