@@ -52,8 +52,14 @@ class ProjectRepository extends BaseRepository
      */
     public function getProjects()
     {
-        return $this->model->when(request()->q, function ($query) {
-            return $query->where('name', 'ILIKE', '%' . request()->q . '%');
+        $q = request()->q;
+        return $this->model->when($q, function ($query) use ($q) {
+            $query->whereHas('users', function ($query) use ($q) {
+                return $query->where('email', 'ILIKE', '%' . $q . '%');
+            });
+            return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
+        })->when(request()->users, function ($query) {
+            return $query->with('users');
         })->where('is_public', true)->orderBy('created_at', 'desc')->paginate(100);
     }
 
@@ -112,7 +118,6 @@ class ProjectRepository extends BaseRepository
      * @param array $projects
      * De Indexing of the projects
      * @param string $user_id
-     * @throws GeneralException
      */
     public function de_index_projects($projects = [], $user_id = ''): void
     {
@@ -162,7 +167,19 @@ class ProjectRepository extends BaseRepository
     /**
      * @return mixed
      */
-    public function getStarterProjects(){
+    public function getStarterProjects()
+    {
         return $this->model->where('starter_project', true)->get();
+    }
+
+    /**
+     * Update Indexes for projects and related models
+     * @param $project
+     * @return string
+     */
+    public function updateIndex($project): string
+    {
+        $project->update(['elasticsearch' => \DB::raw('NOT elasticsearch')]);
+        return 'Index Status Changed Successfully!';
     }
 }
