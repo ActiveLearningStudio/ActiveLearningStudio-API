@@ -14,7 +14,9 @@ class ChangeDefaultMembershipTypeIdInUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedTinyInteger('membership_type_id')->default(2)->change();  // default to free membership as demo will be deprecated
+            // Changing to smallint because doctrine crashes when trying to change the tinyint column
+            // https://github.com/laravel/framework/issues/8840
+            $table->smallInteger('membership_type_id')->unsigned()->default(2)->change(); // default to free membership as demo will be deprecated
         });
     }
 
