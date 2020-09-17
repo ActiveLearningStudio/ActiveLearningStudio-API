@@ -138,7 +138,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::resource('users', 'UserController');
         // projects
         Route::resource('projects', 'ProjectController');
-        Route::post('projects/indexes/{id}', 'ProjectController@updateIndexes');
+        Route::post('projects/indexes/{id}', 'ProjectController@updateIndexes'); // id param is for user_id
+        Route::get('projects/{project}/index', 'ProjectController@updateIndex');
+        Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
         // lms-settings
         Route::resource('lms-settings', 'LmsSettingController');
     });

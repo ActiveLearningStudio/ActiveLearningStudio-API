@@ -168,6 +168,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $proj["name"] = $project['name'];
         $proj["thumb_url"] = $project['thumb_url'];
         $proj["updated_at"] = $project['updated_at'];
+        $proj["elasticsearch"] = $project['elasticsearch'];
         $proj["shared"] = isset($project['shared']) ? $project['shared'] : false;
 
         $proj["playlists"] = [];
