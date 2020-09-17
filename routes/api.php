@@ -139,5 +139,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // projects
         Route::resource('projects', 'ProjectController');
         Route::post('projects/indexes/{id}', 'ProjectController@updateIndexes');
+        // lms-settings
+        Route::resource('lms-settings', 'LmsSettingController');
     });
 });

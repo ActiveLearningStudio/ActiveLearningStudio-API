@@ -67,7 +67,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             ob_get_clean();
             $new_image_url = "/storage/projects/" . $new_image_name;
 
-        } 
+        }
         $data = [
             'name' => $project->name,
             'description' => $project->description,
@@ -82,7 +82,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'errors' => ['Could not create project. Please try again later.'],
             ], 500);
         }
-        
+
         $playlists = $project->playlists;
         foreach ($playlists as $playlist) {
             $play_list_data = ['title' => $playlist->title,

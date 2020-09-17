@@ -154,4 +154,35 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new MailResetPasswordNotification($token));
     }
+
+    /**
+     * @param $query
+     * @param $value
+     * @return mixed
+     * Scope for combine first and last name search
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->orWhereRaw("CONCAT(first_name,' ',last_name) ILIKE '%" . $value . "%'");
+    }
+
+    /**
+     * @param $query
+     * @param $columns
+     * @param $value
+     * @return mixed
+     * Scope for searching in specific columns
+     */
+    public function scopeSearch($query, $columns, $value)
+    {
+        foreach ($columns as $column) {
+            // no need to perform search if searchable is false
+            if (isset($column['searchable']) && $column['searchable'] === 'false') {
+                continue;
+            }
+            $column = $column['name'] ?? $column;
+            $query->orWhere($column, 'ILIKE', '%' . $value . '%');
+        }
+        return $query;
+    }
 }
