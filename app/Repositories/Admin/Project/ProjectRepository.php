@@ -179,7 +179,8 @@ class ProjectRepository extends BaseRepository
      */
     public function updateIndex($project): string
     {
-        $project->update(['elasticsearch' => \DB::raw('NOT elasticsearch')]);
+        $project->elasticsearch = ! $project->elasticsearch;
+        $project->save();
         return 'Index Status Changed Successfully!';
     }
 }
