@@ -42,6 +42,7 @@ class UserController extends Controller
     /**
      * @param $id
      * @return UserResource
+     * @throws GeneralException
      */
     public function edit($id)
     {
@@ -61,7 +62,8 @@ class UserController extends Controller
     }
 
     /**
-     * @param StoreUser $request
+     * @param UpdateUser $request
+     * @param $id
      * @return UserResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */

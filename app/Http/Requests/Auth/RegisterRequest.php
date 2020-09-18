@@ -29,8 +29,8 @@ class RegisterRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => ['required', 'string', new StrongPassword],
-            'organization_name' => 'string|max:50',
-            'job_title' => 'string|max:255',
+            'organization_name' => 'nullable|string|max:50',
+            'job_title' => 'nullable|string|max:255',
         ];
     }
 }
