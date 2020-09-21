@@ -24,23 +24,12 @@ class ActivityTypeRepository extends BaseRepository
     }
 
     /**
-     * @param int $start
-     * @param int $length
+     * @param $data
      * @return mixed
      */
-    public function getAll($start = 0, $length = 25)
+    public function getAll($data)
     {
-        // calculate page size if not present in request
-        if (!request()->has('page')) {
-            $page = empty($length) ? 0 : ($start / $length);
-            request()->request->add(['page' => $page + 1]);
-        }
-        // search through each column and sort by - Needed for datatables calls
-        return $this->model->with('user')->when(isset(request()->order[0]['dir']), function ($query) {
-            return $query->orderBy(request()->columns[request()->order[0]['column']]['name'], request()->order[0]['dir']);
-        })->when(isset(request()->search['value']) && request()->search['value'], function ($query) {
-            return $query->search(request()->columns, request()->search['value']);
-        })->paginate($length);
+        return $this->setDtParams($data)->getDtPaginated(['activityItems']);
     }
 
     /**
@@ -51,8 +40,10 @@ class ActivityTypeRepository extends BaseRepository
     public function create($data)
     {
         try {
-            $setting = $this->model->create($data);
-            return 'Setting created successfully!';
+            // choosing this store path because old data is being read from this path
+            $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
+            $type = $this->model->create($data);
+            return 'Activity Type created successfully!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());
@@ -66,8 +57,12 @@ class ActivityTypeRepository extends BaseRepository
      */
     public function update($id, $data)
     {
-        $setting = $this->find($id)->update($data);
-        return 'Setting data updated!';
+        // choosing this store path because old data is being read from this path
+        if (isset( $data['image'])){
+            $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
+        }
+        $type = $this->find($id)->update($data);
+        return 'Activity Type data updated!';
     }
 
     /**
@@ -76,10 +71,10 @@ class ActivityTypeRepository extends BaseRepository
      */
     public function find($id)
     {
-        if ($setting = $this->model->find($id)) {
-            return $setting;
+        if ($type = $this->model->find($id)) {
+            return $type;
         }
-        throw new GeneralException('Setting Not found.');
+        throw new GeneralException('Activity Type Not found!');
     }
 
     /**
@@ -91,7 +86,7 @@ class ActivityTypeRepository extends BaseRepository
     {
         try {
             $this->model->find($id)->delete();
-            return 'Setting Deleted!';
+            return 'Activity Type Deleted!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());

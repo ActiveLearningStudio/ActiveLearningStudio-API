@@ -143,5 +143,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
         // lms-settings
         Route::resource('lms-settings', 'LmsSettingController');
+        // activity-types
+        Route::resource('activity-types', 'ActivityTypeController');
+        // activity-items
+        Route::resource('activity-items', 'ActivityItemController');
     });
 });

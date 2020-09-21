@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreLmsSetting;
-use App\Http\Resources\V1\Admin\LmsSettingCollection;
-use App\Http\Resources\V1\Admin\LmsSettingResource;
+use App\Http\Resources\V1\ActivityItemResource;
 use App\Repositories\Admin\ActivityItem\ActivityItemRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -30,28 +29,28 @@ class ActivityItemController extends Controller
 
     /**
      * @param Request $request
-     * @return LmsSettingCollection
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request)
     {
-        $collections = ($this->repository->getAll($request->start, $request->length));
-        return new LmsSettingCollection($collections);
+        $collections = $this->repository->getAll($request->all());
+        return ActivityItemResource::collection($collections);
     }
 
     /**
      * @param $id
-     * @return LmsSettingResource
+     * @return ActivityItemResource
      * @throws GeneralException
      */
     public function edit($id)
     {
         $setting = $this->repository->find($id);
-        return new LmsSettingResource($setting->load('user'));
+        return new ActivityItemResource($setting->load('user'));
     }
 
     /**
      * @param StoreLmsSetting $request
-     * @return LmsSettingResource|Application|ResponseFactory|Response
+     * @return ActivityItemResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
     public function store(StoreLmsSetting $request)

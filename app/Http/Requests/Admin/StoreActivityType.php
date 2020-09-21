@@ -24,7 +24,9 @@ class StoreActivityType extends FormRequest
     public function rules()
     {
         return [
-
+            'title' => 'required',
+            'image' => 'image|max:1000',
+            'order'=>'required|integer'
         ];
     }
 }

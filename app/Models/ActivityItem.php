@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\GlobalScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ActivityItem extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, GlobalScope;
 
     /**
      * The attributes that are mass assignable.
