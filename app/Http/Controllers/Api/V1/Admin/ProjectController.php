@@ -56,9 +56,9 @@ class ProjectController extends Controller
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function updateIndexes(Request $request, $id)
+    public function updateIndexes(Request $request)
     {
-        return response(['message' => $this->projectRepository->updateIndexes($request->projects, $id)], 200);
+        return response(['message' => $this->projectRepository->updateIndexes($request->only('index_projects', 'remove_index_projects'))], 200);
     }
 
     /**
@@ -67,7 +67,6 @@ class ProjectController extends Controller
      */
     public function updateIndex(Project $project)
     {
-        \Log::info($project);
         return response(['message' => $this->projectRepository->updateIndex($project)], 200);
     }
 
@@ -77,11 +76,19 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function loadShared(Project $project)
+    public function loadShared(Project $project): Response
     {
         return response([
             'data' => resolve(ProjectRepositoryInterface::class)->getProjectForPreview($project),
         ], 200);
+    }
+
+    /**
+     * @param Project $project
+     * @return Application|ResponseFactory|Response
+     */
+    public function togglePublicStatus(Project $project){
+        return response(['message' => $this->projectRepository->togglePublicStatus($project)], 200);
     }
 
 }
