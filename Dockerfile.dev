@@ -55,21 +55,31 @@ RUN chown -R 1000 /var/www/html
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
+#ENV variables for .env of laravel
+ENV APP_URL=http://localhost:8082/api
+ENV FRONT_END_URL=http://localhost:8082
+ENV DB_CONNECTION=pgsql
+ENV DB_HOST=localhost
+ENV DB_PORT=5432
+ENV DB_DATABASE=postgres
+ENV DB_USERNAME=postgres
+ENV DB_PASSWORD=postgres
+
 #creating env file
 RUN touch .env
 RUN echo "APP_NAME=Curriki" >> .env
 RUN echo "APP_ENV=local" >> .env
 RUN echo "APP_KEY=" >> .env
 RUN echo "APP_DEBUG=true" >> .env
-RUN echo "APP_URL=" >> .env
-RUN echo "FRONT_END_URL=" >> .env
+RUN echo "APP_URL=${APP_URL}" >> .env
+RUN echo "FRONT_END_URL=${FRONT_END_URL}" >> .env
 RUN echo "LOG_CHANNEL=stack" >> .env
-RUN echo "DB_CONNECTION=pgsql" >> .env
-RUN echo "DB_HOST=" >> .env
-RUN echo "DB_PORT=" >> .env
-RUN echo "DB_DATABASE=" >> .env
-RUN echo "DB_USERNAME=" >> .env
-RUN echo "DB_PASSWORD=" >> .env
+RUN echo "DB_CONNECTION=${DB_CONNECTION}" >> .env
+RUN echo "DB_HOST=${DB_HOST}" >> .env
+RUN echo "DB_PORT=${DB_PORT}" >> .env
+RUN echo "DB_DATABASE=${DB_DATABASE}" >> .env
+RUN echo "DB_USERNAME=${DB_USERNAME}" >> .env
+RUN echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
 RUN echo "BROADCAST_DRIVER=log" >> .env
 RUN echo "CACHE_DRIVER=file" >> .env
 RUN echo "QUEUE_CONNECTION=sync" >> .env
