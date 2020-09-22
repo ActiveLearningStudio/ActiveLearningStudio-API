@@ -42,12 +42,14 @@ RUN docker-php-ext-install gd
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 #RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
+WORKDIR /var/www/html
+
 # Copy the PHP configuration file
 COPY ./php.ini /usr/local/etc/php/
 COPY ./* /var/www/html/
 
 #RUN service apache2 restart
 
-WORKDIR /var/www/html
+
 #RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
 #    composer clear-cache
