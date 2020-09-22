@@ -46,7 +46,7 @@ WORKDIR /var/www/html
 
 # Copy the PHP configuration file
 COPY ./php.ini /usr/local/etc/php/
-COPY ./* /var/www/html/
+COPY . /var/www/html/
 
 RUN service apache2 restart
 
