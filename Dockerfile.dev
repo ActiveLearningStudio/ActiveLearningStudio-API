@@ -51,5 +51,5 @@ COPY . /var/www/html/
 RUN service apache2 restart
 
 
-#RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
-#    composer clear-cache
+RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
+    composer clear-cache
