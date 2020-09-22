@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin;
 
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class BaseRepository.
@@ -370,13 +370,15 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function setDtParams($dtParams)
     {
-        $this->dtSearchColumns = $dtParams['columns'];
-        $this->dtOrder = $this->dtSearchColumns[$dtParams['order'][0]['column']]['name'] ?? 'created_at'; // get datatable order column
-        $this->dtOrderDir = $dtParams['order'][0]['dir'];
-        $this->dtSearchValue = $dtParams['search']['value'] ?? null; // set null if no search value present in request
-        $this->dtStart = $dtParams['start'];
-        $this->dtLength = $dtParams['length'];
-        $this->dtPage = ($this->dtStart / $this->dtLength) + 1; // calculate page size
+        if (isset($dtParams['columns'], $dtParams['order'], $dtParams['start'], $dtParams['length'], $dtParams['search'])) {
+            $this->dtSearchColumns = $dtParams['columns'];
+            $this->dtOrder = $this->dtSearchColumns[$dtParams['order'][0]['column']]['name']; // get datatable order column
+            $this->dtOrderDir = $dtParams['order'][0]['dir'];
+            $this->dtSearchValue = $dtParams['search']['value'] ?? null; // set null if no search value present in request
+            $this->dtStart = $dtParams['start'];
+            $this->dtLength = $dtParams['length'];
+            $this->dtPage = ($this->dtStart / $this->dtLength) + 1; // calculate page size
+        }
         return $this;
     }
 
@@ -387,8 +389,13 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function getDtPaginated($with = [])
     {
+        // make sure we've got the right instance of query builder
+        if (!$this->query instanceof Builder) {
+            $this->query = $this->model::query();
+        }
+
         // search through each column and sort by - Needed for datatables calls
-        return $this->model->when($this->dtOrderDir, function ($query) {
+        return $this->query->when($this->dtOrderDir, function ($query) {
             return $query->orderBy($this->dtOrder, $this->dtOrderDir);
         })->when($this->dtSearchValue, function ($query) {
             return $query->search($this->dtSearchColumns, $this->dtSearchValue);

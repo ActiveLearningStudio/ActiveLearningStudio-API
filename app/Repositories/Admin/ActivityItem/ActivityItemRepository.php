@@ -29,7 +29,11 @@ class ActivityItemRepository extends BaseRepository
      */
     public function getAll($data)
     {
-        return $this->setDtParams($data)->getDtPaginated(['activityType']);
+        $this->setDtParams($data);
+        $this->query = $this->model->whereHas('activityType', function ($query) {
+            return $query->where('title', 'ILIKE', '%' . $this->dtSearchValue . '%');
+        });
+        return $this->getDtPaginated(['activityType']);
     }
 
     /**
@@ -40,11 +44,13 @@ class ActivityItemRepository extends BaseRepository
     public function create($data)
     {
         try {
+            // choosing this store path because old data is being read from this path
+            $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
             $item = $this->model->create($data);
             return 'Activity Item created successfully!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            throw new GeneralException('Unable to create activity Item, please try again later!');
         }
     }
 
@@ -55,13 +61,23 @@ class ActivityItemRepository extends BaseRepository
      */
     public function update($id, $data)
     {
-        $item = $this->find($id)->update($data);
-        return 'Activity Item data updated!';
+        try {
+            // choosing this store path because old data is being read from this path
+            if (isset($data['image'])) {
+                $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
+            }
+            $item = $this->find($id)->update($data);
+            return 'Activity Item data updated!';
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+            throw new GeneralException('Unable to update activity Item, please try again later!');
+        }
     }
 
     /**
      * @param $id
      * @return mixed
+     * @throws GeneralException
      */
     public function find($id)
     {
@@ -83,7 +99,7 @@ class ActivityItemRepository extends BaseRepository
             return 'Activity Item Deleted!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            throw new GeneralException('Unable to delete activity Item, please try again later!');
         }
     }
 }

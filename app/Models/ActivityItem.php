@@ -20,6 +20,8 @@ class ActivityItem extends Model
         'description',
         'order',
         'activity_type_id',
+        'demo_activity_id',
+        'demo_video_id',
         'type',
         'h5pLib',
         'image',

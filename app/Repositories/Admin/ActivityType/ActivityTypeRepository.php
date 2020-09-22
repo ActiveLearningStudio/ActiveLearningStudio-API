@@ -29,7 +29,11 @@ class ActivityTypeRepository extends BaseRepository
      */
     public function getAll($data)
     {
-        return $this->setDtParams($data)->getDtPaginated(['activityItems']);
+        $this->setDtParams($data);
+        $this->query = $this->model->when($data['q'] ?? null, function ($query) use ($data) {
+            return $query->search(['title'], $data['q']);
+        });
+        return $this->getDtPaginated(['activityItems']);
     }
 
     /**
@@ -46,7 +50,7 @@ class ActivityTypeRepository extends BaseRepository
             return 'Activity Type created successfully!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            throw new GeneralException('Unable to create activity type, please try again later!');
         }
     }
 
@@ -57,17 +61,23 @@ class ActivityTypeRepository extends BaseRepository
      */
     public function update($id, $data)
     {
-        // choosing this store path because old data is being read from this path
-        if (isset( $data['image'])){
-            $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
+        try {
+            // choosing this store path because old data is being read from this path
+            if (isset($data['image'])) {
+                $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
+            }
+            $type = $this->find($id)->update($data);
+            return 'Activity Type data updated!';
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+            throw new GeneralException('Unable to update activity type, please try again later!');
         }
-        $type = $this->find($id)->update($data);
-        return 'Activity Type data updated!';
     }
 
     /**
      * @param $id
      * @return mixed
+     * @throws GeneralException
      */
     public function find($id)
     {
@@ -89,7 +99,7 @@ class ActivityTypeRepository extends BaseRepository
             return 'Activity Type Deleted!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            throw new GeneralException('Unable to delete activity type, please try again later!');
         }
     }
 }

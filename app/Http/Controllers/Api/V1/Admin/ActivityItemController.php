@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreLmsSetting;
+use App\Http\Requests\Admin\StoreActivityItem;
 use App\Http\Resources\V1\ActivityItemResource;
 use App\Repositories\Admin\ActivityItem\ActivityItemRepository;
 use Illuminate\Contracts\Foundation\Application;
@@ -44,16 +44,16 @@ class ActivityItemController extends Controller
      */
     public function edit($id)
     {
-        $setting = $this->repository->find($id);
-        return new ActivityItemResource($setting->load('user'));
+        $item = $this->repository->find($id);
+        return new ActivityItemResource($item);
     }
 
     /**
-     * @param StoreLmsSetting $request
+     * @param StoreActivityItem $request
      * @return ActivityItemResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function store(StoreLmsSetting $request)
+    public function store(StoreActivityItem $request)
     {
         $validated = $request->validated();
         $response = $this->repository->create($validated);
@@ -61,12 +61,12 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * @param StoreLmsSetting $request
+     * @param StoreActivityItem $request
      * @param $id
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function update(StoreLmsSetting $request, $id)
+    public function update(StoreActivityItem $request, $id)
     {
         $validated = $request->validated();
         $response = $this->repository->update($id, $validated);

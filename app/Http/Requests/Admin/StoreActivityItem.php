@@ -24,7 +24,15 @@ class StoreActivityItem extends FormRequest
     public function rules()
     {
         return [
-
+            'title' => 'required|max:255',
+            'description' => 'required|max:255',
+            'demo_activity_id' => 'max:255',
+            'demo_video_id' => 'max:255',
+            'image' => 'image|max:1000',
+            'order' => 'required|integer',
+            'type' => 'required',
+            'activity_type_id' => 'required|exists:activity_types,id',
+            'h5pLib' => 'required',
         ];
     }
 }
