@@ -56,14 +56,14 @@ RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
 #ENV variables for .env of laravel
-#ENV APP_URL=http://localhost:8082/api
-#ENV FRONT_END_URL=http://localhost:8082
-#ENV DB_CONNECTION=pgsql
-#ENV DB_HOST=localhost
-#ENV DB_PORT=5432
-#ENV DB_DATABASE=postgres
-#ENV DB_USERNAME=postgres
-#ENV DB_PASSWORD=postgres
+ARG APP_URL
+ARG FRONT_END_URL
+ARG DB_CONNECTION
+ARG DB_HOST
+ARG DB_PORT
+ARG DB_DATABASE
+ARG DB_USERNAME
+ARG DB_PASSWORD
 
 #creating env file
 RUN touch .env
