@@ -155,7 +155,7 @@ class SearchController extends Controller
      *                 "pivot": {
      *                     "project_id": 457,
      *                     "user_id": 1,
-     *                     "role": "teacher",
+     *                     "role": "owner",
      *                     "created_at": "2020-08-25T09:35:35.000000Z",
      *                     "updated_at": "2020-08-25T09:35:35.000000Z"
      *                 }
