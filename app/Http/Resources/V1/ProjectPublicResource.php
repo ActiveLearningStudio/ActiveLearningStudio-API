@@ -3,7 +3,7 @@
 namespace App\Http\Resources\V1;
 
 use App\Http\Resources\V1\ProjectUserResource;
-use App\Http\Resources\V1\ProjectPlaylistResource;
+use App\Http\Resources\V1\ProjectPlaylistShortResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,7 +24,7 @@ class ProjectPublicResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
-            'playlists' => ProjectPlaylistResource::collection($this->playlists->sortBy('order')),
+            'playlists' => ProjectPlaylistShortResource::collection($this->playlists->sortBy('order')),
             'is_public' => $this->is_public,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

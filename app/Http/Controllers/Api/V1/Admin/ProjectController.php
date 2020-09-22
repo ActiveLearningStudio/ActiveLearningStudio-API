@@ -14,6 +14,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
+/**
+ * @group Project Administration
+ * @authenticated
+ *
+ * Apis for administration of projects
+ */
 class ProjectController extends Controller
 {
 
@@ -30,6 +36,8 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display all projects.
+     *
      * @param Request $request
      * @return AnonymousResourceCollection
      */
@@ -39,7 +47,12 @@ class ProjectController extends Controller
     }
 
     /**
+     * Modify the index of a project
+     *
+     * @urlParam id required The id means user_id.
+     *
      * @param Request $request
+     * @param $id
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
@@ -58,7 +71,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display the specified project.
+     * Display the shared project.
      *
      * @param Project $project
      * @return Response
