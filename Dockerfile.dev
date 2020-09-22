@@ -48,7 +48,7 @@ WORKDIR /var/www/html
 COPY ./php.ini /usr/local/etc/php/
 COPY ./* /var/www/html/
 
-#RUN service apache2 restart
+RUN service apache2 restart
 
 
 #RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
