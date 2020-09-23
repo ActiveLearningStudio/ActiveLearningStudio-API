@@ -34,6 +34,8 @@ class Project extends Model
     public function toSearchableArray()
     {
         $searchableArray = [
+            'organisation_id' => $this->organisation_id,
+            'organisation_visibility_type_id' => $this->organisation_visibility_type_id,
             'project_id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,

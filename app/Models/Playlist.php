@@ -36,11 +36,13 @@ class Playlist extends Model
             'project_id' => $this->project_id,
             'is_public' => $this->is_public,
             'elasticsearch' => $this->elasticsearch,
+            'organisation_visibility_type_id' => $this->organisation_visibility_type_id,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
 
         if ($this->project) {
+            $searchableArray['organisation_id'] = $this->project->organisation_id;
             $searchableArray['shared'] = $this->project->shared;
         }
 

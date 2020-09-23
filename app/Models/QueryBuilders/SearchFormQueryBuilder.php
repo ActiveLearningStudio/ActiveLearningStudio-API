@@ -22,9 +22,19 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     private $elasticsearch;
 
     /**
+     * @var array
+     */
+    private $organisationVisibilityTypeIds;
+
+    /**
      * @var string
      */
     private $type;
+
+    /**
+     * @var array
+     */
+    private $organisationIds;
 
     /**
      * @var array
@@ -69,9 +79,21 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    public function organisationVisibilityTypeIds(array $organisationVisibilityTypeIds): self
+    {
+        $this->organisationVisibilityTypeIds = $organisationVisibilityTypeIds;
+        return $this;
+    }
+
     public function type(string $type): self
     {
         $this->type = $type;
+        return $this;
+    }
+
+    public function organisationIds(array $organisationIds): self
+    {
+        $this->organisationIds = $organisationIds;
         return $this;
     }
 
@@ -128,10 +150,26 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
+        if (isset($this->organisationVisibilityTypeIds) && !empty($this->organisationVisibilityTypeIds)) {
+            $andQueries[] = [
+                'terms' => [
+                    'organisation_visibility_type_id' => $this->organisationVisibilityTypeIds
+                ]
+            ];
+        }
+
         if (isset($this->type) && !empty($this->type)) {
             $andQueries[] = [
                 'term' => [
                     'type' => $this->type
+                ]
+            ];
+        }
+
+        if (isset($this->organisationIds) && !empty($this->organisationIds)) {
+            $andQueries[] = [
+                'terms' => [
+                    'organisation_id' => $this->organisationIds
                 ]
             ];
         }

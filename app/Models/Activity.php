@@ -49,12 +49,17 @@ class Activity extends Model
             'education_level_id' => $this->education_level_id,
             'is_public' => $this->is_public,
             'elasticsearch' => $this->elasticsearch,
+            'organisation_visibility_type_id' => $this->organisation_visibility_type_id,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
 
         if ($this->playlist) {
             $searchableArray['project_id'] = $this->playlist->project_id;
+
+            if ($this->playlist->project) {
+                $searchableArray['organisation_id'] = $this->playlist->project->organisation_id;
+            }
         }
 
         $activityRepository = resolve(ActivityRepositoryInterface::class);

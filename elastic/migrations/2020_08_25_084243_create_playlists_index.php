@@ -15,6 +15,8 @@ final class CreatePlaylistsIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('playlists', function (Mapping $mapping, Settings $settings) {
+            $mapping->keyword('organisation_id');
+            $mapping->keyword('organisation_visibility_type_id');
             $mapping->text('title');
             $mapping->keyword('project_id');
             $mapping->boolean('is_public');
