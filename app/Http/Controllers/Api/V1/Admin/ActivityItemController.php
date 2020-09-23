@@ -11,6 +11,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
@@ -29,7 +30,7 @@ class ActivityItemController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function index(Request $request)
     {
@@ -57,7 +58,7 @@ class ActivityItemController extends Controller
     {
         $validated = $request->validated();
         $response = $this->repository->create($validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new ActivityItemResource($response['data'])], 200);
     }
 
     /**
@@ -70,7 +71,7 @@ class ActivityItemController extends Controller
     {
         $validated = $request->validated();
         $response = $this->repository->update($id, $validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new ActivityItemResource($response['data'])], 200);
     }
 
     /**

@@ -59,7 +59,7 @@ class ActivityTypeController extends Controller
     {
         $validated = $request->validated();
         $response = $this->repository->create($validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new ActivityTypeResource($response['data'])], 200);
     }
 
     /**
@@ -72,7 +72,7 @@ class ActivityTypeController extends Controller
     {
         $validated = $request->validated();
         $response = $this->repository->update($id, $validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new ActivityTypeResource($response['data'])], 200);
     }
 
     /**
