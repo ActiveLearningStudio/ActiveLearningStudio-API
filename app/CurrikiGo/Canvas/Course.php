@@ -49,13 +49,15 @@ class Course
         if ($course) {
             $modules = $this->canvasClient->run(new GetModulesCommand($course->id, $moduleName));
             $module = CourseHelper::getModuleByName($modules, $moduleName);
-            $items = $this->canvasClient->run(new GetModuleItemsCommand($course->id, $module->id));
-            foreach ($items as $key => $item) {
-                $moduleItems[] = $item->title;
+            if ($module) {
+                $items = $this->canvasClient->run(new GetModuleItemsCommand($course->id, $module->id));
+                foreach ($items as $key => $item) {
+                    $moduleItems[] = $item->title;
+                }
             }
             return ['course' => $course->name, 'playlists' => $moduleItems];
-        } else {
-            return ['course' => null, 'playlists' => []];
         }
+        
+        return ['course' => null, 'playlists' => []];        
     }
 }
