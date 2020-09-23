@@ -55,66 +55,7 @@ RUN chown -R 1000 /var/www/html
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
-#ENV variables for .env of laravel
-ARG APP_URL
-ARG FRONT_END_URL
-ARG DB_CONNECTION
-ARG DB_HOST
-ARG DB_PORT
-ARG DB_DATABASE
-ARG DB_USERNAME
-ARG DB_PASSWORD
 
-#creating env file
-RUN touch .env
-RUN echo "APP_NAME=Curriki" >> .env
-RUN echo "APP_ENV=local" >> .env
-RUN echo "APP_KEY=" >> .env
-RUN echo "APP_DEBUG=true" >> .env
-RUN echo "APP_URL=${APP_URL}" >> .env
-RUN echo "FRONT_END_URL=${FRONT_END_URL}" >> .env
-RUN echo "LOG_CHANNEL=stack" >> .env
-RUN echo "DB_CONNECTION=${DB_CONNECTION}" >> .env
-RUN echo "DB_HOST=${DB_HOST}" >> .env
-RUN echo "DB_PORT=${DB_PORT}" >> .env
-RUN echo "DB_DATABASE=${DB_DATABASE}" >> .env
-RUN echo "DB_USERNAME=${DB_USERNAME}" >> .env
-RUN echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
-RUN echo "BROADCAST_DRIVER=log" >> .env
-RUN echo "CACHE_DRIVER=file" >> .env
-RUN echo "QUEUE_CONNECTION=sync" >> .env
-RUN echo "SESSION_DRIVER=file" >> .env
-RUN echo "SESSION_LIFETIME=120" >> .env
-RUN echo "REDIS_HOST=127.0.0.1" >> .env
-RUN echo "REDIS_PASSWORD=null" >> .env
-RUN echo "REDIS_PORT=6379" >> .env
-RUN echo "MAIL_MAILER=smtp" >> .env
-RUN echo "MAIL_HOST=smtp.mailtrap.io" >> .env
-RUN echo "MAIL_PORT=2525" >> .env
-RUN echo "MAIL_USERNAME=null" >> .env
-RUN echo "MAIL_PASSWORD=null" >> .env
-RUN echo "MAIL_ENCRYPTION=null" >> .env
-RUN echo "MAIL_FROM_ADDRESS=null" >> .env
-RUN echo "MAIL_FROM_NAME="${APP_NAME}"" >> .env
-RUN echo "AWS_ACCESS_KEY_ID=" >> .env
-RUN echo "AWS_SECRET_ACCESS_KEY=" >> .env
-RUN echo "AWS_DEFAULT_REGION=us-east-1" >> .env
-RUN echo "AWS_BUCKET=" >> .env
-RUN echo "PUSHER_APP_ID=" >> .env
-RUN echo "PUSHER_APP_KEY=" >> .env
-RUN echo "PUSHER_APP_SECRET=" >> .env
-RUN echo "PUSHER_APP_CLUSTER=mt1" >> .env
-RUN echo "MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"" >> .env
-RUN echo "MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"" >> .env
-RUN echo "MATTERMOST_SERVER=default" >> .env
-RUN echo "MATTERMOST_HOST=" >> .env
-RUN echo "MATTERMOST_LOGIN=" >> .env
-RUN echo "MATTERMOST_LOGIN=" >> .env
-RUN echo "MATTERMOST_PASSWORD=" >> .env
-RUN echo "MATTERMOST_DEFAULT_TEAM_ID=" >> .env
-RUN echo "GAPI_CLASSROOM_CREDENTIALS=" >> .env
-RUN echo "GAPI_CLIENT_ID=" >> .env
 
-RUN php artisan key:generate
-RUN php artisan cache:clear
-RUN php artisan config:cache
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
