@@ -46,13 +46,16 @@ class ProjectRepository extends BaseRepository
     {
         $q = request()->q;
         return $this->model->when($q, function ($query) use ($q) {
-            $query->whereHas('users', function ($query) use ($q) {
-                return $query->where('email', 'ILIKE', '%' . $q . '%');
+            $query->where(function ($query) use($q){
+                // get projects by name or email
+                $query->orWhereHas('users', function ($query) use ($q) {
+                    return $query->where('email', 'ILIKE', '%' . $q . '%');
+                });
+                return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
             });
-            return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
         })->when(request()->users, function ($query) {
             return $query->with('users');
-        })->where('is_public', true)->orderBy('created_at', 'desc')->paginate(100);
+        })/*->where('is_public', true)*/->orderBy('created_at', 'desc')->paginate(100);
     }
 
     /**

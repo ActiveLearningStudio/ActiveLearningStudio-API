@@ -399,7 +399,10 @@ abstract class BaseRepository implements RepositoryContract
         return $this->query->when($this->dtOrderDir, function ($query) {
             return $query->orderBy($this->dtOrder, $this->dtOrderDir);
         })->when($this->dtSearchValue, function ($query) {
-            return $query->search($this->dtSearchColumns, $this->dtSearchValue);
+            // group the where clause to avoid the conflicting of other where clauses with search
+            return $query->where(function ($query) {
+                return $query->search($this->dtSearchColumns, $this->dtSearchValue);
+            });
         })->when($with, function ($query) use ($with) {
             return $query->with($with);
         })->paginate($this->dtLength, '*', 'page', $this->dtPage);
