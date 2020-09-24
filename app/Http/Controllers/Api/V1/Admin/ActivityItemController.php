@@ -11,7 +11,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
@@ -30,7 +29,7 @@ class ActivityItemController extends Controller
 
     /**
      * @param Request $request
-     * @return AnonymousResourceCollection
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request)
     {
