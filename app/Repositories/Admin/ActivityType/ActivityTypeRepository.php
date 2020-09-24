@@ -46,12 +46,13 @@ class ActivityTypeRepository extends BaseRepository
         try {
             // choosing this store path because old data is being read from this path
             $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
-            $type = $this->model->create($data);
-            return 'Activity Type created successfully!';
+            if ($type = $this->model->create($data)) {
+                return ['message' => 'Activity type created Successfully!', 'data' => $type];
+            }
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException('Unable to create activity type, please try again later!');
+             Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to create activity type, please try again later!');
     }
 
     /**
@@ -66,12 +67,13 @@ class ActivityTypeRepository extends BaseRepository
             if (isset($data['image'])) {
                 $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
             }
-            $type = $this->find($id)->update($data);
-            return 'Activity Type data updated!';
+            if ($this->find($id)->update($data)) {
+                return ['message' => 'Activity Type data updated!', 'data' => $this->find($id)];
+            }
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException('Unable to update activity type, please try again later!');
+             Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to update activity type, please try again later!');
     }
 
     /**
@@ -98,8 +100,8 @@ class ActivityTypeRepository extends BaseRepository
             $this->model->find($id)->delete();
             return 'Activity Type Deleted!';
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException('Unable to delete activity type, please try again later!');
+             Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to delete activity type, please try again later!');
     }
 }
