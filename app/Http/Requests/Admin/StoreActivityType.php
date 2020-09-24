@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Rules\StrongPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUser extends FormRequest
+class StoreActivityType extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +24,9 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'organization_name' => 'max:255',
-            'job_title' => 'max:255',
-            'email' => 'required|email|max:255',
-            'password' => ['sometimes', 'required', 'string', new StrongPassword],
+            'title' => 'required',
+            'image' => 'image|max:1000',
+            'order' => 'required|integer'
         ];
     }
 }
