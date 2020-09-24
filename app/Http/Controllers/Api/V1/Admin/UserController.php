@@ -83,4 +83,12 @@ class UserController extends Controller
     {
         return response(['message' => $this->userRepository->destroy($id)], 200);
     }
+
+    /**
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function reportBasic(Request $request){
+        return response( $this->userRepository->reportBasic($request->all()), 200);
+    }
 }

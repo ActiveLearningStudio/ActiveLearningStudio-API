@@ -89,7 +89,7 @@ class UserRepository extends BaseRepository
             }
             return ['message' => 'User data updated successfully!', 'data' => $this->find($id)];
         } catch (\Exception $e) {
-            Log::critical('Clone Project ID: '. $clone_project_id);
+            Log::critical('Clone Project ID: ' . $clone_project_id);
             Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to update user, please try again later!');
@@ -125,5 +125,22 @@ class UserRepository extends BaseRepository
             Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to delete user, please try again later!');
+    }
+
+    /**
+     * Users basic report, projects, playlists and activities count
+     * @param $data
+     * @return mixed
+     */
+    public function reportBasic($data)
+    {
+        $this->setDtParams($data);
+        $this->query = $this->model->select(['id', 'first_name', 'last_name', 'email'])->withCount(['projects', 'playlists', 'activities'])
+            ->when($data['mode'] === 'subscribed', function ($query) {
+                return $query->where(function ($query) {
+                    return $query->where('subscribed', true);
+                });
+            });
+        return $this->getDtPaginated();
     }
 }
