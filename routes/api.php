@@ -46,6 +46,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::get('projects/recent', 'ProjectController@recent');
         Route::get('projects/default', 'ProjectController@default');
+        Route::get('projects/detail', 'ProjectController@detail');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
@@ -137,6 +138,15 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::resource('users', 'UserController');
         // projects
         Route::resource('projects', 'ProjectController');
-        Route::post('projects/indexes/{id}', 'ProjectController@updateIndexes');
+        Route::post('projects/indexes', 'ProjectController@updateIndexes');
+        Route::get('projects/{project}/index', 'ProjectController@updateIndex');
+        Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
+        Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
+        // lms-settings
+        Route::resource('lms-settings', 'LmsSettingController');
+        // activity-types
+        Route::resource('activity-types', 'ActivityTypeController');
+        // activity-items
+        Route::resource('activity-items', 'ActivityItemController');
     });
 });

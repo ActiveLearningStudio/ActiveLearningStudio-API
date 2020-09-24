@@ -52,8 +52,14 @@ class ProjectRepository extends BaseRepository
      */
     public function getProjects()
     {
-        return $this->model->when(request()->q, function ($query) {
-            return $query->where('name', 'ILIKE', '%' . request()->q . '%');
+        $q = request()->q;
+        return $this->model->when($q, function ($query) use ($q) {
+            $query->whereHas('users', function ($query) use ($q) {
+                return $query->where('email', 'ILIKE', '%' . $q . '%');
+            });
+            return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
+        })->when(request()->users, function ($query) {
+            return $query->with('users');
         })->where('is_public', true)->orderBy('created_at', 'desc')->paginate(100);
     }
 
@@ -63,7 +69,7 @@ class ProjectRepository extends BaseRepository
      * @return string
      * @throws GeneralException
      */
-    public function clone(User $user, $project_id)
+    public function clone(User $user, $project_id): string
     {
         $project = $this->model->find($project_id);
         $pivot_data = $project->users->find($user->id);
@@ -86,21 +92,18 @@ class ProjectRepository extends BaseRepository
 
     /**
      * Update Indexes for projects and related models
-     * @param $projects
-     * @param $user_id
+     * @param $data
      * @return string
      * @throws GeneralException
      */
-    public function updateIndexes($projects, $user_id)
+    public function updateIndexes($data): string
     {
         try {
-            // first de-index the all projects of the users
-            $this->de_index_projects([], $user_id);
+            // first de-index the projects of the users
+            $this->removeProjectsIndex($data['remove_index_projects'] ?? []);
+            // index the selected projects
+            $this->indexProjects($data['index_projects'] ?? []);
 
-            if ($projects) {
-                // index the selected projects
-                $this->index_projects($projects);
-            }
             return 'Indexes Updated Successfully!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
@@ -111,38 +114,40 @@ class ProjectRepository extends BaseRepository
     /**
      * @param array $projects
      * De Indexing of the projects
-     * @param string $user_id
-     * @throws GeneralException
+     * @param string $key
      */
-    public function de_index_projects($projects = [], $user_id = ''): void
+    public function removeProjectsIndex($projects, $key = 'elasticsearch'): void
     {
-        $user = $user_id ? $this->userModel->find($user_id) : auth()->user();
-
-        // get current user projects - if specific project IDs are not provided
-        $user_all_projects = !empty($projects) ? $projects : $user->projects->modelKeys();
-        $playlists = $this->playlistModel->whereIn('project_id', $user_all_projects)->get('id');
+        if (empty($projects)){
+            return;
+        }
+        $playlists = $this->playlistModel->whereIn('project_id', $projects)->get('id');
 
         // elasticsearch set false for projects and related models
-        $this->model->whereIn('id', $user_all_projects)->update(['elasticsearch' => false]);
-        $playlists->toQuery()->update(['elasticsearch' => false]);
-        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->update(['elasticsearch' => false]);
+        $this->model->whereIn('id', $projects)->update([$key => false]);
+        $this->playlistModel->whereIn('project_id', $projects)->update([$key => false]);
+        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->update([$key => false]);
 
         // scout searchable update the indexes
-        $this->model->whereIn('id', $user_all_projects)->searchable();
-        $this->playlistModel->whereIn('project_id', $user_all_projects)->searchable();
+        $this->model->whereIn('id', $projects)->searchable();
+        $this->playlistModel->whereIn('project_id', $projects)->searchable();
         $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->searchable();
     }
 
     /**
      * @param $projects
      * Indexing of the projects
+     * @param string $key
      */
-    public function index_projects($projects): void
+    public function indexProjects($projects, $key = 'elasticsearch'): void
     {
+        if (empty($projects)){
+            return;
+        }
         // search-able is needed as on collections update observer will not get fired
         // so searchable will updated the elastic search index via scout package
         // update directly on query builder
-        $this->model->whereIn('id', $projects)->update(['elasticsearch' => true]);
+        $this->model->whereIn('id', $projects)->update([$key => true]);
         $this->model->whereIn('id', $projects)->searchable();
         // to fire observer update should be done on each single instance of models
         // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
@@ -151,12 +156,48 @@ class ProjectRepository extends BaseRepository
         $playlists = $this->playlistModel->whereIn('project_id', $projects)->get('id');
 
         // prepare the query builder from collections and perform update
-        $playlists->toQuery()->update(['elasticsearch' => true]);
+        $this->playlistModel->whereIn('project_id', $projects)->update([$key => true]);
         $this->playlistModel->whereIn('project_id', $projects)->searchable();
 
         // update related activities by getting keys of parent playlists
-        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->update(['elasticsearch' => true]);
+        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->update([$key => true]);
         $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->searchable();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getStarterProjects()
+    {
+        return $this->model->where('starter_project', true)->get();
+    }
+
+    /**
+     * Update Indexes for projects and related models
+     * @param $project
+     * @return string
+     */
+    public function updateIndex($project): string
+    {
+        if ($project->elasticsearch) {
+            $this->removeProjectsIndex([$project->id]);
+        } else {
+            $this->indexProjects([$project->id]);
+        }
+        return 'Index Status Changed Successfully!';
+    }
+
+    /**
+     * @param $project
+     * @return string
+     */
+    public function togglePublicStatus($project): string
+    {
+        if ($project->is_public) {
+            $this->removeProjectsIndex([$project->id], 'is_public');
+        } else {
+            $this->indexProjects([$project->id], 'is_public');
+        }
+        return 'Public Status toggled Successfully!';
+    }
 }

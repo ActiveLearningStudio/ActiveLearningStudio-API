@@ -3,16 +3,21 @@
 namespace App\Repositories\Admin\User;
 
 use App\Exceptions\GeneralException;
+use App\Jobs\AssignStarterProjects;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * Class UserRepository.
  */
 class UserRepository extends BaseRepository
 {
+    use DispatchesJobs;
+
     /**
      * @var ProjectRepository
      */
@@ -37,16 +42,19 @@ class UserRepository extends BaseRepository
      */
     public function getUsers($start = 0, $length = 25)
     {
-        $page = empty($length) ? 0 : ($start / $length);
-        request()->request->add(['page' => $page + 1]);
+        // calculate page size if not present in request
+        if (!request()->has('page')) {
+            $page = empty($length) ? 0 : ($start / $length);
+            request()->request->add(['page' => $page + 1]);
+        }
+        // search through each column and sort by - Needed for datatables calls
         return $this->model->when(isset(request()->order[0]['dir']), function ($query) {
             return $query->orderBy(request()->columns[request()->order[0]['column']]['name'], request()->order[0]['dir']);
         })->when(isset(request()->search['value']) && request()->search['value'], function ($query) {
-            foreach (request()->columns as $column) {
-                if ($column['searchable'] && $column['searchable'] !== 'false') {
-                    $query->orWhere($column['name'], 'LIKE', '%' . request()->search['value'] . '%');
-                }
-            }
+            return $query->search(request()->columns, request()->search['value']);
+        })->when(request()->q, function ($query) {
+            $query->search(['email', 'name'], request()->q);
+            $query->name(request()->q);
             return $query;
         })->paginate($length);
     }
@@ -59,7 +67,11 @@ class UserRepository extends BaseRepository
     public function createUser($data)
     {
         try {
-            return $this->model->create($data);
+            $data['remember_token'] = Str::random(64);
+            $data['email_verified_at'] = now();
+            $user = $this->model->create($data);
+//            $this->dispatch((new AssignStarterProjects($user))); For now - not needed
+            return $user;
         } catch (\Exception $e) {
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());
@@ -75,9 +87,9 @@ class UserRepository extends BaseRepository
     {
         $user = $this->find($id);
         // update the user data
-        if($user->update($data) && $clone_project_id){
+        if ($user->update($data) && $clone_project_id) {
             // if clone project id provided - clone the project
-          return $this->projectRepository->clone($user, $clone_project_id);
+            return $this->projectRepository->clone($user, $clone_project_id);
         }
         return 'User data updated!';
     }
@@ -88,7 +100,7 @@ class UserRepository extends BaseRepository
      */
     public function find($id)
     {
-        if ($user = $this->model->whereId($id)->with('projects')->first()){
+        if ($user = $this->model->whereId($id)->with('projects')->first()) {
             return $user;
         }
         throw new GeneralException('User Not found.');
@@ -105,8 +117,8 @@ class UserRepository extends BaseRepository
             throw new GeneralException('You cannot delete your own user');
         }
         try {
-             $this->model->find($id)->delete();
-             return 'User Deleted!';
+            $this->model->find($id)->delete();
+            return 'User Deleted!';
         } catch (\Exception $e) {
             Log::info($e->getMessage());
             throw new GeneralException($e->getMessage());

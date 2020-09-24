@@ -2,14 +2,15 @@
 
 namespace App\Models\CurrikiGo;
 
+use App\Models\Traits\GlobalScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
 
 class LmsSetting extends Model
 {
-    use SoftDeletes;
-    
+    use SoftDeletes, GlobalScope;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,7 +27,7 @@ class LmsSetting extends Model
         'lti_client_id',
         'user_id'
     ];
-    
+
     /**
      * Get the user that owns the activity
      */
@@ -34,4 +35,5 @@ class LmsSetting extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
 }

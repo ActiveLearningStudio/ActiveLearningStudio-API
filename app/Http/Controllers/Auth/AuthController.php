@@ -39,14 +39,18 @@ class AuthController extends Controller
 
         $data['password'] = Hash::make($data['password']);
         $data['remember_token'] = Str::random(64);
+        $data['email_verified_at'] = now();
 
         $user = $this->userRepository->create($data);
 
         if ($user) {
-            event(new Registered($user));
-
+//            event(new Registered($user));
+//
+//            return response([
+//                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"
+//            ], 201);
             return response([
-                'message' => 'Verification email is sent. Please follow the instructions.'
+                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
             ], 201);
         }
 
@@ -105,13 +109,12 @@ class AuthController extends Controller
                 $password = Str::random(10);
                 $user = $this->userRepository->create([
                     'first_name' => $result['name'],
-                    'last_name' => '',
+                    'last_name' => ' ',
                     'email' => $result['email'],
                     'password' => Hash::make($password),
                     'temp_password' => $password,
                     'remember_token' => Str::random(64),
-                    'organization_name' => ' ',
-                    'job_title' => ' ',
+                    'email_verified_at' => now(),
                 ]);
             }
             $user->gapi_access_token = $request->tokenObj;

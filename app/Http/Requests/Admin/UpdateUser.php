@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Rules\StrongPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUser extends FormRequest
@@ -24,10 +25,10 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email'=> 'required|email',
-            'password'=>'sometimes|required|min:8'
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'password' => ['sometimes', 'required', 'string', new StrongPassword],
         ];
     }
 }

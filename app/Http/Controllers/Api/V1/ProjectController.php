@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProjectResource;
+use App\Http\Resources\V1\ProjectDetailResource;
 use App\Models\Project;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectEditRequest;
@@ -52,6 +53,26 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display a listing of the project with detail.
+     *
+     * @return Response
+     */
+    public function detail()
+    {
+        $authenticated_user = auth()->user();
+
+        if ($authenticated_user->isAdmin()) {
+            return response([
+                'projects' => ProjectDetailResource::collection($this->projectRepository->all()),
+            ], 200);
+        }
+
+        return response([
+            'projects' => ProjectDetailResource::collection($authenticated_user->projects),
+        ], 200);
+    }
+
+    /**
      * Display a listing of the recent projects.
      *
      * @return Response
@@ -92,7 +113,7 @@ class ProjectController extends Controller
     public function uploadThumb(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image|max:100',
+            'thumb' => 'required|image|max:102400',
         ]);
 
         if ($validator->fails()) {

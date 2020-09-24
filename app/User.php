@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Traits\GlobalScope;
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,7 +14,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable, SoftDeletes;
+    use HasApiTokens, Notifiable, SoftDeletes, GlobalScope;
 
     /**
      * The attributes that are mass assignable.
@@ -63,7 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @param $password
      */
-    public function setPasswordAttribute($password) : void
+    public function setPasswordAttribute($password): void
     {
         // If password was accidentally passed in already hashed, try not to double hash it
         if (
@@ -82,17 +83,18 @@ class User extends Authenticatable implements MustVerifyEmail
      * Combine first and last name for Name column
      * @param $name
      */
-    public function setNameAttribute($name) : void
+    public function setNameAttribute($name): void
     {
-        $this->attributes['name'] = $this->attributes['first_name'].' '.$this->attributes['last_name'];
+        $this->attributes['name'] = $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
     }
 
     /**
      * @param $name
      * @return mixed
      */
-    public function getNameAttribute($name){
-        if (! $name || empty($name)){
+    public function getNameAttribute($name)
+    {
+        if (!$name || empty($name)) {
             return "{$this->first_name} {$this->last_name}";
         }
         return $name;
@@ -154,4 +156,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new MailResetPasswordNotification($token));
     }
+
+    /**
+     * @param $query
+     * @param $value
+     * @return mixed
+     * Scope for combine first and last name search
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->orWhereRaw("CONCAT(first_name,' ',last_name) ILIKE '%" . $value . "%'");
+    }
+
 }
