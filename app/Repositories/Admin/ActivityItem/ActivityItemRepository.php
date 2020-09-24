@@ -46,12 +46,13 @@ class ActivityItemRepository extends BaseRepository
         try {
             // choosing this store path because old data is being read from this path
             $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
-            $item = $this->model->create($data);
-            return 'Activity Item created successfully!';
+            if ($item = $this->model->create($data)) {
+                return ['message' => 'Activity Item created successfully!', 'data' => $item];
+            }
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException('Unable to create activity Item, please try again later!');
+             Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to create activity Item, please try again later!');
     }
 
     /**
@@ -66,12 +67,13 @@ class ActivityItemRepository extends BaseRepository
             if (isset($data['image'])) {
                 $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
             }
-            $item = $this->find($id)->update($data);
-            return 'Activity Item data updated!';
+            if ($this->find($id)->update($data)) {
+                return ['message' => 'Activity Item data updated!', 'data' => $this->find($id)];
+            }
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException('Unable to update activity Item, please try again later!');
+             Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to update activity Item, please try again later!');
     }
 
     /**
@@ -98,8 +100,8 @@ class ActivityItemRepository extends BaseRepository
             $this->model->find($id)->delete();
             return 'Activity Item Deleted!';
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException('Unable to delete activity Item, please try again later!');
+             Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to delete activity Item, please try again later!');
     }
 }

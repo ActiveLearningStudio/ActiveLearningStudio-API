@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Models\DeepRelations\HasManyDeep;
+use App\Models\DeepRelations\HasRelationships;
 use App\Models\Traits\GlobalScope;
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +17,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable, SoftDeletes, GlobalScope;
+    use HasApiTokens, Notifiable, SoftDeletes, GlobalScope, HasRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -106,6 +109,37 @@ class User extends Authenticatable implements MustVerifyEmail
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
+    }
+
+    /**
+     * Get playlists directly from users model via hasManyThrough
+     * @return HasManyThrough
+     */
+    public function playlists(){
+        return $this->hasManyThrough('App\Models\Playlist', 'App\Models\Pivots\UserProject', 'user_id', 'project_id',
+            'id', 'project_id');
+    }
+
+    /**
+     * Get far away relations data using custom Deep classes
+     * @return HasManyDeep
+     */
+    public function activities()
+    {
+        return $this->hasManyDeep(
+            'App\Models\Activity',
+            ['App\Models\Pivots\UserProject', 'App\Models\Playlist'], // Intermediate models, beginning at the far parent (Users).
+            [
+                'user_id', // Foreign key on the "user_project" table.
+                'project_id',    // Foreign key on the "playlist" table.
+                'playlist_id'     // Foreign key on the "activity" table.
+            ],
+            [
+                'id', // Local key on the "users" table.
+                'project_id', // Local key on the "user_project" table.
+                'id'  // Local key on the "playlist" table.
+            ]
+        );
     }
 
     public function lmssetting()

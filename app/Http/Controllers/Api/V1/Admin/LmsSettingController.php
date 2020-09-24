@@ -34,7 +34,7 @@ class LmsSettingController extends Controller
      */
     public function index(Request $request)
     {
-        $collections = ($this->lmsSettingRepository->getAll($request->start, $request->length));
+        $collections = $this->lmsSettingRepository->getAll($request->all());
         return new LmsSettingCollection($collections);
     }
 
@@ -58,7 +58,7 @@ class LmsSettingController extends Controller
     {
         $validated = $request->validated();
         $response = $this->lmsSettingRepository->create($validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user'))], 200);
     }
 
     /**
@@ -71,7 +71,7 @@ class LmsSettingController extends Controller
     {
         $validated = $request->validated();
         $response = $this->lmsSettingRepository->update($id, $validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user'))], 200);
     }
 
     /**

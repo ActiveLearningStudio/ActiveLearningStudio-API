@@ -379,6 +379,7 @@ abstract class BaseRepository implements RepositoryContract
             $this->dtLength = $dtParams['length'];
             $this->dtPage = ($this->dtStart / $this->dtLength) + 1; // calculate page size
         }
+        $this->dtPage = $dtParams['page'] ?? $this->dtPage; // if page parameter is already present in request then override
         return $this;
     }
 
@@ -389,7 +390,7 @@ abstract class BaseRepository implements RepositoryContract
      */
     protected function getDtPaginated($with = [])
     {
-        // make sure we've got the right instance of query builder
+        // to make sure the instance of query builder
         if (!$this->query instanceof Builder) {
             $this->query = $this->model::query();
         }
@@ -398,7 +399,10 @@ abstract class BaseRepository implements RepositoryContract
         return $this->query->when($this->dtOrderDir, function ($query) {
             return $query->orderBy($this->dtOrder, $this->dtOrderDir);
         })->when($this->dtSearchValue, function ($query) {
-            return $query->search($this->dtSearchColumns, $this->dtSearchValue);
+            // group the where clause to avoid the conflicting of other where clauses with search
+            return $query->where(function ($query) {
+                return $query->search($this->dtSearchColumns, $this->dtSearchValue);
+            });
         })->when($with, function ($query) use ($with) {
             return $query->with($with);
         })->paginate($this->dtLength, '*', 'page', $this->dtPage);
