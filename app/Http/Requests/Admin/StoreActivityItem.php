@@ -25,7 +25,7 @@ class StoreActivityItem extends FormRequest
     {
         return [
             'title' => 'required|max:255',
-            'description' => 'required|max:255',
+            'description' => 'required',
             'demo_activity_id' => 'max:255',
             'demo_video_id' => 'max:255',
             'image' => 'image|max:1000',

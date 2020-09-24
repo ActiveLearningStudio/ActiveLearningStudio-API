@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models\Traits;
 
 /**
@@ -8,11 +9,11 @@ namespace App\Models\Traits;
 trait GlobalScope{
 
     /**
+     * Global Scope for searching in specific columns
      * @param $query
      * @param $columns
      * @param $value
      * @return mixed
-     * Scope for searching in specific columns
      */
     public function scopeSearch($query, $columns, $value)
     {
