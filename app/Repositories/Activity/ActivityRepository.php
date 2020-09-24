@@ -144,7 +144,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ])
             ->isPublic(true)
             ->elasticsearch(true)
-            ->organisationVisibilityTypeIds([4])
+            ->organisationVisibilityTypeIds([null, 4])
             ->type(Arr::get($data, 'type', 0))
             ->subjectIds(Arr::get($data, 'subjectIds', []))
             ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))

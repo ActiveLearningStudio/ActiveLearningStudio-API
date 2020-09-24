@@ -130,12 +130,10 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     public function buildQuery(): array
     {
         $queries = [];
-        $orQueries = [];
-        $andQueries = [];
         $boolQueries = [];
 
         if (isset($this->isPublic) && !empty($this->isPublic)) {
-            $andQueries[] = [
+            $queries[] = [
                 'term' => [
                     'is_public' => $this->isPublic
                 ]
@@ -143,7 +141,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->elasticsearch) && !empty($this->elasticsearch)) {
-            $andQueries[] = [
+            $queries[] = [
                 'term' => [
                     'elasticsearch' => $this->elasticsearch
                 ]
@@ -151,15 +149,38 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->organisationVisibilityTypeIds) && !empty($this->organisationVisibilityTypeIds)) {
-            $andQueries[] = [
-                'terms' => [
-                    'organisation_visibility_type_id' => $this->organisationVisibilityTypeIds
-                ]
-            ];
+            if (in_array(null, $this->organisationVisibilityTypeIds, true)) {
+                $queries[] = [
+                    'bool' => [
+                        'should' => [
+                            [
+                                'terms' => [
+                                    'organisation_visibility_type_id' => array_values(array_filter($this->organisationVisibilityTypeIds))
+                                ]
+                            ],
+                            [
+                                'bool' => [
+                                    'must_not' => [
+                                        'exists' => [
+                                            'field' => 'organisation_visibility_type_id'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            } else {
+                $queries[] = [
+                    'terms' => [
+                        'organisation_visibility_type_id' => $this->organisationVisibilityTypeIds
+                    ]
+                ];
+            }
         }
 
         if (isset($this->type) && !empty($this->type)) {
-            $andQueries[] = [
+            $queries[] = [
                 'term' => [
                     'type' => $this->type
                 ]
@@ -167,7 +188,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->organisationIds) && !empty($this->organisationIds)) {
-            $andQueries[] = [
+            $queries[] = [
                 'terms' => [
                     'organisation_id' => $this->organisationIds
                 ]
@@ -175,7 +196,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->subjectIds) && !empty($this->subjectIds)) {
-            $andQueries[] = [
+            $queries[] = [
                 'terms' => [
                     'subject_id' => $this->subjectIds
                 ]
@@ -183,7 +204,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->educationLevelIds) && !empty($this->educationLevelIds)) {
-            $andQueries[] = [
+            $queries[] = [
                 'terms' => [
                     'education_level_id' => $this->educationLevelIds
                 ]
@@ -191,7 +212,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->playlistIds) && !empty($this->playlistIds)) {
-            $andQueries[] = [
+            $queries[] = [
                 'terms' => [
                     'playlist_id' => $this->playlistIds
                 ]
@@ -199,7 +220,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->projectIds) && !empty($this->projectIds)) {
-            $andQueries[] = [
+            $queries[] = [
                 'terms' => [
                     'project_id' => $this->projectIds
                 ]
@@ -207,16 +228,21 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (isset($this->query) && !empty($this->query)) {
-            $orQueries[] = [
-                'multi_match' => [
-                    'query' => $this->query,
-                    'fields' => ['title^5', 'name^5', 'description^3']
-                ]
-            ];
-
-            $orQueries[] = [
-                'multi_match' => [
-                    'query' => $this->query
+            $queries[] = [
+                'bool' => [
+                    'should' => [
+                        [
+                            'multi_match' => [
+                                'query' => $this->query,
+                                'fields' => ['title^5', 'name^5', 'description^3']
+                            ]
+                        ],
+                        [
+                            'multi_match' => [
+                                'query' => $this->query
+                            ]
+                        ]
+                    ]
                 ]
             ];
         }
@@ -229,19 +255,9 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (!empty($andQueries)) {
-            $queries = $andQueries;
+        if (!empty($queries)) {
+            $boolQueries['must'] = $queries;
         }
-
-        if (!empty($orQueries)) {
-            $queries[] = [
-                'bool' => [
-                    'should' => $orQueries
-                ]
-            ];
-        }
-
-        $boolQueries['must'] = $queries;
 
         return [
             'bool' => $boolQueries
