@@ -95,7 +95,7 @@ class Project extends Model
     public function getUserAttribute()
     {
         if (isset($this->users)) {
-            return $this->users()->wherePivot('role', 'teacher')->first();
+            return $this->users()->wherePivot('role', 'owner')->first();
         }
 
         return null;

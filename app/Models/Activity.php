@@ -92,7 +92,7 @@ class Activity extends Model
     public function getUserAttribute()
     {
         if (isset($this->playlist) && isset($this->playlist->project) && isset($this->playlist->project->users)) {
-            return $this->playlist->project->users()->wherePivot('role', 'teacher')->first();
+            return $this->playlist->project->users()->wherePivot('role', 'owner')->first();
         }
 
         return null;

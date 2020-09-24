@@ -96,7 +96,7 @@ class Playlist extends Model
     public function getUserAttribute()
     {
         if (isset($this->project) && isset($this->project->users)) {
-            return $this->project->users()->wherePivot('role', 'teacher')->first();
+            return $this->project->users()->wherePivot('role', 'owner')->first();
         }
 
         return null;
