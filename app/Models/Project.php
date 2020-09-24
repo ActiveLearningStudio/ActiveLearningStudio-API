@@ -26,6 +26,7 @@ class Project extends Model
         'starter_project',
         'elasticsearch',
         'is_public',
+        'organisation_visibility_type_id'
     ];
 
     /**
@@ -70,6 +71,14 @@ class Project extends Model
     public function playlists()
     {
         return $this->hasMany('App\Models\Playlist', 'project_id');
+    }
+
+    /**
+     * Get the organisation that owns the project.
+     */
+    public function organisation()
+    {
+        return $this->belongsTo('App\Models\Organisation');
     }
 
     /**
