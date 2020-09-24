@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Traits\GlobalScope;
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,7 +14,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable, SoftDeletes;
+    use HasApiTokens, Notifiable, SoftDeletes, GlobalScope;
 
     /**
      * The attributes that are mass assignable.
@@ -167,23 +168,4 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->orWhereRaw("CONCAT(first_name,' ',last_name) ILIKE '%" . $value . "%'");
     }
 
-    /**
-     * @param $query
-     * @param $columns
-     * @param $value
-     * @return mixed
-     * Scope for searching in specific columns
-     */
-    public function scopeSearch($query, $columns, $value)
-    {
-        foreach ($columns as $column) {
-            // no need to perform search if searchable is false
-            if (isset($column['searchable']) && $column['searchable'] === 'false') {
-                continue;
-            }
-            $column = $column['name'] ?? $column;
-            $query->orWhere($column, 'ILIKE', '%' . $value . '%');
-        }
-        return $query;
-    }
 }
