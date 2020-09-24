@@ -47,15 +47,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     /**
      * To clone project and associated playlists
-     * @param Request $request
+     * @param $authenticated_user
      * @param Project $project
+     * @param $token
      * @return type
      */
-    public function clone(Request $request, Project $project)
+    public function clone($authenticated_user, Project $project, $token)
     {
-        // request has is implemented to support other than auth users
-        $authenticated_user = $request->has('clone_user') ? $request->clone_user :auth()->user();
-        $token = $request->bearerToken();
         $new_image_url = config('app.default_thumb_url');
         $source_file = storage_path("app/public/".(str_replace('/storage/','',$project->thumb_url)));
         if (file_exists($source_file)) {
@@ -73,7 +71,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             'description' => $project->description,
             'thumb_url' => $new_image_url,
             'shared' => $project->shared,
-            'starter_project' => $project->starter_project,
+            'starter_project' => false,
         ];
 
         $clonned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
