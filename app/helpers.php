@@ -21,7 +21,12 @@ if (! function_exists('clone_thumbnail')) {
                 $ext = pathinfo(basename($thumbnail), PATHINFO_EXTENSION);
                 $new_image_name = uniqid() . '.' . $ext;
                 ob_start();
-                $destination_file = str_replace("uploads", $source, str_replace(basename($thumbnail), $new_image_name, $source_file));
+                
+                $destination_file = str_replace("uploads_tmp", $source, str_replace(basename($thumbnail), $new_image_name, $source_file));
+                if(strpos($destination_file, 'uploads') !== false) {
+                    $destination_file = str_replace("uploads", $source, $destination_file);
+                }
+                
                 \File::copy($source_file, $destination_file);
                 ob_get_clean();
                 $new_image_url = "/storage/" . $source . "/" . $new_image_name;
