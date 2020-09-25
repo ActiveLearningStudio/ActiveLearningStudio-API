@@ -25,8 +25,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-//        $schedule->command(new SendDailyUsage)->dailyAt('0:00');
-        $schedule->command(new SendDailyUsage)->everyFourHours();
+//        $schedule->command(SendDailyUsage::class)->dailyAt('0:00');
+        $schedule->command(SendDailyUsage::class)->everyFourHours();
     }
 
     /**
