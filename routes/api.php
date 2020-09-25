@@ -149,5 +149,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::resource('activity-types', 'ActivityTypeController');
         // activity-items
         Route::resource('activity-items', 'ActivityItemController');
+        // organisations
+        Route::resource('organisations', 'OrganisationController');
+        Route::get('organisations/report/basic', 'OrganisationController@reportBasic')->name('organisations.report.basic');
     });
 });

@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Traits\GlobalScope;
+use App\Models\DeepRelations\HasManyDeep;
+use App\Models\DeepRelations\HasRelationships;
 
 class Organisation extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, GlobalScope, HasRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +19,8 @@ class Organisation extends Model
      */
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'parent_id'
     ];
 
     /**
@@ -33,6 +37,37 @@ class Organisation extends Model
     public function projects()
     {
         return $this->hasMany('App\Models\Project');
+    }
+
+    /**
+     * Get playlists directly from organisations model via hasManyThrough
+     * @return HasManyThrough
+     */
+    public function playlists()
+    {
+        return $this->hasManyThrough('App\Models\Playlist', 'App\Models\Project', 'organisation_id', 'project_id', 'id', 'id');
+    }
+
+    /**
+     * Get far away relations data using custom Deep classes
+     * @return HasManyDeep
+     */
+    public function activities()
+    {
+        return $this->hasManyDeep(
+            'App\Models\Activity',
+            ['App\Models\Project', 'App\Models\Playlist'], // Intermediate models, beginning at the far parent (Organisations).
+            [
+                'organisation_id', // Foreign key on the "project" table.
+                'project_id',    // Foreign key on the "playlist" table.
+                'playlist_id'     // Foreign key on the "activity" table.
+            ],
+            [
+                'id', // Local key on the "users" table.
+                'id', // Local key on the "project" table.
+                'id'  // Local key on the "playlist" table.
+            ]
+        );
     }
 
     /**
