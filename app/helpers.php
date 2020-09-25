@@ -16,7 +16,7 @@ if (! function_exists('clone_thumbnail')) {
                 return $thumbnail;
             }
             
-            $source_file = storage_path("app/public/".(str_replace('/storage/','',$thumbnail)));
+            $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $thumbnail)));
             if (file_exists($source_file)) {
                 $ext = pathinfo(basename($thumbnail), PATHINFO_EXTENSION);
                 $new_image_name = uniqid() . '.' . $ext;
@@ -24,7 +24,7 @@ if (! function_exists('clone_thumbnail')) {
                 $destination_file = str_replace("uploads", $source, str_replace(basename($thumbnail), $new_image_name, $source_file));
                 \File::copy($source_file, $destination_file);
                 ob_get_clean();
-                $new_image_url = "/storage/".$source."/" . $new_image_name;
+                $new_image_url = "/storage/" . $source . "/" . $new_image_name;
             } 
         }
         
