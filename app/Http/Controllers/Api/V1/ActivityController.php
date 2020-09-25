@@ -300,7 +300,7 @@ class ActivityController extends Controller
             ], 500);
         }
 
-        $cloned_activity = $this->activityRepository->clone($request, $playlist, $activity);
+        $cloned_activity = $this->activityRepository->clone($playlist, $activity, $request->bearerToken());
 
         if ($cloned_activity) {
             return response([

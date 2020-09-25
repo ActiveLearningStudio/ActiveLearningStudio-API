@@ -54,6 +54,9 @@
             "Djoudi\\LaravelH5p\\": "H5P/laravel-h5p/src/LaravelH5p",
             "App\\": "app/"
         },
+        "files": [
+            "app/helpers.php"
+        ],
         "classmap": [
             "database/seeds",
             "database/factories"

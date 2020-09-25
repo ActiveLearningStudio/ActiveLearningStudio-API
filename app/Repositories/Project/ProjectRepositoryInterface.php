@@ -12,10 +12,11 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
 {
     /**
      * To clone a project and its associated playlist,activities
-     * @param \App\Repositories\Project\Request $request
+     * @param $authenticated_user
      * @param Project $project
+     * @param string $token Authenticated user token
      */
-    public function clone(Request $request, Project $project);
+    public function clone($authenticated_user, Project $project, $token);
 
     /**
      * To fetch project based on LMS settings
