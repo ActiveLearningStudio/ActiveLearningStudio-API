@@ -36,12 +36,12 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
     public function getH5pElasticsearchFields($h5pContent);
     
     /**
-     * Tio Clone Activity and H5P Content
-     * @param Request $request
+     * To clone a playlist and associated activities
      * @param Playlist $playlist
      * @param Activity $activity
+     * @param string $token
      */
-    public function clone(Request $request, Playlist $playlist, Activity $activity);
+    public function clone(Playlist $playlist, Activity $activity, $token);
     
     /**
      * To Clone H5P content associated to an Activity
