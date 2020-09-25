@@ -46,21 +46,26 @@ class StarterProjects extends Command
         $starterProjects = resolve(ProjectRepository::class)->getStarterProjects(); // get all starter projects
         $users = User::has('projects', '<=', 1)->get(); // get users with 1 or 0 projects
 
-        \Log::info('Starter Project found: ' . $starterProjects->count());
+        \Log::info('Starter Projects found: ' . $starterProjects->count());
+        $this->info('Starter Project found: ' . $starterProjects->count());
         \Log::info('Users found with less than 2 projects: ' . $users->count());
-        \Log::info('Starter Project script started at: ' . \Carbon::now());
+        $this->info('Users found with less than 2 projects: ' . $users->count());
+        \Log::info('Starter Project script started at: ' . now());
+        $this->line('Starter Project script started at: ' . now());
         foreach ($users as $user) {
+            $this->line('Starter Projects Assigning for User: ' . $user->email . ' started at ' . now());
             // loop through starter projects
             foreach ($starterProjects as $project) {
                 try {
                     $projectRepository->clone($user, $project, $user->createToken('auth_token')->accessToken);
                 } catch (\Exception $e) {
-                    Log::info($user);
-                    Log::info($project);
-                    Log::Error('Starter Projects Assigning failed:' . $e->getMessage());
+                    $this->error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
+                    Log::Error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
                 }
             }
+            $this->info('Starter Projects assigned to User: ' . $user->email . ' timestamp: ' . now());
         }
-        \Log::info('Starter Project script Finished at: ' . \Carbon::now());
+        $this->info('Starter Project script Finished at: ' . now());
+        \Log::info('Starter Project script Finished at: ' . now());
     }
 }

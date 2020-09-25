@@ -49,7 +49,7 @@ class AuthController extends Controller
         $user = $this->userRepository->create($data);
 
         if ($user) {
-            AssignStarterProjects::dispatchAfterResponse($user, $user->createToken('auth_token')->accessToken)->onQueue('starterProjects');
+            AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
             event(new Registered($user));
 
 //            return response([

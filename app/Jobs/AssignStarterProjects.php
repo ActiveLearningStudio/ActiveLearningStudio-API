@@ -50,7 +50,7 @@ class AssignStarterProjects implements ShouldQueue
     {
         // get starter projects
         $starterProjects = resolve(ProjectRepository::class)->getStarterProjects();
-        \Log::info('Starter Project script started at: ' . \Carbon::now());
+        \Log::info('Starter Project JOB started at: ' . now());
         DB::transaction(function () use ($starterProjects, $projectRepository) {
             // assign all starter projects one by one
             try {
@@ -63,7 +63,7 @@ class AssignStarterProjects implements ShouldQueue
                 Log::info($this->user);
             }
         });
-        \Log::info('Starter Project script Finished at: ' . \Carbon::now());
+        \Log::info('Starter Project JOB Finished at: ' . now());
     }
 
 }

@@ -7,6 +7,7 @@ use App\Jobs\AssignStarterProjects;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -58,7 +59,8 @@ class UserRepository extends BaseRepository
             $data['remember_token'] = Str::random(64);
             $data['email_verified_at'] = now();
             if ($user = $this->model->create($data)) {
-                AssignStarterProjects::dispatchAfterResponse($user, $user->createToken('auth_token')->accessToken)->onQueue('starterProjects');
+                AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
+                event(new Registered($user));
                 return ['message' => 'User created successfully!', 'data' => $user];
             }
         } catch (\Exception $e) {
