@@ -212,6 +212,6 @@ class ProjectRepository extends BaseRepository
             throw new GeneralException('Choose at-least one project.');
         }
         $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
-        return 'Projects Starter status updated successfully!';
+        return 'Starter Projects status updated successfully!';
     }
 }
