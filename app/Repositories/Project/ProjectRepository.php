@@ -23,7 +23,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param Project $model
      */
-    public function __construct(Project $model,PlaylistRepositoryInterface $playlistRepositroy, ActivityRepositoryInterface $activityRepository)
+    public function __construct(Project $model, PlaylistRepositoryInterface $playlistRepositroy, ActivityRepositoryInterface $activityRepository)
     {
         $this->activityRepository = $activityRepository;
         $this->playlistRepositroy = $playlistRepositroy;
@@ -66,8 +66,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             'starter_project' => false,
         ];
 
-        $clonned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
-        if (!$clonned_project) {
+        $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
+        if (!$cloned_project) {
             return response([
                 'errors' => ['Could not create project. Please try again later.'],
             ], 500);
@@ -75,7 +75,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         
         $playlists = $project->playlists;
         foreach ($playlists as $playlist) {
-            $cloned_activity = $this->playlistRepositroy->clone($clonned_project, $playlist, $token);
+            $cloned_activity = $this->playlistRepositroy->clone($cloned_project, $playlist, $token);
         }
     }
 
