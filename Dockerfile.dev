@@ -50,6 +50,12 @@ COPY . /var/www/html/
 
 RUN service apache2 restart
 
+RUN chown -R 1000 /var/www/html
 
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod 777 /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]

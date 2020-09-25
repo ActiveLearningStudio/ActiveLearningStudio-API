@@ -2,13 +2,14 @@
 
 namespace App\Models\CurrikiGo;
 
+use App\Models\Traits\GlobalScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
 
 class LmsSetting extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, GlobalScope;
 
     /**
      * The attributes that are mass assignable.
@@ -35,23 +36,4 @@ class LmsSetting extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * @param $query
-     * @param $columns
-     * @param $value
-     * @return mixed
-     * Scope for searching in specific columns
-     */
-    public function scopeSearch($query, $columns, $value)
-    {
-        foreach ($columns as $column) {
-            // no need to perform search if searchable is false
-            if (isset($column['searchable']) && $column['searchable'] === 'false') {
-                continue;
-            }
-            $column = $column['name'] ?? $column;
-            $query->orWhere($column, 'ILIKE', '%' . $value . '%');
-        }
-        return $query;
-    }
 }

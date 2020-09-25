@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Admin;
 
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * Class BaseRepository.
  *
@@ -64,6 +66,18 @@ abstract class BaseRepository implements RepositoryContract
      * @var array
      */
     protected $scopes = [];
+
+    /**
+     * Yajra/DataTables
+     * DataTables properties
+     */
+    protected $dtStart = 0;
+    protected $dtLength = 25;
+    protected $dtPage = 1;
+    protected $dtOrder = 'created_at';
+    protected $dtOrderDir = 'asc';
+    protected $dtSearchValue = '';
+    protected $dtSearchColumns = [];
 
     /**
      * Get all the model records in the database.
@@ -142,7 +156,7 @@ abstract class BaseRepository implements RepositoryContract
     /**
      * @param $item
      * @param $column
-     * @param  array  $columns
+     * @param array $columns
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
      */
@@ -199,10 +213,10 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
-     * @param int    $limit
-     * @param array  $columns
+     * @param int $limit
+     * @param array $columns
      * @param string $pageName
-     * @param null   $page
+     * @param null $page
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -237,7 +251,7 @@ abstract class BaseRepository implements RepositoryContract
      * Add a simple where in clause to the query.
      *
      * @param string $column
-     * @param mixed  $values
+     * @param mixed $values
      *
      * @return $this
      */
@@ -313,7 +327,7 @@ abstract class BaseRepository implements RepositoryContract
             $this->query->orderBy($orders['column'], $orders['direction']);
         }
 
-        if (isset($this->take) and ! is_null($this->take)) {
+        if (isset($this->take) and !is_null($this->take)) {
             $this->query->take($this->take);
         }
 
@@ -348,4 +362,50 @@ abstract class BaseRepository implements RepositoryContract
 
         return $this;
     }
+
+    /**
+     * Params of DataTables present in Request
+     * @param $dtParams
+     * @return BaseRepository
+     */
+    protected function setDtParams($dtParams)
+    {
+        if (isset($dtParams['columns'], $dtParams['order'], $dtParams['start'], $dtParams['length'], $dtParams['search'])) {
+            $this->dtSearchColumns = $dtParams['columns'];
+            $this->dtOrder = $this->dtSearchColumns[$dtParams['order'][0]['column']]['name']; // get datatable order column
+            $this->dtOrderDir = $dtParams['order'][0]['dir'];
+            $this->dtSearchValue = $dtParams['search']['value'] ?? null; // set null if no search value present in request
+            $this->dtStart = $dtParams['start'];
+            $this->dtLength = $dtParams['length'];
+            $this->dtPage = ($this->dtStart / $this->dtLength) + 1; // calculate page size
+        }
+        $this->dtPage = $dtParams['page'] ?? $this->dtPage; // if page parameter is already present in request then override
+        return $this;
+    }
+
+    /**
+     * Get the default datatables paginated response
+     * @param array $with
+     * @return mixed
+     */
+    protected function getDtPaginated($with = [])
+    {
+        // to make sure the instance of query builder
+        if (!$this->query instanceof Builder) {
+            $this->query = $this->model::query();
+        }
+
+        // search through each column and sort by - Needed for datatables calls
+        return $this->query->when($this->dtOrderDir, function ($query) {
+            return $query->orderBy($this->dtOrder, $this->dtOrderDir);
+        })->when($this->dtSearchValue, function ($query) {
+            // group the where clause to avoid the conflicting of other where clauses with search
+            return $query->where(function ($query) {
+                return $query->search($this->dtSearchColumns, $this->dtSearchValue);
+            });
+        })->when($with, function ($query) use ($with) {
+            return $query->with($with);
+        })->paginate($this->dtLength, '*', 'page', $this->dtPage);
+    }
+
 }
