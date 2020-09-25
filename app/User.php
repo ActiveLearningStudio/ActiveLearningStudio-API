@@ -6,7 +6,7 @@ use App\Models\DeepRelations\HasManyDeep;
 use App\Models\DeepRelations\HasRelationships;
 use App\Models\Traits\GlobalScope;
 use App\Notifications\MailResetPasswordNotification;
-use App\Notifications\VerifyEmail;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -178,7 +178,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmailNotification);
     }
 
     /**
