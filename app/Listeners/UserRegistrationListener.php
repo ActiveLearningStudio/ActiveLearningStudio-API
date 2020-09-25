@@ -5,6 +5,7 @@ namespace App\Listeners;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Log;
 
 class UserRegistrationListener
 {
@@ -54,14 +55,19 @@ class UserRegistrationListener
             'hapikey' => '68896ae2-0832-43d3-ae55-9852086ca0ef',
         ];
 
-        $this->client->request(
-            'POST',
-            $hubspot_url,
-            [
-                'headers' => $headers,
-                'query' => $query,
-                'json' => $data,
-            ]
-        );
+        try {
+            $this->client->request(
+                'POST',
+                $hubspot_url,
+                [
+                    'headers' => $headers,
+                    'query' => $query,
+                    'json' => $data,
+                ]
+            );
+        } catch (\Exception $e) {
+            Log::error('HubSpot Registration Error: ');
+            Log::error($e);
+        }
     }
 }
