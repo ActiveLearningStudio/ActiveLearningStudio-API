@@ -88,7 +88,18 @@ class UserController extends Controller
      * @param Request $request
      * @return Application|ResponseFactory|Response
      */
-    public function reportBasic(Request $request){
-        return response( $this->userRepository->reportBasic($request->all()), 200);
+    public function reportBasic(Request $request)
+    {
+        return response($this->userRepository->reportBasic($request->all()), 200);
+    }
+
+    /**
+     * Temporary function for invoking the starter projects command in background
+     * This command will get users with less than 2 projects and assign starter projects
+     */
+    public function assignStarterProjects(): void
+    {
+        \Artisan::call('project:starters');
+        dd("Assign starter projects command invoked successfully.");
     }
 }
