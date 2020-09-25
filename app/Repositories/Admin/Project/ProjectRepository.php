@@ -60,8 +60,7 @@ class ProjectRepository extends BaseRepository
             return $query->where(function ($query) use ($mode) {
                 return $query->where('starter_project', $mode);
             });
-        })/*->where('is_public', true)*/
-        ;
+        });
         return $this->getDtPaginated(['users']);
     }
 
@@ -77,13 +76,13 @@ class ProjectRepository extends BaseRepository
         $pivot_data = $project->users->find($user->id);
         $linked_user_id = $pivot_data ? $pivot_data->pivot->value('user_id') : 0;
         if ((int)$user->id === $linked_user_id) {
-            throw new GeneralException('Project already linked to this user');
+            throw new GeneralException('Project already linked to this user.');
         }
         try {
             // resolving this object one-time
             // as it might only needed here - so no dependency injection in constructor
             resolve(ProjectRepositoryInterface::class)->clone($user, $project, request()->bearerToken());
-            return 'User data updated and Project cloning successful!';
+            return 'User data updated and project cloning successful!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return 'Cloning failed.';
@@ -104,7 +103,7 @@ class ProjectRepository extends BaseRepository
             // index the selected projects
             $this->indexProjects($data['index_projects'] ?? []);
 
-            return 'Indexes Updated Successfully!';
+            return 'Indexes updated successfully!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new GeneralException('Unable to update indexes, please try again later!');
@@ -184,7 +183,7 @@ class ProjectRepository extends BaseRepository
         } else {
             $this->indexProjects([$project->id]);
         }
-        return 'Index Status Changed Successfully!';
+        return 'Index status changed successfully!';
     }
 
     /**
@@ -198,7 +197,7 @@ class ProjectRepository extends BaseRepository
         } else {
             $this->indexProjects([$project->id], 'is_public');
         }
-        return 'Public Status toggled Successfully!';
+        return 'Public status toggled successfully!';
     }
 
     /**
@@ -213,6 +212,6 @@ class ProjectRepository extends BaseRepository
             throw new GeneralException('Choose at-least one project.');
         }
         $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
-        return 'Projects Starter status Updated Successfully!';
+        return 'Projects Starter status updated successfully!';
     }
 }
