@@ -10,9 +10,9 @@ if (! function_exists('clone_thumbnail')) {
     {
         $new_image_url = config('app.default_thumb_url');
         
-        if(!empty($thumbnail) && !empty($source)) {
+        if (!empty($thumbnail) && !empty($source)) {
         
-            if(filter_var($thumbnail, FILTER_VALIDATE_URL) !== false) {
+            if (filter_var($thumbnail, FILTER_VALIDATE_URL) !== false) {
                 return $thumbnail;
             }
             

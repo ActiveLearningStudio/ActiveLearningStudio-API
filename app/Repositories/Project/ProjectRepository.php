@@ -56,7 +56,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function clone($authenticated_user, Project $project, $token)
     {
-        $new_image_url = clone_thumbnail($project->thumb_url,"projects");
+        $new_image_url = clone_thumbnail($project->thumb_url, "projects");
         
         $data = [
             'name' => $project->name,

@@ -232,7 +232,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
         }
 
-        $new_thumb_url = clone_thumbnail($activity->thumb_url,"activities");
+        $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
         
         $activity_data = [
             'title' => $activity->title,
