@@ -137,12 +137,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // users
         Route::resource('users', 'UserController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
         // projects
         Route::resource('projects', 'ProjectController');
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
         Route::get('projects/{project}/index', 'ProjectController@updateIndex');
         Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
+        Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
         // lms-settings
         Route::resource('lms-settings', 'LmsSettingController');
         // activity-types
