@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Jobs\AssignStarterProjects;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,15 +18,18 @@ use Illuminate\Support\Str;
 class AuthController extends Controller
 {
     private $userRepository;
+    private $userLoginRepository;
 
     /**
      * AuthController constructor.
      *
      * @param UserRepositoryInterface $userRepository
+     * @param UserLoginRepositoryInterface $userLoginRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository, UserLoginRepositoryInterface $userLoginRepository)
     {
         $this->userRepository = $userRepository;
+        $this->userLoginRepository = $userLoginRepository;
     }
 
     /**
@@ -44,8 +49,9 @@ class AuthController extends Controller
         $user = $this->userRepository->create($data);
 
         if ($user) {
-//            event(new Registered($user));
-//
+            AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
+            event(new Registered($user));
+
 //            return response([
 //                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"
 //            ], 201);
@@ -85,6 +91,11 @@ class AuthController extends Controller
 
         $accessToken = $user->createToken('auth_token')->accessToken;
 
+        $this->userLoginRepository->create([
+            'user_id' => $user->id,
+            'ip_address' => $loginRequest->ip(),
+        ]);
+
         return response([
             'user' => new UserResource($user),
             'access_token' => $accessToken,
@@ -121,6 +132,11 @@ class AuthController extends Controller
             $user->save();
 
             $accessToken = $user->createToken('auth_token')->accessToken;
+
+            $this->userLoginRepository->create([
+                'user_id' => $user->id,
+                'ip_address' => $request->ip(),
+            ]);
 
             return response([
                 'user' => new UserResource($user),

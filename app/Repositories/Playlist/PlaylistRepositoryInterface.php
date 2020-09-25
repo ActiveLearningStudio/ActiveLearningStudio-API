@@ -26,12 +26,11 @@ interface PlaylistRepositoryInterface extends EloquentRepositoryInterface
 
     /**
      * Clone Project,PlayList and activities
-     * @param Request $request
      * @param Project $project
      * @param Playlist $playlist
-     *
+     * @param string $token
      */
-    public function clone(Request $request, Project $project, Playlist $playlist);
+    public function clone(Project $project, Playlist $playlist, $token);
 
     /**
      * Get Playlists for Preview
