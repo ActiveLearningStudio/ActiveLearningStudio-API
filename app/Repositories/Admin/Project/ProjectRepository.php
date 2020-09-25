@@ -40,22 +40,28 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
+     * @param $data
      * @return mixed
      */
-    public function getAll()
+    public function getAll($data)
     {
-        $q = request()->q;
-        return $this->model->when($q, function ($query) use ($q) {
-            $query->where(function ($query) use($q){
+        $q = $data['q'] ?? null;
+        $mode = $data['mode'] ?? null;
+        $this->setDtParams($data);
+        $this->query = $this->model->when($q, function ($query) use ($q) {
+            $query->where(function ($query) use ($q) {
                 // get projects by name or email
                 $query->orWhereHas('users', function ($query) use ($q) {
                     return $query->where('email', 'ILIKE', '%' . $q . '%');
                 });
                 return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
             });
-        })->when(request()->users, function ($query) {
-            return $query->with('users');
-        })/*->where('is_public', true)*/->orderBy('created_at', 'desc')->paginate(100);
+        })->when($mode && $mode !== 'all', function ($query) use ($mode) {
+            return $query->where(function ($query) use ($mode) {
+                return $query->where('starter_project', $mode);
+            });
+        });
+        return $this->getDtPaginated(['users']);
     }
 
     /**
@@ -70,17 +76,15 @@ class ProjectRepository extends BaseRepository
         $pivot_data = $project->users->find($user->id);
         $linked_user_id = $pivot_data ? $pivot_data->pivot->value('user_id') : 0;
         if ((int)$user->id === $linked_user_id) {
-            throw new GeneralException('Project already linked to this user');
+            throw new GeneralException('Project already linked to this user.');
         }
         try {
-            // adding user model to request - because use existing clone method
-            request()->request->add(['clone_user' => $user]);
             // resolving this object one-time
             // as it might only needed here - so no dependency injection in constructor
-            resolve(ProjectRepositoryInterface::class)->clone(request(), $project);
-            return 'User data updated and Project cloning successful!';
+            resolve(ProjectRepositoryInterface::class)->clone($user, $project, request()->bearerToken());
+            return 'User data updated and project cloning successful!';
         } catch (\Exception $e) {
-             Log::error($e->getMessage());
+            Log::error($e->getMessage());
             return 'Cloning failed.';
         }
     }
@@ -99,9 +103,9 @@ class ProjectRepository extends BaseRepository
             // index the selected projects
             $this->indexProjects($data['index_projects'] ?? []);
 
-            return 'Indexes Updated Successfully!';
+            return 'Indexes updated successfully!';
         } catch (\Exception $e) {
-             Log::error($e->getMessage());
+            Log::error($e->getMessage());
             throw new GeneralException('Unable to update indexes, please try again later!');
         }
     }
@@ -179,7 +183,7 @@ class ProjectRepository extends BaseRepository
         } else {
             $this->indexProjects([$project->id]);
         }
-        return 'Index Status Changed Successfully!';
+        return 'Index status changed successfully!';
     }
 
     /**
@@ -193,6 +197,21 @@ class ProjectRepository extends BaseRepository
         } else {
             $this->indexProjects([$project->id], 'is_public');
         }
-        return 'Public Status toggled Successfully!';
+        return 'Public status toggled successfully!';
+    }
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($projects, $flag): string
+    {
+        if (empty($projects)) {
+            throw new GeneralException('Choose at-least one project.');
+        }
+        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
+        return 'Starter Projects status updated successfully!';
     }
 }
