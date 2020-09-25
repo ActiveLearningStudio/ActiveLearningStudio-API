@@ -32,7 +32,6 @@ class ProjectController extends Controller
     public function __construct(ProjectRepository $projectRepository)
     {
         $this->projectRepository = $projectRepository;
-//        $this->authorizeResource(Project::class, 'project');
     }
 
     /**
@@ -43,7 +42,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        return ProjectResource::collection($this->projectRepository->getProjects());
+        return ProjectResource::collection($this->projectRepository->getAll());
     }
 
     /**
@@ -52,7 +51,6 @@ class ProjectController extends Controller
      * @urlParam id required The id means user_id.
      *
      * @param Request $request
-     * @param $id
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
@@ -87,7 +85,8 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Application|ResponseFactory|Response
      */
-    public function togglePublicStatus(Project $project){
+    public function togglePublicStatus(Project $project)
+    {
         return response(['message' => $this->projectRepository->togglePublicStatus($project)], 200);
     }
 

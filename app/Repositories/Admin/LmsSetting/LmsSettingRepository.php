@@ -24,23 +24,12 @@ class LmsSettingRepository extends BaseRepository
     }
 
     /**
-     * @param int $start
-     * @param int $length
+     * @param $data
      * @return mixed
      */
-    public function getAll($start = 0, $length = 25)
+    public function getAll($data)
     {
-        // calculate page size if not present in request
-        if (!request()->has('page')) {
-            $page = empty($length) ? 0 : ($start / $length);
-            request()->request->add(['page' => $page + 1]);
-        }
-        // search through each column and sort by - Needed for datatables calls
-        return $this->model->with('user')->when(isset(request()->order[0]['dir']), function ($query) {
-            return $query->orderBy(request()->columns[request()->order[0]['column']]['name'], request()->order[0]['dir']);
-        })->when(isset(request()->search['value']) && request()->search['value'], function ($query) {
-            return $query->search(request()->columns, request()->search['value']);
-        })->paginate($length);
+        return $this->setDtParams($data)->getDtPaginated(['user']);
     }
 
     /**
@@ -51,12 +40,13 @@ class LmsSettingRepository extends BaseRepository
     public function create($data)
     {
         try {
-            $setting = $this->model->create($data);
-            return 'Setting created successfully!';
+            if ($setting = $this->model->create($data)) {
+                return ['message' => 'Setting created successfully!', 'data' => $setting];
+            }
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to create LMS Setting, please try again later!');
     }
 
     /**
@@ -66,13 +56,20 @@ class LmsSettingRepository extends BaseRepository
      */
     public function update($id, $data)
     {
-        $setting = $this->find($id)->update($data);
-        return 'Setting data updated!';
+        try {
+            if ($this->find($id)->update($data)) {
+                return ['message' => 'Setting created updated!', 'data' => $this->find($id)];
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        throw new GeneralException('Unable to update LMS Setting, please try again later!');
     }
 
     /**
      * @param $id
      * @return mixed
+     * @throws GeneralException
      */
     public function find($id)
     {
@@ -93,8 +90,8 @@ class LmsSettingRepository extends BaseRepository
             $this->model->find($id)->delete();
             return 'Setting Deleted!';
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to delete LMS Setting, please try again later!');
     }
 }

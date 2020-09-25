@@ -7,7 +7,6 @@ use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Admin\BaseRepository;
-use App\Repositories\Admin\User\UserRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
 use Illuminate\Support\Facades\Log;
@@ -28,39 +27,35 @@ class ProjectRepository extends BaseRepository
     private $activityModel;
 
     /**
-     * @var User
-     */
-    private $userModel;
-
-    /**
      * ProjectRepository constructor.
      * @param Project $model
      * @param Playlist $playlistModel
      * @param Activity $activityModel
-     * @param User $userModel
      */
-    public function __construct(Project $model, Playlist $playlistModel, Activity $activityModel, User $userModel)
+    public function __construct(Project $model, Playlist $playlistModel, Activity $activityModel)
     {
         $this->model = $model;
         $this->playlistModel = $playlistModel;
         $this->activityModel = $activityModel;
-        $this->userModel = $userModel;
     }
 
     /**
      * @return mixed
      */
-    public function getProjects()
+    public function getAll()
     {
         $q = request()->q;
         return $this->model->when($q, function ($query) use ($q) {
-            $query->whereHas('users', function ($query) use ($q) {
-                return $query->where('email', 'ILIKE', '%' . $q . '%');
+            $query->where(function ($query) use($q){
+                // get projects by name or email
+                $query->orWhereHas('users', function ($query) use ($q) {
+                    return $query->where('email', 'ILIKE', '%' . $q . '%');
+                });
+                return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
             });
-            return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
         })->when(request()->users, function ($query) {
             return $query->with('users');
-        })->where('is_public', true)->orderBy('created_at', 'desc')->paginate(100);
+        })/*->where('is_public', true)*/->orderBy('created_at', 'desc')->paginate(100);
     }
 
     /**
@@ -85,8 +80,8 @@ class ProjectRepository extends BaseRepository
             resolve(ProjectRepositoryInterface::class)->clone(request(), $project);
             return 'User data updated and Project cloning successful!';
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+             Log::error($e->getMessage());
+            return 'Cloning failed.';
         }
     }
 
@@ -106,7 +101,7 @@ class ProjectRepository extends BaseRepository
 
             return 'Indexes Updated Successfully!';
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
+             Log::error($e->getMessage());
             throw new GeneralException('Unable to update indexes, please try again later!');
         }
     }
@@ -118,7 +113,7 @@ class ProjectRepository extends BaseRepository
      */
     public function removeProjectsIndex($projects, $key = 'elasticsearch'): void
     {
-        if (empty($projects)){
+        if (empty($projects)) {
             return;
         }
         $playlists = $this->playlistModel->whereIn('project_id', $projects)->get('id');
@@ -141,7 +136,7 @@ class ProjectRepository extends BaseRepository
      */
     public function indexProjects($projects, $key = 'elasticsearch'): void
     {
-        if (empty($projects)){
+        if (empty($projects)) {
             return;
         }
         // search-able is needed as on collections update observer will not get fired

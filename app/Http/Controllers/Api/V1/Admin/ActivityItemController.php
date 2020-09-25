@@ -57,7 +57,7 @@ class ActivityItemController extends Controller
     {
         $validated = $request->validated();
         $response = $this->repository->create($validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new ActivityItemResource($response['data'])], 200);
     }
 
     /**
@@ -70,7 +70,7 @@ class ActivityItemController extends Controller
     {
         $validated = $request->validated();
         $response = $this->repository->update($id, $validated);
-        return response(['message' => $response], 200);
+        return response(['message' => $response['message'], 'data' => new ActivityItemResource($response['data'])], 200);
     }
 
     /**

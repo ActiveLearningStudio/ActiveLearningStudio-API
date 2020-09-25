@@ -136,6 +136,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin', 'middleware' => ['auth:api', 'verified', 'admin']], function () {
         // users
         Route::resource('users', 'UserController');
+        Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         // projects
         Route::resource('projects', 'ProjectController');
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
