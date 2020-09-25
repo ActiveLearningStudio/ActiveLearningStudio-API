@@ -8,6 +8,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Support\Collection;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\CurrikiGo\LmsSetting;
 
@@ -15,15 +16,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 {
 
     private $activityRepository;
+    private $playlistRepositroy;
 
     /**
      * ProjectRepository constructor.
      *
      * @param Project $model
      */
-    public function __construct(Project $model, ActivityRepositoryInterface $activityRepository)
+    public function __construct(Project $model,PlaylistRepositoryInterface $playlistRepositroy, ActivityRepositoryInterface $activityRepository)
     {
         $this->activityRepository = $activityRepository;
+        $this->playlistRepositroy = $playlistRepositroy;
         parent::__construct($model);
     }
 
@@ -47,25 +50,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     /**
      * To clone project and associated playlists
-     * @param $authenticated_user
+     * @param User $authenticated_user
      * @param Project $project
-     * @param $token
-     * @return type
+     * @param string $token
      */
     public function clone($authenticated_user, Project $project, $token)
     {
-        $new_image_url = config('app.default_thumb_url');
-        $source_file = storage_path("app/public/".(str_replace('/storage/','',$project->thumb_url)));
-        if (file_exists($source_file)) {
-            $ext = pathinfo(basename($project->thumb_url), PATHINFO_EXTENSION);
-            $new_image_name = uniqid() . '.' . $ext;
-            ob_start();
-            $destination_file = str_replace("uploads","projects",str_replace(basename($project->thumb_url),$new_image_name,$source_file));
-            \File::copy($source_file, $destination_file);
-            ob_get_clean();
-            $new_image_url = "/storage/projects/" . $new_image_name;
-
-        } 
+        $new_image_url = clone_thumbnail($project->thumb_url,"projects");
+        
         $data = [
             'name' => $project->name,
             'description' => $project->description,
@@ -83,49 +75,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         
         $playlists = $project->playlists;
         foreach ($playlists as $playlist) {
-            $play_list_data = ['title' => $playlist->title,
-                'order' => $playlist->order,
-                // is_public will always be FALSE when cloning, so we don't need to cascade it.
-                // 'is_public' => $playlist->is_public
-            ];
-            $cloned_playlist = $clonned_project->playlists()->create($play_list_data);
-
-            $activites = $playlist->activities;
-            foreach ($activites as $activity) {
-                $h5P_res = null;
-                if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) {
-                    $h5P_res = $this->activityRepository->download_and_upload_h5p($token, $activity->h5p_content_id);
-                }
-                $new_thumb_url = config('app.default_thumb_url');
-                $activites_source_file = storage_path("app/public/".(str_replace('/storage/','',$activity->thumb_url)));
-                if (file_exists($activites_source_file)) {
-                    $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
-                    $new_image_name_mtd = uniqid() . '.' . $ext;
-                    ob_start();
-                    $activites_destination_file = str_replace("uploads","activities",str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file));
-                    \File::copy($activites_source_file, $activites_destination_file);
-                    ob_get_clean();
-                    $new_thumb_url = "/storage/activities/" . $new_image_name_mtd;
-                }
-
-                $activity_data = [
-                    'title' => $activity->title,
-                    'type' => $activity->type,
-                    'content' => $activity->content,
-                    'playlist_id' => $cloned_playlist->id,
-                    'order' => $activity->order,
-                    'h5p_content_id' => $h5P_res === null ? 0 : $h5P_res->id,
-                    'thumb_url' => $new_thumb_url,
-                    'subject_id' => $activity->subject_id,
-                    'education_level_id' => $activity->education_level_id,
-                    // is_public & elasticsearch will always be FALSE when cloning, so we don't need to cascade it.
-                    // 'is_public' => $activity->is_public,
-                    // 'elasticsearch' => $activity->elasticsearch,
-                    'shared' => $activity->shared,
-                ];
-
-                $cloned_activity = $this->activityRepository->create($activity_data);
-            }
+            $cloned_activity = $this->playlistRepositroy->clone($clonned_project, $playlist, $token);
         }
     }
 

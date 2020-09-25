@@ -226,7 +226,7 @@ class PlaylistController extends Controller
             ], 500);
         }
 
-        $this->playlistRepository->clone($request, $project, $playlist);
+        $this->playlistRepository->clone($project, $playlist, $request->bearerToken());
 
         return response([
             'message' => 'Playlist is cloned successfully.',

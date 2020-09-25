@@ -14,7 +14,7 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * To clone a project and its associated playlist,activities
      * @param $authenticated_user
      * @param Project $project
-     * @param type $token Authenticated user token
+     * @param string $token Authenticated user token
      */
     public function clone($authenticated_user, Project $project, $token);
 
