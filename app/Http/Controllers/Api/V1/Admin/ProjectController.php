@@ -42,7 +42,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        return ProjectResource::collection($this->projectRepository->getAll());
+        return ProjectResource::collection($this->projectRepository->getAll($request->all()));
     }
 
     /**
@@ -90,4 +90,14 @@ class ProjectController extends Controller
         return response(['message' => $this->projectRepository->togglePublicStatus($project)], 200);
     }
 
+    /**
+     * Toggle the starter projects flag
+     * @param Request $request
+     * @param $flag
+     * @return Application|ResponseFactory|Response
+     */
+    public function toggleStarter(Request $request, $flag)
+    {
+        return response(['message' => $this->projectRepository->toggleStarter($request->projects, $flag)], 200);
+    }
 }
