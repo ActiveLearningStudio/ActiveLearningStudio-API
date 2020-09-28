@@ -391,6 +391,7 @@ class LaravelH5p
                     'state' => '{}',
                 ),
             ),
+            'metadata' => isset($content['metadata']) ? $content['metadata'] : ['title' => null]
         );
 
         // Get preloaded user data for the current user
