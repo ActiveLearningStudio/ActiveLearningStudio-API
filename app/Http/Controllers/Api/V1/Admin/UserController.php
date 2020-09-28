@@ -27,7 +27,6 @@ class UserController extends Controller
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-//        $this->authorizeResource(User::class, 'user');
     }
 
     /**
@@ -36,12 +35,13 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return UserResource::collection($this->userRepository->getUsers($request->start, $request->length));
+        return UserResource::collection($this->userRepository->getAll($request->all()));
     }
 
     /**
      * @param $id
      * @return UserResource
+     * @throws GeneralException
      */
     public function edit($id)
     {
@@ -51,24 +51,27 @@ class UserController extends Controller
 
     /**
      * @param StoreUser $request
-     * @return UserResource
+     * @return UserResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
     public function store(StoreUser $request)
     {
-        $user = $this->userRepository->createUser($request->only('email', 'password', 'first_name', 'last_name', 'name', 'organization_name', 'job_title'));
-        return new UserResource($user);
+        $validated = $request->validated();
+        $response = $this->userRepository->create($validated);
+        return response(['message' => $response['message'], 'data' => new UserResource($response['data'])], 200);
     }
 
     /**
-     * @param StoreUser $request
+     * @param UpdateUser $request
+     * @param $id
      * @return UserResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
     public function update(UpdateUser $request, $id)
     {
-        $response = $this->userRepository->updateUser($id, $request->only('email', 'password', 'first_name', 'last_name', 'name'), $request->clone_project_id);
-        return response(['message' => $response], 200);
+        $validated = $request->validated();
+        $response = $this->userRepository->update($id, $validated, $request->clone_project_id);
+        return response(['message' => $response['message'], 'data' => new UserResource($response['data'])], 200);
     }
 
     /**
@@ -78,6 +81,25 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        return response(['message' => $this->userRepository->destroyUser($id)], 200);
+        return response(['message' => $this->userRepository->destroy($id)], 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function reportBasic(Request $request)
+    {
+        return response($this->userRepository->reportBasic($request->all()), 200);
+    }
+
+    /**
+     * Temporary function for invoking the starter projects command in background
+     * This command will get users with less than 2 projects and assign starter projects
+     */
+    public function assignStarterProjects(): void
+    {
+        \Artisan::call('project:starters');
+        dd("Assign starter projects command invoked successfully.");
     }
 }

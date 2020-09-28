@@ -27,12 +27,12 @@ class ProfileUpdateRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             // 'email' => 'required|email|max:255|unique:users',
-            'organization_name' => 'required|string|min:2|max:50',
-            'organization_type' => 'string|max:255',
-            'website' => 'url|max:255',
-            'job_title' => 'required|string|max:255',
-            'address' => 'string|max:255',
-            'phone_number' => 'string|max:255',
+            'organization_name' => 'nullable|string|max:50',
+            'organization_type' => 'nullable|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'job_title' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
         ];
     }
 }

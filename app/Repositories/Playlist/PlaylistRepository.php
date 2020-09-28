@@ -89,53 +89,22 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
 
     /**
      * To Clone Playlist and associated activities
-     *
-     * @param Request $request
      * @param Project $project
      * @param Playlist $playlist
+     * @param string $token
      */
-    public function clone(Request $request, Project $project, Playlist $playlist)
+    public function clone(Project $project, Playlist $playlist, $token)
     {
         $play_list_data = [
             'title' => $playlist->title,
             'order' => $playlist->order,
         ];
-        $token = $request->bearerToken();
+        
         $cloned_playlist = $project->playlists()->create($play_list_data);
 
         $activities = $playlist->activities;
         foreach ($activities as $activity) {
-            $h5P_res = null;
-            if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) {
-                $h5P_res = $this->activityRepository->download_and_upload_h5p($token, $activity->h5p_content_id);
-            }
-
-            $new_thumb_url = config('app.default_thumb_url');
-            $activites_source_file = storage_path("app/public/".(str_replace('/storage/','',$activity->thumb_url)));
-                if (file_exists($activites_source_file)) {
-                $ext = pathinfo(basename($activity->thumb_url), PATHINFO_EXTENSION);
-                $new_image_name_mtd = uniqid() . '.' . $ext;
-                ob_start();
-                $activites_destination_file = str_replace("uploads","activities",str_replace(basename($activity->thumb_url),$new_image_name_mtd,$activites_source_file));
-                \File::copy($activites_source_file, $activites_destination_file);
-                ob_get_clean();
-                $new_thumb_url = '/storage/activities/' . $new_image_name_mtd;
-            }
-            $activity_data = [
-                'title' => $activity->title,
-                'type' => $activity->type,
-                'content' => $activity->content,
-                'playlist_id' => $cloned_playlist->id,
-                'order' => $activity->order,
-                'h5p_content_id' => $h5P_res === null ? 0 : $h5P_res->id,
-                'thumb_url' => $new_thumb_url,
-                'subject_id' => $activity->subject_id,
-                'education_level_id' => $activity->education_level_id,
-                'shared' => $activity->shared,
-                'education_level_id' => $activity->education_level_id,
-            ];
-
-            $cloned_activity = $this->activityRepository->create($activity_data);
+            $cloned_activity = $this->activityRepository->clone($cloned_playlist, $activity, $token);
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\GlobalScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -11,7 +12,7 @@ use App\Models\QueryBuilders\SearchFormQueryBuilder;
 
 class Project extends Model
 {
-    use SoftDeletes, Searchable, CustomSearch;
+    use SoftDeletes, Searchable, CustomSearch, GlobalScope;
 
     /**
      * The attributes that are mass assignable.
@@ -93,7 +94,7 @@ class Project extends Model
     public function getUserAttribute()
     {
         if (isset($this->users)) {
-            return $this->users()->wherePivot('role', 'teacher')->first();
+            return $this->users()->wherePivot('role', 'owner')->first();
         }
 
         return null;

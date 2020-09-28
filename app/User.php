@@ -2,9 +2,13 @@
 
 namespace App;
 
+use App\Models\DeepRelations\HasManyDeep;
+use App\Models\DeepRelations\HasRelationships;
+use App\Models\Traits\GlobalScope;
 use App\Notifications\MailResetPasswordNotification;
-use App\Notifications\VerifyEmail;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,7 +17,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable, SoftDeletes;
+    use HasApiTokens, Notifiable, SoftDeletes, GlobalScope, HasRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -63,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @param $password
      */
-    public function setPasswordAttribute($password) : void
+    public function setPasswordAttribute($password): void
     {
         // If password was accidentally passed in already hashed, try not to double hash it
         if (
@@ -82,17 +86,18 @@ class User extends Authenticatable implements MustVerifyEmail
      * Combine first and last name for Name column
      * @param $name
      */
-    public function setNameAttribute($name) : void
+    public function setNameAttribute($name): void
     {
-        $this->attributes['name'] = $this->attributes['first_name'].' '.$this->attributes['last_name'];
+        $this->attributes['name'] = $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
     }
 
     /**
      * @param $name
      * @return mixed
      */
-    public function getNameAttribute($name){
-        if (! $name || empty($name)){
+    public function getNameAttribute($name)
+    {
+        if (!$name || empty($name)) {
             return "{$this->first_name} {$this->last_name}";
         }
         return $name;
@@ -104,6 +109,37 @@ class User extends Authenticatable implements MustVerifyEmail
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
+    }
+
+    /**
+     * Get playlists directly from users model via hasManyThrough
+     * @return HasManyThrough
+     */
+    public function playlists(){
+        return $this->hasManyThrough('App\Models\Playlist', 'App\Models\Pivots\UserProject', 'user_id', 'project_id',
+            'id', 'project_id');
+    }
+
+    /**
+     * Get far away relations data using custom Deep classes
+     * @return HasManyDeep
+     */
+    public function activities()
+    {
+        return $this->hasManyDeep(
+            'App\Models\Activity',
+            ['App\Models\Pivots\UserProject', 'App\Models\Playlist'], // Intermediate models, beginning at the far parent (Users).
+            [
+                'user_id', // Foreign key on the "user_project" table.
+                'project_id',    // Foreign key on the "playlist" table.
+                'playlist_id'     // Foreign key on the "activity" table.
+            ],
+            [
+                'id', // Local key on the "users" table.
+                'project_id', // Local key on the "user_project" table.
+                'id'  // Local key on the "playlist" table.
+            ]
+        );
     }
 
     public function lmssetting()
@@ -142,7 +178,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmailNotification);
     }
 
     /**
@@ -154,4 +190,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new MailResetPasswordNotification($token));
     }
+
+    /**
+     * @param $query
+     * @param $value
+     * @return mixed
+     * Scope for combine first and last name search
+     */
+    public function scopeName($query, $value)
+    {
+        return $query->orWhereRaw("CONCAT(first_name,' ',last_name) ILIKE '%" . $value . "%'");
+    }
+
 }

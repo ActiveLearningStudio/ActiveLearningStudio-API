@@ -3,10 +3,13 @@
 namespace App\Repositories\Admin\User;
 
 use App\Exceptions\GeneralException;
+use App\Jobs\AssignStarterProjects;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * Class UserRepository.
@@ -31,24 +34,18 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param int $start
-     * @param int $length
+     * @param $data
      * @return mixed
      */
-    public function getUsers($start = 0, $length = 25)
+    public function getAll($data)
     {
-        $page = empty($length) ? 0 : ($start / $length);
-        request()->request->add(['page' => $page + 1]);
-        return $this->model->when(isset(request()->order[0]['dir']), function ($query) {
-            return $query->orderBy(request()->columns[request()->order[0]['column']]['name'], request()->order[0]['dir']);
-        })->when(isset(request()->search['value']) && request()->search['value'], function ($query) {
-            foreach (request()->columns as $column) {
-                if ($column['searchable'] && $column['searchable'] !== 'false') {
-                    $query->orWhere($column['name'], 'LIKE', '%' . request()->search['value'] . '%');
-                }
-            }
+        $this->setDtParams($data);
+        $this->query = $this->model->when($data['q'] ?? null, function ($query) use ($data) {
+            $query->search(['email', 'name'], $data['q']);
+            $query->name($data['q']);
             return $query;
-        })->paginate($length);
+        });
+        return $this->getDtPaginated();
     }
 
     /**
@@ -56,39 +53,55 @@ class UserRepository extends BaseRepository
      * @return mixed
      * @throws GeneralException
      */
-    public function createUser($data)
+    public function create($data)
     {
         try {
-            return $this->model->create($data);
+            $data['remember_token'] = Str::random(64);
+            $data['email_verified_at'] = now();
+            if ($user = $this->model->create($data)) {
+                AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
+                event(new Registered($user));
+                return ['message' => 'User created successfully!', 'data' => $user];
+            }
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to create user, please try again later!');
     }
 
     /**
+     * @param $id
      * @param $data
+     * @param $clone_project_id
      * @return mixed
      * @throws GeneralException
      */
-    public function updateUser($id, $data, $clone_project_id)
+    public function update($id, $data, $clone_project_id)
     {
         $user = $this->find($id);
-        // update the user data
-        if($user->update($data) && $clone_project_id){
-            // if clone project id provided - clone the project
-          return $this->projectRepository->clone($user, $clone_project_id);
+        try {
+            // update the user data
+            if ($user->update($data) && $clone_project_id) {
+                // if clone project id provided - clone the project
+                $this->projectRepository->clone($user, $clone_project_id);
+                return ['message' => 'User data updated and project cloned successfully!', 'data' => $this->find($id)];
+            }
+            return ['message' => 'User data updated successfully!', 'data' => $this->find($id)];
+        } catch (\Exception $e) {
+            Log::critical('Clone Project ID: ' . $clone_project_id);
+            Log::error($e->getMessage());
         }
-        return 'User data updated!';
+        throw new GeneralException('Unable to update user, please try again later!');
     }
 
     /**
      * @param $id
      * @return mixed
+     * @throws GeneralException
      */
     public function find($id)
     {
-        if ($user = $this->model->whereId($id)->with('projects')->first()){
+        if ($user = $this->model->whereId($id)->with('projects')->first()) {
             return $user;
         }
         throw new GeneralException('User Not found.');
@@ -99,17 +112,34 @@ class UserRepository extends BaseRepository
      * @return mixed
      * @throws GeneralException
      */
-    public function destroyUser($id)
+    public function destroy($id)
     {
         if ((int)$id === auth()->id()) {
             throw new GeneralException('You cannot delete your own user');
         }
         try {
-             $this->model->find($id)->delete();
-             return 'User Deleted!';
+            $this->model->find($id)->delete();
+            return 'User Deleted!';
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            throw new GeneralException($e->getMessage());
+            Log::error($e->getMessage());
         }
+        throw new GeneralException('Unable to delete user, please try again later!');
+    }
+
+    /**
+     * Users basic report, projects, playlists and activities count
+     * @param $data
+     * @return mixed
+     */
+    public function reportBasic($data)
+    {
+        $this->setDtParams($data);
+        $this->query = $this->model->select(['id', 'first_name', 'last_name', 'email'])->withCount(['projects', 'playlists', 'activities'])
+            ->when($data['mode'] === 'subscribed', function ($query) {
+                return $query->where(function ($query) {
+                    return $query->where('subscribed', true);
+                });
+            });
+        return $this->getDtPaginated();
     }
 }

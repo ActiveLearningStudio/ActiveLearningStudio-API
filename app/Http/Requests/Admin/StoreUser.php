@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Rules\StrongPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUser extends FormRequest
@@ -24,12 +25,12 @@ class StoreUser extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'organization_name' => 'required',
-            'job_title' => 'required',
-            'email'=> 'required|email|unique:users,email',
-            'password'=>'required|min:8'
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'organization_name' => 'max:255',
+            'job_title' => 'max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => ['required', 'string', new StrongPassword],
         ];
     }
 }

@@ -60,9 +60,9 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @param User $user
      * @param Project $project
-     * @param role $role
-     * @access private
+     * @param $role
      * @return boolean
+     * @access private
      */
     private function hasPermission(User $user, Project $project, $role = null)
     {

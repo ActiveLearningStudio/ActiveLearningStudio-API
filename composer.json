@@ -9,10 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
-        "doctrine/dbal": "^2.10",
         "babenkoivan/elastic-migrations": "^1.2",
         "babenkoivan/elastic-scout-driver": "^1.2",
         "babenkoivan/elastic-scout-driver-plus": "^1.7",
+        "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "google/apiclient": "^2.7",
@@ -54,6 +54,9 @@
             "Djoudi\\LaravelH5p\\": "H5P/laravel-h5p/src/LaravelH5p",
             "App\\": "app/"
         },
+        "files": [
+            "app/helpers.php"
+        ],
         "classmap": [
             "database/seeds",
             "database/factories"

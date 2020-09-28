@@ -57,7 +57,7 @@ class ActivityController extends Controller
     public function uploadThumb(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image|max:1024',
+            'thumb' => 'required|image|max:102400',
         ]);
 
         if ($validator->fails()) {
@@ -300,7 +300,7 @@ class ActivityController extends Controller
             ], 500);
         }
 
-        $cloned_activity = $this->activityRepository->clone($request, $playlist, $activity);
+        $cloned_activity = $this->activityRepository->clone($playlist, $activity, $request->bearerToken());
 
         if ($cloned_activity) {
             return response([
