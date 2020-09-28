@@ -40,12 +40,12 @@ class AuthController extends Controller
     /**
      * Register
      *
-     * @bodyParam first_name string required First name of user
-     * @bodyParam last_name string required Last name of user
-     * @bodyParam email string required Email of user
+     * @bodyParam first_name string required First name of a user
+     * @bodyParam last_name string required Last name of a user
+     * @bodyParam email string required Email of a user
      * @bodyParam password string required Password
-     * @bodyParam organization_name string required Organization name of user
-     * @bodyParam job_title string required Job title of user
+     * @bodyParam organization_name string required Organization name of a user
+     * @bodyParam job_title string required Job title of a user
      *
      * @response 201 {
      *   "message": "Verification email is sent. Please follow the instructions."
@@ -90,7 +90,7 @@ class AuthController extends Controller
     /**
      * Login
      *
-     * @bodyParam email string required The email of user
+     * @bodyParam email string required The email of a user
      * @bodyParam password string required The password corresponded to the email
      *
      * @response {

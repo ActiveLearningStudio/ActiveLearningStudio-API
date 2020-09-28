@@ -49,7 +49,7 @@ class VerificationController extends Controller
     /**
      * @group Authentication
      *
-     * Verify an email address
+     * Verify an Email Address
      * Mark the authenticated user's email address as verified.
      *
      * @bodyParam id string required

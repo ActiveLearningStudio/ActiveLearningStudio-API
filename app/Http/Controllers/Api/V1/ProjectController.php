@@ -161,7 +161,7 @@ class ProjectController extends Controller
     /**
      * Display the specified project.
      *
-     * @queryParam projectId required This is id of a project.
+     * @queryParam projectId required This is an id of a project.
      *
      * @param Project $project
      * @return Response

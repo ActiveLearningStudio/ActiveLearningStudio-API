@@ -34,7 +34,7 @@ curl -X POST \
     "http://localhost:8000/api/register" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"first_name":"dignissimos","last_name":"mollitia","email":"veniam","password":"omnis","organization_name":"ut","job_title":"eos"}'
+    -d '{"first_name":"occaecati","last_name":"voluptates","email":"excepturi","password":"pariatur","organization_name":"praesentium","job_title":"corporis"}'
 
 ```
 
@@ -49,12 +49,12 @@ let headers = {
 };
 
 let body = {
-    "first_name": "dignissimos",
-    "last_name": "mollitia",
-    "email": "veniam",
-    "password": "omnis",
-    "organization_name": "ut",
-    "job_title": "eos"
+    "first_name": "occaecati",
+    "last_name": "voluptates",
+    "email": "excepturi",
+    "password": "pariatur",
+    "organization_name": "praesentium",
+    "job_title": "corporis"
 }
 
 fetch(url, {
@@ -90,12 +90,12 @@ fetch(url, {
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `first_name` | string |  required  | First name of user
-        `last_name` | string |  required  | Last name of user
-        `email` | string |  required  | Email of user
+    `first_name` | string |  required  | First name of a user
+        `last_name` | string |  required  | Last name of a user
+        `email` | string |  required  | Email of a user
         `password` | string |  required  | Password
-        `organization_name` | string |  required  | Organization name of user
-        `job_title` | string |  required  | Job title of user
+        `organization_name` | string |  required  | Organization name of a user
+        `job_title` | string |  required  | Job title of a user
     
 <!-- END_d7b7952e7fdddc07c978c9bdaf757acf -->
 
@@ -109,7 +109,7 @@ curl -X POST \
     "http://localhost:8000/api/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"cumque","password":"omnis"}'
+    -d '{"email":"nihil","password":"dolores"}'
 
 ```
 
@@ -124,8 +124,8 @@ let headers = {
 };
 
 let body = {
-    "email": "cumque",
-    "password": "omnis"
+    "email": "nihil",
+    "password": "dolores"
 }
 
 fetch(url, {
@@ -188,7 +188,7 @@ fetch(url, {
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `email` | string |  required  | The email of user
+    `email` | string |  required  | The email of a user
         `password` | string |  required  | The password corresponded to the email
     
 <!-- END_c3fa189a6c95ca36ad6ac4791a873d23 -->
@@ -256,7 +256,7 @@ curl -X POST \
     "http://localhost:8000/api/forgot-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"tempora"}'
+    -d '{"email":"possimus"}'
 
 ```
 
@@ -271,7 +271,7 @@ let headers = {
 };
 
 let body = {
-    "email": "tempora"
+    "email": "possimus"
 }
 
 fetch(url, {
@@ -307,12 +307,12 @@ fetch(url, {
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `email` | string |  required  | The email of user
+    `email` | string |  required  | The email of a user
     
 <!-- END_78c4b7d6388c81c68bc37ec872d44f65 -->
 
 <!-- START_c0e8219f309b296fd587bc241557abce -->
-## Verify an email address
+## Verify an Email Address
 Mark the authenticated user&#039;s email address as verified.
 
 > Example request:
@@ -322,7 +322,7 @@ curl -X POST \
     "http://localhost:8000/api/verify-email" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"id":"asperiores","hash":"optio","signature":"illum","expires":"veritatis"}'
+    -d '{"id":"quam","hash":"tempora","signature":"cum","expires":"ad"}'
 
 ```
 
@@ -337,10 +337,10 @@ let headers = {
 };
 
 let body = {
-    "id": "asperiores",
-    "hash": "optio",
-    "signature": "illum",
-    "expires": "veritatis"
+    "id": "quam",
+    "hash": "tempora",
+    "signature": "cum",
+    "expires": "ad"
 }
 
 fetch(url, {
@@ -428,16 +428,16 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/reiciendis/playlists/dolor/publish" \
+    "http://localhost:8000/api/v1/go/canvas/projects/corrupti/playlists/tempore/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":20,"counter":18}'
+    -d '{"setting_id":4,"counter":1}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/reiciendis/playlists/dolor/publish"
+    "http://localhost:8000/api/v1/go/canvas/projects/corrupti/playlists/tempore/publish"
 );
 
 let headers = {
@@ -446,8 +446,8 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 20,
-    "counter": 18
+    "setting_id": 4,
+    "counter": 1
 }
 
 fetch(url, {
@@ -530,16 +530,16 @@ Parameter | Type | Status | Description
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/culpa/fetch" \
+    "http://localhost:8000/api/v1/go/canvas/projects/omnis/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":16}'
+    -d '{"setting_id":17}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/culpa/fetch"
+    "http://localhost:8000/api/v1/go/canvas/projects/omnis/fetch"
 );
 
 let headers = {
@@ -548,7 +548,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 16
+    "setting_id": 17
 }
 
 fetch(url, {
@@ -614,16 +614,16 @@ Parameter | Type | Status | Description
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/moodle/projects/quidem/playlists/et/publish" \
+    "http://localhost:8000/api/v1/go/moodle/projects/similique/playlists/rerum/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":2,"counter":12}'
+    -d '{"setting_id":12,"counter":14}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/moodle/projects/quidem/playlists/et/publish"
+    "http://localhost:8000/api/v1/go/moodle/projects/similique/playlists/rerum/publish"
 );
 
 let headers = {
@@ -632,8 +632,8 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 2,
-    "counter": 12
+    "setting_id": 12,
+    "counter": 14
 }
 
 fetch(url, {
@@ -672,16 +672,16 @@ Parameter | Type | Status | Description
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/moodle/projects/provident/fetch" \
+    "http://localhost:8000/api/v1/go/moodle/projects/vero/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":19}'
+    -d '{"setting_id":6}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/moodle/projects/provident/fetch"
+    "http://localhost:8000/api/v1/go/moodle/projects/vero/fetch"
 );
 
 let headers = {
@@ -690,7 +690,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 19
+    "setting_id": 6
 }
 
 fetch(url, {
@@ -764,7 +764,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"est"}'
+    -d '{"access_token":"nam"}'
 
 ```
 
@@ -779,7 +779,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "est"
+    "access_token": "nam"
 }
 
 fetch(url, {
@@ -2644,14 +2644,14 @@ fetch(url, {
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/admin/projects/indexes/quia" \
+    "http://localhost:8000/api/v1/admin/projects/indexes/et" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/admin/projects/indexes/quia"
+    "http://localhost:8000/api/v1/admin/projects/indexes/et"
 );
 
 let headers = {
@@ -3239,7 +3239,7 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1?projectId=eius" \
+    -G "http://localhost:8000/api/v1/projects/1?projectId=hic" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
@@ -3250,7 +3250,7 @@ const url = new URL(
 );
 
 let params = {
-    "projectId": "eius",
+    "projectId": "hic",
 };
 Object.keys(params)
     .forEach(key => url.searchParams.append(key, params[key]));
@@ -3284,7 +3284,7 @@ fetch(url, {
 
 Parameter | Status | Description
 --------- | ------- | ------- | -----------
-    `projectId` |  required  | This is id of a project.
+    `projectId` |  required  | This is an id of a project.
 
 <!-- END_75829dedef8e9515c7f6ed1540f9b2db -->
 
@@ -4048,7 +4048,7 @@ fetch(url, {
     "variables": [],
     "info": {
         "name": "Curriki API",
-        "_postman_id": "e3a25ad8-18c7-4e37-9022-1aa393d8b3be",
+        "_postman_id": "477f5344-fafc-43dc-8e45-a58e5babe10a",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -4079,7 +4079,7 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"first_name\": \"distinctio\",\n    \"last_name\": \"repellendus\",\n    \"email\": \"et\",\n    \"password\": \"inventore\",\n    \"organization_name\": \"tenetur\",\n    \"job_title\": \"recusandae\"\n}"
+                            "raw": "{\n    \"first_name\": \"dignissimos\",\n    \"last_name\": \"mollitia\",\n    \"email\": \"veniam\",\n    \"password\": \"omnis\",\n    \"organization_name\": \"ut\",\n    \"job_title\": \"eos\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -4107,7 +4107,7 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"aut\",\n    \"password\": \"maxime\"\n}"
+                            "raw": "{\n    \"email\": \"cumque\",\n    \"password\": \"omnis\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -4163,14 +4163,14 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"dicta\"\n}"
+                            "raw": "{\n    \"email\": \"tempora\"\n}"
                         },
                         "description": "",
                         "response": []
                     }
                 },
                 {
-                    "name": "Verify Email Address\nMark the authenticated user's email address as verified.",
+                    "name": "Verify an email address\nMark the authenticated user's email address as verified.",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -4191,7 +4191,7 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"id\": \"itaque\",\n    \"hash\": \"eligendi\",\n    \"signature\": \"architecto\",\n    \"expires\": \"temporibus\"\n}"
+                            "raw": "{\n    \"id\": \"asperiores\",\n    \"hash\": \"optio\",\n    \"signature\": \"illum\",\n    \"expires\": \"veritatis\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -4243,13 +4243,13 @@ fetch(url, {
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "veniam",
+                                    "value": "reiciendis",
                                     "description": "The ID of the project"
                                 },
                                 {
                                     "id": "playlist",
                                     "key": "playlist",
-                                    "value": "molestiae",
+                                    "value": "dolor",
                                     "description": "The ID of the playlist."
                                 }
                             ]
@@ -4267,7 +4267,7 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 11,\n    \"counter\": 19\n}"
+                            "raw": "{\n    \"setting_id\": 20,\n    \"counter\": 18\n}"
                         },
                         "description": "",
                         "response": []
@@ -4285,7 +4285,7 @@ fetch(url, {
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "aliquid",
+                                    "value": "culpa",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -4321,13 +4321,13 @@ fetch(url, {
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "ut",
+                                    "value": "quidem",
                                     "description": "The ID of the project"
                                 },
                                 {
                                     "id": "playlist",
                                     "key": "playlist",
-                                    "value": "necessitatibus",
+                                    "value": "et",
                                     "description": "The ID of the playlist."
                                 }
                             ]
@@ -4345,7 +4345,7 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 4,\n    \"counter\": 7\n}"
+                            "raw": "{\n    \"setting_id\": 2,\n    \"counter\": 12\n}"
                         },
                         "description": "",
                         "response": []
@@ -4363,7 +4363,7 @@ fetch(url, {
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "et",
+                                    "value": "provident",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -4381,7 +4381,7 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 1\n}"
+                            "raw": "{\n    \"setting_id\": 19\n}"
                         },
                         "description": "",
                         "response": []
@@ -4415,7 +4415,7 @@ fetch(url, {
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"access_token\": \"non\"\n}"
+                            "raw": "{\n    \"access_token\": \"est\"\n}"
                         },
                         "description": "Save GAPI access token in the database.",
                         "response": []
@@ -4864,6 +4864,76 @@ fetch(url, {
             ]
         },
         {
+            "name": "Project Administration",
+            "description": "",
+            "item": [
+                {
+                    "name": "Display all projects.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/projects",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Modify the index of a project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/projects\/indexes\/:id",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "quia",
+                                    "description": "The id means user_id."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
             "name": "Project management",
             "description": "\nAPIs for managing projects",
             "item": [
@@ -5157,7 +5227,7 @@ fetch(url, {
                             "query": [
                                 {
                                     "key": "projectId",
-                                    "value": "blanditiis",
+                                    "value": "eius",
                                     "description": "This is id of a project.",
                                     "disabled": false
                                 }
@@ -8090,62 +8160,6 @@ fetch(url, {
                             "query": []
                         },
                         "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "api\/v1\/admin\/projects",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/admin\/projects",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "api\/v1\/admin\/projects\/indexes\/{id}",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/admin\/projects\/indexes\/:id",
-                            "query": []
-                        },
-                        "method": "POST",
                         "header": [
                             {
                                 "key": "Content-Type",
