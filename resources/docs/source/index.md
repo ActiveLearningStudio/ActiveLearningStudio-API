@@ -4,8 +4,6 @@ title: API Reference
 language_tabs:
 - bash
 - javascript
-- php
-- python
 
 includes:
 
@@ -36,7 +34,7 @@ curl -X POST \
     "http://localhost:8000/api/register" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"first_name":"distinctio","last_name":"repellendus","email":"et","password":"inventore","organization_name":"tenetur","job_title":"recusandae"}'
+    -d '{"first_name":"dignissimos","last_name":"mollitia","email":"veniam","password":"omnis","organization_name":"ut","job_title":"eos"}'
 
 ```
 
@@ -51,12 +49,12 @@ let headers = {
 };
 
 let body = {
-    "first_name": "distinctio",
-    "last_name": "repellendus",
-    "email": "et",
-    "password": "inventore",
-    "organization_name": "tenetur",
-    "job_title": "recusandae"
+    "first_name": "dignissimos",
+    "last_name": "mollitia",
+    "email": "veniam",
+    "password": "omnis",
+    "organization_name": "ut",
+    "job_title": "eos"
 }
 
 fetch(url, {
@@ -66,51 +64,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/register',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'first_name' => 'distinctio',
-            'last_name' => 'repellendus',
-            'email' => 'et',
-            'password' => 'inventore',
-            'organization_name' => 'tenetur',
-            'job_title' => 'recusandae',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/register'
-payload = {
-    "first_name": "distinctio",
-    "last_name": "repellendus",
-    "email": "et",
-    "password": "inventore",
-    "organization_name": "tenetur",
-    "job_title": "recusandae"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -156,7 +109,7 @@ curl -X POST \
     "http://localhost:8000/api/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"aut","password":"maxime"}'
+    -d '{"email":"cumque","password":"omnis"}'
 
 ```
 
@@ -171,8 +124,8 @@ let headers = {
 };
 
 let body = {
-    "email": "aut",
-    "password": "maxime"
+    "email": "cumque",
+    "password": "omnis"
 }
 
 fetch(url, {
@@ -182,43 +135,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/login',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'email' => 'aut',
-            'password' => 'maxime',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/login'
-payload = {
-    "email": "aut",
-    "password": "maxime"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -273,7 +189,7 @@ response.json()
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
     `email` | string |  required  | The email of user
-        `password` | string |  required  | The password corresponded the email
+        `password` | string |  required  | The password corresponded to the email
     
 <!-- END_c3fa189a6c95ca36ad6ac4791a873d23 -->
 
@@ -305,35 +221,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/login/google',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/login/google'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
 ```
 
 
@@ -369,7 +256,7 @@ curl -X POST \
     "http://localhost:8000/api/forgot-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"dicta"}'
+    -d '{"email":"tempora"}'
 
 ```
 
@@ -384,7 +271,7 @@ let headers = {
 };
 
 let body = {
-    "email": "dicta"
+    "email": "tempora"
 }
 
 fetch(url, {
@@ -394,41 +281,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/forgot-password',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'email' => 'dicta',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/forgot-password'
-payload = {
-    "email": "dicta"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -460,7 +312,7 @@ Parameter | Type | Status | Description
 <!-- END_78c4b7d6388c81c68bc37ec872d44f65 -->
 
 <!-- START_c0e8219f309b296fd587bc241557abce -->
-## Verify Email Address
+## Verify an email address
 Mark the authenticated user&#039;s email address as verified.
 
 > Example request:
@@ -470,7 +322,7 @@ curl -X POST \
     "http://localhost:8000/api/verify-email" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"id":"itaque","hash":"eligendi","signature":"architecto","expires":"temporibus"}'
+    -d '{"id":"asperiores","hash":"optio","signature":"illum","expires":"veritatis"}'
 
 ```
 
@@ -485,10 +337,10 @@ let headers = {
 };
 
 let body = {
-    "id": "itaque",
-    "hash": "eligendi",
-    "signature": "architecto",
-    "expires": "temporibus"
+    "id": "asperiores",
+    "hash": "optio",
+    "signature": "illum",
+    "expires": "veritatis"
 }
 
 fetch(url, {
@@ -498,47 +350,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/verify-email',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'id' => 'itaque',
-            'hash' => 'eligendi',
-            'signature' => 'architecto',
-            'expires' => 'temporibus',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/verify-email'
-payload = {
-    "id": "itaque",
-    "hash": "eligendi",
-    "signature": "architecto",
-    "expires": "temporibus"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -591,35 +402,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/logout',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/logout'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
 
 > Example response (200):
 
@@ -646,16 +428,16 @@ response.json()
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/veniam/playlists/molestiae/publish" \
+    "http://localhost:8000/api/v1/go/canvas/projects/reiciendis/playlists/dolor/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":11,"counter":19}'
+    -d '{"setting_id":20,"counter":18}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/veniam/playlists/molestiae/publish"
+    "http://localhost:8000/api/v1/go/canvas/projects/reiciendis/playlists/dolor/publish"
 );
 
 let headers = {
@@ -664,8 +446,8 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 11,
-    "counter": 19
+    "setting_id": 20,
+    "counter": 18
 }
 
 fetch(url, {
@@ -675,43 +457,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/go/canvas/projects/veniam/playlists/molestiae/publish',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'setting_id' => 11,
-            'counter' => 19,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/canvas/projects/veniam/playlists/molestiae/publish'
-payload = {
-    "setting_id": 11,
-    "counter": 19
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -785,7 +530,7 @@ Parameter | Type | Status | Description
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/aliquid/fetch" \
+    "http://localhost:8000/api/v1/go/canvas/projects/culpa/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"setting_id":16}'
@@ -794,7 +539,7 @@ curl -X POST \
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/aliquid/fetch"
+    "http://localhost:8000/api/v1/go/canvas/projects/culpa/fetch"
 );
 
 let headers = {
@@ -813,41 +558,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/go/canvas/projects/aliquid/fetch',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'setting_id' => 16,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/canvas/projects/aliquid/fetch'
-payload = {
-    "setting_id": 16
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -904,16 +614,16 @@ Parameter | Type | Status | Description
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/moodle/projects/ut/playlists/necessitatibus/publish" \
+    "http://localhost:8000/api/v1/go/moodle/projects/quidem/playlists/et/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":4,"counter":7}'
+    -d '{"setting_id":2,"counter":12}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/moodle/projects/ut/playlists/necessitatibus/publish"
+    "http://localhost:8000/api/v1/go/moodle/projects/quidem/playlists/et/publish"
 );
 
 let headers = {
@@ -922,8 +632,8 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 4,
-    "counter": 7
+    "setting_id": 2,
+    "counter": 12
 }
 
 fetch(url, {
@@ -935,51 +645,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/go/moodle/projects/ut/playlists/necessitatibus/publish',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'setting_id' => 4,
-            'counter' => 7,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/moodle/projects/ut/playlists/necessitatibus/publish'
-payload = {
-    "setting_id": 4,
-    "counter": 7
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/go/moodle/projects/{project}/playlists/{playlist}/publish`
@@ -1006,16 +672,16 @@ Parameter | Type | Status | Description
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/moodle/projects/et/fetch" \
+    "http://localhost:8000/api/v1/go/moodle/projects/provident/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":1}'
+    -d '{"setting_id":19}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/moodle/projects/et/fetch"
+    "http://localhost:8000/api/v1/go/moodle/projects/provident/fetch"
 );
 
 let headers = {
@@ -1024,7 +690,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 1
+    "setting_id": 19
 }
 
 fetch(url, {
@@ -1034,41 +700,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/go/moodle/projects/et/fetch',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'setting_id' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/moodle/projects/et/fetch'
-payload = {
-    "setting_id": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -1133,7 +764,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"non"}'
+    -d '{"access_token":"est"}'
 
 ```
 
@@ -1148,7 +779,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "non"
+    "access_token": "est"
 }
 
 fetch(url, {
@@ -1158,41 +789,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/access-token',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'non',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/access-token'
-payload = {
-    "access_token": "non"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -1259,35 +855,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/google-classroom/courses',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/courses'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -1368,41 +935,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/projects/9/copy',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'course_id' => '123',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/projects/9/copy'
-payload = {
-    "course_id": "123"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
 ```
 
 
@@ -1555,35 +1087,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -1628,35 +1131,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/create',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/create'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -1705,43 +1179,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/h5p',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/h5p`
@@ -1778,35 +1216,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/{}',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/{}'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -1855,35 +1264,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/{}/edit',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/{}/edit'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -1930,35 +1310,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/h5p/{}',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/{}'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -1999,35 +1350,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/h5p/{}',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/{}'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -2065,35 +1387,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/settings',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/settings'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -2142,35 +1435,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/activity/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/activity/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -2215,35 +1479,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/activity/1/visibility/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/activity/1/visibility/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -3060,6 +2295,10 @@ response.json()
                                 "state": "{}"
                             }
                         ],
+                        "metadata": {
+                            "title": "Science of Golf: Why Balls Have Dimples",
+                            "license": "U"
+                        },
                         "scripts": [
                             "http:\/\/localhost:8000\/storage\/h5p\/libraries\/Drop-1.0\/js\/drop.min.js?ver=1.0.2",
                             "http:\/\/localhost:8000\/storage\/h5p\/libraries\/H5P.Transition-1.0\/transition.js?ver=1.0.4",
@@ -3208,35 +2447,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/embed/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/embed/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (500):
 
@@ -3286,35 +2496,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/go/lms-settings/user/me',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms-settings/user/me'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -3398,56 +2579,106 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/go/lms/projects',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms/projects'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "error": {
-        "lms_url": [
-            "The lms url field is required."
-        ],
-        "lti_client_id": [
-            "The lti client id field is required."
-        ]
-    }
-}
-```
 
 ### HTTP Request
 `POST api/v1/go/lms/projects`
 
 
 <!-- END_96dd725df77268e19acea6ed61900366 -->
+
+#Project Administration
+
+
+<!-- START_fc2a4353e3093252e672968599713345 -->
+## Display all projects.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/admin/projects" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/projects"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/v1/admin/projects`
+
+
+<!-- END_fc2a4353e3093252e672968599713345 -->
+
+<!-- START_94e456091f258b9d03ee0bd9bfcc6f8d -->
+## Modify the index of a project
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/admin/projects/indexes/quia" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/projects/indexes/quia"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/v1/admin/projects/indexes/{id}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `id` |  required  | The id means user_id.
+
+<!-- END_94e456091f258b9d03ee0bd9bfcc6f8d -->
 
 #Project management
 
@@ -3483,35 +2714,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/1/load-shared',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/load-shared'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (200):
 
@@ -3524,6 +2726,7 @@ response.json()
         "name": "The Science of Golf",
         "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
         "updated_at": "2020-07-11T12:51:07.000000Z",
+        "elasticsearch": true,
         "shared": false,
         "playlists": [
             {
@@ -3655,43 +2858,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects/upload-thumb',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/upload-thumb'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/projects/upload-thumb`
@@ -3729,43 +2896,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects/1/share',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/share'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/projects/{project}/share`
@@ -3800,35 +2931,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects/1/clone',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/clone'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
 ```
 
 
@@ -3904,43 +3006,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects/1/remove-share',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/remove-share'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/projects/{project}/remove-share`
@@ -3976,35 +3042,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/recent',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/recent'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -4052,35 +3089,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/default',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/default'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -4124,35 +3132,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/detail',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/detail'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -4200,35 +3179,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -4274,43 +3224,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/projects`
@@ -4325,7 +3239,7 @@ response.json()
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/projects/1?projectId=blanditiis" \
+    -G "http://localhost:8000/api/v1/projects/1?projectId=eius" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
@@ -4336,7 +3250,7 @@ const url = new URL(
 );
 
 let params = {
-    "projectId": "blanditiis",
+    "projectId": "eius",
 };
 Object.keys(params)
     .forEach(key => url.searchParams.append(key, params[key]));
@@ -4352,41 +3266,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'query' => [
-            'projectId'=> 'blanditiis',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1'
-params = {
-  'projectId': 'blanditiis',
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, params=params)
-response.json()
 ```
 
 
@@ -4439,35 +3318,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/projects/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -4506,35 +3356,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/projects/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
 ```
 
 
@@ -4590,49 +3411,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/search',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'query' => [
-            'query'=> 'test',
-            'sort'=> 'created_at',
-            'order'=> 'desc',
-            'from'=> '0',
-            'size'=> '10',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/search'
-params = {
-  'query': 'test',
-  'sort': 'created_at',
-  'order': 'desc',
-  'from': '0',
-  'size': '10',
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, params=params)
-response.json()
 ```
 
 
@@ -4759,55 +3537,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/search/advanced',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'query' => [
-            'query'=> 'test',
-            'negativeQuery'=> 'badword',
-            'userIds'=> '[1]',
-            'model'=> 'activities',
-            'sort'=> 'created_at',
-            'order'=> 'desc',
-            'from'=> '0',
-            'size'=> '10',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/search/advanced'
-params = {
-  'query': 'test',
-  'negativeQuery': 'badword',
-  'userIds': '[1]',
-  'model': 'activities',
-  'sort': 'created_at',
-  'order': 'desc',
-  'from': '0',
-  'size': '10',
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, params=params)
-response.json()
-```
-
 
 > Example response (200):
 
@@ -4841,7 +3570,7 @@ response.json()
                 "pivot": {
                     "project_id": 457,
                     "user_id": 1,
-                    "role": "teacher",
+                    "role": "owner",
                     "created_at": "2020-08-25T09:35:35.000000Z",
                     "updated_at": "2020-08-25T09:35:35.000000Z"
                 }
@@ -4882,13 +3611,49 @@ response.json()
             "id": 1,
             "title": "",
             "model": "Activity",
-            "user": null
+            "user": {
+                "id": 1,
+                "first_name": "test",
+                "last_name": "test",
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "is_admin": false,
+                "organization_name": "organization_name",
+                "organization_type": null,
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "website": null,
+                "hubspot": false,
+                "subscribed": false,
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-08-22T12:13:52.000000Z",
+                "gapi_access_token": null
+            }
         },
         {
             "id": 1,
             "title": "",
             "model": "Activity",
-            "user": null
+            "user": {
+                "id": 1,
+                "first_name": "test",
+                "last_name": "test",
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "is_admin": false,
+                "organization_name": "organization_name",
+                "organization_type": null,
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "website": null,
+                "hubspot": false,
+                "subscribed": false,
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-08-22T12:13:52.000000Z",
+                "gapi_access_token": null
+            }
         }
     ]
 }
@@ -4946,43 +3711,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/subscribe',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/subscribe'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/subscribe`
@@ -5018,35 +3747,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/users/me',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/me'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -5094,43 +3794,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/users/update-password',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/update-password'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/users/update-password`
@@ -5166,35 +3830,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/users',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -5242,43 +3877,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/users',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/users`
@@ -5314,35 +3913,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/users/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -5390,35 +3960,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/users/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -5457,35 +3998,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/users/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
 ```
 
 
@@ -5528,35 +4040,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/doc.json',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/doc.json'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (200):
 
@@ -5565,7 +4048,7 @@ response.json()
     "variables": [],
     "info": {
         "name": "Curriki API",
-        "_postman_id": "ba0ff912-b789-43d8-8198-c9e6d2f93f17",
+        "_postman_id": "e3a25ad8-18c7-4e37-9022-1aa393d8b3be",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -5596,7 +4079,7 @@ response.json()
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"first_name\": \"necessitatibus\",\n    \"last_name\": \"odit\",\n    \"email\": \"adipisci\",\n    \"password\": \"eveniet\",\n    \"organization_name\": \"distinctio\",\n    \"job_title\": \"deserunt\"\n}"
+                            "raw": "{\n    \"first_name\": \"distinctio\",\n    \"last_name\": \"repellendus\",\n    \"email\": \"et\",\n    \"password\": \"inventore\",\n    \"organization_name\": \"tenetur\",\n    \"job_title\": \"recusandae\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -5624,7 +4107,7 @@ response.json()
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"voluptas\",\n    \"password\": \"ab\"\n}"
+                            "raw": "{\n    \"email\": \"aut\",\n    \"password\": \"maxime\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -5680,7 +4163,7 @@ response.json()
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"et\"\n}"
+                            "raw": "{\n    \"email\": \"dicta\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -5708,7 +4191,7 @@ response.json()
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "[]"
+                            "raw": "{\n    \"id\": \"itaque\",\n    \"hash\": \"eligendi\",\n    \"signature\": \"architecto\",\n    \"expires\": \"temporibus\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -5760,13 +4243,13 @@ response.json()
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "magni",
+                                    "value": "veniam",
                                     "description": "The ID of the project"
                                 },
                                 {
                                     "id": "playlist",
                                     "key": "playlist",
-                                    "value": "totam",
+                                    "value": "molestiae",
                                     "description": "The ID of the playlist."
                                 }
                             ]
@@ -5784,7 +4267,7 @@ response.json()
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 17,\n    \"counter\": 15\n}"
+                            "raw": "{\n    \"setting_id\": 11,\n    \"counter\": 19\n}"
                         },
                         "description": "",
                         "response": []
@@ -5797,6 +4280,84 @@ response.json()
                             "protocol": "http",
                             "host": "localhost:8000",
                             "path": "api\/v1\/go\/canvas\/projects\/:project\/fetch",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "aliquid",
+                                    "description": "The ID of the project."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"setting_id\": 16\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Publish a Playlist to Moodle",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/moodle\/projects\/:project\/playlists\/:playlist\/publish",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "ut",
+                                    "description": "The ID of the project"
+                                },
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "necessitatibus",
+                                    "description": "The ID of the playlist."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"setting_id\": 4,\n    \"counter\": 7\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Fetch a course from Moodle",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/moodle\/projects\/:project\/fetch",
                             "query": [],
                             "variable": [
                                 {
@@ -5820,85 +4381,7 @@ response.json()
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 18\n}"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Publish a Playlist to Moodle",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/go\/moodle\/projects\/:project\/playlists\/:playlist\/publish",
-                            "query": [],
-                            "variable": [
-                                {
-                                    "id": "project",
-                                    "key": "project",
-                                    "value": "error",
-                                    "description": "The ID of the project"
-                                },
-                                {
-                                    "id": "playlist",
-                                    "key": "playlist",
-                                    "value": "quaerat",
-                                    "description": "The ID of the playlist."
-                                }
-                            ]
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 19,\n    \"counter\": 14\n}"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Fetch a course from Moodle",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "localhost:8000",
-                            "path": "api\/v1\/go\/moodle\/projects\/:project\/fetch",
-                            "query": [],
-                            "variable": [
-                                {
-                                    "id": "project",
-                                    "key": "project",
-                                    "value": "id",
-                                    "description": "The ID of the project."
-                                }
-                            ]
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 19\n}"
+                            "raw": "{\n    \"setting_id\": 1\n}"
                         },
                         "description": "",
                         "response": []
@@ -5932,7 +4415,7 @@ response.json()
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"access_token\": \"sapiente\"\n}"
+                            "raw": "{\n    \"access_token\": \"non\"\n}"
                         },
                         "description": "Save GAPI access token in the database.",
                         "response": []
@@ -6674,7 +5157,7 @@ response.json()
                             "query": [
                                 {
                                     "key": "projectId",
-                                    "value": "dolor",
+                                    "value": "blanditiis",
                                     "description": "This is id of a project.",
                                     "disabled": false
                                 }
@@ -9750,35 +8233,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/h5p',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -9821,35 +8275,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/h5p/create',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p/create'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -9896,43 +8321,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/h5p',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST h5p`
@@ -9967,35 +8356,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/h5p/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -10042,35 +8402,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/h5p/1/edit',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p/1/edit'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -10115,35 +8446,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/h5p/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -10183,35 +8485,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/h5p/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -10247,35 +8520,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/library',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/library'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -10322,35 +8566,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/library/show/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/library/show/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -10395,43 +8610,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/library/store',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/library/store'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST library/store`
@@ -10466,35 +8645,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/library/destroy',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/library/destroy'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
 ```
 
 
@@ -10532,35 +8682,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/library/restrict',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/library/restrict'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -10607,43 +8728,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/library/clear',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/library/clear'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST library/clear`
@@ -10678,35 +8763,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/h5p/embed/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p/embed/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -10751,35 +8807,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/h5p/content-params/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/h5p/content-params/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -10827,35 +8854,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/oauth/authorize',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/authorize'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -10901,43 +8899,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/oauth/authorize',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/authorize'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (419):
-
-```json
-{
-    "message": "CSRF token mismatch."
-}
-```
 
 ### HTTP Request
 `POST oauth/authorize`
@@ -10973,35 +8935,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/oauth/authorize',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/authorize'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
 ```
 
 
@@ -11042,46 +8975,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/oauth/token',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/token'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "error": "unsupported_grant_type",
-    "error_description": "The authorization grant type is not supported by the authorization server.",
-    "hint": "Check that all required parameters have been provided",
-    "message": "The authorization grant type is not supported by the authorization server."
-}
-```
 
 ### HTTP Request
 `POST oauth/token`
@@ -11117,35 +9011,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/oauth/tokens',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/tokens'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -11193,35 +9058,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/oauth/tokens/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/tokens/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -11260,43 +9096,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/oauth/token/refresh',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/token/refresh'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (419):
-
-```json
-{
-    "message": "CSRF token mismatch."
-}
-```
 
 ### HTTP Request
 `POST oauth/token/refresh`
@@ -11332,35 +9132,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/oauth/clients',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/clients'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -11408,43 +9179,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/oauth/clients',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/clients'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (419):
-
-```json
-{
-    "message": "CSRF token mismatch."
-}
-```
 
 ### HTTP Request
 `POST oauth/clients`
@@ -11480,35 +9215,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/oauth/clients/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/clients/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
 ```
 
 
@@ -11549,35 +9255,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/oauth/clients/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/clients/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -11614,35 +9291,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/oauth/scopes',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/scopes'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -11690,35 +9338,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/oauth/personal-access-tokens',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/personal-access-tokens'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -11764,43 +9383,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/oauth/personal-access-tokens',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/personal-access-tokens'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (419):
-
-```json
-{
-    "message": "CSRF token mismatch."
-}
-```
 
 ### HTTP Request
 `POST oauth/personal-access-tokens`
@@ -11836,35 +9419,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/oauth/personal-access-tokens/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/oauth/personal-access-tokens/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
 ```
 
 
@@ -11905,54 +9459,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/reset-password',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/reset-password'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (422):
-
-```json
-{
-    "message": "The given data was invalid.",
-    "errors": {
-        "token": [
-            "The token field is required."
-        ],
-        "email": [
-            "The email field is required."
-        ],
-        "password": [
-            "The password field is required."
-        ]
-    }
-}
-```
 
 ### HTTP Request
 `POST api/reset-password`
@@ -11990,43 +9497,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/verify-email/resend',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/verify-email/resend'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
 
 ### HTTP Request
 `POST api/verify-email/resend`
@@ -12062,35 +9533,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/playlists/1/load-shared',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/playlists/1/load-shared'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -12139,35 +9581,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/log-view',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/log-view'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (200):
 
@@ -12210,35 +9623,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/playlists/1/log-view',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/playlists/1/log-view'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -12285,35 +9669,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/1/log-view',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/log-view'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (200):
 
@@ -12356,35 +9711,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/users/me/redeem/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/me/redeem/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -12432,43 +9758,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects/1/playlists/reorder',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/playlists/reorder'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/projects/{project}/playlists/reorder`
@@ -12503,35 +9793,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects/1/playlists/1/clone',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/playlists/1/clone'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
 ```
 
 
@@ -12607,35 +9868,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/1/playlists',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/playlists'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -12681,43 +9913,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/projects/1/playlists',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/playlists'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/projects/{project}/playlists`
@@ -12753,35 +9949,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/projects/1/playlists/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/playlists/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -12829,35 +9996,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/projects/1/playlists/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/playlists/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -12898,35 +10036,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/projects/1/playlists/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/projects/1/playlists/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -12962,35 +10071,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/playlists/1/activities/1/clone',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/playlists/1/activities/1/clone'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
 ```
 
 
@@ -13088,43 +10168,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/activities/upload-thumb',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/upload-thumb'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/activities/upload-thumb`
@@ -13160,35 +10204,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/share',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/share'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -13236,35 +10251,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/remove-share',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/remove-share'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -13308,35 +10294,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/detail',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/detail'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -13384,35 +10341,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/h5p',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/h5p'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -13456,35 +10384,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/h5p-resource-settings',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/h5p-resource-settings'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -13532,35 +10431,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/h5p-resource-settings-open',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/h5p-resource-settings-open'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -13604,35 +10474,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -13680,43 +10521,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/activities',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/activities`
@@ -13752,35 +10557,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -13828,35 +10604,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/activities/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -13897,35 +10644,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/activities/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -13962,35 +10680,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activity-types/1/items',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-types/1/items'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -14038,35 +10727,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activity-types',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-types'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -14112,43 +10772,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/activity-types',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-types'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/activity-types`
@@ -14184,35 +10808,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activity-types/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-types/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -14260,35 +10855,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/activity-types/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-types/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -14329,35 +10895,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/activity-types/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-types/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -14394,35 +10931,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activity-items',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-items'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -14470,43 +10978,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/activity-items',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-items'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/activity-items`
@@ -14542,35 +11014,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activity-items/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-items/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -14618,35 +11061,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/activity-items/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-items/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -14687,35 +11101,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/activity-items/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-items/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -14751,35 +11136,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/users/1/metrics',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/1/metrics'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -14826,35 +11182,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/users/1/membership',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/users/1/membership'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -14897,35 +11224,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/libraries',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/libraries'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -14974,35 +11272,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/single-libraries',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/single-libraries'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -15045,35 +11314,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/content-type-cache',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/content-type-cache'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -15130,35 +11370,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/library-install',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/library-install'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -15213,43 +11424,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/h5p/ajax/library-upload',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/library-upload'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/h5p/ajax/library-upload`
@@ -15284,35 +11459,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/filter',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/filter'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -15369,35 +11515,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/finish',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/finish'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -15450,35 +11567,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/content-user-data',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/content-user-data'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -15534,35 +11622,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/activities/1/h5p-resource-settings-shared',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activities/1/h5p-resource-settings-shared'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -16369,6 +12428,10 @@ response.json()
                             "state": "{}"
                         }
                     ],
+                    "metadata": {
+                        "title": "Science of Golf: Why Balls Have Dimples",
+                        "license": "U"
+                    },
                     "scripts": [
                         "http:\/\/localhost:8000\/storage\/h5p\/libraries\/Drop-1.0\/js\/drop.min.js?ver=1.0.2",
                         "http:\/\/localhost:8000\/storage\/h5p\/libraries\/H5P.Transition-1.0\/transition.js?ver=1.0.4",
@@ -16907,35 +12970,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/ajax/files',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/ajax/files'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (500):
 
@@ -16990,35 +13024,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/h5p/export/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/h5p/export/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (500):
 
@@ -17062,35 +13067,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/playlists/1/lti',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/playlists/1/lti'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -17519,35 +13495,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/error',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/error'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -17594,35 +13541,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/admin/users',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
 
 > Example response (401):
 
@@ -17667,43 +13585,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
 
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/admin/users',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
 
 ### HTTP Request
 `POST api/v1/admin/users`
@@ -17738,35 +13620,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/admin/users/1/edit',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users/1/edit'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
@@ -17813,35 +13666,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/admin/users/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -17881,35 +13705,6 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/admin/users/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
 
 
 ### HTTP Request
@@ -17917,152 +13712,6 @@ response.json()
 
 
 <!-- END_ff019bc7db8f5be9ac8699027d67f85c -->
-
-<!-- START_fc2a4353e3093252e672968599713345 -->
-## api/v1/admin/projects
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/admin/projects" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/admin/projects"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/admin/projects',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/projects'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
-
-### HTTP Request
-`GET api/v1/admin/projects`
-
-
-<!-- END_fc2a4353e3093252e672968599713345 -->
-
-<!-- START_94e456091f258b9d03ee0bd9bfcc6f8d -->
-## api/v1/admin/projects/indexes/{id}
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/admin/projects/indexes/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/admin/projects/indexes/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/admin/projects/indexes/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/projects/indexes/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated."
-}
-```
-
-### HTTP Request
-`POST api/v1/admin/projects/indexes/{id}`
-
-
-<!-- END_94e456091f258b9d03ee0bd9bfcc6f8d -->
 
 <!-- START_53be1e9e10a08458929a2e0ea70ddb86 -->
 ## Invoke the controller method.
@@ -18092,35 +13741,6 @@ fetch(url, {
 })
     .then(response => response.json())
     .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
 ```
 
 
