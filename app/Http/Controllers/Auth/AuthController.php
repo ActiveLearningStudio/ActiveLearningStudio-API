@@ -91,7 +91,7 @@ class AuthController extends Controller
      * Login
      *
      * @bodyParam email string required The email of user
-     * @bodyParam password string required The password corresponded the email
+     * @bodyParam password string required The password corresponded to the email
      *
      * @response {
      *   "user": {
