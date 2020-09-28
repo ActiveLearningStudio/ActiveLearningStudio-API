@@ -47,11 +47,21 @@ class VerificationController extends Controller
     }
 
     /**
+     * @group Authentication
+     *
+     * Verify an Email Address
      * Mark the authenticated user's email address as verified.
+     *
+     * @bodyParam id string required
+     * @bodyParam hash string required
+     * @bodyParam signature string required
+     * @bodyParam expires string required
+     *
+     * @response 204 {
+     * }
      *
      * @param EmailVerificationRequest $emailVerificationRequest
      * @return Response
-     *
      * @throws AuthorizationException
      */
     public function verify(EmailVerificationRequest $emailVerificationRequest)

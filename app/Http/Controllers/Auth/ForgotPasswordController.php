@@ -26,9 +26,24 @@ class ForgotPasswordController extends Controller
     use SendsPasswordResetEmails;
 
     /**
+     * @group Authentication
+     *
+     * Forgot Password Email
      * Send a reset link to the given user.
      *
-     * @param  Request $request
+     * @bodyParam email string required The email of a user
+     *
+     * @response {
+     *   "message": "Password reset email has been sent. Please follow the instructions."
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Email is not verified."
+     *   ]
+     * }
+     *
+     * @param Request $request
      * @return Response
      */
     public function sendResetLinkEmail(Request $request)
@@ -57,8 +72,8 @@ class ForgotPasswordController extends Controller
     /**
      * Get the response for a successful password reset link.
      *
-     * @param  Request $request
-     * @param  string $response
+     * @param Request $request
+     * @param string $response
      * @return Response
      */
     protected function sendResetLinkResponse(Request $request, $response)
@@ -70,8 +85,8 @@ class ForgotPasswordController extends Controller
     /**
      * Get the response for a failed password reset link.
      *
-     * @param  Request $request
-     * @param  string $response
+     * @param Request $request
+     * @param string $response
      * @return Response
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
