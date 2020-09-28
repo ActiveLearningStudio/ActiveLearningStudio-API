@@ -8,6 +8,7 @@ use App\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class SendDailyUsage extends Command
 {
@@ -56,11 +57,13 @@ class SendDailyUsage extends Command
 
         foreach ($users as $user) {
             $login_count = UserLogin::where('user_id', $user->id)
-                ->where('created_at', '>', Carbon::now()->subDays(1))
+//                ->where('created_at', '>', Carbon::now()->subDays(1))
+                ->where('created_at', '>', Carbon::now()->subHours(4))
                 ->count();
 
             $project_count = $user->projects()
-                ->where('projects.created_at', '>', Carbon::now()->subDays(1))
+//                ->where('projects.created_at', '>', Carbon::now()->subDays(1))
+                ->where('projects.created_at', '>', Carbon::now()->subHours(4))
                 ->where('role', 'owner')
                 ->count();
 
@@ -69,60 +72,70 @@ class SendDailyUsage extends Command
             $activity_count = 0;
             foreach ($all_projects as $project) {
                 $count = $project->playlists()
-                    ->where('playlists.created_at', '>', Carbon::now()->subDays(1))
+//                    ->where('playlists.created_at', '>', Carbon::now()->subDays(1))
+                    ->where('playlists.created_at', '>', Carbon::now()->subHours(4))
                     ->count();
                 $playlist_count = $playlist_count + $count;
 
                 $all_playlists = $project->playlists;
                 foreach ($all_playlists as $playlist) {
                     $a_count = $playlist->activities()
-                        ->where('activities.created_at', '>', Carbon::now()->subDays(1))
+//                        ->where('activities.created_at', '>', Carbon::now()->subDays(1))
+                        ->where('activities.created_at', '>', Carbon::now()->subHours(4))
                         ->count();
                     $activity_count = $activity_count + $a_count;
                 }
             }
 
-            $data = [
-                'fields' => [
-                    [
-                        'name' => 'email',
-                        'value' => $user->email,
-                    ],
-                    [
-                        'name' => 'firstname',
-                        'value' => $user->first_name . ' ' . $user->last_name,
-                    ],
+            if ($login_count > 0 || $project_count > 0 || $playlist_count > 0 || $activity_count > 0) {
+                $data = [
+                    'fields' => [
+                        [
+                            'name' => 'email',
+                            'value' => $user->email,
+                        ],
+                        [
+                            'name' => 'firstname',
+                            'value' => $user->first_name . ' ' . $user->last_name,
+                        ],
 //                    [
 //                        'name' => 'date',
 //                        'value' => now()->toString(),
 //                    ],
-                    [
-                        'name' => 'login_count',
-                        'value' => $login_count,
+                        [
+                            'name' => 'login_count',
+                            'value' => $login_count,
+                        ],
+                        [
+                            'name' => 'project_count',
+                            'value' => $project_count,
+                        ],
+                        [
+                            'name' => 'playlist_count',
+                            'value' => $playlist_count,
+                        ],
+                        [
+                            'name' => 'activity_count',
+                            'value' => $activity_count,
+                        ],
                     ],
-                    [
-                        'name' => 'project_count',
-                        'value' => $project_count,
-                    ],
-                    [
-                        'name' => 'playlist_count',
-                        'value' => $playlist_count,
-                    ],
-                    [
-                        'name' => 'activity_count',
-                        'value' => $activity_count,
-                    ],
-                ],
-            ];
+                ];
 
-            $this->client->request(
-                'POST',
-                $hubspot_url,
-                [
-                    'headers' => $headers,
-                    'json' => $data,
-                ]
-            );
+                try {
+                    $this->client->request(
+                        'POST',
+                        $hubspot_url,
+                        [
+                            'headers' => $headers,
+                            'json' => $data,
+                        ]
+                    );
+                } catch (\Exception $e) {
+                    Log::error('HubSpot Daily Report Error: ');
+                    Log::error('Submit Data: ', $data);
+                    Log::error($e);
+                }
+            }
         }
     }
 }

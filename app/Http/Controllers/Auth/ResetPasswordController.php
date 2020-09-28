@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
@@ -50,6 +51,7 @@ class ResetPasswordController extends Controller
      *
      * @param Request $request
      * @param $response
+     * @return Response
      */
     protected function sendResetResponse(Request $request, $response)
     {
@@ -62,6 +64,7 @@ class ResetPasswordController extends Controller
      *
      * @param Request $request
      * @param $response
+     * @return Response
      */
     protected function sendResetFailedResponse(Request $request, $response)
     {
