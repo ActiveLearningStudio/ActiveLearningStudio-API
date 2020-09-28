@@ -45,20 +45,22 @@ class ProjectRepository extends BaseRepository
      */
     public function getAll($data)
     {
+        $mode = $data['mode'] ?? 'all';
         $q = $data['q'] ?? null;
-        $mode = $data['mode'] ?? null;
-        $this->setDtParams($data);
-        $this->query = $this->model->when($q, function ($query) use ($q) {
-            $query->where(function ($query) use ($q) {
-                // get projects by name or email
-                $query->orWhereHas('users', function ($query) use ($q) {
-                    return $query->where('email', 'ILIKE', '%' . $q . '%');
-                });
-                return $query->orWhere('name', 'ILIKE', '%' . $q . '%');
-            });
-        })->when($mode && $mode !== 'all', function ($query) use ($mode) {
+
+        // if data tables parameters present in request
+        if ($this->isDtRequest($data)) {
+            $this->setDtParams($data)->enableRelDtSearch(["email"], $this->dtSearchValue);
+        }
+
+        // if simple request for getting project listing with search
+        if ($q) {
+            $this->enableDtSearch(['name'], $q)->enableRelDtSearch(['email'], $q);
+        }
+
+        $this->query = $this->model->when($mode !== 'all', function ($query) use ($mode) {
             return $query->where(function ($query) use ($mode) {
-                return $query->where('starter_project', $mode);
+                return $query->where('starter_project', (bool)$mode);
             });
         });
         return $this->getDtPaginated(['users']);
