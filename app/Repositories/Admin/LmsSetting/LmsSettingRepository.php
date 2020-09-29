@@ -46,7 +46,7 @@ class LmsSettingRepository extends BaseRepository
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to create LMS Setting, please try again later!');
+        throw new GeneralException('Unable to create setting, please try again later!');
     }
 
     /**
@@ -58,12 +58,12 @@ class LmsSettingRepository extends BaseRepository
     {
         try {
             if ($this->find($id)->update($data)) {
-                return ['message' => 'Setting created updated!', 'data' => $this->find($id)];
+                return ['message' => 'Setting updated successfully!', 'data' => $this->find($id)];
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to update LMS Setting, please try again later!');
+        throw new GeneralException('Unable to update setting, please try again later!');
     }
 
     /**
@@ -76,7 +76,7 @@ class LmsSettingRepository extends BaseRepository
         if ($setting = $this->model->find($id)) {
             return $setting;
         }
-        throw new GeneralException('Setting Not found.');
+        throw new GeneralException('Setting not found.');
     }
 
     /**
@@ -87,11 +87,11 @@ class LmsSettingRepository extends BaseRepository
     public function destroy($id)
     {
         try {
-            $this->model->find($id)->delete();
-            return 'Setting Deleted!';
+            $this->find($id)->delete();
+            return 'Setting deleted!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to delete LMS Setting, please try again later!');
+        throw new GeneralException('Unable to delete setting, please try again later!');
     }
 }
