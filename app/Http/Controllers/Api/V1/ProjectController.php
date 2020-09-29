@@ -304,10 +304,7 @@ class ProjectController extends Controller
             ], 500);
         }
 
-        $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken());
-        return response([
-            'message' => 'Project is cloned successfully.',
-        ], 200);
+        return response(['message' => $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken())], 200);
     }
 
 }
