@@ -58,7 +58,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function clone($authenticated_user, Project $project, $token)
     {
-        try{
+        try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
         
             $data = [
@@ -70,7 +70,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'cloned_from'=> $project->id,
             ];
             
-            return \DB::transaction(function () use($authenticated_user, $data, $project, $token) {
+            return \DB::transaction(function () use ($authenticated_user, $data, $project, $token) {
                 $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
