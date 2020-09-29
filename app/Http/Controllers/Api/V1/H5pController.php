@@ -20,7 +20,6 @@ use Illuminate\Validation\ValidationException;
 
 /**
  * @group  H5P
- * @authenticated
  *
  * APIs for H5P
  */
@@ -98,10 +97,26 @@ class H5pController extends Controller
     /**
      * Store H5P
      *
+     * @response 201 {
+     *   "success": "Content created.",
+     *   "id": 5,
+     *   "title": "title",
+     *   "type": "h5p"
+     * }
+     *
+     * @response 400 {
+     *   "fail": "Can not create."
+     * }
+     *
+     * @response 422 {
+     *   "fail": "Can not create."
+     * }
+     *
      * @param Request $request
      * @return Response
      * @throws ValidationException
      */
+    // TODO: need to unify error handling
     public function store(Request $request)
     {
         $h5p = App::make('LaravelH5p');
@@ -211,8 +226,12 @@ class H5pController extends Controller
     /**
      * Retrieve H5P based on id
      *
+     * @urlParam id required The Id of a H5p
+     *
+     * @responseFile responses/h5p-retrieve-based-id.edit.get.json
+     *
      * @param Request $request
-     * @param int $request
+     * @param $id
      *
      * @return Response
      */
@@ -258,7 +277,12 @@ class H5pController extends Controller
     }
 
     /**
-     * Retrive H5P based on Activity
+     * Retrieve H5P based on Activity
+     *
+     * @urlParam activityId required The Id of a activity
+     * @urlParam visibility Status of visibility
+     *
+     * @responseFile responses/h5p-basedon-activity.json
      *
      * @param Activity $activity
      * @param $visibility
@@ -301,8 +325,19 @@ class H5pController extends Controller
     /**
      * Update H5P based on id
      *
+     * @urlParam id required The Id of a H5p
+     *
+     * @response 200 {
+     *   "success": "Content updated.",
+     *   "id": 5
+     * }
+     *
+     * @response 400 {
+     *   "fail": "Can not update."
+     * }
+     *
      * @param Request $request
-     * @param int $id
+     * @param $id
      * @return Response
      * @throws ValidationException
      */
@@ -400,10 +435,14 @@ class H5pController extends Controller
     }
 
     /**
-     * Retrive H5P based on id to display
+     * Retrieve H5P based on id to display
+     *
+     * @urlParam id required The Id of a H5p
+     *
+     * @responseFile responses/h5p-retrieve-based-id.get.json
      *
      * @param Request $request
-     * @param int $id
+     * @param $id
      *
      * @return Response
      */
@@ -440,10 +479,14 @@ class H5pController extends Controller
     }
 
     /**
-     * Retrive H5P embed parameters
+     * Retrieve H5P embed parameters
+     *
+     * @urlParam id required The Id of a H5p
+     *
+     * @responseFile responses/h5p-retrieve-embed.get.json
      *
      * @param Request $request
-     * @param int $id
+     * @param $id
      *
      * @return Response
      */
@@ -459,6 +502,15 @@ class H5pController extends Controller
         return response(compact('settings', 'embed_code'), 200);
     }
 
+    /**
+     * Remove H5p
+     *
+     * @urlParam id required The Id of a H5p
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response|string
+     */
     public function destroy(Request $request, $id)
     {
         try {

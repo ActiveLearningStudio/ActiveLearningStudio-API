@@ -44,15 +44,16 @@ class CourseController extends Controller
     /**
      * Fetch a course from Canvas
      *
-     * @urlParam  project required The ID of the project.
-     * @bodyParam  setting_id int The id of the LMS setting.
+     * @urlParam project required The ID of the project.
+     * @bodyParam setting_id int The id of the LMS setting.
      *
-     * @responseFile  responses/fetchfromcanvas.post.json
-     * @response  400 {
-     *  "errors": "Validation error"
+     * @responseFile responses/fetch-from-canvas.post.json
+     *
+     * @response 400 {
+     *   "errors": "Validation error"
      * }
-     * @response  403 {
-     *  "errors": "You are not authorized to perform this action."
+     * @response 403 {
+     *   "errors": "You are not authorized to perform this action."
      * }
      *
      * @param Project $project
@@ -82,15 +83,17 @@ class CourseController extends Controller
     /**
      * Fetch a course from Moodle
      *
-     * @urlParam  project required The ID of the project.
-     * @bodyParam  setting_id int The id of the LMS setting.
+     * @urlParam project required The ID of the project.
+     * @bodyParam setting_id int The id of the LMS setting.
      *
-     * @responseFile  responses/fetchfromcanvas.post.json
-     * @response  400 {
-     *  "errors": "Validation error"
+     * @responseFile responses/fetch-from-canvas.post.json
+     *
+     * @response 400 {
+     *   "errors": "Validation error"
      * }
-     * @response  403 {
-     *  "errors": "You are not authorized to perform this action."
+     *
+     * @response 403 {
+     *   "errors": "You are not authorized to perform this action."
      * }
      *
      * @param FetchCourseRequest $fetchRequest

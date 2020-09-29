@@ -12,6 +12,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @group  Activity Item
+ *
+ * APIs for managing activity items
+ */
 class ActivityItemController extends Controller
 {
     private $activityItemRepository;
@@ -21,6 +26,7 @@ class ActivityItemController extends Controller
      * ActivityItemController constructor.
      *
      * @param ActivityItemRepositoryInterface $activityItemRepository
+     * @param ActivityTypeRepositoryInterface $activityTypeRepository
      */
     public function __construct(
         ActivityItemRepositoryInterface $activityItemRepository,
@@ -35,6 +41,8 @@ class ActivityItemController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @responseFile responses/activity-items.json
+     *
      * @return Response
      */
     public function index()
@@ -46,6 +54,14 @@ class ActivityItemController extends Controller
 
     /**
      * Upload thumb image for activity item
+     *
+     * @response {
+     *   "image": "https:\/\/images.pexels.com\/photos\/593158\/pexels-photo-593158.jpeg?auto=compress"
+     * }
+     *
+     * @response 400 {
+     *   "errors": ["Invalid image"]
+     * }
      *
      * @param Request $request
      * @return Response
@@ -71,6 +87,24 @@ class ActivityItemController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @bodyParam title string required The title of a activity item
+     * @bodyParam description string required The description of a activity item
+     * @bodyParam order int The order number of a activity item
+     * @bodyParam activity_type_id int The Id of a activity type
+     * @bodyParam type any required The type of a activity item
+     * @bodyParam h5pLib any required The H5pLib of a activity item
+     * @bodyParam image string The image url of a activity item
+     *
+     * @responseFile 201 responses/activity-item.json
+     *
+     * @response 400 {
+     *   "errors": ["Invalid activity type id."]
+     * }
+     *
+     * @response 500 {
+     *   "errors": ["Could not create activity item. Please try again later."]
+     * }
      *
      * @param Request $request
      * @return Response
@@ -110,6 +144,10 @@ class ActivityItemController extends Controller
     /**
      * Display the specified resource.
      *
+     * @urlParam activity_item required The Id of a activity item
+     *
+     * @responseFile responses/activity-item.json
+     *
      * @param ActivityItem $activityItem
      * @return Response
      */
@@ -122,6 +160,25 @@ class ActivityItemController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @urlParam activity_item required The Id of a activity item
+     * @bodyParam title string required The title of a activity item
+     * @bodyParam description string required The description of a activity item
+     * @bodyParam order int The order number of a activity item
+     * @bodyParam activity_type_id int The Id of a activity type
+     * @bodyParam type any required The type of a activity item
+     * @bodyParam h5pLib any required The H5pLib of a activity item
+     * @bodyParam image string The image url of a activity item
+     *
+     * @responseFile responses/activity-item.json
+     *
+     * @response 400 {
+     *   "errors": ["Invalid activity type id."]
+     * }
+     *
+     * @response 500 {
+     *   "errors": ["Failed to update activity item."]
+     * }
      *
      * @param Request $request
      * @param ActivityItem $activityItem
@@ -161,6 +218,16 @@ class ActivityItemController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @urlParam activity_item required The Id of a activity item
+     *
+     * @response {
+     *   "message": "Activity item is deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": ["Failed to delete activity item."]
+     * }
      *
      * @param ActivityItem $activityItem
      * @return Response

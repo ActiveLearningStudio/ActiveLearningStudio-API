@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Gate;
 
 /**
  * @group  CurrikiGo
- * @authenticated
  *
  * APIs for publishing playlists to other LMSs
  */
@@ -94,15 +93,18 @@ class PublishController extends Controller
      * @bodyParam  setting_id int The id of the LMS setting.
      * @bodyParam  counter int The counter for uniqueness of the title
      *
-     * @responseFile  responses/playlisttocanvas.post.json
+     * @responseFile  responses/playlist-to-canvas.post.json
+     *
      * @response  400 {
-     *  "errors": "Invalid project or playlist Id."
+     *   "errors": "Invalid project or playlist Id."
      * }
+     *
      * @response  403 {
-     *  "errors": "You are not authorized to perform this action."
+     *   "errors": "You are not authorized to perform this action."
      * }
+     *
      * @response  500 {
-     *  "errors": "Error sending playlists to canvas."
+     *   "errors": "Error sending playlists to canvas."
      * }
      *
      * @param Project $project

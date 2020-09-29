@@ -53,8 +53,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
-        Route::get('activities/{activity}/share', 'ActivityShareController@share');
-        Route::get('activities/{activity}/remove-share', 'ActivityShareController@removeShare');
+        Route::get('activities/{activity}/share', 'ActivityController@share');
+        Route::get('activities/{activity}/remove-share', 'ActivityController@removeShare');
         Route::get('activities/{activity}/detail', 'ActivityController@detail');
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
@@ -71,20 +71,21 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/{user}/metrics', 'UserMetricsController@show');
         Route::get('users/{user}/membership', 'UserMembershipController@show');
 
+        Route::get('h5p/settings', 'H5pController@create');
+        Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
+        Route::resource('h5p', 'H5pController');
+
         Route::group(['prefix' => 'h5p'], function () {
-            Route::resource('/', "H5pController");
-            Route::get('settings', "H5pController@create");
-            Route::get('activity/{activity}', "H5pController@showByActivity");
-            //H5P Ajax calls
-            Route::match(['GET', 'POST'], 'ajax/libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraries')->name("h5p.ajax.libraries");
-            Route::get('ajax/single-libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@singleLibrary')->name("h5p.ajax.single-libraries");
-            Route::any('ajax/content-type-cache', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentTypeCache')->name("h5p.ajax.content-type-cache");
-            Route::any('ajax/library-install', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraryInstall')->name("h5p.ajax.library-install");
-            Route::post('ajax/library-upload', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraryUpload')->name("h5p.ajax.library-upload");
-            Route::post('ajax/rebuild-cache', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@rebuildCache')->name("h5p.ajax.rebuild-cache");
-            Route::any('ajax/filter', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@filter')->name("h5p.ajax.filter");
-            Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name("h5p.ajax.finish");
-            Route::any('ajax/content-user-data', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentUserData')->name("h5p.ajax.content-user-data");
+            // H5P Ajax calls
+            Route::match(['GET', 'POST'], 'ajax/libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraries')->name('h5p.ajax.libraries');
+            Route::get('ajax/single-libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@singleLibrary')->name('h5p.ajax.single-libraries');
+            Route::any('ajax/content-type-cache', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentTypeCache')->name('h5p.ajax.content-type-cache');
+            Route::any('ajax/library-install', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraryInstall')->name('h5p.ajax.library-install');
+            Route::post('ajax/library-upload', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraryUpload')->name('h5p.ajax.library-upload');
+            Route::post('ajax/rebuild-cache', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@rebuildCache')->name('h5p.ajax.rebuild-cache');
+            Route::any('ajax/filter', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@filter')->name('h5p.ajax.filter');
+            Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name('h5p.ajax.finish');
+            Route::any('ajax/content-user-data', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentUserData')->name('h5p.ajax.content-user-data');
         });
 
         // Elasticsearch
@@ -117,13 +118,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
     //H5P Activity public route
-    Route::get('h5p/activity/{activity}/visibility/{visibility}', "H5pController@showByActivity");
-    //Route to support H5P Editor's core js library fileupload with "new XMLHttpRequest()"
-    Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name("h5p.ajax.files");
+    Route::get('h5p/activity/{activity}/visibility/{visibility}', 'H5pController@showByActivity');
+    //Route to support H5P Editor's core js library file upload with 'new XMLHttpRequest()'
+    Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name('h5p.ajax.files');
     //H5P export public route for H5P toolbar and cloning
-    Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name("h5p.export");
+    Route::get('h5p/export/{id}', '\Djoudi\LaravelH5p\Http\Controllers\DownloadController')->name('h5p.export');
     //H5P embed
-    Route::get('h5p/embed/{id}', "H5pController@embed");
+    Route::get('h5p/embed/{id}', 'H5pController@embed');
     //Public route used for LTI previews
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     //LTI Playlist
@@ -131,7 +132,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('error', 'ErrorController@show')->name('api/error');
 
     /*********************** ADMIN PANEL ROUTES ************************/
-    Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin', 'middleware' => ['auth:api', 'verified', 'admin']], function () {
+    Route::group([
+        'prefix' => 'admin',
+        'as' => 'v1.admin.',
+        'namespace' => 'Admin',
+        'name' => 'admin.',
+        'middleware' => ['auth:api', 'verified', 'admin']
+    ], function () {
         // users
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');

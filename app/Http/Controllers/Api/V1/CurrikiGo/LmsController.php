@@ -11,7 +11,6 @@ use App\Http\Resources\V1\ProjectPublicResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
-use Redirect;
 
 /**
  * @group  LMS Settings
@@ -23,7 +22,7 @@ class LmsController extends Controller
 {
     private $lmsSettingRepository;
     private $projectRepository;
-    
+
     /**
      * LmsController constructor.
      *
@@ -36,9 +35,14 @@ class LmsController extends Controller
     }
 
     /**
-     * Projects based on LMS settings LTI client_id 
-     * 
-     * Display a listing of user Projects that blong it same LMS/LTI settings
+     * Projects based on LMS settings LTI client_id
+     *
+     * Display a listing of user Projects that belong it same LMS/LTI settings
+     *
+     * @bodyParam lms_url string required The url of a lms
+     * @bodyParam lti_client_id int required The Id of a lti client
+     *
+     * @responseFile responses/projects.get.json
      *
      * @param Request $request
      * @return Response
@@ -50,14 +54,13 @@ class LmsController extends Controller
             $messages = $validator->messages();
             return response(['error' => $messages], 400);
         }
-        
+
         $lms_url = $request->input('lms_url');
         $lti_client_id = $request->input('lti_client_id');
         $projects = $this->projectRepository->fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id);
-        
+
         return response([
             'projects' => ProjectPublicResource::collection($projects),
         ], 200);
-        
     }
 }

@@ -75,6 +75,20 @@ class UserController extends Controller
     /**
      * Display the authenticated user.
      *
+     * @response {
+     *   "user": {
+     *     "created_at": "2020-09-06T19:21:08.000000Z",
+     *     "description": "test a test",
+     *     "id": 1779,
+     *     "is_public": false,
+     *     "name": "Amar",
+     *     "shared": true,
+     *     "starter_project": null,
+     *     "thumb_url": "https://photo.excel.com/photos/2233112/photo-2233112.jpeg",
+     *     "updated_at": "2020-09-07T16:31:52.000000Z"
+     *   }
+     * }
+     *
      * @return Response
      */
     public function me()
@@ -87,6 +101,26 @@ class UserController extends Controller
 
     /**
      * Subscribe.
+     *
+     * @response {
+     *   "user": {
+     *     "created_at": "2020-09-06T19:21:08.000000Z",
+     *     "description": "test a test",
+     *     "id": 1779,
+     *     "is_public": false,
+     *     "name": "Amar",
+     *     "shared": true,
+     *     "starter_project": null,
+     *     "thumb_url": "https://photo.excel.com/photos/2233112/photo-2233112.jpeg",
+     *     "updated_at": "2020-09-07T16:31:52.000000Z"
+     *   }
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to subscribe."
+     *   ]
+     * }
      *
      * @param Request $request
      * @return Response
@@ -113,6 +147,36 @@ class UserController extends Controller
     /**
      * Update the specified user in storage.
      *
+     * @urlParam user required The id of a user.
+     * @bodyParam first_name string required First name of a user.
+     * @bodyParam last_name string required Surname of a user.
+     * @bodyParam organization_name required Organization name of a user.
+     * @bodyParam website required Website url of a user.
+     * @bodyParam job_title required Job name of a user.
+     * @bodyParam address string required Address of a user.
+     * @bodyParam phone_number string required Phone number of a user.
+     *
+     * @response {
+     *   "user": {
+     *     "created_at": "2020-09-06T19:21:08.000000Z",
+     *     "description": "test a test",
+     *     "id": 1779,
+     *     "is_public": false,
+     *     "name": "Amar",
+     *     "shared": true,
+     *     "starter_project": null,
+     *     "thumb_url": "https://photo.excel.com/photos/2233112/photo-2233112.jpeg",
+     *     "updated_at": "2020-09-07T16:31:52.000000Z"
+     *   },
+     *   "message" => "Profile has been updated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update profile."
+     *   ]
+     * }
+     *
      * @param ProfileUpdateRequest $profileUpdateRequest
      * @param User $user
      * @return Response
@@ -137,6 +201,25 @@ class UserController extends Controller
 
     /**
      * Update password of the specified user in storage.
+     *
+     * @bodyParam current_password string required Current password to be changed into.
+     * @bodyParam password string required New password to be set.
+     *
+     * @response {
+     *   "message": "Password has been updated successfully."
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid request."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update password."
+     *   ]
+     * }
      *
      * @param Request $request
      * @return Response
@@ -172,6 +255,18 @@ class UserController extends Controller
 
     /**
      * Remove the specified user from storage.
+     *
+     * @urlParam user required The id of user.
+     *
+     * @response {
+     *   "message": "User is deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to delete profile."
+     *   ]
+     * }
      *
      * @param User $user
      * @return Response
