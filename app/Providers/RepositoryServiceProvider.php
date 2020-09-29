@@ -24,6 +24,8 @@ use App\Repositories\H5pLibrary\H5pLibraryRepository;
 use App\Repositories\H5pLibrary\H5pLibraryRepositoryInterface;
 use App\Repositories\Metrics\MetricsRepositoryInterface;
 use App\Repositories\Metrics\MetricsRepository;
+use App\Repositories\UserLogin\UserLoginRepository;
+use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -45,7 +47,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LmsSettingRepositoryInterface::class, LmsSettingRepository::class);
         $this->app->bind(H5pElasticsearchFieldRepositoryInterface::class, H5pElasticsearchFieldRepository::class);
         $this->app->bind(H5pLibraryRepositoryInterface::class, H5pLibraryRepository::class);
-        $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);        
+        $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
+        $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
     }
 
     /**

@@ -7,7 +7,7 @@ use App\Jobs\AssignStarterProjects;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
-use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -16,8 +16,6 @@ use Illuminate\Support\Str;
  */
 class UserRepository extends BaseRepository
 {
-    use DispatchesJobs;
-
     /**
      * @var ProjectRepository
      */
@@ -61,7 +59,8 @@ class UserRepository extends BaseRepository
             $data['remember_token'] = Str::random(64);
             $data['email_verified_at'] = now();
             if ($user = $this->model->create($data)) {
-                // $this->dispatch((new AssignStarterProjects($user))); For now - not needed
+                AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
+                event(new Registered($user));
                 return ['message' => 'User created successfully!', 'data' => $user];
             }
         } catch (\Exception $e) {
@@ -85,7 +84,7 @@ class UserRepository extends BaseRepository
             if ($user->update($data) && $clone_project_id) {
                 // if clone project id provided - clone the project
                 $this->projectRepository->clone($user, $clone_project_id);
-                return ['message' => 'User data updated and project cloned successfully!', 'data' => $this->find($id)];
+                return ['message' => 'User data updated and project is being cloned in background!', 'data' => $this->find($id)];
             }
             return ['message' => 'User data updated successfully!', 'data' => $this->find($id)];
         } catch (\Exception $e) {
@@ -105,7 +104,7 @@ class UserRepository extends BaseRepository
         if ($user = $this->model->whereId($id)->with('projects')->first()) {
             return $user;
         }
-        throw new GeneralException('User Not found.');
+        throw new GeneralException('User not found.');
     }
 
     /**
@@ -119,7 +118,7 @@ class UserRepository extends BaseRepository
             throw new GeneralException('You cannot delete your own user');
         }
         try {
-            $this->model->find($id)->delete();
+            $this->find($id)->delete();
             return 'User Deleted!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());

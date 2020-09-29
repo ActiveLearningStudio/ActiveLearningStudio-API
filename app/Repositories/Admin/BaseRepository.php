@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Admin;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Concerns\BuildsQueries;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -77,7 +79,9 @@ abstract class BaseRepository implements RepositoryContract
     protected $dtOrder = 'created_at';
     protected $dtOrderDir = 'asc';
     protected $dtSearchValue = '';
+    protected $dtRelSearchValue = '';
     protected $dtSearchColumns = [];
+    protected $dtRelSearchColumns = [];
 
     /**
      * Get all the model records in the database.
@@ -218,7 +222,7 @@ abstract class BaseRepository implements RepositoryContract
      * @param string $pageName
      * @param null $page
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function paginate($limit = 25, array $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -364,27 +368,83 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
+     * Verify if DT Params present
+     * @param $dtParams
+     * @return bool
+     */
+    protected function isDtRequest($dtParams)
+    {
+        return isset($dtParams['columns'], $dtParams['order'], $dtParams['start'], $dtParams['length'], $dtParams['search']);
+    }
+
+    /**
      * Params of DataTables present in Request
      * @param $dtParams
      * @return BaseRepository
      */
     protected function setDtParams($dtParams)
     {
-        if (isset($dtParams['columns'], $dtParams['order'], $dtParams['start'], $dtParams['length'], $dtParams['search'])) {
-            $this->dtSearchColumns = $dtParams['columns'];
-            $this->dtOrder = $this->dtSearchColumns[$dtParams['order'][0]['column']]['name']; // get datatable order column
-            $this->dtOrderDir = $dtParams['order'][0]['dir'];
-            $this->dtSearchValue = $dtParams['search']['value'] ?? null; // set null if no search value present in request
-            $this->dtStart = $dtParams['start'];
-            $this->dtLength = $dtParams['length'];
-            $this->dtPage = ($this->dtStart / $this->dtLength) + 1; // calculate page size
+        if ($this->isDtRequest($dtParams)) {
+            $sValue = $dtParams['search']['value'] ?? null; // set null if no search value present in request
+
+            $this->enableDtSearch($dtParams['columns'], $sValue)->enablePagination($dtParams['start'], $dtParams['length'])
+                ->enableDtOrder($this->dtSearchColumns[$dtParams['order'][0]['column']]['name'], $dtParams['order'][0]['dir']);
         }
         $this->dtPage = $dtParams['page'] ?? $this->dtPage; // if page parameter is already present in request then override
         return $this;
     }
 
     /**
+     * @param $value
+     * @return $this
+     */
+    public function enableDtSearch($columns, $value)
+    {
+        $this->dtSearchColumns = $columns ?? null;
+        $this->dtSearchValue = $value ?? null;
+        return $this;
+    }
+
+    /**
+     * @param $columns
+     * @param $value
+     * @return $this
+     */
+    public function enableRelDtSearch($columns, $value)
+    {
+        $this->dtRelSearchColumns = $columns ?? null;
+        $this->dtRelSearchValue = $value ?? null;
+        return $this;
+    }
+
+    /**
+     * @param $order
+     * @param $dir
+     * @return $this
+     */
+    public function enableDtOrder($order, $dir)
+    {
+        $this->dtOrder = $order; // get datatable order column
+        $this->dtOrderDir = $dir;
+        return $this;
+    }
+
+    /**
+     * @param $start
+     * @param $length
+     * @return $this
+     */
+    public function enablePagination($start, $length)
+    {
+        $this->dtStart = $start;
+        $this->dtLength = $length;
+        $this->dtPage = ($start / $length) + 1; // calculate page size
+        return $this;
+    }
+
+    /**
      * Get the default datatables paginated response
+     * Relational search can be performed only on 1st relation for now
      * @param array $with
      * @return mixed
      */
@@ -395,17 +455,73 @@ abstract class BaseRepository implements RepositoryContract
             $this->query = $this->model::query();
         }
 
-        // search through each column and sort by - Needed for datatables calls
-        return $this->query->when($this->dtOrderDir, function ($query) {
+        // search through each column and sort by - also append relation data if needed
+        return $this->dtOrderBy()->dtWith($with)->dtSearch($with)->dtPaginate();
+    }
+
+    /**
+     * @return BuildsQueries|Builder|mixed
+     */
+    protected function dtOrderBy()
+    {
+        $this->query = $this->query->when($this->dtOrderDir, function ($query) {
             return $query->orderBy($this->dtOrder, $this->dtOrderDir);
-        })->when($this->dtSearchValue, function ($query) {
+        });
+        return $this;
+    }
+
+    /**
+     * @param null $relations
+     * @return BuildsQueries|Builder|mixed
+     */
+    public function dtSearch($relations = null)
+    {
+        $this->query = $this->query->when($this->dtSearchValue, function ($query) use ($relations) {
             // group the where clause to avoid the conflicting of other where clauses with search
-            return $query->where(function ($query) {
+            $query->where(function ($query) use ($relations) {
+                // if search relation need to be perform -
+                $this->dtRelSearch($query, $relations);
                 return $query->search($this->dtSearchColumns, $this->dtSearchValue);
             });
-        })->when($with, function ($query) use ($with) {
+        });
+        return $this;
+    }
+
+    /**
+     * @param $with
+     * @return $this
+     */
+    protected function dtWith($with)
+    {
+        $this->query = $this->query->when($with, function ($query) use ($with) {
             return $query->with($with);
-        })->paginate($this->dtLength, '*', 'page', $this->dtPage);
+        });
+        return $this;
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     */
+    protected function dtPaginate()
+    {
+        return $this->query->paginate($this->dtLength, '*', 'page', $this->dtPage);
+    }
+
+    /**
+     * @param $query
+     * @param $relation
+     * @return mixed
+     */
+    protected function dtRelSearch($query, $relation)
+    {
+        return $query->when($this->dtRelSearchValue, function ($query) use ($relation) {
+            // access the first relation from relations array
+            $query->orWhereHas($relation[0], function ($query) {
+                $query->where(function ($query) {
+                    return $query->search($this->dtRelSearchColumns, $this->dtRelSearchValue);
+                });
+            });
+        });
     }
 
 }
