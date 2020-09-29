@@ -81,7 +81,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $cloned_activity = $this->playlistRepositroy->clone($cloned_project, $playlist, $token);
                 }
 
-                $project->clone_ctr = $project->clone_ctr+1;
+                $project->clone_ctr = $project->clone_ctr + 1;
                 $project->save();
                 
                 return "Project cloned successfully";
@@ -90,7 +90,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         } catch (\Exception $e) {
             \DB::rollBack();
             Log::error($e->getMessage());
-            throw new GeneralException('Unable to clone project, please try again later!');
+            throw new GeneralException('Unable to clone the project, please try again later!');
         }
         
         
