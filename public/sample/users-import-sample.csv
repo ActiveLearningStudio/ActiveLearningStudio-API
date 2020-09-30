@@ -1,0 +1,14 @@
+first_name,last_name,email,password,organization_name,job_title
+168xos,com,168xosocom@gmail.com,sample$1Password,optional column,optional column
+Test,User,421demo@curriki.org,sample$1Password,,
+A,Henry,althea.henry@fac.edu.tt,sample$1Password,optional column,optional column
+aaron,mckinnon,amckinnon@sde.idaho.gov,sample$1Password,,optional column
+Aaron,Hart,ahart@openphysed.org,sample$1Password,,
+Aashish,Kumawat,ankitkumawat764@gmail.com,sample$1Password,optional column,
+Ahmad,Mukhtar,test3987970@gmaill.com,sample$1Password,,optional column
+Abby,First,abby@curriki.org,sample$1Password,,
+Abby,Test,abigailross49+12979@gmail.com,sample$1Password,,
+Abhay,dhamale,digitalmogli12@gmail.com,sample$1Password,optional column,optional column
+,,,,,
+,,,,,
+"Notes: Email must be unique and Password must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.",,,,,

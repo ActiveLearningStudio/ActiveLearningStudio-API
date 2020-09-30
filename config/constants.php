@@ -4,4 +4,7 @@ return [
     'curriki-tsugi-host' => env('CURRIKI_TSUGI_HOST'),
     'front-url' => env('FRONT_END_URL'),
     'curriki-demo-email' => env('CURRIKI_DEMO_EMAIL'),
+    'users' => [
+       'sample-file' => 'sample/users-import-sample.csv'
+    ],
 ];

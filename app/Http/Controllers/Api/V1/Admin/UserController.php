@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ImportBulkUsers;
 use App\Http\Requests\Admin\StoreUser;
 use App\Http\Requests\Admin\UpdateUser;
 use App\Http\Resources\V1\Admin\UserResource;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
@@ -101,5 +103,35 @@ class UserController extends Controller
     {
         \Artisan::call('project:starters');
         dd("Assign starter projects command invoked successfully.");
+    }
+
+    /**
+     * Users import sample file
+     * @return BinaryFileResponse
+     * @throws GeneralException
+     */
+    public function downloadSampleFile(): BinaryFileResponse
+    {
+        $sampleFile = config('constants.users.sample-file');
+        if ($sampleFile) {
+            return response()->download($sampleFile, 'users-import-sample.csv', ['Content-Type' => 'text/csv']);
+        }
+        throw new GeneralException('Sample file not found!');
+    }
+
+    /**
+     * @param ImportBulkUsers $request
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function bulkImport(ImportBulkUsers $request)
+    {
+        $validated = $request->validated();
+        $response = $this->userRepository->bulkImport($validated);
+        // if report is present then set status 206 for partial success and show error messages
+        if ($response['report']){
+            return response(['errors' => [$response['message']], 'report' => $response['report']], 206);
+        }
+        return response(['message' => $response['message'], 'report' => $response['report']], 200);
     }
 }
