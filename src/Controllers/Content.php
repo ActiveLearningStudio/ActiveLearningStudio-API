@@ -94,10 +94,8 @@ class Content implements ControllerInterface
                 $additionalParams['placementHeight'] = $displayHeight;
             }
         }
-        $icon = false;
-        if ( $fa_icon !== false ) {
-            $icon = $CFG->fontawesome.'/png/'.str_replace('fa-','',$fa_icon).'.png';
-        }                
+        
+        $icon = CURRIKI_STUDIO_HOST.'/favicon-apple.png';                                           
 
         // Set up to send the response
         if ( $this->deeplink ) {
