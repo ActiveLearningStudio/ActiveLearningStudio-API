@@ -2,7 +2,7 @@
     "variables": [],
     "info": {
         "name": "Curriki API",
-        "_postman_id": "f3068bd6-b388-4e60-a6e5-f492c622e849",
+        "_postman_id": "2180f784-b743-49a8-971c-febebcfc480d",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -23,13 +23,13 @@
                                 {
                                     "id": "playlist",
                                     "key": "playlist",
-                                    "value": "enim",
+                                    "value": "odio",
                                     "description": "The Id of a playlist"
                                 },
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "omnis",
+                                    "value": "deserunt",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -54,7 +54,7 @@
                     }
                 },
                 {
-                    "name": "Upload thumb image for activity",
+                    "name": "Upload thumbnail\nUpload thumb image for activity",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -75,7 +75,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"thumb\": \"aut\"\n}"
+                            "raw": "{\n    \"thumb\": \"rerum\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -93,7 +93,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "minima",
+                                    "value": "ut",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -129,7 +129,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "sequi",
+                                    "value": "ullam",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -165,7 +165,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "ea",
+                                    "value": "voluptatem",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -201,7 +201,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "dolorem",
+                                    "value": "sunt",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -237,7 +237,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "voluptates",
+                                    "value": "incidunt",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -273,7 +273,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "accusamus",
+                                    "value": "facilis",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -298,7 +298,7 @@
                     }
                 },
                 {
-                    "name": "Display a listing of the activity.",
+                    "name": "Get Activities\nDisplay a listing of the activity.",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -347,9 +347,9 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"totam\",\n    \"type\": \"vel\",\n    \"content\": \"animi\",\n    \"playlist_id\": 19,\n    \"order\": 17,\n    \"h5p_content_id\": 2,\n    \"thumb_url\": \"sed\",\n    \"subject_id\": \"iste\",\n    \"education_level_id\": \"natus\"\n}"
+                            "raw": "{\n    \"title\": \"odit\",\n    \"type\": \"non\",\n    \"content\": \"nulla\",\n    \"playlist_id\": 12,\n    \"order\": 4,\n    \"h5p_content_id\": 15,\n    \"thumb_url\": \"quae\",\n    \"subject_id\": \"mollitia\",\n    \"education_level_id\": \"odit\"\n}"
                         },
-                        "description": "",
+                        "description": "Description",
                         "response": []
                     }
                 },
@@ -365,7 +365,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "est",
+                                    "value": "et",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -401,7 +401,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "quaerat",
+                                    "value": "distinctio",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -419,7 +419,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"vel\",\n    \"type\": \"ullam\",\n    \"content\": \"consequuntur\",\n    \"playlist_id\": 19,\n    \"shared\": true,\n    \"order\": 20,\n    \"h5p_content_id\": 19,\n    \"thumb_url\": \"est\",\n    \"subject_id\": \"beatae\",\n    \"education_level_id\": \"mollitia\"\n}"
+                            "raw": "{\n    \"title\": \"qui\",\n    \"type\": \"vero\",\n    \"content\": \"est\",\n    \"playlist_id\": 19,\n    \"shared\": false,\n    \"order\": 20,\n    \"h5p_content_id\": 11,\n    \"thumb_url\": \"molestiae\",\n    \"subject_id\": \"quia\",\n    \"education_level_id\": \"sed\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -437,7 +437,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "rerum",
+                                    "value": "sunt",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -473,7 +473,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "at",
+                                    "value": "et",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -553,7 +553,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"sed\",\n    \"description\": \"molestias\",\n    \"order\": 3,\n    \"activity_type_id\": 15,\n    \"type\": \"est\",\n    \"h5pLib\": \"molestiae\",\n    \"image\": \"aperiam\"\n}"
+                            "raw": "{\n    \"title\": \"iste\",\n    \"description\": \"pariatur\",\n    \"order\": 10,\n    \"activity_type_id\": 12,\n    \"type\": \"suscipit\",\n    \"h5pLib\": \"nemo\",\n    \"image\": \"adipisci\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -571,7 +571,7 @@
                                 {
                                     "id": "activity_item",
                                     "key": "activity_item",
-                                    "value": "minus",
+                                    "value": "aut",
                                     "description": "The Id of a activity item"
                                 }
                             ]
@@ -607,7 +607,7 @@
                                 {
                                     "id": "activity_item",
                                     "key": "activity_item",
-                                    "value": "soluta",
+                                    "value": "sequi",
                                     "description": "The Id of a activity item"
                                 }
                             ]
@@ -625,7 +625,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"blanditiis\",\n    \"description\": \"quibusdam\",\n    \"order\": 3,\n    \"activity_type_id\": 9,\n    \"type\": \"consequatur\",\n    \"h5pLib\": \"id\",\n    \"image\": \"sapiente\"\n}"
+                            "raw": "{\n    \"title\": \"aut\",\n    \"description\": \"illo\",\n    \"order\": 18,\n    \"activity_type_id\": 3,\n    \"type\": \"velit\",\n    \"h5pLib\": \"est\",\n    \"image\": \"consequatur\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -643,7 +643,7 @@
                                 {
                                     "id": "activity_item",
                                     "key": "activity_item",
-                                    "value": "est",
+                                    "value": "repudiandae",
                                     "description": "The Id of a activity item"
                                 }
                             ]
@@ -751,7 +751,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"odit\",\n    \"order\": 4,\n    \"image\": \"in\"\n}"
+                            "raw": "{\n    \"title\": \"quis\",\n    \"order\": 18,\n    \"image\": \"perferendis\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -769,7 +769,7 @@
                                 {
                                     "id": "activity_type",
                                     "key": "activity_type",
-                                    "value": "corporis",
+                                    "value": "omnis",
                                     "description": "The Id of a activity type"
                                 }
                             ]
@@ -805,7 +805,7 @@
                                 {
                                     "id": "activity_type",
                                     "key": "activity_type",
-                                    "value": "qui",
+                                    "value": "est",
                                     "description": "The Id of a activity type"
                                 }
                             ]
@@ -823,7 +823,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"ut\",\n    \"order\": 5,\n    \"image\": \"eius\"\n}"
+                            "raw": "{\n    \"title\": \"maiores\",\n    \"order\": 15,\n    \"image\": \"fuga\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -841,7 +841,7 @@
                                 {
                                     "id": "activity_type",
                                     "key": "activity_type",
-                                    "value": "fuga",
+                                    "value": "incidunt",
                                     "description": "The Id of a activity type"
                                 }
                             ]
@@ -893,7 +893,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"first_name\": \"ipsa\",\n    \"last_name\": \"doloribus\",\n    \"email\": \"esse\",\n    \"password\": \"placeat\",\n    \"organization_name\": \"laudantium\",\n    \"job_title\": \"sed\"\n}"
+                            "raw": "{\n    \"first_name\": \"incidunt\",\n    \"last_name\": \"molestias\",\n    \"email\": \"voluptatem\",\n    \"password\": \"velit\",\n    \"organization_name\": \"quis\",\n    \"job_title\": \"voluptatem\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -921,7 +921,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"dolores\",\n    \"password\": \"saepe\"\n}"
+                            "raw": "{\n    \"email\": \"occaecati\",\n    \"password\": \"alias\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -977,7 +977,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"cum\"\n}"
+                            "raw": "{\n    \"email\": \"sit\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -1005,7 +1005,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"id\": \"qui\",\n    \"hash\": \"autem\",\n    \"signature\": \"aut\",\n    \"expires\": \"sint\"\n}"
+                            "raw": "{\n    \"id\": \"iure\",\n    \"hash\": \"rerum\",\n    \"signature\": \"provident\",\n    \"expires\": \"voluptatum\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -1057,13 +1057,13 @@
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "architecto",
+                                    "value": "voluptas",
                                     "description": "The ID of the project"
                                 },
                                 {
                                     "id": "playlist",
                                     "key": "playlist",
-                                    "value": "aperiam",
+                                    "value": "ipsam",
                                     "description": "The ID of the playlist."
                                 }
                             ]
@@ -1081,7 +1081,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 1,\n    \"counter\": 12\n}"
+                            "raw": "{\n    \"setting_id\": 15,\n    \"counter\": 17\n}"
                         },
                         "description": "",
                         "response": []
@@ -1099,7 +1099,7 @@
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "voluptatem",
+                                    "value": "consectetur",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -1117,7 +1117,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 2\n}"
+                            "raw": "{\n    \"setting_id\": 11\n}"
                         },
                         "description": "",
                         "response": []
@@ -1135,13 +1135,13 @@
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "aut",
+                                    "value": "quia",
                                     "description": "The ID of the project"
                                 },
                                 {
                                     "id": "playlist",
                                     "key": "playlist",
-                                    "value": "velit",
+                                    "value": "sunt",
                                     "description": "The ID of the playlist."
                                 }
                             ]
@@ -1159,7 +1159,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 9,\n    \"counter\": 4\n}"
+                            "raw": "{\n    \"setting_id\": 9,\n    \"counter\": 2\n}"
                         },
                         "description": "",
                         "response": []
@@ -1177,7 +1177,7 @@
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "voluptate",
+                                    "value": "voluptas",
                                     "description": "The ID of the project."
                                 }
                             ]
@@ -1195,7 +1195,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 9\n}"
+                            "raw": "{\n    \"setting_id\": 19\n}"
                         },
                         "description": "",
                         "response": []
@@ -1229,7 +1229,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"access_token\": \"quam\"\n}"
+                            "raw": "{\n    \"access_token\": \"eum\"\n}"
                         },
                         "description": "Save GAPI access token in the database.",
                         "response": []
@@ -1569,7 +1569,7 @@
                                 {
                                     "id": "visibility",
                                     "key": "visibility",
-                                    "value": "ut",
+                                    "value": "id",
                                     "description": "Status of visibility"
                                 }
                             ]
@@ -1605,7 +1605,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "veniam",
+                                    "value": "inventore",
                                     "description": "The Id of a H5p"
                                 }
                             ]
@@ -1685,7 +1685,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"lms_url\": \"commodi\",\n    \"lti_client_id\": 13\n}"
+                            "raw": "{\n    \"lms_url\": \"quo\",\n    \"lti_client_id\": 12\n}"
                         },
                         "description": "Display a listing of user Projects that belong it same LMS\/LTI settings",
                         "response": []
@@ -1719,7 +1719,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"playlists\": \"repellat\"\n}"
+                            "raw": "{\n    \"playlists\": \"eum\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -2077,7 +2077,7 @@
                             "query": [
                                 {
                                     "key": "projectId",
-                                    "value": "similique",
+                                    "value": "esse",
                                     "description": "This is an id of a project.",
                                     "disabled": false
                                 }
@@ -2384,7 +2384,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"current_password\": \"eveniet\",\n    \"password\": \"ut\"\n}"
+                            "raw": "{\n    \"current_password\": \"voluptatem\",\n    \"password\": \"quia\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -2486,7 +2486,7 @@
                                 {
                                     "id": "user",
                                     "key": "user",
-                                    "value": "est",
+                                    "value": "ratione",
                                     "description": "The id of a user."
                                 }
                             ]
@@ -2504,7 +2504,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"first_name\": \"repellendus\",\n    \"last_name\": \"et\",\n    \"organization_name\": \"iusto\",\n    \"website\": \"harum\",\n    \"job_title\": \"quia\",\n    \"address\": \"sit\",\n    \"phone_number\": \"voluptatibus\"\n}"
+                            "raw": "{\n    \"first_name\": \"autem\",\n    \"last_name\": \"dolores\",\n    \"organization_name\": \"quia\",\n    \"website\": \"porro\",\n    \"job_title\": \"voluptates\",\n    \"address\": \"explicabo\",\n    \"phone_number\": \"officia\"\n}"
                         },
                         "description": "",
                         "response": []
@@ -2522,7 +2522,7 @@
                                 {
                                     "id": "user",
                                     "key": "user",
-                                    "value": "veritatis",
+                                    "value": "et",
                                     "description": "The id of user."
                                 }
                             ]

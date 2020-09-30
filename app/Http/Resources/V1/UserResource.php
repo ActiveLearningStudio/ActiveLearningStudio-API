@@ -28,11 +28,9 @@ class UserResource extends JsonResource
             'address' => $this->address,
             'phone_number' => $this->phone_number,
             'website' => $this->website,
-            'hubspot' => $this->hubspot,
             'subscribed' => $this->subscribed,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'gapi_access_token' => $this->gapi_access_token
+            // 'created_at' => $this->created_at,
+            // 'updated_at' => $this->updated_at,
         ];
     }
 }

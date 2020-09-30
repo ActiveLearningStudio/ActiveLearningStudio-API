@@ -106,11 +106,7 @@ class AuthController extends Controller
      *     "address": null,
      *     "phone_number": null,
      *     "website": null,
-     *     "hubspot": false,
      *     "subscribed": true,
-     *     "created_at": "2020-08-26T11:28:16.000000Z",
-     *     "updated_at": "2020-09-10T15:08:45.000000Z",
-     *     "gapi_access_token": null
      *   },
      *   "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODBjMGJhY..."
      * }
@@ -177,11 +173,7 @@ class AuthController extends Controller
      *     "address": null,
      *     "phone_number": null,
      *     "website": null,
-     *     "hubspot": false,
      *     "subscribed": true,
-     *     "created_at": "2020-08-26T11:28:16.000000Z",
-     *     "updated_at": "2020-09-10T15:08:45.000000Z",
-     *     "gapi_access_token": JSON Object
      *   },
      *   "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODBjMGJhY..."
      * }

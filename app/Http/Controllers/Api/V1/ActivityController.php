@@ -42,7 +42,9 @@ class ActivityController extends Controller
     }
 
     /**
-     * Display a listing of the activity.
+     * Get Activities
+     *
+     * Get list of activities
      *
      * @responseFile responses/activities.json
      *
@@ -56,6 +58,8 @@ class ActivityController extends Controller
     }
 
     /**
+     * Upload thumbnail
+     *
      * Upload thumb image for activity
      *
      * @bodyParam thumb image required Thumbnail image
