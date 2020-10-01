@@ -134,6 +134,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin', 'middleware' => ['auth:api', 'verified', 'admin']], function () {
         // users
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        Route::post('users/bulk/import', 'UserController@bulkImport')->name('users.bulk.import');
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
         Route::resource('users', 'UserController');
 
@@ -154,4 +155,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // activity-items
         Route::resource('activity-items', 'ActivityItemController');
     });
+
+    // admin public routes for downloads / uploads
+    Route::get('admin/users/import/sample-file', 'Admin\UserController@downloadSampleFile')->name('users.import.sample-file');
 });
