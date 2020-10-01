@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -10,6 +11,8 @@ use App\Jobs\AssignStarterProjects;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -254,4 +257,38 @@ class AuthController extends Controller
             'message' => 'You have been successfully logged out.',
         ], 200);
     }
+
+    /***
+     * CUSTOM ADMIN LOGIN VERIFICATION
+     * @param LoginRequest $loginRequest
+     * @return Application|ResponseFactory|Response
+     * @throws \Throwable
+     */
+    public function adminLogin(LoginRequest $loginRequest)
+    {
+        $data = $loginRequest->validated();
+
+        if (!auth()->attempt($data)) {
+            return response([
+                'errors' => ['Invalid Credentials.'],
+            ], 400);
+        }
+
+        $user = auth()->user();
+
+        throw_if(!$user->email_verified_at, new GeneralException('Email is not verified!')); // make sure admin email is verified
+        throw_if(!$user->isAdmin(), new GeneralException('Unauthorized!')); // if not admin then throw unauthorized error
+
+        // keep the login logs
+        $this->userLoginRepository->create([
+            'user_id' => $user->id,
+            'ip_address' => $loginRequest->ip(),
+        ]);
+
+        return response([
+            'user' => new UserResource($user),
+            'access_token' => $user->createToken('auth_token')->accessToken,
+        ], 200);
+    }
+
 }
