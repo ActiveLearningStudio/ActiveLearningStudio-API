@@ -6,7 +6,7 @@ use App\Rules\StrongPassword;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -23,6 +23,19 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
     use Importable, SkipsFailures, SkipsErrors;
 
     /**
+     * @var
+     */
+    protected $timestamp;
+
+    /**
+     * UsersImport constructor.
+     */
+    public function __construct()
+    {
+        $this->timestamp = now();
+    }
+
+    /**
      * @param array $row
      * @return Model|null
      */
@@ -35,6 +48,8 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
             'job_title' => $row['job_title'],
             'email' => $row['email'],
             'password' => Hash::make($row['password']),
+            'remember_token' => Str::random(64),
+            'email_verified_at' => $this->timestamp
         ]);
     }
 
