@@ -157,6 +157,10 @@ class UserRepository extends BaseRepository
         try {
             $import = new UsersImport();
             $import->import($data['import_file']);
+
+            // if none of the records was inserted, could be empty file or bad formatted
+            throw_if(!$import->importedCount && !$import->failures()->count(), new GeneralException('Empty or bad formatted file.'));
+
             $error = $this->bulkError($import);
             return [
                 'report' => $error ? custom_url('storage/temporary/users-import-report.csv') : false,
@@ -165,7 +169,7 @@ class UserRepository extends BaseRepository
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to import the users data, please try again later.');
+        throw new GeneralException('Empty or bad formatted file, please download sample file for proper format.');
     }
 
     /**

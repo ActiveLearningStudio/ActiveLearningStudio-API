@@ -28,6 +28,12 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
     protected $timestamp;
 
     /**
+     * Keep count of inserted rows
+     * @var int
+     */
+    public $importedCount = 0;
+
+    /**
      * UsersImport constructor.
      */
     public function __construct()
@@ -41,11 +47,12 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
      */
     public function model(array $row)
     {
+        $this->importedCount++; // increment the inserted rows count
         return new User([
             'first_name' => $row['first_name'],
             'last_name' => $row['last_name'],
-            'organization_name' => $row['organization_name'],
-            'job_title' => $row['job_title'],
+            'organization_name' => $row['organization_name'] ?? null,
+            'job_title' => $row['job_title'] ?? null,
             'email' => $row['email'],
             'password' => Hash::make($row['password']),
             'remember_token' => Str::random(64),
