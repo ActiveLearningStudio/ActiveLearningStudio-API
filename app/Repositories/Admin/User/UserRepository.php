@@ -11,6 +11,7 @@ use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Bus\PendingDispatch;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -158,7 +159,7 @@ class UserRepository extends BaseRepository
             $import->import($data['import_file']);
             $error = $this->bulkError($import);
             return [
-                'report' => $error ? asset('storage/temporary/users-import-report.csv') : false,
+                'report' => $error ? custom_url('storage/temporary/users-import-report.csv') : false,
                 'message' => $error ? 'Failed to import some rows data, please download detailed error report.' : 'All users data imported successfully!'
             ];
         } catch (\Exception $e) {
@@ -178,12 +179,18 @@ class UserRepository extends BaseRepository
         $report = false;
         // check if any validation failures then create CSV FILE for report
         if (count($failures)) {
-            foreach ($failures as $k => $failure) {
-                $errors[$k] = $failure->values();
-                $errors[$k]['status'] = 'failed';
-                $errors[$k]['reason'] = implode(' | ', $failure->errors());
+            foreach ($failures as $failure) {
+                $row = (int)$failure->row();
+                // if row values are already added then no need to override
+                if (!isset($errors[$row])) {
+                    $errors[$row] = $failure->values();
+                    $errors[$row]['status'] = 'failed';
+                }
+                // append old errors by pipeline separator for same row
+                $row_error = implode(' | ', $failure->errors());
+                $errors[$row]['reason'] = isset($errors[$row]['reason']) ? $errors[$row]['reason'] . ' | ' . $row_error : $row_error;
             }
-            $report = (new ArrayExport($errors, array_keys($errors[0])))->store('public/temporary/users-import-report.csv');
+            $report = (new ArrayExport($errors, array_keys(reset($errors))))->store('public/temporary/users-import-report.csv');
         }
         $errors = $import->errors();
         // if any database error occurred

@@ -258,7 +258,7 @@ class AuthController extends Controller
         ], 200);
     }
 
-    /***
+    /**
      * CUSTOM ADMIN LOGIN VERIFICATION
      * @param LoginRequest $loginRequest
      * @return Application|ResponseFactory|Response
