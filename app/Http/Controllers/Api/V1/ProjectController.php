@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\V1\H5pController;
 
+/**
+ * @group Project management
+ *
+ * APIs for managing projects
+ */
 class ProjectController extends Controller
 {
 
@@ -155,6 +160,8 @@ class ProjectController extends Controller
 
     /**
      * Display the specified project.
+     *
+     * @queryParam projectId required This is an id of a project.
      *
      * @param Project $project
      * @return Response
@@ -297,10 +304,7 @@ class ProjectController extends Controller
             ], 500);
         }
 
-        $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken());
-        return response([
-            'message' => 'Project is cloned successfully.',
-        ], 200);
+        return response(['message' => $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken())], 200);
     }
 
 }

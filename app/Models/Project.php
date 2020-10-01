@@ -27,6 +27,8 @@ class Project extends Model
         'starter_project',
         'elasticsearch',
         'is_public',
+        'cloned_from',
+        'clone_ctr',
         'organisation_visibility_type_id'
     ];
 

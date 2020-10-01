@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', 'Auth\AuthController@register')->name('register');
 Route::post('login', 'Auth\AuthController@login')->name('login');
+Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('reset-password', 'Auth\ResetPasswordController@reset');
@@ -35,18 +36,16 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::post('users/update-password', 'UserController@updatePassword');
-        // Membership
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer');
-
         Route::apiResource('users', 'UserController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
-        Route::post('projects/{project}/share', 'ProjectController@share');
-        Route::post('projects/{project}/clone', 'ProjectController@clone');
-        Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::get('projects/recent', 'ProjectController@recent');
         Route::get('projects/default', 'ProjectController@default');
         Route::get('projects/detail', 'ProjectController@detail');
+        Route::post('projects/{project}/share', 'ProjectController@share');
+        Route::post('projects/{project}/clone', 'ProjectController@clone');
+        Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
@@ -135,24 +134,32 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     /*********************** ADMIN PANEL ROUTES ************************/
     Route::group(['prefix' => 'admin', 'as' => 'v1.admin.', 'namespace' => 'Admin', 'middleware' => ['auth:api', 'verified', 'admin']], function () {
         // users
-        Route::resource('users', 'UserController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        Route::post('users/bulk/import', 'UserController@bulkImport')->name('users.bulk.import');
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
+        Route::resource('users', 'UserController');
+
         // projects
-        Route::resource('projects', 'ProjectController');
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
+        Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
         Route::get('projects/{project}/index', 'ProjectController@updateIndex');
         Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
-        Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
+        Route::resource('projects', 'ProjectController');
+
         // lms-settings
         Route::resource('lms-settings', 'LmsSettingController');
+
         // activity-types
         Route::resource('activity-types', 'ActivityTypeController');
+
         // activity-items
         Route::resource('activity-items', 'ActivityItemController');
         // organisations
         Route::resource('organisations', 'OrganisationController');
         Route::get('organisations/report/basic', 'OrganisationController@reportBasic')->name('organisations.report.basic');
     });
+
+    // admin public routes for downloads / uploads
+    Route::get('admin/users/import/sample-file', 'Admin\UserController@downloadSampleFile')->name('users.import.sample-file');
 });

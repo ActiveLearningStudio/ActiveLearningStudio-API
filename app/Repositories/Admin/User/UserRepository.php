@@ -3,11 +3,14 @@
 namespace App\Repositories\Admin\User;
 
 use App\Exceptions\GeneralException;
+use App\Exports\ArrayExport;
+use App\Imports\UsersImport;
 use App\Jobs\AssignStarterProjects;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -84,7 +87,7 @@ class UserRepository extends BaseRepository
             if ($user->update($data) && $clone_project_id) {
                 // if clone project id provided - clone the project
                 $this->projectRepository->clone($user, $clone_project_id);
-                return ['message' => 'User data updated and project cloned successfully!', 'data' => $this->find($id)];
+                return ['message' => 'User data updated and project is being cloned in background!', 'data' => $this->find($id)];
             }
             return ['message' => 'User data updated successfully!', 'data' => $this->find($id)];
         } catch (\Exception $e) {
@@ -104,7 +107,7 @@ class UserRepository extends BaseRepository
         if ($user = $this->model->whereId($id)->with('projects')->first()) {
             return $user;
         }
-        throw new GeneralException('User Not found.');
+        throw new GeneralException('User not found.');
     }
 
     /**
@@ -118,7 +121,7 @@ class UserRepository extends BaseRepository
             throw new GeneralException('You cannot delete your own user');
         }
         try {
-            $this->model->find($id)->delete();
+            $this->find($id)->delete();
             return 'User Deleted!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -141,5 +144,53 @@ class UserRepository extends BaseRepository
                 });
             });
         return $this->getDtPaginated();
+    }
+
+    /**
+     * @param $data
+     * @return array
+     * @throws GeneralException
+     */
+    public function bulkImport($data)
+    {
+        try {
+            $import = new UsersImport();
+            $import->import($data['import_file']);
+            $error = $this->bulkError($import);
+            return [
+                'report' => $error ? asset('storage/temporary/users-import-report.csv') : false,
+                'message' => $error ? 'Failed to import some rows data, please download detailed error report.' : 'All users data imported successfully!'
+            ];
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+        }
+        throw new GeneralException('Unable to import the users data, please try again later.');
+    }
+
+    /**
+     * @param $import
+     * @return bool|PendingDispatch
+     */
+    protected function bulkError($import)
+    {
+        $failures = $import->failures();
+        $errors = [];
+        $report = false;
+        // check if any validation failures then create CSV FILE for report
+        if (count($failures)) {
+            foreach ($failures as $k => $failure) {
+                $errors[$k] = $failure->values();
+                $errors[$k]['status'] = 'failed';
+                $errors[$k]['reason'] = implode(' | ', $failure->errors());
+            }
+            $report = (new ArrayExport($errors, array_keys($errors[0])))->store('public/temporary/users-import-report.csv');
+        }
+        $errors = $import->errors();
+        // if any database error occurred
+        if (count($errors)) {
+            Log::error("USER IMPORT DATABASE ERRORS: ");
+            Log::error(implode(", ", $errors));
+        }
+        return $report;
     }
 }

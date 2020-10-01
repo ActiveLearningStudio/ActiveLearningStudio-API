@@ -11,6 +11,8 @@ use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\CurrikiGo\LmsSetting;
+use Illuminate\Support\Facades\Log;
+use App\Exceptions\GeneralException;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -56,27 +58,42 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function clone($authenticated_user, Project $project, $token)
     {
-        $new_image_url = clone_thumbnail($project->thumb_url, "projects");
+        try {
+            $new_image_url = clone_thumbnail($project->thumb_url, "projects");
         
-        $data = [
-            'name' => $project->name,
-            'description' => $project->description,
-            'thumb_url' => $new_image_url,
-            'shared' => $project->shared,
-            'starter_project' => false,
-        ];
+            $data = [
+                'name' => $project->name,
+                'description' => $project->description,
+                'thumb_url' => $new_image_url,
+                'shared' => $project->shared,
+                'starter_project' => false,
+                'cloned_from'=> $project->id,
+            ];
+            
+            return \DB::transaction(function () use ($authenticated_user, $data, $project, $token) {
+                $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
+                if (!$cloned_project) {
+                    return 'Could not create project. Please try again later.';
+                }
 
-        $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
-        if (!$cloned_project) {
-            return response([
-                'errors' => ['Could not create project. Please try again later.'],
-            ], 500);
+                $playlists = $project->playlists;
+                foreach ($playlists as $playlist) {
+                    $cloned_activity = $this->playlistRepositroy->clone($cloned_project, $playlist, $token);
+                }
+
+                $project->clone_ctr = $project->clone_ctr + 1;
+                $project->save();
+                
+                return "Project cloned successfully";
+            });
+            
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Log::error($e->getMessage());
+            throw new GeneralException('Unable to clone the project, please try again later!');
         }
         
-        $playlists = $project->playlists;
-        foreach ($playlists as $playlist) {
-            $cloned_activity = $this->playlistRepositroy->clone($cloned_project, $playlist, $token);
-        }
+        
     }
 
 
