@@ -3679,7 +3679,7 @@ Create a new playlist of a project.
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/projects/consectetur/playlists" \
+    "http://localhost:8000/api/v1/projects/accusantium/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
@@ -3688,7 +3688,7 @@ curl -X POST \
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/consectetur/playlists"
+    "http://localhost:8000/api/v1/projects/accusantium/playlists"
 );
 
 let headers = {
@@ -3714,7 +3714,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->post(
-    'http://localhost:8000/api/v1/projects/consectetur/playlists',
+    'http://localhost:8000/api/v1/projects/accusantium/playlists',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -3734,7 +3734,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/projects/consectetur/playlists'
+url = 'http://localhost:8000/api/v1/projects/accusantium/playlists'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -7756,7 +7756,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"sit","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"iste","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 
 ```
 
@@ -7773,7 +7773,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "sit",
+    "content": "iste",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -7804,7 +7804,7 @@ $response = $client->post(
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
             'type' => 'h5p',
-            'content' => 'sit',
+            'content' => 'iste',
             'playlist_id' => 1,
             'order' => 2,
             'h5p_content_id' => 59,
@@ -7826,7 +7826,7 @@ url = 'http://localhost:8000/api/v1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "sit",
+    "content": "iste",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -8085,7 +8085,7 @@ curl -X PUT \
     "http://localhost:8000/api/v1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"tenetur","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"molestiae","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 
 ```
 
@@ -8102,7 +8102,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "tenetur",
+    "content": "molestiae",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -8134,7 +8134,7 @@ $response = $client->put(
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
             'type' => 'h5p',
-            'content' => 'tenetur',
+            'content' => 'molestiae',
             'playlist_id' => 1,
             'shared' => false,
             'order' => 2,
@@ -8157,7 +8157,7 @@ url = 'http://localhost:8000/api/v1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "tenetur",
+    "content": "molestiae",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -8374,14 +8374,14 @@ Get H5P Resource Settings for a shared activity
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/activities/molestiae/h5p-resource-settings-shared" \
+    -G "http://localhost:8000/api/v1/activities/suscipit/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/activities/molestiae/h5p-resource-settings-shared"
+    "http://localhost:8000/api/v1/activities/suscipit/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -8401,7 +8401,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/activities/molestiae/h5p-resource-settings-shared',
+    'http://localhost:8000/api/v1/activities/suscipit/h5p-resource-settings-shared',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -8417,7 +8417,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/activities/molestiae/h5p-resource-settings-shared'
+url = 'http://localhost:8000/api/v1/activities/suscipit/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11546,16 +11546,16 @@ APIs for fetching courses from LMSs
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/nam/fetch" \
+    "http://localhost:8000/api/v1/go/canvas/projects/nostrum/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":15}'
+    -d '{"setting_id":17}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/nam/fetch"
+    "http://localhost:8000/api/v1/go/canvas/projects/nostrum/fetch"
 );
 
 let headers = {
@@ -11564,7 +11564,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 15
+    "setting_id": 17
 }
 
 fetch(url, {
@@ -11580,14 +11580,14 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->post(
-    'http://localhost:8000/api/v1/go/canvas/projects/nam/fetch',
+    'http://localhost:8000/api/v1/go/canvas/projects/nostrum/fetch',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
         'json' => [
-            'setting_id' => 15,
+            'setting_id' => 17,
         ],
     ]
 );
@@ -11599,9 +11599,9 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/go/canvas/projects/nam/fetch'
+url = 'http://localhost:8000/api/v1/go/canvas/projects/nostrum/fetch'
 payload = {
-    "setting_id": 15
+    "setting_id": 17
 }
 headers = {
   'Content-Type': 'application/json',
@@ -11677,7 +11677,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/go/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"non"}'
+    -d '{"access_token":"ducimus"}'
 
 ```
 
@@ -11692,7 +11692,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "non"
+    "access_token": "ducimus"
 }
 
 fetch(url, {
@@ -11715,7 +11715,7 @@ $response = $client->post(
             'Accept' => 'application/json',
         ],
         'json' => [
-            'access_token' => 'non',
+            'access_token' => 'ducimus',
         ],
     ]
 );
@@ -11729,7 +11729,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/go/access-token'
 payload = {
-    "access_token": "non"
+    "access_token": "ducimus"
 }
 headers = {
   'Content-Type': 'application/json',
