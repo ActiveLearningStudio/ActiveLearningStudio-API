@@ -91,6 +91,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // Elasticsearch
         Route::get('search', 'SearchController@search');
         Route::get('search/advanced', 'SearchController@advance');
+        Route::get('search/dashboard', 'SearchController@dashboard');
 
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {

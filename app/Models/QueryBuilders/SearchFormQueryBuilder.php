@@ -112,7 +112,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         $andQueries = [];
         $boolQueries = [];
 
-        if (isset($this->isPublic) && !empty($this->isPublic)) {
+        if (isset($this->isPublic) && is_bool($this->isPublic)) {
             $andQueries[] = [
                 'term' => [
                     'is_public' => $this->isPublic
@@ -120,7 +120,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->elasticsearch) && !empty($this->elasticsearch)) {
+        if (isset($this->elasticsearch) && is_bool($this->elasticsearch)) {
             $andQueries[] = [
                 'term' => [
                     'elasticsearch' => $this->elasticsearch
