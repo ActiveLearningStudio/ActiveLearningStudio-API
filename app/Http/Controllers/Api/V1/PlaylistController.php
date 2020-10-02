@@ -12,6 +12,7 @@ use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Jobs\ClonePlayList;
 
 class PlaylistController extends Controller
 {
@@ -226,11 +227,10 @@ class PlaylistController extends Controller
             ], 500);
         }
 
-        $this->playlistRepository->clone($project, $playlist, $request->bearerToken());
-
-        return response([
-            'message' => 'Playlist is cloned successfully.',
-        ], 200);
+        // pushed cloning of project in background
+        ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
+        
+        return response(['message' => "Playlist is being cloned in background!"], 200);
     }
 
 }
