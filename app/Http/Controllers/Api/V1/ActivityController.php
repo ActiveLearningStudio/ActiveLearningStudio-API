@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\V1\H5pActivityResource;
+use App\Jobs\CloneActivity;
 use H5pCore;
 
 class ActivityController extends Controller
@@ -283,13 +284,10 @@ class ActivityController extends Controller
      * @apiResourceModel  App\Models\Activity
      *
      * @response  {
-     *  "message": "Activity is cloned successfully",
+     *  "message": "Activity is being cloned in background!",
      * },
      *  {
      *  "errors": "Not a Public PlayList",
-     * },
-     *  {
-     *  "errors": "Failed to clone activity.",
      * }
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
@@ -300,17 +298,9 @@ class ActivityController extends Controller
             ], 500);
         }
 
-        $cloned_activity = $this->activityRepository->clone($playlist, $activity, $request->bearerToken());
+        CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
 
-        if ($cloned_activity) {
-            return response([
-                'message' => 'Activity is cloned successfully.',
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to clone activity.'],
-        ], 500);
+        return response(['message' => "Activity is being cloned in background!"], 200);
     }
 
     /**
