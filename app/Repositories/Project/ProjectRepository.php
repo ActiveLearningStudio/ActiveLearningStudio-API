@@ -2,31 +2,34 @@
 
 namespace App\Repositories\Project;
 
-use App\Models\Project;
-use Illuminate\Support\Facades\Storage;
-use App\Repositories\BaseRepository;
-use App\Repositories\Project\ProjectRepositoryInterface;
-use Illuminate\Support\Collection;
-use App\Repositories\Activity\ActivityRepositoryInterface;
-use App\Repositories\Playlist\PlaylistRepositoryInterface;
-use Illuminate\Http\Request;
 use App\Models\CurrikiGo\LmsSetting;
+use App\Models\Project;
+use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\BaseRepository;
+use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\Repositories\Project\ProjectRepositoryInterface;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
 
     private $activityRepository;
-    private $playlistRepositroy;
+    private $playlistRepository;
 
     /**
      * ProjectRepository constructor.
      *
      * @param Project $model
+     * @param PlaylistRepositoryInterface $playlistRepository
+     * @param ActivityRepositoryInterface $activityRepository
      */
-    public function __construct(Project $model, PlaylistRepositoryInterface $playlistRepositroy, ActivityRepositoryInterface $activityRepository)
+    public function __construct(Project $model, PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository)
     {
         $this->activityRepository = $activityRepository;
-        $this->playlistRepositroy = $playlistRepositroy;
+        $this->playlistRepository = $playlistRepository;
         parent::__construct($model);
     }
 
@@ -50,14 +53,16 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     /**
      * To clone project and associated playlists
+     *
      * @param User $authenticated_user
      * @param Project $project
      * @param string $token
+     * @return Response
      */
     public function clone($authenticated_user, Project $project, $token)
     {
-        $new_image_url = clone_thumbnail($project->thumb_url, "projects");
-        
+        $new_image_url = clone_thumbnail($project->thumb_url, 'projects');
+
         $data = [
             'name' => $project->name,
             'description' => $project->description,
@@ -72,30 +77,28 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'errors' => ['Could not create project. Please try again later.'],
             ], 500);
         }
-        
+
         $playlists = $project->playlists;
         foreach ($playlists as $playlist) {
-            $cloned_activity = $this->playlistRepositroy->clone($cloned_project, $playlist, $token);
+            $cloned_activity = $this->playlistRepository->clone($cloned_project, $playlist, $token);
         }
     }
 
-
     /**
      * To fetch project based on LMS settings
+     *
      * @param $lms_url
      * @param $lti_client_id
      * @return Project $project
      */
     public function fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id)
     {
-        $projects = $this->model->whereHas('users', function ($query_user) use ($lms_url, $lti_client_id) {
+        return $this->model->whereHas('users', function ($query_user) use ($lms_url, $lti_client_id) {
             $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lms_url, $lti_client_id) {
                 $query_lmssetting->where('lms_url', $lms_url)->where('lti_client_id', $lti_client_id);
             });
         })->get();
-        return $projects;
     }
-
 
     /**
      * To fetch project based on LMS settings
@@ -111,24 +114,22 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         $proj = [];
         $proj["id"] = $project['id'];
-        $proj["created_at"] = $project['created_at'];
-        $proj["description"] = $project['description'];
         $proj["name"] = $project['name'];
+        $proj["description"] = $project['description'];
         $proj["thumb_url"] = $project['thumb_url'];
-        $proj["updated_at"] = $project['updated_at'];
-        $proj["elasticsearch"] = $project['elasticsearch'];
         $proj["shared"] = isset($project['shared']) ? $project['shared'] : false;
+        $proj["elasticsearch"] = $project['elasticsearch'];
+        $proj["created_at"] = $project['created_at'];
+        $proj["updated_at"] = $project['updated_at'];
 
         $proj["playlists"] = [];
-
         foreach ($project['playlists'] as $playlist) {
             $plist = [];
             $plist["id"] = $playlist['id'];
             $plist["title"] = $playlist['title'];
             $plist["project_id"] = $playlist->project->id;
-            $plist["updated_at"] = $playlist['updated_at'];
             $plist["created_at"] = $playlist['created_at'];
-            $plist['title'] = $playlist['title'];
+            $plist["updated_at"] = $playlist['updated_at'];
             $plist['activities'] = [];
 
             foreach ($playlist['activities'] as $activity) {
@@ -153,21 +154,26 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     /**
      * To fetch recent public project
+     *
+     * @param $limit
      * @return Project $projects
      */
-    public function fetchRecentPublic($limit){
+    public function fetchRecentPublic($limit)
+    {
         return $this->model->where('is_public', true)->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 
     /**
      * To fetch default projects
+     *
+     * @param $default_email
      * @return Project $projects
      */
-    public function fetchDefault($defaultEmail){
-        $projects = $this->model->whereHas('users', function ($query_user) use ($defaultEmail) {
-            $query_user->where('email', $defaultEmail);
+    public function fetchDefault($default_email)
+    {
+        return $this->model->whereHas('users', function ($query_user) use ($default_email) {
+            $query_user->where('email', $default_email);
         })->get();
-        return $projects;
     }
 
 }

@@ -12,15 +12,12 @@ use App\CurrikiGo\Moodle\Course as MoodleCourse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CurrikiGo\FetchCourseRequest;
 use App\Models\Project;
-use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
 /**
- * @group  CurrikiGo
- * @authenticated
+ * @group 10. CurrikiGo Course
  *
  * APIs for fetching courses from LMSs
  */
@@ -42,25 +39,30 @@ class CourseController extends Controller
     }
 
     /**
-     * Fetch a course from Canvas
+     * Fetch a Course from Canvas
      *
-     * @urlParam project required The ID of the project.
-     * @bodyParam setting_id int The id of the LMS setting.
+     * @urlParam project required The Id of the project Example 1
+     * @bodyParam setting_id int The Id of the LMS setting Example 1
      *
-     * @responseFile responses/fetch-from-canvas.post.json
+     * @responseFile responses/curriki-go/fetch-course.json
      *
      * @response 400 {
-     *   "errors": "Validation error"
+     *   "errors": [
+     *     "Validation error"
+     *   ]
      * }
+     *
      * @response 403 {
-     *   "errors": "You are not authorized to perform this action."
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
      * }
      *
      * @param Project $project
      * @param FetchCourseRequest $fetchRequest
      * @return Response
      */
-    public function fetchFromCanvas(Project $project, FetchCourseRequest $fetchRequest)
+    public function fetchFromCanvas(FetchCourseRequest $fetchRequest, Project $project)
     {
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->allows('fetch-lms-course', $project)) {
@@ -81,19 +83,23 @@ class CourseController extends Controller
     }
 
     /**
-     * Fetch a course from Moodle
+     * Fetch a Course from Moodle
      *
-     * @urlParam project required The ID of the project.
-     * @bodyParam setting_id int The id of the LMS setting.
+     * @urlParam project required The Id of the project Example 1
+     * @bodyParam setting_id int The Id of the LMS setting Example 1
      *
-     * @responseFile responses/fetch-from-canvas.post.json
+     * @responseFile responses/fetch-course.json
      *
      * @response 400 {
-     *   "errors": "Validation error"
+     *   "errors": [
+     *     "Validation error"
+     *   ]
      * }
      *
      * @response 403 {
-     *   "errors": "You are not authorized to perform this action."
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
      * }
      *
      * @param FetchCourseRequest $fetchRequest

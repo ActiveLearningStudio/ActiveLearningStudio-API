@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Playlist;
-use App\Models\Project;
 use App\Http\Requests\V1\PlaylistRequest;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Models\Playlist;
+use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -14,21 +14,21 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
- * @group  Playlist
+ * @group 4. Playlist
  *
- * APIs for managing playlists
+ * APIs for playlist management
  */
 class PlaylistController extends Controller
 {
 
     private $playlistRepository;
-
     private $activityRepository;
 
     /**
      * PlaylistController constructor.
      *
      * @param PlaylistRepositoryInterface $playlistRepository
+     * @param ActivityRepositoryInterface $activityRepository
      */
     public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository)
     {
@@ -40,11 +40,13 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display a listing of the playlist.
+     * Get Playlists
      *
-     * @urlParam projectId required The Id of a project
+     * Get a list of the playlists of a project.
      *
-     * @responseFile responses/playlists.get.json
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile responses/playlist/playlists.json
      *
      * @param Project $project
      * @return Response
@@ -60,16 +62,20 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Store a newly created playlist in storage.
+     * Create Playlist
      *
-     * @urlParam project required The Id of a project
-     * @bodyParam title string required The title of a playlist
-     * @bodyParam order int required The order number of a playlist
+     * Create a new playlist of a project.
      *
-     * @responseFile 201 responses/playlist.get.json
+     * @urlParam project required The Id of a project Example 1
+     * @bodyParam title string required The title of a playlist Example: Math Playlist
+     * @bodyParam order int The order number of a playlist Example: 0
+     *
+     * @responseFile 201 responses/playlist/playlist.json
      *
      * @response 500 {
-     *   "errors": ["Could not create playlist. Please try again later."]
+     *   "errors": [
+     *     "Could not create playlist. Please try again later."
+     *   ]
      * }
      *
      * @param PlaylistRequest $playlistRequest
@@ -99,15 +105,19 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display the specified playlist.
+     * Get Playlist
      *
-     * @urlParam projectId required The Id of a project
-     * @urlParam playlistId required The Id of a playlist
+     * Get the specified playlist of a project.
      *
-     * @responseFile responses/playlist.get.json
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @responseFile 200 responses/playlist/playlist.json
      *
      * @response 400 {
-     *   "errors": ["Invalid project or playlist id."]
+     *   "errors": [
+     *     "Invalid project or playlist id."
+     *   ]
      * }
      *
      * @param Project $project
@@ -128,19 +138,24 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display the specified shared playlist.
+     * Get Shared Playlist
      *
-     * @urlParam playlistId required The Id of a playlist
+     * Get the specified shared playlist of a Project.
      *
-     * @responseFile responses/playlist.get.json
+     * @urlParam playlist required The Id of a playlist Example: 1
      *
-     * @response {
-     *   "errors": ["No shareable Project found."]
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "No shareable Project found."
+     *   ]
      * }
      *
      * @param Playlist $playlist
      * @return Response
      */
+    // TODO: need to update
     public function loadShared(Playlist $playlist)
     {
         if (!$playlist->project->shared) {
@@ -155,15 +170,18 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display the lti playlist.
+     * Get Lti Playlist
      *
-     * @urlParam playlistId required The Id of a playlist
+     * Get the lti playlist of a project.
      *
-     * @responseFile responses/playlist.get.json
+     * @urlParam project required The Id of a project Example 1
+     *
+     * @responseFile responses/playlist/playlist.json
      *
      * @param Playlist $playlist
      * @return Response
      */
+    // TODO: need to update
     public function loadLti(Playlist $playlist)
     {
         return response([
@@ -172,30 +190,14 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Reorder playlists in storage.
+     * Reorder Playlists
      *
-     * @urlParam projectId required The Id of a project
-     * @bodyParam playlists required Playlists of a project
+     * Reorder playlists of a project.
      *
-     * @response {
-     *   "playlists": [
-     *     {
-     *       "id": 3898,
-     *       "order": 0,
-     *       "activities": []
-     *     },
-     *     {
-     *       "id": 3806,
-     *       "order": 1,
-     *       "activities": []
-     *     },
-     *     {
-     *       "id": 3900,
-     *       "order": 2,
-     *       "activities": []
-     *     }
-     *   ]
-     * }
+     * @urlParam project required The Id of a project Example: 1
+     * @bodyParam playlists array required Playlists of a project
+     *
+     * @responseFile responses/playlist/playlists.json
      *
      * @param Request $request
      * @param Project $project
@@ -211,21 +213,27 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Update the specified playlist in storage.
+     * Update Playlist
      *
-     * @urlParam projectId required The Id of a project
-     * @urlParam playlistId required The Id of a playlist
-     * @bodyParam title string required The title of a playlist
-     * @bodyParam order int required The order number of a playlist
+     * Update the specified playlist of a project.
      *
-     * @responseFile responses/playlist.get.json
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @bodyParam title string required The title of a playlist Example: Math Playlist
+     * @bodyParam order int The order number of a playlist Example: 0
+     *
+     * @responseFile responses/playlist/playlist.json
      *
      * @response 400 {
-     *  "errors": ["Invalid project or playlist id."]
+     *   "errors": [
+     *     "Invalid project or playlist id."
+     *   ]
      * }
      *
      * @response 500 {
-     *  "errors": ["Failed to update playlist."]
+     *   "errors": [
+     *     "Failed to update playlist."
+     *   ]
      * }
      *
      * @param PlaylistRequest $playlistRequest
@@ -256,21 +264,27 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Remove the specified playlist from storage.
+     * Remove Playlist
      *
-     * @urlParam projectId required The Id of a project
-     * @urlParam playlistId required The Id of a playlist
+     * Remove the specified playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
      *
      * @response 200 {
-     *   "message": "Playlist is deleted successfully."
+     *   "message": "Playlist has been deleted successfully."
      * }
      *
      * @response 400 {
-     *   "errors": ["Invalid project or playlist id."]
+     *   "errors": [
+     *     "Invalid project or playlist id."
+     *   ]
      * }
      *
      * @response 500 {
-     *   "errors": ["Failed to delete playlist."]
+     *   "errors": [
+     *     "Failed to delete playlist."
+     *   ]
      * }
      *
      * @param Project $project
@@ -289,7 +303,7 @@ class PlaylistController extends Controller
 
         if ($is_deleted) {
             return response([
-                'message' => 'Playlist is deleted successfully.',
+                'message' => 'Playlist has been deleted successfully.',
             ], 200);
         }
 
@@ -299,17 +313,21 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Clone a playlist.
+     * Clone Playlist
      *
-     * @urlParam projectId required The Id of a project
-     * @urlParam playlistId required The Id of a playlist
+     * Clone a playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
      *
      * @response {
-     *  "message": "Playlist is cloned successfully"
+     *   "message": "Playlist has been cloned successfully."
      * }
      *
      * @response 500 {
-     *   "errors": ["Not a Public Playlist."]
+     *   "errors": [
+     *     "Not a public Playlist."
+     *   ]
      * }
      *
      * @param Request $request
@@ -328,7 +346,7 @@ class PlaylistController extends Controller
         $this->playlistRepository->clone($project, $playlist, $request->bearerToken());
 
         return response([
-            'message' => 'Playlist is cloned successfully.',
+            'message' => 'Playlist has been cloned successfully.',
         ], 200);
     }
 

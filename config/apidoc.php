@@ -140,8 +140,11 @@ return [
              */
             'exclude' => [
                 'v1.admin.*',
-                'v1.h5p.ajax.*',
-                'v1.api/error'
+                'h5p.ajax.*',
+                'h5p.export',
+                'metrics.*',
+                'membership.*',
+                'api/error'
             ],
 
             /*

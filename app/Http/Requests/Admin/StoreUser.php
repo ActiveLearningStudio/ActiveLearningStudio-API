@@ -29,7 +29,7 @@ class StoreUser extends FormRequest
             'last_name' => 'required|string|max:255',
             'organization_name' => 'max:255',
             'job_title' => 'max:255',
-            'email' => 'required|email|max:255|unique:users,email',
+            'email' => 'required|email|max:255|unique:users',
             'password' => ['required', 'string', new StrongPassword],
         ];
     }

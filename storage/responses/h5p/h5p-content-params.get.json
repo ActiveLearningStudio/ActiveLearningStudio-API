@@ -1,0 +1,124 @@
+{
+    "params": {
+        "interactiveVideo": {
+            "video": {
+                "startScreenOptions": {
+                    "title": "Interactive Video",
+                    "hideStartTitle": false
+                },
+                "textTracks": {
+                    "videoTrack": [
+                        {
+                            "label": "Subtitles",
+                            "kind": "subtitles",
+                            "srcLang": "en"
+                        }
+                    ]
+                },
+                "files": [
+                    {
+                        "path": "https://www.youtube.com/watch?v=sv5hK4crIRc",
+                        "mime": "video/YouTube",
+                        "copyright": {
+                            "license": "U"
+                        }
+                    }
+                ]
+            },
+            "assets": {},
+            "summary": {
+                "task": {
+                    "library": "H5P.Summary 1.10",
+                    "params": {
+                        "intro": "Choose the correct statement.",
+                        "summaries": [
+                            {
+                                "subContentId": "6cb4e7d7-e940-43cb-bc02-02bcc2580bb5",
+                                "tip": ""
+                            }
+                        ],
+                        "overallFeedback": [
+                            {
+                                "from": 0,
+                                "to": 100
+                            }
+                        ],
+                        "solvedLabel": "Progress:",
+                        "scoreLabel": "Wrong answers:",
+                        "resultLabel": "Your result",
+                        "labelCorrect": "Correct.",
+                        "labelIncorrect": "Incorrect! Please try again.",
+                        "alternativeIncorrectLabel": "Incorrect",
+                        "labelCorrectAnswers": "Correct answers.",
+                        "tipButtonLabel": "Show tip",
+                        "scoreBarLabel": "You got :num out of :total points",
+                        "progressText": "Progress :num of :total"
+                    },
+                    "subContentId": "1b0de51a-baa3-43c0-8606-a21e59df0466",
+                    "metadata": {
+                        "contentType": "Summary",
+                        "license": "U",
+                        "title": "Untitled Summary"
+                    }
+                },
+                "displayAt": 3
+            }
+        },
+        "override": {
+            "autoplay": false,
+            "loop": false,
+            "showBookmarksmenuOnLoad": false,
+            "showRewind10": false,
+            "preventSkipping": false,
+            "deactivateSound": false
+        },
+        "l10n": {
+            "interaction": "Interaction",
+            "play": "Play",
+            "pause": "Pause",
+            "mute": "Mute",
+            "unmute": "Unmute",
+            "quality": "Video Quality",
+            "captions": "Captions",
+            "close": "Close",
+            "fullscreen": "Fullscreen",
+            "exitFullscreen": "Exit Fullscreen",
+            "summary": "Open summary dialog",
+            "bookmarks": "Bookmarks",
+            "endscreen": "Submit screen",
+            "defaultAdaptivitySeekLabel": "Continue",
+            "continueWithVideo": "Continue with video",
+            "playbackRate": "Playback Rate",
+            "rewind10": "Rewind 10 Seconds",
+            "navDisabled": "Navigation is disabled",
+            "sndDisabled": "Sound is disabled",
+            "requiresCompletionWarning": "You need to answer all the questions correctly before continuing.",
+            "back": "Back",
+            "hours": "Hours",
+            "minutes": "Minutes",
+            "seconds": "Seconds",
+            "currentTime": "Current time:",
+            "totalTime": "Total time:",
+            "singleInteractionAnnouncement": "Interaction appeared:",
+            "multipleInteractionsAnnouncement": "Multiple interactions appeared.",
+            "videoPausedAnnouncement": "Video is paused",
+            "content": "Content",
+            "answered": "@answered answered",
+            "endcardTitle": "@answered Question(s) answered",
+            "endcardInformation": "You have answered @answered questions, click below to submit your answers.",
+            "endcardInformationNoAnswers": "You have not answered any questions.",
+            "endcardInformationMustHaveAnswer": "You have to answer at least one question before you can submit your answers.",
+            "endcardSubmitButton": "Submit Answers",
+            "endcardSubmitMessage": "Your answers have been submitted!",
+            "endcardTableRowAnswered": "Answered questions",
+            "endcardTableRowScore": "Score",
+            "endcardAnsweredScore": "answered",
+            "endCardTableRowSummaryWithScore": "You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.",
+            "endCardTableRowSummaryWithoutScore": "You have answered the @question that appeared after @minutes minutes and @seconds seconds."
+        }
+    },
+    "metadata": {
+        "title": "Education Youtube",
+        "license": "U"
+    }
+}

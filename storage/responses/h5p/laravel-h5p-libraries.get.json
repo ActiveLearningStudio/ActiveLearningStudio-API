@@ -595,7 +595,7 @@
     },
     {
         "name": "H5P.TrueFalse",
-        "title": "True\/False Question",
+        "title": "True/False Question",
         "majorVersion": 1,
         "minorVersion": 6,
         "patchVersion": 4,
