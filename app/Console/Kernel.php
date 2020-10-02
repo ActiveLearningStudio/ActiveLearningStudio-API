@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\SendDailyUsage;
+use App\Console\Commands\StarterProjects;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,6 +28,8 @@ class Kernel extends ConsoleKernel
     {
 //        $schedule->command(SendDailyUsage::class)->dailyAt('0:00');
         $schedule->command(SendDailyUsage::class)->everyFourHours();
+        $schedule->command(StarterProjects::class)->everyFiveMinutes()
+            ->name('starter_projects')->withoutOverlapping(43200)->runInBackground();
     }
 
     /**
