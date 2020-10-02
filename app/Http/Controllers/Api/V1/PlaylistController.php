@@ -227,15 +227,10 @@ class PlaylistController extends Controller
             ], 500);
         }
 
-        //$this->playlistRepository->clone($project, $playlist, $request->bearerToken());
-        
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
         
         return response(['message' => "Playlist is being cloned in background!"], 200);
-        
-
-        
     }
 
 }

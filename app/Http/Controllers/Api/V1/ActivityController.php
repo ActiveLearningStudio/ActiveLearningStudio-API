@@ -284,13 +284,10 @@ class ActivityController extends Controller
      * @apiResourceModel  App\Models\Activity
      *
      * @response  {
-     *  "message": "Activity is cloned successfully",
+     *  "message": "Activity is being cloned in background!",
      * },
      *  {
      *  "errors": "Not a Public PlayList",
-     * },
-     *  {
-     *  "errors": "Failed to clone activity.",
      * }
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
@@ -301,7 +298,6 @@ class ActivityController extends Controller
             ], 500);
         }
 
-        //$cloned_activity = $this->activityRepository->clone($playlist, $activity, $request->bearerToken());
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
 
         return response(['message' => "Activity is being cloned in background!"], 200);
