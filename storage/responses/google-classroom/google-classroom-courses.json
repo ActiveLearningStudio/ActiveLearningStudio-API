@@ -1,0 +1,20 @@
+{
+    "courses": [
+        {
+            "id": "1",
+            "name": "How to build a playlist in CurrikiStudio"
+        },
+        {
+            "id": "2",
+            "name": "Partner Content Projects"
+        },
+        {
+            "id": "3",
+            "name": "Our Great BIg Back Yard"
+        },
+        {
+            "id": "4",
+            "name": "Alice in Wonderland"
+        }
+    ]
+}

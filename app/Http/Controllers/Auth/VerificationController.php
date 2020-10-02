@@ -47,15 +47,16 @@ class VerificationController extends Controller
     }
 
     /**
-     * @group Authentication
+     * @group 1. Authentication
      *
      * Verify an Email Address
+     *
      * Mark the authenticated user's email address as verified.
      *
-     * @bodyParam id string required
-     * @bodyParam hash string required
-     * @bodyParam signature string required
-     * @bodyParam expires string required
+     * @bodyParam id int required The Id of a user Example: 1
+     * @bodyParam hash string required The hash string Example: 9e0f70124a2a88d5435...
+     * @bodyParam signature string required The signature Example: 467fbe9a00e7d367553f...
+     * @bodyParam expires int required The expire time of verification email Example: 1599754915
      *
      * @response 204 {
      * }

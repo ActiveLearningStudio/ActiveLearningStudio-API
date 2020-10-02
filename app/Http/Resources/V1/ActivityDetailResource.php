@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Http\Resources\V1\ActivityPlaylistResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
 
 class ActivityDetailResource extends JsonResource
 {
@@ -13,11 +13,11 @@ class ActivityDetailResource extends JsonResource
     {
         // Ensure you call the parent constructor
         parent::__construct($resource);
+
         $this->resource = $resource;
-        
         $this->data = $data;
     }
-    
+
     /**
      * Transform the resource into an array.
      *
@@ -25,10 +25,10 @@ class ActivityDetailResource extends JsonResource
      * @return array
      */
     public function toArray($request)
-    {        
+    {
         return [
             'id' => $this->id,
-            'playlist' => $this->playlist,
+            'playlist' => new ActivityPlaylistResource($this->playlist),
             'title' => $this->title,
             'type' => $this->type,
             'content' => $this->content,

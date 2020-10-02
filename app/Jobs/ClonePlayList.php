@@ -14,17 +14,17 @@ use Illuminate\Queue\SerializesModels;
 class ClonePlayList implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
+
     /**
      * @var Project
      */
     protected $project;
-    
+
     /**
      * @var Playlist
      */
     protected $playlist;
-    
+
     /**
      * @var
      */
@@ -33,7 +33,9 @@ class ClonePlayList implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param Project $project
+     * @param Playlist $playlist
+     * @param $token
      */
     public function __construct(Project $project, Playlist $playlist, $token)
     {
@@ -44,6 +46,7 @@ class ClonePlayList implements ShouldQueue
 
     /**
      * Execute the job.
+     *
      * @param PlaylistRepositoryInterface $playlistRepository
      * @return void
      */

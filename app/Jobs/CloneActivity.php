@@ -14,26 +14,28 @@ use Illuminate\Queue\SerializesModels;
 class CloneActivity implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
+
     /**
      * @var Activity
      */
     protected $activity;
-    
+
     /**
      * @var Playlist
      */
     protected $playlist;
-    
+
     /**
      * @var
      */
     protected $token;
-    
+
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param Playlist $playlist
+     * @param Activity $activity
+     * @param $token
      */
     public function __construct(Playlist $playlist, Activity $activity, $token)
     {
@@ -44,6 +46,7 @@ class CloneActivity implements ShouldQueue
 
     /**
      * Execute the job.
+     *
      * @param ActivityRepositoryInterface $activityRepository
      * @return void
      */

@@ -19,17 +19,16 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @group  H5P
- * @authenticated
+ * @group 12. H5P
  *
- * APIs for H5P
+ * APIs for H5P management
  */
 class H5pController extends Controller
 {
     /**
-     * List of H5Ps
+     * Get H5Ps
      *
-     * Display a listing of the H5Ps
+     * Get a list of the H5Ps.
      *
      * @return JsonResponse
      */
@@ -58,7 +57,7 @@ class H5pController extends Controller
     }
 
     /**
-     * H5P create settings
+     * Create H5P Settings
      *
      * @param Request $request
      * @return Response
@@ -102,6 +101,7 @@ class H5pController extends Controller
      * @return Response
      * @throws ValidationException
      */
+    // TODO: need to unify error handling
     public function store(Request $request)
     {
         $h5p = App::make('LaravelH5p');
@@ -209,11 +209,16 @@ class H5pController extends Controller
     }
 
     /**
-     * Retrieve H5P based on id
+     * Get H5P
+     *
+     * Get the specified H5P
+     *
+     * @urlParam id required The Id of a H5p
+     *
+     * @responseFile responses/h5p/h5p-edit.json
      *
      * @param Request $request
-     * @param int $request
-     *
+     * @param $id
      * @return Response
      */
     public function edit(Request $request, $id)
@@ -258,7 +263,12 @@ class H5pController extends Controller
     }
 
     /**
-     * Retrive H5P based on Activity
+     * Get H5P based on Activity
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     * @urlParam visibility The status of visibility
+     *
+     * @responseFile responses/h5p-activity.json
      *
      * @param Activity $activity
      * @param $visibility
@@ -299,13 +309,27 @@ class H5pController extends Controller
     }
 
     /**
-     * Update H5P based on id
+     * Update H5P
+     *
+     * Update the specified H5P
+     *
+     * @urlParam id required The Id of a H5p Example 5
+     *
+     * @response 200 {
+     *   "success": "Content updated.",
+     *   "id": 5
+     * }
+     *
+     * @response 400 {
+     *   "fail": "Can not update."
+     * }
      *
      * @param Request $request
-     * @param int $id
+     * @param $id
      * @return Response
      * @throws ValidationException
      */
+    // TODO: need to unify error handling
     public function update(Request $request, $id)
     {
         $h5p = App::make('LaravelH5p');
@@ -400,11 +424,16 @@ class H5pController extends Controller
     }
 
     /**
-     * Retrive H5P based on id to display
+     * Get H5P
+     *
+     * Get the specified H5P
+     *
+     * @urlParam id required The Id of a H5p Example: 1
+     *
+     * @responseFile responses/h5p/h5p-get.json
      *
      * @param Request $request
-     * @param int $id
-     *
+     * @param $id
      * @return Response
      */
     public function show(Request $request, $id)
@@ -440,11 +469,16 @@ class H5pController extends Controller
     }
 
     /**
-     * Retrive H5P embed parameters
+     * Get H5P Embed
+     *
+     * Get the specified H5P embed parameters
+     *
+     * @urlParam id required The Id of a H5p Example: 1
+     *
+     * @responseFile responses/h5p/h5p-embed.json
      *
      * @param Request $request
-     * @param int $id
-     *
+     * @param $id
      * @return Response
      */
     public function embed(Request $request, $id)
@@ -459,6 +493,17 @@ class H5pController extends Controller
         return response(compact('settings', 'embed_code'), 200);
     }
 
+    /**
+     * Remove H5P
+     *
+     * Remove the specified H5P
+     *
+     * @urlParam id required The Id of a H5P Example: 1
+     *
+     * @param Request $request
+     * @param $id
+     * @return Response|string
+     */
     public function destroy(Request $request, $id)
     {
         try {
