@@ -44,28 +44,26 @@ class StarterProjects extends Command
     {
         // get starter projects
         $starterProjects = resolve(ProjectRepository::class)->getStarterProjects(); // get all starter projects
-        $users = User::has('projects', '<=', 1)->get(); // get users with 1 or 0 projects
+        $users = User::has('projects', '<=', 1)->with('projects:id,cloned_from')->get(); // get users with 1 or 0 projects
 
-        \Log::info('Starter Projects found: ' . $starterProjects->count());
-        $this->info('Starter Project found: ' . $starterProjects->count());
-        \Log::info('Users found with less than 2 projects: ' . $users->count());
-        $this->info('Users found with less than 2 projects: ' . $users->count());
-        \Log::info('Starter Project script started at: ' . now());
-        $this->line('Starter Project script started at: ' . now());
+        Log::info('Starter Projects found: ' . $starterProjects->count());
+        Log::info('Users found with less than 2 projects: ' . $users->count());
+
         foreach ($users as $user) {
-            $this->line('Starter Projects Assigning for User: ' . $user->email . ' started at ' . now());
             // loop through starter projects
             foreach ($starterProjects as $project) {
+                // if current starter project is already assigned then skip and move to the next starter project
+                if (in_array($project->id, $user->projects->pluck('cloned_from')->toArray())) {
+                    continue;
+                }
                 try {
                     $projectRepository->clone($user, $project, $user->createToken('auth_token')->accessToken);
                 } catch (\Exception $e) {
-                    $this->error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
                     Log::Error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
                 }
             }
-            $this->info('Starter Projects assigned to User: ' . $user->email . ' timestamp: ' . now());
+            Log::info('Projects are assigned to the USER: ' . $user->email . ' timestamp: ' . now());
         }
-        $this->info('Starter Project script Finished at: ' . now());
-        \Log::info('Starter Project script Finished at: ' . now());
+        Log::info('Starter Project script Finished at: ' . now());
     }
 }
