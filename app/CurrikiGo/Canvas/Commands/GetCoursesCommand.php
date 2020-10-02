@@ -62,8 +62,11 @@ class GetCoursesCommand implements Command
     {
         $response = null;
         try {
-            $url = $this->apiURL . '/accounts/' . $this->accountId . '/courses';
-            $url .= $this->programName ? '?search_term=' . $this->programName : '';
+            //$url = $this->apiURL . '/accounts/' . $this->accountId . '/courses';
+            //$url .= $this->programName ? '?search_term=' . $this->programName : '';
+            //$url = $this->apiURL . '/users/' . $this->accountId . '/courses';
+            $url = $this->apiURL . '/courses';
+            $url .= '?enrollment_state=active';
             $response = $this->httpClient->request('GET', $url, [
                     'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json']
                 ])->getBody()->getContents();
