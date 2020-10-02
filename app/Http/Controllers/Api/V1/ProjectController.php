@@ -14,6 +14,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Api\V1\H5pController;
+use App\Jobs\CloneProject;
 
 /**
  * @group Project management
@@ -303,8 +304,12 @@ class ProjectController extends Controller
                 'errors' => ['Not a Public Project.'],
             ], 500);
         }
-
-        return response(['message' => $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken())], 200);
+        
+        // pushed cloning of project in background
+        CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
+        
+        //$this->projectRepository->clone(auth()->user(), $project, $request->bearerToken());  Old Logic will remove after testing in dev
+        return response(['message' => "Project is being cloned in background!"], 200);
     }
 
 }
