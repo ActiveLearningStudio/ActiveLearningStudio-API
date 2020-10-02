@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\PlaylistRequest;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Jobs\ClonePlayList;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
@@ -321,12 +322,12 @@ class PlaylistController extends Controller
      * @urlParam playlist required The Id of a playlist Example: 1
      *
      * @response {
-     *   "message": "Playlist has been cloned successfully."
+     *   "message": "Playlist is being cloned in background!"
      * }
      *
      * @response 500 {
      *   "errors": [
-     *     "Not a public Playlist."
+     *     "Not a Public Playlist."
      *   ]
      * }
      *
@@ -339,14 +340,15 @@ class PlaylistController extends Controller
     {
         if (!$playlist->is_public) {
             return response([
-                'errors' => ['Not a public Playlist.'],
+                'errors' => ['Not a Public Playlist.'],
             ], 500);
         }
 
-        $this->playlistRepository->clone($project, $playlist, $request->bearerToken());
+        // pushed cloning of project in background
+        ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
 
         return response([
-            'message' => 'Playlist has been cloned successfully.',
+            'message' => 'Playlist is being cloned in background!',
         ], 200);
     }
 

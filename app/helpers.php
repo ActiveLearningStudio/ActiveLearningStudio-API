@@ -55,3 +55,15 @@ if (!function_exists('custom_url')) {
         return url($proxy . '/' . ltrim($url, '/')); // remove first slash from URL as it already appended
     }
 }
+
+if (!function_exists('invoke_starter_projects_command')) {
+    /**
+     * Invokes the starter projects command in background
+     */
+    function invoke_starter_projects_command()
+    {
+        dispatch(function () {
+            \Artisan::call('project:starters');
+        });
+    }
+}

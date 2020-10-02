@@ -7,6 +7,7 @@ use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Jobs\CloneActivity;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Repositories\Activity\ActivityRepositoryInterface;
@@ -446,12 +447,12 @@ class ActivityController extends Controller
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @response {
-     *   "message": "Activity has been cloned successfully."
+     *   "message": "Activity is being cloned in background!"
      * }
      *
      * @response 400 {
      *   "errors": [
-     *     "Not a public Activity."
+     *     "Not a Public Activity."
      *   ]
      * }
      *
@@ -470,21 +471,15 @@ class ActivityController extends Controller
     {
         if (!$activity->is_public) {
             return response([
-                'errors' => ['Not a public Activity.'],
+                'errors' => ['Not a Public Activity.'],
             ], 400);
         }
 
-        $cloned_activity = $this->activityRepository->clone($playlist, $activity, $request->bearerToken());
-
-        if ($cloned_activity) {
-            return response([
-                'message' => 'Activity has been cloned successfully.',
-            ], 200);
-        }
+        CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
 
         return response([
-            'errors' => ['Failed to clone activity.'],
-        ], 500);
+            'message' => 'Activity is being cloned in background!',
+        ], 200);
     }
 
     /**
