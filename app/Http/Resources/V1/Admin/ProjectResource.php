@@ -24,6 +24,8 @@ class ProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
+            'cloned_from' => $this->cloned_from,
+            'clone_ctr' => $this->clone_ctr,
             'users' => ProjectUserResource::collection($this->whenLoaded('users')),
             'playlists' => ProjectPlaylistResource::collection($this->whenLoaded('playlists')),
             'is_public' => $this->is_public,

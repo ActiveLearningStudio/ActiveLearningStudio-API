@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin\Project;
 
 use App\Exceptions\GeneralException;
+use App\Jobs\CloneProject;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
@@ -83,8 +84,10 @@ class ProjectRepository extends BaseRepository
         try {
             // resolving this object one-time
             // as it might only needed here - so no dependency injection in constructor
-            resolve(ProjectRepositoryInterface::class)->clone($user, $project, request()->bearerToken());
-            return 'User data updated and project cloning successful!';
+            CloneProject::dispatch($user, $project, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond());
+            // pushed cloning of project in background
+            // resolve(ProjectRepositoryInterface::class)->clone($user, $project, request()->bearerToken());
+            return 'User data updated and project is being cloned in background!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return 'Cloning failed.';

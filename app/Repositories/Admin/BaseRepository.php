@@ -480,7 +480,7 @@ abstract class BaseRepository implements RepositoryContract
             // group the where clause to avoid the conflicting of other where clauses with search
             $query->where(function ($query) use ($relations) {
                 // if search relation need to be perform -
-                $this->dtRelSearch($query, $relations[0]); // access the first relation from relations array
+                $this->dtRelSearch($query, $relations);
                 return $query->search($this->dtSearchColumns, $this->dtSearchValue);
             });
         });
@@ -515,7 +515,8 @@ abstract class BaseRepository implements RepositoryContract
     protected function dtRelSearch($query, $relation)
     {
         return $query->when($this->dtRelSearchValue, function ($query) use ($relation) {
-            $query->orWhereHas($relation, function ($query) {
+            // access the first relation from relations array
+            $query->orWhereHas($relation[0], function ($query) {
                 $query->where(function ($query) {
                     return $query->search($this->dtRelSearchColumns, $this->dtRelSearchValue);
                 });

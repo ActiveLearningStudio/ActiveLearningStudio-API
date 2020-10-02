@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', 'Auth\AuthController@register')->name('register');
 Route::post('login', 'Auth\AuthController@login')->name('login');
+Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
@@ -143,6 +144,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     ], function () {
         // users
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        Route::post('users/bulk/import', 'UserController@bulkImport')->name('users.bulk.import');
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
         Route::resource('users', 'UserController');
 
@@ -163,4 +165,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // activity-items
         Route::resource('activity-items', 'ActivityItemController');
     });
+
+    // admin public routes for downloads / uploads
+    Route::get('admin/users/import/sample-file', 'Admin\UserController@downloadSampleFile')->name('users.import.sample-file');
 });

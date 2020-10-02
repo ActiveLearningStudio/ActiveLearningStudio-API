@@ -3,11 +3,15 @@
 namespace App\Repositories\Admin\User;
 
 use App\Exceptions\GeneralException;
+use App\Exports\ArrayExport;
+use App\Imports\UsersImport;
 use App\Jobs\AssignStarterProjects;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Bus\PendingDispatch;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -84,7 +88,7 @@ class UserRepository extends BaseRepository
             if ($user->update($data) && $clone_project_id) {
                 // if clone project id provided - clone the project
                 $this->projectRepository->clone($user, $clone_project_id);
-                return ['message' => 'User data updated and project cloned successfully!', 'data' => $this->find($id)];
+                return ['message' => 'User data updated and project is being cloned in background!', 'data' => $this->find($id)];
             }
             return ['message' => 'User data updated successfully!', 'data' => $this->find($id)];
         } catch (\Exception $e) {
@@ -104,7 +108,7 @@ class UserRepository extends BaseRepository
         if ($user = $this->model->whereId($id)->with('projects')->first()) {
             return $user;
         }
-        throw new GeneralException('User Not found.');
+        throw new GeneralException('User not found.');
     }
 
     /**
@@ -118,7 +122,7 @@ class UserRepository extends BaseRepository
             throw new GeneralException('You cannot delete your own user');
         }
         try {
-            $this->model->find($id)->delete();
+            $this->find($id)->delete();
             return 'User Deleted!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -141,5 +145,63 @@ class UserRepository extends BaseRepository
                 });
             });
         return $this->getDtPaginated();
+    }
+
+    /**
+     * @param $data
+     * @return array
+     * @throws GeneralException
+     */
+    public function bulkImport($data)
+    {
+        try {
+            $import = new UsersImport();
+            $import->import($data['import_file']);
+
+            // if none of the records was inserted, could be empty file or bad formatted
+            throw_if(!$import->importedCount && !$import->failures()->count(), new GeneralException('Empty or bad formatted file.'));
+
+            $error = $this->bulkError($import);
+            return [
+                'report' => $error ? custom_url('storage/temporary/users-import-report.csv') : false,
+                'message' => $error ? 'Failed to import some rows data, please download detailed error report.' : 'All users data imported successfully!'
+            ];
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+        }
+        throw new GeneralException('Empty or bad formatted file, please download sample file for proper format.');
+    }
+
+    /**
+     * @param $import
+     * @return bool|PendingDispatch
+     */
+    protected function bulkError($import)
+    {
+        $failures = $import->failures();
+        $errors = [];
+        $report = false;
+        // check if any validation failures then create CSV FILE for report
+        if (count($failures)) {
+            foreach ($failures as $failure) {
+                $row = (int)$failure->row();
+                // if row values are already added then no need to override
+                if (!isset($errors[$row])) {
+                    $errors[$row] = $failure->values();
+                    $errors[$row]['status'] = 'failed';
+                }
+                // append old errors by pipeline separator for same row
+                $row_error = implode(' | ', $failure->errors());
+                $errors[$row]['reason'] = isset($errors[$row]['reason']) ? $errors[$row]['reason'] . ' | ' . $row_error : $row_error;
+            }
+            $report = (new ArrayExport($errors, array_keys(reset($errors))))->store('public/temporary/users-import-report.csv');
+        }
+        $errors = $import->errors();
+        // if any database error occurred
+        if (count($errors)) {
+            Log::error("USER IMPORT DATABASE ERRORS: ");
+            Log::error(implode(", ", $errors));
+        }
+        return $report;
     }
 }

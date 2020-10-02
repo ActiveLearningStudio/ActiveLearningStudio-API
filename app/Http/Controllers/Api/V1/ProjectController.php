@@ -7,6 +7,7 @@ use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectUpdateRequest;
 use App\Http\Resources\V1\ProjectDetailResource;
 use App\Http\Resources\V1\ProjectResource;
+use App\Jobs\CloneProject;
 use App\Models\Project;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
@@ -406,7 +407,7 @@ class ProjectController extends Controller
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
-     *   "message": "Project has been cloned successfully."
+     *   "message": "Project is being cloned in background!"
      * }
      *
      * @response 400 {
@@ -427,10 +428,12 @@ class ProjectController extends Controller
             ], 400);
         }
 
-        $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken());
+        // pushed cloning of project in background
+        CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
 
+        // $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken());  Old Logic will remove after testing in dev
         return response([
-            'message' => 'Project has been cloned successfully.',
+            'message' => 'Project is being cloned in background!',
         ], 200);
     }
 

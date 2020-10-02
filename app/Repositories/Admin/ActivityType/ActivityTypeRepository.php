@@ -45,12 +45,14 @@ class ActivityTypeRepository extends BaseRepository
     {
         try {
             // choosing this store path because old data is being read from this path
-            $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
+            if (isset($data['image'])) {
+                $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
+            }
             if ($type = $this->model->create($data)) {
                 return ['message' => 'Activity type created Successfully!', 'data' => $type];
             }
         } catch (\Exception $e) {
-             Log::error($e->getMessage());
+            Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to create activity type, please try again later!');
     }
@@ -71,7 +73,7 @@ class ActivityTypeRepository extends BaseRepository
                 return ['message' => 'Activity Type data updated!', 'data' => $this->find($id)];
             }
         } catch (\Exception $e) {
-             Log::error($e->getMessage());
+            Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to update activity type, please try again later!');
     }
@@ -86,7 +88,7 @@ class ActivityTypeRepository extends BaseRepository
         if ($type = $this->model->find($id)) {
             return $type;
         }
-        throw new GeneralException('Activity Type Not found!');
+        throw new GeneralException('Activity type not found!');
     }
 
     /**
@@ -97,10 +99,10 @@ class ActivityTypeRepository extends BaseRepository
     public function destroy($id)
     {
         try {
-            $this->model->find($id)->delete();
+            $this->find($id)->delete();
             return 'Activity Type Deleted!';
         } catch (\Exception $e) {
-             Log::error($e->getMessage());
+            Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to delete activity type, please try again later!');
     }
