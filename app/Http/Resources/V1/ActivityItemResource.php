@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Http\Resources\V1\ActivityItemTypeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class ActivityItemResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'order' => $this->order,
-            'activityType' => $this->activityType,
+            'activityType' => new ActivityItemTypeResource($this->activityType),
             'type' => $this->type,
             'h5pLib' => $this->h5pLib,
             'image' => $this->image,

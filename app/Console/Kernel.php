@@ -26,10 +26,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-//        $schedule->command(SendDailyUsage::class)->dailyAt('0:00');
+        // $schedule->command(SendDailyUsage::class)->dailyAt('0:00');
         $schedule->command(SendDailyUsage::class)->everyFourHours();
-        $schedule->command(StarterProjects::class)->everyFiveMinutes()
-            ->name('starter_projects')->withoutOverlapping(43200)->runInBackground();
+        $schedule->command(StarterProjects::class)
+            ->everyFiveMinutes()
+            ->name('starter_projects')
+            ->withoutOverlapping(43200)
+            ->runInBackground();
     }
 
     /**

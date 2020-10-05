@@ -1,0 +1,32 @@
+{
+    "playlist": {
+        "id": 1,
+        "title": "Math Playlist",
+        "order": 0,
+        "is_public": true,
+        "project_id": 1,
+        "project": {
+            "id": 1,
+            "name": "Test Project",
+            "description": "This is a test project.",
+            "thumb_url": "https://images.pexels.com/photos/2832382",
+            "shared": true,
+            "starter_project": null,
+            "users": [
+                {
+                    "id": 1,
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "email": "john.doe@currikistudio.org",
+                    "role": "owner"
+                }
+            ],
+            "is_public": true,
+            "created_at": "2020-09-06T19:21:08.000000Z",
+            "updated_at": "2020-09-06T19:21:08.000000Z"
+        },
+        "activities": [],
+        "created_at": "2020-09-07T17:01:24.000000Z",
+        "updated_at": "2020-09-07T17:01:24.000000Z"
+    }
+}

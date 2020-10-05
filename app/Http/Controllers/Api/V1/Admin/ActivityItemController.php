@@ -20,6 +20,7 @@ class ActivityItemController extends Controller
 
     /**
      * ActivityItemController constructor.
+     *
      * @param ActivityItemRepository $repository
      */
     public function __construct(ActivityItemRepository $repository)

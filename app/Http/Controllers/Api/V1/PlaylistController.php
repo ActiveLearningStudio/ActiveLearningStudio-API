@@ -3,28 +3,33 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Playlist;
-use App\Models\Project;
 use App\Http\Requests\V1\PlaylistRequest;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Jobs\ClonePlayList;
+use App\Models\Playlist;
+use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Jobs\ClonePlayList;
 
+/**
+ * @group 4. Playlist
+ *
+ * APIs for playlist management
+ */
 class PlaylistController extends Controller
 {
 
     private $playlistRepository;
-
     private $activityRepository;
 
     /**
      * PlaylistController constructor.
      *
      * @param PlaylistRepositoryInterface $playlistRepository
+     * @param ActivityRepositoryInterface $activityRepository
      */
     public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository)
     {
@@ -36,7 +41,13 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display a listing of the playlist.
+     * Get Playlists
+     *
+     * Get a list of the playlists of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile responses/playlist/playlists.json
      *
      * @param Project $project
      * @return Response
@@ -52,7 +63,21 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Store a newly created playlist in storage.
+     * Create Playlist
+     *
+     * Create a new playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example 1
+     * @bodyParam title string required The title of a playlist Example: Math Playlist
+     * @bodyParam order int The order number of a playlist Example: 0
+     *
+     * @responseFile 201 responses/playlist/playlist.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Could not create playlist. Please try again later."
+     *   ]
+     * }
      *
      * @param PlaylistRequest $playlistRequest
      * @param Project $project
@@ -81,7 +106,20 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display the specified playlist.
+     * Get Playlist
+     *
+     * Get the specified playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @responseFile 200 responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid project or playlist id."
+     *   ]
+     * }
      *
      * @param Project $project
      * @param Playlist $playlist
@@ -101,11 +139,24 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display the specified playlist.
+     * Get Shared Playlist
+     *
+     * Get the specified shared playlist of a Project.
+     *
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "No shareable Project found."
+     *   ]
+     * }
      *
      * @param Playlist $playlist
      * @return Response
      */
+    // TODO: need to update
     public function loadShared(Playlist $playlist)
     {
         if (!$playlist->project->shared) {
@@ -120,11 +171,18 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Display the lti playlist.
+     * Get Lti Playlist
+     *
+     * Get the lti playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example 1
+     *
+     * @responseFile responses/playlist/playlist.json
      *
      * @param Playlist $playlist
      * @return Response
      */
+    // TODO: need to update
     public function loadLti(Playlist $playlist)
     {
         return response([
@@ -133,7 +191,14 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Reorder playlists in storage.
+     * Reorder Playlists
+     *
+     * Reorder playlists of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @bodyParam playlists array required Playlists of a project
+     *
+     * @responseFile responses/playlist/playlists.json
      *
      * @param Request $request
      * @param Project $project
@@ -149,7 +214,28 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Update the specified playlist in storage.
+     * Update Playlist
+     *
+     * Update the specified playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @bodyParam title string required The title of a playlist Example: Math Playlist
+     * @bodyParam order int The order number of a playlist Example: 0
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid project or playlist id."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update playlist."
+     *   ]
+     * }
      *
      * @param PlaylistRequest $playlistRequest
      * @param Project $project
@@ -179,7 +265,28 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Remove the specified playlist from storage.
+     * Remove Playlist
+     *
+     * Remove the specified playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @response 200 {
+     *   "message": "Playlist has been deleted successfully."
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid project or playlist id."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to delete playlist."
+     *   ]
+     * }
      *
      * @param Project $project
      * @param Playlist $playlist
@@ -197,7 +304,7 @@ class PlaylistController extends Controller
 
         if ($is_deleted) {
             return response([
-                'message' => 'Playlist is deleted successfully.',
+                'message' => 'Playlist has been deleted successfully.',
             ], 200);
         }
 
@@ -207,30 +314,42 @@ class PlaylistController extends Controller
     }
 
     /**
-     * @apiResourceCollection  App\Http\Resources\V1\ProjectResource
-     * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
-     * @apiResourceModel  App\Models\Project
-     * @apiResourceModel  App\Models\Playlist
+     * Clone Playlist
      *
-     * @response  {
-     *  "message": "Playlist is cloned successfully",
-     * },
-     *  {
-     *  "errors": "Not a Public Playlist",
+     * Clone a playlist of a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @response {
+     *   "message": "Playlist is being cloned in background!"
      * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Not a Public Playlist."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Project $project
+     * @param Playlist $playlist
+     * @return Response
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
         if (!$playlist->is_public) {
             return response([
-                'errors' => ['Not a public Playlist.'],
+                'errors' => ['Not a Public Playlist.'],
             ], 500);
         }
 
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
-        
-        return response(['message' => "Playlist is being cloned in background!"], 200);
+
+        return response([
+            'message' => 'Playlist is being cloned in background!',
+        ], 200);
     }
 
 }
