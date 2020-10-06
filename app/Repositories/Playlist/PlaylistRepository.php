@@ -97,13 +97,12 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
     public function clone(Project $project, Playlist $playlist, string $token)
     {
         $isDuplicate = false;
-        if($playlist->project_id == $project->id)
+        if ($playlist->project_id == $project->id)
                $isDuplicate = true;
         
-        if($isDuplicate) {
+        if ($isDuplicate) {
             Playlist::where('project_id', $project->id)->where('order', '>', $playlist->order)->increment('order', 1);
         }
-        
         $play_list_data = [
             'title' => ($isDuplicate) ? $playlist->title."-COPY" : $playlist->title,
             'order' => ($isDuplicate) ? $playlist->order + 1 : $playlist->order,

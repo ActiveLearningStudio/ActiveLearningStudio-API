@@ -443,17 +443,20 @@ class ProjectController extends Controller
     }
     
     /**
-     * Reorder project in storage.
+     * Reorder Projects
+     *
+     * Reorder projects of a user.
+     *
+     * @bodyParam projects array required projects of a user
      *
      * @param Request $request
-     * @param Project $project
      * @return Response
      */
-    public function reorder(Request $request, Project $project)
+    public function reorder(Request $request)
     {
         $authenticated_user = auth()->user();
 
-        $this->projectRepository->saveList($request->playlists);
+        $this->projectRepository->saveList($request->projects);
 
         return response([
             'playlists' => ProjectResource::collection($authenticated_user->projects),

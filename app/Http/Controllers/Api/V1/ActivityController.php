@@ -653,8 +653,5 @@ class ActivityController extends Controller
         return false;
     }
     
-    public function populateOrderNumber()
-    {
-       $this->activityRepository->populateOrderNumber(); 
-    }
 }
+

@@ -53,10 +53,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         return $is_updated;
     }
-    
+
     /**
      * Get latest order of project for User
-     * @param $authenticated_user 
+     * @param $authenticated_user
      * @return int
      */
     public function getOrder($authenticated_user)
@@ -77,19 +77,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
-            
             $userProjectIds = $authenticated_user->projects->pluck('id')->toArray();
-            
             $isDuplicate = false;
-            if (in_array($project->id, $userProjectIds))
-                        $isDuplicate = true;
             
-            if($isDuplicate) {
+            if (in_array($project->id, $userProjectIds))
+                $isDuplicate = true;
+
+            if ($isDuplicate) {
                 $authenticated_user->projects()->where('order', '>', $project->order)->increment('order', 1);
             }
-            
             $data = [
-                'name' => ($isDuplicate) ? $project->name."-COPY" : $project->name,
+                'name' => ($isDuplicate) ? $project->name . "-COPY" : $project->name,
                 'description' => $project->description,
                 'thumb_url' => $new_image_url,
                 'shared' => $project->shared,
@@ -213,7 +211,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query_user->where('email', $default_email);
         })->get();
     }
-    
+
     /**
      * To Populate missing order number, One time script
      */
@@ -232,8 +230,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             }
         }
     }
-    
-    
+
+
     /**
      * To reorder Projects
      *

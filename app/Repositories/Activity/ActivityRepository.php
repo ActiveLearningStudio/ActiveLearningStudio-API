@@ -233,14 +233,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
         }
         
-       $isDuplicate = ($activity->playlist_id == $playlist->id);
-            
-        if($isDuplicate) {
+        $isDuplicate = ($activity->playlist_id == $playlist->id);
+        if ($isDuplicate) {
             Activity::where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
         }
-
         $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
-        
         $activity_data = [
             'title' => ($isDuplicate) ? $activity->title."-COPY" : $activity->title,
             'type' => $activity->type,
