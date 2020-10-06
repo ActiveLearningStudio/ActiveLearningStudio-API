@@ -1,0 +1,195 @@
+{
+    "h5p" : "mainJsonData",
+    "content" : "contentJsonData",
+    "contentTypes" : {
+        "outdated": false,
+        "libraries": [
+            {
+                "id": 1,
+                "machineName": "H5P.QuestionSet",
+                "majorVersion": 1,
+                "minorVersion": 17,
+                "patchVersion": 2,
+                "h5pMajorVersion": 1,
+                "h5pMinorVersion": 19,
+                "title": "Quiz (Question Set)",
+                "summary": "Create a sequence of various question types",
+                "description": "Question Set is your typical quiz content type. It allows the learner to solve a sequence of various question types such as Multichoice, Drag and drop and Fill in the blanks in a Question set. As an author, there are many settings you can use to make it behave just the way you want it to. You may, for instance, customize the Question set with background images and define a pass percentage for the learner. The Question Set also allows you to add videos that are played at the end. One video for success, another if the learner fails the test. This might motivate learners to try again if they fail so that they get to see the success video.",
+                "icon": "/storage/h5p/libraries/H5P.QuestionSet-1.17/icon.svg",
+                "createdAt": 1488380337,
+                "updatedAt": 1589176511,
+                "isRecommended": true,
+                "popularity": 3,
+                "screenshots": [
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/question-set-01.png?itok=7xWQV7Vm",
+                        "alt": "A multiple choice inside a question set"
+                    },
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/question-set-02_0.png?itok=ku46xHQX",
+                        "alt": "A drag and drop inside a question set"
+                    },
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/question-set-03.png?itok=n1cnLs5j",
+                        "alt": "A multiple choice inside a question set"
+                    },
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/question-set-04.png?itok=TrmmsdwT",
+                        "alt": "The summary page"
+                    }
+                ],
+                "license": {
+                    "id": "MIT",
+                    "attributes": {
+                        "useCommercially": true,
+                        "modifiable": true,
+                        "distributable": true,
+                        "sublicensable": true,
+                        "canHoldLiable": false,
+                        "mustIncludeCopyright": true,
+                        "mustIncludeLicense": true
+                    }
+                },
+                "owner": "Joubel",
+                "installed": true,
+                "isUpToDate": true,
+                "restricted": false,
+                "canInstall": true,
+                "categories": [
+                    "Multimedia",
+                    "Questions"
+                ],
+                "keywords": [
+                    "question set",
+                    "collection",
+                    "quiz"
+                ],
+                "tutorial": "https://h5p.org/tutorial-question-set",
+                "example": "https://h5p.org/question-set",
+                "localMajorVersion": 1,
+                "localMinorVersion": 17,
+                "localPatchVersion": 2
+            },
+            {
+                "id": 2,
+                "machineName": "H5P.Accordion",
+                "majorVersion": 1,
+                "minorVersion": 0,
+                "patchVersion": 24,
+                "h5pMajorVersion": 1,
+                "h5pMinorVersion": 5,
+                "title": "Accordion",
+                "summary": "Create vertically stacked expandable items",
+                "description": "Reduce the amount of text presented to readers by using this responsive accordion. Readers decide which headlines to take a closer look at by expanding the title. Excellent for providing an overview with optional in-depth explanations.",
+                "icon": "/storage/h5p/libraries/H5P.Accordion-1.0/icon.svg",
+                "createdAt": 1488282378,
+                "updatedAt": 1589176511,
+                "isRecommended": true,
+                "popularity": 9,
+                "screenshots": [
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/accordion-01.png?itok=qnXarBZ5",
+                        "alt": "Collapsed"
+                    },
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/accordion-02.png?itok=lnTobl4C",
+                        "alt": "Expanded"
+                    }
+                ],
+                "license": {
+                    "id": "MIT",
+                    "attributes": {
+                        "useCommercially": true,
+                        "modifiable": true,
+                        "distributable": true,
+                        "sublicensable": true,
+                        "canHoldLiable": false,
+                        "mustIncludeCopyright": true,
+                        "mustIncludeLicense": true
+                    }
+                },
+                "owner": "Joubel",
+                "installed": true,
+                "isUpToDate": true,
+                "restricted": false,
+                "canInstall": true,
+                "categories": [],
+                "keywords": [
+                    "accordion",
+                    "collapsible text"
+                ],
+                "tutorial": "https://h5p.org/accordion-tutorial",
+                "example": "https://h5p.org/accordion",
+                "localMajorVersion": 1,
+                "localMinorVersion": 0,
+                "localPatchVersion": 24
+            },
+            {
+                "id": 3,
+                "machineName": "H5P.SingleChoiceSet",
+                "majorVersion": 1,
+                "minorVersion": 11,
+                "patchVersion": 9,
+                "h5pMajorVersion": 1,
+                "h5pMinorVersion": 19,
+                "title": "Single Choice Set",
+                "summary": "Create questions with one correct answer",
+                "description": "Single choice set allows content designers to create question sets with one correct answer per question. The end user gets immediate feedback after submitting each answer.",
+                "icon": "/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/icon.svg",
+                "createdAt": 1488380512,
+                "updatedAt": 1596180071,
+                "isRecommended": true,
+                "popularity": 11,
+                "screenshots": [
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/single-choice-set-01.png?itok=IzXoN6tp",
+                        "alt": "Learner's initial view"
+                    },
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/single-choice-set-02.png?itok=yrj9-jB0",
+                        "alt": "Correct answer given for an alternative"
+                    },
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/single-choice-set-03.png?itok=o-b5R46U",
+                        "alt": "Summary page"
+                    },
+                    {
+                        "url": "https://h5p.org/sites/default/files/styles/h5p-content-type-hub-screenshot/public/single-choice-set-04.png?itok=0BlfuOy3",
+                        "alt": "Showing solution"
+                    }
+                ],
+                "license": {
+                    "id": "MIT",
+                    "attributes": {
+                        "useCommercially": true,
+                        "modifiable": true,
+                        "distributable": true,
+                        "sublicensable": true,
+                        "canHoldLiable": false,
+                        "mustIncludeCopyright": true,
+                        "mustIncludeLicense": true
+                    }
+                },
+                "owner": "Joubel",
+                "installed": true,
+                "isUpToDate": true,
+                "restricted": false,
+                "canInstall": true,
+                "categories": [
+                    "Multimedia",
+                    "Questions"
+                ],
+                "keywords": [
+                    "collection",
+                    "quiz",
+                    "choice"
+                ],
+                "tutorial": "https://h5p.org/documentation/content-author-guide/tutorials-for-authors/single-choice-set",
+                "example": "https://h5p.org/single-choice-set",
+                "localMajorVersion": 1,
+                "localMinorVersion": 11,
+                "localPatchVersion": 9
+            }
+        ]
+    }
+}

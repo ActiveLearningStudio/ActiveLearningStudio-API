@@ -1,0 +1,1203 @@
+{
+    "activity": {
+      "id": 30959,
+      "title": "The History of the U.S. National Parks",
+      "type": "h5p",
+      "content": "",
+      "shared": true,
+      "order": 0,
+      "thumb_url": "/storage/activities/5f6e6d8b27819.jpeg",
+      "subject_id": "Social Studies",
+      "education_level_id": "Grades 9-10 (Ages 14-16)",
+      "h5p": {
+        "settings": {
+          "baseUrl": "https://www.currikistudio.org/api",
+          "url": "https://www.currikistudio.org/api/storage/h5p",
+          "postUserStatistics": true,
+          "ajax": {
+            "setFinished": "https://www.currikistudio.org/api/api/h5p/ajax/url",
+            "contentUserData": "https://www.currikistudio.org/api/api/h5p/ajax/content-user-data/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId"
+          },
+          "saveFreq": false,
+          "siteUrl": "https://www.currikistudio.org/api",
+          "l10n": {
+            "H5P": {
+              "fullscreen": "Fullscreen",
+              "disableFullscreen": "Disable fullscreen",
+              "download": "Download",
+              "copyrights": "Rights of use",
+              "embed": "Embed",
+              "reuseDescription": "Reuse this content.",
+              "size": "Size",
+              "showAdvanced": "Show advanced",
+              "hideAdvanced": "Hide advanced",
+              "advancedHelp": "Include this script on your website if you want dynamic sizing of the embedded content:",
+              "copyrightInformation": "Rights of use",
+              "close": "Close",
+              "title": "Title",
+              "author": "Author",
+              "year": "Year",
+              "source": "Source",
+              "license": "License",
+              "thumbnail": "Thumbnail",
+              "noCopyrights": "No copyright information available for this content.",
+              "downloadDescription": "Download this content as a H5P file.",
+              "copyrightsDescription": "View copyright information for this content.",
+              "embedDescription": "View the embed code for this content.",
+              "h5pDescription": "Visit H5P.org to check out more cool content.",
+              "contentChanged": "This content has changed since you last used it.",
+              "startingOver": "You'll be starting over.",
+              "confirmDialogHeader": "Confirm action",
+              "confirmDialogBody": "Please confirm that you wish to proceed. This action is not reversible.",
+              "cancelLabel": "Cancel",
+              "confirmLabel": "Confirm",
+              "reuse": "Reuse",
+              "reuseContent": "Reuse Content"
+            }
+          },
+          "hubIsEnabled": false,
+          "user": {
+            "name": "I Dev",
+            "mail": "i.do.dev@outlook.com"
+          },
+          "editor": {
+            "filesPath": "https://www.currikistudio.org/api/storage/h5p/editor",
+            "fileIcon": {
+              "path": "https://www.currikistudio.org/api/storage/h5p/h5p-editor/images/binary-file.png",
+              "width": 50,
+              "height": 50
+            },
+            "ajaxPath": "https://www.currikistudio.org/api/api/v1/h5p/ajax/",
+            "libraryUrl": "https://www.currikistudio.org/api/storage/h5p/h5p-editor/",
+            "copyrightSemantics": {
+              "name": "copyright",
+              "type": "group",
+              "label": "Copyright information",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "text",
+                  "label": "Title",
+                  "placeholder": "La Gioconda",
+                  "optional": true
+                },
+                {
+                  "name": "author",
+                  "type": "text",
+                  "label": "Author",
+                  "placeholder": "Leonardo da Vinci",
+                  "optional": true
+                },
+                {
+                  "name": "year",
+                  "type": "text",
+                  "label": "Year(s)",
+                  "placeholder": "1503 - 1517",
+                  "optional": true
+                },
+                {
+                  "name": "source",
+                  "type": "text",
+                  "label": "Source",
+                  "placeholder": "http://en.wikipedia.org/wiki/Mona_Lisa",
+                  "optional": true,
+                  "regexp": {
+                    "pattern": "^http[s]?://.+",
+                    "modifiers": "i"
+                  }
+                },
+                {
+                  "name": "license",
+                  "type": "select",
+                  "label": "License",
+                  "default": "U",
+                  "options": [
+                    {
+                      "value": "U",
+                      "label": "Undisclosed"
+                    },
+                    {
+                      "value": "CC BY",
+                      "label": "Attribution",
+                      "versions": [
+                        {
+                          "value": "4.0",
+                          "label": "4.0 International"
+                        },
+                        {
+                          "value": "3.0",
+                          "label": "3.0 Unported"
+                        },
+                        {
+                          "value": "2.5",
+                          "label": "2.5 Generic"
+                        },
+                        {
+                          "value": "2.0",
+                          "label": "2.0 Generic"
+                        },
+                        {
+                          "value": "1.0",
+                          "label": "1.0 Generic"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "CC BY-SA",
+                      "label": "Attribution-ShareAlike",
+                      "versions": [
+                        {
+                          "value": "4.0",
+                          "label": "4.0 International"
+                        },
+                        {
+                          "value": "3.0",
+                          "label": "3.0 Unported"
+                        },
+                        {
+                          "value": "2.5",
+                          "label": "2.5 Generic"
+                        },
+                        {
+                          "value": "2.0",
+                          "label": "2.0 Generic"
+                        },
+                        {
+                          "value": "1.0",
+                          "label": "1.0 Generic"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "CC BY-ND",
+                      "label": "Attribution-NoDerivs",
+                      "versions": [
+                        {
+                          "value": "4.0",
+                          "label": "4.0 International"
+                        },
+                        {
+                          "value": "3.0",
+                          "label": "3.0 Unported"
+                        },
+                        {
+                          "value": "2.5",
+                          "label": "2.5 Generic"
+                        },
+                        {
+                          "value": "2.0",
+                          "label": "2.0 Generic"
+                        },
+                        {
+                          "value": "1.0",
+                          "label": "1.0 Generic"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "CC BY-NC",
+                      "label": "Attribution-NonCommercial",
+                      "versions": [
+                        {
+                          "value": "4.0",
+                          "label": "4.0 International"
+                        },
+                        {
+                          "value": "3.0",
+                          "label": "3.0 Unported"
+                        },
+                        {
+                          "value": "2.5",
+                          "label": "2.5 Generic"
+                        },
+                        {
+                          "value": "2.0",
+                          "label": "2.0 Generic"
+                        },
+                        {
+                          "value": "1.0",
+                          "label": "1.0 Generic"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "CC BY-NC-SA",
+                      "label": "Attribution-NonCommercial-ShareAlike",
+                      "versions": [
+                        {
+                          "value": "4.0",
+                          "label": "4.0 International"
+                        },
+                        {
+                          "value": "3.0",
+                          "label": "3.0 Unported"
+                        },
+                        {
+                          "value": "2.5",
+                          "label": "2.5 Generic"
+                        },
+                        {
+                          "value": "2.0",
+                          "label": "2.0 Generic"
+                        },
+                        {
+                          "value": "1.0",
+                          "label": "1.0 Generic"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "CC BY-NC-ND",
+                      "label": "Attribution-NonCommercial-NoDerivs",
+                      "versions": [
+                        {
+                          "value": "4.0",
+                          "label": "4.0 International"
+                        },
+                        {
+                          "value": "3.0",
+                          "label": "3.0 Unported"
+                        },
+                        {
+                          "value": "2.5",
+                          "label": "2.5 Generic"
+                        },
+                        {
+                          "value": "2.0",
+                          "label": "2.0 Generic"
+                        },
+                        {
+                          "value": "1.0",
+                          "label": "1.0 Generic"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "GNU GPL",
+                      "label": "General Public License",
+                      "versions": [
+                        {
+                          "value": "v3",
+                          "label": "Version 3"
+                        },
+                        {
+                          "value": "v2",
+                          "label": "Version 2"
+                        },
+                        {
+                          "value": "v1",
+                          "label": "Version 1"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "PD",
+                      "label": "Public Domain",
+                      "versions": [
+                        {
+                          "value": "-",
+                          "label": "-"
+                        },
+                        {
+                          "value": "CC0 1.0",
+                          "label": "CC0 1.0 Universal"
+                        },
+                        {
+                          "value": "CC PDM",
+                          "label": "Public Domain Mark"
+                        }
+                      ]
+                    },
+                    {
+                      "value": "C",
+                      "label": "Copyright"
+                    }
+                  ]
+                },
+                {
+                  "name": "version",
+                  "type": "select",
+                  "label": "License Version",
+                  "options": []
+                }
+              ]
+            },
+            "metadataSemantics": [
+              {
+                "name": "title",
+                "type": "text",
+                "label": "Title",
+                "placeholder": "La Gioconda"
+              },
+              {
+                "name": "license",
+                "type": "select",
+                "label": "License",
+                "default": "U",
+                "options": [
+                  {
+                    "value": "U",
+                    "label": "Undisclosed"
+                  },
+                  {
+                    "type": "optgroup",
+                    "label": "Creative Commons",
+                    "options": [
+                      {
+                        "value": "CC BY",
+                        "label": "Attribution (CC BY)",
+                        "versions": [
+                          {
+                            "value": "4.0",
+                            "label": "4.0 International"
+                          },
+                          {
+                            "value": "3.0",
+                            "label": "3.0 Unported"
+                          },
+                          {
+                            "value": "2.5",
+                            "label": "2.5 Generic"
+                          },
+                          {
+                            "value": "2.0",
+                            "label": "2.0 Generic"
+                          },
+                          {
+                            "value": "1.0",
+                            "label": "1.0 Generic"
+                          }
+                        ]
+                      },
+                      {
+                        "value": "CC BY-SA",
+                        "label": "Attribution-ShareAlike (CC BY-SA)",
+                        "versions": [
+                          {
+                            "value": "4.0",
+                            "label": "4.0 International"
+                          },
+                          {
+                            "value": "3.0",
+                            "label": "3.0 Unported"
+                          },
+                          {
+                            "value": "2.5",
+                            "label": "2.5 Generic"
+                          },
+                          {
+                            "value": "2.0",
+                            "label": "2.0 Generic"
+                          },
+                          {
+                            "value": "1.0",
+                            "label": "1.0 Generic"
+                          }
+                        ]
+                      },
+                      {
+                        "value": "CC BY-ND",
+                        "label": "Attribution-NoDerivs (CC BY-ND)",
+                        "versions": [
+                          {
+                            "value": "4.0",
+                            "label": "4.0 International"
+                          },
+                          {
+                            "value": "3.0",
+                            "label": "3.0 Unported"
+                          },
+                          {
+                            "value": "2.5",
+                            "label": "2.5 Generic"
+                          },
+                          {
+                            "value": "2.0",
+                            "label": "2.0 Generic"
+                          },
+                          {
+                            "value": "1.0",
+                            "label": "1.0 Generic"
+                          }
+                        ]
+                      },
+                      {
+                        "value": "CC BY-NC",
+                        "label": "Attribution-NonCommercial (CC BY-NC)",
+                        "versions": [
+                          {
+                            "value": "4.0",
+                            "label": "4.0 International"
+                          },
+                          {
+                            "value": "3.0",
+                            "label": "3.0 Unported"
+                          },
+                          {
+                            "value": "2.5",
+                            "label": "2.5 Generic"
+                          },
+                          {
+                            "value": "2.0",
+                            "label": "2.0 Generic"
+                          },
+                          {
+                            "value": "1.0",
+                            "label": "1.0 Generic"
+                          }
+                        ]
+                      },
+                      {
+                        "value": "CC BY-NC-SA",
+                        "label": "Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)",
+                        "versions": [
+                          {
+                            "value": "4.0",
+                            "label": "4.0 International"
+                          },
+                          {
+                            "value": "3.0",
+                            "label": "3.0 Unported"
+                          },
+                          {
+                            "value": "2.5",
+                            "label": "2.5 Generic"
+                          },
+                          {
+                            "value": "2.0",
+                            "label": "2.0 Generic"
+                          },
+                          {
+                            "value": "1.0",
+                            "label": "1.0 Generic"
+                          }
+                        ]
+                      },
+                      {
+                        "value": "CC BY-NC-ND",
+                        "label": "Attribution-NonCommercial-NoDerivs (CC BY-NC-ND)",
+                        "versions": [
+                          {
+                            "value": "4.0",
+                            "label": "4.0 International"
+                          },
+                          {
+                            "value": "3.0",
+                            "label": "3.0 Unported"
+                          },
+                          {
+                            "value": "2.5",
+                            "label": "2.5 Generic"
+                          },
+                          {
+                            "value": "2.0",
+                            "label": "2.0 Generic"
+                          },
+                          {
+                            "value": "1.0",
+                            "label": "1.0 Generic"
+                          }
+                        ]
+                      },
+                      {
+                        "value": "CC0 1.0",
+                        "label": "Public Domain Dedication (CC0)"
+                      },
+                      {
+                        "value": "CC PDM",
+                        "label": "Public Domain Mark (PDM)"
+                      }
+                    ]
+                  },
+                  {
+                    "value": "GNU GPL",
+                    "label": "General Public License v3"
+                  },
+                  {
+                    "value": "PD",
+                    "label": "Public Domain"
+                  },
+                  {
+                    "value": "ODC PDDL",
+                    "label": "Public Domain Dedication and Licence"
+                  },
+                  {
+                    "value": "C",
+                    "label": "Copyright"
+                  }
+                ]
+              },
+              {
+                "name": "licenseVersion",
+                "type": "select",
+                "label": "License Version",
+                "options": [
+                  {
+                    "value": "4.0",
+                    "label": "4.0 International"
+                  },
+                  {
+                    "value": "3.0",
+                    "label": "3.0 Unported"
+                  },
+                  {
+                    "value": "2.5",
+                    "label": "2.5 Generic"
+                  },
+                  {
+                    "value": "2.0",
+                    "label": "2.0 Generic"
+                  },
+                  {
+                    "value": "1.0",
+                    "label": "1.0 Generic"
+                  }
+                ],
+                "optional": true
+              },
+              {
+                "name": "yearFrom",
+                "type": "number",
+                "label": "Years (from)",
+                "placeholder": "1991",
+                "min": "-9999",
+                "max": "9999",
+                "optional": true
+              },
+              {
+                "name": "yearTo",
+                "type": "number",
+                "label": "Years (to)",
+                "placeholder": "1992",
+                "min": "-9999",
+                "max": "9999",
+                "optional": true
+              },
+              {
+                "name": "source",
+                "type": "text",
+                "label": "Source",
+                "placeholder": "https://",
+                "optional": true
+              },
+              {
+                "name": "authors",
+                "type": "list",
+                "field": {
+                  "name": "author",
+                  "type": "group",
+                  "fields": [
+                    {
+                      "label": "Author's name",
+                      "name": "name",
+                      "optional": true,
+                      "type": "text"
+                    },
+                    {
+                      "name": "role",
+                      "type": "select",
+                      "label": "Author's role",
+                      "default": "Author",
+                      "options": [
+                        {
+                          "value": "Author",
+                          "label": "Author"
+                        },
+                        {
+                          "value": "Editor",
+                          "label": "Editor"
+                        },
+                        {
+                          "value": "Licensee",
+                          "label": "Licensee"
+                        },
+                        {
+                          "value": "Originator",
+                          "label": "Originator"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "licenseExtras",
+                "type": "text",
+                "widget": "textarea",
+                "label": "License Extras",
+                "optional": true,
+                "description": "Any additional information about the license"
+              },
+              {
+                "name": "changes",
+                "type": "list",
+                "field": {
+                  "name": "change",
+                  "type": "group",
+                  "label": "Changelog",
+                  "fields": [
+                    {
+                      "name": "date",
+                      "type": "text",
+                      "label": "Date",
+                      "optional": true
+                    },
+                    {
+                      "name": "author",
+                      "type": "text",
+                      "label": "Changed by",
+                      "optional": true
+                    },
+                    {
+                      "name": "log",
+                      "type": "text",
+                      "widget": "textarea",
+                      "label": "Description of change",
+                      "placeholder": "Photo cropped, text changed, etc.",
+                      "optional": true
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "authorComments",
+                "type": "text",
+                "widget": "textarea",
+                "label": "Author comments",
+                "description": "Comments for the editor of the content (This text will not be published as a part of copyright info)",
+                "optional": true
+              },
+              {
+                "name": "contentType",
+                "type": "text",
+                "widget": "none"
+              },
+              {
+                "name": "defaultLanguage",
+                "type": "text",
+                "widget": "none"
+              }
+            ],
+            "assets": {
+              "css": [
+                "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/css/laravel-h5p.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-confirmation-dialog.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-core-button.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/libs/darkroom.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/h5p-hub-client.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/fonts.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/application.css",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/libs/zebra_datepicker.min.css"
+              ],
+              "js": [
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/jquery.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-event-dispatcher.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api-event.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-content-type.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-confirmation-dialog.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-action-bar.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/request-queue.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-editor.js",
+                "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p.js",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.9",
+                "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p-editor.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5p-hub-client.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-semantic-structure.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library-selector.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-fullscreen-bar.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-form.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-text.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-html.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-number.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-textarea.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-file-uploader.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-file.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-image.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-image-popup.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-av.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-group.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-boolean.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-list.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-list-editor.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library-list-cache.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-select.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-selector-hub.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-selector-legacy.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-dimensions.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-coordinates.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-none.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata-author-widget.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata-changelog-widget.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-pre-save.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/ckeditor/ckeditor.js",
+                "https://www.currikistudio.org/api/storage/h5p/h5p-editor/language/en.js"
+              ]
+            },
+            "deleteMessage": "laravel-h5p.content.destoryed",
+            "apiVersion": {
+              "majorVersion": 1,
+              "minorVersion": 24
+            }
+          },
+          "loadedJs": [],
+          "loadedCss": [],
+          "core": {
+            "styles": [
+              "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/css/laravel-h5p.css",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p.css",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-confirmation-dialog.css",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-core-button.css"
+            ],
+            "scripts": [
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/jquery.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-event-dispatcher.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api-event.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-content-type.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-confirmation-dialog.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-action-bar.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/request-queue.js",
+              "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-editor.js",
+              "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p.js",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.9",
+              "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.9"
+            ]
+          },
+          "contents": {
+            "cid-343": {
+              "library": "H5P.Timeline 1.1",
+              "jsonContent": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{},\"startDate\":\"1872\",\"endDate\":\"1872\",\"headline\":\"Yellowstone National Park Act\",\"text\":\"<p><strong>Yellowstone National Park Act, 1872<\\/strong>&nbsp;- The Act signed into law on March 1, 1872, established the world's first true national park. It withdrew more than two million acres of the public domain in the Montana and Wyoming territories from settlement, occupancy, or sale to be \\\"dedicated and set apart as a public park or pleasuring-ground for the benefit and enjoyment of the people.\\\" It placed the park under the control of the Secretary of the Interior and gave the Secretary responsibility for preserving all timber, mineral deposits, geologic wonders, and other resources within the park. The establishment of the park set a precedent for placing other natural reserves under federal jurisdiction.<\\/p>\\n\"},{\"asset\":{},\"text\":\"<p>Antiquities Act of 1906&nbsp;- The Antiquities Act, signed by President Theodore Roosevelt on June 8, 1906, grew out of a movement to protect the prehistoric cliff dwellings, pueblo ruins and early missions in the Southwest. It authorized Presidents to proclaim and reserve \\\"historic landmarks, historic and prehistoric structures, and other objects of historic or scientific interest\\\" on lands owned or controlled by the United States as \\\"national monuments.\\\" It also prohibited the excavation or appropriation of antiquities on federal lands without permission from the department having jurisdiction. Nearly a quarter of the units currently in the National Park System originated in whole or part from the Antiquities Act.<\\/p>\\n\",\"startDate\":\"1906\",\"endDate\":\"1906\",\"headline\":\"Antiquities Act\"},{\"asset\":{},\"text\":\"<p>Act to Establish the National Park Service, 1916 (Organic Act)&nbsp;- By August 1916 the Department of Interior oversaw 14 national parks, 21 national monuments, and the Hot Springs and Casa Grande Ruin reservations, but there was no unified leadership or organization to operate them. Lacking this, the parks and monuments were vulnerable to competing interests. With encouragement from future directors Stephen T. Mather and Horace Albright, the National Geographic Society, journalists, railroad interests and others, Congress passed what is often known as the Organic Act, which established the National Park Service and placed all the existing parks under its management. The legislation established the basis for the fundamental mission, philosophy, and policies of the National Park Service.<\\/p>\\n\",\"startDate\":\"1916\",\"endDate\":\"1916\",\"headline\":\"Act to Establish the National Park Service\"},{\"asset\":{},\"text\":\"<p>Reorganization of 1933 - A major reorganization within President Franklin Roosevelt's executive branch in 1933 had a tremendous impact on the National Park Service. Specifically, two executive orders, effective August 10, 1933, transferred the War Department's parks and monuments to the National Park Service. In addition the National Park Service received all the national monuments held by the Forest Service and the responsibility for virtually all monuments created thereafter. It also assumed responsibility for the parks in the nation's capital, which had previously been managed by a separate office in Washington. The reorganization was one of the most significant events in the evolution of the National Park System. The Service's holdings were greatly expanded and there was now a single, national system of parklands. With the 1933 reorganization and new responsibilities for historical areas, historic preservation became a primary mission of the National Park Service.<\\/p>\\n\",\"endDate\":\"1933\",\"headline\":\"Reorganization of 1933\",\"startDate\":\"1933\"},{\"asset\":{},\"startDate\":\"1935\",\"endDate\":\"1935\",\"text\":\"<p>Preservation of Historic Sites Act, 1935&nbsp;-The Historic Sites Act grew out of the National Park Service's desire for a stronger legal underpinning for its expanding historical programs and from recognition outside the Service of the need for greater federal assistance to historic properties. The Act declared \\\"a national policy to preserve for public use historic sites, buildings and objects of national significance for the inspiration and benefit of the people of the United States.\\\" It assigned broad powers and duties to the Secretary of the Interior and the Service, to include conducting surveys of historic properties to determine which possess exceptional value as commemorating or illustrating U.S. history. They were authorized to conduct research; to restore, preserve, and maintain historic properties directly or through cooperative agreements with other parties; and to mark properties, establish and maintain related museums, and engage in other interpretive activities for public education. The legislation's provision for a historic site survey proved valuable in identifying potential additions to the National Park System.<\\/p>\\n\",\"headline\":\"Preservation of Historic Sites Act\"},{\"asset\":{},\"text\":\"<p>Mission 66 -&nbsp;Mission 66 was a 10-year program, initiated by National Park Service Director Conrad L. Wirth in 1956, to upgrade facilities, staffing, and resource management throughout the System by the 50th&nbsp;anniversary of the Service in 1966. Congress appropriated more than a billion dollars over the 10-year period for Mission 66 improvements. The legacy of the program included dozens of visitor centers, hundreds of employee residences, as well as the Mather and Albright employee training centers at Harpers Ferry and the Grand Canyon.<\\/p>\\n\",\"headline\":\"Mission 66\",\"startDate\":\"1956\",\"endDate\":\"1966\"},{\"asset\":{},\"text\":\"<p>Wilderness Act of 1964&nbsp;- In the Wilderness Act of 1964, Congress adopted a policy of securing wilderness areas for the benefit of present and future generations of Americans. It established a National Wilderness Preservation System, to be composed of federally owned areas designated by Congress as \\\"wilderness areas,\\\" that would be administered in a way that would leave them unimpaired for the use and enjoyment of the American people as wilderness areas. The legislation prompted the Service to carefully examine all park land that potentially qualified as wilderness areas and provided additional legal protection for park areas threatened with development.<\\/p>\\n\",\"startDate\":\"1964\",\"endDate\":\"1964\",\"headline\":\"Wilderness Act of 1964\"}],\"language\":\"en\",\"headline\":\"The History of the U.S. National Parks\",\"backgroundImage\":{\"path\":\"images\\/backgroundImage-5ed7ee0b0ff44.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2400,\"height\":1452},\"text\":\"\"}}",
+              "fullScreen": 1,
+              "exportUrl": "https://www.currikistudio.org/api/api/v1/h5p/export/343",
+              "embedCode": "<iframe src=\"https://www.currikistudio.org/h5p/embed/343\" width=\":w\" height=\":h\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>",
+              "resizeCode": "<script src=\"https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-resizer.js\" charset=\"UTF-8\"></script>",
+              "url": "https://www.currikistudio.org/h5p/embed/343",
+              "title": "The History of the U.S. National Parks",
+              "displayOptions": {
+                "frame": true,
+                "export": true,
+                "embed": true,
+                "copyright": false,
+                "icon": true,
+                "copy": false
+              },
+              "contentUserData": [
+                {
+                  "state": "{}"
+                }
+              ],
+              "scripts": [
+                "https://www.currikistudio.org/api/storage/h5p/libraries/TimelineJS-1.1/js/storyjs-embed.js?ver=1.1.1",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/TimelineJS-1.1/timeline.js?ver=1.1.1",
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Timeline-1.1/timeline.js?ver=1.1.19"
+              ],
+              "styles": [
+                "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Timeline-1.1/timeline.css?ver=1.1.19"
+              ]
+            }
+          }
+        },
+        "user": {
+          "id": 1744,
+          "name": "I Dev",
+          "email": "i.do.dev@outlook.com"
+        },
+        "embed_code": "<div class=\"h5p-iframe-wrapper\"><iframe id=\"h5p-iframe-343\" class=\"h5p-iframe\" data-content-id=\"343\" style=\"height: 1px\" src=\"about:blank\" frameBorder=\"0\" scrolling=\"no\"></iframe></div>"
+      },
+      "playlist": {
+        "id": 6501,
+        "title": "About the National Parks",
+        "project_id": 2958,
+        "order": 0,
+        "created_at": "2020-09-25T22:21:35.000000Z",
+        "updated_at": "2020-09-25T22:21:35.000000Z",
+        "deleted_at": null,
+        "is_public": false,
+        "elasticsearch": false,
+        "project": {
+          "id": 2958,
+          "name": "Exploring National Parks",
+          "description": "Explore America’s national parks. Discover our most treasured places. From science to the arts, service learning to teacher training, America’s national parks teach invaluable lessons about our planet, our history, and ourselves. These incredible places, and all that they offer beyond the boundaries of the national parks, are the catalysts for inspiring a new generation of park enthusiasts. The National Park Foundation is dedicated to utilizing these powerful learning environments that can provide in-depth, real-world learning experiences, to nurture a deep connection between the next generation and America's national parks.",
+          "thumb_url": "/storage/projects/5f6e6d6f3cb2d.jpeg",
+          "created_at": "2020-09-25T22:21:35.000000Z",
+          "updated_at": "2020-09-25T22:21:35.000000Z",
+          "deleted_at": null,
+          "shared": false,
+          "is_public": false,
+          "starter_project": false,
+          "elasticsearch": false
+        }
+      },
+      "created_at": "2020-09-25T22:22:03.000000Z",
+      "updated_at": "2020-09-25T22:22:03.000000Z"
+    },
+    "playlist": {
+      "id": 6501,
+      "title": "About the National Parks",
+      "order": 0,
+      "is_public": false,
+      "project_id": 2958,
+      "project": {
+        "id": 2958,
+        "name": "Exploring National Parks",
+        "description": "Explore America’s national parks. Discover our most treasured places. From science to the arts, service learning to teacher training, America’s national parks teach invaluable lessons about our planet, our history, and ourselves. These incredible places, and all that they offer beyond the boundaries of the national parks, are the catalysts for inspiring a new generation of park enthusiasts. The National Park Foundation is dedicated to utilizing these powerful learning environments that can provide in-depth, real-world learning experiences, to nurture a deep connection between the next generation and America's national parks.",
+        "thumb_url": "/storage/projects/5f6e6d6f3cb2d.jpeg",
+        "shared": false,
+        "starter_project": false,
+        "users": [
+          {
+            "id": 1744,
+            "first_name": "I",
+            "last_name": "Dev",
+            "email": "i.do.dev@outlook.com",
+            "role": "owner"
+          }
+        ],
+        "is_public": false,
+        "created_at": "2020-09-25T22:21:35.000000Z",
+        "updated_at": "2020-09-25T22:21:35.000000Z"
+      },
+      "activities": [
+        {
+          "id": 30959,
+          "playlist_id": 6501,
+          "title": "The History of the U.S. National Parks",
+          "type": "h5p",
+          "content": "",
+          "shared": true,
+          "order": 0,
+          "thumb_url": "/storage/activities/5f6e6d8b27819.jpeg",
+          "subject_id": "Social Studies",
+          "education_level_id": "Grades 9-10 (Ages 14-16)",
+          "h5p_content": {
+            "id": 343,
+            "created_at": "2020-06-03T18:39:05.000000Z",
+            "updated_at": "2020-06-23T21:29:30.000000Z",
+            "user_id": 1,
+            "title": "The History of the U.S. National Parks",
+            "library_id": 61,
+            "parameters": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{},\"startDate\":\"1872\",\"endDate\":\"1872\",\"headline\":\"Yellowstone National Park Act\",\"text\":\"<p><strong>Yellowstone National Park Act, 1872<\\/strong>&nbsp;- The Act signed into law on March 1, 1872, established the world's first true national park. It withdrew more than two million acres of the public domain in the Montana and Wyoming territories from settlement, occupancy, or sale to be \\\"dedicated and set apart as a public park or pleasuring-ground for the benefit and enjoyment of the people.\\\" It placed the park under the control of the Secretary of the Interior and gave the Secretary responsibility for preserving all timber, mineral deposits, geologic wonders, and other resources within the park. The establishment of the park set a precedent for placing other natural reserves under federal jurisdiction.<\\/p>\\n\"},{\"asset\":{},\"text\":\"<p>Antiquities Act of 1906&nbsp;- The Antiquities Act, signed by President Theodore Roosevelt on June 8, 1906, grew out of a movement to protect the prehistoric cliff dwellings, pueblo ruins and early missions in the Southwest. It authorized Presidents to proclaim and reserve \\\"historic landmarks, historic and prehistoric structures, and other objects of historic or scientific interest\\\" on lands owned or controlled by the United States as \\\"national monuments.\\\" It also prohibited the excavation or appropriation of antiquities on federal lands without permission from the department having jurisdiction. Nearly a quarter of the units currently in the National Park System originated in whole or part from the Antiquities Act.<\\/p>\\n\",\"startDate\":\"1906\",\"endDate\":\"1906\",\"headline\":\"Antiquities Act\"},{\"asset\":{},\"text\":\"<p>Act to Establish the National Park Service, 1916 (Organic Act)&nbsp;- By August 1916 the Department of Interior oversaw 14 national parks, 21 national monuments, and the Hot Springs and Casa Grande Ruin reservations, but there was no unified leadership or organization to operate them. Lacking this, the parks and monuments were vulnerable to competing interests. With encouragement from future directors Stephen T. Mather and Horace Albright, the National Geographic Society, journalists, railroad interests and others, Congress passed what is often known as the Organic Act, which established the National Park Service and placed all the existing parks under its management. The legislation established the basis for the fundamental mission, philosophy, and policies of the National Park Service.<\\/p>\\n\",\"startDate\":\"1916\",\"endDate\":\"1916\",\"headline\":\"Act to Establish the National Park Service\"},{\"asset\":{},\"text\":\"<p>Reorganization of 1933 - A major reorganization within President Franklin Roosevelt's executive branch in 1933 had a tremendous impact on the National Park Service. Specifically, two executive orders, effective August 10, 1933, transferred the War Department's parks and monuments to the National Park Service. In addition the National Park Service received all the national monuments held by the Forest Service and the responsibility for virtually all monuments created thereafter. It also assumed responsibility for the parks in the nation's capital, which had previously been managed by a separate office in Washington. The reorganization was one of the most significant events in the evolution of the National Park System. The Service's holdings were greatly expanded and there was now a single, national system of parklands. With the 1933 reorganization and new responsibilities for historical areas, historic preservation became a primary mission of the National Park Service.<\\/p>\\n\",\"endDate\":\"1933\",\"headline\":\"Reorganization of 1933\",\"startDate\":\"1933\"},{\"asset\":{},\"startDate\":\"1935\",\"endDate\":\"1935\",\"text\":\"<p>Preservation of Historic Sites Act, 1935&nbsp;-The Historic Sites Act grew out of the National Park Service's desire for a stronger legal underpinning for its expanding historical programs and from recognition outside the Service of the need for greater federal assistance to historic properties. The Act declared \\\"a national policy to preserve for public use historic sites, buildings and objects of national significance for the inspiration and benefit of the people of the United States.\\\" It assigned broad powers and duties to the Secretary of the Interior and the Service, to include conducting surveys of historic properties to determine which possess exceptional value as commemorating or illustrating U.S. history. They were authorized to conduct research; to restore, preserve, and maintain historic properties directly or through cooperative agreements with other parties; and to mark properties, establish and maintain related museums, and engage in other interpretive activities for public education. The legislation's provision for a historic site survey proved valuable in identifying potential additions to the National Park System.<\\/p>\\n\",\"headline\":\"Preservation of Historic Sites Act\"},{\"asset\":{},\"text\":\"<p>Mission 66 -&nbsp;Mission 66 was a 10-year program, initiated by National Park Service Director Conrad L. Wirth in 1956, to upgrade facilities, staffing, and resource management throughout the System by the 50th&nbsp;anniversary of the Service in 1966. Congress appropriated more than a billion dollars over the 10-year period for Mission 66 improvements. The legacy of the program included dozens of visitor centers, hundreds of employee residences, as well as the Mather and Albright employee training centers at Harpers Ferry and the Grand Canyon.<\\/p>\\n\",\"headline\":\"Mission 66\",\"startDate\":\"1956\",\"endDate\":\"1966\"},{\"asset\":{},\"text\":\"<p>Wilderness Act of 1964&nbsp;- In the Wilderness Act of 1964, Congress adopted a policy of securing wilderness areas for the benefit of present and future generations of Americans. It established a National Wilderness Preservation System, to be composed of federally owned areas designated by Congress as \\\"wilderness areas,\\\" that would be administered in a way that would leave them unimpaired for the use and enjoyment of the American people as wilderness areas. The legislation prompted the Service to carefully examine all park land that potentially qualified as wilderness areas and provided additional legal protection for park areas threatened with development.<\\/p>\\n\",\"startDate\":\"1964\",\"endDate\":\"1964\",\"headline\":\"Wilderness Act of 1964\"}],\"language\":\"en\",\"headline\":\"The History of the U.S. National Parks\",\"backgroundImage\":{\"path\":\"images\\/backgroundImage-5ed7ee0b0ff44.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2400,\"height\":1452},\"text\":\"\"}}",
+            "filtered": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{},\"startDate\":\"1872\",\"endDate\":\"1872\",\"headline\":\"Yellowstone National Park Act\",\"text\":\"<p><strong>Yellowstone National Park Act, 1872<\\/strong>&nbsp;- The Act signed into law on March 1, 1872, established the world's first true national park. It withdrew more than two million acres of the public domain in the Montana and Wyoming territories from settlement, occupancy, or sale to be \\\"dedicated and set apart as a public park or pleasuring-ground for the benefit and enjoyment of the people.\\\" It placed the park under the control of the Secretary of the Interior and gave the Secretary responsibility for preserving all timber, mineral deposits, geologic wonders, and other resources within the park. The establishment of the park set a precedent for placing other natural reserves under federal jurisdiction.<\\/p>\\n\"},{\"asset\":{},\"text\":\"<p>Antiquities Act of 1906&nbsp;- The Antiquities Act, signed by President Theodore Roosevelt on June 8, 1906, grew out of a movement to protect the prehistoric cliff dwellings, pueblo ruins and early missions in the Southwest. It authorized Presidents to proclaim and reserve \\\"historic landmarks, historic and prehistoric structures, and other objects of historic or scientific interest\\\" on lands owned or controlled by the United States as \\\"national monuments.\\\" It also prohibited the excavation or appropriation of antiquities on federal lands without permission from the department having jurisdiction. Nearly a quarter of the units currently in the National Park System originated in whole or part from the Antiquities Act.<\\/p>\\n\",\"startDate\":\"1906\",\"endDate\":\"1906\",\"headline\":\"Antiquities Act\"},{\"asset\":{},\"text\":\"<p>Act to Establish the National Park Service, 1916 (Organic Act)&nbsp;- By August 1916 the Department of Interior oversaw 14 national parks, 21 national monuments, and the Hot Springs and Casa Grande Ruin reservations, but there was no unified leadership or organization to operate them. Lacking this, the parks and monuments were vulnerable to competing interests. With encouragement from future directors Stephen T. Mather and Horace Albright, the National Geographic Society, journalists, railroad interests and others, Congress passed what is often known as the Organic Act, which established the National Park Service and placed all the existing parks under its management. The legislation established the basis for the fundamental mission, philosophy, and policies of the National Park Service.<\\/p>\\n\",\"startDate\":\"1916\",\"endDate\":\"1916\",\"headline\":\"Act to Establish the National Park Service\"},{\"asset\":{},\"text\":\"<p>Reorganization of 1933 - A major reorganization within President Franklin Roosevelt's executive branch in 1933 had a tremendous impact on the National Park Service. Specifically, two executive orders, effective August 10, 1933, transferred the War Department's parks and monuments to the National Park Service. In addition the National Park Service received all the national monuments held by the Forest Service and the responsibility for virtually all monuments created thereafter. It also assumed responsibility for the parks in the nation's capital, which had previously been managed by a separate office in Washington. The reorganization was one of the most significant events in the evolution of the National Park System. The Service's holdings were greatly expanded and there was now a single, national system of parklands. With the 1933 reorganization and new responsibilities for historical areas, historic preservation became a primary mission of the National Park Service.<\\/p>\\n\",\"endDate\":\"1933\",\"headline\":\"Reorganization of 1933\",\"startDate\":\"1933\"},{\"asset\":{},\"startDate\":\"1935\",\"endDate\":\"1935\",\"text\":\"<p>Preservation of Historic Sites Act, 1935&nbsp;-The Historic Sites Act grew out of the National Park Service's desire for a stronger legal underpinning for its expanding historical programs and from recognition outside the Service of the need for greater federal assistance to historic properties. The Act declared \\\"a national policy to preserve for public use historic sites, buildings and objects of national significance for the inspiration and benefit of the people of the United States.\\\" It assigned broad powers and duties to the Secretary of the Interior and the Service, to include conducting surveys of historic properties to determine which possess exceptional value as commemorating or illustrating U.S. history. They were authorized to conduct research; to restore, preserve, and maintain historic properties directly or through cooperative agreements with other parties; and to mark properties, establish and maintain related museums, and engage in other interpretive activities for public education. The legislation's provision for a historic site survey proved valuable in identifying potential additions to the National Park System.<\\/p>\\n\",\"headline\":\"Preservation of Historic Sites Act\"},{\"asset\":{},\"text\":\"<p>Mission 66 -&nbsp;Mission 66 was a 10-year program, initiated by National Park Service Director Conrad L. Wirth in 1956, to upgrade facilities, staffing, and resource management throughout the System by the 50th&nbsp;anniversary of the Service in 1966. Congress appropriated more than a billion dollars over the 10-year period for Mission 66 improvements. The legacy of the program included dozens of visitor centers, hundreds of employee residences, as well as the Mather and Albright employee training centers at Harpers Ferry and the Grand Canyon.<\\/p>\\n\",\"headline\":\"Mission 66\",\"startDate\":\"1956\",\"endDate\":\"1966\"},{\"asset\":{},\"text\":\"<p>Wilderness Act of 1964&nbsp;- In the Wilderness Act of 1964, Congress adopted a policy of securing wilderness areas for the benefit of present and future generations of Americans. It established a National Wilderness Preservation System, to be composed of federally owned areas designated by Congress as \\\"wilderness areas,\\\" that would be administered in a way that would leave them unimpaired for the use and enjoyment of the American people as wilderness areas. The legislation prompted the Service to carefully examine all park land that potentially qualified as wilderness areas and provided additional legal protection for park areas threatened with development.<\\/p>\\n\",\"startDate\":\"1964\",\"endDate\":\"1964\",\"headline\":\"Wilderness Act of 1964\"}],\"language\":\"en\",\"headline\":\"The History of the U.S. National Parks\",\"backgroundImage\":{\"path\":\"images\\/backgroundImage-5ed7ee0b0ff44.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2400,\"height\":1452},\"text\":\"\"}}",
+            "slug": "the-history-of-the-us-national-parks",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": "[]",
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": "[]",
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:22:03.000000Z",
+          "updated_at": "2020-09-25T22:22:03.000000Z"
+        },
+        {
+          "id": 30960,
+          "playlist_id": 6501,
+          "title": "Where are these National Parks?",
+          "type": "h5p",
+          "content": "",
+          "shared": false,
+          "order": 1,
+          "thumb_url": "/storage/activities/5f6e6d8c54452.png",
+          "subject_id": "Social Studies",
+          "education_level_id": "Grades 9-10 (Ages 14-16)",
+          "h5p_content": {
+            "id": 344,
+            "created_at": "2020-06-03T18:54:03.000000Z",
+            "updated_at": "2020-06-04T01:02:15.000000Z",
+            "user_id": 1,
+            "title": "Where are these National Parks?",
+            "library_id": 60,
+            "parameters": "{\"cards\":[{\"text\":\"Kenai Fjords National Park\",\"answer\":\"Alaska\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed847ead8d37.jpg#tmp\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":5710,\"height\":3812}},{\"text\":\"Glacier National Park\",\"answer\":\"Montana\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed847f8971ee.jpg#tmp\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":7671,\"height\":5117}},{\"text\":\"Zion National Park\",\"answer\":\"Utah\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed8480558075.jpg#tmp\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":3555,\"height\":2000}},{\"text\":\"Dry Tortugas National Park\",\"answer\":\"Florida\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed8480cb3d1d.jpg#tmp\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720}},{\"text\":\"Yosemite National Park\",\"answer\":\"California\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed84814e0e89.jpg#tmp\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1060,\"height\":696}}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Where are these National Parks?\"}",
+            "filtered": "{\"cards\":[{\"text\":\"Kenai Fjords National Park\",\"answer\":\"Alaska\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed847ead8d37.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":5710,\"height\":3812}},{\"text\":\"Glacier National Park\",\"answer\":\"Montana\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed847f8971ee.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":7671,\"height\":5117}},{\"text\":\"Zion National Park\",\"answer\":\"Utah\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed8480558075.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":3555,\"height\":2000}},{\"text\":\"Dry Tortugas National Park\",\"answer\":\"Florida\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed8480cb3d1d.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720}},{\"text\":\"Yosemite National Park\",\"answer\":\"California\",\"tip\":\"\",\"image\":{\"path\":\"images\\/image-5ed84814e0e89.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1060,\"height\":696}}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Where are these National Parks?\"}",
+            "slug": "where-are-these-national-parks",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": "[]",
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": "[]",
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:22:04.000000Z",
+          "updated_at": "2020-09-25T22:22:04.000000Z"
+        },
+        {
+          "id": 30957,
+          "playlist_id": 6501,
+          "title": "Seasonal Park Animals",
+          "type": "h5p",
+          "content": "",
+          "shared": false,
+          "order": 2,
+          "thumb_url": "/storage/activities/5f6e6d7e71eb7.png",
+          "subject_id": "Social Studies",
+          "education_level_id": "Grades 3-5 (Ages 8-10)",
+          "h5p_content": {
+            "id": 346,
+            "created_at": "2020-06-03T19:27:28.000000Z",
+            "updated_at": "2020-06-03T19:31:13.000000Z",
+            "user_id": 1,
+            "title": "Seasonal Park Animals",
+            "library_id": 106,
+            "parameters": "{\"taskDescription\":\"Arrange these photos into the seasons when you will find the animals in the national parks (Order: Winter, Spring, Summer, and Fall)\",\"altTaskDescription\":\"Make the following list be ordered correctly. Use the cursor keys to navigate through the list items, use space to activate or deactivate an item and the cursor keys to move it\",\"sequenceImages\":[{\"image\":{\"path\":\"images\\/image-5ed7f8ca7ce43.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":560,\"height\":370},\"imageDescription\":\"Bison in Yellowstone National Park\"},{\"image\":{\"path\":\"images\\/image-5ed7f98560891.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":564,\"height\":362},\"imageDescription\":\"Alligator Mating Season in South Florida\"},{\"image\":{\"path\":\"images\\/image-5ed7fa4a27266.png#tmp\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":564,\"height\":368},\"imageDescription\":\"Sea Turtles at Padre Islands National Seashore, Texas\"},{\"image\":{\"path\":\"images\\/image-5ed7fa7430ca3.png#tmp\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":562,\"height\":372},\"imageDescription\":\"Elk in Rocky Mountain National Park, Colorado\"}],\"behaviour\":{\"enableSolution\":true,\"enableRetry\":true,\"enableResume\":true},\"l10n\":{\"totalMoves\":\"Total Moves\",\"timeSpent\":\"Time spent\",\"score\":\"You got @score of @total points\",\"checkAnswer\":\"Check\",\"tryAgain\":\"Retry\",\"showSolution\":\"ShowSolution\",\"resume\":\"Resume\",\"audioNotSupported\":\"Audio Error\",\"ariaPlay\":\"Play the corresponding audio\",\"ariaMoveDescription\":\"Moved @cardDesc from @posSrc to @posDes\",\"ariaCardDesc\":\"sequencing item\"}}",
+            "filtered": "{\"taskDescription\":\"Arrange these photos into the seasons when you will find the animals in the national parks (Order: Winter, Spring, Summer, and Fall)\",\"altTaskDescription\":\"Make the following list be ordered correctly. Use the cursor keys to navigate through the list items, use space to activate or deactivate an item and the cursor keys to move it\",\"sequenceImages\":[{\"image\":{\"path\":\"images\\/image-5ed7f8ca7ce43.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":560,\"height\":370},\"imageDescription\":\"Bison in Yellowstone National Park\"},{\"image\":{\"path\":\"images\\/image-5ed7f98560891.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":564,\"height\":362},\"imageDescription\":\"Alligator Mating Season in South Florida\"},{\"image\":{\"path\":\"images\\/image-5ed7fa4a27266.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":564,\"height\":368},\"imageDescription\":\"Sea Turtles at Padre Islands National Seashore, Texas\"},{\"image\":{\"path\":\"images\\/image-5ed7fa7430ca3.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":562,\"height\":372},\"imageDescription\":\"Elk in Rocky Mountain National Park, Colorado\"}],\"behaviour\":{\"enableSolution\":true,\"enableRetry\":true,\"enableResume\":true},\"l10n\":{\"totalMoves\":\"Total Moves\",\"timeSpent\":\"Time spent\",\"score\":\"You got @score of @total points\",\"checkAnswer\":\"Check\",\"tryAgain\":\"Retry\",\"showSolution\":\"ShowSolution\",\"resume\":\"Resume\",\"audioNotSupported\":\"Audio Error\",\"ariaPlay\":\"Play the corresponding audio\",\"ariaMoveDescription\":\"Moved @cardDesc from @posSrc to @posDes\",\"ariaCardDesc\":\"sequencing item\"}}",
+            "slug": "seasonal-park-animals",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": "[]",
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": "[]",
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:21:50.000000Z",
+          "updated_at": "2020-09-25T22:21:50.000000Z"
+        },
+        {
+          "id": 30955,
+          "playlist_id": 6501,
+          "title": "Photo Time Capsule",
+          "type": "h5p",
+          "content": "",
+          "shared": false,
+          "order": 3,
+          "thumb_url": "/storage/activities/5f6e6d7193c42.jpeg",
+          "subject_id": "Social Studies",
+          "education_level_id": "Grades 3-5 (Ages 8-10)",
+          "h5p_content": {
+            "id": 348,
+            "created_at": "2020-06-03T19:51:50.000000Z",
+            "updated_at": "2020-06-03T19:53:28.000000Z",
+            "user_id": 1,
+            "title": "Photo Time Capsule",
+            "library_id": 116,
+            "parameters": "{\"imageBefore\":{\"imageBefore\":{\"params\":{\"contentName\":\"Image\",\"alt\":\"Quarry Visitor Center\",\"title\":\"Quarry Visitor Center\",\"file\":{\"path\":\"images\\/file-5ed7ff4c7c700.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":800,\"height\":450}},\"library\":\"H5P.Image 1.1\",\"subContentId\":\"7ff2473c-745d-4ca0-b555-c0858771c9da\",\"metadata\":{\"contentType\":\"Image\",\"license\":\"U\",\"title\":\"Quarry Visitor Center, a Mission 66 project at Dinosaur National Monument was completed in 1958.\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Quarry Visitor Center, a Mission 66 project at Dinosaur National Monument was completed in 1958.\"}},\"labelBefore\":\"Then: Quarry Visitor Center, a Mission 66 project at Dinosaur National Monument was completed in 1958.\"},\"imageAfter\":{\"imageAfter\":{\"params\":{\"contentName\":\"Image\",\"alt\":\"Mesa Verde Visitor Center\",\"title\":\"Mesa Verde Visitor Center\",\"file\":{\"path\":\"images\\/file-5ed7ff5390f17.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":800,\"height\":450}},\"library\":\"H5P.Image 1.1\",\"subContentId\":\"630fb2a4-dc71-4156-8e00-cc171c4bf4e0\",\"metadata\":{\"contentType\":\"Image\",\"license\":\"U\",\"title\":\"Mesa Verde National Park in Colorado opened its new visitor and research center in 2013.\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Mesa Verde National Park in Colorado opened its new visitor and research center in 2013.\"}},\"labelAfter\":\"Now: Mesa Verde National Park in Colorado opened its new visitor and research center in 2013\"},\"behavior\":{\"startingPosition\":50,\"sliderOrientation\":\"horizontal\",\"sliderColor\":\"#f3f3f3\"}}",
+            "filtered": "{\"imageBefore\":{\"imageBefore\":{\"params\":{\"contentName\":\"Image\",\"alt\":\"Quarry Visitor Center\",\"title\":\"Quarry Visitor Center\",\"file\":{\"path\":\"images\\/file-5ed7ff4c7c700.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":800,\"height\":450}},\"library\":\"H5P.Image 1.1\",\"subContentId\":\"7ff2473c-745d-4ca0-b555-c0858771c9da\",\"metadata\":{\"contentType\":\"Image\",\"license\":\"U\",\"title\":\"Quarry Visitor Center, a Mission 66 project at Dinosaur National Monument was completed in 1958.\"}},\"labelBefore\":\"Then: Quarry Visitor Center, a Mission 66 project at Dinosaur National Monument was completed in 1958.\"},\"imageAfter\":{\"imageAfter\":{\"params\":{\"contentName\":\"Image\",\"alt\":\"Mesa Verde Visitor Center\",\"title\":\"Mesa Verde Visitor Center\",\"file\":{\"path\":\"images\\/file-5ed7ff5390f17.jpg\",\"mime\":\"image\\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":800,\"height\":450}},\"library\":\"H5P.Image 1.1\",\"subContentId\":\"630fb2a4-dc71-4156-8e00-cc171c4bf4e0\",\"metadata\":{\"contentType\":\"Image\",\"license\":\"U\",\"title\":\"Mesa Verde National Park in Colorado opened its new visitor and research center in 2013.\"}},\"labelAfter\":\"Now: Mesa Verde National Park in Colorado opened its new visitor and research center in 2013\"},\"behavior\":{\"startingPosition\":50,\"sliderOrientation\":\"horizontal\",\"sliderColor\":\"#f3f3f3\"}}",
+            "slug": "photo-time-capsule",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": "[]",
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": "[]",
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:21:37.000000Z",
+          "updated_at": "2020-09-25T22:21:37.000000Z"
+        },
+        {
+          "id": 30956,
+          "playlist_id": 6501,
+          "title": "Top 5 Most Famous Hikes",
+          "type": "h5p",
+          "content": "",
+          "shared": false,
+          "order": 4,
+          "thumb_url": "/storage/activities/5f6e6d7dd3043.jpeg",
+          "subject_id": null,
+          "education_level_id": null,
+          "h5p_content": {
+            "id": 350,
+            "created_at": "2020-06-04T01:33:24.000000Z",
+            "updated_at": "2020-06-04T01:33:24.000000Z",
+            "user_id": 1,
+            "title": "Top 5 Most Famous Hikes",
+            "library_id": 40,
+            "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\\/\\/www.youtube.com\\/watch?v=dmK5-3ZhXX8\",\"mime\":\"video\\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":13.015,\"to\":16.016},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Approximately 1,000 feet above the valley floor, it is as tall as the Eiffel Tower.<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Approximately 3,000 feet above the valley floor, it is 3 times as tall as the Eiffel Tower<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Approximately 5,000 feet above the valley floor, it is 5 times as tall as the Eiffel Tower<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>How tall is El Capitan?<\\/p>\\n\"},\"subContentId\":\"e9894d6a-3193-40f0-bfc1-712b9b6e7292\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"How tall is El Capitan?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"How tall is El Capitan?\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>How tall is El Capitan?<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":30.46,\"to\":35.46},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>About 30 feet in diameter and 250 feet tall<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>About 10 feet in diameter and 250 feet tall<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>About 30 feet in diameter and 50 feet tall<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Giant sequoias can grow to be\\u2026<\\/p>\\n\"},\"subContentId\":\"074b235c-7805-4a2e-b60c-181869194ecf\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Giant sequoias can grow to be\\u2026\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Giant sequoias can grow to be\\u2026\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Giant sequoias can grow to be\\u2026<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":78.78,\"to\":81.78},\"libraryTitle\":\"True\\/False Question\",\"action\":{\"library\":\"H5P.TrueFalse 1.6\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"correct\":\"true\",\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false},\"l10n\":{\"trueText\":\"True\",\"falseText\":\"False\",\"score\":\"You got @score of @total points\",\"checkAnswer\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgain\":\"Retry\",\"wrongAnswerMessage\":\"Wrong answer\",\"correctAnswerMessage\":\"Correct answer\",\"scoreBarLabel\":\"You got :num out of :total points\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>True or False?&nbsp;Yosemite Falls is the highest waterfall in North America.<\\/p>\\n\"},\"subContentId\":\"8dd13e88-8f8e-4cc1-a3cb-0355113242d9\",\"metadata\":{\"contentType\":\"True\\/False Question\",\"license\":\"U\",\"title\":\"True or False?\\u00a0Yosemite Falls\\u00a0is the highest waterfall in North America\",\"authors\":[],\"changes\":[],\"extraTitle\":\"True or False?\\u00a0Yosemite Falls\\u00a0is the highest waterfall in North America\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>True or False?&nbsp;Yosemite Falls is the highest waterfall in North America<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":93.25,\"to\":97.25},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>You cannot be viewed from the valley floor by car. To see it you must get on the trail.<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Vernal Fall is only 317 ft but the most powerful waterfall in the park.<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>\\nVernal Fall is man made.\\n<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Which of the following facts about Vernal Falls are true?<\\/p>\\n\"},\"subContentId\":\"16014588-9846-4d54-949c-2326141b1f51\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Which of the following facts about Vernal Falls are true?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Which of the following facts about Vernal Falls are true?\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Which of the following facts about Vernal Falls are true?<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":119.18,\"to\":123.18},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>In 1776<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>1 million years ago<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>65 million years ago<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Half dome was formed:<\\/p>\\n\"},\"subContentId\":\"27edc536-7010-4a27-a14a-97baebfa3e0a\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Half dome was formed:\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Half dome was formed:\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Half dome was formed:<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":123.689,\"to\":125},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Drive<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Be dropped off by a private aircraft<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Obtain a permit and summit to the top using cables and rails<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>To reach the top of Half Dome, you must:<\\/p>\\n\"},\"subContentId\":\"791db282-d828-4682-bc83-423cccaa752c\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"To reach the top of Half Dome, you must:\",\"authors\":[],\"changes\":[],\"extraTitle\":\"To reach the top of Half Dome, you must:\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>To reach the top of Half Dome, you must:<\\/p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":134,\"label\":\"2:14 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"e2e7b052-e6cf-4abd-aedb-ff9f2c321123\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"d933cde6-2646-4fe4-9ed6-fb039db57420\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\\/\\/www.youtube.com\\/watch?v=dmK5-3ZhXX8\",\"mime\":\"video\\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":13.015,\"to\":16.016},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Approximately 1,000 feet above the valley floor, it is as tall as the Eiffel Tower.<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Approximately 3,000 feet above the valley floor, it is 3 times as tall as the Eiffel Tower<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Approximately 5,000 feet above the valley floor, it is 5 times as tall as the Eiffel Tower<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>How tall is El Capitan?<\\/p>\\n\"},\"subContentId\":\"e9894d6a-3193-40f0-bfc1-712b9b6e7292\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"How tall is El Capitan?\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>How tall is El Capitan?<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":30.46,\"to\":35.46},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>About 30 feet in diameter and 250 feet tall<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>About 10 feet in diameter and 250 feet tall<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>About 30 feet in diameter and 50 feet tall<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Giant sequoias can grow to be\\u2026<\\/p>\\n\"},\"subContentId\":\"074b235c-7805-4a2e-b60c-181869194ecf\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Giant sequoias can grow to be\\u2026\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Giant sequoias can grow to be\\u2026<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":78.78,\"to\":81.78},\"libraryTitle\":\"True\\/False Question\",\"action\":{\"library\":\"H5P.TrueFalse 1.6\",\"params\":{\"media\":{\"disableImageZooming\":false},\"correct\":\"true\",\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false},\"l10n\":{\"trueText\":\"True\",\"falseText\":\"False\",\"score\":\"You got @score of @total points\",\"checkAnswer\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgain\":\"Retry\",\"wrongAnswerMessage\":\"Wrong answer\",\"correctAnswerMessage\":\"Correct answer\",\"scoreBarLabel\":\"You got :num out of :total points\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>True or False?&nbsp;Yosemite Falls is the highest waterfall in North America.<\\/p>\\n\"},\"subContentId\":\"8dd13e88-8f8e-4cc1-a3cb-0355113242d9\",\"metadata\":{\"contentType\":\"True\\/False Question\",\"license\":\"U\",\"title\":\"True or False?\\u00a0Yosemite Falls\\u00a0is the highest waterfall in North America\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>True or False?&nbsp;Yosemite Falls is the highest waterfall in North America<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":93.25,\"to\":97.25},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>You cannot be viewed from the valley floor by car. To see it you must get on the trail.<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Vernal Fall is only 317 ft but the most powerful waterfall in the park.<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>\\nVernal Fall is man made.\\n<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Which of the following facts about Vernal Falls are true?<\\/p>\\n\"},\"subContentId\":\"16014588-9846-4d54-949c-2326141b1f51\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Which of the following facts about Vernal Falls are true?\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Which of the following facts about Vernal Falls are true?<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":119.18,\"to\":123.18},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>In 1776<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>1 million years ago<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>65 million years ago<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Half dome was formed:<\\/p>\\n\"},\"subContentId\":\"27edc536-7010-4a27-a14a-97baebfa3e0a\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Half dome was formed:\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Half dome was formed:<\\/p>\\n\"},{\"x\":47.72357723577235,\"y\":45.95375722543353,\"width\":10,\"height\":10,\"duration\":{\"from\":123.689,\"to\":125},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Drive<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Be dropped off by a private aircraft<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Obtain a permit and summit to the top using cables and rails<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>To reach the top of Half Dome, you must:<\\/p>\\n\"},\"subContentId\":\"791db282-d828-4682-bc83-423cccaa752c\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"To reach the top of Half Dome, you must:\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>To reach the top of Half Dome, you must:<\\/p>\\n\"}],\"endscreens\":[{\"time\":134,\"label\":\"2:14 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"e2e7b052-e6cf-4abd-aedb-ff9f2c321123\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"d933cde6-2646-4fe4-9ed6-fb039db57420\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "slug": "top-5-most-famous-hikes",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": null,
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": null,
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:21:49.000000Z",
+          "updated_at": "2020-09-25T22:21:49.000000Z"
+        },
+        {
+          "id": 30953,
+          "playlist_id": 6501,
+          "title": "Planning Our National Park Roads and Our National Parkways",
+          "type": "h5p",
+          "content": "",
+          "shared": false,
+          "order": 5,
+          "thumb_url": "/storage/activities/5f6e6d70acbfe.png",
+          "subject_id": "Social Studies",
+          "education_level_id": "Grades 11-12 (Ages 16-18)",
+          "h5p_content": {
+            "id": 345,
+            "created_at": "2020-06-03T19:17:27.000000Z",
+            "updated_at": "2020-06-04T01:16:22.000000Z",
+            "user_id": 1,
+            "title": "Planning Our National Park Roads and Our National Parkways",
+            "library_id": 81,
+            "parameters": "{\"content\":[{\"content\":{\"params\":{\"text\":\"<p align=\\\"justify\\\"><span><span style=\\\"color:#000000\\\"><span><span><span><span><span><span><span><span><span><span><span><span style=\\\"background-color:#ffffff\\\"><span><span>The basic premise controlling all planning, as well as development and management of the national parks, monuments, and parkways, is embodied in the Act of 1916, which established the National Park Service of the United States Department of the Interior. It is quoted in part as follows:<\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/p>\\n\\n<p align=\\\"justify\\\"><em>The service thus established shall promote and regulate the use of Federal areas known as national parks, monuments, and reservations hereinafter specified by such means and measures as conform to the fundamental purpose of the said parks, monuments, and reservations, which purpose is to conserve the scenery and the natural and historic objects and the wild life therein and to provide for the enjoyment of the same in such manner and by such means as will leave them unimpaired for the enjoyment of future generations.<\\/em><\\/p>\\n\\n<p align=\\\"justify\\\"><span><span style=\\\"color:#000000\\\"><span><span><span><span><span><span><span><span><span><span><span><span style=\\\"background-color:#ffffff\\\"><span><span>This continues to be the guiding principle of the National Park Service as recently restated by Director Conrad L. Wirth in his Foreword to Mission 66:<\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/p>\\n\\n<p align=\\\"justify\\\"><em>Appropriate park use by present and future generations requires preservation and protection of the resources of the parks. But the underlying purpose of national parks, a purpose deriving clearly from the Act of 1916 as well as from the several acts establishing the national parks and monuments, is to yield certain benefits to the Nation and its people. These benefits result primarily from the visitor's experiences in the areas of the System. It is the function of the National Park Service and the objective of the MISSION 66 program constantly to improve the quality of that experience.<\\/em><\\/p>\\n\\n<p align=\\\"justify\\\"><span><span style=\\\"color:#000000\\\"><span><span><span><span><span><span><span><span><span><span><span><span style=\\\"background-color:#ffffff\\\"><span><span>Mission 66 is a far-reaching ten-year conservation program for the National Park System, conceived by Mr. Wirth, approved and recommended to the Congress by the President in 1956. It is intended to provide facilities in the parks for the more than 80,000,000 visitors expected to be using the system by 1966 \\u2014 fiftieth anniversary year of the establishment of the National Park Service. It will also provide stronger and more effective safeguards for the scenic, scientific, and historic resources of the system. Both the enlarged appropriation for the present (1957) fiscal year and the budget for 1958, provide for carrying the program forward at the recommended rate.<\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Planning Our National Park Roads and Our National Parkways\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Planning Our National Park Roads and Our National Parkways\"},\"subContentId\":\"dfb8dedf-e156-4f5d-9871-f7c945f78f16\"},\"useSeparator\":\"auto\"},{\"useSeparator\":\"auto\",\"content\":{\"params\":{\"media\":{\"disableImageZooming\":false,\"type\":{\"params\":{}}},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>The Act of 1916<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>The Act of 1961<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>The Act of 1776<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Which Act established the National Park Service of the United States Department of the Interior?<\\/p>\\n\"},\"library\":\"H5P.MultiChoice 1.14\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Which Act established the National Park Service of the United States Department of the Interior?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Which Act established the National Park Service of the United States Department of the Interior?\"},\"subContentId\":\"5b7e23af-da3a-408c-94d9-b7148abb4f37\"}},{\"content\":{\"params\":{\"media\":{\"disableImageZooming\":false,\"type\":{\"params\":{}}},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>1 year<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>10 years<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Forever<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>How long was the Mission 66 program?<\\/p>\\n\"},\"library\":\"H5P.MultiChoice 1.14\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"How long was the Mission 66 program?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"How long was the Mission 66 program?\"},\"subContentId\":\"ff738479-301e-4d8d-8991-52b69826ece2\"},\"useSeparator\":\"auto\"},{\"content\":{\"params\":{\"iconType\":\"image\",\"icon\":\"plus\",\"color\":\"#c46c39\",\"hotspots\":[{\"position\":{\"x\":54.400000000000006,\"y\":3.3560311284046693},\"alwaysFullscreen\":false,\"content\":[{\"params\":{\"contentName\":\"Image\",\"file\":{\"path\":\"images\\/file-5ed84aa8c4b6b.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1378,\"height\":818}},\"library\":\"H5P.Image 1.1\",\"metadata\":{\"contentType\":\"Image\",\"license\":\"U\",\"title\":\"Blue Ridge Parkway Under Construction, 1940\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Blue Ridge Parkway Under Construction, 1940\"},\"subContentId\":\"72947462-714f-4e88-bd8f-d65a9514aae3\"}]}],\"hotspotNumberLabel\":\"Hotspot #num\",\"closeButtonLabel\":\"Close\",\"image\":{\"path\":\"images\\/image-5ed849c51cc6a.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1278,\"height\":1288},\"iconImage\":{\"path\":\"images\\/iconImage-5ed84aca35b9e.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1200,\"height\":1562}},\"library\":\"H5P.ImageHotspots 1.8\",\"metadata\":{\"contentType\":\"Image Hotspots\",\"license\":\"U\",\"title\":\"Original National Parks Roads Budget\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Original National Parks Roads Budget\"},\"subContentId\":\"135eea2e-c850-4a0e-aeb8-b462bb6223c9\"},\"useSeparator\":\"auto\"}]}",
+            "filtered": "{\"content\":[{\"content\":{\"params\":{\"text\":\"<p align=\\\"justify\\\"><span><span style=\\\"color:#000000\\\"><span><span><span><span><span><span><span><span><span><span><span><span style=\\\"background-color:#ffffff\\\"><span><span>The basic premise controlling all planning, as well as development and management of the national parks, monuments, and parkways, is embodied in the Act of 1916, which established the National Park Service of the United States Department of the Interior. It is quoted in part as follows:<\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/p>\\n\\n<p align=\\\"justify\\\"><em>The service thus established shall promote and regulate the use of Federal areas known as national parks, monuments, and reservations hereinafter specified by such means and measures as conform to the fundamental purpose of the said parks, monuments, and reservations, which purpose is to conserve the scenery and the natural and historic objects and the wild life therein and to provide for the enjoyment of the same in such manner and by such means as will leave them unimpaired for the enjoyment of future generations.<\\/em><\\/p>\\n\\n<p align=\\\"justify\\\"><span><span style=\\\"color:#000000\\\"><span><span><span><span><span><span><span><span><span><span><span><span style=\\\"background-color:#ffffff\\\"><span><span>This continues to be the guiding principle of the National Park Service as recently restated by Director Conrad L. Wirth in his Foreword to Mission 66:<\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/p>\\n\\n<p align=\\\"justify\\\"><em>Appropriate park use by present and future generations requires preservation and protection of the resources of the parks. But the underlying purpose of national parks, a purpose deriving clearly from the Act of 1916 as well as from the several acts establishing the national parks and monuments, is to yield certain benefits to the Nation and its people. These benefits result primarily from the visitor's experiences in the areas of the System. It is the function of the National Park Service and the objective of the MISSION 66 program constantly to improve the quality of that experience.<\\/em><\\/p>\\n\\n<p align=\\\"justify\\\"><span><span style=\\\"color:#000000\\\"><span><span><span><span><span><span><span><span><span><span><span><span style=\\\"background-color:#ffffff\\\"><span><span>Mission 66 is a far-reaching ten-year conservation program for the National Park System, conceived by Mr. Wirth, approved and recommended to the Congress by the President in 1956. It is intended to provide facilities in the parks for the more than 80,000,000 visitors expected to be using the system by 1966 \\u2014 fiftieth anniversary year of the establishment of the National Park Service. It will also provide stronger and more effective safeguards for the scenic, scientific, and historic resources of the system. Both the enlarged appropriation for the present (1957) fiscal year and the budget for 1958, provide for carrying the program forward at the recommended rate.<\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/span><\\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Planning Our National Park Roads and Our National Parkways\"},\"subContentId\":\"dfb8dedf-e156-4f5d-9871-f7c945f78f16\"},\"useSeparator\":\"auto\"},{\"useSeparator\":\"auto\",\"content\":{\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>The Act of 1916<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>The Act of 1961<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>The Act of 1776<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>Which Act established the National Park Service of the United States Department of the Interior?<\\/p>\\n\"},\"library\":\"H5P.MultiChoice 1.14\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Which Act established the National Park Service of the United States Department of the Interior?\"},\"subContentId\":\"5b7e23af-da3a-408c-94d9-b7148abb4f37\"}},{\"content\":{\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>1 year<\\/div>\\n\"},{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>10 years<\\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>Forever<\\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>How long was the Mission 66 program?<\\/p>\\n\"},\"library\":\"H5P.MultiChoice 1.14\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"How long was the Mission 66 program?\"},\"subContentId\":\"ff738479-301e-4d8d-8991-52b69826ece2\"},\"useSeparator\":\"auto\"},{\"content\":{\"params\":{\"iconType\":\"image\",\"icon\":\"plus\",\"color\":\"#c46c39\",\"hotspots\":[{\"position\":{\"x\":54.400000000000006,\"y\":3.3560311284046693},\"alwaysFullscreen\":false,\"content\":[{\"params\":{\"contentName\":\"Image\",\"file\":{\"path\":\"images\\/file-5ed84aa8c4b6b.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1378,\"height\":818}},\"library\":\"H5P.Image 1.1\",\"metadata\":{\"contentType\":\"Image\",\"license\":\"U\",\"title\":\"Blue Ridge Parkway Under Construction, 1940\"},\"subContentId\":\"72947462-714f-4e88-bd8f-d65a9514aae3\"}]}],\"hotspotNumberLabel\":\"Hotspot #num\",\"closeButtonLabel\":\"Close\",\"image\":{\"path\":\"images\\/image-5ed849c51cc6a.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1278,\"height\":1288},\"iconImage\":{\"path\":\"images\\/iconImage-5ed84aca35b9e.png\",\"mime\":\"image\\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1200,\"height\":1562}},\"library\":\"H5P.ImageHotspots 1.8\",\"metadata\":{\"contentType\":\"Image Hotspots\",\"license\":\"U\",\"title\":\"Original National Parks Roads Budget\"},\"subContentId\":\"135eea2e-c850-4a0e-aeb8-b462bb6223c9\"},\"useSeparator\":\"auto\"}]}",
+            "slug": "planning-our-national-park-roads-and-our-national-parkways",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": "[]",
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": "[]",
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:21:36.000000Z",
+          "updated_at": "2020-09-25T22:21:36.000000Z"
+        },
+        {
+          "id": 30958,
+          "playlist_id": 6501,
+          "title": "Ken Burns Documentary - America&#039;s Best Idea",
+          "type": "h5p",
+          "content": "",
+          "shared": false,
+          "order": 6,
+          "thumb_url": "/storage/activities/5f6e6d8ab6df0.jpeg",
+          "subject_id": "Social Studies",
+          "education_level_id": "Grades 9-10 (Ages 14-16)",
+          "h5p_content": {
+            "id": 342,
+            "created_at": "2020-06-03T18:27:15.000000Z",
+            "updated_at": "2020-08-13T15:55:41.000000Z",
+            "user_id": 1,
+            "title": "Ken Burns Documentary - America&#039;s Best Idea",
+            "library_id": 40,
+            "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\\/\\/www.youtube.com\\/watch?v=LkZNgV-Mqoo\",\"mime\":\"video\\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":47.3423242669234,\"y\":24.588358982785614,\"width\":17.090069284064665,\"height\":13.856812933025406,\"duration\":{\"from\":26,\"to\":36},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"bd731f2b-fecc-401f-913e-e59db26ebf78\",\"question\":\"<p>Which State is the Grand Canyon in?<\\/p>\\n\",\"answers\":[\"<p>Arizona<\\/p>\\n\",\"<p>Utah<\\/p>\\n\",\"<p>California<\\/p>\\n\",\"<p>Colorado<\\/p>\\n\"]},{\"subContentId\":\"f67cd15c-2d51-4f0b-937a-24ecb1673eed\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"cf2e6213-fb74-425f-a487-91307caab251\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Which State is the Grand Canyon in?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Which State is the Grand Canyon in?\"}},\"pause\":true,\"displayType\":\"poster\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":23.094688221709006,\"y\":28.688524590163937,\"width\":22.632794457274827,\"height\":10.623556581986143,\"duration\":{\"from\":60,\"to\":70},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"cc7a68d6-df6d-45cf-852d-718070e2c35f\",\"question\":\"<p>Glacier National Park is home to the...<\\/p>\\n\",\"answers\":[\"<p>Rocky Mountain Range<\\/p>\\n\",\"<p>Sierra Nevada Mountain Range<\\/p>\\n\",\"<p>Appalachian Mountain Range<\\/p>\\n\"]},{\"subContentId\":\"2c7b584e-039e-4200-ae52-5ef85bb6f72b\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"53d9c163-d5e3-4fc9-a515-6c463b860c25\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Glacier National Park is home to the...\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Glacier National Park is home to the...\"}},\"pause\":true,\"displayType\":\"poster\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":147,\"label\":\"2:27 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"b562275d-441d-44fb-b402-fe35e41ddaaa\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"dd84716e-98fe-41a8-b40c-27780419b25d\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\\/\\/www.youtube.com\\/watch?v=LkZNgV-Mqoo\",\"mime\":\"video\\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":47.3423242669234,\"y\":24.588358982785614,\"width\":17.090069284064665,\"height\":13.856812933025406,\"duration\":{\"from\":26,\"to\":36},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"bd731f2b-fecc-401f-913e-e59db26ebf78\",\"question\":\"<p>Which State is the Grand Canyon in?<\\/p>\\n\",\"answers\":[\"<p>Arizona<\\/p>\\n\",\"<p>Utah<\\/p>\\n\",\"<p>California<\\/p>\\n\",\"<p>Colorado<\\/p>\\n\"]},{\"subContentId\":\"f67cd15c-2d51-4f0b-937a-24ecb1673eed\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"cf2e6213-fb74-425f-a487-91307caab251\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Which State is the Grand Canyon in?\"}},\"pause\":true,\"displayType\":\"poster\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":23.094688221709006,\"y\":28.688524590163937,\"width\":22.632794457274827,\"height\":10.623556581986143,\"duration\":{\"from\":60,\"to\":70},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"cc7a68d6-df6d-45cf-852d-718070e2c35f\",\"question\":\"<p>Glacier National Park is home to the...<\\/p>\\n\",\"answers\":[\"<p>Rocky Mountain Range<\\/p>\\n\",\"<p>Sierra Nevada Mountain Range<\\/p>\\n\",\"<p>Appalachian Mountain Range<\\/p>\\n\"]},{\"subContentId\":\"2c7b584e-039e-4200-ae52-5ef85bb6f72b\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"53d9c163-d5e3-4fc9-a515-6c463b860c25\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Glacier National Park is home to the...\"}},\"pause\":true,\"displayType\":\"poster\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"endscreens\":[{\"time\":147,\"label\":\"2:27 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"b562275d-441d-44fb-b402-fe35e41ddaaa\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"dd84716e-98fe-41a8-b40c-27780419b25d\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "slug": "ken-burns-documentary-america039s-best-idea",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": "[]",
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": "[]",
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:22:02.000000Z",
+          "updated_at": "2020-09-25T22:22:02.000000Z"
+        },
+        {
+          "id": 30954,
+          "playlist_id": 6501,
+          "title": "Word Jumble: National Parks",
+          "type": "h5p",
+          "content": "",
+          "shared": false,
+          "order": 7,
+          "thumb_url": "/storage/activities/5f6e6d7116b76.jpeg",
+          "subject_id": "Language Arts",
+          "education_level_id": "Grades 3-5 (Ages 8-10)",
+          "h5p_content": {
+            "id": 347,
+            "created_at": "2020-06-03T19:35:13.000000Z",
+            "updated_at": "2020-06-03T19:37:13.000000Z",
+            "user_id": 1,
+            "title": "Word Jumble: National Parks",
+            "library_id": 79,
+            "parameters": "{\"taskDescription\":\"Find the words from the grid\",\"wordList\":\"Yosemite,ParkRanger,Campsite,Glacier,Zion,GrandCanyon,Trails\",\"behaviour\":{\"orientations\":{\"horizontal\":true,\"horizontalBack\":true,\"vertical\":true,\"verticalUp\":true,\"diagonal\":true,\"diagonalBack\":true,\"diagonalUp\":true,\"diagonalUpBack\":true},\"fillPool\":\"abcdefghijklmnopqrstuvwxyz\",\"preferOverlap\":true,\"showVocabulary\":true,\"enableShowSolution\":true,\"enableRetry\":true},\"l10n\":{\"check\":\"Check\",\"tryAgain\":\"Retry\",\"showSolution\":\"Show Solution\",\"found\":\"@found of @totalWords found\",\"timeSpent\":\"Time Spent\",\"score\":\"You got @score of @total points\",\"wordListHeader\":\"Find the words\"}}",
+            "filtered": "{\"taskDescription\":\"Find the words from the grid\",\"wordList\":\"Yosemite,ParkRanger,Campsite,Glacier,Zion,GrandCanyon,Trails\",\"behaviour\":{\"orientations\":{\"horizontal\":true,\"horizontalBack\":true,\"vertical\":true,\"verticalUp\":true,\"diagonal\":true,\"diagonalBack\":true,\"diagonalUp\":true,\"diagonalUpBack\":true},\"fillPool\":\"abcdefghijklmnopqrstuvwxyz\",\"preferOverlap\":true,\"showVocabulary\":true,\"enableShowSolution\":true,\"enableRetry\":true},\"l10n\":{\"check\":\"Check\",\"tryAgain\":\"Retry\",\"showSolution\":\"Show Solution\",\"found\":\"@found of @totalWords found\",\"timeSpent\":\"Time Spent\",\"score\":\"You got @score of @total points\",\"wordListHeader\":\"Find the words\"}}",
+            "slug": "word-jumble-national-parks",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": "[]",
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": "[]",
+            "default_language": null
+          },
+          "is_public": false,
+          "created_at": "2020-09-25T22:21:37.000000Z",
+          "updated_at": "2020-09-25T22:21:37.000000Z"
+        }
+      ],
+      "created_at": "2020-09-25T22:21:35.000000Z",
+      "updated_at": "2020-09-25T22:21:35.000000Z"
+    }
+  }
