@@ -99,4 +99,13 @@ class ProjectController extends Controller
     {
         return response(['message' => $this->projectRepository->toggleStarter($request->projects, $flag)], 200);
     }
+
+    /**
+     * Temporary function for clearing db cache data - will be removed in future releases
+     */
+    public function clearDBCache(): void
+    {
+        \Artisan::call('cache:clear database');
+        dd('Database cache cleared successfully!');
+    }
 }

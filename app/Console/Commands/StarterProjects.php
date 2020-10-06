@@ -46,8 +46,8 @@ class StarterProjects extends Command
         // get starter projects
         $starterProjects = resolve(ProjectRepository::class)->getStarterProjects(); // get all starter projects
         $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
-        // get users with 1 or 0 projects and not already in queue - limit of 100
-        $users = User::has('projects', '<=', 1)->with('projects:id,cloned_from')->whereNotIn('id', $inProgress)->limit(100)->get();
+        // get users with 1 or 0 projects and not already in queue - limit of 50
+        $users = User::has('projects', '<=', 1)->with('projects:id,cloned_from')->whereNotIn('id', $inProgress)->limit(50)->get();
 
         if (count($users)) {
             $releaseProgress = []; // array for containing the users IDs for which starter projects processed
