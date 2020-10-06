@@ -83,7 +83,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                 $playlists = $project->playlists;
                 foreach ($playlists as $playlist) {
-                    $cloned_activity = $this->playlistRepositroy->clone($cloned_project, $playlist, $token);
+                    $cloned_activity = $this->playlistRepository->clone($cloned_project, $playlist, $token);
                 }
 
                 $project->clone_ctr = $project->clone_ctr + 1;
