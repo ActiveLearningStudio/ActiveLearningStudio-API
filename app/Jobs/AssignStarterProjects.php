@@ -10,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AssignStarterProjects implements ShouldQueue
@@ -50,20 +49,26 @@ class AssignStarterProjects implements ShouldQueue
     {
         // get starter projects
         $starterProjects = resolve(ProjectRepository::class)->getStarterProjects();
-        \Log::info('Starter Project JOB started at: ' . now());
-        DB::transaction(function () use ($starterProjects, $projectRepository) {
+
+        try {
+            $userID = $this->user->id;
+            $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
+            $inProgress[$userID] = $userID; // append the user ID to in progress array
+            \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
+
             // assign all starter projects one by one
-            try {
-                foreach ($starterProjects as $project) {
-                    $projectRepository->clone($this->user, $project, $this->token);
-                }
-            } catch (\Exception $e) {
-                DB::rollback();
-                Log::info('Starter Projects Assigning failed:' . $e->getMessage());
-                Log::info($this->user);
+            foreach ($starterProjects as $project) {
+                $projectRepository->clone($this->user, $project, $this->token);
             }
-        });
-        \Log::info('Starter Project JOB Finished at: ' . now());
+        } catch (\Exception $e) {
+            Log::info('Starter Projects Assigning failed:' . $e->getMessage());
+            Log::info($this->user);
+        }
+        // as this job can take some time, so again get the fresh list of InProgress users
+        $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
+        // remove the id of this particular user from inProgress and update
+        unset($inProgress[$userID]);
+        \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
     }
 
 }

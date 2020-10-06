@@ -164,6 +164,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // activity-items
         Route::resource('activity-items', 'ActivityItemController');
+
+        // others
+        Route::get('clear/db/cache', 'ProjectController@clearDBCache');
     });
 
     // admin public routes for downloads / uploads
