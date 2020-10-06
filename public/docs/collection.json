@@ -2,22 +2,22 @@
     "variables": [],
     "info": {
         "name": "Curriki API",
-        "_postman_id": "0f498dac-a941-4af1-85c0-905593434474",
+        "_postman_id": "811b4fcf-a04d-4bb3-8f0c-b03aca65e7c1",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
     "item": [
         {
-            "name": "Google Classroom",
-            "description": "",
+            "name": "1. Authentication",
+            "description": "\nAPIs for Authentication",
             "item": [
                 {
-                    "name": "Save Access Token",
+                    "name": "Register",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/google-classroom\/access-token",
+                            "host": "localhost:8000",
+                            "path": "api\/register",
                             "query": []
                         },
                         "method": "POST",
@@ -33,7 +33,2261 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"access_token\": \"est\"\n}"
+                            "raw": "{\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john.doe@currikistudio.org\",\n    \"password\": \"Password123\",\n    \"organization_name\": \"Curriki\",\n    \"job_title\": \"Developer\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/login",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"john.doe@currikistudio.org\",\n    \"password\": \"Password123\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Login with Google",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/login\/google",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"tokenId\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...\",\n    \"tokenObj\": {\n        \"token_type\": \"Bearer\",\n        \"access_token\": \"ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...\",\n        \"scope\": \"email profile ...\",\n        \"login_hint\": \"AJDLj6JUa8yxXrhHdWRHIV0...\",\n        \"expires_in\": 3599,\n        \"id_token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6I...\",\n        \"session_state\": {\n            \"extraQueryParams\": {\n                \"authuser\": \"0\"\n            }\n        },\n        \"first_issued_at\": 1601535932504,\n        \"expires_at\": 1601539531504,\n        \"idpId\": \"google\"\n    }\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Forgot Password\n\nSend a password reset link to the given user.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/forgot-password",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"john.doe@currikistudio.org\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Reset Password\n\nReset the given user's password.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/reset-password",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"token\": \"ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...\",\n    \"email\": \"john.doe@currikistudio.org\",\n    \"password\": \"Password123\",\n    \"password_confirmation\": \"Password123\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Verify an Email Address\n\nMark the authenticated user's email address as verified.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/verify-email",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"id\": 1,\n    \"hash\": \"9e0f70124a2a88d5435...\",\n    \"signature\": \"467fbe9a00e7d367553f...\",\n    \"expires\": 1599754915\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/logout",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. User",
+            "description": "\nAPIs for user management",
+            "item": [
+                {
+                    "name": "Accept Terms",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/subscribe",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Accept Terms and Privacy Policy.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Authenticated User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/me",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the authenticated user detail.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Password",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/update-password",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"current_password\": \"Password123\",\n    \"password\": \"Password321\",\n    \"password_confirmation\": \"Password321\"\n}"
+                        },
+                        "description": "Update password of the specified user in storage.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the users.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/:user",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "user",
+                                    "key": "user",
+                                    "value": "1",
+                                    "description": "The Id of a user"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified user detail.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/:user",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "user",
+                                    "key": "user",
+                                    "value": "1",
+                                    "description": "The Id of a user"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"organization_name\": \"Curriki\",\n    \"website\": \"www.currikistudio.org\",\n    \"job_title\": \"Developer\",\n    \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\n    \"phone_number\": \"+1234567890\"\n}"
+                        },
+                        "description": "Update the specified user in storage.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/:user",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "user",
+                                    "key": "user",
+                                    "value": "1",
+                                    "description": "The Id of a user"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove the specified user from storage.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Project",
+            "description": "\nAPIs for project management",
+            "item": [
+                {
+                    "name": "Get Shared Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/load-shared",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified shared project detail.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Upload thumbnail",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/upload-thumb",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"thumb\": \"(binary)\"\n}"
+                        },
+                        "description": "Upload thumbnail image for a project",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Recent Projects",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/recent",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the recent projects of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Default Projects",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/default",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the default projects.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Projects Detail",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/detail",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the projects of a user with detail.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Share Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/share",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Share the specified project of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Clone Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/clone",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Clone the specified project of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Share Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/remove-share",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove share the specified project of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Projects",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the projects of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Test Project\",\n    \"description\": \"This is a test project.\",\n    \"thumb_url\": \"https:\\\/\\\/images.pexels.com\\\/photos\\\/2832382\",\n    \"is_public\": true\n}"
+                        },
+                        "description": "Create a new project in storage for a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified project detail.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Test Project\",\n    \"description\": \"This is a test project.\",\n    \"thumb_url\": \"https:\\\/\\\/images.pexels.com\\\/photos\\\/2832382\"\n}"
+                        },
+                        "description": "Update the specified project of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove the specified project of a user.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Playlist",
+            "description": "\nAPIs for playlist management",
+            "item": [
+                {
+                    "name": "Get Shared Playlist",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/playlists\/:playlist\/load-shared",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of a playlist"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified shared playlist of a Project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Reorder Playlists",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/playlists\/reorder",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"playlists\": []\n}"
+                        },
+                        "description": "Reorder playlists of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Clone Playlist",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/playlists\/:playlist\/clone",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                },
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of a playlist"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Clone a playlist of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Playlists",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/playlists",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the playlists of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Playlist",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/playlists",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "accusantium",
+                                    "description": "The Id of a project Example 1"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Math Playlist\",\n    \"order\": 0\n}"
+                        },
+                        "description": "Create a new playlist of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Playlist",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                },
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of a playlist"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified playlist of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Playlist",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                },
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of a playlist"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Math Playlist\",\n    \"order\": 0\n}"
+                        },
+                        "description": "Update the specified playlist of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Playlist",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                },
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of a playlist"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove the specified playlist of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Lti Playlist",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/playlists\/:playlist\/lti",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the lti playlist of a project.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5. Activity",
+            "description": "\nAPIs for activity management",
+            "item": [
+                {
+                    "name": "Clone Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/playlists\/:playlist\/activities\/:activity\/clone",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of a playlist"
+                                },
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Clone the specified activity of a playlist.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Upload thumbnail",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/upload-thumb",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"thumb\": \"(binary)\"\n}"
+                        },
+                        "description": "Upload thumbnail image for a activity",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Share Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity\/share",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Share the specified activity.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Share Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity\/remove-share",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove share the specified activity.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activity Detail",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity\/detail",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified activity in detail.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "H5P Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity\/h5p",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get H5P Resource Settings",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity\/h5p-resource-settings",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get H5P Resource Settings for a activity",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get H5P Resource Settings (Open)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity\/h5p-resource-settings-open",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get H5P Resource Settings for a activity",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activities",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of activities",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Science of Golf: Why Balls Have Dimples\",\n    \"type\": \"h5p\",\n    \"content\": \"iste\",\n    \"playlist_id\": 1,\n    \"order\": 2,\n    \"h5p_content_id\": 59,\n    \"thumb_url\": \"null\",\n    \"subject_id\": \"null\",\n    \"education_level_id\": \"null\"\n}"
+                        },
+                        "description": "Create a new activity.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified activity.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Science of Golf: Why Balls Have Dimples\",\n    \"type\": \"h5p\",\n    \"content\": \"molestiae\",\n    \"playlist_id\": 1,\n    \"shared\": false,\n    \"order\": 2,\n    \"h5p_content_id\": 59,\n    \"thumb_url\": \"null\",\n    \"subject_id\": \"null\",\n    \"education_level_id\": \"null\"\n}"
+                        },
+                        "description": "Update the specified activity.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Activity",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "1",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove the specified activity.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get H5P Resource Settings (Shared)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/:activity\/h5p-resource-settings-shared",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity",
+                                    "key": "activity",
+                                    "value": "suscipit",
+                                    "description": "The Id of a activity"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get H5P Resource Settings for a shared activity",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "6. Activity Type",
+            "description": "\nAPIs for activity type management",
+            "item": [
+                {
+                    "name": "Get Activity Type Items",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-types\/:activityType\/items",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of activity items of the specified activity type.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activity Types",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-types",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the activity types.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-types",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Audio\",\n    \"order\": 0,\n    \"image\": \"\\\/storage\\\/uploads\\\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\"\n}"
+                        },
+                        "description": "Create a new activity type.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-types\/:activity_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_type",
+                                    "key": "activity_type",
+                                    "value": "1",
+                                    "description": "The Id of a activity type"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified activity type.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-types\/:activity_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_type",
+                                    "key": "activity_type",
+                                    "value": "1",
+                                    "description": "The Id of a activity type"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Audio\",\n    \"order\": 0,\n    \"image\": \"\\\/storage\\\/uploads\\\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\"\n}"
+                        },
+                        "description": "Update the specified activity type.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-types\/:activity_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_type",
+                                    "key": "activity_type",
+                                    "value": "1",
+                                    "description": "The Id of a activity type"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove the specified activity type.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "7. Activity Item",
+            "description": "\nAPIs for activity item management",
+            "item": [
+                {
+                    "name": "Get Activity Items",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-items",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the activity items.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-items",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Audio Recorder\",\n    \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\n    \"order\": 1,\n    \"activity_type_id\": 1,\n    \"type\": \"h5p\",\n    \"h5pLib\": \"H5P.AudioRecorder 1.0\",\n    \"image\": \"\\\/storage\\\/activity-items\\\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\"\n}"
+                        },
+                        "description": "Create a new activity item.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-items\/:activity_item",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_item",
+                                    "key": "activity_item",
+                                    "value": "1",
+                                    "description": "The Id of a activity item"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified activity item.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-items\/:activity_item",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_item",
+                                    "key": "activity_item",
+                                    "value": "1",
+                                    "description": "The Id of a activity item"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Audio Recorder\",\n    \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\n    \"order\": 1,\n    \"activity_type_id\": 1,\n    \"type\": \"h5p\",\n    \"h5pLib\": \"H5P.AudioRecorder 1.0\",\n    \"image\": \"\\\/storage\\\/activity-items\\\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\"\n}"
+                        },
+                        "description": "Update the specified activity item.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activity-items\/:activity_item",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_item",
+                                    "key": "activity_item",
+                                    "value": "1",
+                                    "description": "The Id of a activity item"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove the specified activity item.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "8. CurrikiGo",
+            "description": "\nAPIs for publishing playlists to other LMSs",
+            "item": [
+                {
+                    "name": "Publish Playlist to Canvas",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/canvas\/projects\/:project\/playlists\/:playlist\/publish",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of the project"
+                                },
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of the playlist"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"setting_id\": 1,\n    \"counter\": 1\n}"
+                        },
+                        "description": "Publish the specified playlist to Canvas.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Publish Playlist to Moodle",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/moodle\/projects\/:project\/playlists\/:playlist\/publish",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of the project"
+                                },
+                                {
+                                    "id": "playlist",
+                                    "key": "playlist",
+                                    "value": "1",
+                                    "description": "The Id of the playlist"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"setting_id\": 1,\n    \"counter\": 1\n}"
+                        },
+                        "description": "Publish the specified playlist to Moodle.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "9. LMS Settings",
+            "description": "\nAPIs for LMS settings used for publishing",
+            "item": [
+                {
+                    "name": "Authenticated user LMS settings",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/lms-settings\/user\/me",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Display a listing of the LMS settings for authenticated user",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Projects based on LMS\/LTI settings",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/lms\/projects",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"lms_url\": \"quo\",\n    \"lti_client_id\": 12\n}"
+                        },
+                        "description": "Get a list of projects that belong to the same LMS\/LTI settings",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "10. CurrikiGo Course",
+            "description": "\nAPIs for fetching courses from LMSs",
+            "item": [
+                {
+                    "name": "Fetch a Course from Canvas",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/canvas\/projects\/:project\/fetch",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "nostrum",
+                                    "description": "The Id of the project Example 1"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"setting_id\": 17\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "11. Google Classroom",
+            "description": "\nAPIs for Google Classroom",
+            "item": [
+                {
+                    "name": "Save Access Token",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/access-token",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"access_token\": \"ducimus\"\n}"
                         },
                         "description": "Save GAPI access token in the database.",
                         "response": []
@@ -44,8 +2298,8 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/google-classroom\/courses",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/courses",
                             "query": []
                         },
                         "method": "GET",
@@ -72,15 +2326,15 @@
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/google-classroom\/projects\/:project\/copy",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/go\/projects\/:project\/copy",
                             "query": [],
                             "variable": [
                                 {
                                     "id": "project",
                                     "key": "project",
                                     "value": "9",
-                                    "description": "The ID of the project."
+                                    "description": "The Id of a project."
                                 }
                             ]
                         },
@@ -99,23 +2353,23 @@
                             "mode": "raw",
                             "raw": "{\n    \"course_id\": \"123\"\n}"
                         },
-                        "description": "Copy whole project to google classroom either as a new course\nor into an existing course.",
+                        "description": "Copy whole project to google classroom either as a new course or into an existing course.",
                         "response": []
                     }
                 }
             ]
         },
         {
-            "name": "general",
-            "description": "",
+            "name": "12. H5P",
+            "description": "\nAPIs for H5P management",
             "item": [
                 {
-                    "name": "Authorize a client to access the user's account.",
+                    "name": "Create H5P Settings",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/authorize",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p\/settings",
                             "query": []
                         },
                         "method": "GET",
@@ -138,96 +2392,12 @@
                     }
                 },
                 {
-                    "name": "Approve the authorization request.",
+                    "name": "Get H5Ps",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/authorize",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Deny the authorization request.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/authorize",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Authorize a client to access the user's account.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/token",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Get all of the authorized tokens for the authenticated user.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/tokens",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p",
                             "query": []
                         },
                         "method": "GET",
@@ -245,45 +2415,17 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
+                        "description": "Get a list of the H5Ps.",
                         "response": []
                     }
                 },
                 {
-                    "name": "Delete the given token.",
+                    "name": "Store H5P",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/tokens\/:token_id",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Get a fresh transient token cookie for the authenticated user.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/token\/refresh",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p",
                             "query": []
                         },
                         "method": "POST",
@@ -306,12 +2448,12 @@
                     }
                 },
                 {
-                    "name": "Get all of the clients for the authenticated user.",
+                    "name": "Get H5P",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/clients",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p\/:h5p",
                             "query": []
                         },
                         "method": "GET",
@@ -329,45 +2471,17 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
+                        "description": "Get the specified H5P",
                         "response": []
                     }
                 },
                 {
-                    "name": "Store a new client.",
+                    "name": "Update H5P",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/clients",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Update the given client.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/clients\/:client_id",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p\/:h5p",
                             "query": []
                         },
                         "method": "PUT",
@@ -385,17 +2499,17 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
+                        "description": "Update the specified H5P",
                         "response": []
                     }
                 },
                 {
-                    "name": "Delete the given client.",
+                    "name": "Remove H5P",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/clients\/:client_id",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p\/:h5p",
                             "query": []
                         },
                         "method": "DELETE",
@@ -413,18 +2527,26 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
+                        "description": "Remove the specified H5P",
                         "response": []
                     }
                 },
                 {
-                    "name": "Get all of the available scopes for the application.",
+                    "name": "Get H5P Embed",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/scopes",
-                            "query": []
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p\/embed\/:id",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The Id of a H5p"
+                                }
+                            ]
                         },
                         "method": "GET",
                         "header": [
@@ -441,18 +2563,55 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
+                        "description": "Get the specified H5P embed parameters",
                         "response": []
                     }
-                },
+                }
+            ]
+        },
+        {
+            "name": "13. Search",
+            "description": "\nAPIs for search management",
+            "item": [
                 {
-                    "name": "Get all of the personal access tokens for the authenticated user.",
+                    "name": "Deep Linking Search",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/personal-access-tokens",
-                            "query": []
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/search",
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "test",
+                                    "description": "Query to search.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "created_at",
+                                    "description": "Field to sort by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "order",
+                                    "value": "desc",
+                                    "description": "Order to sort by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "0",
+                                    "description": "Index where the pagination start from.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of records to return.",
+                                    "disabled": false
+                                }
+                            ]
                         },
                         "method": "GET",
                         "header": [
@@ -469,270 +2628,67 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
+                        "description": "Search projects, playlists and activities for deep linking",
                         "response": []
                     }
                 },
                 {
-                    "name": "Create a new personal access token for the user.",
+                    "name": "Advance search",
                     "request": {
                         "url": {
                             "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/personal-access-tokens",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Delete the given token.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "oauth\/personal-access-tokens\/:token_id",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Register",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/register",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Login",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/login",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Send a reset link to the given user.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/forgot-password",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Reset the given user's password.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/reset-password",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Mark the authenticated user's email address as verified.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/verify-email",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Resend the email verification notification.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/verify-email\/resend",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Logout",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/logout",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display the authenticated user.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/users\/me",
-                            "query": []
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/search\/advanced",
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "test",
+                                    "description": "Query to search.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "negativeQuery",
+                                    "value": "badword",
+                                    "description": "Terms that should not exist.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "userIds",
+                                    "value": "%5B1%5D",
+                                    "description": "Array of user ids to match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "model",
+                                    "value": "activities",
+                                    "description": "Index to filter by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "created_at",
+                                    "description": "Field to sort by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "order",
+                                    "value": "desc",
+                                    "description": "Order to sort by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "0",
+                                    "description": "Index where the pagination start from.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of records to return.",
+                                    "disabled": false
+                                }
+                            ]
                         },
                         "method": "GET",
                         "header": [
@@ -749,679 +2705,7 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display a listing of the user.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/users",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Store a newly created user in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/users",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display the specified user.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/users\/:user",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Update the specified user in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/users\/:user",
-                            "query": []
-                        },
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Remove the specified user from storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/users\/:user",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Upload thumb image for project",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/upload-thumb",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Share the specified project.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project\/share-project",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Remove share specified project.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project\/remove-share-project",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display a listing of the project.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Store a newly created project in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display the specified project.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Update the specified project in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project",
-                            "query": []
-                        },
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Remove the specified project from storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display a listing of the playlist.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project\/playlists",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Store a newly created playlist in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project\/playlists",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display the specified playlist.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Update the specified playlist in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
-                            "query": []
-                        },
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Remove the specified playlist from storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/projects\/:project\/playlists\/:playlist",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display a listing of the activity.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/playlists\/:playlist\/activities",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Store a newly created activity in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/playlists\/:playlist\/activities",
-                            "query": []
-                        },
-                        "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display the specified activity.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/playlists\/:playlist\/activities\/:activity",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Update the specified activity in storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/playlists\/:playlist\/activities\/:activity",
-                            "query": []
-                        },
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Remove the specified activity from storage.",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/playlists\/:playlist\/activities\/:activity",
-                            "query": []
-                        },
-                        "method": "DELETE",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "Display error",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "host": "currikiapi.localhost",
-                            "path": "api\/v1\/error",
-                            "query": []
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "[]"
-                        },
-                        "description": "",
+                        "description": "Advance search for projects, playlists and activities",
                         "response": []
                     }
                 }

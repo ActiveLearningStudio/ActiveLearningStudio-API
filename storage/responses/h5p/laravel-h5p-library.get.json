@@ -1,0 +1,9 @@
+{
+    "name": "H5P.Accordion",
+    "title": "Accordion",
+    "majorVersion": 1,
+    "minorVersion": 0,
+    "patchVersion": 24,
+    "restricted": false,
+    "tutorial_url": ""
+}

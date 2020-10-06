@@ -11,38 +11,38 @@ class GetCoursesCommand implements Command
 {
     /**
      * API URL
-     * 
+     *
      * @var string
      */
     public $apiURL;
     /**
      * Access Token for api requests
-     * 
+     *
      * @var string
      */
     public $accessToken;
     /**
      * HTTP Client instance
-     * 
+     *
      * @var \GuzzleHttp\Client
      */
     public $httpClient;
     /**
      * Account Id
-     * 
+     *
      * @var int|string
      */
     private $accountId;
     /**
      * Program name
-     * 
+     *
      * @var string
      */
     private $programName;
 
     /**
      * Creates an instance of the command class
-     * 
+     *
      * @param int $accountId
      * @param string $programName
      * @return void
@@ -55,21 +55,24 @@ class GetCoursesCommand implements Command
 
     /**
      * Execute an API request for getting courses
-     * 
+     *
      * @return string|null
      */
     public function execute()
     {
         $response = null;
         try {
-            $url = $this->apiURL . '/accounts/' . $this->accountId . '/courses';
-            $url .= $this->programName ? '?search_term=' . $this->programName : '';
+            // $url = $this->apiURL . '/accounts/' . $this->accountId . '/courses';
+            // $url .= $this->programName ? '?search_term=' . $this->programName : '';
+            // $url = $this->apiURL . '/users/' . $this->accountId . '/courses';
+            $url = $this->apiURL . '/courses';
+            $url .= '?enrollment_state=active';
             $response = $this->httpClient->request('GET', $url, [
-                    'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json']
-                ])->getBody()->getContents();
+                'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json']
+            ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}
-        
+
         return $response;
     }
 }

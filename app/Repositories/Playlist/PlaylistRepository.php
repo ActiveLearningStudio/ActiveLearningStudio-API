@@ -78,7 +78,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             ], $playlist['id']);
 
             // Reorder activities
-            foreach($playlist['activities'] as $activity){
+            foreach ($playlist['activities'] as $activity) {
                 $act = Activity::find($activity['id']);
                 $act->order = $activity['order'];
                 $act->playlist_id = $playlist['id'];
@@ -89,11 +89,12 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
 
     /**
      * To Clone Playlist and associated activities
+     *
      * @param Project $project
      * @param Playlist $playlist
      * @param string $token
      */
-    public function clone(Project $project, Playlist $playlist, $token)
+    public function clone(Project $project, Playlist $playlist, string $token)
     {
         $isDuplicate = false;
         if($playlist->project_id == $project->id)
@@ -107,7 +108,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             'title' => ($isDuplicate) ? $playlist->title."-COPY" : $playlist->title,
             'order' => ($isDuplicate) ? $playlist->order + 1 : $playlist->order,
         ];
-        
+
         $cloned_playlist = $project->playlists()->create($play_list_data);
 
         $activities = $playlist->activities;

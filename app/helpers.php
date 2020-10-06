@@ -56,11 +56,12 @@ if (!function_exists('custom_url')) {
     }
 }
 
-if (!function_exists('invoke_starter_projects_command')){
+if (!function_exists('invoke_starter_projects_command')) {
     /**
      * Invokes the starter projects command in background
      */
-    function invoke_starter_projects_command(){
+    function invoke_starter_projects_command()
+    {
         dispatch(function () {
             \Artisan::call('project:starters');
         });
