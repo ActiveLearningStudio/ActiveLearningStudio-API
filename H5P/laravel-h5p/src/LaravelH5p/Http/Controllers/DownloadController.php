@@ -20,7 +20,7 @@ class DownloadController extends Controller
      *
      * Download the specified H5P
      *
-     * @urlParam id required The Id of a H5P content
+     * @urlParam id required The Id of a H5P content Example 1
      *
      * @response {
      *  "Content-Type" => "application/zip",

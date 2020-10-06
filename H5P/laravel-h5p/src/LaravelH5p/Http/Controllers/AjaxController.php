@@ -22,7 +22,11 @@ class AjaxController extends Controller
      * Get H5P libraries
      *
      * Get a list of libraries
-     *
+     * 
+     * @urlParam machineName H5P.Dictation 1.0
+     * @urlParam majorVersion Example 1
+     * @urlParam minorVersion Example 0
+     * 
      * @responseFile responses/h5p/h5p-ajax-libraries.json
      *
      * @return Response
@@ -75,6 +79,10 @@ class AjaxController extends Controller
      *
      * Get single H5P library details
      *
+     * @urlParam machineName string H5P.Dictation 1.0
+     * @urlParam majorVersion string Example 1
+     * @urlParam minorVersion string Example 0
+     * 
      * @responseFile responses/h5p/h5p-ajax-library.json
      *
      * @return Response
@@ -90,7 +98,7 @@ class AjaxController extends Controller
      * Get H5P Content Type Cache
      *
      * Get H5P Content Type Cache mainly for H5P Hub
-     *
+     * 
      * @responseFile responses/h5p/h5p-ajax-content-type-cache.json
      *
      * @return Response
@@ -107,7 +115,7 @@ class AjaxController extends Controller
      *
      * Install H5P library and list all
      *
-     * @bodyParam id required Example: H5P.Dictation 1.0
+     * @bodyParam id int required Example H5P.Dictation 1.0
      * 
      * @responseFile responses/h5p/h5p-ajax-content-type-cache.json
      *
@@ -128,7 +136,7 @@ class AjaxController extends Controller
      *
      * Upload H5P library and list all
      *
-     * @bodyParam h5p required (.h5p file) Example: example-h5p.h5p
+     * @bodyParam h5p file required Example example-h5p.h5p
      * 
      * @responseFile responses/h5p/h5p-ajax-library-upload.json
      *
@@ -207,11 +215,11 @@ class AjaxController extends Controller
      *
      * Upload H5P library and list all
      *
-     * @bodyParam contentId int required H5P content id
-     * @bodyParam score int required H5P score
-     * @bodyParam maxScore int required H5P maximum score
-     * @bodyParam opened int required H5P opened
-     * @bodyParam finished int required H5P finished
+     * @bodyParam contentId int required H5P content id Example 1
+     * @bodyParam score int required H5P score Example 2
+     * @bodyParam maxScore int required H5P maximum score Example 3
+     * @bodyParam opened float required H5P opened Example 3.333
+     * @bodyParam finished float required H5P finished Example 8.9898
      * 
      * @response {
      *   "success": [
@@ -315,7 +323,7 @@ class AjaxController extends Controller
      *
      * Save H5P content user data
      *
-     * @bodyParam content_id int required H5P content id
+     * @bodyParam content_id int required H5P content id Example 1
      * @bodyParam data_type string required Example H5P-Blanks-question-important-description-open
      * @bodyParam sub_content_id int required Example 0
      * 

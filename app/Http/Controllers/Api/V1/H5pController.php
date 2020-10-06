@@ -63,9 +63,9 @@ class H5pController extends Controller
      
      * Retrieve H5P settings which is used to create new H5P content
      * 
-     * @urlParam machineName string required
-     * @urlParam majorVersion string required
-     * @urlParam minorVersion string required
+     * @urlParam machineName required H5P.Dictation 1.0
+     * @urlParam majorVersion required Example 1
+     * @urlParam minorVersion required Example 0
      * 
      * @responseFile responses/h5p/h5p-settings.json
      *
@@ -239,7 +239,7 @@ class H5pController extends Controller
      *
      * Get the specified H5P
      *
-     * @urlParam id int required The Id of a H5p
+     * @urlParam id required int H5P content id Example 1
      *
      * @responseFile responses/h5p/h5p-edit.json
      *
@@ -293,8 +293,8 @@ class H5pController extends Controller
      * 
      * Get H5P based on activity id
      *
-     * @urlParam activity required The Id of a activity Example: 1
-     * @urlParam visibility The status of visibility
+     * @urlParam activity required The Id of a activity Example 1
+     * @urlParam visibility The status of visibility Example public
      *
      * @responseFile responses/h5p/h5p-activity.json
      *
@@ -341,7 +341,7 @@ class H5pController extends Controller
      *
      * Update the specified H5P
      *
-     * @urlParam id required The Id of a H5p Example 5
+     * @urlParam id required The H5P content id Example 5
      *
      * @response 200 {
      *   "success": "Content updated.",
@@ -501,7 +501,7 @@ class H5pController extends Controller
      *
      * Get the specified H5P embed parameters
      *
-     * @urlParam id int required The Id of a H5p Example: 1
+     * @urlParam id int required The Id of a H5p Example 1
      *
      * @responseFile responses/h5p/h5p-embed.json
      *
@@ -526,7 +526,7 @@ class H5pController extends Controller
      *
      * Remove the specified H5P
      *
-     * @urlParam id required The Id of a H5P Example: 1
+     * @urlParam id required The H5P content id Example 1
      *
      * @response {
      *   "message": "H5P content has been deleted successfully."
