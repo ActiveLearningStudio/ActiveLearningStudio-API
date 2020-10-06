@@ -48,7 +48,7 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * To reorder the list of projects
      * @param type $projects
      */
-    public function saveList($projects);
+    public function saveList(array $projects);
     
     /**
      * To Populate missing order number, One time script

@@ -101,7 +101,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
                $isDuplicate = true;
         
         if($isDuplicate) {
-            \DB::table('playlists')->where('project_id', '=', $project->id)->where('order', '>', $playlist->order)->increment('order', 1);
+            Playlist::where('project_id', $project->id)->where('order', '>', $playlist->order)->increment('order', 1);
         }
         
         $play_list_data = [

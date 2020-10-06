@@ -236,7 +236,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
        $isDuplicate = ($activity->playlist_id == $playlist->id);
             
         if($isDuplicate) {
-            \DB::table('activities')->where('playlist_id', '=', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
+            Activity::where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
         }
 
         $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");

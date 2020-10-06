@@ -6,12 +6,8 @@ use App\Exceptions\GeneralException;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
 use App\User;
-use Illuminate\Support\Facades\Storage;
 use App\Repositories\BaseRepository;
-use App\Repositories\Project\ProjectRepositoryInterface;
-use Illuminate\Support\Collection;
 use App\Repositories\Activity\ActivityRepositoryInterface;
-use App\Repositories\BaseRepository;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
@@ -101,13 +97,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'starter_project' => false,
                 'cloned_from' => $project->id,
             ];
-            
+
             return \DB::transaction(function () use ($authenticated_user, $data, $project, $token) {
                 $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
                 }
-                
+
                 $playlists = $project->playlists;
                 foreach ($playlists as $playlist) {
                     $cloned_activity = $this->playlistRepository->clone($cloned_project, $playlist, $token);

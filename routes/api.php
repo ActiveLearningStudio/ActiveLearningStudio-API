@@ -46,7 +46,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/detail', 'ProjectController@detail');
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
-        Route::get('/projects/update-order-number', 'ProjectController@populateOrderNumber');
+        Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('projects/{project}/reorder', 'ProjectController@reorder');
         Route::apiResource('projects', 'ProjectController');
