@@ -30,7 +30,7 @@ class H5pController extends Controller
      *
      * Get a list of the H5Ps.
      *
-     * @responseFile responses/activity/h5p-index.json
+     * @responseFile responses/h5p/h5p-index.json
      * 
      * @return JsonResponse
      */
@@ -67,7 +67,7 @@ class H5pController extends Controller
      * @urlParam majorVersion string required
      * @urlParam minorVersion string required
      * 
-     * @responseFile responses/activity/activity-settings.json
+     * @responseFile responses/h5p/h5p-settings.json
      *
      * @param Request $request
      * @return Response
@@ -296,7 +296,7 @@ class H5pController extends Controller
      * @urlParam activity required The Id of a activity Example: 1
      * @urlParam visibility The status of visibility
      *
-     * @responseFile responses/h5p-activity.json
+     * @responseFile responses/h5p/h5p-activity.json
      *
      * @param Activity $activity
      * @param $visibility

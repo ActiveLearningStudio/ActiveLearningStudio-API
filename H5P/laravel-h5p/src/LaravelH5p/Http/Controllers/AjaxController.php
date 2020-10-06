@@ -23,7 +23,7 @@ class AjaxController extends Controller
      *
      * Get a list of libraries
      *
-     * @responseFile responses/activity/h5p-ajax-libraries.json
+     * @responseFile responses/h5p/h5p-ajax-libraries.json
      *
      * @return Response
      */
@@ -75,7 +75,7 @@ class AjaxController extends Controller
      *
      * Get single H5P library details
      *
-     * @responseFile responses/activity/h5p-ajax-library.json
+     * @responseFile responses/h5p/h5p-ajax-library.json
      *
      * @return Response
      */
@@ -91,7 +91,7 @@ class AjaxController extends Controller
      *
      * Get H5P Content Type Cache mainly for H5P Hub
      *
-     * @responseFile responses/activity/h5p-ajax-content-type-cache.json
+     * @responseFile responses/h5p/h5p-ajax-content-type-cache.json
      *
      * @return Response
      */
@@ -109,7 +109,7 @@ class AjaxController extends Controller
      *
      * @bodyParam id required Example: H5P.Dictation 1.0
      * 
-     * @responseFile responses/activity/h5p-ajax-content-type-cache.json
+     * @responseFile responses/h5p/h5p-ajax-content-type-cache.json
      *
      * @return Response
      */
@@ -130,7 +130,7 @@ class AjaxController extends Controller
      *
      * @bodyParam h5p required (.h5p file) Example: example-h5p.h5p
      * 
-     * @responseFile responses/activity/h5p-ajax-library-upload.json
+     * @responseFile responses/h5p/h5p-ajax-library-upload.json
      *
      * @return Response
      */
