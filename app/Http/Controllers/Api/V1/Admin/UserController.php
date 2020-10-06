@@ -101,7 +101,7 @@ class UserController extends Controller
      */
     public function assignStarterProjects(): void
     {
-        \Artisan::call('project:starters');
+        invoke_starter_projects_command();
         dd("Assign starter projects command invoked successfully.");
     }
 

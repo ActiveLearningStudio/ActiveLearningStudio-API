@@ -3,6 +3,7 @@
 namespace App\Repositories\Project;
 
 use App\Models\Project;
+use App\User;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\BaseRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
@@ -49,6 +50,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         return $is_updated;
     }
+    
+    /**
+     * Get latest order of project for User
+     * @param $authenticated_user 
+     * @return int
+     */
+    public function getOrder($authenticated_user)
+    {
+        return $authenticated_user->projects()->orderBy('order','desc')
+            ->value('order') ?? 0;
+    }
 
     /**
      * To clone project and associated playlists
@@ -60,21 +72,36 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
-        
+            
+            $userProjectIds = $authenticated_user->projects->pluck('id')->toArray();
+            
+            $isDuplicate = false;
+            if (in_array($project->id, $userProjectIds))
+                        $isDuplicate = true;
+            
+            if($isDuplicate) {
+                $authenticated_user->projects()->where('order', '>', $project->order)->increment('order', 1);
+            }
+            
             $data = [
-                'name' => $project->name,
+                'name' => ($isDuplicate) ? $project->name."-COPY" : $project->name,
                 'description' => $project->description,
                 'thumb_url' => $new_image_url,
                 'shared' => $project->shared,
+                'order' => ($isDuplicate) ? $project->order + 1 : $this->getOrder($authenticated_user) + 1,
                 'starter_project' => false,
                 'cloned_from'=> $project->id,
             ];
+            
+            
             
             return \DB::transaction(function () use ($authenticated_user, $data, $project, $token) {
                 $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
                 }
+                
+                
 
                 $playlists = $project->playlists;
                 foreach ($playlists as $playlist) {
@@ -185,6 +212,40 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query_user->where('email', $defaultEmail);
         })->get();
         return $projects;
+    }
+    
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber()
+    {
+        $users = User::all();
+        foreach($users as $user) {
+            $projects = $user->projects()->orderBy('created_at')->get();
+            if(!empty($projects)) {
+                $order = 1;
+                foreach($projects as $project) {
+                   $project->order = $order;
+                   $project->save();
+                   $order++;
+                }
+            }
+        }
+    }
+    
+    
+    /**
+     * To reorder Projects
+     *
+     * @param array $playlists
+     */
+    public function saveList(array $projects)
+    {
+        foreach ($projects as $project) {
+            $this->update([
+                'order' => $project['order'],
+            ], $project['id']);
+        }
     }
 
 }

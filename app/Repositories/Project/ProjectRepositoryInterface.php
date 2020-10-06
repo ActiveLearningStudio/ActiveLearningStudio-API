@@ -37,4 +37,22 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return Project $projects
      */
     public function fetchDefault($defaultEmail);
+    
+    /**
+     * To reorder the list of projects
+     * @param type $projects
+     */
+    public function saveList($projects);
+    
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber();
+    
+    /**
+     * Get latest order of project for User
+     * @param $authenticated_user 
+     * @return int
+     */
+    public function getOrder($authenticated_user);
 }

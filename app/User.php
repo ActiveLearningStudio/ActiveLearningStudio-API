@@ -108,7 +108,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function projects()
     {
-        return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->orderBy('order','desc')->withTimestamps();
     }
 
     /**

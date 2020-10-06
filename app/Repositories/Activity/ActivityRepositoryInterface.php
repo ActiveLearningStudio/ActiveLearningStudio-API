@@ -56,4 +56,11 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * @return is_public value
      */
     public function getPlaylistIsPublicValue($playlistId);
+    
+    /**
+     * Get latest order of activity for Playlist
+     * @param $playlist_id
+     * @return int
+     */
+    public function getOrder($playlist_id);
 }
