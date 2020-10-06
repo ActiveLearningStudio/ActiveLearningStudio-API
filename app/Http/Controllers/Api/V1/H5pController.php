@@ -60,7 +60,7 @@ class H5pController extends Controller
 
     /**
      * Create H5P Settings
-     
+     *
      * Retrieve H5P settings which is used to create new H5P content
      * 
      * @urlParam machineName required H5P.Dictation 1.0

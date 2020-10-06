@@ -222,15 +222,11 @@ class AjaxController extends Controller
      * @bodyParam finished float required H5P finished Example 8.9898
      * 
      * @response {
-     *   "success": [
-     *     "true"
-     *   ]
+     *   "success": "true"
      * }
      * 
      * @response {
-     *   "success": [
-     *     "false"
-     *   ]
+     *   "success": "false"
      * }
      *
      * @return Response
@@ -328,9 +324,7 @@ class AjaxController extends Controller
      * @bodyParam sub_content_id int required Example 0
      * 
      * @response {
-     *   "success": [
-     *     "true"
-     *   ]
+     *   "success": "true"
      * }
      *
      * @return Response
