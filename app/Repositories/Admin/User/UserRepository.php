@@ -162,7 +162,7 @@ class UserRepository extends BaseRepository
             throw_if(!$import->importedCount && !$import->failures()->count(), new GeneralException('Empty or bad formatted file.'));
 
             $error = $this->bulkError($import);
-            invoke_starter_projects_command(); // start assigning the starter projects in the background
+
             return [
                 'report' => $error ? custom_url('storage/temporary/users-import-report.csv') : false,
                 'message' => $error ? 'Failed to import some rows data, please download detailed error report.' : 'All users data imported successfully!'
