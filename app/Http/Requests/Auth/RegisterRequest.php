@@ -30,6 +30,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|email|max:255|unique:users',
             'password' => ['required', 'string', new StrongPassword],
             'organization_name' => 'nullable|string|max:50',
+            'organization_type' => 'required|string|max:255',
             'job_title' => 'nullable|string|max:255',
         ];
     }
