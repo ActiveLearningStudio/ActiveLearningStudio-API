@@ -448,7 +448,7 @@ class ProjectController extends Controller
      * Reorder projects of a user.
      *
      * @bodyParam projects array required projects of a user
-     *
+     * @responseFile responses/playlist/playlists.json
      * @param Request $request
      * @return Response
      */
