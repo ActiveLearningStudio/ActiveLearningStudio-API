@@ -227,7 +227,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
     }
 
-
     /**
      * To reorder Projects
      *

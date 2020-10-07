@@ -660,5 +660,6 @@ class ActivityController extends Controller
     {
         $this->activityRepository->populateOrderNumber();
     }
+    
 }
 

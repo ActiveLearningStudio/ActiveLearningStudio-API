@@ -232,8 +232,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) {
             $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
         }
-
         $isDuplicate = ($activity->playlist_id == $playlist->id);
+        
         if ($isDuplicate) {
             Activity::where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
         }
@@ -317,7 +317,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         return ($playlist) ? $playlist : false;
     }
-
+    
     /**
      * Get latest order of activity for Playlist
      * @param $playlist_id
@@ -329,7 +329,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ->orderBy('order', 'desc')
             ->value('order') ?? 0;
     }
-
+    
     /**
      * To Populate missing order number, One time script
      */
