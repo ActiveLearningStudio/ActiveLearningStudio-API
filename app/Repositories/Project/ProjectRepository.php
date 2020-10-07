@@ -235,7 +235,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * To reorder Projects
      *
-     * @param array $playlists
+     * @param array $projects
      */
     public function saveList(array $projects)
     {
