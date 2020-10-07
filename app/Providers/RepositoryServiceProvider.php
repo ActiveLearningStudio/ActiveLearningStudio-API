@@ -2,28 +2,30 @@
 
 namespace App\Providers;
 
+use App\Repositories\Activity\ActivityRepository;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepository;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\ActivityType\ActivityTypeRepository;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use App\Repositories\BaseRepository;
-use App\Repositories\EloquentRepositoryInterface;
-use App\Repositories\Activity\ActivityRepository;
-use App\Repositories\Activity\ActivityRepositoryInterface;
-use App\Repositories\Playlist\PlaylistRepository;
-use App\Repositories\Playlist\PlaylistRepositoryInterface;
-use App\Repositories\Project\ProjectRepository;
-use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
-use App\Repositories\User\UserRepository;
-use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\EloquentRepositoryInterface;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Repositories\H5pLibrary\H5pLibraryRepository;
 use App\Repositories\H5pLibrary\H5pLibraryRepositoryInterface;
 use App\Repositories\Metrics\MetricsRepositoryInterface;
 use App\Repositories\Metrics\MetricsRepository;
+use App\Repositories\Playlist\PlaylistRepository;
+use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\Repositories\Project\ProjectRepository;
+use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\Team\TeamRepository;
+use App\Repositories\Team\TeamRepositoryInterface;
+use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepository;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -49,6 +51,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(H5pLibraryRepositoryInterface::class, H5pLibraryRepository::class);
         $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
         $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
+        $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
     }
 
     /**
