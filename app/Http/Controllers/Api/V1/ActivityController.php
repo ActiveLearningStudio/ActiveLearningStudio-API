@@ -3,24 +3,28 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\PlaylistResource;
-use App\Models\Activity;
-use App\Models\Playlist;
-use App\Models\Project;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
+use App\Http\Resources\V1\H5pActivityResource;
+use App\Http\Resources\V1\PlaylistResource;
+use App\Jobs\CloneActivity;
+use App\Models\Activity;
+use App\Models\Playlist;
 use App\Repositories\Activity\ActivityRepositoryInterface;
-use App\User;
+use Djoudi\LaravelH5p\Events\H5pEvent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Djoudi\LaravelH5p\Events\H5pEvent;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\V1\H5pActivityResource;
 use H5pCore;
 
+/**
+ * @group 5. Activity
+ *
+ * APIs for activity management
+ */
 class ActivityController extends Controller
 {
 
@@ -37,7 +41,11 @@ class ActivityController extends Controller
     }
 
     /**
-     * Display a listing of the activity.
+     * Get Activities
+     *
+     * Get a list of activities
+     *
+     * @responseFile responses/activity/activities.json
      *
      * @return Response
      */
@@ -49,7 +57,21 @@ class ActivityController extends Controller
     }
 
     /**
-     * Upload thumb image for activity
+     * Upload thumbnail
+     *
+     * Upload thumbnail image for a activity
+     *
+     * @bodyParam thumb image required Thumbnail image to upload Example: (binary)
+     *
+     * @response {
+     *   "thumbUrl": "/storage/activities/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid image."
+     *   ]
+     * }
      *
      * @param Request $request
      * @return Response
@@ -74,13 +96,34 @@ class ActivityController extends Controller
     }
 
     /**
-     * Store a newly created activity in storage.
+     * Create Activity
+     *
+     * Create a new activity.
+     *
+     * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
+     * @bodyParam type string required The type of a activity Example: h5p
+     * @bodyParam content string required The content of a activity Example:
+     * @bodyParam playlist_id int The Id of a playlist Example: 1
+     * @bodyParam order int The order number of a activity Example: 2
+     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam thumb_url string The image url of thumbnail Example: null
+     * @bodyParam subject_id string The Id of a subject Example: null
+     * @bodyParam education_level_id string The Id of a education level Example: null
+     *
+     * @responseFile 201 responses/activity/activity.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Could not create activity. Please try again later."
+     *   ]
+     * }
      *
      * @param Request $request
      * @return Response
      */
     public function store(Request $request)
     {
+        // TODO: need to update validation
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
@@ -92,7 +135,9 @@ class ActivityController extends Controller
             'subject_id' => 'string',
             'education_level_id' => 'string',
         ]);
+
         $data['is_public'] = $this->activityRepository->getPlaylistIsPublicValue($data['playlist_id']);
+        $data['order'] = $this->activityRepository->getOrder($data['playlist_id']) + 1;
         $activity = $this->activityRepository->create($data);
 
         if ($activity) {
@@ -107,7 +152,13 @@ class ActivityController extends Controller
     }
 
     /**
-     * Display the specified activity.
+     * Get Activity
+     *
+     * Get the specified activity.
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/activity/activity.json
      *
      * @param Activity $activity
      * @return Response
@@ -120,7 +171,29 @@ class ActivityController extends Controller
     }
 
     /**
-     * Update the specified activity in storage.
+     * Update Activity
+     *
+     * Update the specified activity.
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
+     * @bodyParam type string required The type of a activity Example: h5p
+     * @bodyParam content string required The content of a activity Example:
+     * @bodyParam playlist_id int The Id of a playlist Example: 1
+     * @bodyParam shared bool required The status of share of a activity Example: false
+     * @bodyParam order int The order number of a activity Example: 2
+     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam thumb_url string The image url of thumbnail Example: null
+     * @bodyParam subject_id string The Id of a subject Example: null
+     * @bodyParam education_level_id string The Id of a education level Example: null
+     *
+     * @responseFile responses/activity/activity.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update activity."
+     *   ]
+     * }
      *
      * @param Request $request
      * @param Activity $activity
@@ -128,6 +201,7 @@ class ActivityController extends Controller
      */
     public function update(Request $request, Activity $activity)
     {
+        // TODO: need validation
         $is_updated = $this->activityRepository->update($request->only([
             'playlist_id',
             'title',
@@ -224,9 +298,14 @@ class ActivityController extends Controller
         return $content['id'];
     }
 
-
     /**
-     * Display the specified activity in detail.
+     * Get Activity Detail
+     *
+     * Get the specified activity in detail.
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/activity/activity-with-detail.json
      *
      * @param Activity $activity
      * @return Response
@@ -236,6 +315,7 @@ class ActivityController extends Controller
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
         if ($activity->playlist->project->user) {
+            // TODO: is this correct?
             $data['user_name'] = $activity->playlist->project->user;
             $data['user_id'] = $activity->playlist->project->id;
         }
@@ -255,7 +335,91 @@ class ActivityController extends Controller
     }
 
     /**
-     * Remove the specified activity from storage.
+     * Share Activity
+     *
+     * Share the specified activity.
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/activity/activity-shared.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to share activity."
+     *   ]
+     * }
+     *
+     * @param Activity $activity
+     * @return Response
+     */
+    public function share(Activity $activity)
+    {
+        $is_updated = $this->activityRepository->update([
+            'shared' => true,
+        ], $activity->id);
+
+        if ($is_updated) {
+            return response([
+                'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to share activity.'],
+        ], 500);
+    }
+
+    /**
+     * Remove Share Activity
+     *
+     * Remove share the specified activity.
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/activity/activity.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to remove share activity."
+     *   ]
+     * }
+     *
+     * @param Activity $activity
+     * @return Response
+     */
+    public function removeShare(Activity $activity)
+    {
+        $is_updated = $this->activityRepository->update([
+            'shared' => false,
+        ], $activity->id);
+
+        if ($is_updated) {
+            return response([
+                'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to remove share activity.'],
+        ], 500);
+    }
+
+    /**
+     * Remove Activity
+     *
+     * Remove the specified activity.
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @response {
+     *   "message": "Activity has been deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to delete activity."
+     *   ]
+     * }
      *
      * @param Activity $activity
      * @return Response
@@ -266,7 +430,7 @@ class ActivityController extends Controller
 
         if ($is_deleted) {
             return response([
-                'message' => 'Activity is deleted successfully.',
+                'message' => 'Activity has been deleted successfully.',
             ], 200);
         }
 
@@ -276,48 +440,57 @@ class ActivityController extends Controller
     }
 
     /**
+     * Clone Activity
      *
-     * @apiResourceCollection  App\Http\Resources\V1\PlaylistResource
-     * @apiResourceCollection  App\Http\Resources\V1\ActivityResource
-     * @apiResourceModel  App\Models\Playlist
-     * @apiResourceModel  App\Models\Activity
+     * Clone the specified activity of a playlist.
      *
-     * @response  {
-     *  "message": "Activity is cloned successfully",
-     * },
-     *  {
-     *  "errors": "Not a Public PlayList",
-     * },
-     *  {
-     *  "errors": "Failed to clone activity.",
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @response {
+     *   "message": "Activity is being cloned in background!"
      * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Not a Public Activity."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to clone activity."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Playlist $playlist
+     * @param Activity $activity
+     * @return Response
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
         if (!$activity->is_public) {
             return response([
                 'errors' => ['Not a Public Activity.'],
-            ], 500);
+            ], 400);
         }
 
-        $cloned_activity = $this->activityRepository->clone($playlist, $activity, $request->bearerToken());
-
-        if ($cloned_activity) {
-            return response([
-                'message' => 'Activity is cloned successfully.',
-            ], 200);
-        }
+        CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
 
         return response([
-            'errors' => ['Failed to clone activity.'],
-        ], 500);
+            'message' => 'Activity is being cloned in background!',
+        ], 200);
     }
 
     /**
-     * Activity H5P
+     * H5P Activity
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/activity/activity-playlists.json
      *
      * @param Activity $activity
-     *
      * @return Response
      */
     public function h5p(Activity $activity)
@@ -351,7 +524,19 @@ class ActivityController extends Controller
     }
 
     /**
-     * Get H5P Resource Settings for Activity
+     * Get H5P Resource Settings
+     *
+     * Get H5P Resource Settings for a activity
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/h5p/h5p-resource-settings-open.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Activity doesn't belong to this user."
+     *   ]
+     * }
      *
      * @param Activity $activity
      * @return Response
@@ -362,7 +547,7 @@ class ActivityController extends Controller
 
         if (!$authenticated_user->isAdmin() && !$this->hasPermission($activity)) {
             return response([
-                'errors' => ["Activity doesn't belong to this user"]
+                'errors' => ["Activity doesn't belong to this user."]
             ], 400);
         }
 
@@ -381,7 +566,13 @@ class ActivityController extends Controller
     }
 
     /**
-     * Get H5P Resource Settings for Activity
+     * Get H5P Resource Settings (Open)
+     *
+     * Get H5P Resource Settings for a activity
+     *
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/h5p/h5p-resource-settings-open.json
      *
      * @param Activity $activity
      * @return Response
@@ -405,7 +596,19 @@ class ActivityController extends Controller
     }
 
     /**
-     * Get H5P Resource Settings for Activity
+     * Get H5P Resource Settings (Shared)
+     *
+     * Get H5P Resource Settings for a shared activity
+     *
+     * @urlParam activity required The Id of a activity
+     *
+     * @responseFile responses/h5p/h5p-resource-settings-open.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Activity not found."
+     *   ]
+     * }
      *
      * @param Activity $activity
      * @return Response
@@ -449,4 +652,6 @@ class ActivityController extends Controller
 
         return false;
     }
+    
 }
+

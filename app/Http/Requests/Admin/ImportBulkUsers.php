@@ -24,7 +24,18 @@ class ImportBulkUsers extends FormRequest
     public function rules()
     {
         return [
-            'import_file' => 'required|mimes:csv,txt',
+            'import_file' => 'required|mimes:csv,txt|max:30000',
+        ];
+    }
+
+    /**
+     * Custom messages
+     * @return array|string[]
+     */
+    public function messages()
+    {
+        return [
+            'import_file.mimes' => 'The import file must be a file of type: CSV.',
         ];
     }
 }

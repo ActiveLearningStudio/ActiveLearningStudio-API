@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityItem;
 use App\Http\Resources\V1\ActivityItemResource;
+use App\Models\ActivityItem;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use Illuminate\Http\Request;
@@ -12,6 +12,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @group 7. Activity Item
+ *
+ * APIs for activity item management
+ */
 class ActivityItemController extends Controller
 {
     private $activityItemRepository;
@@ -21,6 +26,7 @@ class ActivityItemController extends Controller
      * ActivityItemController constructor.
      *
      * @param ActivityItemRepositoryInterface $activityItemRepository
+     * @param ActivityTypeRepositoryInterface $activityTypeRepository
      */
     public function __construct(
         ActivityItemRepositoryInterface $activityItemRepository,
@@ -33,7 +39,11 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Get Activity Items
+     *
+     * Get a list of the activity items.
+     *
+     * @responseFile responses/activity-item/activity-items.json
      *
      * @return Response
      */
@@ -45,7 +55,21 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Upload thumb image for activity item
+     * Upload Thumbnail
+     *
+     * Upload thumbnail image for a activity item
+     *
+     * @bodyParam thumb image required Thumbnail image
+     *
+     * @response {
+     *   "thumbUrl": "/storage/activity-items/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid image."
+     *   ]
+     * }
      *
      * @param Request $request
      * @return Response
@@ -70,13 +94,38 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create Activity Item
+     *
+     * Create a new activity item.
+     *
+     * @bodyParam title string required The title of a activity item Example: Audio Recorder
+     * @bodyParam description string required The description of a activity item Example: Record your voice and play back or download a .wav file of your recording.
+     * @bodyParam order int The order number of a activity item Example: 1
+     * @bodyParam activity_type_id int The Id of a activity type Example: 1
+     * @bodyParam type any required The type of a activity item Example: h5p
+     * @bodyParam h5pLib any required The H5pLib of a activity item Example: H5P.AudioRecorder 1.0
+     * @bodyParam image string The image url of a activity item Example: /storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png
+     *
+     * @responseFile 201 responses/activity-item/activity-item.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid activity type id."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Could not create activity item. Please try again later."
+     *   ]
+     * }
      *
      * @param Request $request
      * @return Response
      */
     public function store(Request $request)
     {
+        // TODO: need to update validation
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
@@ -108,7 +157,13 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get Activity Item
+     *
+     * Get the specified activity item.
+     *
+     * @urlParam activity_item required The Id of a activity item Example: 1
+     *
+     * @responseFile responses/activity-item/activity-item.json
      *
      * @param ActivityItem $activityItem
      * @return Response
@@ -121,7 +176,32 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Activity Item
+     *
+     * Update the specified activity item.
+     *
+     * @urlParam activity_item required The Id of a activity item Example: 1
+     * @bodyParam title string required The title of a activity item Example: Audio Recorder
+     * @bodyParam description string required The description of a activity item Example: Record your voice and play back or download a .wav file of your recording.
+     * @bodyParam order int The order number of a activity item Example: 1
+     * @bodyParam activity_type_id int The Id of a activity type Example: 1
+     * @bodyParam type any required The type of a activity item Example: h5p
+     * @bodyParam h5pLib any required The H5pLib of a activity item Example: H5P.AudioRecorder 1.0
+     * @bodyParam image string The image url of a activity item Example: /storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png
+     *
+     * @responseFile responses/activity-item/activity-item.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid activity type id."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update activity item."
+     *   ]
+     * }
      *
      * @param Request $request
      * @param ActivityItem $activityItem
@@ -138,6 +218,7 @@ class ActivityItemController extends Controller
             }
         }
 
+        // TODO: need to add validation
         $is_updated = $this->activityItemRepository->update($request->only([
             'title',
             'description',
@@ -160,7 +241,21 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove Activity Item
+     *
+     * Remove the specified activity item.
+     *
+     * @urlParam activity_item required The Id of a activity item Example: 1
+     *
+     * @response {
+     *   "message": "Activity item has been deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to delete activity item."
+     *   ]
+     * }
      *
      * @param ActivityItem $activityItem
      * @return Response
@@ -171,7 +266,7 @@ class ActivityItemController extends Controller
 
         if ($is_deleted) {
             return response([
-                'message' => 'Activity item is deleted successfully.',
+                'message' => 'Activity item has been deleted successfully.',
             ], 200);
         }
 

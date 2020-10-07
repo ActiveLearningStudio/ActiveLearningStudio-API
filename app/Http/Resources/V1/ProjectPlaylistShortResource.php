@@ -20,7 +20,8 @@ class ProjectPlaylistShortResource extends JsonResource
             'title' => $this->title,
             'order' => $this->order,
             'activities' => PlaylistActivityShortResource::collection($this->activities->sortBy('order')),
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
