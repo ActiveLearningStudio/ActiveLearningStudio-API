@@ -206,6 +206,8 @@ class SearchController extends Controller
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
      * @queryParam  isPublic Public access enabled or disabled. Example: true
      * @queryParam  elasticsearch Elasticsearch enabled or disabled. Example: false
+     * @queryParam  startDate Start date for search by date range. Example: 2020-04-30 00:00:00
+     * @queryParam  endDate End date for search by date range. Example: 2020-04-30 23:59:59
      * @queryParam  model Index to filter by. Example: activities
      * @queryParam  sort Field to sort by. Example: created_at
      * @queryParam  order Order to sort by. Example: desc

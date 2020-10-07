@@ -142,6 +142,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 ]
             ])
             ->type(Arr::get($data, 'type', 0))
+            ->startDate(Arr::get($data, 'startDate', 0))
+            ->endDate(Arr::get($data, 'endDate', 0))
             ->subjectIds(Arr::get($data, 'subjectIds', []))
             ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
             ->projectIds($projectIds)

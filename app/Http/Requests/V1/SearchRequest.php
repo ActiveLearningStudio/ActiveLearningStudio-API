@@ -26,6 +26,10 @@ class SearchRequest extends FormRequest
         return [
             'query' => 'required|string|max:255',
             'negativeQuery' => 'string|max:255',
+            'isPublic' => 'boolean',
+            'elasticsearch' => 'boolean',
+            'startDate' => 'date',
+            'endDate' => 'date',
             'userIds' => 'array|exists:App\User,id',
             'subjectIds' => 'array|exists:App\Models\Activity,subject_id',
             'educationLevelIds' => 'array|exists:App\Models\Activity,education_level_id',

@@ -3,6 +3,7 @@
 namespace App\Models\QueryBuilders;
 
 use ElasticScoutDriverPlus\Builders\QueryBuilderInterface;
+use Carbon\Carbon;
 
 final class SearchFormQueryBuilder implements QueryBuilderInterface
 {
@@ -25,6 +26,16 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
      * @var string
      */
     private $type;
+
+    /**
+     * @var string
+     */
+    private $startDate;
+
+    /**
+     * @var string
+     */
+    private $endDate;
 
     /**
      * @var array
@@ -72,6 +83,18 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     public function type(string $type): self
     {
         $this->type = $type;
+        return $this;
+    }
+
+    public function startDate(string $startDate): self
+    {
+        $this->startDate = $startDate;
+        return $this;
+    }
+
+    public function endDate(string $endDate): self
+    {
+        $this->endDate = $endDate;
         return $this;
     }
 
@@ -132,6 +155,26 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             $andQueries[] = [
                 'term' => [
                     'type' => $this->type
+                ]
+            ];
+        }
+
+        if ((isset($this->startDate) && !empty($this->startDate)) || (isset($this->endDate) && !empty($this->endDate))) {
+            $dateRange = [];
+
+            if (isset($this->startDate) && !empty($this->startDate)) {
+                $carbonStartDate = new Carbon($this->startDate);
+                $dateRange['gte'] = $carbonStartDate->toAtomString();
+            }
+
+            if (isset($this->endDate) && !empty($this->endDate)) {
+                $carbonEndDate = new Carbon($this->endDate);
+                $dateRange['lte'] = $carbonEndDate->toAtomString();
+            }
+
+            $andQueries[] = [
+                'range' => [
+                    'created_at' => $dateRange
                 ]
             ];
         }
