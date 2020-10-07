@@ -448,7 +448,7 @@ class ActivityController extends Controller
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @response {
-     *   "message": "Activity is being cloned in background!"
+     *   "message": "Activity is being cloned|duplicated in background!"
      * }
      *
      * @response 400 {
@@ -477,9 +477,9 @@ class ActivityController extends Controller
         }
 
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
-
+        $isDuplicate = ($activity->playlist_id == $playlist->id);
         return response([
-            'message' => 'Activity is being cloned in background!',
+            'message' => ($isDuplicate) ? 'Activity is being duplicated in background!' : 'Activity is being cloned in background!',
         ], 200);
     }
 
@@ -652,6 +652,13 @@ class ActivityController extends Controller
 
         return false;
     }
-    
+
+    /**
+     * @uses One time script to populate all missing order number
+     */
+    public function populateOrderNumber()
+    {
+        $this->activityRepository->populateOrderNumber();
+    }
 }
 
