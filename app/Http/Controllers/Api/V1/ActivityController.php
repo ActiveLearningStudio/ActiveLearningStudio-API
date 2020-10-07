@@ -230,11 +230,11 @@ class ActivityController extends Controller
     /**
      * Update H5P
      *
-     * @param Request $request
+     * @param $request
      * @param int $id
      * @return mixed
      */
-    public function update_h5p(Request $request, $id)
+    public function update_h5p($request, $id)
     {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
