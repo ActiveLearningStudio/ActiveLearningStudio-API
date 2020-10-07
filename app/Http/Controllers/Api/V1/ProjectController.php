@@ -448,7 +448,7 @@ class ProjectController extends Controller
      * Reorder projects of a user.
      *
      * @bodyParam projects array required projects of a user
-     * @responseFile responses/playlist/playlists.json
+     * @responseFile responses/project/projects.json
      * @param Request $request
      * @return Response
      */
@@ -459,7 +459,7 @@ class ProjectController extends Controller
         $this->projectRepository->saveList($request->projects);
 
         return response([
-            'playlists' => ProjectResource::collection($authenticated_user->projects),
+            'projects' => ProjectResource::collection($authenticated_user->projects),
         ], 200);
     }
 
