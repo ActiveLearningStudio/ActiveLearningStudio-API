@@ -18,7 +18,7 @@ class SearchResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'thumb_url' => $this->when(isset($this->thumb_url), $this->thumb_url),
+            'thumb_url' => (isset($this->thumb_url) ? $this->thumb_url : $this->thumbUrl),
             'title' => (isset($this->title) ? $this->title : $this->name),
             'description' => $this->when(isset($this->description), $this->description),
             'model' => $this->modelType,
