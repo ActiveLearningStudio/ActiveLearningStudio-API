@@ -189,8 +189,8 @@ class ProjectController extends Controller
     public function store(ProjectRequest $projectRequest)
     {
         $data = $projectRequest->validated();
-
         $authenticated_user = auth()->user();
+        $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
 
         if ($project) {
@@ -430,10 +430,36 @@ class ProjectController extends Controller
 
         // pushed cloning of project in background
         CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
+        
+        return response(['message' => "Project is being cloned in background!"], 200);
+    }
+    
+    /**
+     * @uses One time script to populate all missing order number
+     */
+    public function populateOrderNumber()
+    {
+       $this->projectRepository->populateOrderNumber(); 
+    }
+    
+    /**
+     * Reorder Projects
+     *
+     * Reorder projects of a user.
+     *
+     * @bodyParam projects array required projects of a user
+     * @responseFile responses/project/projects.json
+     * @param Request $request
+     * @return Response
+     */
+    public function reorder(Request $request)
+    {
+        $authenticated_user = auth()->user();
 
-        // $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken());  Old Logic will remove after testing in dev
+        $this->projectRepository->saveList($request->projects);
+
         return response([
-            'message' => 'Project is being cloned in background!',
+            'projects' => ProjectResource::collection($authenticated_user->projects),
         ], 200);
     }
 

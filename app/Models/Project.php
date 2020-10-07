@@ -29,6 +29,7 @@ class Project extends Model
         'is_public',
         'cloned_from',
         'clone_ctr',
+        'order',
     ];
 
     /**

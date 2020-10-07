@@ -137,6 +137,7 @@ class ActivityController extends Controller
         ]);
 
         $data['is_public'] = $this->activityRepository->getPlaylistIsPublicValue($data['playlist_id']);
+        $data['order'] = $this->activityRepository->getOrder($data['playlist_id']) + 1;
         $activity = $this->activityRepository->create($data);
 
         if ($activity) {
@@ -651,4 +652,6 @@ class ActivityController extends Controller
 
         return false;
     }
+    
 }
+
