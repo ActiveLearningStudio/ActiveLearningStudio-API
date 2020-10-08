@@ -77,11 +77,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
-            $userProjectIds = $authenticated_user->projects->pluck('id')->toArray();
-            $isDuplicate = false;
-            
-            if (in_array($project->id, $userProjectIds))
-                $isDuplicate = true;
+            $isDuplicate = $this->checkIsDuplicate($authenticated_user,$project->id);
 
             if ($isDuplicate) {
                 $authenticated_user->projects()->where('order', '>', $project->order)->increment('order', 1);
@@ -231,7 +227,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
     }
 
-
     /**
      * To reorder Projects
      *
@@ -244,6 +239,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'order' => $project['order'],
             ], $project['id']);
         }
+    }
+
+    /**
+     * @param $authenticated_user
+     * @param $project_id
+     * @return bool
+     */
+    public function checkIsDuplicate($authenticated_user,$project_id)
+    {
+        $userProjectIds = $authenticated_user->projects->pluck('id')->toArray();
+        return in_array($project_id, $userProjectIds);
     }
 
 }

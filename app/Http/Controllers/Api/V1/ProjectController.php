@@ -407,7 +407,7 @@ class ProjectController extends Controller
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
-     *   "message": "Project is being cloned in background!"
+     *   "message": "Project is being cloned|duplicated in background!"
      * }
      *
      * @response 400 {
@@ -427,21 +427,22 @@ class ProjectController extends Controller
                 'errors' => ['Not a Public Project.'],
             ], 400);
         }
-
+        $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
         // pushed cloning of project in background
         CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
-        
-        return response(['message' => "Project is being cloned in background!"], 200);
+        return response([
+            'message' => ($isDuplicate) ? "Project is being duplicated in background!" : "Project is being cloned in background!"
+        ], 200);
     }
-    
+
     /**
      * @uses One time script to populate all missing order number
      */
     public function populateOrderNumber()
     {
-       $this->projectRepository->populateOrderNumber(); 
+       $this->projectRepository->populateOrderNumber();
     }
-    
+
     /**
      * Reorder Projects
      *
@@ -462,5 +463,4 @@ class ProjectController extends Controller
             'projects' => ProjectResource::collection($authenticated_user->projects),
         ], 200);
     }
-
 }

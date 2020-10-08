@@ -61,4 +61,9 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * @return int
      */
     public function getOrder($playlist_id);
+
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber();
 }
