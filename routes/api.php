@@ -46,9 +46,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/recent', 'ProjectController@recent');
         Route::get('projects/default', 'ProjectController@default');
         Route::get('projects/detail', 'ProjectController@detail');
+        Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
+        Route::post('projects/{project}/reorder', 'ProjectController@reorder');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
@@ -58,6 +60,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
         Route::get('activities/{activity}/share', 'ActivityController@share');
+        Route::get('activities/update-order', 'ActivityController@populateOrderNumber');
         Route::get('activities/{activity}/remove-share', 'ActivityController@removeShare');
         Route::get('activities/{activity}/detail', 'ActivityController@detail');
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
@@ -169,6 +172,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // organization-types
         Route::resource('organization-type', 'OrganizationTypesController');
+        
+        // others
+        Route::get('clear/db/cache', 'ProjectController@clearDBCache');
     });
 
     // admin public routes for downloads / uploads

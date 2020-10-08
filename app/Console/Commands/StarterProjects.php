@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Exceptions\GeneralException;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
@@ -44,26 +45,39 @@ class StarterProjects extends Command
     {
         // get starter projects
         $starterProjects = resolve(ProjectRepository::class)->getStarterProjects(); // get all starter projects
-        $users = User::has('projects', '<=', 1)->with('projects:id,cloned_from')->get(); // get users with 1 or 0 projects
+        $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
+        // get users with 1 or 0 projects and not already in queue - limit of 50
+        $users = User::has('projects', '<=', 1)->with('projects:id,cloned_from')->whereNotIn('id', $inProgress)->limit(50)->get();
 
-        Log::info('Starter Projects found: ' . $starterProjects->count());
-        Log::info('Users found with less than 2 projects: ' . $users->count());
+        if (count($users)) {
+            $releaseProgress = []; // array for containing the users IDs for which starter projects processed
+            $inProgress += $users->pluck('id', 'id')->all();
+            \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
 
-        foreach ($users as $user) {
-            // loop through starter projects
-            foreach ($starterProjects as $project) {
-                // if current starter project is already assigned then skip and move to the next starter project
-                if (in_array($project->id, $user->projects->pluck('cloned_from')->toArray())) {
-                    continue;
+            Log::info('Starter Projects: ' . $starterProjects->count() . ' & Users found: ' . $users->count());
+
+            foreach ($users as $user) {
+                // loop through starter projects
+                foreach ($starterProjects as $project) {
+                    // if current starter project is already assigned then skip and move to the next starter project
+                    if (in_array($project->id, $user->projects->pluck('cloned_from')->toArray())) {
+                        continue;
+                    }
+                    try {
+                        $projectRepository->clone($user, $project, $user->createToken('auth_token')->accessToken);
+                    } catch (\Exception $e) {
+                        Log::Error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
+                    }
                 }
-                try {
-                    $projectRepository->clone($user, $project, $user->createToken('auth_token')->accessToken);
-                } catch (\Exception $e) {
-                    Log::Error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
-                }
+                $releaseProgress[$user->id] = $user->id;
+                Log::info('Projects are assigned to the USER: ' . $user->email . ' timestamp: ' . now());
             }
-            Log::info('Projects are assigned to the USER: ' . $user->email . ' timestamp: ' . now());
+
+            Log::info('Starter Project script Finished at: ' . now());
+            // as this cron can take some time, so again get the fresh list of InProgress users
+            $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
+            // update the in progress users IDs excluding the completed
+            \Cache::store('database')->put('in_progress_users', array_diff($inProgress, $releaseProgress));
         }
-        Log::info('Starter Project script Finished at: ' . now());
     }
 }

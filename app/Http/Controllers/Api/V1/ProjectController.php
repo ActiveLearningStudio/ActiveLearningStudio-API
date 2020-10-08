@@ -189,8 +189,8 @@ class ProjectController extends Controller
     public function store(ProjectRequest $projectRequest)
     {
         $data = $projectRequest->validated();
-
         $authenticated_user = auth()->user();
+        $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
 
         if ($project) {
@@ -407,7 +407,7 @@ class ProjectController extends Controller
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
-     *   "message": "Project is being cloned in background!"
+     *   "message": "Project is being cloned|duplicated in background!"
      * }
      *
      * @response 400 {
@@ -427,14 +427,40 @@ class ProjectController extends Controller
                 'errors' => ['Not a Public Project.'],
             ], 400);
         }
-
+        $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
         // pushed cloning of project in background
         CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
-
-        // $this->projectRepository->clone(auth()->user(), $project, $request->bearerToken());  Old Logic will remove after testing in dev
         return response([
-            'message' => 'Project is being cloned in background!',
+            'message' => ($isDuplicate) ? "Project is being duplicated in background!" : "Project is being cloned in background!"
         ], 200);
     }
 
+    /**
+     * @uses One time script to populate all missing order number
+     */
+    public function populateOrderNumber()
+    {
+       $this->projectRepository->populateOrderNumber();
+    }
+
+    /**
+     * Reorder Projects
+     *
+     * Reorder projects of a user.
+     *
+     * @bodyParam projects array required projects of a user
+     * @responseFile responses/project/projects.json
+     * @param Request $request
+     * @return Response
+     */
+    public function reorder(Request $request)
+    {
+        $authenticated_user = auth()->user();
+
+        $this->projectRepository->saveList($request->projects);
+
+        return response([
+            'projects' => ProjectResource::collection($authenticated_user->projects),
+        ], 200);
+    }
 }

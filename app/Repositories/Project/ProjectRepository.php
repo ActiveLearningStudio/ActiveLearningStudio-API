@@ -5,8 +5,9 @@ namespace App\Repositories\Project;
 use App\Exceptions\GeneralException;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
-use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\User;
 use App\Repositories\BaseRepository;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
@@ -54,6 +55,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     }
 
     /**
+     * Get latest order of project for User
+     * @param $authenticated_user
+     * @return int
+     */
+    public function getOrder($authenticated_user)
+    {
+        return $authenticated_user->projects()->orderBy('order','desc')
+            ->value('order') ?? 0;
+    }
+
+    /**
      * To clone project and associated playlists
      *
      * @param User $authenticated_user
@@ -65,12 +77,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
+            $isDuplicate = $this->checkIsDuplicate($authenticated_user,$project->id);
 
+            if ($isDuplicate) {
+                $authenticated_user->projects()->where('order', '>', $project->order)->increment('order', 1);
+            }
             $data = [
-                'name' => $project->name,
+                'name' => ($isDuplicate) ? $project->name . "-COPY" : $project->name,
                 'description' => $project->description,
                 'thumb_url' => $new_image_url,
                 'shared' => $project->shared,
+                'order' => ($isDuplicate) ? $project->order + 1 : $this->getOrder($authenticated_user) + 1,
                 'starter_project' => false,
                 'cloned_from' => $project->id,
             ];
@@ -83,7 +100,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                 $playlists = $project->playlists;
                 foreach ($playlists as $playlist) {
-                    $cloned_activity = $this->playlistRepositroy->clone($cloned_project, $playlist, $token);
+                    $cloned_activity = $this->playlistRepository->clone($cloned_project, $playlist, $token);
                 }
 
                 $project->clone_ctr = $project->clone_ctr + 1;
@@ -189,6 +206,50 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $this->model->whereHas('users', function ($query_user) use ($default_email) {
             $query_user->where('email', $default_email);
         })->get();
+    }
+
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber()
+    {
+        $users = User::all();
+        foreach($users as $user) {
+            $projects = $user->projects()->orderBy('created_at')->get();
+            if(!empty($projects)) {
+                $order = 1;
+                foreach($projects as $project) {
+                   $project->order = $order;
+                   $project->save();
+                   $order++;
+                }
+            }
+        }
+    }
+
+    /**
+     * To reorder Projects
+     *
+     * @param array $projects
+     */
+    public function saveList(array $projects)
+    {
+        foreach ($projects as $project) {
+            $this->update([
+                'order' => $project['order'],
+            ], $project['id']);
+        }
+    }
+
+    /**
+     * @param $authenticated_user
+     * @param $project_id
+     * @return bool
+     */
+    public function checkIsDuplicate($authenticated_user,$project_id)
+    {
+        $userProjectIds = $authenticated_user->projects->pluck('id')->toArray();
+        return in_array($project_id, $userProjectIds);
     }
 
 }

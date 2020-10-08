@@ -488,6 +488,11 @@ class LaravelH5pRepository implements H5PFrameworkInterface
         if ($isLibrary) {
             $whitelist .= ' ' . $defaultLibraryWhitelist;
         }
+        
+        $whitelistArr = explode(' ', $whitelist);
+        $whitelistCapitalized = array_map(function($ext) { return strtoupper($ext); }, $whitelistArr);
+        $whitelistFinalArr = array_merge($whitelistArr, $whitelistCapitalized);
+        $whitelist = implode(' ', $whitelistFinalArr);
         return $whitelist;
     }
 
