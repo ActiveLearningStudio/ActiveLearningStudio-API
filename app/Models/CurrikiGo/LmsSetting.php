@@ -25,6 +25,7 @@ class LmsSetting extends Model
         'lms_access_secret',
         'description',
         'lti_client_id',
+        'lms_login_id',
         'user_id'
     ];
 
