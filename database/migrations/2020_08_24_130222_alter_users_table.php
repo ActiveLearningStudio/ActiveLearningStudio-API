@@ -15,7 +15,7 @@ class AlterUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('gapi_access_token');
-            
+
         });
 
         Schema::table('users', function (Blueprint $table) {
@@ -33,7 +33,9 @@ class AlterUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //$table->dropColumn('gapi_access_token');
-            $table->string('gapi_access_token')->nullable()->default(null)->change();
+            // don't rollback this because it'll throw exception if column has values greater than default (255) varchar
+            // either specify the large length
+            $table->string('gapi_access_token', 10000)->nullable()->default(null)->change();
         });
     }
 }

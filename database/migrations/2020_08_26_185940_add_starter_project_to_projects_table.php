@@ -27,8 +27,9 @@ class AddStarterProjectToProjectsTable extends Migration
     public function down()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->string('description')->change();
-            $table->dropColumn(['starter_project']);
+            //  don't rollback this because it'll throw exception if description column has values greater than default (255) varchar
+            // $table->string('description')->change();
+            $table->dropColumn('starter_project');
         });
     }
 }
