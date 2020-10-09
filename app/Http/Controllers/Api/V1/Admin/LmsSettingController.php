@@ -43,7 +43,7 @@ class LmsSettingController extends Controller
      * @return LmsSettingResource
      * @throws GeneralException
      */
-    public function edit($id)
+    public function show($id)
     {
         $setting = $this->lmsSettingRepository->find($id);
         return new LmsSettingResource($setting->load('user'));
