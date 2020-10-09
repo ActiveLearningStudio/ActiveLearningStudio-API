@@ -148,6 +148,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ->subjectIds(Arr::get($data, 'subjectIds', []))
             ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
             ->projectIds($projectIds)
+            ->h5pLibraries(Arr::get($data, 'h5pLibraries', []))
             ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))

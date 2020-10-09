@@ -15,6 +15,7 @@ final class CreateActivitiesIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('activities', function (Mapping $mapping, Settings $settings) {
+            $mapping->keyword('h5p_library');
             $mapping->keyword('playlist_id');
             $mapping->text('title');
             $mapping->keyword('type');

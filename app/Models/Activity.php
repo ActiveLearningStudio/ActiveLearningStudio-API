@@ -40,6 +40,7 @@ class Activity extends Model
     public function toSearchableArray()
     {
         $searchableArray = [
+            'h5p_library' => $this->h5pLibrary,
             'playlist_id' => $this->playlist_id,
             'title' => $this->title,
             'type' => $this->type,
@@ -114,5 +115,21 @@ class Activity extends Model
     public function metrics()
     {
         return $this->hasOne('App\Models\ActivityMetric');
+    }
+
+    /**
+     * Get the h5p library.
+     *
+     * @return string
+     */
+    public function getH5pLibraryAttribute()
+    {
+        $h5pLibrary = null;
+
+        if ($this->h5p_content && $this->h5p_content->library) {
+            $h5pLibrary = $this->h5p_content->library->name . ' ' .$this->h5p_content->library->major_version . '.' .$this->h5p_content->library->minor_version;
+        }
+
+        return $h5pLibrary;
     }
 }

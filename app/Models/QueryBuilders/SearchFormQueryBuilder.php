@@ -58,6 +58,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     private $projectIds;
 
     /**
+     * @var array
+     */
+    private $h5pLibraries;
+
+    /**
      * @var string
      */
     private $negativeQuery;
@@ -119,6 +124,12 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     public function projectIds(array $projectIds): self
     {
         $this->projectIds = $projectIds;
+        return $this;
+    }
+
+    public function h5pLibraries(array $h5pLibraries): self
+    {
+        $this->h5pLibraries = $h5pLibraries;
         return $this;
     }
 
@@ -207,6 +218,14 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             $andQueries[] = [
                 'terms' => [
                     'project_id' => $this->projectIds
+                ]
+            ];
+        }
+
+        if (isset($this->h5pLibraries) && !empty($this->h5pLibraries)) {
+            $andQueries[] = [
+                'terms' => [
+                    'h5p_library' => $this->h5pLibraries
                 ]
             ];
         }
