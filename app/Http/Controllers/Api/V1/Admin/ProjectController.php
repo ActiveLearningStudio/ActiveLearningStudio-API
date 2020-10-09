@@ -101,11 +101,12 @@ class ProjectController extends Controller
     }
 
     /**
-     * Temporary function for clearing db cache data - will be removed in future releases
+     * CUR - 612 => Update existing project rows for is_user_starter flag
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
      */
-    public function clearDBCache(): void
+    public function updateUserStarterFlag()
     {
-        \Artisan::call('cache:clear database');
-        dd('Database cache cleared successfully!');
+        return response(['message' => $this->projectRepository->updateUserStarterFlag()], 200);
     }
 }

@@ -44,7 +44,7 @@ class ActivityTypeController extends Controller
      * @return ActivityTypeResource
      * @throws GeneralException
      */
-    public function edit($id)
+    public function show($id)
     {
         $type = $this->repository->find($id);
         return new ActivityTypeResource($type);

@@ -25,6 +25,7 @@ class Project extends Model
         'thumb_url',
         'shared',
         'starter_project',
+        'is_user_starter',
         'elasticsearch',
         'is_public',
         'cloned_from',
