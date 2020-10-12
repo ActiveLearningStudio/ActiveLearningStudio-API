@@ -106,8 +106,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                         $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'] = [];
                     }
 
-                    $activityModel = $searchedModel->attributesToArray();
-                    $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'][$activityId] = SearchResource::make($activityModel)->resolve();
+                    $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'][$activityId] = SearchResource::make($searchedModel)->resolve();
                 }
             }
         }

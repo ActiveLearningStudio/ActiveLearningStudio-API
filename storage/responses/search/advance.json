@@ -1,0 +1,32 @@
+{
+    "data": [
+        {
+            "id": 9999,
+            "thumb_url": "/storage/uploads/5f1083871600f.png",
+            "title": "",
+            "model": "Activity",
+            "user": null
+        },
+        {
+            "id": 999,
+            "thumb_url": "/storage/uploads/5ef42a8dc4386.png",
+            "title": "About The National Parks",
+            "model": "Playlist",
+            "user": null
+        },
+        {
+            "id": 999,
+            "thumb_url": "/storage/uploads_tmp/UDixgGgVAnNYNMikT8Qic7q0WR0SSA54lOqL9u6t.png",
+            "title": "Algebra 1 ACPS Curriki Resources",
+            "description": "Algebra 1 ACPS Curriki Resources",
+            "model": "Project",
+            "user": null
+        }
+    ],
+    "meta": {
+        "activities": 1,
+        "playlists": 1,
+        "projects": 1,
+        "total": 3
+    }
+}
