@@ -145,6 +145,25 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         $orQueries = [];
         $andQueries = [];
         $boolQueries = [];
+        $dateRange = [];
+
+        if (isset($this->startDate) && !empty($this->startDate)) {
+            $carbonStartDate = new Carbon($this->startDate);
+            $dateRange['gte'] = $carbonStartDate->toAtomString();
+        }
+
+        if (isset($this->endDate) && !empty($this->endDate)) {
+            $carbonEndDate = new Carbon($this->endDate);
+            $dateRange['lte'] = $carbonEndDate->toAtomString();
+        }
+
+        if (!empty($dateRange)) {
+            $andQueries[] = [
+                'range' => [
+                    'created_at' => $dateRange
+                ]
+            ];
+        }
 
         if (isset($this->isPublic)) {
             $andQueries[] = [
@@ -166,26 +185,6 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             $andQueries[] = [
                 'term' => [
                     'type' => $this->type
-                ]
-            ];
-        }
-
-        if ((isset($this->startDate) && !empty($this->startDate)) || (isset($this->endDate) && !empty($this->endDate))) {
-            $dateRange = [];
-
-            if (isset($this->startDate) && !empty($this->startDate)) {
-                $carbonStartDate = new Carbon($this->startDate);
-                $dateRange['gte'] = $carbonStartDate->toAtomString();
-            }
-
-            if (isset($this->endDate) && !empty($this->endDate)) {
-                $carbonEndDate = new Carbon($this->endDate);
-                $dateRange['lte'] = $carbonEndDate->toAtomString();
-            }
-
-            $andQueries[] = [
-                'range' => [
-                    'created_at' => $dateRange
                 ]
             ];
         }
