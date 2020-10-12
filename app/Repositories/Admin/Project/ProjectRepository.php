@@ -219,4 +219,19 @@ class ProjectRepository extends BaseRepository
         $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
         return 'Starter Projects status updated successfully!';
     }
+
+    /**
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateUserStarterFlag(): string
+    {
+        $starterProjects = $this->getStarterProjects(); // get all the starter projects
+        if (!count($starterProjects)) {
+            throw new GeneralException('Please first set at-least 1 starter project!');
+        }
+        // set the user starter flag to true if was cloned from global starter project
+        $this->model->whereIn('cloned_from', $starterProjects->modelKeys())->update(['is_user_starter' => true]);
+        return 'Existing records are updated successfully for user starter project flag.';
+    }
 }

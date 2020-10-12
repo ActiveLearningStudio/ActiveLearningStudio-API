@@ -68,39 +68,42 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * To clone project and associated playlists
      *
-     * @param User $authenticated_user
+     * @param $authUser
      * @param Project $project
      * @param string $token
      * @return Response
+     * @throws GeneralException
      */
-    public function clone($authenticated_user, Project $project, $token)
+    public function clone($authUser, Project $project, $token)
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
-            $isDuplicate = $this->checkIsDuplicate($authenticated_user,$project->id);
+            $isDuplicate = $this->checkIsDuplicate($authUser,$project->id);
 
             if ($isDuplicate) {
-                $authenticated_user->projects()->where('order', '>', $project->order)->increment('order', 1);
+                $authUser->projects()->where('order', '>', $project->order)->increment('order', 1);
             }
+
             $data = [
                 'name' => ($isDuplicate) ? $project->name . "-COPY" : $project->name,
                 'description' => $project->description,
                 'thumb_url' => $new_image_url,
                 'shared' => $project->shared,
-                'order' => ($isDuplicate) ? $project->order + 1 : $this->getOrder($authenticated_user) + 1,
-                'starter_project' => false,
+                'order' => ($isDuplicate) ? $project->order + 1 : $this->getOrder($authUser) + 1,
+                'starter_project' => false, // this is for global starter project
+                'is_user_starter' => $project->starter_project, // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
 
-            return \DB::transaction(function () use ($authenticated_user, $data, $project, $token) {
-                $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
+            return \DB::transaction(function () use ($authUser, $data, $project, $token) {
+                $cloned_project = $authUser->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
                 }
 
                 $playlists = $project->playlists;
                 foreach ($playlists as $playlist) {
-                    $cloned_activity = $this->playlistRepository->clone($cloned_project, $playlist, $token);
+                    $this->playlistRepository->clone($cloned_project, $playlist, $token);
                 }
 
                 $project->clone_ctr = $project->clone_ctr + 1;

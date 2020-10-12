@@ -45,7 +45,7 @@ class UserController extends Controller
      * @return UserResource
      * @throws GeneralException
      */
-    public function edit($id)
+    public function show($id)
     {
         $user = $this->userRepository->find($id);
         return new UserResource($user);
