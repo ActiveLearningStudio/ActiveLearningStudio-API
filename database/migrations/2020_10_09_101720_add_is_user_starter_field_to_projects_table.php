@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStarterProjectToProjectsTable extends Migration
+class AddIsUserStarterFieldToProjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddStarterProjectToProjectsTable extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->text('description')->change();
-            $table->boolean('starter_project')->nullable();
+            $table->boolean('is_user_starter')->default(false)->after('is_public')->comment('Bool flag for identifying the users starter project.');
         });
     }
 
@@ -27,9 +26,7 @@ class AddStarterProjectToProjectsTable extends Migration
     public function down()
     {
         Schema::table('projects', function (Blueprint $table) {
-            //  don't rollback this because it'll throw exception if description column has values greater than default (255) varchar
-            // $table->string('description')->change();
-            $table->dropColumn('starter_project');
+            $table->dropColumn('is_user_starter');
         });
     }
 }

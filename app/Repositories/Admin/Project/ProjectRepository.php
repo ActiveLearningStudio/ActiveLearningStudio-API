@@ -64,6 +64,11 @@ class ProjectRepository extends BaseRepository
                 return $query->where('starter_project', (bool)$mode);
             });
         });
+
+        // exclude users those projects which were clone from global starter project
+        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+            $this->query = $this->query->where('is_user_starter', false);
+        }
         return $this->getDtPaginated(['users']);
     }
 
@@ -218,5 +223,20 @@ class ProjectRepository extends BaseRepository
         }
         $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
         return 'Starter Projects status updated successfully!';
+    }
+
+    /**
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateUserStarterFlag(): string
+    {
+        $starterProjects = $this->getStarterProjects(); // get all the starter projects
+        if (!count($starterProjects)) {
+            throw new GeneralException('Please first set at-least 1 starter project!');
+        }
+        // set the user starter flag to true if was cloned from global starter project
+        $this->model->whereIn('cloned_from', $starterProjects->modelKeys())->update(['is_user_starter' => true]);
+        return 'Existing records are updated successfully for user starter project flag.';
     }
 }

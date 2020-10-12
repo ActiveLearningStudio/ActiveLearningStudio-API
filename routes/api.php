@@ -47,10 +47,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/default', 'ProjectController@default');
         Route::get('projects/detail', 'ProjectController@detail');
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
+        Route::post('projects/reorder', 'ProjectController@reorder');
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
-        Route::post('projects/{project}/reorder', 'ProjectController@reorder');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
@@ -116,7 +116,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         });
 
         // Google Share
-        Route::group(['prefix' => 'go'], function () {
+        Route::group(['prefix' => 'google-classroom'], function () {
             Route::post('access-token', 'GoogleClassroomController@saveAccessToken');
             Route::get('courses', 'GoogleClassroomController@getCourses');
             Route::post('projects/{project}/copy', 'GoogleClassroomController@copyProject');
@@ -151,30 +151,28 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         Route::post('users/bulk/import', 'UserController@bulkImport')->name('users.bulk.import');
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
-        Route::resource('users', 'UserController');
+        Route::apiResource('users', 'UserController');
 
         // projects
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
+        Route::get('projects/user-starters/flag', 'ProjectController@updateUserStarterFlag');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
         Route::get('projects/{project}/index', 'ProjectController@updateIndex');
         Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
-        Route::resource('projects', 'ProjectController');
+        Route::apiResource('projects', 'ProjectController');
 
         // lms-settings
-        Route::resource('lms-settings', 'LmsSettingController');
+        Route::apiResource('lms-settings', 'LmsSettingController');
 
         // activity-types
-        Route::resource('activity-types', 'ActivityTypeController');
+        Route::apiResource('activity-types', 'ActivityTypeController');
 
         // activity-items
-        Route::resource('activity-items', 'ActivityItemController');
+        Route::apiResource('activity-items', 'ActivityItemController');
 
         // organization-types
         Route::apiResource('organization-types', 'OrganizationTypesController');
-        
-        // others
-        Route::get('clear/db/cache', 'ProjectController@clearDBCache');
     });
 
     // admin public routes for downloads / uploads
