@@ -15,8 +15,8 @@ class CreateOrganizationTypesTable extends Migration
     {
         Schema::create('organization_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('label');
+            $table->string('name')->unique();
+            $table->string('label')->unique();
             $table->integer('order')->unsigned();
         });
     }

@@ -3,7 +3,6 @@
 namespace App\Repositories\OrganizationType;
 
 use Illuminate\Http\Request;
-
 use App\Models\OrganizationType;
 
 interface OrganizationTypeRepositoryInterface
@@ -15,21 +14,23 @@ interface OrganizationTypeRepositoryInterface
 
     /**
      * Create a new organization type
-     * @param String $name
-     * @param String $label
+     * @param array $attributes
+     * @return Collection
      */    
-    public function create($name, $label);
+    public function create($attributes);
 
     /**
      * Update an existing organization type
-     * @param Illuminate\Http\Request
-     * @param App\Models\OrganizationType
+     * @param array $attributes
+     * @param int $id
+     * @return App\Models\OrganizationType
      */    
-    public function update(Request $request, OrganizationType $orgType);
+    public function update($attributes, $id);
 
     /**
      * Delete an existing organization type
-     * @param App\Models\OrganizationType
+     * @param int $id
+     * @return int
      */    
-    public function delete(OrganizationType $orgType);
+    public function delete($id);
 }

@@ -171,7 +171,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::resource('activity-items', 'ActivityItemController');
 
         // organization-types
-        Route::resource('organization-type', 'OrganizationTypesController');
+        Route::apiResource('organization-types', 'OrganizationTypesController');
         
         // others
         Route::get('clear/db/cache', 'ProjectController@clearDBCache');
