@@ -239,8 +239,4 @@ class ProjectRepository extends BaseRepository
         $this->model->whereIn('cloned_from', $starterProjects->modelKeys())->update(['is_user_starter' => true]);
         return 'Existing records are updated successfully for user starter project flag.';
     }
-
-    public function getNonStarterProjects(){
-
-    }
 }
