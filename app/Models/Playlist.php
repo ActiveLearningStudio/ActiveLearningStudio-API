@@ -111,4 +111,18 @@ class Playlist extends Model
     {
         return 'Playlist';
     }
+
+    /**
+     * Get the playlists's project's thumb_url.
+     *
+     * @return object
+     */
+    public function getThumbUrlAttribute()
+    {
+        if (isset($this->project) && isset($this->project->thumb_url)) {
+            return $this->project->thumb_url;
+        }
+
+        return null;
+    }
 }

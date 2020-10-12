@@ -111,7 +111,7 @@ return [
                  * Match only routes whose paths match this pattern (use * as a wildcard to match any characters).
                  */
                 'prefixes' => [
-                    '*',
+                    'api/*',
                     // 'users/*',
                 ],
 
@@ -139,7 +139,12 @@ return [
              * Note that the route must be referenced by name here (wildcards are supported).
              */
             'exclude' => [
-                // 'users.create', 'admin.*'
+                'v1.admin.*',
+                'h5p.ajax.*',
+                'h5p.export',
+                'metrics.*',
+                'membership.*',
+                'api/error'
             ],
 
             /*
@@ -166,7 +171,7 @@ return [
                      * API calls will be made only for routes in this group matching these HTTP methods (GET, POST, etc).
                      * List the methods here or use '*' to mean all methods. Leave empty to disable API calls.
                      */
-                    'methods' => ['GET', 'POST'],
+                    'methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
 
                     /*
                      * Laravel config variables which should be set for the API call.

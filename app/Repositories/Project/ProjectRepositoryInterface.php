@@ -12,6 +12,7 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
 {
     /**
      * To clone a project and its associated playlist,activities
+     *
      * @param $authenticated_user
      * @param Project $project
      * @param string $token Authenticated user token
@@ -20,6 +21,7 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
 
     /**
      * To fetch project based on LMS settings
+     *
      * @param $lms_url
      * @param $lti_client_id
      * @return Project $project
@@ -28,13 +30,40 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
 
     /**
      * To fetch recent public project
+     *
+     * @param $limit
      * @return Project $projects
      */
     public function fetchRecentPublic($limit);
 
     /**
      * To fetch recent public projects
+     *
+     * @param $default_email
      * @return Project $projects
      */
-    public function fetchDefault($defaultEmail);
+    public function fetchDefault($default_email);
+    /**
+     * To reorder the list of projects
+     * @param type $projects
+     */
+    public function saveList(array $projects);
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber();
+
+    /**
+     * Get latest order of project for User
+     * @param $authenticated_user
+     * @return int
+     */
+    public function getOrder($authenticated_user);
+
+    /**
+     * @param $authenticated_user
+     * @param $project_id
+     * @return bool
+     */
+    public function checkIsDuplicate($authenticated_user,$project_id);
 }

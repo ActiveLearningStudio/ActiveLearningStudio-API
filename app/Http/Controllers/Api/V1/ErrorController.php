@@ -17,6 +17,12 @@ class ErrorController extends Controller
     /**
      * Display error
      *
+     * @response 401 {
+     *   "errors": [
+     *     "Unauthorized."
+     *   ]
+     * }
+     *
      * @return Response
      */
     public function show()

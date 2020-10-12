@@ -1,0 +1,30 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@currikistudio.org",
+            "organization_name": "Curriki",
+            "organization_type": null,
+            "job_title": "Developer",
+            "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+            "phone_number": "+1234567890",
+            "website": "www.currikistudio.org",
+            "subscribed": true
+        },
+        {
+            "id": 2,
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "email": "jane.doe@currikistudio.org",
+            "organization_name": "Curriki",
+            "organization_type": null,
+            "job_title": "Manager",
+            "address": "20660 Stevens Creek Blvd #333, Cupertino, CA 95014",
+            "phone_number": "+1234567891",
+            "website": "www.currikistudio.org",
+            "subscribed": true
+        }
+    ]
+}

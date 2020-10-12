@@ -45,7 +45,7 @@ class UserController extends Controller
      * @return UserResource
      * @throws GeneralException
      */
-    public function edit($id)
+    public function show($id)
     {
         $user = $this->userRepository->find($id);
         return new UserResource($user);
@@ -101,7 +101,7 @@ class UserController extends Controller
      */
     public function assignStarterProjects(): void
     {
-        \Artisan::call('project:starters');
+        invoke_starter_projects_command();
         dd("Assign starter projects command invoked successfully.");
     }
 

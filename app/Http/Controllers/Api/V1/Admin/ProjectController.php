@@ -14,12 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
-/**
- * @group Project Administration
- * @authenticated
- *
- * Apis for administration of projects
- */
 class ProjectController extends Controller
 {
 
@@ -27,6 +21,7 @@ class ProjectController extends Controller
 
     /**
      * ProjectController constructor.
+     *
      * @param ProjectRepository $projectRepository
      */
     public function __construct(ProjectRepository $projectRepository)
@@ -46,9 +41,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Modify the index of a project
-     *
-     * @urlParam id required The id means user_id.
+     * Modify the index of a projects
      *
      * @param Request $request
      * @return Application|ResponseFactory|Response
@@ -60,6 +53,8 @@ class ProjectController extends Controller
     }
 
     /**
+     * Modify the index of a project
+     *
      * @param Project $project
      * @return Application|ResponseFactory|Response
      */
@@ -82,6 +77,8 @@ class ProjectController extends Controller
     }
 
     /**
+     * Update public status of project
+     *
      * @param Project $project
      * @return Application|ResponseFactory|Response
      */
@@ -92,12 +89,24 @@ class ProjectController extends Controller
 
     /**
      * Toggle the starter projects flag
+     *
      * @param Request $request
      * @param $flag
      * @return Application|ResponseFactory|Response
+     * @throws GeneralException
      */
     public function toggleStarter(Request $request, $flag)
     {
         return response(['message' => $this->projectRepository->toggleStarter($request->projects, $flag)], 200);
+    }
+
+    /**
+     * CUR - 612 => Update existing project rows for is_user_starter flag
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function updateUserStarterFlag()
+    {
+        return response(['message' => $this->projectRepository->updateUserStarterFlag()], 200);
     }
 }

@@ -20,8 +20,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
 /**
- * @group  CurrikiGo
- * @authenticated
+ * @group 8. CurrikiGo
  *
  * APIs for publishing playlists to other LMSs
  */
@@ -43,18 +42,39 @@ class PublishController extends Controller
     }
 
     /**
-     * Publish a Playlist to Moodle
+     * Publish Playlist to Moodle
      *
-     * @urlParam  project required The ID of the project
-     * @urlParam  playlist required The ID of the playlist.
-     * @bodyParam  setting_id int The id of the LMS setting.
-     * @bodyParam  counter int The counter for uniqueness of the title
+     * Publish the specified playlist to Moodle.
+     *
+     * @urlParam project required The Id of the project Example: 1
+     * @urlParam playlist required The Id of the playlist Example: 1
+     * @bodyParam setting_id int The Id of the LMS setting Example: 1
+     * @bodyParam counter int The counter for uniqueness of the title Example: 1
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid project or playlist Id."
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to send playlist to Moodle."
+     *   ]
+     * }
      *
      * @param PublishPlaylistRequest $publishRequest
      * @param Project $project
      * @param Playlist $playlist
      * @return Response
      */
+    // TODO: need to add 200 response
     public function playlistToMoodle(PublishPlaylistRequest $publishRequest, Project $project, Playlist $playlist)
     {
         if ($playlist->project_id !== $project->id) {
@@ -81,28 +101,43 @@ class PublishController extends Controller
             }
 
             return response([
-                'errors' => ['Error sending playlists to Moodle'],
+                'errors' => ['Failed to send playlist to Moodle.'],
             ], 500);
         }
+
+        return response([
+            'errors' => ['You are not authorized to perform this action.'],
+        ], 403);
     }
 
     /**
-     * Publish a Playlist to Canvas
+     * Publish Playlist to Canvas
      *
-     * @urlParam  project required The ID of the project
-     * @urlParam  playlist required The ID of the playlist.
-     * @bodyParam  setting_id int The id of the LMS setting.
-     * @bodyParam  counter int The counter for uniqueness of the title
+     * Publish the specified playlist to Canvas.
      *
-     * @responseFile  responses/playlisttocanvas.post.json
-     * @response  400 {
-     *  "errors": "Invalid project or playlist Id."
+     * @urlParam project required The Id of the project Example: 1
+     * @urlParam playlist required The Id of the playlist Example: 1
+     * @bodyParam setting_id int The Id of the LMS setting Example: 1
+     * @bodyParam counter int The counter for uniqueness of the title Example: 1
+     *
+     * @responseFile responses/curriki-go/playlist-to-canvas.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid project or playlist Id."
+     *   ]
      * }
-     * @response  403 {
-     *  "errors": "You are not authorized to perform this action."
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
      * }
+     *
      * @response  500 {
-     *  "errors": "Error sending playlists to canvas."
+     *   "errors": [
+     *     "Failed to send playlist to canvas."
+     *   ]
      * }
      *
      * @param Project $project
@@ -134,7 +169,7 @@ class PublishController extends Controller
                 ], 200);
             } else {
                 return response([
-                    'errors' => ['Error sending playlists to Canvas.'],
+                    'errors' => ['Failed to send playlist to canvas.'],
                 ], 500);
             }
         }
