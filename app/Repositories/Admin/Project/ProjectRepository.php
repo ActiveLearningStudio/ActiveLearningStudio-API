@@ -64,6 +64,11 @@ class ProjectRepository extends BaseRepository
                 return $query->where('starter_project', (bool)$mode);
             });
         });
+
+        // exclude users those projects which were clone from global starter project
+        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+            $this->query = $this->query->where('is_user_starter', false);
+        }
         return $this->getDtPaginated(['users']);
     }
 
