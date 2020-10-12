@@ -29,11 +29,7 @@ class ActivityItemRepository extends BaseRepository
      */
     public function getAll($data)
     {
-        $this->setDtParams($data);
-        $this->query = $this->model->whereHas('activityType', function ($query) {
-            return $query->where('title', 'ILIKE', '%' . $this->dtSearchValue . '%');
-        });
-        return $this->getDtPaginated(['activityType']);
+        return $this->setDtParams($data)->enableRelDtSearch(['title'], $this->dtSearchValue)->getDtPaginated(['activityType']);
     }
 
     /**

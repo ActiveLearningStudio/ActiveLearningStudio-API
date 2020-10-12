@@ -19,20 +19,17 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'name' => $this->name,
+            // 'name' => $this->name,
             'email' => $this->email,
-            'is_admin' => $this->isAdmin(),
             'organization_name' => $this->organization_name,
             'organization_type' => $this->organization_type,
             'job_title' => $this->job_title,
             'address' => $this->address,
             'phone_number' => $this->phone_number,
             'website' => $this->website,
-            'hubspot' => $this->hubspot,
             'subscribed' => $this->subscribed,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'gapi_access_token' => $this->gapi_access_token
+            // 'created_at' => $this->created_at,
+            // 'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -1,0 +1,1307 @@
+{
+    "activity": {
+        "id": 1,
+        "title": "Science of Golf: Why Balls Have Dimples",
+        "type": "h5p",
+        "content": "",
+        "shared": false,
+        "order": 2,
+        "thumb_url": null,
+        "subject_id": null,
+        "education_level_id": null,
+        "h5p": {
+            "settings": {
+                "baseUrl": "https://www.currikistudio.org/api",
+                "url": "https://www.currikistudio.org/api/storage/h5p",
+                "postUserStatistics": true,
+                "ajax": {
+                    "setFinished": "https://www.currikistudio.org/api/api/h5p/ajax/url",
+                    "contentUserData": "https://www.currikistudio.org/api/api/h5p/ajax/content-user-data/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId"
+                },
+                "saveFreq": false,
+                "siteUrl": "https://www.currikistudio.org/api",
+                "l10n": {
+                    "H5P": {
+                        "fullscreen": "Fullscreen",
+                        "disableFullscreen": "Disable fullscreen",
+                        "download": "Download",
+                        "copyrights": "Rights of use",
+                        "embed": "Embed",
+                        "reuseDescription": "Reuse this content.",
+                        "size": "Size",
+                        "showAdvanced": "Show advanced",
+                        "hideAdvanced": "Hide advanced",
+                        "advancedHelp": "Include this script on your website if you want dynamic sizing of the embedded content:",
+                        "copyrightInformation": "Rights of use",
+                        "close": "Close",
+                        "title": "Title",
+                        "author": "Author",
+                        "year": "Year",
+                        "source": "Source",
+                        "license": "License",
+                        "thumbnail": "Thumbnail",
+                        "noCopyrights": "No copyright information available for this content.",
+                        "downloadDescription": "Download this content as a H5P file.",
+                        "copyrightsDescription": "View copyright information for this content.",
+                        "embedDescription": "View the embed code for this content.",
+                        "h5pDescription": "Visit H5P.org to check out more cool content.",
+                        "contentChanged": "This content has changed since you last used it.",
+                        "startingOver": "You'll be starting over.",
+                        "confirmDialogHeader": "Confirm action",
+                        "confirmDialogBody": "Please confirm that you wish to proceed. This action is not reversible.",
+                        "cancelLabel": "Cancel",
+                        "confirmLabel": "Confirm",
+                        "reuse": "Reuse",
+                        "reuseContent": "Reuse Content"
+                    }
+                },
+                "hubIsEnabled": false,
+                "user": {
+                    "name": "John Doe",
+                    "email": "john.doe@currikistudio.org"
+                },
+                "editor": {
+                    "filesPath": "https://www.currikistudio.org/api/storage/h5p/editor",
+                    "fileIcon": {
+                        "path": "https://www.currikistudio.org/api/storage/h5p/h5p-editor/images/binary-file.png",
+                        "width": 50,
+                        "height": 50
+                    },
+                    "ajaxPath": "https://www.currikistudio.org/api/api/v1/h5p/ajax/",
+                    "libraryUrl": "https://www.currikistudio.org/api/storage/h5p/h5p-editor/",
+                    "copyrightSemantics": {
+                        "name": "copyright",
+                        "type": "group",
+                        "label": "Copyright information",
+                        "fields": [
+                            {
+                                "name": "title",
+                                "type": "text",
+                                "label": "Title",
+                                "placeholder": "La Gioconda",
+                                "optional": true
+                            },
+                            {
+                                "name": "author",
+                                "type": "text",
+                                "label": "Author",
+                                "placeholder": "Leonardo da Vinci",
+                                "optional": true
+                            },
+                            {
+                                "name": "year",
+                                "type": "text",
+                                "label": "Year(s)",
+                                "placeholder": "1503 - 1517",
+                                "optional": true
+                            },
+                            {
+                                "name": "source",
+                                "type": "text",
+                                "label": "Source",
+                                "placeholder": "http://en.wikipedia.org/wiki/Mona_Lisa",
+                                "optional": true,
+                                "regexp": {
+                                    "pattern": "^http[s]?://.+",
+                                    "modifiers": "i"
+                                }
+                            },
+                            {
+                                "name": "license",
+                                "type": "select",
+                                "label": "License",
+                                "default": "U",
+                                "options": [
+                                    {
+                                        "value": "U",
+                                        "label": "Undisclosed"
+                                    },
+                                    {
+                                        "value": "CC BY",
+                                        "label": "Attribution",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-SA",
+                                        "label": "Attribution-ShareAlike",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-ND",
+                                        "label": "Attribution-NoDerivs",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-NC",
+                                        "label": "Attribution-NonCommercial",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-NC-SA",
+                                        "label": "Attribution-NonCommercial-ShareAlike",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-NC-ND",
+                                        "label": "Attribution-NonCommercial-NoDerivs",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "GNU GPL",
+                                        "label": "General Public License",
+                                        "versions": [
+                                            {
+                                                "value": "v3",
+                                                "label": "Version 3"
+                                            },
+                                            {
+                                                "value": "v2",
+                                                "label": "Version 2"
+                                            },
+                                            {
+                                                "value": "v1",
+                                                "label": "Version 1"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "PD",
+                                        "label": "Public Domain",
+                                        "versions": [
+                                            {
+                                                "value": "-",
+                                                "label": "-"
+                                            },
+                                            {
+                                                "value": "CC0 1.0",
+                                                "label": "CC0 1.0 Universal"
+                                            },
+                                            {
+                                                "value": "CC PDM",
+                                                "label": "Public Domain Mark"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "C",
+                                        "label": "Copyright"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "version",
+                                "type": "select",
+                                "label": "License Version",
+                                "options": []
+                            }
+                        ]
+                    },
+                    "metadataSemantics": [
+                        {
+                            "name": "title",
+                            "type": "text",
+                            "label": "Title",
+                            "placeholder": "La Gioconda"
+                        },
+                        {
+                            "name": "license",
+                            "type": "select",
+                            "label": "License",
+                            "default": "U",
+                            "options": [
+                                {
+                                    "value": "U",
+                                    "label": "Undisclosed"
+                                },
+                                {
+                                    "type": "optgroup",
+                                    "label": "Creative Commons",
+                                    "options": [
+                                        {
+                                            "value": "CC BY",
+                                            "label": "Attribution (CC BY)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-SA",
+                                            "label": "Attribution-ShareAlike (CC BY-SA)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-ND",
+                                            "label": "Attribution-NoDerivs (CC BY-ND)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-NC",
+                                            "label": "Attribution-NonCommercial (CC BY-NC)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-NC-SA",
+                                            "label": "Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-NC-ND",
+                                            "label": "Attribution-NonCommercial-NoDerivs (CC BY-NC-ND)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC0 1.0",
+                                            "label": "Public Domain Dedication (CC0)"
+                                        },
+                                        {
+                                            "value": "CC PDM",
+                                            "label": "Public Domain Mark (PDM)"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "value": "GNU GPL",
+                                    "label": "General Public License v3"
+                                },
+                                {
+                                    "value": "PD",
+                                    "label": "Public Domain"
+                                },
+                                {
+                                    "value": "ODC PDDL",
+                                    "label": "Public Domain Dedication and Licence"
+                                },
+                                {
+                                    "value": "C",
+                                    "label": "Copyright"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "licenseVersion",
+                            "type": "select",
+                            "label": "License Version",
+                            "options": [
+                                {
+                                    "value": "4.0",
+                                    "label": "4.0 International"
+                                },
+                                {
+                                    "value": "3.0",
+                                    "label": "3.0 Unported"
+                                },
+                                {
+                                    "value": "2.5",
+                                    "label": "2.5 Generic"
+                                },
+                                {
+                                    "value": "2.0",
+                                    "label": "2.0 Generic"
+                                },
+                                {
+                                    "value": "1.0",
+                                    "label": "1.0 Generic"
+                                }
+                            ],
+                            "optional": true
+                        },
+                        {
+                            "name": "yearFrom",
+                            "type": "number",
+                            "label": "Years (from)",
+                            "placeholder": "1991",
+                            "min": "-9999",
+                            "max": "9999",
+                            "optional": true
+                        },
+                        {
+                            "name": "yearTo",
+                            "type": "number",
+                            "label": "Years (to)",
+                            "placeholder": "1992",
+                            "min": "-9999",
+                            "max": "9999",
+                            "optional": true
+                        },
+                        {
+                            "name": "source",
+                            "type": "text",
+                            "label": "Source",
+                            "placeholder": "https://",
+                            "optional": true
+                        },
+                        {
+                            "name": "authors",
+                            "type": "list",
+                            "field": {
+                                "name": "author",
+                                "type": "group",
+                                "fields": [
+                                    {
+                                        "label": "Author's name",
+                                        "name": "name",
+                                        "optional": true,
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "role",
+                                        "type": "select",
+                                        "label": "Author's role",
+                                        "default": "Author",
+                                        "options": [
+                                            {
+                                                "value": "Author",
+                                                "label": "Author"
+                                            },
+                                            {
+                                                "value": "Editor",
+                                                "label": "Editor"
+                                            },
+                                            {
+                                                "value": "Licensee",
+                                                "label": "Licensee"
+                                            },
+                                            {
+                                                "value": "Originator",
+                                                "label": "Originator"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "licenseExtras",
+                            "type": "text",
+                            "widget": "textarea",
+                            "label": "License Extras",
+                            "optional": true,
+                            "description": "Any additional information about the license"
+                        },
+                        {
+                            "name": "changes",
+                            "type": "list",
+                            "field": {
+                                "name": "change",
+                                "type": "group",
+                                "label": "Changelog",
+                                "fields": [
+                                    {
+                                        "name": "date",
+                                        "type": "text",
+                                        "label": "Date",
+                                        "optional": true
+                                    },
+                                    {
+                                        "name": "author",
+                                        "type": "text",
+                                        "label": "Changed by",
+                                        "optional": true
+                                    },
+                                    {
+                                        "name": "log",
+                                        "type": "text",
+                                        "widget": "textarea",
+                                        "label": "Description of change",
+                                        "placeholder": "Photo cropped, text changed, etc.",
+                                        "optional": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "authorComments",
+                            "type": "text",
+                            "widget": "textarea",
+                            "label": "Author comments",
+                            "description": "Comments for the editor of the content (This text will not be published as a part of copyright info)",
+                            "optional": true
+                        },
+                        {
+                            "name": "contentType",
+                            "type": "text",
+                            "widget": "none"
+                        },
+                        {
+                            "name": "defaultLanguage",
+                            "type": "text",
+                            "widget": "none"
+                        }
+                    ],
+                    "assets": {
+                        "css": [
+                            "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/css/laravel-h5p.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-confirmation-dialog.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-core-button.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/libs/darkroom.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/h5p-hub-client.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/fonts.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/application.css",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/libs/zebra_datepicker.min.css"
+                        ],
+                        "js": [
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/jquery.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-event-dispatcher.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api-event.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-content-type.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-confirmation-dialog.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-action-bar.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/request-queue.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-editor.js",
+                            "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p.js",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p-editor.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5p-hub-client.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-semantic-structure.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library-selector.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-fullscreen-bar.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-form.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-text.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-html.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-number.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-textarea.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-file-uploader.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-file.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-image.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-image-popup.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-av.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-group.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-boolean.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-list.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-list-editor.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library-list-cache.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-select.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-selector-hub.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-selector-legacy.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-dimensions.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-coordinates.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-none.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata-author-widget.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata-changelog-widget.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-pre-save.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/ckeditor/ckeditor.js",
+                            "https://www.currikistudio.org/api/storage/h5p/h5p-editor/language/en.js"
+                        ]
+                    },
+                    "deleteMessage": "laravel-h5p.content.destoryed",
+                    "apiVersion": {
+                        "majorVersion": 1,
+                        "minorVersion": 24
+                    }
+                },
+                "loadedJs": [],
+                "loadedCss": [],
+                "core": {
+                    "styles": [
+                        "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/css/laravel-h5p.css",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p.css",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-confirmation-dialog.css",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-core-button.css"
+                    ],
+                    "scripts": [
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/jquery.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-event-dispatcher.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api-event.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-content-type.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-confirmation-dialog.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-action-bar.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-core/js/request-queue.js",
+                        "https://www.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-editor.js",
+                        "https://www.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p.js",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.9",
+                        "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.9"
+                    ]
+                },
+                "contents": {
+                    "cid-59": {
+                        "library": "H5P.InteractiveVideo 1.21",
+                        "jsonContent": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https://youtu.be/fcjaxC-e8oY\",\"mime\":\"video/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?</p>\\n\",\"answers\":[\"<p>They reduce wind resistance.</p>\\n\",\"<p>They make the ball more visually interesting.</p>\\n\",\"<p>They grip the putting green better than a smooth ball.</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?</p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?</p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.</p>\\n\",\"<p>The ball has no spin.</p>\\n\",\"<p>The ball travels higher, but for a shorter distance.</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball</p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                        "fullScreen": 1,
+                        "exportUrl": "https://www.currikistudio.org/api/h5p/export/59",
+                        "embedCode": "<iframe src=\"https://www.currikistudio.org/h5p/embed/59\" width=\":w\" height=\":h\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>",
+                        "resizeCode": "<script src=\"https://www.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-resizer.js\" charset=\"UTF-8\"></script>",
+                        "url": "https://www.currikistudio.org/api/h5p/embed/59",
+                        "title": "Science of Golf: Why Balls Have Dimples",
+                        "displayOptions": {
+                            "frame": true,
+                            "export": true,
+                            "embed": true,
+                            "copyright": false,
+                            "icon": true,
+                            "copy": false
+                        },
+                        "contentUserData": [
+                            {
+                                "state": "{}"
+                            }
+                        ],
+                        "scripts": [
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/Drop-1.0/js/drop.min.js?ver=1.0.2",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Transition-1.0/transition.js?ver=1.0.4",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Question-1.4/scripts/question.js?ver=1.4.7",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Question-1.4/scripts/explainer.js?ver=1.4.7",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Question-1.4/scripts/score-points.js?ver=1.4.7",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SoundJS-1.0/soundjs-0.6.2.min.js?ver=1.0.2",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/stop-watch.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/sound-effects.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/xapi-event-builder.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/result-slide.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/solution-view.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/single-choice-alternative.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/single-choice.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/scripts/single-choice-set.js?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Summary-1.10/js/stop-watch.js?ver=1.10.8",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Summary-1.10/js/xapi-event-builder.js?ver=1.10.8",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Summary-1.10/js/summary.js?ver=1.10.8",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNDrop-1.1/drag-n-drop.js?ver=1.1.5",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNResize-1.2/H5P.DragNResize.js?ver=1.2.6",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/scripts/drag-n-bar.js?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/scripts/context-menu.js?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/scripts/dialog.js?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/scripts/drag-n-bar-element.js?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/scripts/drag-n-bar-form-manager.js?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/flowplayer-1.0/scripts/flowplayer-3.2.12.min.js?ver=1.0.5",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Video-1.5/scripts/youtube.js?ver=1.5.12",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Video-1.5/scripts/panopto.js?ver=1.5.12",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Video-1.5/scripts/html5.js?ver=1.5.12",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Video-1.5/scripts/flash.js?ver=1.5.12",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Video-1.5/scripts/video.js?ver=1.5.12",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/jQuery.ui-1.10/h5p-jquery-ui.js?ver=1.10.19",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.InteractiveVideo-1.21/dist/h5p-interactive-video.js?ver=1.21.9"
+                        ],
+                        "styles": [
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/FontAwesome-4.5/h5p-font-awesome.min.css?ver=4.5.4",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/Drop-1.0/css/drop-theme-arrows-bounce.min.css?ver=1.0.2",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.FontIcons-1.0/styles/h5p-font-icons.css?ver=1.0.6",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-help-dialog.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-message-dialog.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-progress-circle.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-simple-rounded-button.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-speech-bubble.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-tip.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-slider.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-score-bar.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-progressbar.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-ui.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-icon.css?ver=1.3.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Question-1.4/styles/question.css?ver=1.4.7",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Question-1.4/styles/explainer.css?ver=1.4.7",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.SingleChoiceSet-1.11/styles/single-choice-set.css?ver=1.11.9",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Summary-1.10/css/summary.css?ver=1.10.8",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNResize-1.2/H5P.DragNResize.css?ver=1.2.6",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/styles/drag-n-bar.css?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/styles/dialog.css?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/styles/context-menu.css?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.DragNBar-1.5/styles/drag-n-bar-form-manager.css?ver=1.5.10",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.Video-1.5/styles/video.css?ver=1.5.12",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/jQuery.ui-1.10/h5p-jquery-ui.css?ver=1.10.19",
+                            "https://www.currikistudio.org/api/storage/h5p/libraries/H5P.InteractiveVideo-1.21/dist/h5p-interactive-video.css?ver=1.21.9"
+                        ]
+                    }
+                }
+            },
+            "user": {
+                "id": 1,
+                "name": "John Doe",
+                "email": "john.doe@currikistudio.org"
+            },
+            "embed_code": "<div class=\"h5p-iframe-wrapper\"><iframe id=\"h5p-iframe-59\" class=\"h5p-iframe\" data-content-id=\"59\" style=\"height: 1px\" src=\"about:blank\" frameBorder=\"0\" scrolling=\"no\"></iframe></div>"
+        },
+        "playlist": {
+            "id": 1,
+            "title": "The Engineering & Design Behind Golf Balls",
+            "project_id": 1,
+            "order": 0,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "elasticsearch": true,
+            "is_public": true,
+            "project": {
+                "id": 1,
+                "name": "The Science of Golf",
+                "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                "thumb_url": "/storage/projects/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+                "starter_project": false,
+                "created_at": "2020-04-30T20:03:12.000000Z",
+                "updated_at": "2020-09-17T05:44:49.000000Z",
+                "deleted_at": null,
+                "elasticsearch": false,
+                "shared": true,
+                "is_public": true
+            }
+        },
+        "created_at": null,
+        "updated_at": null
+    },
+    "playlist": {
+        "id": 1,
+        "title": "The Engineering & Design Behind Golf Balls",
+        "order": 0,
+        "is_public": true,
+        "project_id": 1,
+        "project": {
+            "id": 1,
+            "name": "The Science of Golf",
+            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+            "thumb_url": "/storage/projects/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+            "shared": true,
+            "starter_project": false,
+            "users": [
+                {
+                    "id": 1,
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "email": "john.doe@currikistudio.org",
+                    "role": "owner"
+                }
+            ],
+            "is_public": true,
+            "created_at": "2020-04-30T20:03:12.000000Z",
+            "updated_at": "2020-09-17T05:44:49.000000Z"
+        },
+        "activities": [
+            {
+                "id": 4,
+                "playlist_id": 1,
+                "title": "Labeling Golf Ball - Principles of Physics",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 0,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 65,
+                    "created_at": "2020-04-30T23:40:49.000000Z",
+                    "updated_at": "2020-04-30T23:40:49.000000Z",
+                    "user_id": 1,
+                    "title": "Labeling Golf Ball - Principles of Physics",
+                    "library_id": 19,
+                    "parameters": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images/background-5eab614083be2.png#tmp\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Lift</p>\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Drag</p>\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Spin</p>\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Lift</div>\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Drag</div>\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Spin</div>\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
+                    "filtered": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images/background-5eab614083be2.png\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Lift</p>\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Drag</p>\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Spin</p>\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Lift</div>\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Drag</div>\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Spin</div>\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
+                    "slug": "labeling-golf-ball-principles-of-physics",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 17774,
+                "playlist_id": 1,
+                "title": "Latest",
+                "type": "h5p",
+                "content": "test",
+                "shared": false,
+                "order": null,
+                "thumb_url": "/storage/activities/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
+                "subject_id": "Mathematics",
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 19334,
+                    "created_at": "2020-08-30T20:09:56.000000Z",
+                    "updated_at": "2020-08-30T20:09:56.000000Z",
+                    "user_id": 1,
+                    "title": "Latest",
+                    "library_id": 98,
+                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                    "filtered": "",
+                    "slug": "latest",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": "2020-08-30T20:22:47.000000Z",
+                "updated_at": "2020-08-30T20:22:47.000000Z"
+            },
+            {
+                "id": 17776,
+                "playlist_id": 1,
+                "title": "Latest",
+                "type": "h5p",
+                "content": "test",
+                "shared": false,
+                "order": null,
+                "thumb_url": "/storage/activities/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
+                "subject_id": "Mathematics",
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 19334,
+                    "created_at": "2020-08-30T20:09:56.000000Z",
+                    "updated_at": "2020-08-30T20:09:56.000000Z",
+                    "user_id": 1,
+                    "title": "Latest",
+                    "library_id": 98,
+                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                    "filtered": "",
+                    "slug": "latest",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": "2020-08-30T20:24:29.000000Z",
+                "updated_at": "2020-08-30T20:24:29.000000Z"
+            },
+            {
+                "id": 3,
+                "playlist_id": 1,
+                "title": "Physics Vocabulary Study Guide",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 1,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 61,
+                    "created_at": "2020-04-30T20:35:30.000000Z",
+                    "updated_at": "2020-04-30T20:35:30.000000Z",
+                    "user_id": 1,
+                    "title": "Physics Vocabulary Study Guide",
+                    "library_id": 63,
+                    "parameters": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">Acceleration is the measurement of the change </span></span></span><span style=\\\"font-size:11.0pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\">in an object\\u2019s velocity. </span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">The faster the air moves, the less pressure it exerts.</span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"<p><span style=\\\"font-size:10.5pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\"><span style=\\\"color:black\\\">A vector is a quantity that has both a magnitude and a direction.</span></span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"<p><span style=\\\"font-size:10.5pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\"><span style=\\\"color:black\\\">Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.</span></span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:normal\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:10.5pt\\\"><span style=\\\"color:black\\\">A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.</span></span></span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.</span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
+                    "filtered": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"<p><span><span><span>Acceleration is the measurement of the change </span></span></span><span><span><span>in an object\\u2019s velocity. </span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span>The faster the air moves, the less pressure it exerts.</span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span>A vector is a quantity that has both a magnitude and a direction.</span></span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span>Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.</span></span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span><span>A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.</span></span></span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span>Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.</span></span></span></p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
+                    "slug": "physics-vocabulary-study-guide",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 1,
+                "playlist_id": 1,
+                "title": "Science of Golf: Why Balls Have Dimples",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 2,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 59,
+                    "created_at": "2020-04-30T20:24:58.000000Z",
+                    "updated_at": "2020-04-30T20:24:58.000000Z",
+                    "user_id": 1,
+                    "title": "Science of Golf: Why Balls Have Dimples",
+                    "library_id": 40,
+                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https://youtu.be/fcjaxC-e8oY\",\"mime\":\"video/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?</p>\\n\",\"answers\":[\"<p>They reduce wind resistance.</p>\\n\",\"<p>They make the ball more visually interesting.</p>\\n\",\"<p>They grip the putting green better than a smooth ball.</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?</p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?</p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.</p>\\n\",\"<p>The ball has no spin.</p>\\n\",\"<p>The ball travels higher, but for a shorter distance.</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball</p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https://youtu.be/fcjaxC-e8oY\",\"mime\":\"video/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?</p>\\n\",\"answers\":[\"<p>They reduce wind resistance.</p>\\n\",\"<p>They make the ball more visually interesting.</p>\\n\",\"<p>They grip the putting green better than a smooth ball.</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?</p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?</p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.</p>\\n\",\"<p>The ball has no spin.</p>\\n\",\"<p>The ball travels higher, but for a shorter distance.</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball</p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "slug": "science-of-golf-why-balls-have-dimples",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 2,
+                "playlist_id": 1,
+                "title": "Physics and Golf Balls",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 3,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 60,
+                    "created_at": "2020-04-30T20:31:11.000000Z",
+                    "updated_at": "2020-04-30T20:31:11.000000Z",
+                    "user_id": 1,
+                    "title": "Physics and Golf Balls",
+                    "library_id": 60,
+                    "parameters": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images/image-5eab35098aaf0.png#tmp\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images/image-5eab355f7ca78.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images/image-5eab3589be9e3.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
+                    "filtered": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images/image-5eab35098aaf0.png\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images/image-5eab355f7ca78.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images/image-5eab3589be9e3.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
+                    "slug": "physics-and-golf-balls",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 6,
+                "playlist_id": 1,
+                "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 4,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 75,
+                    "created_at": "2020-05-01T04:51:11.000000Z",
+                    "updated_at": "2020-05-01T04:51:11.000000Z",
+                    "user_id": 1,
+                    "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                    "library_id": 40,
+                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https://www.youtube.com/watch?v=FdH0JQL5E-U&list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"<p>\\\"Torque\\\"&nbsp;is&nbsp;a property of golf&nbsp;shafts that describes how much the shaft is&nbsp;prone to twisting during the golf&nbsp;swing.</p>\\n\",\"answers\":[\"<p>True</p>\\n\",\"<p>False</p>\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"<p>... A shaft with a _____ torque&nbsp;rating means&nbsp;the shaft better resists twisting; a shaft with a ____ torque&nbsp;rating means&nbsp;the shaft is&nbsp;more prone to twisting (all other things being equal).</p>\\n\",\"answers\":[\"<p>lower,&nbsp;higher</p>\\n\",\"<p>higher, lower</p>\\n\",\"<p>sharper, duller</p>\\n\",\"<p>straigher, curved</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.</p>\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.</p>\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the right, causing a fade&nbsp; slice curved flight.</div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the left, causing a <strong>slice</strong> curved flight.</div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>When a ball is spinning&nbsp;in a clockwise&nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.</p>\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https://www.youtube.com/watch?v=FdH0JQL5E-U&amp;list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"<p>\\\"Torque\\\"&nbsp;is&nbsp;a property of golf&nbsp;shafts that describes how much the shaft is&nbsp;prone to twisting during the golf&nbsp;swing.</p>\\n\",\"answers\":[\"<p>True</p>\\n\",\"<p>False</p>\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"<p>... A shaft with a _____ torque&nbsp;rating means&nbsp;the shaft better resists twisting; a shaft with a ____ torque&nbsp;rating means&nbsp;the shaft is&nbsp;more prone to twisting (all other things being equal).</p>\\n\",\"answers\":[\"<p>lower,&nbsp;higher</p>\\n\",\"<p>higher, lower</p>\\n\",\"<p>sharper, duller</p>\\n\",\"<p>straigher, curved</p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.</p>\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.</p>\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the right, causing a fade&nbsp; slice curved flight.</div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the left, causing a <strong>slice</strong> curved flight.</div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>When a ball is spinning&nbsp;in a clockwise&nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.</p>\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "slug": "understanding-gear-effect-equipment-and-tech-18birdies",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 5,
+                "playlist_id": 1,
+                "title": "The Evolution of the Golf Ball",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 5,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 66,
+                    "created_at": "2020-04-30T23:58:44.000000Z",
+                    "updated_at": "2020-04-30T23:58:44.000000Z",
+                    "user_id": 1,
+                    "title": "The Evolution of the Golf Ball",
+                    "library_id": 61,
+                    "parameters": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab648fb61c9.jpeg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"<p>Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab64e26de00.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"<p>The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab652f19393.png#tmp\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"<p>The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&nbsp;</p>\\n\\n<p>It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&nbsp;</p>\\n\\n<p>After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&nbsp;</p>\\n\\n<p>Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.<br>\\n&nbsp;</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab658fa6bde.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https://images.app.goo.gl/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"<p>In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...<br>\\n&nbsp;</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab65cbe1adb.png#tmp\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"<p>It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&nbsp;</p>\\n\\n<p>The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.</p>\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"<p>American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.</p>\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"<div>A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!</div>\\n\",\"backgroundImage\":{\"path\":\"images/backgroundImage-5eab633e2e935.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
+                    "filtered": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab648fb61c9.jpeg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"<p>Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab64e26de00.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"<p>The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab652f19393.png\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"<p>The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&nbsp;</p>\\n\\n<p>It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&nbsp;</p>\\n\\n<p>After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&nbsp;</p>\\n\\n<p>Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.<br>\\n&nbsp;</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab658fa6bde.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https://images.app.goo.gl/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"<p>In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...<br>\\n&nbsp;</p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images/thumbnail-5eab65cbe1adb.png\",\"mime\":\"image/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"<p>It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&nbsp;</p>\\n\\n<p>The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.</p>\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"<p>American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.</p>\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"<div>A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!</div>\\n\",\"backgroundImage\":{\"path\":\"images/backgroundImage-5eab633e2e935.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
+                    "slug": "the-evolution-of-the-golf-ball",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 7,
+                "playlist_id": 1,
+                "title": "Famous Golf Holes",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 6,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 76,
+                    "created_at": "2020-05-01T05:20:54.000000Z",
+                    "updated_at": "2020-05-01T05:20:54.000000Z",
+                    "user_id": 1,
+                    "title": "Famous Golf Holes",
+                    "library_id": 60,
+                    "parameters": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images/image-5eabad2e71b62.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"<p>Mickey Mantle<br>\\nAT&amp;T Pro Am</p>\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images/image-5eabae675c197.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images/image-5eabaec199254.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images/image-5eabafb2400f7.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images/image-5eabb0ced23c3.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images/image-5eabb17c9a715.jpg#tmp\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
+                    "filtered": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images/image-5eabad2e71b62.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"<p>Mickey Mantle<br>\\nAT&amp;T Pro Am</p>\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images/image-5eabae675c197.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images/image-5eabaec199254.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images/image-5eabafb2400f7.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images/image-5eabb0ced23c3.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images/image-5eabb17c9a715.jpg\",\"mime\":\"image/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
+                    "slug": "famous-golf-holes",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            }
+        ],
+        "created_at": null,
+        "updated_at": null
+    }
+}

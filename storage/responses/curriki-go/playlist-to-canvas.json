@@ -1,0 +1,19 @@
+{
+    "playlist": {
+        "id": 1,
+        "title": "Development Setup",
+        "position": 4,
+        "type": "ExternalTool",
+        "module_id": 26,
+        "content_id": 0,
+        "html_url": "https://canvas2.curriki.org/courses/32/modules/items/112",
+        "url": "https://canvas2.curriki.org/api/v1/courses/32/external_tools/sessionless_launch?launch_type=module_item&module_item_id=112",
+        "external_url": "https://tsugi.curriki.org/mod/curriki/?playlist=1",
+        "new_tab": false,
+        "completion_requirement": {
+            "type": "must_view"
+        },
+        "published": false,
+        "indent": 0
+    }
+}

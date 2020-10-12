@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Metrics\MetricsRepositoryInterface;
+use Illuminate\Http\Request;
 
 class MetricsController extends Controller
 {
-
     private $metricsRepository;
 
     public function __construct(MetricsRepositoryInterface $metricsRepository)

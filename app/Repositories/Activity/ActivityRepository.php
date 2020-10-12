@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -227,19 +228,22 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     public function clone(Playlist $playlist, Activity $activity, $token)
     {
         $h5P_res = null;
-        
+
         if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) {
             $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
         }
-
-        $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
+        $isDuplicate = ($activity->playlist_id == $playlist->id);
         
+        if ($isDuplicate) {
+            Activity::where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
+        }
+        $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
         $activity_data = [
-            'title' => $activity->title,
+            'title' => ($isDuplicate) ? $activity->title."-COPY" : $activity->title,
             'type' => $activity->type,
             'content' => $activity->content,
             'playlist_id' => $playlist->id,
-            'order' => $activity->order,
+            'order' => ($isDuplicate) ? $activity->order + 1 :$this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $activity->h5p_content_id,
             'thumb_url' => $new_thumb_url,
             'subject_id' => $activity->subject_id,
@@ -290,7 +294,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             } catch (Excecption $ex) {
 
             }
-            
+
             if (!is_null($response_h5p) && $response_h5p->getStatusCode() == 201) {
                 unlink(storage_path('app/public/uploads/' . $new_h5p_file));
                 return json_decode($response_h5p->getBody()->getContents());
@@ -301,7 +305,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             return null;
         }
     }
-    
+
     /**
      *  To get the is_public value for parent playlist of activity
      * @param type $playlistId
@@ -309,9 +313,40 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      */
     public function getPlaylistIsPublicValue($playlistId)
     {
-        $playlist =  Playlist::where('id',$playlistId)->value('is_public'); 
-        
+        $playlist =  Playlist::where('id',$playlistId)->value('is_public');
+
         return ($playlist) ? $playlist : false;
+    }
+    
+    /**
+     * Get latest order of activity for Playlist
+     * @param $playlist_id
+     * @return int
+     */
+    public function getOrder($playlist_id)
+    {
+        return $this->model->where('playlist_id', $playlist_id)
+            ->orderBy('order', 'desc')
+            ->value('order') ?? 0;
+    }
+    
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber()
+    {
+        $playLists = Playlist::all();
+        foreach($playLists as $playlist) {
+            $activites = $playlist->activities()->whereNull('order')->orderBy('created_at')->get();
+            if(!empty($activites)) {
+                $order = 1;
+                foreach($activites as $activity) {
+                    $activity->order = $order;
+                    $activity->save();
+                    $order++;
+                }
+            }
+        }
     }
 
 }

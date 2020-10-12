@@ -1,0 +1,79 @@
+{
+    "course": {
+        "id": "158432479402",
+        "name": "Partner Content Projects",
+        "topics": [
+            {
+                "course_id": "158432479402",
+                "topic_id": "158409588847",
+                "name": "NBC Learn",
+                "course_work": [
+                    {
+                        "id": "158442674345",
+                        "course_id": "158432479402",
+                        "description": null,
+                        "topic_id": "158409588847",
+                        "title": "Test Activity 1 - 1",
+                        "state": "PUBLISHED",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "https://www.currikistudio.org/shared/activity/10"
+                                }
+                            }
+                        ],
+                        "max_points": null
+                    },
+                    {
+                        "id": "158442674350",
+                        "course_id": "158432479402",
+                        "description": null,
+                        "topic_id": "158409588847",
+                        "title": "Test Activity 1 - 0",
+                        "state": "PUBLISHED",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "https://www.currikistudio.org/shared/activity/9"
+                                }
+                            }
+                        ],
+                        "max_points": null
+                    }
+                ]
+            },
+            {
+                "course_id": "158432479402",
+                "topic_id": "158410401228",
+                "name": "Internal",
+                "course_work": [
+                    {
+                        "id": "158443047525",
+                        "course_id": "158432479402",
+                        "description": null,
+                        "topic_id": "158410401228",
+                        "title": "Test Activity 1 - 0",
+                        "state": "PUBLISHED",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "https://www.currikistudio.org/shared/activity/11"
+                                }
+                            }
+                        ],
+                        "max_points": null
+                    }
+                ]
+            }
+        ]
+    }
+}

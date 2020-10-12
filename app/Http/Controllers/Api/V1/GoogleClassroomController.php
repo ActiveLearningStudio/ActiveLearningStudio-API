@@ -20,10 +20,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 
 /**
- * This class handles sharing projects in Google Classroom via a service
+ * @group 11. Google Classroom
  *
- * @group Google Classroom
- * @authenticated
+ * APIs for Google Classroom
  */
 class GoogleClassroomController extends Controller
 {
@@ -49,10 +48,12 @@ class GoogleClassroomController extends Controller
 	 *
 	 * Get all existing Google Classroom Courses
      *
-     * @responseFile  responses/google-classroom.courses.get.json
+     * @responseFile responses/google-classroom/google-classroom-courses.json
      *
-     * @response  500 {
-     *  "errors": "Service exception error"
+     * @response 500 {
+     *   "errors": [
+     *     "Service exception error"
+     *   ]
      * }
      *
      * @param Request $request
@@ -64,7 +65,8 @@ class GoogleClassroomController extends Controller
         try {
             $service = new GoogleClassroom();
             $params = array(
-                // if pageSize is not set, then server will set the maximum limit, so we need to iterate through all pages
+                // if pageSize is not set, then server will set the maximum limit
+                // so we need to iterate through all pages
                 'pageSize' => 100,
                 'courseStates' => GoogleClassroom::COURSE_STATE_ACTIVE
             );
@@ -85,17 +87,22 @@ class GoogleClassroomController extends Controller
 	 *
 	 * Save GAPI access token in the database.
 	 *
-     * @bodyParam  access_token string required The stringified JSON of the GAPI access token object
-     * @response  {
-     *   "message":"Access Token Saved successfully"
+     * @bodyParam access_token string required The stringified of the GAPI access token JSON object
+     *
+     * @response {
+     *   "message": "Access token has been saved successfully."
      * }
      *
-     * @response  500 {
-     *  "errors": "Validation error: Access token is required"
+     * @response 500 {
+     *   "errors": [
+     *     "Validation error: Access token is required"
+     *   ]
      * }
      *
-     * @response  500 {
-     *  "errors": "Failed to save the token."
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to save the token."
+     *   ]
      * }
      *
      * @param GCSaveAccessTokenRequest $accessTokenRequest
@@ -112,7 +119,7 @@ class GoogleClassroomController extends Controller
 
         if ($isUpdated) {
             return response([
-                'message' => 'Access Token Saved successfully',
+                'message' => 'Access token has been saved successfully.',
             ], 200);
         }
 
@@ -124,19 +131,23 @@ class GoogleClassroomController extends Controller
     /**
 	 * Copy project to Google Classroom
 	 *
-	 * Copy whole project to google classroom either as a new course
-     * or into an existing course.
+	 * Copy whole project to google classroom either as a new course or into an existing course.
 	 *
-     * @urlParam    project required The ID of the project. Example: 9
-     * @bodyParam   course_id string ID of an existing Google Classroom course. Example: 123
-     * @responseFile  responses/google-classroom.copyproject.json
+     * @urlParam project required The Id of a project. Example: 9
+     * @bodyParam course_id string Id of an existing Google Classroom course. Example: 123
+     *
+     * @responseFile responses/google-classroom/google-classroom-project.json
      *
      * @response  403 {
-     *  "errors": "Forbidden. You are trying to share other user's project."
+     *   "errors": [
+     *     "Forbidden. You are trying to share other user's project."
+     *   ]
      * }
      *
      * @response  500 {
-     *  "errors": "Failed to save the token."
+     *   "errors": [
+     *     "Failed to copy project."
+     *   ]
      * }
      *
      * @param Project $project

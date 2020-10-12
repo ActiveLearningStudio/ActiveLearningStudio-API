@@ -1,0 +1,46 @@
+{
+    "activityItems": [
+        {
+            "id": 1,
+            "title": "Audio Recorder",
+            "description": "Record your voice and play back or download a .wav file of your recording.",
+            "order": 1,
+            "activityType": {
+                "id": 1,
+                "title": "Audio",
+                "order": 0,
+                "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                "created_at": "2020-08-25T16:29:35.000000Z",
+                "updated_at": "2020-08-25T16:29:35.000000Z"
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.AudioRecorder 1.0",
+            "image": "/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+            "demo_activity_id": null,
+            "demo_video_id": null,
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        },
+        {
+            "id": 2,
+            "title": "Dictation",
+            "description": "A tool to create dictation exercises",
+            "order": 2,
+            "activityType": {
+                "id": 1,
+                "title": "Audio",
+                "order": 0,
+                "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                "created_at": "2020-08-25T16:29:35.000000Z",
+                "updated_at": "2020-08-25T16:29:35.000000Z"
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.Dictation 1.0",
+            "image": "/storage/activity-items/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+            "demo_activity_id": null,
+            "demo_video_id": null,
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        }
+    ]
+}

@@ -26,12 +26,13 @@ class ForgotPasswordController extends Controller
     use SendsPasswordResetEmails;
 
     /**
-     * @group Authentication
+     * @group 1. Authentication
      *
-     * Forgot Password Email
-     * Send a reset link to the given user.
+     * Forgot Password
      *
-     * @bodyParam email string required The email of a user
+     * Send a password reset link to the given user.
+     *
+     * @bodyParam email string required The email of a user Example: john.doe@currikistudio.org
      *
      * @response {
      *   "message": "Password reset email has been sent. Please follow the instructions."

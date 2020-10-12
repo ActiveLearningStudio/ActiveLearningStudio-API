@@ -30,7 +30,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'temp_password',
         'remember_token',
         'organization_name',
         'organization_type',
@@ -108,7 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function projects()
     {
-        return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->orderBy('order','desc')->withTimestamps();
     }
 
     /**
@@ -130,14 +129,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'App\Models\Activity',
             ['App\Models\Pivots\UserProject', 'App\Models\Playlist'], // Intermediate models, beginning at the far parent (Users).
             [
-                'user_id', // Foreign key on the "user_project" table.
-                'project_id',    // Foreign key on the "playlist" table.
-                'playlist_id'     // Foreign key on the "activity" table.
+                'user_id',      // Foreign key on the "user_project" table.
+                'project_id',   // Foreign key on the "playlist" table.
+                'playlist_id'   // Foreign key on the "activity" table.
             ],
             [
-                'id', // Local key on the "users" table.
-                'project_id', // Local key on the "user_project" table.
-                'id'  // Local key on the "playlist" table.
+                'id',           // Local key on the "users" table.
+                'project_id',   // Local key on the "user_project" table.
+                'id'            // Local key on the "playlist" table.
             ]
         );
     }

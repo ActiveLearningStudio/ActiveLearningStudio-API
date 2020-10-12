@@ -20,6 +20,7 @@ class ActivityItemController extends Controller
 
     /**
      * ActivityItemController constructor.
+     *
      * @param ActivityItemRepository $repository
      */
     public function __construct(ActivityItemRepository $repository)
@@ -42,7 +43,7 @@ class ActivityItemController extends Controller
      * @return ActivityItemResource
      * @throws GeneralException
      */
-    public function edit($id)
+    public function show($id)
     {
         $item = $this->repository->find($id);
         return new ActivityItemResource($item);
