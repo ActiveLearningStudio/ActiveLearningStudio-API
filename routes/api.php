@@ -115,7 +115,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         });
 
         // Google Share
-        Route::group(['prefix' => 'go'], function () {
+        Route::group(['prefix' => 'google-classroom'], function () {
             Route::post('access-token', 'GoogleClassroomController@saveAccessToken');
             Route::get('courses', 'GoogleClassroomController@getCourses');
             Route::post('projects/{project}/copy', 'GoogleClassroomController@copyProject');
