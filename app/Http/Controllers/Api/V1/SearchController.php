@@ -110,8 +110,8 @@ class SearchController extends Controller
      *
      * @queryParam  query required Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
-     * @queryParam  isPublic Public access enabled or disabled. Example: true
-     * @queryParam  elasticsearch Elasticsearch enabled or disabled. Example: false
+     * @queryParam  isPublic Public access enabled or disabled. Example: 1
+     * @queryParam  elasticsearch Elasticsearch enabled or disabled. Example: 0
      * @queryParam  startDate Start date for search by date range. Example: 2020-04-30 00:00:00
      * @queryParam  endDate End date for search by date range. Example: 2020-04-30 23:59:59
      * @queryParam  h5pLibraries Array of h5p libraries to match. Example: ['H5P.InteractiveVideo 1.21']
