@@ -147,12 +147,12 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         $boolQueries = [];
         $dateRange = [];
 
-        if (isset($this->startDate) && !empty($this->startDate)) {
+        if (!empty($this->startDate)) {
             $carbonStartDate = new Carbon($this->startDate);
             $dateRange['gte'] = $carbonStartDate->toAtomString();
         }
 
-        if (isset($this->endDate) && !empty($this->endDate)) {
+        if (!empty($this->endDate)) {
             $carbonEndDate = new Carbon($this->endDate);
             $dateRange['lte'] = $carbonEndDate->toAtomString();
         }
@@ -165,7 +165,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->isPublic)) {
+        if (!empty($this->isPublic)) {
             $andQueries[] = [
                 'term' => [
                     'is_public' => $this->isPublic
@@ -173,7 +173,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->elasticsearch)) {
+        if (!empty($this->elasticsearch)) {
             $andQueries[] = [
                 'term' => [
                     'elasticsearch' => $this->elasticsearch
@@ -181,7 +181,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->type) && !empty($this->type)) {
+        if (!empty($this->type)) {
             $andQueries[] = [
                 'term' => [
                     'type' => $this->type
@@ -189,7 +189,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->subjectIds) && !empty($this->subjectIds)) {
+        if (!empty($this->subjectIds)) {
             $andQueries[] = [
                 'terms' => [
                     'subject_id' => $this->subjectIds
@@ -197,7 +197,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->educationLevelIds) && !empty($this->educationLevelIds)) {
+        if (!empty($this->educationLevelIds)) {
             $andQueries[] = [
                 'terms' => [
                     'education_level_id' => $this->educationLevelIds
@@ -205,7 +205,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->playlistIds) && !empty($this->playlistIds)) {
+        if (!empty($this->playlistIds)) {
             $andQueries[] = [
                 'terms' => [
                     'playlist_id' => $this->playlistIds
@@ -213,7 +213,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->projectIds) && !empty($this->projectIds)) {
+        if (!empty($this->projectIds)) {
             $andQueries[] = [
                 'terms' => [
                     'project_id' => $this->projectIds
@@ -221,7 +221,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->h5pLibraries) && !empty($this->h5pLibraries)) {
+        if (!empty($this->h5pLibraries)) {
             $andQueries[] = [
                 'terms' => [
                     'h5p_library' => $this->h5pLibraries
@@ -229,7 +229,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->query) && !empty($this->query)) {
+        if (!empty($this->query)) {
             $orQueries[] = [
                 'multi_match' => [
                     'query' => $this->query,
@@ -244,7 +244,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->negativeQuery) && !empty($this->negativeQuery)) {
+        if (!empty($this->negativeQuery)) {
             $boolQueries['must_not'] = [
                 'multi_match' => [
                     'query' => $this->negativeQuery
