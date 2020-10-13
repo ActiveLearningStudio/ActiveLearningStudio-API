@@ -31,6 +31,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
 
+    Route::get('organization-types', 'OrganizationTypesController@index');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
@@ -89,6 +91,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/filter', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@filter')->name('h5p.ajax.filter');
             Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name('h5p.ajax.finish');
             Route::any('ajax/content-user-data', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentUserData')->name('h5p.ajax.content-user-data');
+            Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
         });
 
         // Elasticsearch
@@ -169,6 +172,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // activity-items
         Route::apiResource('activity-items', 'ActivityItemController');
+
+        // organization-types
+        Route::apiResource('organization-types', 'OrganizationTypesController');
     });
 
     // admin public routes for downloads / uploads

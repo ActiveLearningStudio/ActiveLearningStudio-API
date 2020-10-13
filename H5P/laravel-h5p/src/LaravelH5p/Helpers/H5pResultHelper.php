@@ -42,8 +42,8 @@ class H5pResultHelper
             )
         );
 
-        $query_args[] = $offset;
         $query_args[] = $limit;
+        $query_args[] = $offset;
 
         $query = "
             SELECT hr.id,
@@ -57,8 +57,8 @@ class H5pResultHelper
                 {$joins}
                 {$where}
                 {$order_by}
-            LIMIT ?, ?
-        ";
+            LIMIT ? OFFSET ?
+        "; // LIMIT ?, ?
 
         return DB::select($query, $query_args);
     }
