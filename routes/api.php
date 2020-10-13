@@ -171,8 +171,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('activity-items', 'ActivityItemController');
 
         // organisations
-        Route::resource('organisations', 'OrganisationController');
         Route::get('organisations/report/basic', 'OrganisationController@reportBasic')->name('organisations.report.basic');
+        Route::apiResource('organisations', 'OrganisationController');
     });
 
     // admin public routes for downloads / uploads

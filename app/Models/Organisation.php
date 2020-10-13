@@ -63,7 +63,7 @@ class Organisation extends Model
                 'playlist_id'     // Foreign key on the "activity" table.
             ],
             [
-                'id', // Local key on the "users" table.
+                'id', // Local key on the "organisations" table.
                 'id', // Local key on the "project" table.
                 'id'  // Local key on the "playlist" table.
             ]
