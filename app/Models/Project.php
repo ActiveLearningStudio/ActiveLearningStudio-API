@@ -34,6 +34,19 @@ class Project extends Model
     ];
 
     /**
+     * Fields which are boolean in DB - Must be type casted to avoid the null exception on record creation
+     * The attributes that should be cast.
+     * @var array
+     */
+    protected $casts = [
+        'is_user_starter' => 'boolean',
+        'starter_project' => 'boolean',
+        'elasticsearch' => 'boolean',
+        'is_public' => 'boolean',
+        'shared' => 'boolean',
+    ];
+
+    /**
      * Get the attributes to be indexed in Elasticsearch
      */
     public function toSearchableArray()
