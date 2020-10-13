@@ -5,7 +5,7 @@ namespace App\CurrikiGo\Canvas\Commands;
 use App\CurrikiGo\Canvas\Contracts\Command;
 
 /**
- * This class handles module creation via API in Canvas
+ * This class handles course enrollment via API in Canvas
  */
 class CreateCourseEnrollmentCommand implements Command
 {
@@ -28,11 +28,11 @@ class CreateCourseEnrollmentCommand implements Command
      */
     public $httpClient;
     /**
-     * Course id to create a module in
+     * Course id
      */
     private $courseId;
     /**
-     * Module data
+     * data
      * 
      * @var array
      */
@@ -52,7 +52,7 @@ class CreateCourseEnrollmentCommand implements Command
     }
 
     /**
-     * Execute an API request for creating a module
+     * Execute an API request for course enrollment
      * 
      * @return string|null
      */
