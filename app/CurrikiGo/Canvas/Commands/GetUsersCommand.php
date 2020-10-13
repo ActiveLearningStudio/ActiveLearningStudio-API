@@ -5,7 +5,7 @@ namespace App\CurrikiGo\Canvas\Commands;
 use App\CurrikiGo\Canvas\Contracts\Command;
 
 /**
- * This class handles fetching user data in Canvas LMS
+ * This class handles fetching users from Canvas LMS
  */
 class GetUsersCommand implements Command
 {
