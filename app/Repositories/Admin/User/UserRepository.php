@@ -61,10 +61,15 @@ class UserRepository extends BaseRepository
     {
         try {
             $data['remember_token'] = Str::random(64);
+            $data['deleted_at'] = null; // if soft deleted user registers again
             $data['email_verified_at'] = now();
-            if ($user = $this->model->create($data)) {
-                AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
-                event(new Registered($user));
+            // with trashed is added so soft-deletes records are also checked before creating new one
+            if ($user = $this->model->withTrashed()->updateOrCreate(['email' => $data['email']], $data)) {
+                // no need to fire these events as user was not created recently, it was update request
+                if ($user->wasRecentlyCreated !== true) {
+                    AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
+                    event(new Registered($user));
+                }
                 return ['message' => 'User created successfully!', 'data' => $user];
             }
         } catch (\Exception $e) {
