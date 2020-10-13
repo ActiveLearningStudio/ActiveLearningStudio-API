@@ -227,7 +227,7 @@ class LaravelH5p
             'url' => self::get_h5p_storage(), // for uploaded
             'postUserStatistics' => config('laravel-h5p.h5p_track_user') && Auth::check(),
             'ajax' => array(
-                'setFinished' => config('app.url') . '/api/h5p/ajax/url',
+                'setFinished' => route('h5p.ajax.finish'),//config('app.url') . '/api/h5p/ajax/finish',
                 'contentUserData' => config('app.url') . '/api/h5p/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
                 // 'contentUserData' => route('h5p.ajax.content-user-data', ['content_id' => ':contentId', 'data_type' => ':dataType', 'sub_content_id' => ':subContentId']),
             ),
