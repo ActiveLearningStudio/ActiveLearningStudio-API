@@ -78,7 +78,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
-            $isDuplicate = $this->checkIsDuplicate($authUser,$project->id);
+            $isDuplicate = $this->checkIsDuplicate($authUser, $project->id);
 
             if ($isDuplicate) {
                 $authUser->projects()->where('order', '>', $project->order)->increment('order', 1);
@@ -91,7 +91,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'shared' => $project->shared,
                 'order' => ($isDuplicate) ? $project->order + 1 : $this->getOrder($authUser) + 1,
                 'starter_project' => false, // this is for global starter project
-                'is_user_starter' => $project->starter_project, // this is for user level starter project (means cloned by global starter project)
+                'is_user_starter' => (bool) $project->starter_project, // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
 

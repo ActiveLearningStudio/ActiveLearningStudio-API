@@ -29,7 +29,7 @@ class StoreUser extends FormRequest
             'last_name' => 'required|string|max:255',
             'organization_name' => 'max:255',
             'job_title' => 'max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL', // pass the email if record is soft-deleted issue#CUR-537
             'password' => ['required', 'string', new StrongPassword],
         ];
     }
