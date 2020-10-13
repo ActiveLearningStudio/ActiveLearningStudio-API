@@ -31,6 +31,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
 
+    Route::get('organization-types', 'OrganizationTypesController@index');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
@@ -169,6 +171,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // activity-items
         Route::apiResource('activity-items', 'ActivityItemController');
+
+        // organization-types
+        Route::apiResource('organization-types', 'OrganizationTypesController');
     });
 
     // admin public routes for downloads / uploads
