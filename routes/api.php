@@ -135,6 +135,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
+    // xAPI Statments
+    Route::post('xapi/statements', 'XapiController@saveStatement');
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 
