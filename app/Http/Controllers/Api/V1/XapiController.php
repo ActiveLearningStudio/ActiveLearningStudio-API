@@ -39,16 +39,8 @@ class XapiController extends Controller
 
         try {
             $service = new LearnerRecordStoreService();
-            //dd($data);
-            //$stringOfJSON = $data['statement'];//'{"actor":{"name":"Aqeel AAH","mbox":"mailto:aqeel.ahmad+curriki@tkxel.com","objectType":"Agent"},"verb":{"id":"http://adlnet.gov/expapi/verbs/answered","display":{"en-US":"answered"}},"object":{"id":"http://currikiapi.localhost/h5p/embed/19427","objectType":"Activity","definition":{"extensions":{"http://h5p.org/x-api/h5p-local-content-id":19427},"name":{"en-US":"Addition"}}},"context":{"contextActivities":{"category":[{"id":"http://h5p.org/libraries/H5P.ArithmeticQuiz-1.1","objectType":"Activity"}]}},"result":{"score":{"min":0,"max":2,"raw":2,"scaled":1},"completion":true,"duration":"PT81.94S"}}';
-            //$statement = \TinCan\Statement::fromJSON($data['statement']);
-            //dd($statement);
-
             $response = $service->saveStatement($data['statement']);
             if ($response->success) {
-                //dd($response->content->getId());
-                //print $response->content; // 'someValue'
-                //print "Statement sent successfully!\n";
                 return response([
                     'id' => $response->content->getId(),
                 ], 201);
@@ -58,13 +50,10 @@ class XapiController extends Controller
                     'errors' => ["Error: " . $response->content],
                 ], 500);
             }
-            
         } catch (Exception $e) {
-            // echo $e->getMessage();
             return response([
                 'errors' => ["The statement could not be saved due to an error: " . $e->getMessage()],
             ], 500);
         }
-        
     }
 }
