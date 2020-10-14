@@ -63,7 +63,7 @@ class Playlist
             if ($lmsSettings->lms_login_id && !EnrollmentHelper::isEnrolled($lmsSettings->lms_login_id, $enrollments)) {
                 $users = $this->canvasClient->run(new GetUsersCommand($accountId, '?search_term=' . $lmsSettings->lms_login_id));
                 $userIndex = array_search($lmsSettings->lms_login_id, array_column($users, 'login_id'));
-                $user = $userIndex ? $users[$userIndex] : null;
+                $user = $userIndex !== false ? $users[$userIndex] : null;
                 if ($user) {
                     $enrollmentData = ['enrollment' => ['user_id' => $user->id, 'type' => 'TeacherEnrollment', 'enrollment_state' => 'active', 'notify' => true]];
                     $this->canvasClient->run(new CreateCourseEnrollmentCommand($course->id, $enrollmentData));
@@ -94,7 +94,7 @@ class Playlist
             if ($lmsSettings->lms_login_id && !EnrollmentHelper::isEnrolled($lmsSettings->lms_login_id, $enrollments)) {
                 $users = $this->canvasClient->run(new GetUsersCommand($accountId, '?search_term=' . $lmsSettings->lms_login_id));
                 $userIndex = array_search($lmsSettings->lms_login_id, array_column($users, 'login_id'));
-                $user = $userIndex ? $users[$userIndex] : null;
+                $user = $userIndex !== false ? $users[$userIndex] : null;
                 if ($user) {
                     $enrollmentData = ['enrollment' => ['user_id' => $user->id, 'type' => 'TeacherEnrollment', 'enrollment_state' => 'active', 'notify' => true]];
                     $this->canvasClient->run(new CreateCourseEnrollmentCommand($course->id, $enrollmentData));
