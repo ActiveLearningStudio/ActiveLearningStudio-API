@@ -241,7 +241,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
         }
         $isDuplicate = ($activity->playlist_id == $playlist->id);
-        
+
         if ($isDuplicate) {
             Activity::where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
         }
@@ -315,17 +315,16 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     }
 
     /**
-     *  To get the is_public value for parent playlist of activity
-     * @param type $playlistId
-     * @return type
+     * Check is playlist public
+     * @param $playlistId
+     * @return false
      */
     public function getPlaylistIsPublicValue($playlistId)
     {
-        $playlist =  Playlist::where('id',$playlistId)->value('is_public');
-
-        return ($playlist) ? $playlist : false;
+        $playlist = Playlist::where('id', $playlistId)->with('project')->first();
+        return ($playlist->project->indexing === 3) ? $playlist : false;
     }
-    
+
     /**
      * Get latest order of activity for Playlist
      * @param $playlist_id
@@ -337,7 +336,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ->orderBy('order', 'desc')
             ->value('order') ?? 0;
     }
-    
+
     /**
      * To Populate missing order number, One time script
      */

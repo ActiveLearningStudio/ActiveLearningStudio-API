@@ -90,7 +90,6 @@ class PlaylistController extends Controller
 
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
-        $data['is_public'] = $project->is_public;
 
         $playlist = $project->playlists()->create($data);
 

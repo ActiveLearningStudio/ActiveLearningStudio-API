@@ -21,9 +21,7 @@ class Playlist extends Model
     protected $fillable = [
         'title',
         'project_id',
-        'order',
-        'elasticsearch',
-        'is_public',
+        'order'
     ];
 
     /**

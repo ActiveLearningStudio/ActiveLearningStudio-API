@@ -26,25 +26,18 @@ class Project extends Model
         'shared',
         'starter_project',
         'is_user_starter',
-        'elasticsearch',
-        'is_public',
+        'indexing',
         'cloned_from',
         'clone_ctr',
         'order',
+        'status',
     ];
 
     /**
-     * Fields which are boolean in DB - Must be type casted to avoid the null exception on record creation
-     * The attributes that should be cast.
-     * @var array
+     * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
      */
-    protected $casts = [
-        'is_user_starter' => 'boolean',
-        'starter_project' => 'boolean',
-        'elasticsearch' => 'boolean',
-        'is_public' => 'boolean',
-        'shared' => 'boolean',
-    ];
+    public static $status = [1 => 'DRAFT' , 2 => 'FINISHED'];
+    public static $indexing = [1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'];
 
     /**
      * Get the attributes to be indexed in Elasticsearch
@@ -125,5 +118,21 @@ class Project extends Model
     public function getModelTypeAttribute()
     {
         return 'Project';
+    }
+
+    /**
+     * Maps the indexing integer value and returns the text
+     * @return string|null
+     */
+    public function getIndexingTextAttribute(){
+        return self::$indexing[$this->indexing] ?? null;
+    }
+
+    /**
+     * Maps the status value and returns the text
+     * @return string|null
+     */
+    public function getStatusTextAttribute(){
+        return self::$status[$this->status] ?? null;
     }
 }
