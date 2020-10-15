@@ -65,8 +65,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $searchedModels = $this->model->searchForm()
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
-            ->isPublic(true)
-            ->elasticsearch(true)
+            ->indexing([3])
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))
             ->size(Arr::get($data, 'size', 10))
@@ -144,6 +143,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ->type(Arr::get($data, 'type', 0))
             ->startDate(Arr::get($data, 'startDate', 0))
             ->endDate(Arr::get($data, 'endDate', 0))
+            ->indexing(Arr::get($data, 'indexing', []))
             ->subjectIds(Arr::get($data, 'subjectIds', []))
             ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
             ->projectIds($projectIds)
@@ -155,14 +155,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         if (isset($data['model']) && !empty($data['model'])) {
             $searchResultQuery = $searchResultQuery->postFilter('term', ['_index' => $data['model']]);
-        }
-
-        if (isset($data['isPublic']) && is_bool($data['isPublic'])) {
-            $searchResultQuery = $searchResultQuery->isPublic($data['isPublic']);
-        }
-
-        if (isset($data['elasticsearch']) && is_bool($data['elasticsearch'])) {
-            $searchResultQuery = $searchResultQuery->elasticsearch($data['elasticsearch']);
         }
 
         $searchResult = $searchResultQuery->execute();

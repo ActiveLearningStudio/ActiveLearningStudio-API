@@ -23,8 +23,7 @@ final class CreateActivitiesIndex implements MigrationInterface
             $mapping->keyword('h5p_content_id');
             $mapping->keyword('subject_id');
             $mapping->keyword('education_level_id');
-            $mapping->boolean('is_public');
-            $mapping->boolean('elasticsearch');
+            $mapping->keyword('indexing');
             $mapping->date('created_at');
             $mapping->date('updated_at');
             $mapping->keyword('project_id');

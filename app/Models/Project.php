@@ -48,8 +48,7 @@ class Project extends Model
             'project_id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'is_public' => $this->is_public,
-            'elasticsearch' => $this->elasticsearch,
+            'indexing' => $this->indexing,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
         ];

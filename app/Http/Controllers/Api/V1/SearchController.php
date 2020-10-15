@@ -67,7 +67,7 @@ class SearchController extends Controller
     /**
      * Advance search
      *
-     * Advance search for projects, playlists and activities having isPublic and elasticsearch set to true
+     * Advance search for projects, playlists and activities having indexing approved
      *
      * @queryParam query required Query to search. Example: test
      * @queryParam negativeQuery Terms that should not exist. Example: badword
@@ -99,8 +99,7 @@ class SearchController extends Controller
     public function advance(SearchRequest $searchRequest)
     {
         $data = $searchRequest->validated();
-        $data['isPublic'] = true;
-        $data['elasticsearch'] = true;
+        $data['indexing'] = [3];
 
         $results = $this->activityRepository->advanceSearchForm($data);
 
@@ -110,12 +109,11 @@ class SearchController extends Controller
     /**
      * Dashboard search
      *
-     * Dashboard search for projects, playlists and activities irrespective of isPublic and elasticsearch status
+     * Dashboard search for projects, playlists and activities irrespective of indexing status
      *
      * @queryParam  query required Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
-     * @queryParam  isPublic Public access enabled or disabled. Example: 1
-     * @queryParam  elasticsearch Elasticsearch enabled or disabled. Example: 0
+     * @queryParam  indexing Indexing requested, approved or not approved. Example: [3]
      * @queryParam  startDate Start date for search by date range. Example: 2020-04-30 00:00:00
      * @queryParam  endDate End date for search by date range. Example: 2020-04-30 23:59:59
      * @queryParam  subjectIds Array of subject ids to match. Example: ['ComputerScience']
