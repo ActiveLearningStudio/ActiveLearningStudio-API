@@ -469,12 +469,6 @@ class ActivityController extends Controller
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
-        if (!$activity->is_public) {
-            return response([
-                'errors' => ['Not a Public Activity.'],
-            ], 400);
-        }
-
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($activity->playlist_id == $playlist->id);
         return response([

@@ -425,11 +425,6 @@ class ProjectController extends Controller
      */
     public function clone(Request $request, Project $project)
     {
-        if (!$project->is_public) {
-            return response([
-                'errors' => ['Not a Public Project.'],
-            ], 400);
-        }
         $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
         // pushed cloning of project in background
         CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());

@@ -337,12 +337,6 @@ class PlaylistController extends Controller
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
-        if (!$playlist->is_public) {
-            return response([
-                'errors' => ['Not a Public Playlist.'],
-            ], 500);
-        }
-
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($playlist->project_id == $project->id);
