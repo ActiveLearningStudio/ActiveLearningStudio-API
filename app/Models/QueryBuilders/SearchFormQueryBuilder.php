@@ -13,16 +13,6 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     private $query;
 
     /**
-     * @var boolean
-     */
-    private $isPublic;
-
-    /**
-     * @var boolean
-     */
-    private $elasticsearch;
-
-    /**
      * @var string
      */
     private $type;
@@ -67,21 +57,14 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
      */
     private $negativeQuery;
 
+    /**
+     * @var array
+     */
+    private $indexing;
+
     public function query(string $query): self
     {
         $this->query = $query;
-        return $this;
-    }
-
-    public function isPublic(bool $isPublic): self
-    {
-        $this->isPublic = $isPublic;
-        return $this;
-    }
-
-    public function elasticsearch(bool $elasticsearch): self
-    {
-        $this->elasticsearch = $elasticsearch;
         return $this;
     }
 
@@ -139,6 +122,12 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    public function indexing(array $indexing): self
+    {
+        $this->indexing = $indexing;
+        return $this;
+    }
+
     public function buildQuery(): array
     {
         $queries = [];
@@ -161,22 +150,6 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             $andQueries[] = [
                 'range' => [
                     'created_at' => $dateRange
-                ]
-            ];
-        }
-
-        if (!empty($this->isPublic)) {
-            $andQueries[] = [
-                'term' => [
-                    'is_public' => $this->isPublic
-                ]
-            ];
-        }
-
-        if (!empty($this->elasticsearch)) {
-            $andQueries[] = [
-                'term' => [
-                    'elasticsearch' => $this->elasticsearch
                 ]
             ];
         }
@@ -227,6 +200,37 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                     'h5p_library' => $this->h5pLibraries
                 ]
             ];
+        }
+
+        if (!empty($this->indexing)) {
+            if (in_array('null', $this->indexing, true)) {
+                $andQueries[] = [
+                    'bool' => [
+                        'should' => [
+                            [
+                                'terms' => [
+                                    'indexing' => array_values(array_filter($this->indexing))
+                                ]
+                            ],
+                            [
+                                'bool' => [
+                                    'must_not' => [
+                                        'exists' => [
+                                            'field' => 'indexing'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+            } else {
+                $andQueries[] = [
+                    'terms' => [
+                        'indexing' => $this->indexing
+                    ]
+                ];
+            }
         }
 
         if (!empty($this->query)) {
