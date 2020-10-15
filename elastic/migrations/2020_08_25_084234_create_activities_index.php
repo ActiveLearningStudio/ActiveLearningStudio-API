@@ -17,6 +17,7 @@ final class CreateActivitiesIndex implements MigrationInterface
         Index::create('activities', function (Mapping $mapping, Settings $settings) {
             $mapping->keyword('organisation_id');
             $mapping->keyword('organisation_visibility_type_id');
+            $mapping->keyword('h5p_library');
             $mapping->keyword('playlist_id');
             $mapping->text('title');
             $mapping->keyword('type');

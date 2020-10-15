@@ -107,8 +107,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                         $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'] = [];
                     }
 
-                    $activityModel = $searchedModel->attributesToArray();
-                    $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'][$activityId] = SearchResource::make($activityModel)->resolve();
+                    $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'][$activityId] = SearchResource::make($searchedModel)->resolve();
                 }
             }
         }
@@ -143,13 +142,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     'field' => '_index',
                 ]
             ])
-            ->isPublic(true)
-            ->elasticsearch(true)
             ->organisationVisibilityTypeIds([null, 4])
             ->type(Arr::get($data, 'type', 0))
+            ->startDate(Arr::get($data, 'startDate', 0))
+            ->endDate(Arr::get($data, 'endDate', 0))
             ->subjectIds(Arr::get($data, 'subjectIds', []))
             ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
             ->projectIds($projectIds)
+            ->h5pLibraries(Arr::get($data, 'h5pLibraries', []))
             ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))
@@ -157,6 +157,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         if (isset($data['model']) && !empty($data['model'])) {
             $searchResultQuery = $searchResultQuery->postFilter('term', ['_index' => $data['model']]);
+        }
+
+        if (isset($data['isPublic']) && is_bool($data['isPublic'])) {
+            $searchResultQuery = $searchResultQuery->isPublic($data['isPublic']);
+        }
+
+        if (isset($data['elasticsearch']) && is_bool($data['elasticsearch'])) {
+            $searchResultQuery = $searchResultQuery->elasticsearch($data['elasticsearch']);
         }
 
         $searchResult = $searchResultQuery->execute();

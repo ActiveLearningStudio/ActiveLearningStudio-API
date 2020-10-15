@@ -26,6 +26,8 @@ use App\Repositories\Metrics\MetricsRepositoryInterface;
 use App\Repositories\Metrics\MetricsRepository;
 use App\Repositories\UserLogin\UserLoginRepository;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
+use App\Repositories\OrganizationType\OrganizationTypeRepository;
+use App\Repositories\OrganizationType\OrganizationTypeRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Organisation\OrganisationRepository;
 use App\Repositories\Organisation\OrganisationRepositoryInterface;
@@ -51,6 +53,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(H5pLibraryRepositoryInterface::class, H5pLibraryRepository::class);
         $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
         $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
+        $this->app->bind(OrganizationTypeRepositoryInterface::class, OrganizationTypeRepository::class);
         $this->app->bind(OrganisationRepositoryInterface::class, OrganisationRepository::class);
     }
 

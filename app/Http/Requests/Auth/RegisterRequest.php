@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL', // pass the email if record is soft-deleted issue#CUR-537
             'password' => ['required', 'string', new StrongPassword],
             'organization_name' => 'nullable|string|max:50',
             'organization_type' => 'nullable|string|max:255',

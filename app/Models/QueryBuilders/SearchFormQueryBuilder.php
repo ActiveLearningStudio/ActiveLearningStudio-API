@@ -3,6 +3,7 @@
 namespace App\Models\QueryBuilders;
 
 use ElasticScoutDriverPlus\Builders\QueryBuilderInterface;
+use Carbon\Carbon;
 
 final class SearchFormQueryBuilder implements QueryBuilderInterface
 {
@@ -32,6 +33,16 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     private $type;
 
     /**
+     * @var string
+     */
+    private $startDate;
+
+    /**
+     * @var string
+     */
+    private $endDate;
+
+    /**
      * @var array
      */
     private $organisationIds;
@@ -55,6 +66,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
      * @var array
      */
     private $projectIds;
+
+    /**
+     * @var array
+     */
+    private $h5pLibraries;
 
     /**
      * @var string
@@ -97,6 +113,18 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    public function startDate(string $startDate): self
+    {
+        $this->startDate = $startDate;
+        return $this;
+    }
+
+    public function endDate(string $endDate): self
+    {
+        $this->endDate = $endDate;
+        return $this;
+    }
+
     public function subjectIds(array $subjectIds): self
     {
         $this->subjectIds = $subjectIds;
@@ -121,6 +149,12 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
+    public function h5pLibraries(array $h5pLibraries): self
+    {
+        $this->h5pLibraries = $h5pLibraries;
+        return $this;
+    }
+
     public function negativeQuery(string $negativeQuery): self
     {
         $this->negativeQuery = $negativeQuery;
@@ -131,8 +165,27 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     {
         $queries = [];
         $boolQueries = [];
+        $dateRange = [];
 
-        if (isset($this->isPublic) && !empty($this->isPublic)) {
+        if (!empty($this->startDate)) {
+            $carbonStartDate = new Carbon($this->startDate);
+            $dateRange['gte'] = $carbonStartDate->toAtomString();
+        }
+
+        if (!empty($this->endDate)) {
+            $carbonEndDate = new Carbon($this->endDate);
+            $dateRange['lte'] = $carbonEndDate->toAtomString();
+        }
+
+        if (!empty($dateRange)) {
+            $queries[] = [
+                'range' => [
+                    'created_at' => $dateRange
+                ]
+            ];
+        }
+
+        if (!empty($this->isPublic)) {
             $queries[] = [
                 'term' => [
                     'is_public' => $this->isPublic
@@ -140,7 +193,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->elasticsearch) && !empty($this->elasticsearch)) {
+        if (!empty($this->elasticsearch)) {
             $queries[] = [
                 'term' => [
                     'elasticsearch' => $this->elasticsearch
@@ -148,7 +201,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->organisationVisibilityTypeIds) && !empty($this->organisationVisibilityTypeIds)) {
+        if (!empty($this->organisationVisibilityTypeIds)) {
             if (in_array(null, $this->organisationVisibilityTypeIds, true)) {
                 $queries[] = [
                     'bool' => [
@@ -179,7 +232,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             }
         }
 
-        if (isset($this->type) && !empty($this->type)) {
+        if (!empty($this->type)) {
             $queries[] = [
                 'term' => [
                     'type' => $this->type
@@ -187,7 +240,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->organisationIds) && !empty($this->organisationIds)) {
+        if (!empty($this->organisationIds)) {
             $queries[] = [
                 'terms' => [
                     'organisation_id' => $this->organisationIds
@@ -195,7 +248,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->subjectIds) && !empty($this->subjectIds)) {
+        if (!empty($this->subjectIds)) {
             $queries[] = [
                 'terms' => [
                     'subject_id' => $this->subjectIds
@@ -203,7 +256,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->educationLevelIds) && !empty($this->educationLevelIds)) {
+        if (!empty($this->educationLevelIds)) {
             $queries[] = [
                 'terms' => [
                     'education_level_id' => $this->educationLevelIds
@@ -211,7 +264,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->playlistIds) && !empty($this->playlistIds)) {
+        if (!empty($this->playlistIds)) {
             $queries[] = [
                 'terms' => [
                     'playlist_id' => $this->playlistIds
@@ -219,7 +272,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->projectIds) && !empty($this->projectIds)) {
+        if (!empty($this->projectIds)) {
             $queries[] = [
                 'terms' => [
                     'project_id' => $this->projectIds
@@ -227,7 +280,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->query) && !empty($this->query)) {
+        if (!empty($this->query)) {
             $queries[] = [
                 'bool' => [
                     'should' => [
@@ -247,7 +300,15 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (isset($this->negativeQuery) && !empty($this->negativeQuery)) {
+        if (!empty($this->h5pLibraries)) {
+            $queries[] = [
+                'terms' => [
+                    'h5p_library' => $this->h5pLibraries
+                ]
+            ];
+        }
+
+        if (!empty($this->negativeQuery)) {
             $boolQueries['must_not'] = [
                 'multi_match' => [
                     'query' => $this->negativeQuery

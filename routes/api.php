@@ -31,6 +31,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
 
+    Route::get('organization-types', 'OrganizationTypesController@index');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
@@ -95,6 +97,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // Elasticsearch
         Route::get('search', 'SearchController@search');
         Route::get('search/advanced', 'SearchController@advance');
+        Route::get('search/dashboard', 'SearchController@dashboard');
 
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {
@@ -135,6 +138,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
+    // xAPI Statments
+    Route::post('xapi/statements', 'XapiController@saveStatement');
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 
@@ -169,6 +174,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // activity-items
         Route::apiResource('activity-items', 'ActivityItemController');
+
+        // organization-types
+        Route::apiResource('organization-types', 'OrganizationTypesController');
 
         // organisations
         Route::get('organisations/report/basic', 'OrganisationController@reportBasic')->name('organisations.report.basic');

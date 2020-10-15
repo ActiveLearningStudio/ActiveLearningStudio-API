@@ -43,6 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at',
         'membership_type_id',
         'gapi_access_token',
+        'deleted_at',
     ];
 
     /**
