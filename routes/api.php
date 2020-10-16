@@ -163,7 +163,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
         Route::get('projects/user-starters/flag', 'ProjectController@updateUserStarterFlag');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
-        Route::get('projects/{project}/index', 'ProjectController@updateIndex');
+        Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
         Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
         Route::apiResource('projects', 'ProjectController');

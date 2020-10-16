@@ -124,7 +124,7 @@ class Project extends Model
      * @return string|null
      */
     public function getIndexingTextAttribute(){
-        return self::$indexing[$this->indexing] ?? null;
+        return self::$indexing[$this->indexing] ?? 'NOT REQUESTED';
     }
 
     /**
