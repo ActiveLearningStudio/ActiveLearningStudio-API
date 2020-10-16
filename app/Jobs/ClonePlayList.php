@@ -10,6 +10,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Notifications\CloneNotification;
+use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Support\Facades\Log;
+use App\User;
 
 class ClonePlayList implements ShouldQueue
 {
@@ -30,6 +34,7 @@ class ClonePlayList implements ShouldQueue
      */
     protected $token;
 
+
     /**
      * Create a new job instance.
      *
@@ -42,6 +47,7 @@ class ClonePlayList implements ShouldQueue
         $this->project = $project;
         $this->playlist = $playlist;
         $this->token = $token;
+
     }
 
     /**
@@ -50,8 +56,15 @@ class ClonePlayList implements ShouldQueue
      * @param PlaylistRepositoryInterface $playlistRepository
      * @return void
      */
-    public function handle(PlaylistRepositoryInterface $playlistRepository)
+    public function handle(PlaylistRepositoryInterface $playlistRepository, UserRepositoryInterface $userRepository)
     {
         $playlistRepository->clone($this->project, $this->playlist, $this->token);
+        $isDuplicate = ($this->playlist->project_id == $this->project->id);
+        $process = ($isDuplicate) ? "duplicated" : "cloned";
+        $message =  "Playlist(".$this->playlist->title.") has been $process successfully" ;
+        (new \App\Events\SendMessage($message));
+        $user_id = $userRepository->parseToken($this->token);
+        $user = User::find($user_id);
+        $user->notify(new CloneNotification($message, $process));
     }
 }

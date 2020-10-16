@@ -341,8 +341,9 @@ class PlaylistController extends Controller
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($playlist->project_id == $project->id);
+        $process = ($isDuplicate) ? "duplicated" : "cloned";
         return response([
-            'message' => ($isDuplicate) ? 'Playlist is being duplicated in background!' : 'Playlist is being cloned in background!',
+            'message' => 'Playlist is being '.$process.' in background.You will be notified via email when the process get complted.!',
         ], 200);
     }
 }

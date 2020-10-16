@@ -9,5 +9,10 @@ use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface extends EloquentRepositoryInterface
 {
-
+    /**
+     * To fetch user from token
+     * @param $accessToken
+     * @return bool
+     */
+    public function parseToken($accessToken);
 }

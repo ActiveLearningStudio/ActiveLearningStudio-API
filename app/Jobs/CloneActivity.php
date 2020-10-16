@@ -10,6 +10,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Notifications\CloneNotification;
+use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Support\Facades\Log;
+use App\User;
 
 class CloneActivity implements ShouldQueue
 {
@@ -50,8 +54,15 @@ class CloneActivity implements ShouldQueue
      * @param ActivityRepositoryInterface $activityRepository
      * @return void
      */
-    public function handle(ActivityRepositoryInterface $activityRepository)
+    public function handle(ActivityRepositoryInterface $activityRepository, UserRepositoryInterface $userRepository)
     {
         $activityRepository->clone($this->playlist, $this->activity, $this->token);
+        $isDuplicate = ($this->activity->playlist_id == $this->playlist->id);
+        $process = ($isDuplicate) ? "duplicated" : "cloned";
+        $message =  "Activity(".$this->activity->title.") has been $process successfully" ;
+        (new \App\Events\SendMessage($message));
+        $user_id = $userRepository->parseToken($this->token);
+        $user = User::find($user_id);
+        $user->notify(new CloneNotification($message, $process));
     }
 }
