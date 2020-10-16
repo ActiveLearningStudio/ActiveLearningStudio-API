@@ -49,18 +49,19 @@ class ProjectController extends Controller
      */
     public function updateIndexes(Request $request)
     {
-        return response(['message' => $this->projectRepository->updateIndexes($request->only('index_projects', 'remove_index_projects'))], 200);
+        return response(['message' => $this->projectRepository->updateIndexes($request->only('index_projects', 'index'))], 200);
     }
 
     /**
      * Modify the index of a project
      *
      * @param Project $project
+     * @param $index
      * @return Application|ResponseFactory|Response
      */
-    public function updateIndex(Project $project)
+    public function updateIndex(Project $project, $index)
     {
-        return response(['message' => $this->projectRepository->updateIndex($project)], 200);
+        return response(['message' => $this->projectRepository->updateIndex($project, $index)], 200);
     }
 
     /**
@@ -101,11 +102,12 @@ class ProjectController extends Controller
     }
 
     /**
-     * Temporary function for clearing db cache data - will be removed in future releases
+     * CUR - 612 => Update existing project rows for is_user_starter flag
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
      */
-    public function clearDBCache(): void
+    public function updateUserStarterFlag()
     {
-        \Artisan::call('cache:clear database');
-        dd('Database cache cleared successfully!');
+        return response(['message' => $this->projectRepository->updateUserStarterFlag()], 200);
     }
 }

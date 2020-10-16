@@ -21,9 +21,7 @@ class Playlist extends Model
     protected $fillable = [
         'title',
         'project_id',
-        'order',
-        'elasticsearch',
-        'is_public',
+        'order'
     ];
 
     /**
@@ -34,14 +32,12 @@ class Playlist extends Model
         $searchableArray = [
             'title' => $this->title,
             'project_id' => $this->project_id,
-            'is_public' => $this->is_public,
-            'elasticsearch' => $this->elasticsearch,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
 
         if ($this->project) {
-            $searchableArray['shared'] = $this->project->shared;
+            $searchableArray['indexing'] = $this->project->indexing;
         }
 
         return $searchableArray;
@@ -108,5 +104,19 @@ class Playlist extends Model
     public function getModelTypeAttribute()
     {
         return 'Playlist';
+    }
+
+    /**
+     * Get the playlists's project's thumb_url.
+     *
+     * @return object
+     */
+    public function getThumbUrlAttribute()
+    {
+        if (isset($this->project) && isset($this->project->thumb_url)) {
+            return $this->project->thumb_url;
+        }
+
+        return null;
     }
 }

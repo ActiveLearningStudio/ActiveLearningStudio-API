@@ -50,25 +50,30 @@ class AssignStarterProjects implements ShouldQueue
         // get starter projects
         $starterProjects = resolve(ProjectRepository::class)->getStarterProjects();
 
-        try {
-            $userID = $this->user->id;
-            $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
-            $inProgress[$userID] = $userID; // append the user ID to in progress array
-            \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
-
-            // assign all starter projects one by one
-            foreach ($starterProjects as $project) {
-                $projectRepository->clone($this->user, $project, $this->token);
-            }
-        } catch (\Exception $e) {
-            Log::info('Starter Projects Assigning failed:' . $e->getMessage());
-            Log::info($this->user);
-        }
-        // as this job can take some time, so again get the fresh list of InProgress users
+        $userID = $this->user->id;
         $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
-        // remove the id of this particular user from inProgress and update
-        unset($inProgress[$userID]);
-        \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
+
+        // process this user if it's not already in-progress and processed by cron
+        if ((!isset($inProgress[$userID])) && (count($this->user->projects) < count($starterProjects))) {
+            try {
+                $inProgress[$userID] = $userID; // append the user ID to in progress array
+                \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
+
+                // assign all starter projects one by one
+                foreach ($starterProjects as $project) {
+                    $projectRepository->clone($this->user, $project, $this->token);
+                }
+            } catch
+            (\Exception $e) {
+                Log::info('Starter Projects Assigning failed:' . $e->getMessage());
+                Log::info($this->user);
+            }
+            // as this job can take some time, so again get the fresh list of InProgress users
+            $inProgress = \Cache::store('database')->get('in_progress_users') ?? [];// get in progress user IDs
+            // remove the id of this particular user from inProgress and update
+            unset($inProgress[$userID]);
+            \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
+        }
     }
 
 }

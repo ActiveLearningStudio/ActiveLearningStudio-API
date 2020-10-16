@@ -1,0 +1,44 @@
+{
+    "projects": {
+        "979": {
+            "id": 979,
+            "thumb_url": "/storage/uploads/5f10830df0dcf.png",
+            "title": "Exploring Our National Parks",
+            "description": "Explore America’s national parks. Discover our most treasured places. From science to the arts, service learning to teacher training, America’s national parks teach invaluable lessons about our planet, our history, and ourselves. These incredible places, and all that they offer beyond the boundaries of the national parks, are the catalysts for inspiring a new generation of park enthusiasts. The National Park Foundation is dedicated to utilizing these powerful learning environments that can provide in-depth, real-world learning experiences, to nurture a deep connection between the next generation and America's national parks.",
+            "model": "Project",
+            "user": null,
+            "playlists": {
+                "2174": {
+                    "id": 2174,
+                    "thumb_url": "/storage/uploads/5f10830df0dcf.png",
+                    "title": "Exploring Yosemite",
+                    "model": "Playlist",
+                    "user": null,
+                    "activities": {
+                        "9990": {
+                            "id": 9990,
+                            "thumb_url": "/storage/uploads/5f10831d961f8.jpeg",
+                            "title": "",
+                            "model": "Activity",
+                            "user": null
+                        },
+                        "9991": {
+                            "id": 9991,
+                            "thumb_url": "/storage/uploads/5f108329c36e2.jpeg",
+                            "title": "",
+                            "model": "Activity",
+                            "user": null
+                        },
+                        "9992": {
+                            "id": 9992,
+                            "thumb_url": "/storage/uploads/5f10833529209.jpeg",
+                            "title": "",
+                            "model": "Activity",
+                            "user": null
+                        }
+                    }
+                }
+            }
+        }        
+    }
+}

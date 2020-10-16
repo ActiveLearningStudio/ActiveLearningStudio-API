@@ -9,5 +9,10 @@ use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface extends EloquentRepositoryInterface
 {
-
+    /**
+     * Search by name
+     *
+     * @param $name
+     */
+    public function searchByName($name);
 }

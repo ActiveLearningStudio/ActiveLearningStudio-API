@@ -24,7 +24,6 @@ class PlaylistProjectResource extends JsonResource
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
             'users' => ProjectUserResource::collection($this->users),
-            'is_public' => $this->is_public,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

@@ -43,6 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at',
         'membership_type_id',
         'gapi_access_token',
+        'deleted_at',
     ];
 
     /**
@@ -115,7 +116,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function projects()
     {
-        return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->orderBy('order','asc')->withTimestamps();
     }
 
     /**
@@ -200,10 +201,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Scope for combine first and last name search
+     *
      * @param $query
      * @param $value
      * @return mixed
-     * Scope for combine first and last name search
      */
     public function scopeName($query, $value)
     {

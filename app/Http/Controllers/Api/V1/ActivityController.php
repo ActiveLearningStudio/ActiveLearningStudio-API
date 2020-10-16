@@ -136,7 +136,7 @@ class ActivityController extends Controller
             'education_level_id' => 'string',
         ]);
 
-        $data['is_public'] = $this->activityRepository->getPlaylistIsPublicValue($data['playlist_id']);
+        $data['order'] = $this->activityRepository->getOrder($data['playlist_id']) + 1;
         $activity = $this->activityRepository->create($data);
 
         if ($activity) {
@@ -447,7 +447,7 @@ class ActivityController extends Controller
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @response {
-     *   "message": "Activity is being cloned in background!"
+     *   "message": "Activity is being cloned|duplicated in background!"
      * }
      *
      * @response 400 {
@@ -469,16 +469,10 @@ class ActivityController extends Controller
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
-        if (!$activity->is_public) {
-            return response([
-                'errors' => ['Not a Public Activity.'],
-            ], 400);
-        }
-
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
-
+        $isDuplicate = ($activity->playlist_id == $playlist->id);
         return response([
-            'message' => 'Activity is being cloned in background!',
+            'message' => ($isDuplicate) ? 'Activity is being duplicated in background!' : 'Activity is being cloned in background!',
         ], 200);
     }
 
@@ -614,7 +608,8 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsShared(Activity $activity)
     {
-        if ($activity->shared || $activity->playlist->project->is_public) {
+        // 3 is for indexing approved - see Project Model @indexing property
+        if ($activity->shared || ($activity->playlist->project->indexing === 3)) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();
@@ -651,4 +646,14 @@ class ActivityController extends Controller
 
         return false;
     }
+
+    /**
+     * @uses One time script to populate all missing order number
+     */
+    public function populateOrderNumber()
+    {
+        $this->activityRepository->populateOrderNumber();
+    }
+
 }
+

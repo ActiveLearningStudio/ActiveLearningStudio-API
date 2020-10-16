@@ -15,6 +15,7 @@ final class CreateActivitiesIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('activities', function (Mapping $mapping, Settings $settings) {
+            $mapping->keyword('h5p_library');
             $mapping->keyword('playlist_id');
             $mapping->text('title');
             $mapping->keyword('type');
@@ -22,8 +23,7 @@ final class CreateActivitiesIndex implements MigrationInterface
             $mapping->keyword('h5p_content_id');
             $mapping->keyword('subject_id');
             $mapping->keyword('education_level_id');
-            $mapping->boolean('is_public');
-            $mapping->boolean('elasticsearch');
+            $mapping->keyword('indexing');
             $mapping->date('created_at');
             $mapping->date('updated_at');
             $mapping->keyword('project_id');

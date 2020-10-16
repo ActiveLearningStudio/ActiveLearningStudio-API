@@ -20,6 +20,7 @@ class LmsSettingResource extends JsonResource
             'lms_access_token' => $this->lms_access_token,
             'site_name' => $this->site_name,
             'lti_client_id' => $this->lti_client_id,
+            'lms_login_id' => $this->lms_login_id,
             'lms_name' => $this->lms_name,
             'lms_access_key' => $this->lms_access_key,
             'lms_access_secret' => $this->lms_access_secret,

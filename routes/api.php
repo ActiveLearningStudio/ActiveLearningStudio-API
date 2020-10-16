@@ -31,19 +31,29 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
 
+    Route::get('organization-types', 'OrganizationTypesController@index');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
+        Route::post('users/search', 'UserController@getUsersForTeam');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
         ]);;
 
+        Route::post('teams/invite', 'TeamController@inviteTeamMember');
+        Route::apiResource('teams', 'TeamController');
+
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::get('projects/recent', 'ProjectController@recent');
         Route::get('projects/default', 'ProjectController@default');
         Route::get('projects/detail', 'ProjectController@detail');
+        Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
+        Route::post('projects/reorder', 'ProjectController@reorder');
+        Route::get('projects/{project}/indexing', 'ProjectController@indexing');
+        Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
@@ -56,6 +66,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
         Route::get('activities/{activity}/share', 'ActivityController@share');
+        Route::get('activities/update-order', 'ActivityController@populateOrderNumber');
         Route::get('activities/{activity}/remove-share', 'ActivityController@removeShare');
         Route::get('activities/{activity}/detail', 'ActivityController@detail');
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
@@ -86,11 +97,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/filter', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@filter')->name('h5p.ajax.filter');
             Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name('h5p.ajax.finish');
             Route::any('ajax/content-user-data', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentUserData')->name('h5p.ajax.content-user-data');
+            Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
         });
 
         // Elasticsearch
         Route::get('search', 'SearchController@search');
         Route::get('search/advanced', 'SearchController@advance');
+        Route::get('search/dashboard', 'SearchController@dashboard');
 
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {
@@ -111,7 +124,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         });
 
         // Google Share
-        Route::group(['prefix' => 'go'], function () {
+        Route::group(['prefix' => 'google-classroom'], function () {
             Route::post('access-token', 'GoogleClassroomController@saveAccessToken');
             Route::get('courses', 'GoogleClassroomController@getCourses');
             Route::post('projects/{project}/copy', 'GoogleClassroomController@copyProject');
@@ -131,6 +144,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
+    // xAPI Statments
+    Route::post('xapi/statements', 'XapiController@saveStatement');
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 
@@ -146,27 +161,28 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         Route::post('users/bulk/import', 'UserController@bulkImport')->name('users.bulk.import');
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
-        Route::resource('users', 'UserController');
+        Route::apiResource('users', 'UserController');
 
         // projects
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
+        Route::get('projects/user-starters/flag', 'ProjectController@updateUserStarterFlag');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
-        Route::get('projects/{project}/index', 'ProjectController@updateIndex');
+        Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
         Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
-        Route::resource('projects', 'ProjectController');
+        Route::apiResource('projects', 'ProjectController');
 
         // lms-settings
-        Route::resource('lms-settings', 'LmsSettingController');
+        Route::apiResource('lms-settings', 'LmsSettingController');
 
         // activity-types
-        Route::resource('activity-types', 'ActivityTypeController');
+        Route::apiResource('activity-types', 'ActivityTypeController');
 
         // activity-items
-        Route::resource('activity-items', 'ActivityItemController');
+        Route::apiResource('activity-items', 'ActivityItemController');
 
-        // others
-        Route::get('clear/db/cache', 'ProjectController@clearDBCache');
+        // organization-types
+        Route::apiResource('organization-types', 'OrganizationTypesController');
     });
 
     // admin public routes for downloads / uploads

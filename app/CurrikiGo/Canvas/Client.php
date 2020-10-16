@@ -58,4 +58,12 @@ class Client
         $command->httpClient = new \GuzzleHttp\Client();
         return $command->execute();
     }
+
+    /**
+     * Return lmsSettings
+     */
+    public function getLmsSettings()
+    {
+        return $this->lmsSetting;
+    }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\QueryBuilders\SearchFormQueryBuilder;
 use App\Models\Traits\GlobalScope;
+use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
+use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use ElasticScoutDriverPlus\CustomSearch;
-use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
-use App\Models\QueryBuilders\SearchFormQueryBuilder;
 
 class Project extends Model
 {
@@ -25,11 +25,19 @@ class Project extends Model
         'thumb_url',
         'shared',
         'starter_project',
-        'elasticsearch',
-        'is_public',
+        'is_user_starter',
+        'indexing',
         'cloned_from',
         'clone_ctr',
+        'order',
+        'status',
     ];
+
+    /**
+     * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
+     */
+    public static $status = [1 => 'DRAFT' , 2 => 'FINISHED'];
+    public static $indexing = [1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'];
 
     /**
      * Get the attributes to be indexed in Elasticsearch
@@ -40,8 +48,7 @@ class Project extends Model
             'project_id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'is_public' => $this->is_public,
-            'elasticsearch' => $this->elasticsearch,
+            'indexing' => $this->indexing,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
         ];
@@ -58,11 +65,19 @@ class Project extends Model
     }
 
     /**
-     * Get the users for the projects
+     * Get the users for the project
      */
     public function users()
     {
         return $this->belongsToMany('App\User', 'user_project')->withPivot('role')->withTimestamps();
+    }
+
+    /**
+     * Get the teams for the project
+     */
+    public function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_project')->withTimestamps();
     }
 
     /**
@@ -89,7 +104,7 @@ class Project extends Model
     }
 
     /**
-     * Get the activity's project's user.
+     * Get the project's owner.
      *
      * @return object
      */
@@ -110,5 +125,21 @@ class Project extends Model
     public function getModelTypeAttribute()
     {
         return 'Project';
+    }
+
+    /**
+     * Maps the indexing integer value and returns the text
+     * @return string|null
+     */
+    public function getIndexingTextAttribute(){
+        return self::$indexing[$this->indexing] ?? 'NOT REQUESTED';
+    }
+
+    /**
+     * Maps the status value and returns the text
+     * @return string|null
+     */
+    public function getStatusTextAttribute(){
+        return self::$status[$this->status] ?? null;
     }
 }

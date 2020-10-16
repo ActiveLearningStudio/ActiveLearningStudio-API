@@ -5,8 +5,9 @@ namespace App\Repositories\Project;
 use App\Exceptions\GeneralException;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
-use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\User;
 use App\Repositories\BaseRepository;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
@@ -54,36 +55,55 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     }
 
     /**
+     * Get latest order of project for User
+     * @param $authenticated_user
+     * @return int
+     */
+    public function getOrder($authenticated_user)
+    {
+        return $authenticated_user->projects()->orderBy('order','desc')
+            ->value('order') ?? 0;
+    }
+
+    /**
      * To clone project and associated playlists
      *
-     * @param User $authenticated_user
+     * @param $authUser
      * @param Project $project
      * @param string $token
      * @return Response
+     * @throws GeneralException
      */
-    public function clone($authenticated_user, Project $project, $token)
+    public function clone($authUser, Project $project, $token)
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
+            $isDuplicate = $this->checkIsDuplicate($authUser, $project->id);
+
+            if ($isDuplicate) {
+                $authUser->projects()->where('order', '>', $project->order)->increment('order', 1);
+            }
 
             $data = [
-                'name' => $project->name,
+                'name' => ($isDuplicate) ? $project->name . "-COPY" : $project->name,
                 'description' => $project->description,
                 'thumb_url' => $new_image_url,
                 'shared' => $project->shared,
-                'starter_project' => false,
+                'order' => ($isDuplicate) ? $project->order + 1 : $this->getOrder($authUser) + 1,
+                'starter_project' => false, // this is for global starter project
+                'is_user_starter' => (bool) $project->starter_project, // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
 
-            return \DB::transaction(function () use ($authenticated_user, $data, $project, $token) {
-                $cloned_project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
+            return \DB::transaction(function () use ($authUser, $data, $project, $token) {
+                $cloned_project = $authUser->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
                 }
 
                 $playlists = $project->playlists;
                 foreach ($playlists as $playlist) {
-                    $cloned_activity = $this->playlistRepository->clone($cloned_project, $playlist, $token);
+                    $this->playlistRepository->clone($cloned_project, $playlist, $token);
                 }
 
                 $project->clone_ctr = $project->clone_ctr + 1;
@@ -132,8 +152,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $proj["name"] = $project['name'];
         $proj["description"] = $project['description'];
         $proj["thumb_url"] = $project['thumb_url'];
-        $proj["shared"] = isset($project['shared']) ? $project['shared'] : false;
-        $proj["elasticsearch"] = $project['elasticsearch'];
+        $proj["shared"] = $project['shared'] ?? false;
+        $proj["indexing"] = $project['indexing'];
+        $proj["indexing_text"] = $project['indexing_text'];
         $proj["created_at"] = $project['created_at'];
         $proj["updated_at"] = $project['updated_at'];
 
@@ -175,7 +196,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function fetchRecentPublic($limit)
     {
-        return $this->model->where('is_public', true)->orderBy('created_at', 'desc')->limit($limit)->get();
+        // 3 is for indexing approved - see Project Model @indexing property
+        return $this->model->where('indexing', 3)->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 
     /**
@@ -191,4 +213,82 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         })->get();
     }
 
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber()
+    {
+        $users = User::all();
+        foreach($users as $user) {
+            $projects = $user->projects()->orderBy('created_at')->get();
+            if(!empty($projects)) {
+                $order = 1;
+                foreach($projects as $project) {
+                   $project->order = $order;
+                   $project->save();
+                   $order++;
+                }
+            }
+        }
+    }
+
+    /**
+     * To reorder Projects
+     *
+     * @param array $projects
+     */
+    public function saveList(array $projects)
+    {
+        foreach ($projects as $project) {
+            $this->update([
+                'order' => $project['order'],
+            ], $project['id']);
+        }
+    }
+
+    /**
+     * @param $authenticated_user
+     * @param $project_id
+     * @return bool
+     */
+    public function checkIsDuplicate($authenticated_user,$project_id)
+    {
+        $userProjectIds = $authenticated_user->projects->pluck('id')->toArray();
+        return in_array($project_id, $userProjectIds);
+    }
+
+    /**
+     * @param $project
+     * @return mixed
+     * @throws GeneralException
+     */
+    public function indexing($project)
+    {
+        // if indexing status is already set
+        if ($project->indexing) {
+            throw new GeneralException('Indexing value is already set. Current indexing state of this project: ' . $project->indexing_text);
+        }
+        // if project is in draft
+        if ($project->status === 1) {
+            throw new GeneralException('Project must be finalized before requesting the indexing.');
+        }
+        $project->indexing = 1; // 1 is for indexing requested - see Project Model @indexing property
+        resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
+        return $project->save();
+    }
+
+    /**
+     * @param $project
+     * @return mixed
+     */
+    public function statusUpdate($project)
+    {
+        // see Project Model @status property for mapping
+        $project->status = 3 - $project->status; // this will toggle status, if draft then it will be final or vice versa
+        if ($project->status === 1){
+            $project->indexing = null; // remove indexing if project is reverted to draft state
+            resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
+        }
+        return $project->save();
+    }
 }

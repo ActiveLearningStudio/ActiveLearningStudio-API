@@ -24,14 +24,17 @@ class ProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
+            'is_user_starter' => $this->is_user_starter,
             'cloned_from' => $this->cloned_from,
             'clone_ctr' => $this->clone_ctr,
             'users' => ProjectUserResource::collection($this->whenLoaded('users')),
             'playlists' => ProjectPlaylistResource::collection($this->whenLoaded('playlists')),
-            'is_public' => $this->is_public,
-            'elasticsearch' => $this->elasticsearch,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'status' => $this->status,
+            'status_text' => $this->status_text,
+            'indexing' => $this->indexing,
+            'indexing_text' => $this->indexing_text,
+            'created_at' => $this->created_at->format('d-M-Y'),
+            'updated_at' => $this->updated_at->format('d-M-Y'),
         ];
     }
 }

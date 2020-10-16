@@ -90,7 +90,6 @@ class PlaylistController extends Controller
 
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
-        $data['is_public'] = $project->is_public;
 
         $playlist = $project->playlists()->create($data);
 
@@ -322,7 +321,7 @@ class PlaylistController extends Controller
      * @urlParam playlist required The Id of a playlist Example: 1
      *
      * @response {
-     *   "message": "Playlist is being cloned in background!"
+     *   "message": "Playlist is being cloned|duplicated in background!"
      * }
      *
      * @response 500 {
@@ -338,18 +337,11 @@ class PlaylistController extends Controller
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
-        if (!$playlist->is_public) {
-            return response([
-                'errors' => ['Not a Public Playlist.'],
-            ], 500);
-        }
-
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
-
+        $isDuplicate = ($playlist->project_id == $project->id);
         return response([
-            'message' => 'Playlist is being cloned in background!',
+            'message' => ($isDuplicate) ? 'Playlist is being duplicated in background!' : 'Playlist is being cloned in background!',
         ], 200);
     }
-
 }

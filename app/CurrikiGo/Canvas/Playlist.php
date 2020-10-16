@@ -3,14 +3,17 @@
 namespace App\CurrikiGo\Canvas;
 
 use App\CurrikiGo\Canvas\Client;
-use App\CurrikiGo\Canvas\Commands\GetUserCommand;
+use App\CurrikiGo\Canvas\Commands\GetUsersCommand;
 use App\CurrikiGo\Canvas\Commands\GetEnrollmentsCommand;
 use App\CurrikiGo\Canvas\Commands\GetCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\CreateCourseCommand;
 use App\CurrikiGo\Canvas\Commands\GetModulesCommand;
 use App\CurrikiGo\Canvas\Commands\CreateModuleCommand;
 use App\CurrikiGo\Canvas\Commands\CreateModuleItemCommand;
+use App\CurrikiGo\Canvas\Commands\GetCourseEnrollmentCommand;
+use App\CurrikiGo\Canvas\Commands\CreateCourseEnrollmentCommand;
 use App\CurrikiGo\Canvas\Helpers\Course as CourseHelper;
+use App\CurrikiGo\Canvas\Helpers\Enrollment as EnrollmentHelper;
 use App\Models\Playlist as PlaylistModel;
 use App\Http\Resources\V1\CurrikiGo\CanvasPlaylistResource;
 
@@ -45,13 +48,28 @@ class Playlist
      */
     public function send(PlaylistModel $playlist, $data)
     {
+        
+        $lmsSettings = $this->canvasClient->getLmsSettings();
         $playlistItem = null;
         $moduleName = Client::CURRIKI_MODULE_NAME;
         $accountId = "self";
+
         $courses = $this->canvasClient->run(new GetCoursesCommand($accountId, $playlist->project->name));
         $course = CourseHelper::getByName($courses, $playlist->project->name);
         
         if ($course) {
+            // enroll user to existing course as teacher if not enrolled
+            $enrollments = $this->canvasClient->run(new GetCourseEnrollmentCommand($course->id, '?type[]=TeacherEnrollment'));
+            if ($lmsSettings->lms_login_id && !EnrollmentHelper::isEnrolled($lmsSettings->lms_login_id, $enrollments)) {
+                $users = $this->canvasClient->run(new GetUsersCommand($accountId, '?search_term=' . $lmsSettings->lms_login_id));
+                $userIndex = array_search($lmsSettings->lms_login_id, array_column($users, 'login_id'));
+                $user = $userIndex !== false ? $users[$userIndex] : null;
+                if ($user) {
+                    $enrollmentData = ['enrollment' => ['user_id' => $user->id, 'type' => 'TeacherEnrollment', 'enrollment_state' => 'active', 'notify' => true]];
+                    $this->canvasClient->run(new CreateCourseEnrollmentCommand($course->id, $enrollmentData));
+                }
+            }
+
             // add playlist to existing course
             $modules = $this->canvasClient->run(new GetModulesCommand($course->id, $moduleName));
             $module = CourseHelper::getModuleByName($modules, $moduleName);
@@ -70,6 +88,18 @@ class Playlist
             $moduleItem['content_id'] = $playlist->id;
             $moduleItem['external_url'] = config('constants.curriki-tsugi-host') . "?playlist=" . $playlist->id;
             $playlistItem = $this->canvasClient->run(new CreateModuleItemCommand($course->id, $module->id, $moduleItem));
+
+            // enroll user to course as teacher
+            $enrollments = $this->canvasClient->run(new GetCourseEnrollmentCommand($course->id, '?type[]=TeacherEnrollment'));
+            if ($lmsSettings->lms_login_id && !EnrollmentHelper::isEnrolled($lmsSettings->lms_login_id, $enrollments)) {
+                $users = $this->canvasClient->run(new GetUsersCommand($accountId, '?search_term=' . $lmsSettings->lms_login_id));
+                $userIndex = array_search($lmsSettings->lms_login_id, array_column($users, 'login_id'));
+                $user = $userIndex !== false ? $users[$userIndex] : null;
+                if ($user) {
+                    $enrollmentData = ['enrollment' => ['user_id' => $user->id, 'type' => 'TeacherEnrollment', 'enrollment_state' => 'active', 'notify' => true]];
+                    $this->canvasClient->run(new CreateCourseEnrollmentCommand($course->id, $enrollmentData));
+                }
+            }
         }
         
         return CanvasPlaylistResource::make($playlistItem)->resolve();

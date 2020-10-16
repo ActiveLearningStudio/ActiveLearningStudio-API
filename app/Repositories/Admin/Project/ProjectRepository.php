@@ -64,6 +64,16 @@ class ProjectRepository extends BaseRepository
                 return $query->where('starter_project', (bool)$mode);
             });
         });
+
+        // exclude users those projects which were clone from global starter project
+        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+            $this->query = $this->query->where('is_user_starter', false);
+        }
+
+        // if specific index projects requested
+        if (isset($data['indexing']) && $data['indexing']){
+            $this->query = $this->query->where('indexing', $data['indexing']);
+        }
         return $this->getDtPaginated(['users']);
     }
 
@@ -103,11 +113,12 @@ class ProjectRepository extends BaseRepository
     public function updateIndexes($data): string
     {
         try {
-            // first de-index the projects of the users
-            $this->removeProjectsIndex($data['remove_index_projects'] ?? []);
+            // get and update the projects indexing state
+            $projects = $this->model->whereIn('id', $data['index_projects']);
+            $projects->update(['indexing' => $data['index']]);
+
             // index the selected projects
             $this->indexProjects($data['index_projects'] ?? []);
-
             return 'Indexes updated successfully!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -116,55 +127,28 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
-     * @param array $projects
-     * De Indexing of the projects
-     * @param string $key
-     */
-    public function removeProjectsIndex($projects, $key = 'elasticsearch'): void
-    {
-        if (empty($projects)) {
-            return;
-        }
-        $playlists = $this->playlistModel->whereIn('project_id', $projects)->get('id');
-
-        // elasticsearch set false for projects and related models
-        $this->model->whereIn('id', $projects)->update([$key => false]);
-        $this->playlistModel->whereIn('project_id', $projects)->update([$key => false]);
-        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->update([$key => false]);
-
-        // scout searchable update the indexes
-        $this->model->whereIn('id', $projects)->searchable();
-        $this->playlistModel->whereIn('project_id', $projects)->searchable();
-        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->searchable();
-    }
-
-    /**
      * @param $projects
      * Indexing of the projects
-     * @param string $key
      */
-    public function indexProjects($projects, $key = 'elasticsearch'): void
+    public function indexProjects($projects): void
     {
         if (empty($projects)) {
             return;
         }
-        // search-able is needed as on collections update observer will not get fired
-        // so searchable will updated the elastic search index via scout package
-        // update directly on query builder
-        $this->model->whereIn('id', $projects)->update([$key => true]);
-        $this->model->whereIn('id', $projects)->searchable();
-        // to fire observer update should be done on each single instance of models
-        // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
-
         // first get the collection of playlists - needed in activities update
         $playlists = $this->playlistModel->whereIn('project_id', $projects)->get('id');
 
+        // search-able is needed as on collections update observer will not get fired
+        // so searchable will updated the elastic search index via scout package
+        // update directly on query builder
+        $this->model->whereIn('id', $projects)->searchable();
+
+        // to fire observer update should be done on each single instance of models
+        // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
         // prepare the query builder from collections and perform update
-        $this->playlistModel->whereIn('project_id', $projects)->update([$key => true]);
         $this->playlistModel->whereIn('project_id', $projects)->searchable();
 
         // update related activities by getting keys of parent playlists
-        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->update([$key => true]);
         $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->searchable();
     }
 
@@ -179,30 +163,18 @@ class ProjectRepository extends BaseRepository
     /**
      * Update Indexes for projects and related models
      * @param $project
+     * @param $index
      * @return string
+     * @throws GeneralException
      */
-    public function updateIndex($project): string
+    public function updateIndex($project, $index): string
     {
-        if ($project->elasticsearch) {
-            $this->removeProjectsIndex([$project->id]);
-        } else {
-            $this->indexProjects([$project->id]);
+        if (! isset($this->model::$indexing[$index])){
+            throw new GeneralException('Invalid index value provided.');
         }
+        $project->update(['indexing' => $index]);
+        $this->indexProjects([$project->id]);
         return 'Index status changed successfully!';
-    }
-
-    /**
-     * @param $project
-     * @return string
-     */
-    public function togglePublicStatus($project): string
-    {
-        if ($project->is_public) {
-            $this->removeProjectsIndex([$project->id], 'is_public');
-        } else {
-            $this->indexProjects([$project->id], 'is_public');
-        }
-        return 'Public status toggled successfully!';
     }
 
     /**
@@ -218,5 +190,20 @@ class ProjectRepository extends BaseRepository
         }
         $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
         return 'Starter Projects status updated successfully!';
+    }
+
+    /**
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateUserStarterFlag(): string
+    {
+        $starterProjects = $this->getStarterProjects(); // get all the starter projects
+        if (!count($starterProjects)) {
+            throw new GeneralException('Please first set at-least 1 starter project!');
+        }
+        // set the user starter flag to true if was cloned from global starter project
+        $this->model->whereIn('cloned_from', $starterProjects->modelKeys())->update(['is_user_starter' => true]);
+        return 'Existing records are updated successfully for user starter project flag.';
     }
 }
