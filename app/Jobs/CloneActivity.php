@@ -58,8 +58,8 @@ class CloneActivity implements ShouldQueue
     {
         $activityRepository->clone($this->playlist, $this->activity, $this->token);
         $isDuplicate = ($this->activity->playlist_id == $this->playlist->id);
-        $process = ($isDuplicate) ? "duplicated" : "cloned";
-        $message =  "Activity(".$this->activity->title.") has been $process successfully" ;
+        $process = ($isDuplicate) ? "duplicate" : "clone";
+        $message =  "Your request to $process activity [".$this->activity->title."] has been completed and available" ;
         (new \App\Events\SendMessage($message));
         $user_id = $userRepository->parseToken($this->token);
         $user = User::find($user_id);

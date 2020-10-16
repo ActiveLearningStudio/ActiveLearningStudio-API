@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProjectRequest extends FormRequest
+class XapiStatementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class ProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:80',
-            'description' => 'required|string|max:1000',
-            'thumb_url' => 'required'
+            'statement' => 'required',
         ];
     }
 }

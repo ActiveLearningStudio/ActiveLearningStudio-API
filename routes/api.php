@@ -48,6 +48,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/detail', 'ProjectController@detail');
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::post('projects/reorder', 'ProjectController@reorder');
+        Route::get('projects/{project}/indexing', 'ProjectController@indexing');
+        Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
@@ -138,6 +140,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
+    // xAPI Statments
+    Route::post('xapi/statements', 'XapiController@saveStatement');
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 
@@ -159,7 +163,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
         Route::get('projects/user-starters/flag', 'ProjectController@updateUserStarterFlag');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
-        Route::get('projects/{project}/index', 'ProjectController@updateIndex');
+        Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
         Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
         Route::apiResource('projects', 'ProjectController');

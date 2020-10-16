@@ -55,8 +55,8 @@ class CloneProject implements ShouldQueue
     {
         $projectRepository->clone($this->user, $this->project, $this->token);
         $isDuplicate = $projectRepository->checkIsDuplicate($this->user, $this->project->id);
-        $process = ($isDuplicate) ? "duplicated" : "cloned";
-        $message =  "Project(".$this->project->name.") has been $process successfully" ;
+        $process = ($isDuplicate) ? "duplicate" : "clone";
+        $message =  "Your request to $process project [".$this->project->name."] has been completed and available" ;
         (new \App\Events\SendMessage($message));
         $this->user->notify(new CloneNotification($message, $process));
     }

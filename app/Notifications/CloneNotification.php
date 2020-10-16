@@ -47,7 +47,7 @@ class CloneNotification extends Notification
                     ->subject($this->type.' Notification')
                     ->line($this->message.'. Please visit the studio to view it.')
                     //->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line('Thank you for your patience!');
     }
 
     /**

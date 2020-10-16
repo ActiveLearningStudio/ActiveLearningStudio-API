@@ -26,8 +26,7 @@ class SearchRequest extends FormRequest
         return [
             'query' => 'required|string|max:255',
             'negativeQuery' => 'string|max:255',
-            'isPublic' => 'boolean',
-            'elasticsearch' => 'boolean',
+            'indexing' => 'array|in:null,1,2,3',
             'startDate' => 'date',
             'endDate' => 'date',
             'userIds' => 'array|exists:App\User,id',

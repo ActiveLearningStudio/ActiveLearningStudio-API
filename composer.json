@@ -25,7 +25,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
         "maatwebsite/excel": "^3.1",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "rusticisoftware/tincan": "@stable"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
