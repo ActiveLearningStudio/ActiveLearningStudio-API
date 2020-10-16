@@ -175,7 +175,6 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
-     * @bodyParam is_public boolean required Public status of a project Example: true
      *
      * @responseFile 201 responses/project/project.json
      *
