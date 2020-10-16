@@ -21,7 +21,7 @@ class CloneNotification extends Notification
     public function __construct($message,$type)
     {
         $this->message = $message;
-        $this->type = ucfirst(substr($type, 0, -1));
+        $this->type = ucfirst($type);
     }
 
     /**

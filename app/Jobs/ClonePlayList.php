@@ -60,7 +60,7 @@ class ClonePlayList implements ShouldQueue
     {
         $playlistRepository->clone($this->project, $this->playlist, $this->token);
         $isDuplicate = ($this->playlist->project_id == $this->project->id);
-        $process = ($isDuplicate) ? "duplicated" : "cloned";
+        $process = ($isDuplicate) ? "duplicate" : "clone";
         $message =  "Your request to $process playlist [".$this->playlist->title."] has been completed and available" ;
         (new \App\Events\SendMessage($message));
         $user_id = $userRepository->parseToken($this->token);
