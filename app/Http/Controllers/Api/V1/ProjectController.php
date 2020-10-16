@@ -425,10 +425,11 @@ class ProjectController extends Controller
     public function clone(Request $request, Project $project)
     {
         $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
+        $process = ($isDuplicate) ? "duplicate" : "clone";
         // pushed cloning of project in background
         CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
         return response([
-            'message' => ($isDuplicate) ? "Project is being duplicated in background!" : "Project is being cloned in background!"
+            'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 

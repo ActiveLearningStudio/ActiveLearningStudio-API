@@ -471,8 +471,9 @@ class ActivityController extends Controller
     {
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($activity->playlist_id == $playlist->id);
+        $process = ($isDuplicate) ? "duplicate" : "clone";
         return response([
-            'message' => ($isDuplicate) ? 'Activity is being duplicated in background!' : 'Activity is being cloned in background!',
+            "message" =>  "Your request to $process  activity [$activity->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 
