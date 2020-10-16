@@ -34,7 +34,6 @@ class ClonePlayList implements ShouldQueue
      */
     protected $token;
 
-
     /**
      * Create a new job instance.
      *
