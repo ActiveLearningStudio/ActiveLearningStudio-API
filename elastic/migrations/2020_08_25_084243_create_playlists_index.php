@@ -19,8 +19,7 @@ final class CreatePlaylistsIndex implements MigrationInterface
             $mapping->keyword('organisation_visibility_type_id');
             $mapping->text('title');
             $mapping->keyword('project_id');
-            $mapping->boolean('is_public');
-            $mapping->boolean('elasticsearch');
+            $mapping->keyword('indexing');
             $mapping->date('created_at');
             $mapping->date('updated_at');
         });

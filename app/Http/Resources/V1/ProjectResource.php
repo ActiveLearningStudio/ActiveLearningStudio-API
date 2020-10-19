@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources\V1;
 
-use App\Http\Resources\V1\ProjectUserResource;
-use App\Http\Resources\V1\ProjectPlaylistResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,7 +10,7 @@ class ProjectResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
@@ -24,10 +22,13 @@ class ProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
-            'is_public' => $this->is_public,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'order'=>$this->order,
+            'order' => $this->order,
+            'status' => $this->status,
+            'status_text' => $this->status_text,
+            'indexing' => $this->indexing,
+            'indexing_text' => $this->indexing_text,
         ];
     }
 }

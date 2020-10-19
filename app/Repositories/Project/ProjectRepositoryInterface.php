@@ -43,9 +43,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return Project $projects
      */
     public function fetchDefault($default_email);
+
     /**
      * To reorder the list of projects
-     * @param type $projects
+     * @param array $projects
      */
     public function saveList(array $projects);
     /**
@@ -66,4 +67,16 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return bool
      */
     public function checkIsDuplicate($authenticated_user,$project_id);
+
+    /**
+     * @param $project
+     * @return mixed
+     */
+    public function indexing($project);
+
+    /**
+     * @param $project
+     * @return mixed
+     */
+    public function statusUpdate($project);
 }

@@ -152,8 +152,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $proj["name"] = $project['name'];
         $proj["description"] = $project['description'];
         $proj["thumb_url"] = $project['thumb_url'];
-        $proj["shared"] = isset($project['shared']) ? $project['shared'] : false;
-        $proj["elasticsearch"] = $project['elasticsearch'];
+        $proj["shared"] = $project['shared'] ?? false;
+        $proj["indexing"] = $project['indexing'];
+        $proj["indexing_text"] = $project['indexing_text'];
         $proj["created_at"] = $project['created_at'];
         $proj["updated_at"] = $project['updated_at'];
 
@@ -195,7 +196,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function fetchRecentPublic($limit)
     {
-        return $this->model->where('is_public', true)->orderBy('created_at', 'desc')->limit($limit)->get();
+        // 3 is for indexing approved - see Project Model @indexing property
+        return $this->model->where('indexing', 3)->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 
     /**
@@ -255,4 +257,42 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return in_array($project_id, $userProjectIds);
     }
 
+    /**
+     * @param $project
+     * @return mixed
+     * @throws GeneralException
+     */
+    public function indexing($project)
+    {
+        // if indexing status is already set
+        if ($project->indexing) {
+            throw new GeneralException('Indexing value is already set. Current indexing state of this project: ' . $project->indexing_text);
+        }
+        // if project is in draft
+        if ($project->status === 1) {
+            throw new GeneralException('Project must be finalized before requesting the indexing.');
+        }
+        $project->indexing = 1; // 1 is for indexing requested - see Project Model @indexing property
+        resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
+        return $project->save();
+    }
+
+    /**
+     * @param $project
+     * @return mixed
+     */
+    public function statusUpdate($project)
+    {
+        // see Project Model @status property for mapping
+        $project->status = 3 - $project->status; // this will toggle status, if draft then it will be final or vice versa
+        if ($project->status === 1){
+            $project->indexing = null; // remove indexing if project is reverted to draft state
+            $returnProject = $project->save();
+            resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
+        } else {
+            $returnProject = $project->save();
+        }
+
+        return $returnProject;
+    }
 }

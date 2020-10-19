@@ -21,9 +21,7 @@ class Playlist extends Model
     protected $fillable = [
         'title',
         'project_id',
-        'order',
-        'elasticsearch',
-        'is_public',
+        'order'
     ];
 
     /**
@@ -34,16 +32,14 @@ class Playlist extends Model
         $searchableArray = [
             'title' => $this->title,
             'project_id' => $this->project_id,
-            'is_public' => $this->is_public,
-            'elasticsearch' => $this->elasticsearch,
             'organisation_visibility_type_id' => $this->organisation_visibility_type_id,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
 
         if ($this->project) {
+            $searchableArray['indexing'] = $this->project->indexing;
             $searchableArray['organisation_id'] = $this->project->organisation_id;
-            $searchableArray['shared'] = $this->project->shared;
         }
 
         return $searchableArray;
