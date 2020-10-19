@@ -10,4 +10,21 @@ use Illuminate\Support\Collection;
 interface TeamRepositoryInterface extends EloquentRepositoryInterface
 {
 
+    /**
+     * Set Team / Project / User relationship
+     *
+     * @param $team
+     * @param $projects
+     * @param $users
+     */
+    public function setTeamProjectUser($team, $projects, $users);
+
+    /**
+     * Get Team detail data
+     *
+     * @param $teamId
+     * @return mixed
+     */
+    public function getTeamDetail($teamId);
+
 }

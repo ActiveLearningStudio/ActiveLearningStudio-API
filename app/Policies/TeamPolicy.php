@@ -18,7 +18,7 @@ class TeamPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -30,7 +30,7 @@ class TeamPolicy
      */
     public function view(User $user, Team $team)
     {
-        //
+        return $user->isAdmin() || $this->hasPermission($user, $team);
     }
 
     /**
@@ -41,7 +41,7 @@ class TeamPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +53,7 @@ class TeamPolicy
      */
     public function update(User $user, Team $team)
     {
-        //
+        return $user->isAdmin() || $this->hasPermission($user, $team);
     }
 
     /**
@@ -65,7 +65,7 @@ class TeamPolicy
      */
     public function delete(User $user, Team $team)
     {
-        //
+        return $user->isAdmin() || $this->hasPermission($user, $team, 'owner');
     }
 
     /**
@@ -77,7 +77,7 @@ class TeamPolicy
      */
     public function restore(User $user, Team $team)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -89,6 +89,18 @@ class TeamPolicy
      */
     public function forceDelete(User $user, Team $team)
     {
-        //
+        return $user->isAdmin();
+    }
+
+    private function hasPermission(User $user, Team $team, $role = null)
+    {
+        $team_users = $team->users;
+        foreach ($team_users as $team_user) {
+            if ($user->id === $team_user->id && (!$role || $role === $team_user->pivot->role)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
