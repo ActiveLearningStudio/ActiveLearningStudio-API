@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserFavouriteProjectTable extends Migration
+class CreateUserFavoriteProjectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserFavouriteProjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_favourite_project', function (Blueprint $table) {
+        Schema::create('user_favorite_project', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('project_id');
@@ -30,6 +30,6 @@ class CreateUserFavouriteProjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_favourite_project');
+        Schema::dropIfExists('user_favorite_project');
     }
 }

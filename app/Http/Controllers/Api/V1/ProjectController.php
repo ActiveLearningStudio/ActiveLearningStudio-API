@@ -528,14 +528,14 @@ class ProjectController extends Controller
     }
 
     /**
-     * Favourite/Unfavourite Project
+     * Favorite/Unfavorite Project
      *
-     * Favourite/Unfavourite the specified project for a user.
+     * Favorite/Unfavorite the specified project for a user.
      *
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
-     *   "message": "Project favourite status is set."
+     *   "message": "Project favorite status is set."
      * }
      *
      * @response 400 {
@@ -548,29 +548,29 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function favourite(Request $request, Project $project)
+    public function favorite(Request $request, Project $project)
     {
-        $this->projectRepository->favouriteUpdate(auth()->user(), $project);
+        $this->projectRepository->favoriteUpdate(auth()->user(), $project);
         return response([
-            'message' => 'Favourite status of this project has been updated successfully!'
+            'message' => 'Favorite status of this project has been updated successfully!'
         ], 200);
     }
 
     /**
-     * Get All Favourite Projects
+     * Get All Favorite Projects
      *
-     * Get a list of the favourite projects of a user.
+     * Get a list of the favorite projects of a user.
      *
      * @responseFile responses/project/projects.json
      *
      * @return Response
      */
-    public function getFavourite()
+    public function getFavorite()
     {
         $authenticated_user = auth()->user();
 
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->favouriteProjects),
+            'projects' => ProjectResource::collection($authenticated_user->favoriteProjects),
         ], 200);
     }
 }

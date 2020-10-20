@@ -203,10 +203,10 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the favourite projects for the user
+     * Get the favorite projects for the user
      */
-    public function favouriteProjects()
+    public function favoriteProjects()
     {
-        return $this->belongsToMany('App\Models\Project', 'user_favourite_project')->withTimestamps();
+        return $this->belongsToMany('App\Models\Project', 'user_favorite_project')->withTimestamps();
     }
 }
