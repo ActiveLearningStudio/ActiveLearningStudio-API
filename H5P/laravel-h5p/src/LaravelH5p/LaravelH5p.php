@@ -227,8 +227,8 @@ class LaravelH5p
             'url' => self::get_h5p_storage(), // for uploaded
             'postUserStatistics' => config('laravel-h5p.h5p_track_user') && Auth::check(),
             'ajax' => array(
-                'setFinished' => route('h5p.ajax.finish'),//config('app.url') . '/api/h5p/ajax/finish',
-                'contentUserData' => config('app.url') . '/api/h5p/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
+                'setFinished' => config('app.url') . '/api/v1/h5p/ajax/finish', // route('h5p.ajax.finish')
+                'contentUserData' => config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
                 // 'contentUserData' => route('h5p.ajax.content-user-data', ['content_id' => ':contentId', 'data_type' => ':dataType', 'sub_content_id' => ':subContentId']),
             ),
             'saveFreq' => config('laravel-h5p.h5p_save_content_state', FALSE) ? config('laravel-h5p.h5p_save_content_frequency', 30) : FALSE,
