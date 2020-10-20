@@ -58,6 +58,18 @@ class Playlist
         $course = CourseHelper::getByName($courses, $playlist->project->name);
         
         if ($course) {
+            // enroll user to existing course as teacher if not enrolled
+            $enrollments = $this->canvasClient->run(new GetCourseEnrollmentCommand($course->id, '?type[]=TeacherEnrollment'));
+            if ($lmsSettings->lms_login_id && !EnrollmentHelper::isEnrolled($lmsSettings->lms_login_id, $enrollments)) {
+                $users = $this->canvasClient->run(new GetUsersCommand($accountId, '?search_term=' . $lmsSettings->lms_login_id));
+                $userIndex = array_search($lmsSettings->lms_login_id, array_column($users, 'login_id'));
+                $user = $userIndex !== false ? $users[$userIndex] : null;
+                if ($user) {
+                    $enrollmentData = ['enrollment' => ['user_id' => $user->id, 'type' => 'TeacherEnrollment', 'enrollment_state' => 'active', 'notify' => true]];
+                    $this->canvasClient->run(new CreateCourseEnrollmentCommand($course->id, $enrollmentData));
+                }
+            }
+
             // add playlist to existing course
             $modules = $this->canvasClient->run(new GetModulesCommand($course->id, $moduleName));
             $module = CourseHelper::getModuleByName($modules, $moduleName);
@@ -77,12 +89,12 @@ class Playlist
             $moduleItem['external_url'] = config('constants.curriki-tsugi-host') . "?playlist=" . $playlist->id;
             $playlistItem = $this->canvasClient->run(new CreateModuleItemCommand($course->id, $module->id, $moduleItem));
 
-            // enrol user to course as teacher
+            // enroll user to course as teacher
             $enrollments = $this->canvasClient->run(new GetCourseEnrollmentCommand($course->id, '?type[]=TeacherEnrollment'));
             if ($lmsSettings->lms_login_id && !EnrollmentHelper::isEnrolled($lmsSettings->lms_login_id, $enrollments)) {
                 $users = $this->canvasClient->run(new GetUsersCommand($accountId, '?search_term=' . $lmsSettings->lms_login_id));
                 $userIndex = array_search($lmsSettings->lms_login_id, array_column($users, 'login_id'));
-                $user = $userIndex ? $users[$userIndex] : null;
+                $user = $userIndex !== false ? $users[$userIndex] : null;
                 if ($user) {
                     $enrollmentData = ['enrollment' => ['user_id' => $user->id, 'type' => 'TeacherEnrollment', 'enrollment_state' => 'active', 'notify' => true]];
                     $this->canvasClient->run(new CreateCourseEnrollmentCommand($course->id, $enrollmentData));

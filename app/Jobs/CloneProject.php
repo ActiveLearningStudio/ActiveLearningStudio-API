@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Notifications\CloneNotification;
 
 class CloneProject implements ShouldQueue
 {
@@ -53,5 +54,10 @@ class CloneProject implements ShouldQueue
     public function handle(ProjectRepositoryInterface $projectRepository)
     {
         $projectRepository->clone($this->user, $this->project, $this->token);
+        $isDuplicate = $projectRepository->checkIsDuplicate($this->user, $this->project->id);
+        $process = ($isDuplicate) ? "duplicate" : "clone";
+        $message =  "Your request to $process project [".$this->project->name."] has been completed and available" ;
+        (new \App\Events\SendMessage($message));
+        $this->user->notify(new CloneNotification($message, $process));
     }
 }

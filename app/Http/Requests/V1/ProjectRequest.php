@@ -26,8 +26,7 @@ class ProjectRequest extends FormRequest
         return [
             'name' => 'required|string|max:80',
             'description' => 'required|string|max:1000',
-            'thumb_url' => 'required',
-            'is_public' => 'required',
+            'thumb_url' => 'required'
         ];
     }
 }

@@ -10,6 +10,8 @@ use App\Http\Resources\V1\ProjectResource;
 use App\Jobs\CloneProject;
 use App\Models\Project;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -173,7 +175,6 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
-     * @bodyParam is_public boolean required Public status of a project Example: true
      *
      * @responseFile 201 responses/project/project.json
      *
@@ -244,7 +245,8 @@ class ProjectController extends Controller
     // TODO: need to update documentation
     public function loadShared(Project $project)
     {
-        if ($project->shared || $project->is_public) {
+        // 3 is for indexing approved - see Project Model @indexing property
+        if ($project->shared || ($project->indexing === 3)) {
             return response([
                 'project' => $this->projectRepository->getProjectForPreview($project),
             ], 200);
@@ -422,16 +424,12 @@ class ProjectController extends Controller
      */
     public function clone(Request $request, Project $project)
     {
-        if (!$project->is_public) {
-            return response([
-                'errors' => ['Not a Public Project.'],
-            ], 400);
-        }
         $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
+        $process = ($isDuplicate) ? "duplicate" : "clone";
         // pushed cloning of project in background
         CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
         return response([
-            'message' => ($isDuplicate) ? "Project is being duplicated in background!" : "Project is being cloned in background!"
+            'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 
@@ -461,6 +459,71 @@ class ProjectController extends Controller
 
         return response([
             'projects' => ProjectResource::collection($authenticated_user->projects),
+        ], 200);
+    }
+
+    /**
+     * Indexing Request
+     *
+     * Make the indexing request for a project.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @response {
+     *   "message": "Indexing request for this project has been made successfully!"
+     * }
+     *
+     * @response 404 {
+     *   "message": "No query results for model [Project] Id"
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Indexing value is already set. Current indexing state of this project: CURRENT_STATE_OF_PROJECT_INDEX"
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Project must be finalized before requesting the indexing."
+     *   ]
+     * }
+     *
+     *
+     * @param Project $project
+     * @return Application|ResponseFactory|Response
+     */
+    public function indexing(Project $project)
+    {
+        $this->projectRepository->indexing($project);
+        return response([
+            'message' => 'Indexing request for this project has been made successfully!'
+        ], 200);
+    }
+
+    /**
+     * Status Update
+     *
+     * Update the status of the project, draft to final or vice versa.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @response {
+     *   "message": "Status of this project has been updated successfully!"
+     * }
+     *
+     * @response 404 {
+     *   "message": "No query results for model [Project] Id"
+     * }
+     *
+     * @param Project $project
+     * @return Application|ResponseFactory|Response
+     */
+    public function statusUpdate(Project $project)
+    {
+        $this->projectRepository->statusUpdate($project);
+        return response([
+            'message' => 'Status of this project has been updated successfully!'
         ], 200);
     }
 }

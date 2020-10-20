@@ -90,7 +90,6 @@ class PlaylistController extends Controller
 
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
-        $data['is_public'] = $project->is_public;
 
         $playlist = $project->playlists()->create($data);
 
@@ -338,17 +337,12 @@ class PlaylistController extends Controller
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
-        if (!$playlist->is_public) {
-            return response([
-                'errors' => ['Not a Public Playlist.'],
-            ], 500);
-        }
-
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($playlist->project_id == $project->id);
+        $process = ($isDuplicate) ? "duplicate" : "clone";
         return response([
-            'message' => ($isDuplicate) ? 'Playlist is being duplicated in background!' : 'Playlist is being cloned in background!',
+            "message" =>  "Your request to $process playlist [$playlist->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 }

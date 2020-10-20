@@ -65,8 +65,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $searchedModels = $this->model->searchForm()
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
-            ->isPublic(true)
-            ->elasticsearch(true)
+            ->indexing([3])
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))
             ->size(Arr::get($data, 'size', 10))
@@ -106,8 +105,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                         $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'] = [];
                     }
 
-                    $activityModel = $searchedModel->attributesToArray();
-                    $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'][$activityId] = SearchResource::make($activityModel)->resolve();
+                    $projects[$activityPlaylistProjectId]['playlists'][$activityPlaylistId]['activities'][$activityId] = SearchResource::make($searchedModel)->resolve();
                 }
             }
         }
@@ -142,12 +140,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     'field' => '_index',
                 ]
             ])
-            ->isPublic(true)
-            ->elasticsearch(true)
             ->type(Arr::get($data, 'type', 0))
+            ->startDate(Arr::get($data, 'startDate', 0))
+            ->endDate(Arr::get($data, 'endDate', 0))
+            ->indexing(Arr::get($data, 'indexing', []))
             ->subjectIds(Arr::get($data, 'subjectIds', []))
             ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
             ->projectIds($projectIds)
+            ->h5pLibraries(Arr::get($data, 'h5pLibraries', []))
             ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))
@@ -233,7 +233,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
         }
         $isDuplicate = ($activity->playlist_id == $playlist->id);
-        
+
         if ($isDuplicate) {
             Activity::where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
         }
@@ -307,17 +307,16 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     }
 
     /**
-     *  To get the is_public value for parent playlist of activity
-     * @param type $playlistId
-     * @return type
+     * Check is playlist public
+     * @param $playlistId
+     * @return false
      */
     public function getPlaylistIsPublicValue($playlistId)
     {
-        $playlist =  Playlist::where('id',$playlistId)->value('is_public');
-
-        return ($playlist) ? $playlist : false;
+        $playlist = Playlist::where('id', $playlistId)->with('project')->first();
+        return ($playlist->project->indexing === 3) ? $playlist : false;
     }
-    
+
     /**
      * Get latest order of activity for Playlist
      * @param $playlist_id
@@ -329,7 +328,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ->orderBy('order', 'desc')
             ->value('order') ?? 0;
     }
-    
+
     /**
      * To Populate missing order number, One time script
      */

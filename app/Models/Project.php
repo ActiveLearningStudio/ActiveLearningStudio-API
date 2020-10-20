@@ -26,12 +26,18 @@ class Project extends Model
         'shared',
         'starter_project',
         'is_user_starter',
-        'elasticsearch',
-        'is_public',
+        'indexing',
         'cloned_from',
         'clone_ctr',
         'order',
+        'status',
     ];
+
+    /**
+     * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
+     */
+    public static $status = [1 => 'DRAFT' , 2 => 'FINISHED'];
+    public static $indexing = [1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'];
 
     /**
      * Get the attributes to be indexed in Elasticsearch
@@ -42,8 +48,7 @@ class Project extends Model
             'project_id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'is_public' => $this->is_public,
-            'elasticsearch' => $this->elasticsearch,
+            'indexing' => $this->indexing,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
         ];
@@ -112,5 +117,21 @@ class Project extends Model
     public function getModelTypeAttribute()
     {
         return 'Project';
+    }
+
+    /**
+     * Maps the indexing integer value and returns the text
+     * @return string|null
+     */
+    public function getIndexingTextAttribute(){
+        return self::$indexing[$this->indexing] ?? 'NOT REQUESTED';
+    }
+
+    /**
+     * Maps the status value and returns the text
+     * @return string|null
+     */
+    public function getStatusTextAttribute(){
+        return self::$status[$this->status] ?? null;
     }
 }

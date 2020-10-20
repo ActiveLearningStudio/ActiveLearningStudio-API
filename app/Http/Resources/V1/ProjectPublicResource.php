@@ -25,7 +25,8 @@ class ProjectPublicResource extends JsonResource
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
             'playlists' => ProjectPlaylistShortResource::collection($this->playlists->sortBy('order')),
-            'is_public' => $this->is_public,
+            'indexing' => $this->indexing,
+            'indexing_text' => $this->indexing_text,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

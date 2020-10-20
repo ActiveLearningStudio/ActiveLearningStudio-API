@@ -31,6 +31,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
 
+    Route::get('organization-types', 'OrganizationTypesController@index');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
@@ -46,6 +48,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/detail', 'ProjectController@detail');
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::post('projects/reorder', 'ProjectController@reorder');
+        Route::get('projects/{project}/indexing', 'ProjectController@indexing');
+        Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
@@ -95,6 +99,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // Elasticsearch
         Route::get('search', 'SearchController@search');
         Route::get('search/advanced', 'SearchController@advance');
+        Route::get('search/dashboard', 'SearchController@dashboard');
 
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {
@@ -158,7 +163,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
         Route::get('projects/user-starters/flag', 'ProjectController@updateUserStarterFlag');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
-        Route::get('projects/{project}/index', 'ProjectController@updateIndex');
+        Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
         Route::get('projects/{project}/public-status', 'ProjectController@togglePublicStatus');
         Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
         Route::apiResource('projects', 'ProjectController');
@@ -171,6 +176,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // activity-items
         Route::apiResource('activity-items', 'ActivityItemController');
+
+        // organization-types
+        Route::apiResource('organization-types', 'OrganizationTypesController');
     });
 
     // admin public routes for downloads / uploads
