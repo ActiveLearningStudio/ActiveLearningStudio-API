@@ -223,7 +223,6 @@ class UserRepository extends BaseRepository
             throw new GeneralException('You cannot change the role of yourself.');
         }
         $role = $role ? 'admin' : null;
-        Log::error($role);
         $user->update(['role' => $role]);
         return "User role is changed successfully!";
     }
