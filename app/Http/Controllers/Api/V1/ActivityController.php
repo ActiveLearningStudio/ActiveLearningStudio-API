@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\ActivityRequest;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
@@ -118,23 +119,12 @@ class ActivityController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param ActivityRequest $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(ActivityRequest $request)
     {
-        // TODO: need to update validation
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'content' => 'required|string|max:255',
-            'playlist_id' => 'integer',
-            'order' => 'integer',
-            'h5p_content_id' => 'integer',
-            'thumb_url' => 'string',
-            'subject_id' => 'string',
-            'education_level_id' => 'string',
-        ]);
+        $data = $request->validated();
 
         $data['order'] = $this->activityRepository->getOrder($data['playlist_id']) + 1;
         $activity = $this->activityRepository->create($data);
