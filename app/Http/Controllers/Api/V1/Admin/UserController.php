@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\StoreUser;
 use App\Http\Requests\Admin\UpdateUser;
 use App\Http\Resources\V1\Admin\UserResource;
 use App\Repositories\Admin\User\UserRepository;
+use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
@@ -96,16 +97,6 @@ class UserController extends Controller
     }
 
     /**
-     * Temporary function for invoking the starter projects command in background
-     * This command will get users with less than 2 projects and assign starter projects
-     */
-    public function assignStarterProjects(): void
-    {
-        invoke_starter_projects_command();
-        dd("Assign starter projects command invoked successfully.");
-    }
-
-    /**
      * Users import sample file
      * @return BinaryFileResponse
      * @throws GeneralException
@@ -129,9 +120,20 @@ class UserController extends Controller
         $validated = $request->validated();
         $response = $this->userRepository->bulkImport($validated);
         // if report is present then set status 206 for partial success and show error messages
-        if ($response['report']){
+        if ($response['report']) {
             return response(['errors' => [$response['message']], 'report' => $response['report']], 206);
         }
         return response(['message' => $response['message'], 'report' => $response['report']], 200);
+    }
+
+    /**
+     * @param User $user
+     * @param $role
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function updateRole(User $user, $role)
+    {
+        return response(['message' => $this->userRepository->updateRole($user, (bool)$role)], 200);
     }
 }

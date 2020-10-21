@@ -155,7 +155,7 @@ class UserRepository extends BaseRepository
     /**
      * @param $data
      * @return array
-     * @throws GeneralException
+     * @throws GeneralException|\Throwable
      */
     public function bulkImport($data)
     {
@@ -209,5 +209,21 @@ class UserRepository extends BaseRepository
             Log::error(implode(", ", $errors));
         }
         return $report;
+    }
+
+    /**
+     * @param $user
+     * @param $role
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateRole($user, $role): string
+    {
+        if ($user->id === auth()->id()) {
+            throw new GeneralException('You cannot change the role of yourself.');
+        }
+        $role = $role ? 'admin' : null;
+        $user->update(['role' => $role]);
+        return "User role is changed successfully!";
     }
 }
