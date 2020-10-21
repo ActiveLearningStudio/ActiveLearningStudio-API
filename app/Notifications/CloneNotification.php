@@ -11,17 +11,31 @@ class CloneNotification extends Notification
 {
     use Queueable;
 
+    /**
+     * @var string
+     */
     public $message;
+    /**
+     * @var string
+     */
+    public $userName;
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
+     * @var string
      */
-    public function __construct($message,$type)
+    public $type;
+
+    /**
+     * CloneNotification constructor.
+     * @param $message
+     * @param $type
+     * @param $userName
+     */
+    public function __construct($message, $type, $userName)
     {
         $this->message = $message;
         $this->type = ucfirst($type);
+        $this->userName = $userName;
     }
 
     /**
@@ -44,8 +58,9 @@ class CloneNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject($this->type.' Notification')
-                    ->line($this->message.'. Please visit the studio to view it.')
+                    ->greeting('Hello '. $this->userName . '!')
+                    ->subject($this->type . ' Notification')
+                    ->line($this->message . '. Please visit the studio to view it.')
                     //->action('Notification Action', url('/'))
                     ->line('Thank you for your patience!');
     }

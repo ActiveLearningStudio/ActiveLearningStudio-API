@@ -58,6 +58,7 @@ class CloneProject implements ShouldQueue
         $process = ($isDuplicate) ? "duplicate" : "clone";
         $message =  "Your request to $process project [".$this->project->name."] has been completed and available" ;
         (new \App\Events\SendMessage($message));
-        $this->user->notify(new CloneNotification($message, $process));
+        $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
+        $this->user->notify(new CloneNotification($message, $process, $userName));
     }
 }
