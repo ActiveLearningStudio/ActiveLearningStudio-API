@@ -60,7 +60,7 @@ class CloneNotification extends Notification
         return (new MailMessage)
                     ->greeting('Hello '. $this->userName . '!')
                     ->subject($this->type . ' Notification')
-                    ->line($this->message .'. Please visit the studio to view it.')
+                    ->line($this->message . '. Please visit the studio to view it.')
                     //->action('Notification Action', url('/'))
                     ->line('Thank you for your patience!');
     }
