@@ -538,12 +538,6 @@ class ProjectController extends Controller
      *   "message": "Project favorite status is set."
      * }
      *
-     * @response 400 {
-     *   "errors": [
-     *     "Not a Public Project."
-     *   ]
-     * }
-     *
      * @param Request $request
      * @param Project $project
      * @return Response
