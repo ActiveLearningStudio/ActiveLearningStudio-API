@@ -152,7 +152,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         'prefix' => 'admin',
         'as' => 'v1.admin.',
         'namespace' => 'Admin',
-        'name' => 'admin.'
+        'name' => 'admin.',
+        'middleware' => ['auth:api', 'verified', 'admin']
     ], function () {
         // users
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
