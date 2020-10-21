@@ -14,23 +14,30 @@ class InviteToTeamNotification extends Notification
 
     protected $pageUrl;
 
+    public $sender;
+    public $team;
     public $token;
 
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param $sender
+     * @param $team
+     * @param $token
      */
-    public function __construct($token)
+    public function __construct($sender, $team, $token)
     {
+        $this->sender = $sender;
+        $this->team = $team;
         $this->token = $token;
-        $this->pageUrl = config('app.front_end_url') . '/teams/invite';
+        // $this->pageUrl = config('app.front_end_url') . '/teams/invite';
+        $this->pageUrl = config('app.front_end_url');
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -41,7 +48,7 @@ class InviteToTeamNotification extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return MailMessage
      */
     public function toMail($notifiable)
@@ -52,16 +59,15 @@ class InviteToTeamNotification extends Notification
 
         return (new MailMessage)
             ->subject('Invite to the Team')
-            ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Invite Team', $this->pageUrl . '?token=' . $this->token);
-            // ->line('This invitation link will expire in ' . config('auth.passwords.users.expire') . ' minutes.')
-            // ->line('If you did not request a password reset, no further action is required.');
+            ->line($this->sender->first_name . ' has invited you to join the team ' . $this->team->name)
+            // ->action('Join the Team', $this->pageUrl . '?token=' . $this->token);
+            ->action('Join the Team', $this->pageUrl . '/teams/' . $this->team->id . '/projects');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)

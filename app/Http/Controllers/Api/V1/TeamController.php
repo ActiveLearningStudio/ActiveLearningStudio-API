@@ -4,15 +4,20 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\TeamCreatedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\TeamAddProjectRequest;
+use App\Http\Requests\V1\TeamInviteMemberRequest;
 use App\Http\Requests\V1\TeamInviteRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
 use App\Models\Team;
+use App\Notifications\InviteToTeamNotification;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 /**
  * @group 14. Team
@@ -143,7 +148,9 @@ class TeamController extends Controller
             foreach ($data['users'] as $user_id) {
                 $user = $this->userRepository->find($user_id);
                 if ($user) {
-                    $team->users()->attach($user, ['role' => 'collaborator']);
+                    $token = Hash::make((string) Str::uuid() . date('D M d, Y G:i'));
+                    $team->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
+                    $user->token = $token;
                     $assigned_users[] = $user;
                 }
             }
@@ -157,7 +164,7 @@ class TeamController extends Controller
                 }
             }
 
-            new TeamCreatedEvent($team, $assigned_projects, $assigned_users);
+            event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
 
             $this->teamRepository->setTeamProjectUser($team, $assigned_projects, $assigned_users);
 
@@ -188,6 +195,91 @@ class TeamController extends Controller
         return response([
             'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
         ], 200);
+    }
+
+    /**
+     * Invite Team Member
+     *
+     * Invite a team member to the team.
+     *
+     * @bodyParam email string required The email of the user Example: abby@curriki.org
+     *
+     * @response {
+     *   "invited": true
+     * }
+     *
+     * @response 400 {
+     *   "invited": false
+     * }
+     *
+     * @param TeamInviteMemberRequest $inviteMemberRequest
+     * @param Team $team
+     * @return Response
+     */
+    public function inviteMember(TeamInviteMemberRequest $inviteMemberRequest, Team $team)
+    {
+        $data = $inviteMemberRequest->validated();
+        $auth_user = auth()->user();
+
+        $user = $this->userRepository->findByField('email', $data['email']);
+
+        if ($user) {
+            $token = Hash::make((string) Str::uuid() . date('D M d, Y G:i'));
+            $team->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
+
+            $user->notify(new InviteToTeamNotification($auth_user, $team, $token));
+
+            return response([
+                'invited' => true,
+            ], 200);
+        }
+
+        return response([
+            'invited' => false,
+        ], 400);
+    }
+
+    /**
+     * Add Project to the Team
+     *
+     * Add a project to the team.
+     *
+     * @bodyParam id integer required The Id of the project to add Example: 1
+     *
+     * @response {
+     *   "message": "Project has been added to the team successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to add project to the team."
+     *   ]
+     * }
+     *
+     * @param TeamAddProjectRequest $addProjectRequest
+     * @param Team $team
+     * @return Response
+     */
+    public function addProject(TeamAddProjectRequest $addProjectRequest, Team $team)
+    {
+        $data = $addProjectRequest->validated();
+        $auth_user = auth()->user();
+
+        $project = $this->projectRepository->find($data['id']);
+
+        if ($project) {
+            $team->projects()->attach($project);
+
+            $this->teamRepository->setTeamProjectUser($team, [$auth_user], [$project]);
+
+            return response([
+                'message' => 'Project has been added to the team successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to add project to the team.'],
+        ], 500);
     }
 
     /**

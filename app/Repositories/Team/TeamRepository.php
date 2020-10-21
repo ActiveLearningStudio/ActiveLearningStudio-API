@@ -33,9 +33,21 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     public function setTeamProjectUser($team, $projects, $users)
     {
         $team = $this->model->find($team->id);
+        $auth_user = auth()->user();
 
         if ($team) {
             foreach ($projects as $project) {
+                DB::table('team_project_user')
+                    ->insertOrIgnore([
+                        [
+                            'team_id' => $team->id,
+                            'project_id' => $project->id,
+                            'user_id' => $auth_user->id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ],
+                    ]);
+
                 foreach ($users as $user) {
                     DB::table('team_project_user')
                         ->insertOrIgnore([
@@ -43,6 +55,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                                 'team_id' => $team->id,
                                 'project_id' => $project->id,
                                 'user_id' => $user->id,
+                                'created_at' => now(),
+                                'updated_at' => now(),
                             ],
                         ]);
                 }

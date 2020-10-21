@@ -13,9 +13,9 @@ class AddIsVerifiedToTeamUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('team_user', function (Blueprint $table) {
+        Schema::table('user_team', function (Blueprint $table) {
             $table->boolean('verified')->default(false);
-            $table->string('token')->nullable();
+            $table->string('token')->unique()->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddIsVerifiedToTeamUserTable extends Migration
      */
     public function down()
     {
-        Schema::table('teams', function (Blueprint $table) {
+        Schema::table('user_team', function (Blueprint $table) {
             $table->dropColumn(['verified', 'token']);
         });
     }
