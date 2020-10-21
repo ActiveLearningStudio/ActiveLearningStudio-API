@@ -153,11 +153,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * The organisations that belong to the user.
+     * The organizations that belong to the user.
      */
-    public function organisations()
+    public function organizations()
     {
-        return $this->belongsToMany('App\Models\Organisation', 'organisation_user_roles')->withPivot('organisation_role_type_id')->withTimestamps();
+        return $this->belongsToMany('App\Models\Organization', 'organization_user_roles')->withPivot('organization_role_type_id')->withTimestamps();
     }
 
     public function isAdmin()

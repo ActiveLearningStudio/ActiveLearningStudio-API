@@ -152,8 +152,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         'prefix' => 'admin',
         'as' => 'v1.admin.',
         'namespace' => 'Admin',
-        'name' => 'admin.',
-        'middleware' => ['auth:api', 'verified', 'admin']
+        'name' => 'admin.'
     ], function () {
         // users
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
@@ -182,9 +181,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // organization-types
         Route::apiResource('organization-types', 'OrganizationTypesController');
 
-        // organisations
-        Route::get('organisations/report/basic', 'OrganisationController@reportBasic')->name('organisations.report.basic');
-        Route::apiResource('organisations', 'OrganisationController');
+        // organizations
+        Route::get('organizations/report/basic', 'OrganizationController@reportBasic')->name('organizations.report.basic');
+        Route::apiResource('organizations', 'OrganizationController');
     });
 
     // admin public routes for downloads / uploads

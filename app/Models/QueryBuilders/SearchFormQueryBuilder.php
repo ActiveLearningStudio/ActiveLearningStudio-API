@@ -15,7 +15,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     /**
      * @var array
      */
-    private $organisationVisibilityTypeIds;
+    private $organizationVisibilityTypeIds;
 
     /**
      * @var string
@@ -35,7 +35,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     /**
      * @var array
      */
-    private $organisationIds;
+    private $organizationIds;
 
     /**
      * @var array
@@ -78,9 +78,9 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-    public function organisationVisibilityTypeIds(array $organisationVisibilityTypeIds): self
+    public function organizationVisibilityTypeIds(array $organizationVisibilityTypeIds): self
     {
-        $this->organisationVisibilityTypeIds = $organisationVisibilityTypeIds;
+        $this->organizationVisibilityTypeIds = $organizationVisibilityTypeIds;
         return $this;
     }
 
@@ -90,9 +90,9 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         return $this;
     }
 
-    public function organisationIds(array $organisationIds): self
+    public function organizationIds(array $organizationIds): self
     {
-        $this->organisationIds = $organisationIds;
+        $this->organizationIds = $organizationIds;
         return $this;
     }
 
@@ -174,21 +174,21 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (!empty($this->organisationVisibilityTypeIds)) {
-            if (in_array(null, $this->organisationVisibilityTypeIds, true)) {
+        if (!empty($this->organizationVisibilityTypeIds)) {
+            if (in_array(null, $this->organizationVisibilityTypeIds, true)) {
                 $queries[] = [
                     'bool' => [
                         'should' => [
                             [
                                 'terms' => [
-                                    'organisation_visibility_type_id' => array_values(array_filter($this->organisationVisibilityTypeIds))
+                                    'organization_visibility_type_id' => array_values(array_filter($this->organizationVisibilityTypeIds))
                                 ]
                             ],
                             [
                                 'bool' => [
                                     'must_not' => [
                                         'exists' => [
-                                            'field' => 'organisation_visibility_type_id'
+                                            'field' => 'organization_visibility_type_id'
                                         ]
                                     ]
                                 ]
@@ -199,7 +199,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             } else {
                 $queries[] = [
                     'terms' => [
-                        'organisation_visibility_type_id' => $this->organisationVisibilityTypeIds
+                        'organization_visibility_type_id' => $this->organizationVisibilityTypeIds
                     ]
                 ];
             }
@@ -213,10 +213,10 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
-        if (!empty($this->organisationIds)) {
+        if (!empty($this->organizationIds)) {
             $queries[] = [
                 'terms' => [
-                    'organisation_id' => $this->organisationIds
+                    'organization_id' => $this->organizationIds
                 ]
             ];
         }

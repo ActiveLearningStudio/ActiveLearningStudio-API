@@ -29,8 +29,8 @@ use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use App\Repositories\OrganizationType\OrganizationTypeRepository;
 use App\Repositories\OrganizationType\OrganizationTypeRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\Organisation\OrganisationRepository;
-use App\Repositories\Organisation\OrganisationRepositoryInterface;
+use App\Repositories\Organization\OrganizationRepository;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -54,7 +54,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
         $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
         $this->app->bind(OrganizationTypeRepositoryInterface::class, OrganizationTypeRepository::class);
-        $this->app->bind(OrganisationRepositoryInterface::class, OrganisationRepository::class);
+        $this->app->bind(OrganizationRepositoryInterface::class, OrganizationRepository::class);
     }
 
     /**

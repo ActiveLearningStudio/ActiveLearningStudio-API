@@ -32,14 +32,14 @@ class Playlist extends Model
         $searchableArray = [
             'title' => $this->title,
             'project_id' => $this->project_id,
-            'organisation_visibility_type_id' => $this->organisation_visibility_type_id,
+            'organization_visibility_type_id' => $this->organization_visibility_type_id,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
 
         if ($this->project) {
             $searchableArray['indexing'] = $this->project->indexing;
-            $searchableArray['organisation_id'] = $this->project->organisation_id;
+            $searchableArray['organization_id'] = $this->project->organization_id;
         }
 
         return $searchableArray;

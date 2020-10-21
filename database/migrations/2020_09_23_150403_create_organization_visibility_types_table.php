@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganisationRoleTypesTable extends Migration
+class CreateOrganizationVisibilityTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOrganisationRoleTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('organisation_role_types', function (Blueprint $table) {
+        Schema::create('organization_visibility_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('display_name');
@@ -28,6 +28,6 @@ class CreateOrganisationRoleTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organisation_role_types');
+        Schema::dropIfExists('Organization_visibility_types');
     }
 }

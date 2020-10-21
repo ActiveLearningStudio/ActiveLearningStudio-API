@@ -66,7 +66,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
             ->indexing([3])
-            ->organisationVisibilityTypeIds([4])
+            ->OrganizationVisibilityTypeIds([4])
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))
             ->size(Arr::get($data, 'size', 10))
@@ -141,7 +141,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     'field' => '_index',
                 ]
             ])
-            ->organisationVisibilityTypeIds([null, 4])
+            ->OrganizationVisibilityTypeIds([null, 4])
             ->type(Arr::get($data, 'type', 0))
             ->startDate(Arr::get($data, 'startDate', 0))
             ->endDate(Arr::get($data, 'endDate', 0))

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveOrganisation extends FormRequest
+class SaveOrganization extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class SaveOrganisation extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'parent_id' => 'integer|exists:App\Models\Organisation,id'
+            'parent_id' => 'integer|exists:App\Models\Organization,id'
         ];
     }
 }

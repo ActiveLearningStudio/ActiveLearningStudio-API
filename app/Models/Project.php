@@ -31,7 +31,7 @@ class Project extends Model
         'clone_ctr',
         'order',
         'status',
-        'organisation_visibility_type_id'
+        'organization_visibility_type_id'
     ];
 
     /**
@@ -46,8 +46,8 @@ class Project extends Model
     public function toSearchableArray()
     {
         $searchableArray = [
-            'organisation_id' => $this->organisation_id,
-            'organisation_visibility_type_id' => $this->organisation_visibility_type_id,
+            'organization_id' => $this->organization_id,
+            'organization_visibility_type_id' => $this->organization_visibility_type_id,
             'project_id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
@@ -84,11 +84,11 @@ class Project extends Model
     }
 
     /**
-     * Get the organisation that owns the project.
+     * Get the organization that owns the project.
      */
-    public function organisation()
+    public function organization()
     {
-        return $this->belongsTo('App\Models\Organisation');
+        return $this->belongsTo('App\Models\Organization');
     }
 
     /**

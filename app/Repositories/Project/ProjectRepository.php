@@ -295,14 +295,4 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         return $returnProject;
     }
-
-    /**
-     * @param $authenticated_user
-     * @param $project
-     * @return bool
-     */
-    public function favoriteUpdate($authenticated_user, $project)
-    {
-        return $authenticated_user->favoriteProjects()->toggle([$project->id]);
-    }
 }

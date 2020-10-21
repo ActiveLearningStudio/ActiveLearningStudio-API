@@ -8,7 +8,7 @@ use App\Models\Traits\GlobalScope;
 use App\Models\DeepRelations\HasManyDeep;
 use App\Models\DeepRelations\HasRelationships;
 
-class Organisation extends Model
+class Organization extends Model
 {
     use SoftDeletes, GlobalScope, HasRelationships;
 
@@ -24,15 +24,15 @@ class Organisation extends Model
     ];
 
     /**
-     * The users that belong to the organisation.
+     * The users that belong to the organization.
      */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'organisation_user_roles')->withPivot('organisation_role_type_id')->withTimestamps();
+        return $this->belongsToMany('App\User', 'organization_user_roles')->withPivot('organization_role_type_id')->withTimestamps();
     }
 
     /**
-     * Get the projects for the organisation.
+     * Get the projects for the organization.
      */
     public function projects()
     {
@@ -40,12 +40,12 @@ class Organisation extends Model
     }
 
     /**
-     * Get playlists directly from organisations model via hasManyThrough
+     * Get playlists directly from organizations model via hasManyThrough
      * @return HasManyThrough
      */
     public function playlists()
     {
-        return $this->hasManyThrough('App\Models\Playlist', 'App\Models\Project', 'organisation_id', 'project_id', 'id', 'id');
+        return $this->hasManyThrough('App\Models\Playlist', 'App\Models\Project', 'organization_id', 'project_id', 'id', 'id');
     }
 
     /**
@@ -56,14 +56,14 @@ class Organisation extends Model
     {
         return $this->hasManyDeep(
             'App\Models\Activity',
-            ['App\Models\Project', 'App\Models\Playlist'], // Intermediate models, beginning at the far parent (Organisations).
+            ['App\Models\Project', 'App\Models\Playlist'], // Intermediate models, beginning at the far parent (Organizations).
             [
-                'organisation_id', // Foreign key on the "project" table.
+                'organization_id', // Foreign key on the "project" table.
                 'project_id',    // Foreign key on the "playlist" table.
                 'playlist_id'     // Foreign key on the "activity" table.
             ],
             [
-                'id', // Local key on the "organisations" table.
+                'id', // Local key on the "organizations" table.
                 'id', // Local key on the "project" table.
                 'id'  // Local key on the "playlist" table.
             ]
@@ -71,18 +71,18 @@ class Organisation extends Model
     }
 
     /**
-     * Get the children for the organisation.
+     * Get the children for the organization.
      */
     public function children()
     {
-        return $this->hasMany('App\Models\Organisation', 'parent_id');
+        return $this->hasMany('App\Models\organization', 'parent_id');
     }
 
     /**
-     * Get the parent that owns the organisation.
+     * Get the parent that owns the organization.
      */
     public function parent()
     {
-        return $this->belongsTo('App\Models\Organisation');
+        return $this->belongsTo('App\Models\Organization');
     }
 }

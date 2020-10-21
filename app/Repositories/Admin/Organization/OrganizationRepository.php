@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Repositories\Admin\Organisation;
+namespace App\Repositories\Admin\Organization;
 
 use App\Exceptions\GeneralException;
 use App\Repositories\Admin\BaseRepository;
-use App\Models\Organisation;
+use App\Models\Organization;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class OrganisationRepository.
+ * Class OrganizationRepository.
  */
-class OrganisationRepository extends BaseRepository
+class OrganizationRepository extends BaseRepository
 {
     /**
-     * OrganisationRepository constructor.
+     * OrganizationRepository constructor.
      *
-     * @param Organisation $model
+     * @param Organization $model
      */
-    public function __construct(Organisation $model)
+    public function __construct(Organization $model)
     {
         $this->model = $model;
     }
@@ -44,13 +44,13 @@ class OrganisationRepository extends BaseRepository
     public function create($data)
     {
         try {
-            if ($organisation = $this->model->create($data)) {
-                return ['message' => 'Organisation created successfully!', 'data' => $organisation];
+            if ($organization = $this->model->create($data)) {
+                return ['message' => 'Organization created successfully!', 'data' => $organization];
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to create organisation, please try again later!');
+        throw new GeneralException('Unable to create organization, please try again later!');
     }
 
     /**
@@ -61,15 +61,15 @@ class OrganisationRepository extends BaseRepository
      */
     public function update($id, $data)
     {
-        $organisation = $this->find($id);
+        $organization = $this->find($id);
         try {
-            if ($organisation->update($data)) {
-                return ['message' => 'Organisation data updated successfully!', 'data' => $this->find($id)];
+            if ($organization->update($data)) {
+                return ['message' => 'Organization data updated successfully!', 'data' => $this->find($id)];
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to update organisation, please try again later!');
+        throw new GeneralException('Unable to update organization, please try again later!');
     }
 
     /**
@@ -79,10 +79,10 @@ class OrganisationRepository extends BaseRepository
      */
     public function find($id)
     {
-        if ($organisation = $this->model->whereId($id)->with('projects')->first()) {
-            return $organisation;
+        if ($organization = $this->model->whereId($id)->with('projects')->first()) {
+            return $organization;
         }
-        throw new GeneralException('Organisation Not found.');
+        throw new GeneralException('Organization Not found.');
     }
 
     /**
@@ -94,15 +94,15 @@ class OrganisationRepository extends BaseRepository
     {
         try {
             $this->model->find($id)->delete();
-            return 'Organisation Deleted!';
+            return 'Organization Deleted!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to delete organisation, please try again later!');
+        throw new GeneralException('Unable to delete organization, please try again later!');
     }
 
     /**
-     * Organisations basic report, projects, playlists and activities count
+     * Organizations basic report, projects, playlists and activities count
      * @param $data
      * @return mixed
      */

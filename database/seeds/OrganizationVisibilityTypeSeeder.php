@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class OrganisationVisibilityTypeSeeder extends Seeder
+class OrganizationVisibilityTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,22 +12,22 @@ class OrganisationVisibilityTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('organisation_visibility_types')->insert([
+        DB::table('organization_visibility_types')->insert([
             'name' => 'private',
             'display_name' => 'Private'
         ]);
 
-        DB::table('organisation_visibility_types')->insert([
+        DB::table('organization_visibility_types')->insert([
             'name' => 'protected',
             'display_name' => 'Protected'
         ]);
 
-        DB::table('organisation_visibility_types')->insert([
+        DB::table('organization_visibility_types')->insert([
             'name' => 'global',
             'display_name' => 'Global'
         ]);
 
-        DB::table('organisation_visibility_types')->insert([
+        DB::table('organization_visibility_types')->insert([
             'name' => 'public',
             'display_name' => 'Public'
         ]);

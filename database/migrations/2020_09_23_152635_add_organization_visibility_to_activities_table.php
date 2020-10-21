@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddOrganisationVisibilityToActivitiesTable extends Migration
+class AddOrganizationVisibilityToActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddOrganisationVisibilityToActivitiesTable extends Migration
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->unsignedBigInteger('organisation_visibility_type_id')->nullable()->default(null);
-            $table->foreign('organisation_visibility_type_id')->references('id')->on('organisation_visibility_types');
+            $table->unsignedBigInteger('organization_visibility_type_id')->nullable()->default(null);
+            $table->foreign('organization_visibility_type_id')->references('id')->on('organization_visibility_types');
         });
     }
 
@@ -27,7 +27,7 @@ class AddOrganisationVisibilityToActivitiesTable extends Migration
     public function down()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->dropColumn('organisation_visibility_type_id');
+            $table->dropColumn('organization_visibility_type_id');
         });
     }
 }

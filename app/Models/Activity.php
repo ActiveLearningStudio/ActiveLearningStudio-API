@@ -47,7 +47,7 @@ class Activity extends Model
             'h5p_content_id' => $this->h5p_content_id,
             'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
-            'organisation_visibility_type_id' => $this->organisation_visibility_type_id,
+            'organization_visibility_type_id' => $this->organization_visibility_type_id,
             'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
         ];
@@ -57,7 +57,7 @@ class Activity extends Model
 
             if ($this->playlist->project) {
                 $searchableArray['indexing'] = $this->playlist->project->indexing;
-                $searchableArray['organisation_id'] = $this->playlist->project->organisation_id;
+                $searchableArray['organization_id'] = $this->playlist->project->organization_id;
             }
         }
 
