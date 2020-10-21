@@ -64,6 +64,7 @@ class ClonePlayList implements ShouldQueue
         (new \App\Events\SendMessage($message));
         $user_id = $userRepository->parseToken($this->token);
         $user = User::find($user_id);
-        $user->notify(new CloneNotification($message, $process));
+        $userName = rtrim($user->first_name.' '.$user->last_name,' ');
+        $user->notify(new CloneNotification($message, $process, $userName));
     }
 }
