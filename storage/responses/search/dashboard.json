@@ -19,6 +19,7 @@
             "thumb_url": "/storage/uploads/5f4013d35ec0e.png",
             "title": "Globalization, Robots and You",
             "description": "You have important decisions to make about your educations and career – wouldn’t it be nice if you could better understand the forces of globalization and automation first? What information do you need to gauge salary prospects, the risk of automation, and foreign competition as you compare your options?",
+            "favored": false,
             "model": "Project",
             "user": null
         }
