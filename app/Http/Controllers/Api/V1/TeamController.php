@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\TeamAddProjectRequest;
 use App\Http\Requests\V1\TeamInviteMemberRequest;
 use App\Http\Requests\V1\TeamInviteRequest;
+use App\Http\Requests\V1\TeamRemoveMemberRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
@@ -237,6 +238,52 @@ class TeamController extends Controller
         return response([
             'invited' => false,
         ], 400);
+    }
+
+    /**
+     * Remove Team Member
+     *
+     * remove a team member to the team.
+     *
+     * @bodyParam id integer required The Id of the user Example: 1
+     *
+     * @response {
+     *   "message": "User has been removed from the team successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to remove user from the team."
+     *   ]
+     * }
+     *
+     * @param TeamRemoveMemberRequest $removeMemberRequest
+     * @param Team $team
+     * @return Response
+     */
+    public function removeMember(TeamRemoveMemberRequest $removeMemberRequest, Team $team)
+    {
+        $data = $removeMemberRequest->validated();
+        $auth_user = auth()->user();
+
+        $user = $this->userRepository->find($data['id']);
+
+        if ($user) {
+            $team->users()->detach($user);
+
+            $this->teamRepository->removeTeamProjectUser($team, $user);
+
+            // TODO: need to add remove notification
+            // $user->notify(new InviteToTeamNotification($auth_user, $team));
+
+            return response([
+                'message' => 'User has been removed from the team successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to remove user from the team.'],
+        ], 500);
     }
 
     /**

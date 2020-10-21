@@ -65,6 +65,26 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
     /**
+     * Remove Team / Project / User relationship
+     *
+     * @param $team
+     * @param $user
+     */
+    public function removeTeamProjectUser($team, $user)
+    {
+        $team = $this->model->find($team->id);
+
+        if ($team) {
+            foreach ($team->projects as $project) {
+                DB::table('team_project_user')->where('team_id', $team->id)
+                    ->where('project_id', $project->id)
+                    ->where('user_id', $user->id)
+                    ->delete();
+            }
+        }
+    }
+
+    /**
      * Get Team detail data
      *
      * @param $teamId
