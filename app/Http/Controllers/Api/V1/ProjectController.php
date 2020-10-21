@@ -535,7 +535,7 @@ class ProjectController extends Controller
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
-     *   "message": "Project favorite status is set."
+     *   "message": "Favorite status of this project has been updated successfully!"
      * }
      *
      * @param Request $request
