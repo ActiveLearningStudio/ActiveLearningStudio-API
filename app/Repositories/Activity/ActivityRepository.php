@@ -9,6 +9,7 @@ use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
+use App\Repositories\User\UserRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -227,32 +228,38 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      */
     public function clone(Playlist $playlist, Activity $activity, $token)
     {
-        $h5P_res = null;
-
-        if (!empty($activity->h5p_content_id) && $activity->h5p_content_id != 0) {
-            $h5P_res = $this->download_and_upload_h5p($token, $activity->h5p_content_id);
+        $h5p_content = $activity->h5p_content;
+        if ($h5p_content) {
+            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5p_content->save(); // this will return true, then we can get id of h5pContent
         }
-        $isDuplicate = ($activity->playlist_id == $playlist->id);
+        $newH5pContent = $h5p_content->id ?? null;
+
+        // copy the content data if exist
+        $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
+
+        // detect is it duplicate request or clone
+        $isDuplicate = $activity->playlist_id === $playlist->id;
 
         if ($isDuplicate) {
-            Activity::where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
+            $this->model->where('playlist_id', $activity->playlist_id)->where('order', '>', $activity->order)->increment('order', 1);
         }
+
         $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
         $activity_data = [
-            'title' => ($isDuplicate) ? $activity->title."-COPY" : $activity->title,
+            'title' => ($isDuplicate) ? $activity->title . "-COPY" : $activity->title,
             'type' => $activity->type,
             'content' => $activity->content,
             'playlist_id' => $playlist->id,
-            'order' => ($isDuplicate) ? $activity->order + 1 :$this->getOrder($playlist->id) + 1,
-            'h5p_content_id' => $activity->h5p_content_id,
+            'order' => ($isDuplicate) ? $activity->order + 1 : $this->getOrder($playlist->id) + 1,
+            'h5p_content_id' => $newH5pContent, // set if new h5pContent created
             'thumb_url' => $new_thumb_url,
             'subject_id' => $activity->subject_id,
             'education_level_id' => $activity->education_level_id,
             'shared' => $activity->shared,
         ];
-
         $cloned_activity = $this->create($activity_data);
-
         return $cloned_activity['id'];
     }
 
@@ -348,4 +355,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
     }
 
+    /**
+     * @param $oldContentID
+     * @param $newContentID
+     * @return false
+     */
+    protected function copy_content_data($oldContentID, $newContentID): bool
+    {
+        if (!$oldContentID || !$newContentID) {
+            return false;
+        }
+        $contentDir = storage_path('app/public/h5p/content/');
+        if (!file_exists($contentDir . $oldContentID)) {
+            return false;
+        }
+        \File::copyDirectory($contentDir . $oldContentID, $contentDir . $newContentID);
+        return true;
+    }
 }
