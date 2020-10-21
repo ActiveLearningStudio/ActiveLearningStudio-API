@@ -526,4 +526,45 @@ class ProjectController extends Controller
             'message' => 'Status of this project has been updated successfully!'
         ], 200);
     }
+
+    /**
+     * Favorite/Unfavorite Project
+     *
+     * Favorite/Unfavorite the specified project for a user.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @response {
+     *   "message": "Favorite status of this project has been updated successfully!"
+     * }
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return Response
+     */
+    public function favorite(Request $request, Project $project)
+    {
+        $this->projectRepository->favoriteUpdate(auth()->user(), $project);
+        return response([
+            'message' => 'Favorite status of this project has been updated successfully!'
+        ], 200);
+    }
+
+    /**
+     * Get All Favorite Projects
+     *
+     * Get a list of the favorite projects of a user.
+     *
+     * @responseFile responses/project/projects.json
+     *
+     * @return Response
+     */
+    public function getFavorite()
+    {
+        $authenticated_user = auth()->user();
+
+        return response([
+            'projects' => ProjectResource::collection($authenticated_user->favoriteProjects),
+        ], 200);
+    }
 }
