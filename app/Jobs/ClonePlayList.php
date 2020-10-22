@@ -57,14 +57,18 @@ class ClonePlayList implements ShouldQueue
      */
     public function handle(PlaylistRepositoryInterface $playlistRepository, UserRepositoryInterface $userRepository)
     {
-        $playlistRepository->clone($this->project, $this->playlist, $this->token);
-        $isDuplicate = ($this->playlist->project_id == $this->project->id);
-        $process = ($isDuplicate) ? "duplicate" : "clone";
-        $message =  "Your request to $process playlist [".$this->playlist->title."] has been completed and available" ;
-        (new \App\Events\SendMessage($message));
-        $user_id = $userRepository->parseToken($this->token);
-        $user = User::find($user_id);
-        $userName = rtrim($user->first_name . ' ' . $user->last_name, ' ');
-        $user->notify(new CloneNotification($message, $process, $userName));
+        try {
+            $playlistRepository->clone($this->project, $this->playlist, $this->token);
+            $isDuplicate = ($this->playlist->project_id == $this->project->id);
+            $process = ($isDuplicate) ? "duplicate" : "clone";
+            $message = "Your request to $process playlist [" . $this->playlist->title . "] has been completed and available";
+            (new \App\Events\SendMessage($message));
+            $user_id = $userRepository->parseToken($this->token);
+            $user = User::find($user_id);
+            $userName = rtrim($user->first_name . ' ' . $user->last_name, ' ');
+            $user->notify(new CloneNotification($message, $process, $userName));
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 }
