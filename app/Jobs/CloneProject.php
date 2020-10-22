@@ -53,12 +53,16 @@ class CloneProject implements ShouldQueue
      */
     public function handle(ProjectRepositoryInterface $projectRepository)
     {
-        $projectRepository->clone($this->user, $this->project, $this->token);
-        $isDuplicate = $projectRepository->checkIsDuplicate($this->user, $this->project->id);
-        $process = ($isDuplicate) ? "duplicate" : "clone";
-        $message =  "Your request to $process project [".$this->project->name."] has been completed and available" ;
-        (new \App\Events\SendMessage($message));
-        $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
-        $this->user->notify(new CloneNotification($message, $process, $userName));
+        try {
+            $projectRepository->clone($this->user, $this->project, $this->token);
+            $isDuplicate = $projectRepository->checkIsDuplicate($this->user, $this->project->id);
+            $process = ($isDuplicate) ? "duplicate" : "clone";
+            $message = "Your request to $process project [" . $this->project->name . "] has been completed and available";
+            (new \App\Events\SendMessage($message));
+            $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
+            $this->user->notify(new CloneNotification($message, $process, $userName));
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+        }
     }
 }
