@@ -21,6 +21,7 @@ class SearchResource extends JsonResource
             'thumb_url' => (isset($this->thumb_url) ? $this->thumb_url : $this->thumbUrl),
             'title' => (isset($this->title) ? $this->title : $this->name),
             'description' => $this->when(isset($this->description), $this->description),
+            'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->modelType,
             'user' => new UserResource($this->user)
         ];

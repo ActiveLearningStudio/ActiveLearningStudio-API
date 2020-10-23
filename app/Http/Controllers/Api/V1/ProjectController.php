@@ -535,7 +535,7 @@ class ProjectController extends Controller
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
-     *   "message": "Favorite status of this project has been updated successfully!"
+     *   "message": "This resource will be removed from your Favorites. You will no longer be able to reuse/remix its contents into your projects."
      * }
      *
      * @param Request $request
@@ -544,9 +544,19 @@ class ProjectController extends Controller
      */
     public function favorite(Request $request, Project $project)
     {
-        $this->projectRepository->favoriteUpdate(auth()->user(), $project);
+        $updateStatus = $this->projectRepository->favoriteUpdate(auth()->user(), $project);
+
+        if (!empty($updateStatus['attached'])) {
+            $message = 'This resource has been added to your favorites! ';
+            $message .= 'Once a resource has been added to your favorites, ';
+            $message .= 'you can preview and add them to your own projects.';
+        } else {
+            $message = 'This resource will be removed from your Favorites. ';
+            $message .= 'You will no longer be able to reuse/remix its contents into your projects.';
+        }
+
         return response([
-            'message' => 'Favorite status of this project has been updated successfully!'
+            'message' => $message
         ], 200);
     }
 
