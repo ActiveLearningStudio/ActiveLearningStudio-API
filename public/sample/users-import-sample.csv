@@ -1,14 +1,16 @@
-first_name,last_name,email,password,organization_name,job_title
-168xos,com,168xosocom@gmail.com,sample$1Password,optional column,optional column
-Test,User,421demo@curriki.org,sample$1Password,,
-A,Henry,althea.henry@fac.edu.tt,sample$1Password,optional column,optional column
-aaron,mckinnon,amckinnon@sde.idaho.gov,sample$1Password,,optional column
-Aaron,Hart,ahart@openphysed.org,sample$1Password,,
-Aashish,Kumawat,ankitkumawat764@gmail.com,sample$1Password,optional column,
-Ahmad,Mukhtar,test3987970@gmaill.com,sample$1Password,,optional column
-Abby,First,abby@curriki.org,sample$1Password,,
-Abby,Test,abigailross49+12979@gmail.com,sample$1Password,,
-Abhay,dhamale,digitalmogli12@gmail.com,sample$1Password,optional column,optional column
-,,,,,
-,,,,,
-"Notes: Email must be unique and Password must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.",,,,,
+first_name,last_name,email,password,organization_name,job_title,organization_type
+168xos,com,168xosocom@gmail.com,sample$1Password,Studio,Software Engineer,K-12
+Test,User,421demo@curriki.org,sample$1Password,Curriki,Developer,Higher Education
+A,Henry,althea.henry@fac.edu.tt,sample$1Password,Curriki,Manager,Business/Corporation
+aaron,mckinnon,amckinnon@sde.idaho.gov,sample$1Password,Curriki,Designer,Nonprofit
+Aaron,Hart,ahart@openphysed.org,sample$1Password,TalentLMS,Designer,Government/EDU
+Aashish,Kumawat,ankitkumawat764@gmail.com,sample$1Password,TalentLMS,Designer,Other
+Ahmad,Mukhtar,test3987970@gmaill.com,sample$1Password,TalentLMS,Designer,Other
+Abby,First,abby@curriki.org,sample$1Password,TalentLMS,Designer,Other
+Abby,Test,abigailross49+12979@gmail.com,sample$1Password,TalentLMS,Designer,Other
+Abhay,dhamale,digitalmogli12@gmail.com,sample$1Password,TalentLMS,Designer,Other
+,,,,,,
+Notes/Instructions: ,,,,,,
+"Email must be unique and Password must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.",,,,,,
+Only specific 6 values are allowed for organization types which are mentioned under the organization_type column.,,,,,,
+All fields are required.,,,,,,

@@ -24,6 +24,7 @@ class UserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'job_title' => $this->job_title,
+            'organization_type' => $this->organization_type,
             'is_admin' => $this->isAdmin(), // needed to show on admin weather user is admin or not
             'organization_name' => $this->organization_name,
             'projects' =>  ProjectResource::collection($this->whenLoaded('projects')),
