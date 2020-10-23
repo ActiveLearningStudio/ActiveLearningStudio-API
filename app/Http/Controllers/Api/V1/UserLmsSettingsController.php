@@ -10,11 +10,21 @@ class UserLmsSettingsController extends Controller
 {
     private $repo;
 
+    /**
+     * UserLmsSettingsController constructor.
+     *
+     * @param UserLmsSettingsRepositoryInterface $repo
+     */
     public function __construct(UserLmsSettingsRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }
 
+    /**
+     * Get a full list of LMS settings available to the user
+     *
+     * @return Response
+     */
     public function index()
     {
         return UserLmsSettingResource::collection($this->repo->all());
