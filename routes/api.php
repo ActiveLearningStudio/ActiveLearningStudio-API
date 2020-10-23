@@ -182,6 +182,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // organization-types
         Route::apiResource('organization-types', 'OrganizationTypesController');
+
+        // queue-monitor
+        Route::apiResource('queue-monitor', 'QueueMonitorController');
     });
 
     // admin public routes for downloads / uploads
