@@ -127,6 +127,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::get('courses', 'GoogleClassroomController@getCourses');
             Route::post('projects/{project}/copy', 'GoogleClassroomController@copyProject');
         });
+
+        Route::get('user-lms-settings', 'UserLmsSettingsController@index');
     });
 
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
