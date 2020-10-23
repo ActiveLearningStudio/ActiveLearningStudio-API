@@ -29,9 +29,9 @@ class RegisterRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,NULL,id,deleted_at,NULL', // pass the email if record is soft-deleted issue#CUR-537
             'password' => ['required', 'string', new StrongPassword],
-            'organization_name' => 'nullable|string|max:50',
-            'organization_type' => 'nullable|string|max:255',
-            'job_title' => 'nullable|string|max:255',
+            'organization_name' => 'required|string|max:50',
+            'organization_type' => 'required|string|max:255|exists:organization_types,label',
+            'job_title' => 'required|string|max:255',
         ];
     }
 }
