@@ -47,6 +47,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/invite', 'TeamController@inviteMember');
         Route::post('teams/{team}/remove', 'TeamController@removeMember');
         Route::post('teams/{team}/add-project', 'TeamController@addProject');
+        Route::post('teams/{team}/remove-project', 'TeamController@removeProject');
         Route::apiResource('teams', 'TeamController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
