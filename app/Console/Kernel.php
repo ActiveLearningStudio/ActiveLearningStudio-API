@@ -28,18 +28,6 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command(SendDailyUsage::class)->dailyAt('0:00');
         $schedule->command(SendDailyUsage::class)->everyFourHours();
-        $schedule->command(StarterProjects::class)
-            ->everyFiveMinutes()
-            ->name('starter_projects')
-            ->when(function (){
-                return \Cache::store('database')->get('starter_projects_cron_count') <= 5;
-            })->before(function () {
-                $count = \Cache::store('database')->get('starter_projects_cron_count');
-                \Cache::store('database')->put('starter_projects_cron_count', $count + 1);
-            })->after(function () {
-                $count = \Cache::store('database')->get('starter_projects_cron_count');
-                \Cache::store('database')->put('starter_projects_cron_count', $count - 1);
-            })->runInBackground();
     }
 
     /**

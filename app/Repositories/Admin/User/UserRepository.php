@@ -5,7 +5,6 @@ namespace App\Repositories\Admin\User;
 use App\Exceptions\GeneralException;
 use App\Exports\ArrayExport;
 use App\Imports\UsersImport;
-use App\Jobs\AssignStarterProjects;
 use App\Repositories\Admin\BaseRepository;
 use App\Repositories\Admin\Project\ProjectRepository;
 use App\User;
@@ -67,7 +66,6 @@ class UserRepository extends BaseRepository
             if ($user = $this->model->withTrashed()->updateOrCreate(['email' => $data['email']], $data)) {
                 // no need to fire these events as user was not created recently, it was update request
                 if ($user->wasRecentlyCreated !== true) {
-                    AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
                     event(new Registered($user));
                 }
                 return ['message' => 'User created successfully!', 'data' => $user];
