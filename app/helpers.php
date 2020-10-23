@@ -2,6 +2,9 @@
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Laravel\Passport\Passport;
+use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
 
 if (!function_exists('clone_thumbnail')) {
     /**
@@ -65,5 +68,25 @@ if (!function_exists('invoke_starter_projects_command')) {
         dispatch(function () {
             \Artisan::call('project:starters');
         });
+    }
+}
+
+if (!function_exists('get_user_id_by_token')) {
+    /**
+     * Get user id from BearerToken - can be used in commands and background jobs
+     * In background jobs session data doesn't persist, this would be helpful
+     * @param $token
+     * @return false|mixed
+     */
+    function get_user_id_by_token($token)
+    {
+        $key_path = Passport::keyPath('oauth-public.key');
+        $parseTokenKey = file_get_contents($key_path);
+        $token = (new Parser())->parse((string)$token);
+        $signer = new Sha256();
+        if ($token->verify($signer, $parseTokenKey)) {
+            return (int)$token->getClaim('sub');
+        }
+        return false;
     }
 }

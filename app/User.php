@@ -29,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_name',
         'name',
         'email',
+        'role',
         'password',
         'remember_token',
         'organization_name',
@@ -212,4 +213,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->orWhereRaw("CONCAT(first_name,' ',last_name) ILIKE '%" . $value . "%'");
     }
 
+    /**
+     * Get the favorite projects for the user
+     */
+    public function favoriteProjects()
+    {
+        return $this->belongsToMany('App\Models\Project', 'user_favorite_project')->withTimestamps();
+    }
 }

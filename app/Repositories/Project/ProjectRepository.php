@@ -287,8 +287,22 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $project->status = 3 - $project->status; // this will toggle status, if draft then it will be final or vice versa
         if ($project->status === 1){
             $project->indexing = null; // remove indexing if project is reverted to draft state
+            $returnProject = $project->save();
             resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
+        } else {
+            $returnProject = $project->save();
         }
-        return $project->save();
+
+        return $returnProject;
+    }
+
+    /**
+     * @param $authenticated_user
+     * @param $project
+     * @return bool
+     */
+    public function favoriteUpdate($authenticated_user, $project)
+    {
+        return $authenticated_user->favoriteProjects()->toggle([$project->id]);
     }
 }

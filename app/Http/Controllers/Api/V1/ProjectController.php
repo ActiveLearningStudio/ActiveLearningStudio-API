@@ -425,10 +425,11 @@ class ProjectController extends Controller
     public function clone(Request $request, Project $project)
     {
         $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
+        $process = ($isDuplicate) ? "duplicate" : "clone";
         // pushed cloning of project in background
         CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
         return response([
-            'message' => ($isDuplicate) ? "Project is being duplicated in background!" : "Project is being cloned in background!"
+            'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 
@@ -523,6 +524,57 @@ class ProjectController extends Controller
         $this->projectRepository->statusUpdate($project);
         return response([
             'message' => 'Status of this project has been updated successfully!'
+        ], 200);
+    }
+
+    /**
+     * Favorite/Unfavorite Project
+     *
+     * Favorite/Unfavorite the specified project for a user.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @response {
+     *   "message": "This resource will be removed from your Favorites. You will no longer be able to reuse/remix its contents into your projects."
+     * }
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return Response
+     */
+    public function favorite(Request $request, Project $project)
+    {
+        $updateStatus = $this->projectRepository->favoriteUpdate(auth()->user(), $project);
+
+        if (!empty($updateStatus['attached'])) {
+            $message = 'This resource has been added to your favorites! ';
+            $message .= 'Once a resource has been added to your favorites, ';
+            $message .= 'you can preview and add them to your own projects.';
+        } else {
+            $message = 'This resource will be removed from your Favorites. ';
+            $message .= 'You will no longer be able to reuse/remix its contents into your projects.';
+        }
+
+        return response([
+            'message' => $message
+        ], 200);
+    }
+
+    /**
+     * Get All Favorite Projects
+     *
+     * Get a list of the favorite projects of a user.
+     *
+     * @responseFile responses/project/projects.json
+     *
+     * @return Response
+     */
+    public function getFavorite()
+    {
+        $authenticated_user = auth()->user();
+
+        return response([
+            'projects' => ProjectResource::collection($authenticated_user->favoriteProjects),
         ], 200);
     }
 }

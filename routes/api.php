@@ -54,12 +54,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/default', 'ProjectController@default');
         Route::get('projects/detail', 'ProjectController@detail');
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
+        Route::get('projects/favorites', 'ProjectController@getFavorite');
         Route::post('projects/reorder', 'ProjectController@reorder');
         Route::get('projects/{project}/indexing', 'ProjectController@indexing');
         Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('projects/{project}/share', 'ProjectController@share');
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
+        Route::post('projects/{project}/favorite', 'ProjectController@favorite');
         Route::apiResource('projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
@@ -164,6 +166,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         Route::post('users/bulk/import', 'UserController@bulkImport')->name('users.bulk.import');
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
+        Route::get('users/{user}/roles/{role}', 'UserController@updateRole')->name('users.update.role');
         Route::apiResource('users', 'UserController');
 
         // projects

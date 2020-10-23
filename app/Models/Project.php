@@ -6,6 +6,7 @@ use App\Models\QueryBuilders\SearchFormQueryBuilder;
 use App\Models\Traits\GlobalScope;
 use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 use ElasticScoutDriverPlus\CustomSearch;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
@@ -141,5 +142,23 @@ class Project extends Model
      */
     public function getStatusTextAttribute(){
         return self::$status[$this->status] ?? null;
+    }
+
+    /**
+     * The users that favored the project.
+     */
+    public function favoredByUsers()
+    {
+        return $this->belongsToMany('App\User', 'user_favorite_project')->withTimestamps();
+    }
+
+    /**
+     * Get the favored status.
+     *
+     * @return string
+     */
+    public function getFavoredAttribute()
+    {
+        return $this->favoredByUsers->find(auth()->user()->id) ? true : false;
     }
 }

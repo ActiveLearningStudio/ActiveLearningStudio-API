@@ -15,4 +15,11 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @param $name
      */
     public function searchByName($name);
+
+    /**
+     * To fetch user from token
+     * @param $accessToken
+     * @return bool
+     */
+    public function parseToken($accessToken);
 }

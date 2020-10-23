@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Laravel\Passport\Passport;
+use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -49,5 +52,27 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function searchByName($name)
     {
         return $this->model->name($name)->get();
+    }
+
+    /**
+     * @param $accessToken
+     * @return bool
+     */
+    public function parseToken($accessToken)
+    {
+        $key_path = Passport::keyPath('oauth-public.key');
+        $parseTokenKey = file_get_contents($key_path);
+
+        $token = (new Parser())->parse((string) $accessToken);
+
+        $signer = new Sha256();
+
+        if ($token->verify($signer, $parseTokenKey)) {
+            $userId = $token->getClaim('sub');
+
+            return $userId;
+        } else {
+            return false;
+        }
     }
 }
