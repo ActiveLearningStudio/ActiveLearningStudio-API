@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
-use App\Jobs\AssignStarterProjects;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
@@ -74,7 +73,6 @@ class AuthController extends Controller
         $user = $this->userRepository->create($data);
 
         if ($user) {
-            AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
             event(new Registered($user));
 
 //            return response([
