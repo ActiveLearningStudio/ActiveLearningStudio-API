@@ -343,32 +343,35 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function addProject(TeamAddProjectRequest $addProjectRequest, Team $team)
+    public function addProjects(TeamAddProjectRequest $addProjectRequest, Team $team)
     {
         $data = $addProjectRequest->validated();
         $auth_user = auth()->user();
         $owner = $team->getUserAttribute();
+        $assigned_projects = [];
 
         if ($owner->id === $auth_user->id) {
-            $project = $this->projectRepository->find($data['id']);
-
-            if ($project) {
-                $team->projects()->attach($project);
-
-                $this->teamRepository->setTeamProjectUser($team, [$auth_user], [$project]);
-
-                return response([
-                    'message' => 'Project has been added to the team successfully.',
-                ], 200);
+            foreach ($data['ids'] as $project_id) {
+                $project = $this->projectRepository->find($project_id);
+                if ($project) {
+                    $team->projects()->attach($project);
+                    $assigned_projects[] = $project;
+                }
             }
+
+            $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
+
+            return response([
+                'message' => 'Projects have been added to the team successfully.',
+            ], 200);
         } else {
             return response([
-                'message' => 'You do have have permission to add project to the team.',
+                'message' => 'You do not have permission to add projects to the team.',
             ], 403);
         }
 
         return response([
-            'errors' => ['Failed to add project to the team.'],
+            'errors' => ['Failed to add projects to the team.'],
         ], 500);
     }
 

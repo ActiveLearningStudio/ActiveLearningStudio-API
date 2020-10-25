@@ -24,7 +24,7 @@ class TeamAddProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:projects,id',
+            'ids' => 'required|array|exists:App\Models\Project,id',
         ];
     }
 }
