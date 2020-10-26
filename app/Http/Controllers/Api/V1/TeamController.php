@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\TeamCreatedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\TeamAddMemberRequest;
 use App\Http\Requests\V1\TeamAddProjectRequest;
 use App\Http\Requests\V1\TeamInviteMemberRequest;
 use App\Http\Requests\V1\TeamInviteRequest;
@@ -12,6 +13,7 @@ use App\Http\Requests\V1\TeamRemoveProjectRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
+use App\Models\Project;
 use App\Models\Team;
 use App\Notifications\InviteToTeamNotification;
 use App\Repositories\Project\ProjectRepositoryInterface;
@@ -45,7 +47,8 @@ class TeamController extends Controller
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
         ProjectRepositoryInterface $projectRepository
-    ) {
+    )
+    {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
@@ -150,7 +153,7 @@ class TeamController extends Controller
             foreach ($data['users'] as $user_id) {
                 $user = $this->userRepository->find($user_id);
                 if ($user) {
-                    $token = Hash::make((string) Str::uuid() . date('D M d, Y G:i'));
+                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                     $team->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
                     $user->token = $token;
                     $assigned_users[] = $user;
@@ -212,7 +215,7 @@ class TeamController extends Controller
      *
      * @response 403 {
      *   "errors": [
-     *     "You do have have permission to invite user to the team."
+     *     "You do not have permission to invite user to the team."
      *   ]
      * }
      *
@@ -247,7 +250,7 @@ class TeamController extends Controller
             }
         } else {
             return response([
-                'message' => 'You do have have permission to invite user to the team.',
+                'message' => 'You do not have permission to invite user to the team.',
             ], 403);
         }
 
@@ -269,7 +272,7 @@ class TeamController extends Controller
      *
      * @response 403 {
      *   "errors": [
-     *     "You do have have permission to remove user from the team."
+     *     "You do not have permission to remove user from the team."
      *   ]
      * }
      *
@@ -307,7 +310,7 @@ class TeamController extends Controller
             }
         } else {
             return response([
-                'message' => 'You do have have permission to remove user from the team.',
+                'message' => 'You do not have permission to remove user from the team.',
             ], 403);
         }
 
@@ -317,25 +320,25 @@ class TeamController extends Controller
     }
 
     /**
-     * Add Project to the Team
+     * Add Projects to the Team
      *
-     * Add a project to the team.
+     * Add projects to the team.
      *
-     * @bodyParam id integer required The Id of the project to add Example: 1
+     * @bodyParam ids array required The list of the project Ids to add Example: [1]
      *
      * @response {
-     *   "message": "Project has been added to the team successfully."
+     *   "message": "Projects have been added to the team successfully."
      * }
      *
      * @response 403 {
      *   "errors": [
-     *     "You do have have permission to add project to the team."
+     *     "You do not have permission to add projects to the team."
      *   ]
      * }
      *
      * @response 500 {
      *   "errors": [
-     *     "Failed to add project to the team."
+     *     "Failed to add projects to the team."
      *   ]
      * }
      *
@@ -364,7 +367,7 @@ class TeamController extends Controller
             return response([
                 'message' => 'Projects have been added to the team successfully.',
             ], 200);
-        } else {
+        } elseif ($owner->id !== $auth_user->id) {
             return response([
                 'message' => 'You do not have permission to add projects to the team.',
             ], 403);
@@ -380,7 +383,7 @@ class TeamController extends Controller
      *
      * Remove a project from the team.
      *
-     * @bodyParam id integer required The Id of the project to add Example: 1
+     * @bodyParam id integer required The Id of the project to remove Example: 1
      *
      * @response {
      *   "message": "Project has been removed from the team successfully."
@@ -388,7 +391,7 @@ class TeamController extends Controller
      *
      * @response 403 {
      *   "errors": [
-     *     "You do have have permission to remove project from the team."
+     *     "You do not have permission to remove project from the team."
      *   ]
      * }
      *
@@ -422,12 +425,126 @@ class TeamController extends Controller
             }
         } else {
             return response([
-                'message' => 'You do have have permission to remove project from the team.',
+                'message' => 'You do not have permission to remove project from the team.',
             ], 403);
         }
 
         return response([
             'errors' => ['Failed to remove project from the team.'],
+        ], 500);
+    }
+
+    /**
+     * Add Members to the Team Project
+     *
+     * Add members to a specified project of specified team.
+     *
+     * @bodyParam ids array required The list of the member Ids to add Example: [1]
+     *
+     * @response {
+     *   "message": "Members have been added to the team project successfully."
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You do not have permission to add members to the team project."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to add members to the team project."
+     *   ]
+     * }
+     *
+     * @param TeamAddMemberRequest $addMemberRequest
+     * @param Team $team
+     * @param Project $project
+     * @return Response
+     */
+    public function addMembersToProject(TeamAddMemberRequest $addMemberRequest, Team $team, Project $project)
+    {
+        $data = $addMemberRequest->validated();
+        $auth_user = auth()->user();
+        $owner = $team->getUserAttribute();
+        $assigned_members = [];
+
+        if ($owner->id === $auth_user->id) {
+            foreach ($data['ids'] as $member_id) {
+                $member = $this->userRepository->find($member_id);
+                if ($member) {
+                    $assigned_members[] = $member;
+                }
+            }
+
+            $this->teamRepository->assignMembersToTeamProject($team, $project, $assigned_members);
+
+            return response([
+                'message' => 'Members have been added to the team project successfully.',
+            ], 200);
+        } elseif ($owner->id !== $auth_user->id) {
+            return response([
+                'message' => 'You do not have permission to add members to the team project.',
+            ], 403);
+        }
+
+        return response([
+            'errors' => ['Failed to add members to the team project.'],
+        ], 500);
+    }
+
+    /**
+     * Remove Member from the Team Project
+     *
+     * Remove member from a specified project of specified team.
+     *
+     * @bodyParam id integer required The Id of the member to remove Example: 1
+     *
+     * @response {
+     *   "message": "Member has been removed from the team project successfully."
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You do not have permission to remove member from the team project."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to remove member from the team project."
+     *   ]
+     * }
+     *
+     * @param TeamRemoveMemberRequest $removeMemberRequest
+     * @param Team $team
+     * @param Project $project
+     * @return Response
+     */
+    public function removeMemberFromProject(TeamRemoveMemberRequest $removeMemberRequest, Team $team, Project $project)
+    {
+        $data = $removeMemberRequest->validated();
+        $auth_user = auth()->user();
+        $owner = $team->getUserAttribute();
+
+        if ($owner->id === $auth_user->id) {
+            $user = $this->userRepository->find($data['id']);
+
+            if ($user) {
+                $this->teamRepository->removeMemberFromTeamProject($team, $project, $user);
+
+                return response([
+                    'message' => 'Member has been removed from the team project successfully.',
+                ], 200);
+            }
+        } else {
+            return response([
+                'message' => 'You do not have permission to remove member from the team project.',
+            ], 403);
+        }
+
+        return response([
+            'errors' => ['Failed to remove member from the team project.'],
         ], 500);
     }
 

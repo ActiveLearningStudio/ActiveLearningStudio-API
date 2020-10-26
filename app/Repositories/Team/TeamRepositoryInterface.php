@@ -36,6 +36,24 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     public function removeTeamUserProject($team, $project);
 
     /**
+     * Assign members to the team project
+     *
+     * @param $team
+     * @param $project
+     * @param $users
+     */
+    public function assignMembersToTeamProject($team, $project, $users);
+
+    /**
+     * Remove member from the team project
+     *
+     * @param $team
+     * @param $project
+     * @param $user
+     */
+    public function removeMemberFromTeamProject($team, $project, $user);
+
+    /**
      * Get Team detail data
      *
      * @param $teamId
