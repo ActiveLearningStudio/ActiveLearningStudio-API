@@ -159,6 +159,7 @@ class GoogleClassroom implements GoogleClassroomInterface
                 'url' => $data['activity_link']
             ]
         ]);
+        $courseWork->setMaxpoints(100);
         $courseWork->setState(self::COURSEWORK_STATE_PUBLISHED);
 
         return $this->service->courses_courseWork->create($data['course_id'], $courseWork);
@@ -282,12 +283,16 @@ class GoogleClassroom implements GoogleClassroomInterface
                 $activity->shared = true;
                 $activity->save();
 
+                // Make an assignment URL with context of
+                // classroom id, user id (teacher), and the h5p activity id
+                $userId = auth()->user()->id;
+                $activityLink = '/gclass/launch/' . $userId . '/' . $course->id . '/' . $activity->id;
                 $courseWorkData = [
                     'course_id' => $course->id,
                     'topic_id' => $topic->topicId,
                     'activity_id' => $activity->id,
                     'activity_title' => $activity->title,
-                    'activity_link' => $frontURL . '/activity/' . $activity->id . '/shared'
+                    'activity_link' => $frontURL . $activityLink
                 ];
                 $courseWork = $this->createCourseWork($courseWorkData);
 
