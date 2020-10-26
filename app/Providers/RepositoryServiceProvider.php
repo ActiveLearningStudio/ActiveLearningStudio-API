@@ -28,6 +28,8 @@ use App\Repositories\Team\TeamRepository;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\UserLmsSettings\UserLmsSettingsRepository;
+use App\Repositories\UserLmsSettings\UserLmsSettingsRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepository;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -55,6 +57,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
         $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
         $this->app->bind(OrganizationTypeRepositoryInterface::class, OrganizationTypeRepository::class);
+        $this->app->bind(UserLmsSettingsRepositoryInterface::class, UserLmsSettingsRepository::class);
     }
 
     /**
