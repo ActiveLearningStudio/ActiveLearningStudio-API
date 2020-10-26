@@ -36,11 +36,19 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
+        Route::post('users/search', 'UserController@getUsersForTeam');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
         ]);;
+
+        Route::post('teams/invite', 'TeamController@inviteTeamMember');
+        Route::post('teams/{team}/invite', 'TeamController@inviteMember');
+        Route::post('teams/{team}/remove', 'TeamController@removeMember');
+        Route::post('teams/{team}/add-projects', 'TeamController@addProjects');
+        Route::post('teams/{team}/remove-project', 'TeamController@removeProject');
+        Route::apiResource('teams', 'TeamController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::get('projects/recent', 'ProjectController@recent');
