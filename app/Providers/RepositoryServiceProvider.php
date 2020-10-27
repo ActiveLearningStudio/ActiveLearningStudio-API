@@ -28,6 +28,8 @@ use App\Repositories\UserLogin\UserLoginRepository;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use App\Repositories\OrganizationType\OrganizationTypeRepository;
 use App\Repositories\OrganizationType\OrganizationTypeRepositoryInterface;
+use App\Repositories\GcClasswork\GcClassworkRepository;
+use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -52,6 +54,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
         $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
         $this->app->bind(OrganizationTypeRepositoryInterface::class, OrganizationTypeRepository::class);
+        $this->app->bind(GcClassworkRepositoryInterface::class, GcClassworkRepository::class);
     }
 
     /**

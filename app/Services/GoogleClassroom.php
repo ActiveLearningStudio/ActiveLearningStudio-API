@@ -6,6 +6,8 @@ use App\Services\GoogleClassroomInterface;
 use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCTopicResource;
 use App\Http\Resources\V1\GCCourseWorkResource;
+use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
+use App\Exceptions\GeneralException;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -22,15 +24,23 @@ class GoogleClassroom implements GoogleClassroomInterface
     protected $service;
 
     /**
+     * Google Classwork repository  object
+     *
+     * @var GcClassworkInterface
+     */
+    protected $gc_classwork;
+
+    /**
      * Creates an instance of the class
+     * 
      *
      * @return void
      */
-    function __construct()
+    function __construct($accessTokenStr = null)
     {
         $client = new \Google_Client();
         $client->setApplicationName(config('google.gapi_application_name'));
-        $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS]);
+        $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS, \Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY]);
         $credentials = config('google.gapi_class_credentials');
 
         $client->setAuthConfig(json_decode($credentials, true));
@@ -42,6 +52,9 @@ class GoogleClassroom implements GoogleClassroomInterface
         if (auth()->user()) {
             $accessToken = json_decode(auth()->user()->gapi_access_token, true);
             $client->setAccessToken($accessToken);
+        } else if($accessTokenStr) {
+            $accessToken = json_decode($accessTokenStr, true);
+            $client->setAccessToken($accessToken);
         }
 
         if ($client->isAccessTokenExpired()) {
@@ -49,9 +62,12 @@ class GoogleClassroom implements GoogleClassroomInterface
             if ($client->getRefreshToken()) {
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
             } else {
+                throw new GeneralException('Did not get a proper Google Classroom token, '.
+                'either you have no access to Classroom, '.
+                'or you may need to revoke the permission for this app. ');
                 // @TODO - this flow doesn't actually kick in.
                 // Request authorization from the user.
-                $authUrl = $client->createAuthUrl();
+                /*$authUrl = $client->createAuthUrl();
                 // header("Location: $authUrl");
                 // printf("Open the following link in your browser:\n%s\n", $authUrl);
                 // print 'Enter verification code: ';
@@ -63,8 +79,8 @@ class GoogleClassroom implements GoogleClassroomInterface
 
                 // Check to see if there was an error.
                 if (array_key_exists('error', $accessToken)) {
-                    throw new Exception(join(', ', $accessToken));
-                }
+                    throw new GeneralException(join(', ', $accessToken));
+                }*/
             }
             // // Save the token to a file.
             // if (!file_exists(dirname($tokenPath))) {
@@ -83,6 +99,18 @@ class GoogleClassroom implements GoogleClassroomInterface
     public function getClient()
     {
         return $this->service->getClient();
+    }
+
+    /**
+     * Set GcClasswork repository object
+     * 
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     *
+     * @return void
+     */
+    public function setGcClassworkObject(GcClassworkRepositoryInterface $gcClassworkRepository)
+    {
+        return $this->gc_classwork = $gcClassworkRepository;
     }
 
     /**
@@ -217,7 +245,11 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param int|null $courseId The id of the course
      * @return array
      */
-    public function createProjectAsCourse(Project $project, $courseId = null) {
+    public function createProjectAsCourse(Project $project, $courseId = null)
+    {
+        if (!$this->gc_classwork) {
+            throw new GeneralException("GcClasswork repository object is required");
+        }
         $frontURL = $this->getFrontURL();
         $return = [];
         // If course already exists
@@ -287,17 +319,38 @@ class GoogleClassroom implements GoogleClassroomInterface
                 // classroom id, user id (teacher), and the h5p activity id
                 $userId = auth()->user()->id;
                 $activityLink = '/gclass/launch/' . $userId . '/' . $course->id . '/' . $activity->id;
-                $courseWorkData = [
-                    'course_id' => $course->id,
-                    'topic_id' => $topic->topicId,
-                    'activity_id' => $activity->id,
-                    'activity_title' => $activity->title,
-                    'activity_link' => $frontURL . $activityLink
-                ];
-                $courseWork = $this->createCourseWork($courseWorkData);
 
-                $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
-                $courseWorkCount++;
+                // We need to save the classwork id in the database, and also need to retrieve it later.
+                // So we make a dummy insertion in the database, and append the id in the link.
+                // We have to do this way because, we cannot update the 'Materials' link for classwork 
+                $classworkItem = $this->gc_classwork->create([
+                    'classwork_id' => uniqid(),
+                    'path' => $activityLink,
+                    'course_id' => $course->id
+                ]);
+
+                if ($classworkItem) {
+                    // Now, we append the activity link with our database id.
+                    $activityLink .= '/' . $classworkItem->id;
+                    
+                    $courseWorkData = [
+                        'course_id' => $course->id,
+                        'topic_id' => $topic->topicId,
+                        'activity_id' => $activity->id,
+                        'activity_title' => $activity->title,
+                        'activity_link' => $frontURL . $activityLink
+                    ];
+                    $courseWork = $this->createCourseWork($courseWorkData);
+                    
+                    // Once coursework id is generated, we'll update that in our database.
+                    $this->gc_classwork->update([
+                        'classwork_id' => $courseWork->id,
+                        'path' => $activityLink
+                    ], $classworkItem->id);
+                   
+                    $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
+                    $courseWorkCount++;
+                }
             }
             $count++;
         }
@@ -305,6 +358,52 @@ class GoogleClassroom implements GoogleClassroomInterface
         return $return;
     }
 
+    /**
+     * Check if student is enrolled in a class
+     *
+     * @param int $courseId
+     * @return \Google_Service_Classroom_Student
+     */
+    public function getEnrolledStudent($courseId)
+    {
+        return $this->service->courses_students->get($courseId, "me");
+    }
+
+    public function getFirstStudentSubmission($courseId, $classworkId, $userId = "me")
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+
+        // Submissions associated with this courseWork for this student
+        $retval = $studentSubmissions->listCoursesCourseWorkStudentSubmissions(
+            $courseId, $classworkId, array('userId' => $userId));
+        // Grab the first submission
+        $submissions = $retval->studentSubmissions;
+        $first = $submissions[0];
+        //dd($submissions);
+        //var_dump($first);
+        return $first->id;
+    }
+
+    public function modifySubmissionAttachment($courseId, $courseWorkId, $id, $attachmentLink)
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+        $frontURL = $this->getFrontURL();
+        $postBody = [
+            'link' => [
+                'url' => $frontURL . $attachmentLink
+            ]
+        ];
+        $requestBody = new \Google_Service_Classroom_ModifyAttachmentsRequest;
+        $requestBody->setAddAttachments($postBody);
+        return $studentSubmissions->modifyAttachments($courseId, $courseWorkId, $id, $requestBody);
+    }
+
+    public function turnIn($courseId, $courseWorkId, $id)
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+        $requestBody = new \Google_Service_Classroom_TurnInStudentSubmissionRequest;
+        return $studentSubmissions->turnIn($courseId, $courseWorkId, $id, $requestBody); 
+    }
     /**
      * Determine front URL of the application.
      *

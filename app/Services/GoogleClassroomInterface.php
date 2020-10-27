@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 
 /**
  * Interface for Google Classroom service
@@ -41,6 +42,15 @@ interface GoogleClassroomInterface {
      * @return \Google_Client
      */
     public function getClient();
+
+    /**
+     * Set GcClasswork repository object
+     * 
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     *
+     * @return void
+     */
+    public function setGcClassworkObject(GcClassworkRepositoryInterface $gcClassworkRepository);
 
     /**
      * Get Google Classroom courses

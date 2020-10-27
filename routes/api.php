@@ -144,6 +144,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments
     Route::post('xapi/statements', 'XapiController@saveStatement');
+    // Google Classroom Student workflow
+    Route::group(['prefix' => 'google-classroom'], function () {
+        Route::post('turnin/{classwork}', 'GoogleClassroomController@turnIn');
+    });
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 
