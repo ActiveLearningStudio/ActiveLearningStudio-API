@@ -14,6 +14,8 @@ class QueueMonitor extends Model
 {
     use GlobalScope;
 
+    protected $guarded = [];
+
     protected $casts = [
         'failed' => 'bool',
     ];

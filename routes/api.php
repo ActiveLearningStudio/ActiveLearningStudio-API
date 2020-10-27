@@ -184,6 +184,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('organization-types', 'OrganizationTypesController');
 
         // queue-monitor
+        Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
+        Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
+        Route::get('queue-monitor/jobs/forget/all', 'QueueMonitorController@forgetAll');
+        Route::get('queue-monitor/jobs/retry/{job}', 'QueueMonitorController@retryJob');
+        Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
         Route::apiResource('queue-monitor', 'QueueMonitorController');
     });
 

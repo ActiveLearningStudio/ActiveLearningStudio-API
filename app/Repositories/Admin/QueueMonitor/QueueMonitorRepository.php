@@ -40,4 +40,34 @@ class QueueMonitorRepository extends BaseRepository
         });
         return $this->setDtParams($data)->getDtPaginated();
     }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getJobs($data)
+    {
+        $filter = $data['filter'] ?? null;
+
+        // filter mapping => 1 is for pending jobs, 2 for failed
+        if ((int)$filter === 1) {
+            $this->query = \DB::table('jobs');
+        }
+        if ((int)$filter === 2) {
+            $this->query = \DB::table('failed_jobs');
+        }
+        $this->setDtParams($data)->disableDtSearch(); // disable default search for overriding with custom
+
+        // if search parameter is set
+        if ($this->dtSearchValue) {
+            $this->query = $this->query->where(function ($query) {
+                $columns = ['id', 'queue', 'payload'];
+                foreach ($columns as $column) {
+                    $query->orWhere($column, 'ILIKE', '%' . $this->dtSearchValue . '%');
+                }
+                return $query;
+            });
+        }
+        return $this->getDtPaginated();
+    }
 }

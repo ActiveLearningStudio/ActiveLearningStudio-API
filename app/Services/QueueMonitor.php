@@ -186,7 +186,7 @@ class QueueMonitor
     {
         $resolvedJob = $job->resolveName();
         if (property_exists($resolvedJob, 'monitor')){
-            return $resolvedJob::monitor;
+            return $resolvedJob::$monitor;
         }
         return true;
     }

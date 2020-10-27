@@ -78,6 +78,7 @@ abstract class BaseRepository implements RepositoryContract
     protected $dtPage = 1;
     protected $dtOrder = 'created_at';
     protected $dtOrderDir = 'asc';
+    protected $dtSearch = false;
     protected $dtSearchValue = '';
     protected $dtRelSearchValue = '';
     protected $dtSearchColumns = [];
@@ -395,6 +396,7 @@ abstract class BaseRepository implements RepositoryContract
     }
 
     /**
+     * @param $columns
      * @param $value
      * @return $this
      */
@@ -402,6 +404,16 @@ abstract class BaseRepository implements RepositoryContract
     {
         $this->dtSearchColumns = $columns ?? null;
         $this->dtSearchValue = $value ?? null;
+        $this->dtSearch = $this->dtSearchValue ? true : false;
+        return $this;
+    }
+
+    /**
+     *  To allow the search override
+     */
+    public function disableDtSearch()
+    {
+        $this->dtSearch = false;
         return $this;
     }
 
@@ -451,7 +463,7 @@ abstract class BaseRepository implements RepositoryContract
     protected function getDtPaginated($with = [])
     {
         // to make sure the instance of query builder
-        if (!$this->query instanceof Builder) {
+        if (!$this->query instanceof Builder && !$this->query instanceof \Illuminate\Database\Query\Builder) {
             $this->query = $this->model::query();
         }
 
@@ -476,7 +488,7 @@ abstract class BaseRepository implements RepositoryContract
      */
     public function dtSearch($relations = null)
     {
-        $this->query = $this->query->when($this->dtSearchValue, function ($query) use ($relations) {
+        $this->query = $this->query->when($this->dtSearch, function ($query) use ($relations) {
             // group the where clause to avoid the conflicting of other where clauses with search
             $query->where(function ($query) use ($relations) {
                 // if search relation need to be perform -

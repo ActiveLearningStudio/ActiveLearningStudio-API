@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Arr;
 use Laravel\Passport\Passport;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -88,5 +89,34 @@ if (!function_exists('get_user_id_by_token')) {
             return (int)$token->getClaim('sub');
         }
         return false;
+    }
+}
+
+if (!function_exists('get_job_from_payload')) {
+    /**
+     * Get the job name from payload
+     * @param $payload
+     * @return string|null
+     */
+    function get_job_from_payload($payload)
+    {
+        $payload = json_decode($payload, true);
+        return get_base_name($payload['displayName']);
+    }
+}
+
+if (!function_exists('get_base_name')) {
+    /**
+     * Get the base class name of the job.
+     *
+     * @return string|null
+     */
+    function get_base_name($name): ?string
+    {
+        if (null === $name) {
+            return null;
+        }
+
+        return Arr::last(explode('\\', $name));
     }
 }
