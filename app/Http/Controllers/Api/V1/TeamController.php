@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\TeamCreatedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\TeamAddMemberRequest;
+use App\Http\Requests\V1\TeamAddMemberRequest;
 use App\Http\Requests\V1\TeamAddProjectRequest;
 use App\Http\Requests\V1\TeamInviteMemberRequest;
 use App\Http\Requests\V1\TeamInviteRequest;
