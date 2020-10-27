@@ -15,6 +15,7 @@ class CalculateActivityStorage implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $activity;
+    public static $monitor = false; // this job should not be monitored
 
     public function __construct(Activity $activity)
     {

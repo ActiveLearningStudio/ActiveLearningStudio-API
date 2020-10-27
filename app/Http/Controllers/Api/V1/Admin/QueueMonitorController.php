@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\Admin\QueueMonitorJobResource;
+use App\Http\Resources\V1\Admin\QueueMonitorResource;
+use App\Repositories\Admin\QueueMonitor\QueueMonitorRepository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
+
+class QueueMonitorController extends Controller
+{
+    private $queueMonitorRepository;
+
+    /**
+     * UserController constructor.
+     * @param QueueMonitorRepository $queueMonitorRepository
+     */
+    public function __construct(QueueMonitorRepository $queueMonitorRepository)
+    {
+        $this->queueMonitorRepository = $queueMonitorRepository;
+    }
+
+    /**
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function index(Request $request)
+    {
+        $collections = $this->queueMonitorRepository->getAll($request->all());
+        return QueueMonitorResource::collection($collections);
+    }
+
+    /**
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function jobs(Request $request)
+    {
+        $collections = $this->queueMonitorRepository->getJobs($request->all());
+        return QueueMonitorJobResource::collection($collections);
+    }
+
+    /**
+     * Retry Job by ID
+     * @param $job
+     * @return Application|ResponseFactory|Response
+     */
+    public function retryJob(int $job){
+        \Artisan::call("queue:retry $job");
+        return response(['message' => "The failed job [$job] has been pushed back onto the queue!"], 200);
+    }
+
+    /**
+     * Retry all failed Jobs
+     * @return Application|ResponseFactory|Response
+     */
+    public function retryAll(){
+        \Artisan::call("queue:retry all");
+        return response(['message' => "All failed jobs has been pushed back onto the queue!"], 200);
+    }
+
+    /**
+     * Delete Job by ID
+     * @param $job
+     * @return Application|ResponseFactory|Response
+     */
+    public function forgetJob(int $job){
+        \Artisan::call("queue:forget $job");
+        return response(['message' => "Failed job deleted successfully!"], 200);
+    }
+
+    /**
+     * Flush all failed Jobs
+     * @return Application|ResponseFactory|Response
+     */
+    public function forgetAll(){
+        \Artisan::call("queue:flush");
+        return response(['message' => "All failed jobs deleted successfully!"], 200);
+    }
+}
