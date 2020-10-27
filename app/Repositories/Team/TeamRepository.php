@@ -105,6 +105,52 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
     /**
+     * Assign members to the team project
+     *
+     * @param $team
+     * @param $project
+     * @param $users
+     */
+    public function assignMembersToTeamProject($team, $project, $users)
+    {
+        $team = $this->model->find($team->id);
+
+        if ($team) {
+            foreach ($users as $user) {
+                DB::table('team_project_user')
+                    ->insertOrIgnore([
+                        [
+                            'team_id' => $team->id,
+                            'project_id' => $project->id,
+                            'user_id' => $user->id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ],
+                    ]);
+            }
+        }
+    }
+
+    /**
+     * Remove member from the team project
+     *
+     * @param $team
+     * @param $project
+     * @param $user
+     */
+    public function removeMemberFromTeamProject($team, $project, $user)
+    {
+        $team = $this->model->find($team->id);
+
+        if ($team) {
+            DB::table('team_project_user')->where('team_id', $team->id)
+                ->where('project_id', $project->id)
+                ->where('user_id', $user->id)
+                ->delete();
+        }
+    }
+
+    /**
      * Get Team detail data
      *
      * @param $teamId
