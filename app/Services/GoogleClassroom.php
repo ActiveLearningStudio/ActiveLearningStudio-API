@@ -67,7 +67,9 @@ class GoogleClassroom implements GoogleClassroomInterface
                 'or you may need to revoke the permission for this app. ');
                 // @TODO - this flow doesn't actually kick in.
                 // Request authorization from the user.
-                /*$authUrl = $client->createAuthUrl();
+                // The flow below maybe implemented later on.
+
+                /* $authUrl = $client->createAuthUrl();
                 // header("Location: $authUrl");
                 // printf("Open the following link in your browser:\n%s\n", $authUrl);
                 // print 'Enter verification code: ';
@@ -80,7 +82,7 @@ class GoogleClassroom implements GoogleClassroomInterface
                 // Check to see if there was an error.
                 if (array_key_exists('error', $accessToken)) {
                     throw new GeneralException(join(', ', $accessToken));
-                }*/
+                } */
             }
             // // Save the token to a file.
             // if (!file_exists(dirname($tokenPath))) {
@@ -244,6 +246,7 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param Project $project
      * @param int|null $courseId The id of the course
      * @return array
+     * @throws GeneralException
      */
     public function createProjectAsCourse(Project $project, $courseId = null)
     {
@@ -369,21 +372,39 @@ class GoogleClassroom implements GoogleClassroomInterface
         return $this->service->courses_students->get($courseId, "me");
     }
 
+    /**
+     * Get first student's submission for a classwork in a course.
+     *
+     * @param int $courseId
+     * @param string $classworkId
+     * @param mixed $userId
+     * @return string
+     */
     public function getFirstStudentSubmission($courseId, $classworkId, $userId = "me")
     {
         $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
-
         // Submissions associated with this courseWork for this student
         $retval = $studentSubmissions->listCoursesCourseWorkStudentSubmissions(
-            $courseId, $classworkId, array('userId' => $userId));
+            $courseId,
+            $classworkId,
+            array('userId' => $userId)
+        );
         // Grab the first submission
         $submissions = $retval->studentSubmissions;
         $first = $submissions[0];
-        //dd($submissions);
-        //var_dump($first);
+        
         return $first->id;
     }
 
+    /**
+     * Adds/modifies submission with an attachment
+     *
+     * @param int $courseId The course id
+     * @param string $classworkId The classwork id
+     * @param string $id The submission id
+     * @param string $attachmentLink The URL for attachment
+     * @return string
+     */
     public function modifySubmissionAttachment($courseId, $courseWorkId, $id, $attachmentLink)
     {
         $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
@@ -398,6 +419,14 @@ class GoogleClassroom implements GoogleClassroomInterface
         return $studentSubmissions->modifyAttachments($courseId, $courseWorkId, $id, $requestBody);
     }
 
+    /**
+     * TurnIn an assignment
+     *
+     * @param int $courseId The course id
+     * @param string $classworkId The classwork id
+     * @param string $id The submission id
+     * @return \Google_Service_Classroom_ClassroomEmpty
+     */
     public function turnIn($courseId, $courseWorkId, $id)
     {
         $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;

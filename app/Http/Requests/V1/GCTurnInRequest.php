@@ -25,8 +25,7 @@ class GCTurnInRequest extends FormRequest
     {
         return [
             'access_token' => 'required',
-            'course_id' => 'required|integer',
-            'activity_id' => 'required|integer'
+            'course_id' => 'required|integer'
         ];
     }
 }

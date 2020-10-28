@@ -35,8 +35,7 @@ class GoogleClassroomController extends Controller
      * @var UserRepositoryInterface
      */
     private $userRepository;
-    private $gcClassworkRespository;
-
+    
     /**
      * Instantiate a GoogleClassroom instance.
      *
@@ -45,8 +44,7 @@ class GoogleClassroomController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-//        $this->gcClassworkRespository = $gcClassworkRepository;
-    }
+   }
 
     /**
 	 * Get Courses
@@ -197,47 +195,47 @@ class GoogleClassroomController extends Controller
      * 
      * @urlParam classwork required The Id of a classwork. Example: 9
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
-     * @bodyParam course_id string required The stringified of the GAPI access token JSON object
+     * @bodyParam course_id string required The Google Classroom course id
+     * @bodyParam activity_id string required The Id of the activity
      *
-     * @responseFile responses/google-classroom/google-classroom-project.json
+     * @response  200 {
+     *   "message": "The assignment has been turned in successfully."
+     * }
      *
-     * @response  403 {
+     * @response  500 {
      *   "errors": [
-     *     "Forbidden. You are trying to share other user's project."
+     *     "You are not enrolled in this class."
      *   ]
      * }
      *
      * @response  500 {
      *   "errors": [
-     *     "Failed to copy project."
+     *     "Could not retrieve submission for this assignment."
      *   ]
      * }
      *
-     * @param Project $project
-     * @param GCCopyProjectRequest $copyProjectRequest
+     * @param GcClasswork $classwork
+     * @param GCTurnInRequest $turnInRequest
      * @return Response
 	 */
     public function turnIn(GcClasswork $classwork, GCTurnInRequest $turnInRequest)
     {
         $data = $turnInRequest->validated();
         $courseId = $data['course_id'];
-        $activityId = $data['activity_id'];
         $accessToken = $data['access_token'];
         try {
-            // print_r($classwork);
             // Should we validate if the student is in the course?
             $service = new GoogleClassroom($accessToken);
             $studentRes = $service->getEnrolledStudent($courseId);
             if (isset($studentRes->courseId)) {
-                //echo 'got student';
-                //dd($studentRes);
                 try {
                     // Get the student's submission...
                     $firstSubmission = $service->getFirstStudentSubmission($courseId, $classwork->classwork_id);
                     if ($firstSubmission) {
                         // Submission obtained...
                         // Now make a link.
-                        $summaryLink = str_replace("gclass", "summary", $classwork->path);
+                        $pathArr = explode("/", trim($classwork->path, "/"));
+                        $summaryLink = '/gclass/summary/' . $pathArr[2] . '/' . $pathArr[3] . '/' . $pathArr[4] . '/' . $classwork->classwork_id . '/' . $firstSubmission;
                         $updatedSubmission = $service->modifySubmissionAttachment($courseId, $classwork->classwork_id, $firstSubmission, $summaryLink);
 
                         // Turn in
@@ -263,7 +261,8 @@ class GoogleClassroomController extends Controller
                 ], 500);
             }
         } catch (\Google_Service_Exception $ex) {
-            $response = json_decode($ex->getMessage());
+            // Could obtain error message like that.
+            // $response = json_decode($ex->getMessage());
             // $response->error->message
             return response([
                 'errors' => ['You are not enrolled in this class.'],
