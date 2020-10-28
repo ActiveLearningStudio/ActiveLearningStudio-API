@@ -14,7 +14,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\V1\NotificationResource;
+use App\Http\Resources\V1\NotificationListResource;
 
 /**
  * @group 2. User
@@ -317,16 +317,15 @@ class UserController extends Controller
      *
      * Get a list of the users unread notification
      *
-     * @response {
-     *   "notifications": "List of unread notifications."
-     * }
+     * @responseFile responses/notifications/notifications.json
+     *
      * @param Request $request
      * @return Response
      */
     public function listNotifications(Request $request)
     {
         return response([
-            'notifications' => NotificationResource::collection(auth()->user()->unreadNotifications),
+            'notifications' => NotificationListResource::collection(auth()->user()->unreadNotifications),
         ], 200);
     }
 
@@ -337,10 +336,7 @@ class UserController extends Controller
      *
      * @urlParam $notification_id string required Current id of a notification Example: 123
      *
-     *
-     * @response {
-     *   "notifications": "List of unread notifications."
-     * }
+     * @responseFile responses/notifications/notifications.json
      *
      * @response 500 {
      *   "errors": [
@@ -354,11 +350,11 @@ class UserController extends Controller
     public function readNotification(Request $request, $notification_id)
     {
         $notification = auth()->user()->unreadNotifications()->find($notification_id);
-        if($notification) {
+        if ($notification) {
             $notification->markAsRead();
 
             return response([
-                'notifications' => NotificationResource::collection(auth()->user()->unreadNotifications),
+                'notifications' => NotificationListResource::collection(auth()->user()->unreadNotifications),
             ], 200);
         }
 
