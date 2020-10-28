@@ -309,4 +309,61 @@ class UserController extends Controller
             'errors' => ['Failed to delete profile.'],
         ], 500);
     }
+
+    /**
+     * Get All User Notifications
+     *
+     * Get a list of the users unread notification
+     *
+     * @response {
+     *   "notifications": "List of unread notifications."
+     * }
+     * @param Request $request
+     * @return Response
+     */
+    public function listNotifications(Request $request)
+    {
+        return response([
+            'notifications' => auth()->user()->unreadNotifications,
+        ], 200);
+    }
+
+    /**
+     * Read Notification
+     *
+     * Read notification of the specified user.
+     *
+     * @bodyParam notification_id string required Current id of a notification Example: 123
+     *
+     *
+     * @response {
+     *   "notifications": "List of unread notifications."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to read notification."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function readNotification(Request $request)
+    {
+        $data = $request->only(['notification_id']);
+        $notification = auth()->user()->notifications()->find($data['notification_id']);
+        if($notification) {
+            $notification->markAsRead();
+
+            return response([
+                'notifications' => auth()->user()->unreadNotifications,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to read notification.'],
+        ], 500);
+
+    }
 }
