@@ -6,10 +6,12 @@ namespace App\Models\Traits;
  * Trait GlobalScope
  * @package App\Models\Traits
  */
-trait GlobalScope{
+trait GlobalScope
+{
 
     /**
      * Global Scope for searching in specific columns
+     *
      * @param $query
      * @param $columns
      * @param $value
@@ -27,4 +29,5 @@ trait GlobalScope{
         }
         return $query;
     }
+
 }

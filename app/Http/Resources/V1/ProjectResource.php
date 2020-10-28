@@ -22,13 +22,13 @@ class ProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'order' => $this->order,
             'status' => $this->status,
             'status_text' => $this->status_text,
             'indexing' => $this->indexing,
             'indexing_text' => $this->indexing_text,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

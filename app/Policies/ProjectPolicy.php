@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Pivots\TeamProjectUser;
 use App\Models\Project;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -121,6 +122,17 @@ class ProjectPolicy
         $project_users = $project->users;
         foreach ($project_users as $project_user) {
             if ($user->id === $project_user->id && (!$role || $role === $project_user->pivot->role)) {
+                return true;
+            }
+        }
+
+        $project_teams = $project->teams;
+        foreach ($project_teams as $project_team) {
+            $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
+                ->where('project_id', $project->id)
+                ->where('user_id', $user->id)
+                ->first();
+            if ($team_project_user) {
                 return true;
             }
         }

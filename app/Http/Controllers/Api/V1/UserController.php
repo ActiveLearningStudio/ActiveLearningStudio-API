@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProfileUpdateRequest;
+use App\Http\Requests\V1\UserSearchRequest;
+use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
@@ -46,6 +48,27 @@ class UserController extends Controller
     {
         return response([
             'users' => UserResource::collection($this->userRepository->all()),
+        ], 200);
+    }
+
+    /**
+     * Get All Users for Team
+     *
+     * Get a list of the users for Team.
+     *
+     * @bodyParam search string required Search string for User Example: Abby
+     *
+     * @responseFile responses/user/users-for-team.json
+     *
+     * @param UserSearchRequest $userSearchRequest
+     * @return Response
+     */
+    public function getUsersForTeam(UserSearchRequest $userSearchRequest)
+    {
+        $data = $userSearchRequest->validated();
+
+        return response([
+            'users' => UserForTeamResource::collection($this->userRepository->searchByName($data['search'])),
         ], 200);
     }
 
