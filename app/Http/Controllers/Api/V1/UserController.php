@@ -7,12 +7,14 @@ use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
+use App\Models\Notification;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\V1\NotificationResource;
 
 /**
  * @group 2. User
@@ -324,7 +326,7 @@ class UserController extends Controller
     public function listNotifications(Request $request)
     {
         return response([
-            'notifications' => auth()->user()->unreadNotifications,
+            'notifications' => NotificationResource::collection(auth()->user()->unreadNotifications),
         ], 200);
     }
 
@@ -333,7 +335,7 @@ class UserController extends Controller
      *
      * Read notification of the specified user.
      *
-     * @bodyParam notification_id string required Current id of a notification Example: 123
+     * @urlParam $notification_id string required Current id of a notification Example: 123
      *
      *
      * @response {
@@ -349,15 +351,14 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function readNotification(Request $request)
+    public function readNotification(Request $request, $notification_id)
     {
-        $data = $request->only(['notification_id']);
-        $notification = auth()->user()->notifications()->find($data['notification_id']);
+        $notification = auth()->user()->unreadNotifications()->find($notification_id);
         if($notification) {
             $notification->markAsRead();
 
             return response([
-                'notifications' => auth()->user()->unreadNotifications,
+                'notifications' => NotificationResource::collection(auth()->user()->unreadNotifications),
             ], 200);
         }
 
