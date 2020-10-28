@@ -37,7 +37,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::get('users/notifications', 'UserController@listNotifications');
-        Route::get('users/notifications/{notification}/read', 'UserController@readNotification');
+        Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/search', 'UserController@getUsersForTeam');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
