@@ -1,0 +1,61 @@
+{
+    "data": [
+        {
+            "id": 81,
+            "title": "Arithmetic Quiz",
+            "description": "Time based arithmetic exam builder",
+            "order": 2,
+            "activityType": {
+                "id": 11,
+                "title": "Questions",
+                "order": 0,
+                "image": "/storage/uploads/E9wUgZpAvbmzogYIZYyABuWlvSIJPNYEFDqqL1rt.png",
+                "created_at": null,
+                "updated_at": null
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.ArithmeticQuiz 1.1",
+            "image": "/storage/uploads/V2EzpoGzJi7F9KmWCUCwLF8uXKvr8Nsaunq6Uzw6.png",
+            "demo_activity_id": "730",
+            "demo_video_id": "https://youtu.be/Z61BUoL6k1Y",
+            "created_at": "2020-09-12T01:16:52.000000Z",
+            "updated_at": "2020-09-12T01:16:52.000000Z"
+        },
+        {
+            "id": 87,
+            "title": "Personality Quiz",
+            "description": "Build your own personality quiz",
+            "order": 8,
+            "activityType": {
+                "id": 11,
+                "title": "Questions",
+                "order": 0,
+                "image": "/storage/uploads/E9wUgZpAvbmzogYIZYyABuWlvSIJPNYEFDqqL1rt.png",
+                "created_at": null,
+                "updated_at": null
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.PersonalityQuiz 1.0",
+            "image": "/storage/uploads/jdHy6THv8aZLNrEdy3REa9aKZHcFdM6UXH3Lk7Nz.png",
+            "demo_activity_id": "739",
+            "demo_video_id": " https://youtu.be/zY8CTNn5LVA",
+            "created_at": "2020-09-12T01:16:52.000000Z",
+            "updated_at": "2020-09-12T01:16:52.000000Z"
+        }
+    ],
+    "links": {
+        "first": "https://www.currikistudio.org/api/v1/admin/activity-items?page=1",
+        "last": "https://www.currikistudio.org/api/v1/admin/activity-items?page=2",
+        "prev": null,
+        "next": "https://www.currikistudio.org/api/v1/admin/activity-items?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 2,
+        "path": "https://www.currikistudio.org/api/v1/admin/activity-items",
+        "per_page": "2",
+        "to": 2,
+        "total": 3
+    }
+}

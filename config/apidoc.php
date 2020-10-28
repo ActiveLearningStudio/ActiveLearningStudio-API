@@ -139,7 +139,6 @@ return [
              * Note that the route must be referenced by name here (wildcards are supported).
              */
             'exclude' => [
-                'v1.admin.*',
                 'h5p.ajax.*',
                 'h5p.export',
                 'metrics.*',

@@ -9,6 +9,11 @@ use App\Http\Resources\V1\OrganizationTypeResource;
 use App\Http\Requests\Admin\StoreOrganizationType;
 use App\Models\OrganizationType;
 
+/**
+ * @group 1006. Admin/Organization Types
+ *
+ * APIs for organization types on admin panel.
+ */
 class OrganizationTypesController extends Controller
 {
     private $organizationTypeRepository;

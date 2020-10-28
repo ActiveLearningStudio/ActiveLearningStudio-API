@@ -1,0 +1,23 @@
+{
+    "data": {
+        "id": 53,
+        "title": "Accordion",
+        "description": "An activity that creates accessible (WAI-ARIA enabled) accordions",
+        "order": 1,
+        "activityType": {
+            "id": 8,
+            "title": "Informational",
+            "order": 0,
+            "image": "/storage/uploads/O8M6MvWrdtqrZSczhzzbTdCCDulrKxLJslYTzcwL.png",
+            "created_at": null,
+            "updated_at": null
+        },
+        "type": "h5p",
+        "h5pLib": "H5P.Accordion 1.0",
+        "image": "/storage/uploads/XprFXn7YfIpu6gBe8atabONmxDHwqfK5wdSkjfkL.png",
+        "demo_activity_id": "763",
+        "demo_video_id": "https://youtu.be/dVDFwhy93Vc",
+        "created_at": "2020-09-12T01:16:52.000000Z",
+        "updated_at": "2020-09-12T01:16:52.000000Z"
+    }
+}

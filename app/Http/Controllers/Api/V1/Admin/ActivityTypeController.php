@@ -16,6 +16,11 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+/**
+ * @group 1002. Admin/Activity Types
+ *
+ * APIs for activity types on admin panel.
+ */
 class ActivityTypeController extends Controller
 {
     private $repository;
@@ -30,6 +35,15 @@ class ActivityTypeController extends Controller
     }
 
     /**
+     * Get All Activity Types for listing.
+     *
+     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/activity-type/activity-types.json
+     *
      * @param Request $request
      * @return AnonymousResourceCollection
      */
@@ -40,6 +54,14 @@ class ActivityTypeController extends Controller
     }
 
     /**
+     * Get Activity Type
+     *
+     * Get the specified Activity Type data.
+     *
+     * @urlParam activity_type required The Id of a activity type Example: 1
+     *
+     * @responseFile responses/admin/activity-type/activity-type.json
+     *
      * @param $id
      * @return ActivityTypeResource
      * @throws GeneralException
@@ -51,6 +73,21 @@ class ActivityTypeController extends Controller
     }
 
     /**
+     * Create Activity Type
+     *
+     * Creates the new activity type in database.
+     *
+     * @response {
+     *   "message": "Activity type created successfully!",
+     *   "data": ["Created activity type data array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to create activity type, please try again later!"
+     *   ]
+     * }
+     *
      * @param StoreActivityType $request
      * @return LmsSettingResource|Application|ResponseFactory|Response
      * @throws GeneralException
@@ -63,6 +100,23 @@ class ActivityTypeController extends Controller
     }
 
     /**
+     * Update Activity Type
+     *
+     * Updates the activity type in database.
+     *
+     * @urlParam activity_type required The Id of a activity type Example: 1
+     *
+     * @response {
+     *   "message": "Activity type data updated successfully!",
+     *   "data": ["Updated activity type data array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to update activity type, please try again later."
+     *   ]
+     * }
+     *
      * @param StoreActivityType $request
      * @param $id
      * @return Application|ResponseFactory|Response
@@ -76,6 +130,22 @@ class ActivityTypeController extends Controller
     }
 
     /**
+     * Delete Activity Type
+     *
+     * Deletes the activity type from database.
+     *
+     * @urlParam activity_type required The Id of a activity type Example: 1
+     *
+     * @response {
+     *   "message": "Activity type deleted successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to delete activity type, please try again later."
+     *   ]
+     * }
+     *
      * @param $id
      * @return Application|Factory|View
      * @throws GeneralException

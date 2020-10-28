@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
+/**
+ * @group 1007. Admin/Queues
+ *
+ * APIs for queues monitoring on admin panel.
+ */
 class QueueMonitorController extends Controller
 {
     private $queueMonitorRepository;
@@ -26,6 +31,15 @@ class QueueMonitorController extends Controller
     }
 
     /**
+     * Get All Queues Logs for listing.
+     *
+     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/queue/queues.json
+     *
      * @param Request $request
      * @return AnonymousResourceCollection
      */

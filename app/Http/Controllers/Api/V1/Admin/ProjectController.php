@@ -14,6 +14,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
+/**
+ * @group 1004. Admin/Projects
+ *
+ * APIs for projects on admin panel.
+ */
 class ProjectController extends Controller
 {
 
@@ -30,7 +35,14 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display all projects.
+     * Get All Projects for listing.
+     *
+     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/project/projects.json
      *
      * @param Request $request
      * @return AnonymousResourceCollection
@@ -65,7 +77,13 @@ class ProjectController extends Controller
     }
 
     /**
-     * Display the shared project.
+     * Get the shared project
+     *
+     * Get the specified project data.
+     *
+     * @urlParam project required The Id of a lms-setting Example: 1
+     *
+     * @responseFile responses/admin/project/project-shared.json
      *
      * @param Project $project
      * @return Response
