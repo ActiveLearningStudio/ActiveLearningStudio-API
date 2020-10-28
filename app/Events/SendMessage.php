@@ -17,13 +17,20 @@ class SendMessage implements ShouldBroadcast
     public $message;
 
     /**
+     * @var
+     *
+     */
+    public $userId;
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($message, $userId)
     {
         $this->message = $message;
+        $this->userId = $userId;
         Log::info('construct');
     }
 
@@ -36,7 +43,7 @@ class SendMessage implements ShouldBroadcast
     public function broadcastOn()
     {
         Log::info('broadcastOn');
-        return new PrivateChannel('user-channel');
+        return new PrivateChannel('user-channel.'.$this->userId);
     }
 
     /**
