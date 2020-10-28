@@ -35,7 +35,7 @@ class GoogleClassroomController extends Controller
      * @var UserRepositoryInterface
      */
     private $userRepository;
-    
+
     /**
      * Instantiate a GoogleClassroom instance.
      *
@@ -44,7 +44,7 @@ class GoogleClassroomController extends Controller
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-   }
+    }
 
     /**
 	 * Get Courses
@@ -186,12 +186,12 @@ class GoogleClassroomController extends Controller
             ], 500);
         }
     }
-
+    
     /**
-	 * TurnIn a student's submission
-	 *
-	 * Identifies student's submission on a classwork assignment.
-	 * Attaches a summary page link to the assignment, and turns it in.
+     * TurnIn a student's submission
+     *
+     * Identifies student's submission on a classwork assignment.
+     * Attaches a summary page link to the assignment, and turns it in.
      * 
      * @urlParam classwork required The Id of a classwork. Example: 9
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
@@ -217,7 +217,7 @@ class GoogleClassroomController extends Controller
      * @param GcClasswork $classwork
      * @param GCTurnInRequest $turnInRequest
      * @return Response
-	 */
+     */
     public function turnIn(GcClasswork $classwork, GCTurnInRequest $turnInRequest)
     {
         $data = $turnInRequest->validated();
