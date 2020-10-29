@@ -39,6 +39,7 @@ class GetCoursesCommand implements Command
      * @var string
      */
     private $programName;
+    
     /**
      * SIS ID
      *
