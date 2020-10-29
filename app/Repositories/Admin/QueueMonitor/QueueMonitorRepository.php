@@ -47,7 +47,7 @@ class QueueMonitorRepository extends BaseRepository
      */
     public function getJobs($data)
     {
-        $filter = $data['filter'] ?? null;
+        $filter = $data['filter'] ?? 1; // default for pending jobs
 
         // filter mapping => 1 is for pending jobs, 2 for failed
         if ((int)$filter === 1) {
