@@ -10,8 +10,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GCCopyProjectRequest;
 use App\Http\Requests\V1\GCSaveAccessTokenRequest;
 use App\Http\Requests\V1\GCTurnInRequest;
+use App\Http\Requests\V1\GCSummaryPageAccessRequest;
+use App\Http\Requests\V1\GCGetStudentSubmissionRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\GCCourseResource;
+use App\Http\Resources\V1\GCStudentResource;
+use App\Http\Resources\V1\GCSubmissionResource;
 use App\Models\Project;
 use App\Models\GcClasswork;
 use App\Repositories\User\UserRepositoryInterface;
@@ -186,6 +190,82 @@ class GoogleClassroomController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get student's submission against a classwork
+     *
+     * Identifies student's submission on a classwork assignment.
+     * 
+     * @urlParam classwork required The Id of a classwork. Example: 9
+     * @bodyParam access_token string required The stringified of the GAPI access token JSON object
+     * @bodyParam course_id string required The Google Classroom course id
+     *
+     * @responseFile responses/google-classroom/google-classroom-submission.json
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "You are not enrolled in this class."
+     *   ]
+     * }
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "Could not retrieve submission for this assignment."
+     *   ]
+     * }
+     *
+     * @param GcClasswork $classwork
+     * @param GCGetStudentSubmissionRequest $studentSubmissionRequest
+     * @return Response
+     */
+    public function getStudentSubmission(GcClasswork $classwork, GCGetStudentSubmissionRequest $studentSubmissionRequest)
+    {
+        $data = $studentSubmissionRequest->validated();
+        $courseId = $data['course_id'];
+        $accessToken = $data['access_token'];
+        try {
+            // Should we validate if the student is in the course?
+            $service = new GoogleClassroom($accessToken);
+            $studentRes = $service->getEnrolledStudent($courseId);
+            if (isset($studentRes->courseId)) {
+                try {
+                    // Get the student's submission...
+                    $submissions = $service->getStudentSubmissions($courseId, $classwork->classwork_id);
+                    $firstSubmission = $submissions[0];
+                    return response([
+                        'submission' => GCSubmissionResource::make($firstSubmission)->resolve()
+                    ], 200);
+                } catch (\Google_Service_Exception $ex) {
+                    // Could obtain error message like that.
+                    // $response = json_decode($ex->getMessage());
+                    // $response->error->message
+                    return response([
+                        'errors' => ['Student\'s submission could not be retrieved.'],
+                    ], 500);
+                } catch (\Exception $ex) {
+                    return response([
+                        'errors' => [$ex->getMessage()],
+                    ], 500);
+                }
+            } else {
+                $response = json_decode($studentRes);
+                return response([
+                    'errors' => [$response->error->message],
+                ], 500);
+            }
+        } catch (\Google_Service_Exception $ex) {
+            // Could obtain error message like that.
+            // $response = json_decode($ex->getMessage());
+            // $response->error->message
+            return response([
+                'errors' => ['You are not enrolled in this class.'],
+            ], 500);
+        } catch (\Exception $ex) {
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
+        }
+    }
     
     /**
      * TurnIn a student's submission
@@ -196,7 +276,6 @@ class GoogleClassroomController extends Controller
      * @urlParam classwork required The Id of a classwork. Example: 9
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
      * @bodyParam course_id string required The Google Classroom course id
-     * @bodyParam activity_id string required The Id of the activity
      *
      * @response  200 {
      *   "message": "The assignment has been turned in successfully."
@@ -231,24 +310,33 @@ class GoogleClassroomController extends Controller
                 try {
                     // Get the student's submission...
                     $firstSubmission = $service->getFirstStudentSubmission($courseId, $classwork->classwork_id);
-                    if ($firstSubmission) {
+
+                    if ($firstSubmission && $firstSubmission->state != 'TURNED_IN') {
+                        $firstSubmissionId = $firstSubmission->id;
                         // Submission obtained...
                         // Now make a link.
                         $pathArr = explode("/", trim($classwork->path, "/"));
-                        $summaryLink = '/gclass/summary/' . $pathArr[2] . '/' . $pathArr[3] . '/' . $pathArr[4] . '/' . $classwork->classwork_id . '/' . $firstSubmission;
-                        $updatedSubmission = $service->modifySubmissionAttachment($courseId, $classwork->classwork_id, $firstSubmission, $summaryLink);
+                        // format of Summary link: /gclass/summary/:userid/:courseid/:activityid/:gc_classworkid/:gc_submission_id;
+                        $summaryLink = '/gclass/summary/' . $pathArr[2] . '/' . $pathArr[3] . '/' . $pathArr[4] . '/' . $classwork->classwork_id . '/' . $firstSubmissionId;
+                        $updatedSubmission = $service->modifySubmissionAttachment($courseId, $classwork->classwork_id, $firstSubmissionId, $summaryLink);
 
                         // Turn in
-                        $updatedSubmission = $service->turnIn($courseId, $classwork->classwork_id, $firstSubmission);
+                        $updatedSubmission = $service->turnIn($courseId, $classwork->classwork_id, $firstSubmissionId);
                         
                         return response([
                             'message' => "The assignment has been turned in successfully.",
                         ], 200);
                     } else {
                         return response([
-                            'errors' => ['Could not retrieve submission for this assignment id=' . $studentRes->id],
+                            'errors' => ['Could not retrieve submission for this assignment id=' . $classwork->classwork_id],
                         ], 500);
                     }
+                } catch (\Google_Service_Exception $ex) {
+                    // Could obtain error message like that.
+                    $response = json_decode($ex->getMessage());
+                    return response([
+                        'errors' => [$response->error->message],
+                    ], 500);
                 } catch (Exception $e) {
                     return response([
                         'errors' => ['Could not retrieve submission for this assignment id=' . $studentRes->id],
@@ -267,6 +355,80 @@ class GoogleClassroomController extends Controller
             return response([
                 'errors' => ['You are not enrolled in this class.'],
             ], 500);
+        } catch (\Exception $ex) {
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
+        }
+    }
+
+    /**
+     * Verify whether Google Classroom user has access to a student's submission
+     *
+     * If the user is a teacher, validate if he's one of the teachers in the class
+     * If the user is authenticated and is a student, validate if the submission is his.
+     * 
+     * @bodyParam access_token string required The stringified of the GAPI access token JSON object
+     * @bodyParam course_id string required The Google Classroom course id
+     * @bodyParam gc_classwork_id string required The Id of the classwork
+     * @bodyParam gc_submission_id string required The Id of the student's submission
+     * 
+     * @responseFile responses/google-classroom/google-classroom-student.json
+     *
+     * @response  404 {
+     *   "errors": [
+     *     "Either the entity was not found or you do not have permission to view it."
+     *   ]
+     * }
+     * 
+     *
+     * @param GCSummaryPageAccessRequest $summaryPageRequest
+     * @return Response
+     */
+    public function validateSummaryPageAccess(GCSummaryPageAccessRequest $summaryPageRequest)
+    {
+        $data = $summaryPageRequest->validated();
+        $accessToken = $data['access_token'];
+        $courseId = $data['course_id'];
+        $gcClassworkId = $data['gc_classwork_id'];
+        $gcSubmissionId = $data['gc_submission_id'];
+        
+        try {
+            // Should we validate if the student is in the course?
+            $service = new GoogleClassroom($accessToken);
+
+            // See if the user has access to the submission or not. If not then we just throw an error
+            // If the user does have access to it, then we find who the user is; student or a teacher.
+            $submissionRes = $service->getStudentSubmissionById($courseId, $gcClassworkId, $gcSubmissionId);
+            if (isset($submissionRes->courseId)) {
+                // Get student's user id
+                $userId = $submissionRes->userId;
+                // Retrieve student's profile by id
+                $userRes = $service->getEnrolledStudent($courseId, $userId);
+                
+                if (isset($userRes->userId)) {
+                    return response([
+                        'student' => GCStudentResource::make($userRes)->resolve()
+                    ], 200);
+                } else {
+                    $response = json_decode($userRes);
+                    return response([
+                        'errors' => [$response->error->message],
+                    ], 500);
+                }
+            } else {
+                // user does not have access, so through an error
+                return response([
+                    'errors' => ['Either the entity was not found or you do not have permission to view it.'],
+                ], 404);
+            }
+        } catch (\Google_Service_Exception $ex) {
+            // Could obtain error message like that.
+            // $response = json_decode($ex->getMessage());
+            // $response->error->message
+            return response([
+                'errors' => ['Either the entity was not found or you do not have permission to view it.'],
+            ], 404);
         } catch (\Exception $ex) {
             return response([
                 'errors' => [$ex->getMessage()],
