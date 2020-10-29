@@ -39,7 +39,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get All Users for listing.
+     * Get All Users
      *
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      *
@@ -165,6 +165,15 @@ class UserController extends Controller
     }
 
     /**
+     * Users Basic Report
+     *
+     * Returns the paginated response of the users with basic reporting (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/user/users_report.json
+     *
      * @param Request $request
      * @return Application|ResponseFactory|Response
      */
@@ -236,6 +245,23 @@ class UserController extends Controller
     }
 
     /**
+     * Change User Role
+     *
+     * Make any user admin or remove from admin.
+     *
+     * @urlParam user required The Id of a user. Example: 1
+     * @urlParam role required Role 0 or 1, 1 for making admin, 0 for removing from admin. Example: 1
+     *
+     * @response 200 {
+     *   "message": "User role is changed successfully!"
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "You cannot change the role of yourself."
+     *   ]
+     * }
+     *
      * @param User $user
      * @param $role
      * @return Application|ResponseFactory|Response

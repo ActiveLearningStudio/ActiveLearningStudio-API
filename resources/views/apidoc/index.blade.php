@@ -320,14 +320,16 @@ response.json()</code></pre>
 </table>
 <!-- END_c3fa189a6c95ca36ad6ac4791a873d23 -->
 <!-- START_e9aa8e9cecac4d07efa45f1b2d470efb -->
-<h2>CUSTOM ADMIN LOGIN VERIFICATION</h2>
+<h2>Admin Login</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
     "http://local.api-studio.com/api/admin/login" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"email":"john.doe@currikistudio.org","password":"Password123"}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/admin/login"
 );
@@ -337,9 +339,15 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "email": "john.doe@currikistudio.org",
+    "password": "Password123"
+}
+
 fetch(url, {
     method: "POST",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
@@ -352,6 +360,10 @@ $response = $client-&gt;post(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'json' =&gt; [
+            'email' =&gt; 'john.doe@currikistudio.org',
+            'password' =&gt; 'Password123',
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -360,28 +372,86 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://local.api-studio.com/api/admin/login'
+payload = {
+    "email": "john.doe@currikistudio.org",
+    "password": "Password123"
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('POST', url, headers=headers)
+response = requests.request('POST', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (422):</p>
+<p>Example response (400):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "The given data was invalid.",
-    "errors": {
-        "email": [
-            "The email field is required."
-        ],
-        "password": [
-            "The password field is required."
-        ]
-    }
+    "errors": [
+        "Invalid Credentials."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Email is not verified."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unauthorized!"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "user": {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@currikistudio.org",
+        "organization_name": "Curriki",
+        "organization_type": null,
+        "job_title": "Developer",
+        "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+        "phone_number": "+1234567890",
+        "website": "www.currikistudio.org",
+        "subscribed": true
+    },
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/admin/login</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>required</td>
+<td>The email of a user</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>string</td>
+<td>required</td>
+<td>The password corresponded to the email</td>
+</tr>
+</tbody>
+</table>
 <!-- END_e9aa8e9cecac4d07efa45f1b2d470efb -->
 <!-- START_dfdabf7067a240e78a267dec688cb0f1 -->
 <h2>Login with Google</h2>
@@ -4282,13 +4352,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/voluptas/playlists" \
+    "http://local.api-studio.com/api/v1/projects/aut/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/voluptas/playlists"
+    "http://local.api-studio.com/api/v1/projects/aut/playlists"
 );
 
 let headers = {
@@ -4311,7 +4381,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/voluptas/playlists',
+    'http://local.api-studio.com/api/v1/projects/aut/playlists',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4328,7 +4398,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/voluptas/playlists'
+url = 'http://local.api-studio.com/api/v1/projects/aut/playlists'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -8351,7 +8421,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"maxime","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"ut","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/activities"
@@ -8365,7 +8435,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "maxime",
+    "content": "ut",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -8393,7 +8463,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'maxime',
+            'content' =&gt; 'ut',
             'playlist_id' =&gt; 1,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -8412,7 +8482,7 @@ url = 'http://local.api-studio.com/api/v1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "maxime",
+    "content": "ut",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -8708,7 +8778,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"in","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"fuga","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/activities/1"
@@ -8722,7 +8792,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "in",
+    "content": "fuga",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -8751,7 +8821,7 @@ $response = $client-&gt;put(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'in',
+            'content' =&gt; 'fuga',
             'playlist_id' =&gt; 1,
             'shared' =&gt; false,
             'order' =&gt; 2,
@@ -8771,7 +8841,7 @@ url = 'http://local.api-studio.com/api/v1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "in",
+    "content": "fuga",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -9040,11 +9110,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/maiores/h5p-resource-settings-shared" \
+    -G "http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/maiores/h5p-resource-settings-shared"
+    "http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -9061,7 +9131,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/maiores/h5p-resource-settings-shared',
+    'http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9074,7 +9144,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/maiores/h5p-resource-settings-shared'
+url = 'http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12210,13 +12280,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/go/canvas/projects/est/fetch" \
+    "http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":13}'
+    -d '{"setting_id":19}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/go/canvas/projects/est/fetch"
+    "http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch"
 );
 
 let headers = {
@@ -12225,7 +12295,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 13
+    "setting_id": 19
 }
 
 fetch(url, {
@@ -12238,14 +12308,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/go/canvas/projects/est/fetch',
+    'http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'setting_id' =&gt; 13,
+            'setting_id' =&gt; 19,
         ],
     ]
 );
@@ -12254,9 +12324,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/go/canvas/projects/est/fetch'
+url = 'http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch'
 payload = {
-    "setting_id": 13
+    "setting_id": 19
 }
 headers = {
   'Content-Type': 'application/json',
@@ -12345,7 +12415,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"dicta"}'
+    -d '{"access_token":"repellat"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/google-classroom/access-token"
@@ -12357,7 +12427,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "dicta"
+    "access_token": "repellat"
 }
 
 fetch(url, {
@@ -12377,7 +12447,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'dicta',
+            'access_token' =&gt; 'repellat',
         ],
     ]
 );
@@ -12388,7 +12458,7 @@ import json
 
 url = 'http://local.api-studio.com/api/v1/google-classroom/access-token'
 payload = {
-    "access_token": "dicta"
+    "access_token": "repellat"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -16423,17 +16493,25 @@ response.json()</code></pre>
 <h1>1001. Admin/Users</h1>
 <p>APIs for users on admin panel.</p>
 <!-- START_fe0f34240799837f8ceb6d2b43ba5ac7 -->
-<h2>api/v1/admin/users/report/basic</h2>
+<h2>Users Basic Report</h2>
+<p>Returns the paginated response of the users with basic reporting (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/users/report/basic" \
+    -G "http://local.api-studio.com/api/v1/admin/users/report/basic?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/users/report/basic"
 );
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 let headers = {
     "Content-Type": "application/json",
@@ -16455,6 +16533,10 @@ $response = $client-&gt;get(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -16463,20 +16545,76 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://local.api-studio.com/api/v1/admin/users/report/basic'
+params = {
+  'start': '0',
+  'length': '25',
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('GET', url, headers=headers)
+response = requests.request('GET', url, headers=headers, params=params)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "current_page": 1,
+    "data": [
+        {
+            "id": 1242,
+            "first_name": "123security",
+            "last_name": "products",
+            "email": "wirelessproducts.wl@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        },
+        {
+            "id": 824,
+            "first_name": "168xoso",
+            "last_name": "com",
+            "email": "168xosocom@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        }
+    ],
+    "first_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=1",
+    "from": 1,
+    "last_page": 816,
+    "last_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=816",
+    "next_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=2",
+    "path": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic",
+    "per_page": "2",
+    "prev_page_url": null,
+    "to": 2,
+    "total": 1632
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/users/report/basic</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_fe0f34240799837f8ceb6d2b43ba5ac7 -->
 <!-- START_25676ed5ebaafc1daa224c7a86b89348 -->
 <h2>Bulk Import</h2>
@@ -16488,7 +16626,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/admin/users/bulk/import" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"import_file":"dolores"}'
+    -d '{"import_file":"nesciunt"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/users/bulk/import"
@@ -16500,7 +16638,7 @@ let headers = {
 };
 
 let body = {
-    "import_file": "dolores"
+    "import_file": "nesciunt"
 }
 
 fetch(url, {
@@ -16520,7 +16658,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'import_file' =&gt; 'dolores',
+            'import_file' =&gt; 'nesciunt',
         ],
     ]
 );
@@ -16531,7 +16669,7 @@ import json
 
 url = 'http://local.api-studio.com/api/v1/admin/users/bulk/import'
 payload = {
-    "import_file": "dolores"
+    "import_file": "nesciunt"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -16585,7 +16723,8 @@ response.json()</code></pre>
 </table>
 <!-- END_25676ed5ebaafc1daa224c7a86b89348 -->
 <!-- START_ef52cb1e3190f07a381bee96496d9e42 -->
-<h2>api/v1/admin/users/{user}/roles/{role}</h2>
+<h2>Change User Role</h2>
+<p>Make any user admin or remove from admin.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -16632,16 +16771,46 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "message": "User role is changed successfully!"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You cannot change the role of yourself."
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/users/{user}/roles/{role}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>required</td>
+<td>The Id of a user.</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>required</td>
+<td>Role 0 or 1, 1 for making admin, 0 for removing from admin.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_ef52cb1e3190f07a381bee96496d9e42 -->
 <!-- START_ce6b124894a429e5cdb7415c0d8a91fb -->
-<h2>Get All Users for listing.</h2>
+<h2>Get All Users</h2>
 <p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
@@ -17476,7 +17645,7 @@ response.json()</code></pre>
 <h1>1002. Admin/Activity Types</h1>
 <p>APIs for activity types on admin panel.</p>
 <!-- START_197c7d7cd44f76b20d2c1e30e9875bcf -->
-<h2>Get All Activity Types for listing.</h2>
+<h2>Get All Activity Types</h2>
 <p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
@@ -17659,7 +17828,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/admin/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"sed","order":1}'
+    -d '{"title":"Audio","image":"itaque","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/activity-types"
@@ -17672,7 +17841,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "sed",
+    "image": "itaque",
     "order": 1
 }
 
@@ -17694,7 +17863,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'sed',
+            'image' =&gt; 'itaque',
             'order' =&gt; 1,
         ],
     ]
@@ -17707,7 +17876,7 @@ import json
 url = 'http://local.api-studio.com/api/v1/admin/activity-types'
 payload = {
     "title": "Audio",
-    "image": "sed",
+    "image": "itaque",
     "order": 1
 }
 headers = {
@@ -18114,7 +18283,7 @@ response.json()</code></pre>
 <h1>1003. Admin/Activity Items</h1>
 <p>APIs for activity items on admin panel.</p>
 <!-- START_df6d8716f17197a140172f39a46dd818 -->
-<h2>Get All Activity Items for listing.</h2>
+<h2>Get All Activity Items</h2>
 <p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
@@ -18275,7 +18444,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/admin/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"quod","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"quaerat","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/activity-items"
@@ -18291,7 +18460,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "quod",
+    "image": "quaerat",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18319,7 +18488,7 @@ $response = $client-&gt;post(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'quod',
+            'image' =&gt; 'quaerat',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -18338,7 +18507,7 @@ payload = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "quod",
+    "image": "quaerat",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18541,7 +18710,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"in","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"occaecati","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/activity-items/1"
@@ -18557,7 +18726,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "in",
+    "image": "occaecati",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18585,7 +18754,7 @@ $response = $client-&gt;put(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'in',
+            'image' =&gt; 'occaecati',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -18604,7 +18773,7 @@ payload = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "in",
+    "image": "occaecati",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18804,14 +18973,17 @@ response.json()</code></pre>
 <h1>1004. Admin/Projects</h1>
 <p>APIs for projects on admin panel.</p>
 <!-- START_e06f1c2edc1efaf34e84485c6f1731b8 -->
-<h2>Modify the index of a projects</h2>
+<h2>Projects indexing Bulk</h2>
+<p>Modify the index value of a projects in bulk.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
     "http://local.api-studio.com/api/v1/admin/projects/indexes" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"index_projects":"[1,2,3]","index":3}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/projects/indexes"
 );
@@ -18821,9 +18993,15 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "index_projects": "[1,2,3]",
+    "index": 3
+}
+
 fetch(url, {
     method: "POST",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
@@ -18836,61 +19014,9 @@ $response = $client-&gt;post(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
-<pre><code class="language-python">import requests
-import json
-
-url = 'http://local.api-studio.com/api/v1/admin/projects/indexes'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()</code></pre>
-<blockquote>
-<p>Example response (401):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "message": "Unauthenticated."
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>POST api/v1/admin/projects/indexes</code></p>
-<!-- END_e06f1c2edc1efaf34e84485c6f1731b8 -->
-<!-- START_d14755fa43d36c1aed98de5b82317331 -->
-<h2>CUR - 612 =&gt; Update existing project rows for is_user_starter flag</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/projects/user-starters/flag" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects/user-starters/flag"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
-<pre><code class="language-php">
-$client = new \GuzzleHttp\Client();
-$response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/projects/user-starters/flag',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
+        'json' =&gt; [
+            'index_projects' =&gt; '[1,2,3]',
+            'index' =&gt; 3,
         ],
     ]
 );
@@ -18899,31 +19025,69 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/projects/user-starters/flag'
+url = 'http://local.api-studio.com/api/v1/admin/projects/indexes'
+payload = {
+    "index_projects": "[1,2,3]",
+    "index": 3
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('GET', url, headers=headers)
+response = requests.request('POST', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "errors": [
+        "Unable to update indexes, please try again later!"
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/admin/projects/user-starters/flag</code></p>
-<!-- END_d14755fa43d36c1aed98de5b82317331 -->
+<p><code>POST api/v1/admin/projects/indexes</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index_projects</code></td>
+<td>array</td>
+<td>required</td>
+<td>Projects Ids array.</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>integer</td>
+<td>required</td>
+<td>New Integer Index Value, 1 =&gt; 'REQUESTED', 2 =&gt; 'NOT APPROVED', 3 =&gt; 'APPROVED'.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e06f1c2edc1efaf34e84485c6f1731b8 -->
 <!-- START_de3902c9d2f7f7c820e7fb0ed9abfd77 -->
-<h2>Toggle the starter projects flag</h2>
+<h2>Starter Project Toggle</h2>
+<p>Toggle the starter flag of any project</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
     "http://local.api-studio.com/api/v1/admin/projects/starter/1" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"projects":"[1,2,3]","flag":true}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/projects/starter/1"
 );
@@ -18933,9 +19097,15 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "projects": "[1,2,3]",
+    "flag": true
+}
+
 fetch(url, {
     method: "POST",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
@@ -18948,6 +19118,10 @@ $response = $client-&gt;post(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'json' =&gt; [
+            'projects' =&gt; '[1,2,3]',
+            'flag' =&gt; true,
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -18956,32 +19130,68 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://local.api-studio.com/api/v1/admin/projects/starter/1'
+payload = {
+    "projects": "[1,2,3]",
+    "flag": true
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('POST', url, headers=headers)
+response = requests.request('POST', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "errors": [
+        "Choose at-least one project."
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/v1/admin/projects/starter/{flag}</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>projects</code></td>
+<td>array</td>
+<td>required</td>
+<td>Projects Ids array.</td>
+</tr>
+<tr>
+<td><code>flag</code></td>
+<td>boolean</td>
+<td>required</td>
+<td>Selected projects remove or make starter.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_de3902c9d2f7f7c820e7fb0ed9abfd77 -->
 <!-- START_d72aa9bd32fa1e868d979411efd317b6 -->
-<h2>Modify the index of a project</h2>
+<h2>Project Indexing</h2>
+<p>Modify the index value of a project.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/projects/1/indexes/1" \
+    -G "http://local.api-studio.com/api/v1/admin/projects/1/indexes/3" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects/1/indexes/1"
+    "http://local.api-studio.com/api/v1/admin/projects/1/indexes/3"
 );
 
 let headers = {
@@ -18998,7 +19208,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/projects/1/indexes/1',
+    'http://local.api-studio.com/api/v1/admin/projects/1/indexes/3',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19011,7 +19221,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/projects/1/indexes/1'
+url = 'http://local.api-studio.com/api/v1/admin/projects/1/indexes/3'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -19019,70 +19229,42 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "errors": [
+        "Invalid index value provided."
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/projects/{project}/indexes/{index}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>project</code></td>
+<td>required</td>
+<td>Project Id.</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>required</td>
+<td>New Integer Index Value, 1 =&gt; 'REQUESTED', 2 =&gt; 'NOT APPROVED', 3 =&gt; 'APPROVED'.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_d72aa9bd32fa1e868d979411efd317b6 -->
-<!-- START_85b84a5d8f9c7232251026d5f912f3bb -->
-<h2>Update public status of project</h2>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/projects/1/public-status" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects/1/public-status"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
-<pre><code class="language-php">
-$client = new \GuzzleHttp\Client();
-$response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/projects/1/public-status',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
-<pre><code class="language-python">import requests
-import json
-
-url = 'http://local.api-studio.com/api/v1/admin/projects/1/public-status'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()</code></pre>
-<blockquote>
-<p>Example response (401):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "message": "Unauthenticated."
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>GET api/v1/admin/projects/{project}/public-status</code></p>
-<!-- END_85b84a5d8f9c7232251026d5f912f3bb -->
 <!-- START_a82b7707bfbb3bfb6a194b341f9d2bac -->
 <h2>Get the shared project</h2>
 <p>Get the specified project data.</p>
@@ -19238,19 +19420,19 @@ response.json()</code></pre>
 <tr>
 <td><code>project</code></td>
 <td>required</td>
-<td>The Id of a lms-setting</td>
+<td>The Id of a project.</td>
 </tr>
 </tbody>
 </table>
 <!-- END_a82b7707bfbb3bfb6a194b341f9d2bac -->
 <!-- START_fc2a4353e3093252e672968599713345 -->
-<h2>Get All Projects for listing.</h2>
+<h2>Get All Projects.</h2>
 <p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/projects?start=0&amp;length=25" \
+    -G "http://local.api-studio.com/api/v1/admin/projects?mode=1&amp;indexing=1&amp;exclude_starter=0&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
@@ -19258,6 +19440,9 @@ response.json()</code></pre>
 );
 
 let params = {
+    "mode": "1",
+    "indexing": "1",
+    "exclude_starter": "0",
     "start": "0",
     "length": "25",
 };
@@ -19285,6 +19470,9 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
+            'mode'=&gt; '1',
+            'indexing'=&gt; '1',
+            'exclude_starter'=&gt; '0',
             'start'=&gt; '0',
             'length'=&gt; '25',
         ],
@@ -19297,6 +19485,9 @@ import json
 
 url = 'http://local.api-studio.com/api/v1/admin/projects'
 params = {
+  'mode': '1',
+  'indexing': '1',
+  'exclude_starter': '0',
   'start': '0',
   'length': '25',
 }
@@ -19376,6 +19567,21 @@ response.json()</code></pre>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>mode</code></td>
+<td>optional</td>
+<td>1 for starter projects, 0 for non-starter. Default all.</td>
+</tr>
+<tr>
+<td><code>indexing</code></td>
+<td>optional</td>
+<td>Integer value, 1 =&gt; 'REQUESTED', 2 =&gt; 'NOT APPROVED', 3 =&gt; 'APPROVED'. Default None.</td>
+</tr>
+<tr>
+<td><code>exclude_starter</code></td>
+<td>optional</td>
+<td>Boolean value to exclude the user starter projects. Default false.</td>
+</tr>
 <tr>
 <td><code>start</code></td>
 <td>optional</td>
@@ -20141,7 +20347,8 @@ response.json()</code></pre>
 <h1>1006. Admin/Organization Types</h1>
 <p>APIs for organization types on admin panel.</p>
 <!-- START_4136d7e618a59691f2b786924080a1b8 -->
-<h2>api/v1/admin/organization-types</h2>
+<h2>Get All Organization Types</h2>
+<p>Returns the all organization types.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -20188,23 +20395,63 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "data": [
+        {
+            "id": 1,
+            "name": "k12",
+            "label": "K-12",
+            "order": 0
+        },
+        {
+            "id": 2,
+            "name": "highered",
+            "label": "Higher Education",
+            "order": 1
+        },
+        {
+            "id": 3,
+            "name": "businesscorp",
+            "label": "Business\/Corporation",
+            "order": 2
+        },
+        {
+            "id": 4,
+            "name": "nonprofit",
+            "label": "Nonprofit",
+            "order": 3
+        },
+        {
+            "id": 5,
+            "name": "govedu",
+            "label": "Government\/EDU",
+            "order": 4
+        },
+        {
+            "id": 6,
+            "name": "other",
+            "label": "Other",
+            "order": 5
+        }
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/organization-types</code></p>
 <!-- END_4136d7e618a59691f2b786924080a1b8 -->
 <!-- START_499de428ee63cab2620646b3cf7e3971 -->
-<h2>api/v1/admin/organization-types</h2>
+<h2>Create Organization Type</h2>
+<p>Creates the new organization type in database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
     "http://local.api-studio.com/api/v1/admin/organization-types" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test","order":1}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/organization-types"
 );
@@ -20214,9 +20461,16 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 1
+}
+
 fetch(url, {
     method: "POST",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
@@ -20229,6 +20483,11 @@ $response = $client-&gt;post(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'json' =&gt; [
+            'name' =&gt; 'randomzv2tga01uxb6q8ojri5ob6',
+            'label' =&gt; 'test',
+            'order' =&gt; 1,
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -20237,23 +20496,63 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://local.api-studio.com/api/v1/admin/organization-types'
+payload = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 1
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('POST', url, headers=headers)
+response = requests.request('POST', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (201):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "id": 7,
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 6
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/v1/admin/organization-types</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Unique organization type name.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>string</td>
+<td>required</td>
+<td>Unique label for organization type.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Order Sequence value.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_499de428ee63cab2620646b3cf7e3971 -->
 <!-- START_ab86f5c63956fa42bcde2ca97b638ca2 -->
-<h2>api/v1/admin/organization-types/{organization_type}</h2>
+<h2>Get Organization Type</h2>
+<p>Get the specified Organization Type data.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -20300,23 +20599,46 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "id": 7,
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 6
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/organization-types/{organization_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>organization_type</code></td>
+<td>required</td>
+<td>The Id of a organization type</td>
+</tr>
+</tbody>
+</table>
 <!-- END_ab86f5c63956fa42bcde2ca97b638ca2 -->
 <!-- START_621c794fa4548f3be2ca9856b00bd68d -->
-<h2>api/v1/admin/organization-types/{organization_type}</h2>
+<h2>Update Organization Type</h2>
+<p>Updates the organization type data in database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
     "http://local.api-studio.com/api/v1/admin/organization-types/1" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test"}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/organization-types/1"
 );
@@ -20326,9 +20648,15 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test"
+}
+
 fetch(url, {
     method: "PUT",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
@@ -20341,6 +20669,10 @@ $response = $client-&gt;put(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'json' =&gt; [
+            'name' =&gt; 'randomzv2tga01uxb6q8ojri5ob6',
+            'label' =&gt; 'test',
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -20349,24 +20681,74 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://local.api-studio.com/api/v1/admin/organization-types/1'
+payload = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test"
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('PUT', url, headers=headers)
+response = requests.request('PUT', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (201):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "id": 7,
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 6
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>PUT api/v1/admin/organization-types/{organization_type}</code></p>
 <p><code>PATCH api/v1/admin/organization-types/{organization_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>organization_type</code></td>
+<td>required</td>
+<td>The Id of a organization type.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Updated organization type name.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>string</td>
+<td>required</td>
+<td>Updated label for organization type.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_621c794fa4548f3be2ca9856b00bd68d -->
 <!-- START_8647ecfbe889fff07f7d7867212325fc -->
-<h2>api/v1/admin/organization-types/{organization_type}</h2>
+<h2>Delete Organization Type</h2>
+<p>Deletes the organization type from database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -20413,28 +20795,60 @@ headers = {
 response = requests.request('DELETE', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "message": "Organization type deleted successfully!"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Failed to delete organization type."
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>DELETE api/v1/admin/organization-types/{organization_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>organization_type</code></td>
+<td>required</td>
+<td>The Id of a organization type.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_8647ecfbe889fff07f7d7867212325fc -->
 <h1>1007. Admin/Queues</h1>
 <p>APIs for queues monitoring on admin panel.</p>
 <!-- START_19d2e958e5b93e2b59c7c5f9acf6cbcd -->
-<h2>api/v1/admin/queue-monitor/jobs</h2>
+<h2>Get All Jobs</h2>
+<p>Returns the pending or failed jobs paginated response with pagination links (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs" \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs?filter=1&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs"
 );
+
+let params = {
+    "filter": "1",
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 let headers = {
     "Content-Type": "application/json",
@@ -20456,6 +20870,11 @@ $response = $client-&gt;get(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'query' =&gt; [
+            'filter'=&gt; '1',
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -20464,23 +20883,89 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs'
+params = {
+  'filter': '1',
+  'start': '0',
+  'length': '25',
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('GET', url, headers=headers)
+response = requests.request('GET', url, headers=headers, params=params)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "data": [
+        {
+            "id": 128,
+            "payload": "CloneProject",
+            "queue": "default",
+            "time": "1 day ago",
+            "failed": false,
+            "attempt": 1,
+            "exception": "N\/A"
+        },
+        {
+            "id": 129,
+            "payload": "CloneProject",
+            "queue": "default",
+            "time": "1 day ago",
+            "failed": false,
+            "attempt": 1,
+            "exception": "Unable to clone project"
+        }
+    ],
+    "links": {
+        "first": "https:\/\/currikistudio.org\/api\/api\/v1\/admin\/queue-monitor\/jobs?page=1",
+        "last": "https:\/\/currikistudio.org\/api\/api\/v1\/admin\/queue-monitor\/jobs?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": null,
+        "last_page": 1,
+        "path": "https:\/\/currikistudio.org\/api\/api\/v1\/admin\/queue-monitor\/jobs",
+        "per_page": "2",
+        "to": null,
+        "total": 0
+    }
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/queue-monitor/jobs</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter</code></td>
+<td>optional</td>
+<td>1 for pending jobs, 2 for failed. Default 1.</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_19d2e958e5b93e2b59c7c5f9acf6cbcd -->
 <!-- START_974c9a8bc7cc1bbac2ac685ff311333e -->
-<h2>Retry all failed Jobs</h2>
+<h2>Retry All Failed Jobs</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -20527,16 +21012,16 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "message": "All failed jobs has been pushed back onto the queue!"
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/queue-monitor/jobs/retry/all</code></p>
 <!-- END_974c9a8bc7cc1bbac2ac685ff311333e -->
 <!-- START_ba68bb0fa6b0c7c5c6a906f18d8889dd -->
-<h2>Flush all failed Jobs</h2>
+<h2>Delete All Failed Jobs</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -20583,16 +21068,17 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "message": "All failed jobs deleted successfully!"
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/queue-monitor/jobs/forget/all</code></p>
 <!-- END_ba68bb0fa6b0c7c5c6a906f18d8889dd -->
 <!-- START_4d974cc26d982988b65af87d04e9087f -->
-<h2>Retry Job by ID</h2>
+<h2>Retry Specific Failed Job</h2>
+<p>Retry failed job by ID.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -20639,16 +21125,34 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "message": "The failed job [1] has been pushed back onto the queue!"
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/queue-monitor/jobs/retry/{job}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job</code></td>
+<td>required</td>
+<td>The integer Id of a job.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_4d974cc26d982988b65af87d04e9087f -->
 <!-- START_82b017fa48d3c6810bbe211c47d6232f -->
-<h2>Delete Job by ID</h2>
+<h2>Delete Specific Failed Job</h2>
+<p>Delete failed job by ID.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -20695,22 +21199,39 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (401):</p>
+<p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Unauthenticated."
+    "message": "Failed job deleted successfully!"
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/admin/queue-monitor/jobs/forget/{job}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job</code></td>
+<td>required</td>
+<td>The integer Id of a job.</td>
+</tr>
+</tbody>
+</table>
 <!-- END_82b017fa48d3c6810bbe211c47d6232f -->
 <!-- START_3bc52c8117e841c812597887d1c9a011 -->
-<h2>Get All Queues Logs for listing.</h2>
+<h2>Get All Queues Logs</h2>
 <p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor?start=0&amp;length=25" \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor?filter=1&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
@@ -20718,6 +21239,7 @@ response.json()</code></pre>
 );
 
 let params = {
+    "filter": "1",
     "start": "0",
     "length": "25",
 };
@@ -20745,6 +21267,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
+            'filter'=&gt; '1',
             'start'=&gt; '0',
             'length'=&gt; '25',
         ],
@@ -20757,6 +21280,7 @@ import json
 
 url = 'http://local.api-studio.com/api/v1/admin/queue-monitor'
 params = {
+  'filter': '1',
   'start': '0',
   'length': '25',
 }
@@ -20824,6 +21348,11 @@ response.json()</code></pre>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>filter</code></td>
+<td>optional</td>
+<td>1 for running jobs, 2 for failed, 3 for completed. Default all.</td>
+</tr>
 <tr>
 <td><code>start</code></td>
 <td>optional</td>
@@ -20954,33 +21483,33 @@ response.json()</code></pre>
             "order": 0
         },
         {
-            "id": 2,
-            "name": "highered",
-            "label": "Higher Education",
-            "order": 1
-        },
-        {
             "id": 3,
             "name": "businesscorp",
             "label": "Business\/Corporation",
-            "order": 2
+            "order": 1
         },
         {
             "id": 4,
             "name": "nonprofit",
             "label": "Nonprofit",
-            "order": 3
+            "order": 2
         },
         {
             "id": 5,
             "name": "govedu",
             "label": "Government\/EDU",
-            "order": 4
+            "order": 3
         },
         {
             "id": 6,
             "name": "other",
             "label": "Other",
+            "order": 4
+        },
+        {
+            "id": 2,
+            "name": "highered",
+            "label": "Higher Education",
             "order": 5
         }
     ]

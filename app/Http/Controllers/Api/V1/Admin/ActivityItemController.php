@@ -34,7 +34,7 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Get All Activity Items for listing.
+     * Get All Activity Items
      *
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      *

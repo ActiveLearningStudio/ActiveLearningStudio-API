@@ -1,0 +1,33 @@
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 1242,
+            "first_name": "123security",
+            "last_name": "products",
+            "email": "wirelessproducts.wl@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        },
+        {
+            "id": 824,
+            "first_name": "168xoso",
+            "last_name": "com",
+            "email": "168xosocom@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        }
+    ],
+    "first_page_url": "https://currikistudio.org/api/api/api/v1/admin/users/report/basic?page=1",
+    "from": 1,
+    "last_page": 816,
+    "last_page_url": "https://currikistudio.org/api/api/api/v1/admin/users/report/basic?page=816",
+    "next_page_url": "https://currikistudio.org/api/api/api/v1/admin/users/report/basic?page=2",
+    "path": "https://currikistudio.org/api/api/api/v1/admin/users/report/basic",
+    "per_page": "2",
+    "prev_page_url": null,
+    "to": 2,
+    "total": 1632
+}

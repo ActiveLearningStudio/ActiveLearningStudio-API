@@ -35,7 +35,7 @@ class ActivityTypeController extends Controller
     }
 
     /**
-     * Get All Activity Types for listing.
+     * Get All Activity Types
      *
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      *
