@@ -39,6 +39,12 @@ class GetCoursesCommand implements Command
      * @var string
      */
     private $programName;
+    /**
+     * SIS ID
+     *
+     * @var string
+     */
+    private $sisId;
 
     /**
      * Creates an instance of the command class
@@ -47,10 +53,11 @@ class GetCoursesCommand implements Command
      * @param string $programName
      * @return void
      */
-    public function __construct($accountId, $programName = null)
+    public function __construct($accountId, $programName = null, $sisId = null)
     {
         $this->accountId = $accountId;
         $this->programName = $programName;
+        $this->sisId = $sisId;
     }
 
     /**
@@ -63,7 +70,7 @@ class GetCoursesCommand implements Command
         $response = null;
         try {
             $url = $this->apiURL . '/accounts/' . $this->accountId . '/courses';
-            $url .= $this->programName ? '?search_term=' . $this->programName : '';
+            $url .= $this->sisId ? '?search_term=' . $this->sisId : '';
             $response = $this->httpClient->request('GET', $url, [
                 'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json']
             ])->getBody()->getContents();
