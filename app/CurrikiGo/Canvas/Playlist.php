@@ -16,6 +16,7 @@ use App\CurrikiGo\Canvas\Helpers\Course as CourseHelper;
 use App\CurrikiGo\Canvas\Helpers\Enrollment as EnrollmentHelper;
 use App\Models\Playlist as PlaylistModel;
 use App\Http\Resources\V1\CurrikiGo\CanvasPlaylistResource;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Playlist class for handling playlist publishing to Canvas LMS
@@ -48,14 +49,17 @@ class Playlist
      */
     public function send(PlaylistModel $playlist, $data)
     {
+        $user = Auth::user();
+        $projectNameSlug = strtolower(implode('-', explode(' ', $playlist->project->name)));
+        $sisId = $projectNameSlug . '-' . $user->id . '-' . $playlist->project->id;
         
         $lmsSettings = $this->canvasClient->getLmsSettings();
         $playlistItem = null;
         $moduleName = Client::CURRIKI_MODULE_NAME;
         $accountId = "self";
 
-        $courses = $this->canvasClient->run(new GetCoursesCommand($accountId, $playlist->project->name));
-        $course = CourseHelper::getByName($courses, $playlist->project->name);
+        $courses = $this->canvasClient->run(new GetCoursesCommand($accountId, $playlist->project->name, $sisId));
+        $course = CourseHelper::getBySisId($courses, $sisId);
         
         if ($course) {
             // enroll user to existing course as teacher if not enrolled
@@ -82,7 +86,8 @@ class Playlist
             $playlistItem = $this->canvasClient->run(new CreateModuleItemCommand($course->id, $module->id, $moduleItem));
         } else {
             // create new course and add playlist
-            $course = $this->canvasClient->run(new CreateCourseCommand($accountId, ['name' => $playlist->project->name]));
+            $courseData = ['name' => $playlist->project->name];
+            $course = $this->canvasClient->run(new CreateCourseCommand($accountId, $courseData, $sisId));
             $module = $this->canvasClient->run(new CreateModuleCommand($course->id, ["name" => $moduleName]));
             $moduleItem['title'] = $playlist->title . ($data['counter'] > 0 ? ' (' . $data['counter'] . ')' : '');
             $moduleItem['content_id'] = $playlist->id;
