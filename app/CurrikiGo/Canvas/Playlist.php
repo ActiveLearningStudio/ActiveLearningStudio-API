@@ -51,7 +51,7 @@ class Playlist
     {
         $user = Auth::user();
         $projectNameSlug = strtolower(implode('-', explode(' ', $playlist->project->name)));
-        $sisId = $projectNameSlug.'-'.$user->id.'-'.$playlist->project->id;
+        $sisId = $projectNameSlug . '-' . $user->id . '-' . $playlist->project->id;
         
         $lmsSettings = $this->canvasClient->getLmsSettings();
         $playlistItem = null;
