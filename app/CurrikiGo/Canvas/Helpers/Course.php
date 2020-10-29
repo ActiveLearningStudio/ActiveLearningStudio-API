@@ -27,6 +27,25 @@ class Course
     }
 
     /**
+     * Get a course from a list
+     * 
+     * @param array $list A list of courses
+     * @param string $sisId Course SIS ID.
+     * @return string|null
+     */
+    public static function getBySisId($list, $sisId)
+    {
+        $course = null;
+        foreach ($list as $key => $item) {
+            if (trim($item->sis_course_id) === trim($sisId)) {
+                $course = $item;
+                break;                
+            }
+        }
+        return $course;
+    }
+
+    /**
      * Get a module from a list
      * 
      * @param array $list A list of courses

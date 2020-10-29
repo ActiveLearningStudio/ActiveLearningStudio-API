@@ -8,6 +8,7 @@ use App\CurrikiGo\Canvas\Commands\GetModulesCommand;
 use App\CurrikiGo\Canvas\Commands\GetModuleItemsCommand;
 use App\CurrikiGo\Canvas\Helpers\Course as CourseHelper;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class for fetching courses from Canvas LMS
@@ -42,8 +43,13 @@ class Course
         $playlist = null;
         $moduleName = Client::CURRIKI_MODULE_NAME;
         $accountId = "self";
-        $courses = $this->canvasClient->run(new GetCoursesCommand($accountId, $project->name));
-        $course = CourseHelper::getByName($courses, $project->name);
+
+        $user = Auth::user();
+        $projectNameSlug = strtolower(implode('-', explode(' ', $project->name)));
+        $sisId = $projectNameSlug.'-'.$user->id.'-'.$project->id;
+
+        $courses = $this->canvasClient->run(new GetCoursesCommand($accountId, $project->name, $sisId));
+        $course = CourseHelper::getBySisId($courses, $sisId);
         
         $moduleItems = [];
         if ($course) {
