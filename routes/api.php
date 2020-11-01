@@ -36,6 +36,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
+        Route::get('users/notifications', 'UserController@listNotifications');
+        Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/search', 'UserController@getUsersForTeam');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
@@ -156,6 +158,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments
     Route::post('xapi/statements', 'XapiController@saveStatement');
+    // Google Classroom Student workflow
+    Route::group(['prefix' => 'google-classroom'], function () {
+        Route::post('turnin/{classwork}', 'GoogleClassroomController@turnIn');
+    });
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 
@@ -194,6 +200,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // organization-types
         Route::apiResource('organization-types', 'OrganizationTypesController');
+
+        // queue-monitor
+        Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
+        Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
+        Route::get('queue-monitor/jobs/forget/all', 'QueueMonitorController@forgetAll');
+        Route::get('queue-monitor/jobs/retry/{job}', 'QueueMonitorController@retryJob');
+        Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
+        Route::apiResource('queue-monitor', 'QueueMonitorController');
     });
 
     // admin public routes for downloads / uploads

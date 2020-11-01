@@ -1,0 +1,89 @@
+{
+    "data": {
+        "id": 1,
+        "name": "The Science of Golf",
+        "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+        "thumb_url": "/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+        "shared": false,
+        "indexing": 3,
+        "indexing_text": "APPROVED",
+        "created_at": "2020-04-30T20:03:12.000000Z",
+        "updated_at": "2020-10-27T14:39:05.000000Z",
+        "playlists": [
+            {
+                "id": 1,
+                "title": "The Engineering & Design Behind Golf Balls",
+                "project_id": 1,
+                "created_at": null,
+                "updated_at": "2020-09-17T09:44:27.000000Z",
+                "activities": [
+                    {
+                        "id": 7,
+                        "type": "h5p",
+                        "title": "Famous Golf Holes",
+                        "library_name": "H5P.Flashcards",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 5,
+                        "type": "h5p",
+                        "title": "The Evolution of the Golf Ball",
+                        "library_name": "H5P.Timeline",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 6,
+                        "type": "h5p",
+                        "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                        "library_name": "H5P.InteractiveVideo",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 1,
+                        "type": "h5p",
+                        "title": "Science of Golf: Why Balls Have Dimples",
+                        "library_name": "H5P.InteractiveVideo",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 2,
+                        "type": "h5p",
+                        "title": "Physics and Golf Balls",
+                        "library_name": "H5P.Flashcards",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 3,
+                        "type": "h5p",
+                        "title": "Physics Vocabulary Study Guide",
+                        "library_name": "H5P.Accordion",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 4,
+                        "type": "h5p",
+                        "title": "Labeling Golf Ball - Principles of Physics",
+                        "library_name": "H5P.DragQuestion",
+                        "thumb_url": null
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "Topic 2",
+                "project_id": 1,
+                "created_at": null,
+                "updated_at": "2020-09-17T09:44:27.000000Z",
+                "activities": [
+                    {
+                        "id": 8,
+                        "type": "h5p",
+                        "title": "Physics of a Golf Ball",
+                        "library_name": "H5P.DragQuestion",
+                        "thumb_url": null
+                    }
+                ]
+            }
+        ]
+    }
+}

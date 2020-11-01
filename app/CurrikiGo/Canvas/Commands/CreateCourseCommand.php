@@ -45,12 +45,13 @@ class CreateCourseCommand implements Command
      * 
      * @param string|int $accountId
      * @param array $courseData
+     * @param array $sisId
      * @return void
      */
-    public function __construct($accountId, $courseData)
+    public function __construct($accountId, $courseData, $sisId)
     {
         $this->accountId = $accountId;
-        $this->courseData = $this->prepareCourseData($courseData);
+        $this->courseData = $this->prepareCourseData($courseData, $sisId);
     }
 
     /**
@@ -78,12 +79,12 @@ class CreateCourseCommand implements Command
      * @param array $data
      * @return array
      */
-    public function prepareCourseData($data)
+    public function prepareCourseData($data, $sisId)
     {
         $course["name"] = $data['name'];
         $short_name = strtolower(implode('-', explode(' ', $data['name'])));
         $course["course_code"] = $short_name;
-        $course["sis_course_id"] = $short_name . '-' . uniqid();
+        $course["sis_course_id"] = $sisId;
         $course["license"] = "public_domain";
         $course["public_syllabus_to_auth"] = true;
         $course["public_description"] = $course["name"] . " by CurrikiStudio";

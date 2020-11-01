@@ -7,12 +7,14 @@ use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
+use App\Models\Notification;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\V1\NotificationListResource;
 
 /**
  * @group 2. User
@@ -308,5 +310,57 @@ class UserController extends Controller
         return response([
             'errors' => ['Failed to delete profile.'],
         ], 500);
+    }
+
+    /**
+     * Get All User Notifications
+     *
+     * Get a list of the users unread notification
+     *
+     * @responseFile responses/notifications/notifications.json
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function listNotifications(Request $request)
+    {
+        return response([
+            'notifications' => NotificationListResource::collection(auth()->user()->unreadNotifications),
+        ], 200);
+    }
+
+    /**
+     * Read Notification
+     *
+     * Read notification of the specified user.
+     *
+     * @urlParam $notification_id string required Current id of a notification Example: 123
+     *
+     * @responseFile responses/notifications/notifications.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to read notification."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function readNotification(Request $request, $notification_id)
+    {
+        $notification = auth()->user()->unreadNotifications()->find($notification_id);
+        if ($notification) {
+            $notification->markAsRead();
+
+            return response([
+                'notifications' => NotificationListResource::collection(auth()->user()->unreadNotifications),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to read notification.'],
+        ], 500);
+
     }
 }

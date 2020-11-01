@@ -1,0 +1,40 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "k12",
+            "label": "K-12",
+            "order": 0
+        },
+        {
+            "id": 2,
+            "name": "highered",
+            "label": "Higher Education",
+            "order": 1
+        },
+        {
+            "id": 3,
+            "name": "businesscorp",
+            "label": "Business/Corporation",
+            "order": 2
+        },
+        {
+            "id": 4,
+            "name": "nonprofit",
+            "label": "Nonprofit",
+            "order": 3
+        },
+        {
+            "id": 5,
+            "name": "govedu",
+            "label": "Government/EDU",
+            "order": 4
+        },
+        {
+            "id": 6,
+            "name": "other",
+            "label": "Other",
+            "order": 5
+        }
+    ]
+}
