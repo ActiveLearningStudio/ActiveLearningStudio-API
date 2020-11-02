@@ -101,4 +101,15 @@ class OrganizationController extends Controller
     public function reportBasic(Request $request){
         return response( $this->organizationRepository->reportBasic($request->all()), 200);
     }
+
+    /**
+     * Display a listing of the parent organizations options, other then itself and its exiting children.
+     *
+     * @param $id
+     * @return AnonymousResourceCollection
+     */
+    public function showParentOptions($id)
+    {
+        return OrganizationResource::collection($this->organizationRepository->getParentOptions($id));
+    }
 }

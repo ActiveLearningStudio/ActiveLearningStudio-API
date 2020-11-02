@@ -33,7 +33,7 @@ class OrganizationRepository extends BaseRepository
             $query->search(['name'], $data['q']);
             return $query;
         });
-        return $this->getDtPaginated();
+        return $this->getDtPaginated(['parent']);
     }
 
     /**
@@ -79,7 +79,7 @@ class OrganizationRepository extends BaseRepository
      */
     public function find($id)
     {
-        if ($organization = $this->model->whereId($id)->with('projects')->first()) {
+        if ($organization = $this->model->whereId($id)->with(['projects', 'parent'])->first()) {
             return $organization;
         }
         throw new GeneralException('Organization Not found.');
@@ -111,5 +111,35 @@ class OrganizationRepository extends BaseRepository
         $this->setDtParams($data);
         $this->query = $this->model->select(['id', 'name', 'description', 'parent_id'])->withCount(['projects', 'playlists', 'activities']);
         return $this->getDtPaginated();
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     * @throws GeneralException
+     */
+    public function getParentOptions($id)
+    {
+        if ($organization = $this->model->whereId($id)->first()) {
+            $notInIds = $this->getIds($organization);
+
+            return $this->model->whereNotIn('id', $notInIds)->paginate(1000);
+        }
+
+        throw new GeneralException('Organization Not found.');
+    }
+
+    /**
+     * @param $organization
+     * @return array
+     * @throws GeneralException
+     */
+    public function getIds($organization)
+    {
+        $ids =  [$organization->id];
+        foreach ($organization->children as $child) {
+            $ids = array_merge($ids, $this->getIds($child));
+        }
+        return $ids;
     }
 }

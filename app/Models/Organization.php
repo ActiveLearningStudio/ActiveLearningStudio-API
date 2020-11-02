@@ -75,7 +75,7 @@ class Organization extends Model
      */
     public function children()
     {
-        return $this->hasMany('App\Models\organization', 'parent_id');
+        return $this->hasMany('App\Models\organization', 'parent_id')->with('children');
     }
 
     /**
