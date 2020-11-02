@@ -120,3 +120,15 @@ if (!function_exists('get_base_name')) {
         return Arr::last(explode('\\', $name));
     }
 }
+
+if (!function_exists('is_valid_date')) {
+    /**
+     * Validates the any format date string
+     * @param $date
+     * @return bool
+     */
+    function is_valid_date($date)
+    {
+        return (bool)strtotime($date);
+    }
+}

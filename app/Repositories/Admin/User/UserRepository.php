@@ -42,12 +42,19 @@ class UserRepository extends BaseRepository
      */
     public function getAll($data)
     {
+        $startDate = $data['start_date'] ?? null;
+        $endDate = $data['end_date'] ?? null;
         $this->setDtParams($data);
+
         $this->query = $this->model->when($data['q'] ?? null, function ($query) use ($data) {
             $query->search(['email', 'name'], $data['q']);
             $query->name($data['q']);
             return $query;
+        })->when(is_valid_date($startDate) && is_valid_date($endDate), function ($query) use ($startDate, $endDate) {
+            // apply date scope if valid date string
+            return $query->dateBetween([$startDate, $endDate]);
         });
+
         return $this->getDtPaginated();
     }
 
