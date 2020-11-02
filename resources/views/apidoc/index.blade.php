@@ -320,14 +320,16 @@ response.json()</code></pre>
 </table>
 <!-- END_c3fa189a6c95ca36ad6ac4791a873d23 -->
 <!-- START_e9aa8e9cecac4d07efa45f1b2d470efb -->
-<h2>CUSTOM ADMIN LOGIN VERIFICATION</h2>
+<h2>Admin Login</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
     "http://local.api-studio.com/api/admin/login" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"email":"john.doe@currikistudio.org","password":"Password123"}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/admin/login"
 );
@@ -337,9 +339,15 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "email": "john.doe@currikistudio.org",
+    "password": "Password123"
+}
+
 fetch(url, {
     method: "POST",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
@@ -352,6 +360,10 @@ $response = $client-&gt;post(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'json' =&gt; [
+            'email' =&gt; 'john.doe@currikistudio.org',
+            'password' =&gt; 'Password123',
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -360,28 +372,86 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://local.api-studio.com/api/admin/login'
+payload = {
+    "email": "john.doe@currikistudio.org",
+    "password": "Password123"
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('POST', url, headers=headers)
+response = requests.request('POST', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (422):</p>
+<p>Example response (400):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "The given data was invalid.",
-    "errors": {
-        "email": [
-            "The email field is required."
-        ],
-        "password": [
-            "The password field is required."
-        ]
-    }
+    "errors": [
+        "Invalid Credentials."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Email is not verified."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unauthorized!"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "user": {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@currikistudio.org",
+        "organization_name": "Curriki",
+        "organization_type": null,
+        "job_title": "Developer",
+        "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+        "phone_number": "+1234567890",
+        "website": "www.currikistudio.org",
+        "subscribed": true
+    },
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/admin/login</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>required</td>
+<td>The email of a user</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>string</td>
+<td>required</td>
+<td>The password corresponded to the email</td>
+</tr>
+</tbody>
+</table>
 <!-- END_e9aa8e9cecac4d07efa45f1b2d470efb -->
 <!-- START_dfdabf7067a240e78a267dec688cb0f1 -->
 <h2>Login with Google</h2>
@@ -1153,6 +1223,106 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/users/me</code></p>
 <!-- END_dfb8fbb6facf7c68af221b2363bceb9e -->
+<!-- START_89e22ac0c94b3f953efa67025446e89e -->
+<h2>Get All Users for Team</h2>
+<p>Get a list of the users for Team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/users/search" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"search":"Abby"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/users/search"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "search": "Abby"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/users/search',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'search' =&gt; 'Abby',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/users/search'
+payload = {
+    "search": "Abby"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "users": [
+        {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe"
+        },
+        {
+            "id": 2,
+            "first_name": "Jane",
+            "last_name": "Doe"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/users/search</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>required</td>
+<td>Search string for User</td>
+</tr>
+</tbody>
+</table>
+<!-- END_89e22ac0c94b3f953efa67025446e89e -->
 <!-- START_e1acbbf1139449674cd6b37da0a82ce0 -->
 <h2>Update Password</h2>
 <p>Update password of the specified user in storage.</p>
@@ -2293,6 +2463,86 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/projects/update-order</code></p>
 <!-- END_3315eb7aceffa27cdbfcaf8109372337 -->
+<!-- START_50e5219d14a201aeb43b506d13123073 -->
+<h2>Get All Favorite Projects</h2>
+<p>Get a list of the favorite projects of a user.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/projects/favorites" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/projects/favorites"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/projects/favorites',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/projects/favorites'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "projects": [
+        {
+            "id": 1,
+            "name": "Test Project",
+            "description": "This is a test project.",
+            "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
+            "shared": true,
+            "starter_project": null,
+            "is_public": true,
+            "created_at": "2020-09-06T19:21:08.000000Z",
+            "updated_at": "2020-09-06T19:21:08.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Math Project",
+            "description": "This is a test math project.",
+            "thumb_url": "https:\/\/images.pexels.com\/photos\/2832384",
+            "shared": true,
+            "starter_project": null,
+            "is_public": true,
+            "created_at": "2020-09-07T19:21:08.000000Z",
+            "updated_at": "2020-09-07T19:21:08.000000Z"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/projects/favorites</code></p>
+<!-- END_50e5219d14a201aeb43b506d13123073 -->
 <!-- START_ac987a56b0975bc75cc619ecf8702ef9 -->
 <h2>Reorder Projects</h2>
 <p>Reorder projects of a user.</p>
@@ -2847,6 +3097,80 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_a52552fb436b8c9f0b70cd65be17699e -->
+<!-- START_4eb44fdf87a0076e678c116a0fcbdf9d -->
+<h2>Favorite/Unfavorite Project</h2>
+<p>Favorite/Unfavorite the specified project for a user.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/projects/1/favorite" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/projects/1/favorite"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/projects/1/favorite',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/projects/1/favorite'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "This resource will be removed from your Favorites. You will no longer be able to reuse\/remix its contents into your projects."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/projects/{project}/favorite</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>project</code></td>
+<td>required</td>
+<td>The Id of a project</td>
+</tr>
+</tbody>
+</table>
+<!-- END_4eb44fdf87a0076e678c116a0fcbdf9d -->
 <!-- START_d4bb0000cd4525b356d3f4e604741ee1 -->
 <h2>Get All Projects</h2>
 <p>Get a list of the projects of a user.</p>
@@ -2937,7 +3261,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"Test Project","description":"This is a test project.","thumb_url":"https:\/\/images.pexels.com\/photos\/2832382","is_public":true}'
+    -d '{"name":"Test Project","description":"This is a test project.","thumb_url":"https:\/\/images.pexels.com\/photos\/2832382"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/projects"
@@ -2951,8 +3275,7 @@ let headers = {
 let body = {
     "name": "Test Project",
     "description": "This is a test project.",
-    "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-    "is_public": true
+    "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382"
 }
 
 fetch(url, {
@@ -2975,7 +3298,6 @@ $response = $client-&gt;post(
             'name' =&gt; 'Test Project',
             'description' =&gt; 'This is a test project.',
             'thumb_url' =&gt; 'https://images.pexels.com/photos/2832382',
-            'is_public' =&gt; true,
         ],
     ]
 );
@@ -2988,8 +3310,7 @@ url = 'http://local.api-studio.com/api/v1/projects'
 payload = {
     "name": "Test Project",
     "description": "This is a test project.",
-    "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-    "is_public": true
+    "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -3051,12 +3372,6 @@ response.json()</code></pre>
 <td>string</td>
 <td>required</td>
 <td>Thumbnail Url of a project</td>
-</tr>
-<tr>
-<td><code>is_public</code></td>
-<td>boolean</td>
-<td>required</td>
-<td>Public status of a project</td>
 </tr>
 </tbody>
 </table>
@@ -4037,13 +4352,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/ducimus/playlists" \
+    "http://local.api-studio.com/api/v1/projects/aut/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/ducimus/playlists"
+    "http://local.api-studio.com/api/v1/projects/aut/playlists"
 );
 
 let headers = {
@@ -4066,7 +4381,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/ducimus/playlists',
+    'http://local.api-studio.com/api/v1/projects/aut/playlists',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4083,7 +4398,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/ducimus/playlists'
+url = 'http://local.api-studio.com/api/v1/projects/aut/playlists'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -8106,7 +8421,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"nihil","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"ut","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/activities"
@@ -8120,7 +8435,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "nihil",
+    "content": "ut",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -8148,7 +8463,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'nihil',
+            'content' =&gt; 'ut',
             'playlist_id' =&gt; 1,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -8167,7 +8482,7 @@ url = 'http://local.api-studio.com/api/v1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "nihil",
+    "content": "ut",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -8463,7 +8778,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"et","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"fuga","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/activities/1"
@@ -8477,7 +8792,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "et",
+    "content": "fuga",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -8506,7 +8821,7 @@ $response = $client-&gt;put(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'et',
+            'content' =&gt; 'fuga',
             'playlist_id' =&gt; 1,
             'shared' =&gt; false,
             'order' =&gt; 2,
@@ -8526,7 +8841,7 @@ url = 'http://local.api-studio.com/api/v1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "et",
+    "content": "fuga",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -8795,11 +9110,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/ut/h5p-resource-settings-shared" \
+    -G "http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/ut/h5p-resource-settings-shared"
+    "http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -8816,7 +9131,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/ut/h5p-resource-settings-shared',
+    'http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -8829,7 +9144,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/ut/h5p-resource-settings-shared'
+url = 'http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11965,13 +12280,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/go/canvas/projects/sed/fetch" \
+    "http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":13}'
+    -d '{"setting_id":19}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/go/canvas/projects/sed/fetch"
+    "http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch"
 );
 
 let headers = {
@@ -11980,7 +12295,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 13
+    "setting_id": 19
 }
 
 fetch(url, {
@@ -11993,14 +12308,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/go/canvas/projects/sed/fetch',
+    'http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'setting_id' =&gt; 13,
+            'setting_id' =&gt; 19,
         ],
     ]
 );
@@ -12009,9 +12324,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/go/canvas/projects/sed/fetch'
+url = 'http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch'
 payload = {
-    "setting_id": 13
+    "setting_id": 19
 }
 headers = {
   'Content-Type': 'application/json',
@@ -12100,7 +12415,7 @@ response.json()</code></pre>
     "http://local.api-studio.com/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"accusamus"}'
+    -d '{"access_token":"repellat"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://local.api-studio.com/api/v1/google-classroom/access-token"
@@ -12112,7 +12427,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "accusamus"
+    "access_token": "repellat"
 }
 
 fetch(url, {
@@ -12132,7 +12447,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'accusamus',
+            'access_token' =&gt; 'repellat',
         ],
     ]
 );
@@ -12143,7 +12458,7 @@ import json
 
 url = 'http://local.api-studio.com/api/v1/google-classroom/access-token'
 payload = {
-    "access_token": "accusamus"
+    "access_token": "repellat"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -14870,12 +15185,12 @@ response.json()</code></pre>
 <!-- END_0b53c42f007c5a3ca1fb91b518ef98c3 -->
 <!-- START_4b2e2ae3f1de524eb15d380dcb1e3edb -->
 <h2>Advance search</h2>
-<p>Advance search for projects, playlists and activities having isPublic and elasticsearch set to true</p>
+<p>Advance search for projects, playlists and activities having indexing approved</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/search/advanced?query=test&amp;negativeQuery=badword&amp;userIds=%5B1%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://local.api-studio.com/api/v1/search/advanced?query=test&amp;negativeQuery=badword&amp;userIds=%5B1%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
@@ -14886,6 +15201,10 @@ let params = {
     "query": "test",
     "negativeQuery": "badword",
     "userIds": "[1]",
+    "startDate": "2020-04-30 00:00:00",
+    "endDate": "2020-04-30 23:59:59",
+    "subjectIds": "['ComputerScience']",
+    "educationLevelIds": "['Preschool (Ages 0-4)']",
     "h5pLibraries": "['H5P.InteractiveVideo 1.21']",
     "model": "activities",
     "sort": "created_at",
@@ -14920,6 +15239,10 @@ $response = $client-&gt;get(
             'query'=&gt; 'test',
             'negativeQuery'=&gt; 'badword',
             'userIds'=&gt; '[1]',
+            'startDate'=&gt; '2020-04-30 00:00:00',
+            'endDate'=&gt; '2020-04-30 23:59:59',
+            'subjectIds'=&gt; '['ComputerScience']',
+            'educationLevelIds'=&gt; '['Preschool (Ages 0-4)']',
             'h5pLibraries'=&gt; '['H5P.InteractiveVideo 1.21']',
             'model'=&gt; 'activities',
             'sort'=&gt; 'created_at',
@@ -14939,6 +15262,10 @@ params = {
   'query': 'test',
   'negativeQuery': 'badword',
   'userIds': '[1]',
+  'startDate': '2020-04-30 00:00:00',
+  'endDate': '2020-04-30 23:59:59',
+  'subjectIds': '['ComputerScience']',
+  'educationLevelIds': '['Preschool (Ages 0-4)']',
   'h5pLibraries': '['H5P.InteractiveVideo 1.21']',
   'model': 'activities',
   'sort': 'created_at',
@@ -14986,6 +15313,7 @@ response.json()</code></pre>
             "thumb_url": "\/storage\/uploads_tmp\/UDixgGgVAnNYNMikT8Qic7q0WR0SSA54lOqL9u6t.png",
             "title": "Algebra 1 ACPS Curriki Resources",
             "description": "Algebra 1 ACPS Curriki Resources",
+            "favored": false,
             "model": "Project",
             "user": null
         }
@@ -15025,6 +15353,26 @@ response.json()</code></pre>
 <td>Array of user ids to match.</td>
 </tr>
 <tr>
+<td><code>startDate</code></td>
+<td>optional</td>
+<td>Start date for search by date range.</td>
+</tr>
+<tr>
+<td><code>endDate</code></td>
+<td>optional</td>
+<td>End date for search by date range.</td>
+</tr>
+<tr>
+<td><code>subjectIds</code></td>
+<td>optional</td>
+<td>Array of subject ids to match.</td>
+</tr>
+<tr>
+<td><code>educationLevelIds</code></td>
+<td>optional</td>
+<td>Array of education level ids to match.</td>
+</tr>
+<tr>
 <td><code>h5pLibraries</code></td>
 <td>optional</td>
 <td>Array of h5p libraries to match.</td>
@@ -15059,12 +15407,12 @@ response.json()</code></pre>
 <!-- END_4b2e2ae3f1de524eb15d380dcb1e3edb -->
 <!-- START_67954e7bd18d69bbd176c2502d0973ba -->
 <h2>Dashboard search</h2>
-<p>Dashboard search for projects, playlists and activities irrespective of isPublic and elasticsearch status</p>
+<p>Dashboard search for projects, playlists and activities irrespective of indexing status</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/search/dashboard?query=test&amp;negativeQuery=badword&amp;isPublic=1&amp;elasticsearch=0&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://local.api-studio.com/api/v1/search/dashboard?query=test&amp;negativeQuery=badword&amp;indexing=%5B3%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
@@ -15074,10 +15422,11 @@ response.json()</code></pre>
 let params = {
     "query": "test",
     "negativeQuery": "badword",
-    "isPublic": "1",
-    "elasticsearch": "0",
+    "indexing": "[3]",
     "startDate": "2020-04-30 00:00:00",
     "endDate": "2020-04-30 23:59:59",
+    "subjectIds": "['ComputerScience']",
+    "educationLevelIds": "['Preschool (Ages 0-4)']",
     "h5pLibraries": "['H5P.InteractiveVideo 1.21']",
     "model": "activities",
     "sort": "created_at",
@@ -15111,10 +15460,11 @@ $response = $client-&gt;get(
         'query' =&gt; [
             'query'=&gt; 'test',
             'negativeQuery'=&gt; 'badword',
-            'isPublic'=&gt; '1',
-            'elasticsearch'=&gt; '0',
+            'indexing'=&gt; '[3]',
             'startDate'=&gt; '2020-04-30 00:00:00',
             'endDate'=&gt; '2020-04-30 23:59:59',
+            'subjectIds'=&gt; '['ComputerScience']',
+            'educationLevelIds'=&gt; '['Preschool (Ages 0-4)']',
             'h5pLibraries'=&gt; '['H5P.InteractiveVideo 1.21']',
             'model'=&gt; 'activities',
             'sort'=&gt; 'created_at',
@@ -15133,10 +15483,11 @@ url = 'http://local.api-studio.com/api/v1/search/dashboard'
 params = {
   'query': 'test',
   'negativeQuery': 'badword',
-  'isPublic': '1',
-  'elasticsearch': '0',
+  'indexing': '[3]',
   'startDate': '2020-04-30 00:00:00',
   'endDate': '2020-04-30 23:59:59',
+  'subjectIds': '['ComputerScience']',
+  'educationLevelIds': '['Preschool (Ages 0-4)']',
   'h5pLibraries': '['H5P.InteractiveVideo 1.21']',
   'model': 'activities',
   'sort': 'created_at',
@@ -15184,6 +15535,7 @@ response.json()</code></pre>
             "thumb_url": "\/storage\/uploads\/5f4013d35ec0e.png",
             "title": "Globalization, Robots and You",
             "description": "You have important decisions to make about your educations and career – wouldn’t it be nice if you could better understand the forces of globalization and automation first? What information do you need to gauge salary prospects, the risk of automation, and foreign competition as you compare your options?",
+            "favored": false,
             "model": "Project",
             "user": null
         }
@@ -15201,41 +15553,41 @@ response.json()</code></pre>
 <pre><code class="language-json">{
     "data": [
         {
-            "id": 181095,
+            "id": 302132,
             "thumb_url": "https:\/\/fivestarmartialartsjackson.com\/wp-content\/uploads\/2017\/04\/default-image.jpg",
-            "title": "QUIZ: What tool is this?",
+            "title": "Exploring Yosemite",
             "model": "Activity",
             "user": {
-                "id": 1575,
-                "first_name": "Irene",
-                "last_name": "Hernandez",
-                "email": "ihernandez@mcsk12nm.org",
-                "organization_name": "McCurdy Charter School",
+                "id": 15,
+                "first_name": "Kevin",
+                "last_name": "Brown",
+                "email": "KBrown@ocde.us",
+                "organization_name": "",
                 "organization_type": null,
-                "job_title": "3rd Grade Teacher",
+                "job_title": "",
                 "address": null,
                 "phone_number": null,
                 "website": null,
-                "subscribed": true
+                "subscribed": false
             }
         },
         {
-            "id": 181095,
+            "id": 302132,
             "thumb_url": "https:\/\/fivestarmartialartsjackson.com\/wp-content\/uploads\/2017\/04\/default-image.jpg",
-            "title": "QUIZ: What tool is this?",
+            "title": "Exploring Yosemite",
             "model": "Activity",
             "user": {
-                "id": 1575,
-                "first_name": "Irene",
-                "last_name": "Hernandez",
-                "email": "ihernandez@mcsk12nm.org",
-                "organization_name": "McCurdy Charter School",
+                "id": 15,
+                "first_name": "Kevin",
+                "last_name": "Brown",
+                "email": "KBrown@ocde.us",
+                "organization_name": "",
                 "organization_type": null,
-                "job_title": "3rd Grade Teacher",
+                "job_title": "",
                 "address": null,
                 "phone_number": null,
                 "website": null,
-                "subscribed": true
+                "subscribed": false
             }
         }
     ]
@@ -15263,14 +15615,9 @@ response.json()</code></pre>
 <td>Terms that should not exist.</td>
 </tr>
 <tr>
-<td><code>isPublic</code></td>
+<td><code>indexing</code></td>
 <td>optional</td>
-<td>Public access enabled or disabled.</td>
-</tr>
-<tr>
-<td><code>elasticsearch</code></td>
-<td>optional</td>
-<td>Elasticsearch enabled or disabled.</td>
+<td>Indexing requested, approved or not approved.</td>
 </tr>
 <tr>
 <td><code>startDate</code></td>
@@ -15281,6 +15628,16 @@ response.json()</code></pre>
 <td><code>endDate</code></td>
 <td>optional</td>
 <td>End date for search by date range.</td>
+</tr>
+<tr>
+<td><code>subjectIds</code></td>
+<td>optional</td>
+<td>Array of subject ids to match.</td>
+</tr>
+<tr>
+<td><code>educationLevelIds</code></td>
+<td>optional</td>
+<td>Array of education level ids to match.</td>
 </tr>
 <tr>
 <td><code>h5pLibraries</code></td>
@@ -15315,7 +15672,5758 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_67954e7bd18d69bbd176c2502d0973ba -->
+<h1>14. Team</h1>
+<p>APIs for team management</p>
+<!-- START_27a081279577e3f6f78ba3a9814a7143 -->
+<h2>Invite Team Member</h2>
+<p>Invite a team member while creating a team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/teams/invite" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"id":1,"email":"abby@curriki.org"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/invite"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "id": 1,
+    "email": "abby@curriki.org"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/teams/invite',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'id' =&gt; 1.0,
+            'email' =&gt; 'abby@curriki.org',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/invite'
+payload = {
+    "id": 1,
+    "email": "abby@curriki.org"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "invited": true
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "invited": false
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/teams/invite</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>number</td>
+<td>required</td>
+<td>The ID of a user</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>required</td>
+<td>The email corresponded to the user</td>
+</tr>
+</tbody>
+</table>
+<!-- END_27a081279577e3f6f78ba3a9814a7143 -->
+<!-- START_af01dd42f1456d1a189e3565718c295d -->
+<h2>Invite Team Member</h2>
+<p>Invite a team member to the team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/teams/1/invite" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"email":"abby@curriki.org"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/1/invite"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "email": "abby@curriki.org"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/teams/1/invite',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'email' =&gt; 'abby@curriki.org',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/1/invite'
+payload = {
+    "email": "abby@curriki.org"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "User has been invited to the team successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (403):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You do not have permission to invite user to the team."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to invite user to the team."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/teams/{team}/invite</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>required</td>
+<td>The email of the user</td>
+</tr>
+</tbody>
+</table>
+<!-- END_af01dd42f1456d1a189e3565718c295d -->
+<!-- START_32ba803ff8ac2655c4962881dcfd5956 -->
+<h2>Remove Team Member</h2>
+<p>remove a team member to the team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/teams/1/remove" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"id":1}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/1/remove"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "id": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/teams/1/remove',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'id' =&gt; 1,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/1/remove'
+payload = {
+    "id": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "User has been removed from the team successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (403):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You do not have permission to remove user from the team."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to remove user from the team."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/teams/{team}/remove</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>The Id of the user</td>
+</tr>
+</tbody>
+</table>
+<!-- END_32ba803ff8ac2655c4962881dcfd5956 -->
+<!-- START_468567280d86e75bf96ad9765932b723 -->
+<h2>Add Projects to the Team</h2>
+<p>Add projects to the team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/teams/1/add-projects" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"ids":"[1]"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/1/add-projects"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "ids": "[1]"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/teams/1/add-projects',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'ids' =&gt; '[1]',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/1/add-projects'
+payload = {
+    "ids": "[1]"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Projects have been added to the team successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (403):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You do not have permission to add projects to the team."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to add projects to the team."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/teams/{team}/add-projects</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ids</code></td>
+<td>array</td>
+<td>required</td>
+<td>The list of the project Ids to add</td>
+</tr>
+</tbody>
+</table>
+<!-- END_468567280d86e75bf96ad9765932b723 -->
+<!-- START_cda3666edcf2ff11d3a2f2ba2f03e265 -->
+<h2>Remove Project from the Team</h2>
+<p>Remove a project from the team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/teams/1/remove-project" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"id":1}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/1/remove-project"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "id": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/teams/1/remove-project',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'id' =&gt; 1,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/1/remove-project'
+payload = {
+    "id": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Project has been removed from the team successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (403):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You do not have permission to remove project from the team."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to remove project from the team."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/teams/{team}/remove-project</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>The Id of the project to remove</td>
+</tr>
+</tbody>
+</table>
+<!-- END_cda3666edcf2ff11d3a2f2ba2f03e265 -->
+<!-- START_e6c3e7d31143e75a7880693974dd0790 -->
+<h2>Add Members to the Team Project</h2>
+<p>Add members to a specified project of specified team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/teams/1/projects/1/add-members" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"ids":"[1]"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/1/projects/1/add-members"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "ids": "[1]"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/teams/1/projects/1/add-members',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'ids' =&gt; '[1]',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/1/projects/1/add-members'
+payload = {
+    "ids": "[1]"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Members have been added to the team project successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (403):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You do not have permission to add members to the team project."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to add members to the team project."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/teams/{team}/projects/{project}/add-members</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ids</code></td>
+<td>array</td>
+<td>required</td>
+<td>The list of the member Ids to add</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e6c3e7d31143e75a7880693974dd0790 -->
+<!-- START_1c3c131ff8f1b33e8af840aea128052f -->
+<h2>Remove Member from the Team Project</h2>
+<p>Remove member from a specified project of specified team.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"id":1}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "id": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'id' =&gt; 1,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member'
+payload = {
+    "id": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Member has been removed from the team project successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (403):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You do not have permission to remove member from the team project."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to remove member from the team project."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/teams/{team}/projects/{project}/remove-member</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>The Id of the member to remove</td>
+</tr>
+</tbody>
+</table>
+<!-- END_1c3c131ff8f1b33e8af840aea128052f -->
+<!-- START_f6de42238cfe6bcbd84ba30779151c10 -->
+<h2>Remove Team</h2>
+<p>Remove the specified team of a user.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://local.api-studio.com/api/v1/teams/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/teams/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://local.api-studio.com/api/v1/teams/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/teams/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Team has been deleted successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to delete team."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/teams/{team}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>team</code></td>
+<td>required</td>
+<td>The Id of a team</td>
+</tr>
+</tbody>
+</table>
+<!-- END_f6de42238cfe6bcbd84ba30779151c10 -->
+<h1>1001. Admin/Users</h1>
+<p>APIs for users on admin panel.</p>
+<!-- START_fe0f34240799837f8ceb6d2b43ba5ac7 -->
+<h2>Users Basic Report</h2>
+<p>Returns the paginated response of the users with basic reporting (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/users/report/basic?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users/report/basic"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/users/report/basic',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users/report/basic'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 1242,
+            "first_name": "123security",
+            "last_name": "products",
+            "email": "wirelessproducts.wl@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        },
+        {
+            "id": 824,
+            "first_name": "168xoso",
+            "last_name": "com",
+            "email": "168xosocom@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        }
+    ],
+    "first_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=1",
+    "from": 1,
+    "last_page": 816,
+    "last_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=816",
+    "next_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=2",
+    "path": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic",
+    "per_page": "2",
+    "prev_page_url": null,
+    "to": 2,
+    "total": 1632
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/users/report/basic</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_fe0f34240799837f8ceb6d2b43ba5ac7 -->
+<!-- START_25676ed5ebaafc1daa224c7a86b89348 -->
+<h2>Bulk Import</h2>
+<p>Bulk import the users from CSV file.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/users/bulk/import" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"import_file":"nesciunt"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users/bulk/import"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "import_file": "nesciunt"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/users/bulk/import',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'import_file' =&gt; 'nesciunt',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users/bulk/import'
+payload = {
+    "import_file": "nesciunt"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (206):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to import some rows data, please download detailed error report."
+    ],
+    "report": "https:\/\/currikistudio.org\/api\/storage\/temporary\/users-import-report.csv"
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "All users data imported successfully!"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Empty or bad formatted file, please download sample file for proper format."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/users/bulk/import</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>import_file</code></td>
+<td>file</td>
+<td>required</td>
+<td>The import file must be a file of type: CSV.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_25676ed5ebaafc1daa224c7a86b89348 -->
+<!-- START_ef52cb1e3190f07a381bee96496d9e42 -->
+<h2>Change User Role</h2>
+<p>Make any user admin or remove from admin.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/users/1/roles/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users/1/roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/users/1/roles/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users/1/roles/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "User role is changed successfully!"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You cannot change the role of yourself."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/users/{user}/roles/{role}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>required</td>
+<td>The Id of a user.</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>required</td>
+<td>Role 0 or 1, 1 for making admin, 0 for removing from admin.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ef52cb1e3190f07a381bee96496d9e42 -->
+<!-- START_ce6b124894a429e5cdb7415c0d8a91fb -->
+<h2>Get All Users</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/users?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/users',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1242,
+            "name": "123security products",
+            "email": "wirelessproducts.wl@gmail.com",
+            "first_name": "123security",
+            "last_name": "products",
+            "job_title": "123securityproducts",
+            "organization_type": "Architecture design",
+            "is_admin": false,
+            "organization_name": "North Kansas City Schools"
+        },
+        {
+            "id": 824,
+            "name": "168xoso com",
+            "email": "168xosocom@gmail.com",
+            "first_name": "168xoso",
+            "last_name": "com",
+            "job_title": "",
+            "organization_type": "K-12",
+            "is_admin": false,
+            "organization_name": "North Kansas City Schools"
+        }
+    ],
+    "links": {
+        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=1",
+        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=66",
+        "prev": null,
+        "next": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 66,
+        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users",
+        "per_page": "25",
+        "to": 25,
+        "total": 1632
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/users</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ce6b124894a429e5cdb7415c0d8a91fb -->
+<!-- START_521e32c7d2ba5e2282925ea8a26584bc -->
+<h2>Create User</h2>
+<p>Creates the new user in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/users" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/users',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'first_name' =&gt; 'Ahmad',
+            'last_name' =&gt; 'Mukhtar',
+            'organization_name' =&gt; 'Studio',
+            'organization_type' =&gt; 'K-12',
+            'job_title' =&gt; '2',
+            'email' =&gt; 'ahmedmukhtar1133@gmail.com',
+            'password' =&gt; 'kljd@Fi4R',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users'
+payload = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "User created successfully!",
+    "data": [
+        "Created User Data Array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create user, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/users</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>first_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>First name of the user.</td>
+</tr>
+<tr>
+<td><code>last_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Last name of the user.</td>
+</tr>
+<tr>
+<td><code>organization_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Organization name.</td>
+</tr>
+<tr>
+<td><code>organization_type</code></td>
+<td>string</td>
+<td>required</td>
+<td>Valid organization type.</td>
+</tr>
+<tr>
+<td><code>job_title</code></td>
+<td>string</td>
+<td>required</td>
+<td>Job title of the user in organization.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>email</td>
+<td>required</td>
+<td>Unique email for registration.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>password</td>
+<td>required</td>
+<td>Must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_521e32c7d2ba5e2282925ea8a26584bc -->
+<!-- START_effe89f830caf4daa978f55524698087 -->
+<h2>Get User</h2>
+<p>Get the specified user data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/users/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 1,
+        "name": "Sample User",
+        "email": "sample_user@test.com",
+        "first_name": "Sample",
+        "last_name": "User",
+        "job_title": "Developer",
+        "organization_type": "Architecture design",
+        "is_admin": true,
+        "organization_name": "North Kansas City Schools",
+        "projects": [
+            {
+                "id": 9874,
+                "name": "Activity Sampler",
+                "description": "Studio Demos",
+                "thumb_url": "",
+                "shared": true,
+                "starter_project": false,
+                "is_user_starter": true,
+                "cloned_from": 68,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "09-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 9952,
+                "name": "Activity Sampler",
+                "description": "Studio Demos",
+                "thumb_url": "",
+                "shared": true,
+                "starter_project": false,
+                "is_user_starter": true,
+                "cloned_from": 68,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "09-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 80127,
+                "name": "Testing creation",
+                "description": "Testing after creation.",
+                "thumb_url": "https:\/\/images.pexels.com\/photos\/3169299\/pexels-photo-3169299.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "15-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 80071,
+                "name": "Test",
+                "description": "test",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 2,
+                "status_text": "FINISHED",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "13-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 80074,
+                "name": "Boolean Type Cast Testing",
+                "description": "Test",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 2,
+                "status_text": "FINISHED",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "13-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 2118,
+                "name": "How well do you know?",
+                "description": "How well do you know me?",
+                "thumb_url": "",
+                "shared": true,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "16-Sep-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 2170,
+                "name": "Math Review",
+                "description": "Math Review Unit 2",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "16-Sep-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 2169,
+                "name": "Test",
+                "description": "Exit Ticket test",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "16-Sep-2020",
+                "updated_at": "15-Oct-2020"
+            }
+        ]
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/users/{user}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>required</td>
+<td>The Id of a user</td>
+</tr>
+</tbody>
+</table>
+<!-- END_effe89f830caf4daa978f55524698087 -->
+<!-- START_4bfaf4c2bfaf88b96536e717be6b0e62 -->
+<h2>Update User</h2>
+<p>Updates the user data in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://local.api-studio.com/api/v1/admin/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://local.api-studio.com/api/v1/admin/users/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'first_name' =&gt; 'Ahmad',
+            'last_name' =&gt; 'Mukhtar',
+            'organization_name' =&gt; 'Studio',
+            'organization_type' =&gt; 'K-12',
+            'job_title' =&gt; '2',
+            'email' =&gt; 'ahmedmukhtar1133@gmail.com',
+            'password' =&gt; 'kljd@Fi4R',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users/1'
+payload = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "User data updated successfully!",
+    "data": [
+        "Updated User Data Array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update user, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/admin/users/{user}</code></p>
+<p><code>PATCH api/v1/admin/users/{user}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>required</td>
+<td>The Id of a user</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>first_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>First name of the user.</td>
+</tr>
+<tr>
+<td><code>last_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Last name of the user.</td>
+</tr>
+<tr>
+<td><code>organization_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Organization name.</td>
+</tr>
+<tr>
+<td><code>organization_type</code></td>
+<td>string</td>
+<td>required</td>
+<td>Valid organization type.</td>
+</tr>
+<tr>
+<td><code>job_title</code></td>
+<td>string</td>
+<td>required</td>
+<td>Job title of the user in organization.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>email</td>
+<td>required</td>
+<td>Valid Email.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>password</td>
+<td>required</td>
+<td>Must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_4bfaf4c2bfaf88b96536e717be6b0e62 -->
+<!-- START_ff019bc7db8f5be9ac8699027d67f85c -->
+<h2>Delete User</h2>
+<p>Deletes the user record from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://local.api-studio.com/api/v1/admin/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://local.api-studio.com/api/v1/admin/users/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You cannot delete your own user."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete user, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/admin/users/{user}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>required</td>
+<td>The Id of a user</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ff019bc7db8f5be9ac8699027d67f85c -->
+<!-- START_f8dcc97e33f92cce8410917973a81b60 -->
+<h2>Download Sample File</h2>
+<p>Download import sample file for users.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/users/import/sample-file" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/users/import/sample-file"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/users/import/sample-file',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/users/import/sample-file'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "file": "Downloadable sample file."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Sample file not found!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/users/import/sample-file</code></p>
+<!-- END_f8dcc97e33f92cce8410917973a81b60 -->
+<h1>1002. Admin/Activity Types</h1>
+<p>APIs for activity types on admin panel.</p>
+<!-- START_197c7d7cd44f76b20d2c1e30e9875bcf -->
+<h2>Get All Activity Types</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/activity-types?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-types"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/activity-types',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-types'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 7,
+            "title": "Audio",
+            "order": 0,
+            "image": "\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+            "activityItems": [
+                {
+                    "id": 52,
+                    "title": "Spoken Answers",
+                    "description": "Voice recognition activity that the learner can answered with their own voice.",
+                    "order": 3,
+                    "activity_type_id": 7,
+                    "type": "h5p",
+                    "h5pLib": "H5P.SpeakTheWords 1.3",
+                    "image": "\/storage\/uploads\/7iyRffLSS9QdFKCazDuDetl6WPk4BQP8tEP2eeuJ.png",
+                    "created_at": "2020-09-12T01:16:52.000000Z",
+                    "updated_at": "2020-09-12T01:16:52.000000Z",
+                    "deleted_at": null,
+                    "demo_activity_id": "769",
+                    "demo_video_id": "https:\/\/youtu.be\/lgzsJDcMvPI"
+                },
+                {
+                    "id": 50,
+                    "title": "Audio Recorder",
+                    "description": "Record your voice and play back or download a .wav file of your recording.",
+                    "order": 1,
+                    "activity_type_id": 7,
+                    "type": "h5p",
+                    "h5pLib": "H5P.AudioRecorder 1.0",
+                    "image": "\/storage\/uploads\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+                    "created_at": "2020-09-12T01:16:52.000000Z",
+                    "updated_at": "2020-09-12T01:16:52.000000Z",
+                    "deleted_at": null,
+                    "demo_activity_id": "768",
+                    "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg"
+                },
+                {
+                    "id": 51,
+                    "title": "Dictation",
+                    "description": "A tool to create dictation exercises",
+                    "order": 2,
+                    "activity_type_id": 7,
+                    "type": "h5p",
+                    "h5pLib": "H5P.Dictation 1.0",
+                    "image": "\/storage\/uploads\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                    "created_at": "2020-09-12T01:16:52.000000Z",
+                    "updated_at": "2020-09-12T01:16:52.000000Z",
+                    "deleted_at": null,
+                    "demo_activity_id": "767",
+                    "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY"
+                }
+            ],
+            "created_at": null,
+            "updated_at": null
+        },
+        {
+            "id": 13,
+            "title": "Audio",
+            "order": 0,
+            "image": "\/storage\/activity-types\/audio.png",
+            "activityItems": [],
+            "created_at": null,
+            "updated_at": null
+        }
+    ],
+    "links": {
+        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-types?page=1",
+        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-types?page=6",
+        "prev": null,
+        "next": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-types?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 6,
+        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-types",
+        "per_page": "2",
+        "to": 2,
+        "total": 12
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/activity-types</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_197c7d7cd44f76b20d2c1e30e9875bcf -->
+<!-- START_be74407f085cafa8c03238e489fa014d -->
+<h2>Create Activity Type</h2>
+<p>Creates the new activity type in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/activity-types" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Audio","image":"itaque","order":1}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-types"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Audio",
+    "image": "itaque",
+    "order": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/activity-types',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'title' =&gt; 'Audio',
+            'image' =&gt; 'itaque',
+            'order' =&gt; 1,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-types'
+payload = {
+    "title": "Audio",
+    "image": "itaque",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Activity type created successfully!",
+    "data": [
+        "Created activity type data array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create activity type, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/activity-types</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>required</td>
+<td>Activity Item Title.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>image</td>
+<td>required</td>
+<td>Valid Image.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>required</td>
+<td>At what order it should appear.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_be74407f085cafa8c03238e489fa014d -->
+<!-- START_1c8c52e2bf26d886997e6d019cc66a99 -->
+<h2>Get Activity Type</h2>
+<p>Get the specified Activity Type data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/activity-types/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-types/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/activity-types/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-types/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 7,
+        "title": "Audio",
+        "order": 0,
+        "image": "\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+        "activityItems": [
+            {
+                "id": 52,
+                "title": "Spoken Answers",
+                "description": "Voice recognition activity that the learner can answered with their own voice.",
+                "order": 3,
+                "activity_type_id": 7,
+                "type": "h5p",
+                "h5pLib": "H5P.SpeakTheWords 1.3",
+                "image": "\/storage\/uploads\/7iyRffLSS9QdFKCazDuDetl6WPk4BQP8tEP2eeuJ.png",
+                "created_at": "2020-09-12T01:16:52.000000Z",
+                "updated_at": "2020-09-12T01:16:52.000000Z",
+                "deleted_at": null,
+                "demo_activity_id": "769",
+                "demo_video_id": "https:\/\/youtu.be\/lgzsJDcMvPI"
+            },
+            {
+                "id": 50,
+                "title": "Audio Recorder",
+                "description": "Record your voice and play back or download a .wav file of your recording.",
+                "order": 1,
+                "activity_type_id": 7,
+                "type": "h5p",
+                "h5pLib": "H5P.AudioRecorder 1.0",
+                "image": "\/storage\/uploads\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+                "created_at": "2020-09-12T01:16:52.000000Z",
+                "updated_at": "2020-09-12T01:16:52.000000Z",
+                "deleted_at": null,
+                "demo_activity_id": "768",
+                "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg"
+            },
+            {
+                "id": 51,
+                "title": "Dictation",
+                "description": "A tool to create dictation exercises",
+                "order": 2,
+                "activity_type_id": 7,
+                "type": "h5p",
+                "h5pLib": "H5P.Dictation 1.0",
+                "image": "\/storage\/uploads\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                "created_at": "2020-09-12T01:16:52.000000Z",
+                "updated_at": "2020-09-12T01:16:52.000000Z",
+                "deleted_at": null,
+                "demo_activity_id": "767",
+                "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY"
+            }
+        ],
+        "created_at": null,
+        "updated_at": null
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/activity-types/{activity_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activity_type</code></td>
+<td>required</td>
+<td>The Id of a activity type</td>
+</tr>
+</tbody>
+</table>
+<!-- END_1c8c52e2bf26d886997e6d019cc66a99 -->
+<!-- START_6a8b9fca09620ddb62fe64d5ed11234a -->
+<h2>Update Activity Type</h2>
+<p>Updates the activity type in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://local.api-studio.com/api/v1/admin/activity-types/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Audio","image":"ut","order":1}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-types/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Audio",
+    "image": "ut",
+    "order": 1
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://local.api-studio.com/api/v1/admin/activity-types/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'title' =&gt; 'Audio',
+            'image' =&gt; 'ut',
+            'order' =&gt; 1,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-types/1'
+payload = {
+    "title": "Audio",
+    "image": "ut",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Activity type data updated successfully!",
+    "data": [
+        "Updated activity type data array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update activity type, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/admin/activity-types/{activity_type}</code></p>
+<p><code>PATCH api/v1/admin/activity-types/{activity_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activity_type</code></td>
+<td>required</td>
+<td>The Id of a activity type</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>required</td>
+<td>Activity Item Title.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>image</td>
+<td>required</td>
+<td>Valid Image.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>required</td>
+<td>At what order it should appear.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_6a8b9fca09620ddb62fe64d5ed11234a -->
+<!-- START_572751e0107e5bc634e1ac0587093211 -->
+<h2>Delete Activity Type</h2>
+<p>Deletes the activity type from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://local.api-studio.com/api/v1/admin/activity-types/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-types/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://local.api-studio.com/api/v1/admin/activity-types/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-types/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete activity type, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/admin/activity-types/{activity_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activity_type</code></td>
+<td>required</td>
+<td>The Id of a activity type</td>
+</tr>
+</tbody>
+</table>
+<!-- END_572751e0107e5bc634e1ac0587093211 -->
+<h1>1003. Admin/Activity Items</h1>
+<p>APIs for activity items on admin panel.</p>
+<!-- START_df6d8716f17197a140172f39a46dd818 -->
+<h2>Get All Activity Items</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/activity-items?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-items"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/activity-items',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-items'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 81,
+            "title": "Arithmetic Quiz",
+            "description": "Time based arithmetic exam builder",
+            "order": 2,
+            "activityType": {
+                "id": 11,
+                "title": "Questions",
+                "order": 0,
+                "image": "\/storage\/uploads\/E9wUgZpAvbmzogYIZYyABuWlvSIJPNYEFDqqL1rt.png",
+                "created_at": null,
+                "updated_at": null
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.ArithmeticQuiz 1.1",
+            "image": "\/storage\/uploads\/V2EzpoGzJi7F9KmWCUCwLF8uXKvr8Nsaunq6Uzw6.png",
+            "demo_activity_id": "730",
+            "demo_video_id": "https:\/\/youtu.be\/Z61BUoL6k1Y",
+            "created_at": "2020-09-12T01:16:52.000000Z",
+            "updated_at": "2020-09-12T01:16:52.000000Z"
+        },
+        {
+            "id": 87,
+            "title": "Personality Quiz",
+            "description": "Build your own personality quiz",
+            "order": 8,
+            "activityType": {
+                "id": 11,
+                "title": "Questions",
+                "order": 0,
+                "image": "\/storage\/uploads\/E9wUgZpAvbmzogYIZYyABuWlvSIJPNYEFDqqL1rt.png",
+                "created_at": null,
+                "updated_at": null
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.PersonalityQuiz 1.0",
+            "image": "\/storage\/uploads\/jdHy6THv8aZLNrEdy3REa9aKZHcFdM6UXH3Lk7Nz.png",
+            "demo_activity_id": "739",
+            "demo_video_id": " https:\/\/youtu.be\/zY8CTNn5LVA",
+            "created_at": "2020-09-12T01:16:52.000000Z",
+            "updated_at": "2020-09-12T01:16:52.000000Z"
+        }
+    ],
+    "links": {
+        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-items?page=1",
+        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-items?page=2",
+        "prev": null,
+        "next": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-items?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 2,
+        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/activity-items",
+        "per_page": "2",
+        "to": 2,
+        "total": 3
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/activity-items</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_df6d8716f17197a140172f39a46dd818 -->
+<!-- START_92bea385086e8c01571b78a10df594c8 -->
+<h2>Create Activity Item</h2>
+<p>Creates the new activity item in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/activity-items" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"quaerat","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-items"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Math",
+    "description": "Create Math activities.",
+    "demo_activity_id": 1,
+    "demo_video_id": 1,
+    "image": "quaerat",
+    "order": 1,
+    "type": "h5p",
+    "activity_type_id": 1,
+    "h5pLib": "H5P.DocumentsUpload 1.0"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/activity-items',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'title' =&gt; 'Math',
+            'description' =&gt; 'Create Math activities.',
+            'demo_activity_id' =&gt; 1,
+            'demo_video_id' =&gt; 1,
+            'image' =&gt; 'quaerat',
+            'order' =&gt; 1,
+            'type' =&gt; 'h5p',
+            'activity_type_id' =&gt; 1,
+            'h5pLib' =&gt; 'H5P.DocumentsUpload 1.0',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-items'
+payload = {
+    "title": "Math",
+    "description": "Create Math activities.",
+    "demo_activity_id": 1,
+    "demo_video_id": 1,
+    "image": "quaerat",
+    "order": 1,
+    "type": "h5p",
+    "activity_type_id": 1,
+    "h5pLib": "H5P.DocumentsUpload 1.0"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Activity item created successfully!",
+    "data": [
+        "Created activity item data array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create activity item, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/activity-items</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>required</td>
+<td>Activity Item Title.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>text</td>
+<td>required</td>
+<td>Short description of activity item.</td>
+</tr>
+<tr>
+<td><code>demo_activity_id</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>Demo Activity Id.</td>
+</tr>
+<tr>
+<td><code>demo_video_id</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>Demo Video ID.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>image</td>
+<td>required</td>
+<td>Valid Image.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>required</td>
+<td>At what order it should appear.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>string</td>
+<td>required</td>
+<td>H5P OR Immersive Reader.</td>
+</tr>
+<tr>
+<td><code>activity_type_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Integer ID of parent activity type.</td>
+</tr>
+<tr>
+<td><code>h5pLib</code></td>
+<td>string</td>
+<td>required</td>
+<td>H5P activity name &amp; version.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_92bea385086e8c01571b78a10df594c8 -->
+<!-- START_bb884f911c1bc5348c85017679f2680a -->
+<h2>Get Activity Item</h2>
+<p>Get the specified Activity Item data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/activity-items/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-items/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/activity-items/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-items/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 53,
+        "title": "Accordion",
+        "description": "An activity that creates accessible (WAI-ARIA enabled) accordions",
+        "order": 1,
+        "activityType": {
+            "id": 8,
+            "title": "Informational",
+            "order": 0,
+            "image": "\/storage\/uploads\/O8M6MvWrdtqrZSczhzzbTdCCDulrKxLJslYTzcwL.png",
+            "created_at": null,
+            "updated_at": null
+        },
+        "type": "h5p",
+        "h5pLib": "H5P.Accordion 1.0",
+        "image": "\/storage\/uploads\/XprFXn7YfIpu6gBe8atabONmxDHwqfK5wdSkjfkL.png",
+        "demo_activity_id": "763",
+        "demo_video_id": "https:\/\/youtu.be\/dVDFwhy93Vc",
+        "created_at": "2020-09-12T01:16:52.000000Z",
+        "updated_at": "2020-09-12T01:16:52.000000Z"
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/activity-items/{activity_item}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activity_item</code></td>
+<td>required</td>
+<td>The Id of a activity item</td>
+</tr>
+</tbody>
+</table>
+<!-- END_bb884f911c1bc5348c85017679f2680a -->
+<!-- START_d5360e88fb9f395c18bb9d6064c1aca3 -->
+<h2>Update Activity Item</h2>
+<p>Updates the activity item in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://local.api-studio.com/api/v1/admin/activity-items/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"occaecati","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-items/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Math",
+    "description": "Create Math activities.",
+    "demo_activity_id": 1,
+    "demo_video_id": 1,
+    "image": "occaecati",
+    "order": 1,
+    "type": "h5p",
+    "activity_type_id": 1,
+    "h5pLib": "H5P.DocumentsUpload 1.0"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://local.api-studio.com/api/v1/admin/activity-items/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'title' =&gt; 'Math',
+            'description' =&gt; 'Create Math activities.',
+            'demo_activity_id' =&gt; 1,
+            'demo_video_id' =&gt; 1,
+            'image' =&gt; 'occaecati',
+            'order' =&gt; 1,
+            'type' =&gt; 'h5p',
+            'activity_type_id' =&gt; 1,
+            'h5pLib' =&gt; 'H5P.DocumentsUpload 1.0',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-items/1'
+payload = {
+    "title": "Math",
+    "description": "Create Math activities.",
+    "demo_activity_id": 1,
+    "demo_video_id": 1,
+    "image": "occaecati",
+    "order": 1,
+    "type": "h5p",
+    "activity_type_id": 1,
+    "h5pLib": "H5P.DocumentsUpload 1.0"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Activity item data updated successfully!",
+    "data": [
+        "Updated activity item data array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update activity item, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/admin/activity-items/{activity_item}</code></p>
+<p><code>PATCH api/v1/admin/activity-items/{activity_item}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activity_item</code></td>
+<td>required</td>
+<td>The Id of a activity item</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string</td>
+<td>required</td>
+<td>Activity Item Title.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>text</td>
+<td>required</td>
+<td>Short description of activity item.</td>
+</tr>
+<tr>
+<td><code>demo_activity_id</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>Demo Activity Id.</td>
+</tr>
+<tr>
+<td><code>demo_video_id</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>Demo Video ID.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>image</td>
+<td>required</td>
+<td>Valid Image.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>required</td>
+<td>At what order it should appear.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>string</td>
+<td>required</td>
+<td>H5P OR Immersive Reader.</td>
+</tr>
+<tr>
+<td><code>activity_type_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Integer ID of parent activity type.</td>
+</tr>
+<tr>
+<td><code>h5pLib</code></td>
+<td>string</td>
+<td>required</td>
+<td>H5P activity name &amp; version.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_d5360e88fb9f395c18bb9d6064c1aca3 -->
+<!-- START_f2aa8766f56a4b6208a962284333bc6a -->
+<h2>Delete Activity Item</h2>
+<p>Deletes the activity item from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://local.api-studio.com/api/v1/admin/activity-items/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/activity-items/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://local.api-studio.com/api/v1/admin/activity-items/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/activity-items/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete activity item, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/admin/activity-items/{activity_item}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>activity_item</code></td>
+<td>required</td>
+<td>The Id of a activity item</td>
+</tr>
+</tbody>
+</table>
+<!-- END_f2aa8766f56a4b6208a962284333bc6a -->
+<h1>1004. Admin/Projects</h1>
+<p>APIs for projects on admin panel.</p>
+<!-- START_e06f1c2edc1efaf34e84485c6f1731b8 -->
+<h2>Projects indexing Bulk</h2>
+<p>Modify the index value of a projects in bulk.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/projects/indexes" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"index_projects":"[1,2,3]","index":3}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/projects/indexes"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "index_projects": "[1,2,3]",
+    "index": 3
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/projects/indexes',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'index_projects' =&gt; '[1,2,3]',
+            'index' =&gt; 3,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/projects/indexes'
+payload = {
+    "index_projects": "[1,2,3]",
+    "index": 3
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update indexes, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/projects/indexes</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index_projects</code></td>
+<td>array</td>
+<td>required</td>
+<td>Projects Ids array.</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>integer</td>
+<td>required</td>
+<td>New Integer Index Value, 1 =&gt; 'REQUESTED', 2 =&gt; 'NOT APPROVED', 3 =&gt; 'APPROVED'.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e06f1c2edc1efaf34e84485c6f1731b8 -->
+<!-- START_de3902c9d2f7f7c820e7fb0ed9abfd77 -->
+<h2>Starter Project Toggle</h2>
+<p>Toggle the starter flag of any project</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/projects/starter/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"projects":"[1,2,3]","flag":true}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/projects/starter/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "projects": "[1,2,3]",
+    "flag": true
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/projects/starter/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'projects' =&gt; '[1,2,3]',
+            'flag' =&gt; true,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/projects/starter/1'
+payload = {
+    "projects": "[1,2,3]",
+    "flag": true
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Choose at-least one project."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/projects/starter/{flag}</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>projects</code></td>
+<td>array</td>
+<td>required</td>
+<td>Projects Ids array.</td>
+</tr>
+<tr>
+<td><code>flag</code></td>
+<td>boolean</td>
+<td>required</td>
+<td>Selected projects remove or make starter.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_de3902c9d2f7f7c820e7fb0ed9abfd77 -->
+<!-- START_d72aa9bd32fa1e868d979411efd317b6 -->
+<h2>Project Indexing</h2>
+<p>Modify the index value of a project.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/projects/1/indexes/3" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/projects/1/indexes/3"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/projects/1/indexes/3',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/projects/1/indexes/3'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Invalid index value provided."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/projects/{project}/indexes/{index}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>project</code></td>
+<td>required</td>
+<td>Project Id.</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td>required</td>
+<td>New Integer Index Value, 1 =&gt; 'REQUESTED', 2 =&gt; 'NOT APPROVED', 3 =&gt; 'APPROVED'.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_d72aa9bd32fa1e868d979411efd317b6 -->
+<!-- START_a82b7707bfbb3bfb6a194b341f9d2bac -->
+<h2>Get the shared project</h2>
+<p>Get the specified project data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/projects/1/load-shared" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/projects/1/load-shared"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/projects/1/load-shared',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/projects/1/load-shared'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 1,
+        "name": "The Science of Golf",
+        "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+        "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+        "shared": false,
+        "indexing": 3,
+        "indexing_text": "APPROVED",
+        "created_at": "2020-04-30T20:03:12.000000Z",
+        "updated_at": "2020-10-27T14:39:05.000000Z",
+        "playlists": [
+            {
+                "id": 1,
+                "title": "The Engineering &amp; Design Behind Golf Balls",
+                "project_id": 1,
+                "created_at": null,
+                "updated_at": "2020-09-17T09:44:27.000000Z",
+                "activities": [
+                    {
+                        "id": 7,
+                        "type": "h5p",
+                        "title": "Famous Golf Holes",
+                        "library_name": "H5P.Flashcards",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 5,
+                        "type": "h5p",
+                        "title": "The Evolution of the Golf Ball",
+                        "library_name": "H5P.Timeline",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 6,
+                        "type": "h5p",
+                        "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                        "library_name": "H5P.InteractiveVideo",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 1,
+                        "type": "h5p",
+                        "title": "Science of Golf: Why Balls Have Dimples",
+                        "library_name": "H5P.InteractiveVideo",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 2,
+                        "type": "h5p",
+                        "title": "Physics and Golf Balls",
+                        "library_name": "H5P.Flashcards",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 3,
+                        "type": "h5p",
+                        "title": "Physics Vocabulary Study Guide",
+                        "library_name": "H5P.Accordion",
+                        "thumb_url": null
+                    },
+                    {
+                        "id": 4,
+                        "type": "h5p",
+                        "title": "Labeling Golf Ball - Principles of Physics",
+                        "library_name": "H5P.DragQuestion",
+                        "thumb_url": null
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "title": "Topic 2",
+                "project_id": 1,
+                "created_at": null,
+                "updated_at": "2020-09-17T09:44:27.000000Z",
+                "activities": [
+                    {
+                        "id": 8,
+                        "type": "h5p",
+                        "title": "Physics of a Golf Ball",
+                        "library_name": "H5P.DragQuestion",
+                        "thumb_url": null
+                    }
+                ]
+            }
+        ]
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/projects/{project}/load-shared</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>project</code></td>
+<td>required</td>
+<td>The Id of a project.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_a82b7707bfbb3bfb6a194b341f9d2bac -->
+<!-- START_fc2a4353e3093252e672968599713345 -->
+<h2>Get All Projects.</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/projects?mode=1&amp;indexing=1&amp;exclude_starter=0&amp;start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/projects"
+);
+
+let params = {
+    "mode": "1",
+    "indexing": "1",
+    "exclude_starter": "0",
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/projects',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'mode'=&gt; '1',
+            'indexing'=&gt; '1',
+            'exclude_starter'=&gt; '0',
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/projects'
+params = {
+  'mode': '1',
+  'indexing': '1',
+  'exclude_starter': '0',
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "name": "The Science of Golf",
+            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+            "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+            "shared": false,
+            "starter_project": false,
+            "is_user_starter": false,
+            "cloned_from": null,
+            "clone_ctr": 1,
+            "users": [],
+            "status": 2,
+            "status_text": "FINISHED",
+            "indexing": 3,
+            "indexing_text": "APPROVED",
+            "created_at": "30-Apr-2020",
+            "updated_at": "27-Oct-2020"
+        },
+        {
+            "id": 2,
+            "name": "Partner Content Projects",
+            "description": "Partner Content Projects",
+            "thumb_url": "\/storage\/uploads\/iSioSGpjqWFE9DawcwR1nRIAnb1DuJaTgwWX6bkm.jpeg",
+            "shared": false,
+            "starter_project": false,
+            "is_user_starter": false,
+            "cloned_from": null,
+            "clone_ctr": 0,
+            "users": [],
+            "status": 1,
+            "status_text": "DRAFT",
+            "indexing": null,
+            "indexing_text": "NOT REQUESTED",
+            "created_at": "30-Apr-2020",
+            "updated_at": "15-Oct-2020"
+        }
+    ],
+    "links": {
+        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/projects?page=1",
+        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/projects?page=10849",
+        "prev": null,
+        "next": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/projects?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 10849,
+        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/projects",
+        "per_page": "2",
+        "to": 2,
+        "total": 21697
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/projects</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td>optional</td>
+<td>1 for starter projects, 0 for non-starter. Default all.</td>
+</tr>
+<tr>
+<td><code>indexing</code></td>
+<td>optional</td>
+<td>Integer value, 1 =&gt; 'REQUESTED', 2 =&gt; 'NOT APPROVED', 3 =&gt; 'APPROVED'. Default None.</td>
+</tr>
+<tr>
+<td><code>exclude_starter</code></td>
+<td>optional</td>
+<td>Boolean value to exclude the user starter projects. Default false.</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_fc2a4353e3093252e672968599713345 -->
+<h1>1005. Admin/LMS Settings</h1>
+<p>APIs for lms settings on admin panel.</p>
+<!-- START_8f4fad2b19011e1c4fa626a51f418e6f -->
+<h2>Get All LMS Settings for listing.</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/lms-settings?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/lms-settings"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/lms-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/lms-settings'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "lms_url": "https:\/\/canvas2.curriki.org",
+            "lms_access_token": "282tzGgLDzJOQA1mJPunRArzDvJFdUp4tLNiGqh8jhvQ7oJzPBhIaUp2h5LF6cXg",
+            "site_name": "Curriki Canvas Site #2",
+            "lms_name": "canvas",
+            "lms_access_key": null,
+            "lms_access_secret": null,
+            "description": "Curriki Canvas Site 2",
+            "user_id": 3,
+            "created_at": "2020-08-27T18:38:27.000000Z",
+            "updated_at": "2020-08-27T18:38:27.000000Z",
+            "deleted_at": null,
+            "lti_client_id": null,
+            "lms_login_id": null,
+            "user": {
+                "id": 3,
+                "name": "Abby _",
+                "email": "abby@curriki.org",
+                "email_verified_at": "2020-09-11T23:52:44.000000Z",
+                "created_at": "2020-04-06T20:47:21.000000Z",
+                "updated_at": "2020-10-19T10:44:21.000000Z",
+                "first_name": "Abby",
+                "last_name": "_",
+                "organization_name": "",
+                "job_title": "",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "gapi_access_token": "{\"token_type\":\"Bearer\",\"access_token\":\"ya29.a0AfH6SMA9EL2ZjzTyPOIv3cgdm7VZ6JHJ3WHgqaaYZJY4X5mKhq417RjMKiCOS36tu1E3sOwNALtVBTamNE_XyNLeDak-xZuU4lAtLV1Ap0Gi19AN10vpj5Sg57AJ3KgrT4G3THYkGF3y0BZ4r38QhdAvydlpkfn_KwCZBQ\",\"scope\":\"email profile https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses openid https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses.readonly https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.email https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.topics https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.me https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.students https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.profile\",\"login_hint\":\"AJDLj6LgfEhLCFgVLEzicO4eYW1YOkD2Ocu__Xw4RutMMX9v-B-BEo_pAMXjGBSn6gx8S9fToe9FpA7M_OwrbGosxzx3LBuA28SCV2kIKwPd_qmJ2ctCRP4\",\"expires_in\":3599,\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiODNmMTgwMjNhODU1NTg3Zjk0MmU3NTEwMjI1MTEyMDg4N2Y3MjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE0MzA3NzE2NTQwNTMzODE4OTQzIiwiaGQiOiJjdXJyaWtpLm9yZyIsImVtYWlsIjoiYWJieUBjdXJyaWtpLm9yZyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiSXBlejh3cm5uUmU3Y3p6U1NidFlJdyIsIm5hbWUiOiJBYmJ5IFJvc3MiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2cwYUVyeDRwUE1ZOVRPQXJiZ01KX3ZybHdsSzB6SEdBNVp3dFlVPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFiYnkiLCJmYW1pbHlfbmFtZSI6IlJvc3MiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTYwMDM3NDQ4NywiZXhwIjoxNjAwMzc4MDg3LCJqdGkiOiI3NmUzNjU5M2I1NWEwYjhkMDBlZDZiODRmMmFmMmRiZmVkNDFhN2RhIn0.i9YToGr1CNLtk6zHX2f6dmP4PGB5ibyxFOFisPRvxe1YZvenGpyEh3MlSMkURvHzo2RGmYGkdhpJYHtn2b_TOqbsNsx61DUE4BTME5O_4-VcR-c_YDYFn6K3MpsrYLbSxDKTgdSJbA56B8-s726QzcFEixkU5mtaK5gbO4Zb32U94qF1_ziJ5XcEtaJt1kBY8oY15d3ubXJl-zLyh-fB9K4mqssqqWABbLAtJQycfx5x-9ks6iVHYXq-_tdnfadm7HBYROlcYzKc7VJkOAP5z-e05Zqx9C1NUXpW_-gFwiHazbC7_N_-UihSej2m3qULtIdgZMtT6fid4_LftXc38Q\",\"session_state\":{\"extraQueryParams\":{\"authuser\":\"1\"}},\"first_issued_at\":1600374485776,\"expires_at\":1600378084776,\"idpId\":\"google\"}",
+                "hubspot": true,
+                "subscribed": true,
+                "subscribed_ip": "192.168.96.10",
+                "membership_type_id": 2,
+                "temp_password": null
+            }
+        },
+        {
+            "id": 2,
+            "lms_url": "https:\/\/canvas2.curriki.org",
+            "lms_access_token": "282tzGgLDzJOQA1mJPunRArzDvJFdUp4tLNiGqh8jhvQ7oJzPBhIaUp2h5LF6cXg",
+            "site_name": "Curriki Canvas Site #2",
+            "lms_name": "canvas",
+            "lms_access_key": null,
+            "lms_access_secret": null,
+            "description": "Curriki Canvas Site 2",
+            "user_id": 726,
+            "created_at": "2020-08-27T18:38:27.000000Z",
+            "updated_at": "2020-08-27T18:38:27.000000Z",
+            "deleted_at": null,
+            "lti_client_id": null,
+            "lms_login_id": null,
+            "user": {
+                "id": 726,
+                "name": "Ayesha Jaleel",
+                "email": "muhammadqamar111@gmail.com",
+                "email_verified_at": "2020-09-11T23:56:57.000000Z",
+                "created_at": "2020-08-05T15:45:11.000000Z",
+                "updated_at": "2020-09-18T15:40:02.000000Z",
+                "first_name": "ayesha",
+                "last_name": "jaleel",
+                "organization_name": "",
+                "job_title": "",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "gapi_access_token": "{\"token_type\":\"Bearer\",\"access_token\":\"ya29.a0AfH6SMAL6MLPZFPPhVHV_T0I4NoKnQvgjZde3NVh9EN_iEIr9hZWv9z1l7kg2gEDKL4ytQQPZc4vfjWwibQoFX35kfBZK8IW4oFkloCWGVjUiVQpIv-l3b0_WZA_vrBtiX__rDAbbcsK5f_qQ6Q46PlNYwZpFrSb5sg63w\",\"scope\":\"email profile https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.email https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.me openid https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses.readonly https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.profile https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.students https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.topics\",\"login_hint\":\"AJDLj6LgfEhLCFgVLEzicO4eYW1YEG1H6Z_EdBO9DcPh7Mh4zecJPEER1aZQlAuK9EACWTStds1zX0LniLDNBCxyVGW-meWH65rQ5EKowzaeeKw9Whrf0AI\",\"expires_in\":3599,\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiODNmMTgwMjNhODU1NTg3Zjk0MmU3NTEwMjI1MTEyMDg4N2Y3MjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA2NzA0NTczOTgxNzI2MTQ5NDI5IiwiZW1haWwiOiJtdWhhbW1hZHFhbWFyMTExQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiS0JIT3JpdWJyQ0xyTVkzS01MN3lYdyIsIm5hbWUiOiJNdWhhbW1hZCBRYW1hciIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS0vQU9oMTRHaDNkcnhWRkQtb2xCRHRHc2JzWC1OOUJXdVNUYmlkcHpNTF9IUDkxZz1zOTYtYyIsImdpdmVuX25hbWUiOiJNdWhhbW1hZCIsImZhbWlseV9uYW1lIjoiUWFtYXIiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTYwMDQ0MzYwMiwiZXhwIjoxNjAwNDQ3MjAyLCJqdGkiOiJhZjI1NWI0Y2I5Y2FiMTcwZDc4ZTIzMjljNDU5OTM3MjlmYTA4MTY2In0.JTX2lWgOkyPpdvhP4ueLDR6zw0cY4reT6lK4HgOFJR4sGdhfsclDqD1Tw0r6XfTQQ_AjMnYz9cn-xGH5QyRShu9gGizCt3MeDFU62QiV9wyAgsSeXBxaL0eVD4Jt8eWg0pduaga9424Ov7iEJYT6owtwlPO0FZi9pROjOA9vbj9GUXEEwr-Qejv9UKxKhiZbnQhpyk9PCs5K9eTTdTTFUbNennRb4ZLPKVAek1PXQBMkQBOiH7gf6ycPUd-4HI9wHgj4ARqMpKIGpx-L3J7lod94M-0yRnvlzklivJay9EFvY31xQw1EbB0RcTkMBO9QppIkDGQ9ZxWQyhP1gt4FRA\",\"session_state\":{\"extraQueryParams\":{\"authuser\":\"0\"}},\"first_issued_at\":1600443602681,\"expires_at\":1600447201681,\"idpId\":\"google\"}",
+                "hubspot": true,
+                "subscribed": true,
+                "subscribed_ip": "172.18.0.12",
+                "membership_type_id": 2,
+                "temp_password": null
+            }
+        }
+    ],
+    "links": {
+        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/lms-settings?page=1",
+        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/lms-settings?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/lms-settings",
+        "per_page": "25",
+        "to": 2,
+        "total": 2
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/lms-settings</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8f4fad2b19011e1c4fa626a51f418e6f -->
+<!-- START_e75b6b178b609b7bd0cce5907371aa27 -->
+<h2>Create LMS Setting</h2>
+<p>Creates the new lms setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/lms-settings" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"lms_url":"https:\/\/google.com","lms_access_token":"abcafdgd343asgretgdasgadsfsdfdasgdagsadf","site_name":"Moodle Curriki","lti_client_id":"1","lms_login_id":"1","user_id":1,"lms_name":"Moodle","lms_access_key":"fdaskfasdkjghadskljgh54r325","lms_access_secret":"fasdjhjke4wh54354326","description":"Create LMS Setting for providing access to Moodle."}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/lms-settings"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "lms_url": "https:\/\/google.com",
+    "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
+    "site_name": "Moodle Curriki",
+    "lti_client_id": "1",
+    "lms_login_id": "1",
+    "user_id": 1,
+    "lms_name": "Moodle",
+    "lms_access_key": "fdaskfasdkjghadskljgh54r325",
+    "lms_access_secret": "fasdjhjke4wh54354326",
+    "description": "Create LMS Setting for providing access to Moodle."
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/lms-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'lms_url' =&gt; 'https://google.com',
+            'lms_access_token' =&gt; 'abcafdgd343asgretgdasgadsfsdfdasgdagsadf',
+            'site_name' =&gt; 'Moodle Curriki',
+            'lti_client_id' =&gt; '1',
+            'lms_login_id' =&gt; '1',
+            'user_id' =&gt; 1,
+            'lms_name' =&gt; 'Moodle',
+            'lms_access_key' =&gt; 'fdaskfasdkjghadskljgh54r325',
+            'lms_access_secret' =&gt; 'fasdjhjke4wh54354326',
+            'description' =&gt; 'Create LMS Setting for providing access to Moodle.',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/lms-settings'
+payload = {
+    "lms_url": "https:\/\/google.com",
+    "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
+    "site_name": "Moodle Curriki",
+    "lti_client_id": "1",
+    "lms_login_id": "1",
+    "user_id": 1,
+    "lms_name": "Moodle",
+    "lms_access_key": "fdaskfasdkjghadskljgh54r325",
+    "lms_access_secret": "fasdjhjke4wh54354326",
+    "description": "Create LMS Setting for providing access to Moodle."
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Setting created successfully!",
+    "data": [
+        "Created Setting Data Array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/lms-settings</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lms_url</code></td>
+<td>url</td>
+<td>required</td>
+<td>Valid LMS URL.</td>
+</tr>
+<tr>
+<td><code>lms_access_token</code></td>
+<td>string</td>
+<td>required</td>
+<td>Min 20 characters LMS Access Token.</td>
+</tr>
+<tr>
+<td><code>site_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Site Name.</td>
+</tr>
+<tr>
+<td><code>lti_client_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>LTI Client ID for reference.</td>
+</tr>
+<tr>
+<td><code>lms_login_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>LMS Login ID for reference.</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>lms_name</code></td>
+<td>string</td>
+<td>optional</td>
+<td>LMS name for which setting is being configured.</td>
+</tr>
+<tr>
+<td><code>lms_access_key</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Access key for LMS.</td>
+</tr>
+<tr>
+<td><code>lms_access_secret</code></td>
+<td>string</td>
+<td>required</td>
+<td>Secret key is required if Access Key is provided.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>text</td>
+<td>required</td>
+<td>Brief description.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e75b6b178b609b7bd0cce5907371aa27 -->
+<!-- START_2f2758b0abc25e98982d44b733c0347d -->
+<h2>Get LMS Setting</h2>
+<p>Get the specified lms setting data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/lms-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/lms-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/lms-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/lms-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 1,
+        "lms_url": "https:\/\/canvas2.curriki.org",
+        "lms_access_token": "282tzGgLDzJOQA1mJPunRArzDvJFdUp4tLNiGqh8jhvQ7oJzPBhIaUp2h5LF6cXg",
+        "site_name": "Curriki Canvas Site #2",
+        "lti_client_id": null,
+        "lms_login_id": null,
+        "lms_name": "canvas",
+        "lms_access_key": null,
+        "lms_access_secret": null,
+        "description": "Curriki Canvas Site 2",
+        "user_id": 3,
+        "user": {
+            "id": 3,
+            "name": "Abby _",
+            "email": "abby@curriki.org",
+            "first_name": "Abby",
+            "last_name": "_",
+            "job_title": "",
+            "organization_type": null,
+            "is_admin": false,
+            "organization_name": ""
+        }
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/lms-settings/{lms_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lms_setting</code></td>
+<td>required</td>
+<td>The Id of a lms setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_2f2758b0abc25e98982d44b733c0347d -->
+<!-- START_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+<h2>Update LMS Setting</h2>
+<p>Updates the lms setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://local.api-studio.com/api/v1/admin/lms-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"lms_url":"https:\/\/google.com","lms_access_token":"abcafdgd343asgretgdasgadsfsdfdasgdagsadf","site_name":"Moodle Curriki","lti_client_id":"1","lms_login_id":"1","user_id":1,"lms_name":"Moodle","lms_access_key":"fdaskfasdkjghadskljgh54r325","lms_access_secret":"fasdjhjke4wh54354326","description":"Create LMS Setting for providing access to Moodle."}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/lms-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "lms_url": "https:\/\/google.com",
+    "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
+    "site_name": "Moodle Curriki",
+    "lti_client_id": "1",
+    "lms_login_id": "1",
+    "user_id": 1,
+    "lms_name": "Moodle",
+    "lms_access_key": "fdaskfasdkjghadskljgh54r325",
+    "lms_access_secret": "fasdjhjke4wh54354326",
+    "description": "Create LMS Setting for providing access to Moodle."
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://local.api-studio.com/api/v1/admin/lms-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'lms_url' =&gt; 'https://google.com',
+            'lms_access_token' =&gt; 'abcafdgd343asgretgdasgadsfsdfdasgdagsadf',
+            'site_name' =&gt; 'Moodle Curriki',
+            'lti_client_id' =&gt; '1',
+            'lms_login_id' =&gt; '1',
+            'user_id' =&gt; 1,
+            'lms_name' =&gt; 'Moodle',
+            'lms_access_key' =&gt; 'fdaskfasdkjghadskljgh54r325',
+            'lms_access_secret' =&gt; 'fasdjhjke4wh54354326',
+            'description' =&gt; 'Create LMS Setting for providing access to Moodle.',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/lms-settings/1'
+payload = {
+    "lms_url": "https:\/\/google.com",
+    "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
+    "site_name": "Moodle Curriki",
+    "lti_client_id": "1",
+    "lms_login_id": "1",
+    "user_id": 1,
+    "lms_name": "Moodle",
+    "lms_access_key": "fdaskfasdkjghadskljgh54r325",
+    "lms_access_secret": "fasdjhjke4wh54354326",
+    "description": "Create LMS Setting for providing access to Moodle."
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "LMS setting data updated successfully!",
+    "data": [
+        "Updated LMS setting data array"
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update LMS setting, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/admin/lms-settings/{lms_setting}</code></p>
+<p><code>PATCH api/v1/admin/lms-settings/{lms_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lms_setting</code></td>
+<td>required</td>
+<td>The Id of a lms setting</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lms_url</code></td>
+<td>url</td>
+<td>required</td>
+<td>Valid LMS URL.</td>
+</tr>
+<tr>
+<td><code>lms_access_token</code></td>
+<td>string</td>
+<td>required</td>
+<td>Min 20 characters LMS Access Token.</td>
+</tr>
+<tr>
+<td><code>site_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Site Name.</td>
+</tr>
+<tr>
+<td><code>lti_client_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>LTI Client ID for reference.</td>
+</tr>
+<tr>
+<td><code>lms_login_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>LMS Login ID for reference.</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>lms_name</code></td>
+<td>string</td>
+<td>optional</td>
+<td>LMS name for which setting is being configured.</td>
+</tr>
+<tr>
+<td><code>lms_access_key</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Access key for LMS.</td>
+</tr>
+<tr>
+<td><code>lms_access_secret</code></td>
+<td>string</td>
+<td>required</td>
+<td>Secret key is required if Access Key is provided.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>text</td>
+<td>required</td>
+<td>Brief description.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+<!-- START_b1748719c1f572e3601dbbb3b63923dc -->
+<h2>Delete LMS Setting</h2>
+<p>Deletes the lms setting from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://local.api-studio.com/api/v1/admin/lms-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/lms-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://local.api-studio.com/api/v1/admin/lms-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/lms-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete LMS setting, please try again later."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/admin/lms-settings/{lms_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lms_setting</code></td>
+<td>required</td>
+<td>The Id of a lms setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_b1748719c1f572e3601dbbb3b63923dc -->
+<h1>1006. Admin/Organization Types</h1>
+<p>APIs for organization types on admin panel.</p>
+<!-- START_4136d7e618a59691f2b786924080a1b8 -->
+<h2>Get All Organization Types</h2>
+<p>Returns the all organization types.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/organization-types" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/organization-types"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/organization-types',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/organization-types'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "name": "k12",
+            "label": "K-12",
+            "order": 0
+        },
+        {
+            "id": 2,
+            "name": "highered",
+            "label": "Higher Education",
+            "order": 1
+        },
+        {
+            "id": 3,
+            "name": "businesscorp",
+            "label": "Business\/Corporation",
+            "order": 2
+        },
+        {
+            "id": 4,
+            "name": "nonprofit",
+            "label": "Nonprofit",
+            "order": 3
+        },
+        {
+            "id": 5,
+            "name": "govedu",
+            "label": "Government\/EDU",
+            "order": 4
+        },
+        {
+            "id": 6,
+            "name": "other",
+            "label": "Other",
+            "order": 5
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/organization-types</code></p>
+<!-- END_4136d7e618a59691f2b786924080a1b8 -->
+<!-- START_499de428ee63cab2620646b3cf7e3971 -->
+<h2>Create Organization Type</h2>
+<p>Creates the new organization type in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/admin/organization-types" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test","order":1}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/organization-types"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/admin/organization-types',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'randomzv2tga01uxb6q8ojri5ob6',
+            'label' =&gt; 'test',
+            'order' =&gt; 1,
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/organization-types'
+payload = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (201):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": 7,
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 6
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/admin/organization-types</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Unique organization type name.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>string</td>
+<td>required</td>
+<td>Unique label for organization type.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Order Sequence value.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_499de428ee63cab2620646b3cf7e3971 -->
+<!-- START_ab86f5c63956fa42bcde2ca97b638ca2 -->
+<h2>Get Organization Type</h2>
+<p>Get the specified Organization Type data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/organization-types/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/organization-types/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/organization-types/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/organization-types/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": 7,
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 6
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/organization-types/{organization_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>organization_type</code></td>
+<td>required</td>
+<td>The Id of a organization type</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ab86f5c63956fa42bcde2ca97b638ca2 -->
+<!-- START_621c794fa4548f3be2ca9856b00bd68d -->
+<h2>Update Organization Type</h2>
+<p>Updates the organization type data in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://local.api-studio.com/api/v1/admin/organization-types/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/organization-types/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://local.api-studio.com/api/v1/admin/organization-types/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'randomzv2tga01uxb6q8ojri5ob6',
+            'label' =&gt; 'test',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/organization-types/1'
+payload = {
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (201):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": 7,
+    "name": "randomzv2tga01uxb6q8ojri5ob6",
+    "label": "test",
+    "order": 6
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/admin/organization-types/{organization_type}</code></p>
+<p><code>PATCH api/v1/admin/organization-types/{organization_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>organization_type</code></td>
+<td>required</td>
+<td>The Id of a organization type.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Updated organization type name.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>string</td>
+<td>required</td>
+<td>Updated label for organization type.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_621c794fa4548f3be2ca9856b00bd68d -->
+<!-- START_8647ecfbe889fff07f7d7867212325fc -->
+<h2>Delete Organization Type</h2>
+<p>Deletes the organization type from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://local.api-studio.com/api/v1/admin/organization-types/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/organization-types/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://local.api-studio.com/api/v1/admin/organization-types/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/organization-types/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Organization type deleted successfully!"
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Failed to delete organization type."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/admin/organization-types/{organization_type}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>organization_type</code></td>
+<td>required</td>
+<td>The Id of a organization type.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8647ecfbe889fff07f7d7867212325fc -->
+<h1>1007. Admin/Queues</h1>
+<p>APIs for queues monitoring on admin panel.</p>
+<!-- START_19d2e958e5b93e2b59c7c5f9acf6cbcd -->
+<h2>Get All Jobs</h2>
+<p>Returns the pending or failed jobs paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs?filter=1&amp;start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs"
+);
+
+let params = {
+    "filter": "1",
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'filter'=&gt; '1',
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs'
+params = {
+  'filter': '1',
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 128,
+            "payload": "CloneProject",
+            "queue": "default",
+            "time": "1 day ago",
+            "failed": false,
+            "attempt": 1,
+            "exception": "N\/A"
+        },
+        {
+            "id": 129,
+            "payload": "CloneProject",
+            "queue": "default",
+            "time": "1 day ago",
+            "failed": false,
+            "attempt": 1,
+            "exception": "Unable to clone project"
+        }
+    ],
+    "links": {
+        "first": "https:\/\/currikistudio.org\/api\/api\/v1\/admin\/queue-monitor\/jobs?page=1",
+        "last": "https:\/\/currikistudio.org\/api\/api\/v1\/admin\/queue-monitor\/jobs?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": null,
+        "last_page": 1,
+        "path": "https:\/\/currikistudio.org\/api\/api\/v1\/admin\/queue-monitor\/jobs",
+        "per_page": "2",
+        "to": null,
+        "total": 0
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/queue-monitor/jobs</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter</code></td>
+<td>optional</td>
+<td>1 for pending jobs, 2 for failed. Default 1.</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_19d2e958e5b93e2b59c7c5f9acf6cbcd -->
+<!-- START_974c9a8bc7cc1bbac2ac685ff311333e -->
+<h2>Retry All Failed Jobs</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "All failed jobs has been pushed back onto the queue!"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/queue-monitor/jobs/retry/all</code></p>
+<!-- END_974c9a8bc7cc1bbac2ac685ff311333e -->
+<!-- START_ba68bb0fa6b0c7c5c6a906f18d8889dd -->
+<h2>Delete All Failed Jobs</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "All failed jobs deleted successfully!"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/queue-monitor/jobs/forget/all</code></p>
+<!-- END_ba68bb0fa6b0c7c5c6a906f18d8889dd -->
+<!-- START_4d974cc26d982988b65af87d04e9087f -->
+<h2>Retry Specific Failed Job</h2>
+<p>Retry failed job by ID.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "The failed job [1] has been pushed back onto the queue!"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/queue-monitor/jobs/retry/{job}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job</code></td>
+<td>required</td>
+<td>The integer Id of a job.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_4d974cc26d982988b65af87d04e9087f -->
+<!-- START_82b017fa48d3c6810bbe211c47d6232f -->
+<h2>Delete Specific Failed Job</h2>
+<p>Delete failed job by ID.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Failed job deleted successfully!"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/queue-monitor/jobs/forget/{job}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>job</code></td>
+<td>required</td>
+<td>The integer Id of a job.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_82b017fa48d3c6810bbe211c47d6232f -->
+<!-- START_3bc52c8117e841c812597887d1c9a011 -->
+<h2>Get All Queues Logs</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/v1/admin/queue-monitor?filter=1&amp;start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/admin/queue-monitor"
+);
+
+let params = {
+    "filter": "1",
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/v1/admin/queue-monitor',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'filter'=&gt; '1',
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/admin/queue-monitor'
+params = {
+  'filter': '1',
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 128,
+            "job_id": "376471",
+            "name": "CloneProject",
+            "queue": "default",
+            "started_at": "23 hours ago",
+            "is_finished": true,
+            "time_elapsed": "8.22 s",
+            "failed": false,
+            "attempt": 1,
+            "exception_message": null
+        },
+        {
+            "id": 127,
+            "job_id": "376470",
+            "name": "CloneActivity",
+            "queue": "default",
+            "started_at": "23 hours ago",
+            "is_finished": true,
+            "time_elapsed": "8.17 s",
+            "failed": false,
+            "attempt": 1,
+            "exception_message": null
+        }
+    ],
+    "links": {
+        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/queue-monitor?page=1",
+        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/queue-monitor?page=9",
+        "prev": null,
+        "next": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/queue-monitor?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 9,
+        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/queue-monitor",
+        "per_page": "2",
+        "to": 2,
+        "total": 17
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/admin/queue-monitor</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filter</code></td>
+<td>optional</td>
+<td>1 for running jobs, 2 for failed, 3 for completed. Default all.</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_3bc52c8117e841c812597887d1c9a011 -->
 <h1>general</h1>
+<!-- START_6c3256ccb776586b79a2c91cb56e0197 -->
+<h2>Authenticate the request for channel access.</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://local.api-studio.com/api/broadcasting/auth" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/broadcasting/auth"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://local.api-studio.com/api/broadcasting/auth',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/broadcasting/auth'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/broadcasting/auth</code></p>
+<p><code>POST api/broadcasting/auth</code></p>
+<!-- END_6c3256ccb776586b79a2c91cb56e0197 -->
 <!-- START_603efd3e2b9c40f032302500d4008665 -->
 <h2>api/v1/organization-types</h2>
 <blockquote>
@@ -15367,7 +21475,44 @@ response.json()</code></pre>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "data": []
+    "data": [
+        {
+            "id": 1,
+            "name": "k12",
+            "label": "K-12",
+            "order": 0
+        },
+        {
+            "id": 3,
+            "name": "businesscorp",
+            "label": "Business\/Corporation",
+            "order": 1
+        },
+        {
+            "id": 4,
+            "name": "nonprofit",
+            "label": "Nonprofit",
+            "order": 2
+        },
+        {
+            "id": 5,
+            "name": "govedu",
+            "label": "Government\/EDU",
+            "order": 3
+        },
+        {
+            "id": 6,
+            "name": "other",
+            "label": "Other",
+            "order": 4
+        },
+        {
+            "id": 2,
+            "name": "highered",
+            "label": "Higher Education",
+            "order": 5
+        }
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/organization-types</code></p>
@@ -15433,17 +21578,17 @@ response.json()</code></pre>
 <p><code>DELETE api/v1/h5p/h5p-result/my</code></p>
 <p><code>OPTIONS api/v1/h5p/h5p-result/my</code></p>
 <!-- END_191534ba0ff7c75b39820e5ff52cb5dc -->
-<!-- START_f8dcc97e33f92cce8410917973a81b60 -->
-<h2>Users import sample file</h2>
+<!-- START_d632df2b6f298dfb891c5da13abff768 -->
+<h2>Get a full list of LMS settings available to the user</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/users/import/sample-file" \
+    -G "http://local.api-studio.com/api/v1/user-lms-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/import/sample-file"
+    "http://local.api-studio.com/api/v1/user-lms-settings"
 );
 
 let headers = {
@@ -15460,7 +21605,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/users/import/sample-file',
+    'http://local.api-studio.com/api/v1/user-lms-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15473,7 +21618,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/import/sample-file'
+url = 'http://local.api-studio.com/api/v1/user-lms-settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -15481,14 +21626,79 @@ headers = {
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
 <blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/user-lms-settings</code></p>
+<!-- END_d632df2b6f298dfb891c5da13abff768 -->
+<!-- START_a86c4cd0d35d4f13bdc36508a43719e4 -->
+<h2>Save an xAPI Statement</h2>
+<p>Creates a new statement in the database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://local.api-studio.com/api/v1/xapi/statements" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://local.api-studio.com/api/v1/xapi/statements"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://local.api-studio.com/api/v1/xapi/statements',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://local.api-studio.com/api/v1/xapi/statements'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (201):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": "61ffa986-1dcc-3df0-94d8-a09384b197a7"
+}</code></pre>
+<blockquote>
 <p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Server Error"
+    "errors": [
+        "The statement could not be saved due to an error"
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/admin/users/import/sample-file</code></p>
-<!-- END_f8dcc97e33f92cce8410917973a81b60 -->
+<p><code>POST api/v1/xapi/statements</code></p>
+<!-- END_a86c4cd0d35d4f13bdc36508a43719e4 -->
       </div>
       <div class="dark-box">
                         <div class="lang-selector">

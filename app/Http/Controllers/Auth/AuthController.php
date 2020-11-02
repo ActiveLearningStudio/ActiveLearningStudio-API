@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
-use App\Jobs\AssignStarterProjects;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
@@ -74,7 +73,6 @@ class AuthController extends Controller
         $user = $this->userRepository->create($data);
 
         if ($user) {
-            AssignStarterProjects::dispatch($user, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond())->onQueue('starterProjects');
             event(new Registered($user));
 
 //            return response([
@@ -233,7 +231,31 @@ class AuthController extends Controller
     }
 
     /**
-     * CUSTOM ADMIN LOGIN VERIFICATION
+     * Admin Login
+     *
+     * @bodyParam email string required The email of a user Example: john.doe@currikistudio.org
+     * @bodyParam password string required The password corresponded to the email Example: Password123
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid Credentials."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Email is not verified."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unauthorized!"
+     *   ]
+     * }
+     *
      * @param LoginRequest $loginRequest
      * @return Application|ResponseFactory|Response
      * @throws \Throwable

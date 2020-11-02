@@ -1,0 +1,43 @@
+{
+    "data": [
+        {
+            "id": 128,
+            "job_id": "376471",
+            "name": "CloneProject",
+            "queue": "default",
+            "started_at": "23 hours ago",
+            "is_finished": true,
+            "time_elapsed": "8.22 s",
+            "failed": false,
+            "attempt": 1,
+            "exception_message": null
+        },
+        {
+            "id": 127,
+            "job_id": "376470",
+            "name": "CloneActivity",
+            "queue": "default",
+            "started_at": "23 hours ago",
+            "is_finished": true,
+            "time_elapsed": "8.17 s",
+            "failed": false,
+            "attempt": 1,
+            "exception_message": null
+        }
+    ],
+    "links": {
+        "first": "https://www.currikistudio.org/api/v1/admin/queue-monitor?page=1",
+        "last": "https://www.currikistudio.org/api/v1/admin/queue-monitor?page=9",
+        "prev": null,
+        "next": "https://www.currikistudio.org/api/v1/admin/queue-monitor?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 9,
+        "path": "https://www.currikistudio.org/api/v1/admin/queue-monitor",
+        "per_page": "2",
+        "to": 2,
+        "total": 17
+    }
+}

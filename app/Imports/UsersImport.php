@@ -2,11 +2,13 @@
 
 namespace App\Imports;
 
+use App\Models\OrganizationType;
 use App\Rules\StrongPassword;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -15,8 +17,8 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
 class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithValidation, WithHeadingRow, SkipsOnFailure, SkipsOnError
 {
@@ -26,6 +28,7 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
      * @var
      */
     protected $timestamp;
+    protected $organizationTypes;
 
     /**
      * Keep count of inserted rows
@@ -39,6 +42,7 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
     public function __construct()
     {
         $this->timestamp = now();
+        $this->organizationTypes = OrganizationType::pluck('label');
     }
 
     /**
@@ -52,6 +56,7 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
             'first_name' => $row['first_name'],
             'last_name' => $row['last_name'],
             'organization_name' => $row['organization_name'] ?? null,
+            'organization_type' => $row['organization_type'] ?? null,
             'job_title' => $row['job_title'] ?? null,
             'email' => $row['email'],
             'password' => Hash::make($row['password']),
@@ -84,8 +89,9 @@ class UsersImport implements ToModel, WithBatchInserts, WithChunkReading, WithVa
         return [
             '*.first_name' => 'required|string|max:255',
             '*.last_name' => 'required|string|max:255',
-            '*.organization_name' => 'max:255',
-            '*.job_title' => 'max:255',
+            '*.organization_name' => 'required|string|max:50',
+            '*.organization_type' => ['required', 'string', 'max:255', Rule::in($this->organizationTypes),],
+            '*.job_title' => 'required|string|max:255',
             '*.email' => 'required|email|max:255|unique:users,email',
             '*.password' => ['required', 'string', new StrongPassword],
         ];

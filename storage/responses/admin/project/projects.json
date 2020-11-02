@@ -1,0 +1,55 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "The Science of Golf",
+            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+            "thumb_url": "/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+            "shared": false,
+            "starter_project": false,
+            "is_user_starter": false,
+            "cloned_from": null,
+            "clone_ctr": 1,
+            "users": [],
+            "status": 2,
+            "status_text": "FINISHED",
+            "indexing": 3,
+            "indexing_text": "APPROVED",
+            "created_at": "30-Apr-2020",
+            "updated_at": "27-Oct-2020"
+        },
+        {
+            "id": 2,
+            "name": "Partner Content Projects",
+            "description": "Partner Content Projects",
+            "thumb_url": "/storage/uploads/iSioSGpjqWFE9DawcwR1nRIAnb1DuJaTgwWX6bkm.jpeg",
+            "shared": false,
+            "starter_project": false,
+            "is_user_starter": false,
+            "cloned_from": null,
+            "clone_ctr": 0,
+            "users": [],
+            "status": 1,
+            "status_text": "DRAFT",
+            "indexing": null,
+            "indexing_text": "NOT REQUESTED",
+            "created_at": "30-Apr-2020",
+            "updated_at": "15-Oct-2020"
+        }
+    ],
+    "links": {
+        "first": "https://www.currikistudio.org/api/v1/admin/projects?page=1",
+        "last": "https://www.currikistudio.org/api/v1/admin/projects?page=10849",
+        "prev": null,
+        "next": "https://www.currikistudio.org/api/v1/admin/projects?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 10849,
+        "path": "https://www.currikistudio.org/api/v1/admin/projects",
+        "per_page": "2",
+        "to": 2,
+        "total": 21697
+    }
+}

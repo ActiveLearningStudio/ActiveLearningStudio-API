@@ -7,6 +7,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Laravel\Passport\Passport;
 use Lcobucci\JWT\Parser;
@@ -26,6 +27,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * Update the user if soft deleted, otherwise create new
+     *
      * @param array $data
      * @return false|Model
      */
@@ -37,7 +39,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
+
         return false;
+    }
+
+    /**
+     * Search by name
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function searchByName($name)
+    {
+        return $this->model->name($name)->get();
     }
 
     /**

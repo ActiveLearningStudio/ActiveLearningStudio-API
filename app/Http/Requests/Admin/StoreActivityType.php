@@ -4,6 +4,11 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @bodyParam title string required Activity Item Title. Example: Audio
+ * @bodyParam image image required Valid Image.
+ * @bodyParam order int required At what order it should appear. Example: 1
+ */
 class StoreActivityType extends FormRequest
 {
     /**

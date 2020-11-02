@@ -105,6 +105,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the teams for the user
+     */
+    public function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'user_team')->withPivot('role')->withTimestamps();
+    }
+
+    /**
      * Get the projects for the user
      */
     public function projects()
@@ -116,7 +124,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * Get playlists directly from users model via hasManyThrough
      * @return HasManyThrough
      */
-    public function playlists(){
+    public function playlists()
+    {
         return $this->hasManyThrough('App\Models\Playlist', 'App\Models\Pivots\UserProject', 'user_id', 'project_id',
             'id', 'project_id');
     }
@@ -201,10 +210,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Scope for combine first and last name search
+     *
      * @param $query
      * @param $value
      * @return mixed
-     * Scope for combine first and last name search
      */
     public function scopeName($query, $value)
     {

@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\QueryBuilders\SearchFormQueryBuilder;
 use App\Models\Traits\GlobalScope;
+use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
+use ElasticScoutDriverPlus\CustomSearch;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use ElasticScoutDriverPlus\CustomSearch;
-use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
-use App\Models\QueryBuilders\SearchFormQueryBuilder;
-use Illuminate\Database\Eloquent\Builder;
 
 class Project extends Model
 {
@@ -69,11 +69,19 @@ class Project extends Model
     }
 
     /**
-     * Get the users for the projects
+     * Get the users for the project
      */
     public function users()
     {
         return $this->belongsToMany('App\User', 'user_project')->withPivot('role')->withTimestamps();
+    }
+
+    /**
+     * Get the teams for the project
+     */
+    public function teams()
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_project')->withTimestamps();
     }
 
     /**
@@ -108,7 +116,7 @@ class Project extends Model
     }
 
     /**
-     * Get the activity's project's user.
+     * Get the project's owner.
      *
      * @return object
      */

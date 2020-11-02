@@ -1,0 +1,37 @@
+{
+    "data": [
+        {
+            "id": 128,
+            "payload": "CloneProject",
+            "queue": "default",
+            "time": "1 day ago",
+            "failed": false,
+            "attempt": 1,
+            "exception": "N/A"
+        },
+        {
+            "id": 129,
+            "payload": "CloneProject",
+            "queue": "default",
+            "time": "1 day ago",
+            "failed": false,
+            "attempt": 1,
+            "exception": "Unable to clone project"
+        }
+    ],
+    "links": {
+        "first": "https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1",
+        "last": "https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": null,
+        "last_page": 1,
+        "path": "https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs",
+        "per_page": "2",
+        "to": null,
+        "total": 0
+    }
+}

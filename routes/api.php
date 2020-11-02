@@ -36,11 +36,23 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
+        Route::get('users/notifications', 'UserController@listNotifications');
+        Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
+        Route::post('users/search', 'UserController@getUsersForTeam');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
         ]);;
+
+        Route::post('teams/invite', 'TeamController@inviteTeamMember');
+        Route::post('teams/{team}/invite', 'TeamController@inviteMember');
+        Route::post('teams/{team}/remove', 'TeamController@removeMember');
+        Route::post('teams/{team}/add-projects', 'TeamController@addProjects');
+        Route::post('teams/{team}/remove-project', 'TeamController@removeProject');
+        Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
+        Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
+        Route::apiResource('teams', 'TeamController');
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::get('projects/recent', 'ProjectController@recent');
@@ -127,6 +139,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::get('courses', 'GoogleClassroomController@getCourses');
             Route::post('projects/{project}/copy', 'GoogleClassroomController@copyProject');
         });
+
+        Route::get('user-lms-settings', 'UserLmsSettingsController@index');
     });
 
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
@@ -144,6 +158,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments
     Route::post('xapi/statements', 'XapiController@saveStatement');
+    // Google Classroom Student workflow
+    Route::group(['prefix' => 'google-classroom'], function () {
+        Route::post('turnin/{classwork}', 'GoogleClassroomController@turnIn');
+    });
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 
@@ -182,6 +200,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // organization-types
         Route::apiResource('organization-types', 'OrganizationTypesController');
+
+        // queue-monitor
+        Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
+        Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
+        Route::get('queue-monitor/jobs/forget/all', 'QueueMonitorController@forgetAll');
+        Route::get('queue-monitor/jobs/retry/{job}', 'QueueMonitorController@retryJob');
+        Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
+        Route::apiResource('queue-monitor', 'QueueMonitorController');
 
         // organizations
         Route::get('organizations/report/basic', 'OrganizationController@reportBasic')->name('organizations.report.basic');
