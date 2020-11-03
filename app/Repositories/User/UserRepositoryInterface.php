@@ -17,6 +17,13 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
     public function searchByName($name);
 
     /**
+     * Search by email
+     *
+     * @param $email
+     */
+    public function searchByEmailAndName($email);
+
+    /**
      * To fetch user from token
      * @param $accessToken
      * @return bool

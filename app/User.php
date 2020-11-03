@@ -214,6 +214,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Scope for email search
+     *
+     * @param $query
+     * @param $value
+     * @return mixed
+     */
+    public function scopeSearch($query, $value)
+    {
+        return $query->orWhereRaw("email ILIKE '%" . $value . "%'")->orWhereRaw("CONCAT(first_name,' ',last_name) ILIKE '%" . $value . "%'");
+    }
+
+    /**
      * Get the favorite projects for the user
      */
     public function favoriteProjects()
