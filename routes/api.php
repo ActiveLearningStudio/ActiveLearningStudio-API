@@ -163,6 +163,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     // Google Classroom Student workflow
     Route::group(['prefix' => 'google-classroom'], function () {
         Route::post('turnin/{classwork}', 'GoogleClassroomController@turnIn');
+        Route::post('validate-summary-access', 'GoogleClassroomController@validateSummaryPageAccess');
+        Route::post('classwork/{classwork}/submission', 'GoogleClassroomController@getStudentSubmission');
     });
 
     Route::get('error', 'ErrorController@show')->name('api/error');

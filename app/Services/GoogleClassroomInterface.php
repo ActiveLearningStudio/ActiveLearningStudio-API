@@ -112,9 +112,10 @@ interface GoogleClassroomInterface {
      * Check if student is enrolled in a class
      *
      * @param int $courseId
+     * @param string $userId
      * @return \Google_Service_Classroom_Student
      */
-    public function getEnrolledStudent($courseId);
+    public function getEnrolledStudent($courseId, $userId = "me");
 
     /**
      * Get first student's submission for a classwork in a course.
@@ -125,6 +126,16 @@ interface GoogleClassroomInterface {
      * @return string
      */
     public function getFirstStudentSubmission($courseId, $classworkId, $userId = "me");
+
+    /**
+     * Get student's submissions for a classwork in a course.
+     *
+     * @param int $courseId
+     * @param string $classworkId
+     * @param mixed $userId
+     * @return array
+     */
+    public function getStudentSubmissions($courseId, $classworkId, $userId = "me");
 
     /**
      * Adds/modifies submission with an attachment
@@ -146,5 +157,33 @@ interface GoogleClassroomInterface {
      * @return \Google_Service_Classroom_ClassroomEmpty
      */
     public function turnIn($courseId, $courseWorkId, $id);
+
+    /**
+     * Check if user is a teacher in a class
+     *
+     * @param int $courseId
+     * @param string $userId
+     * @param array $optParams
+     * @return \Google_Service_Classroom_Teacher
+     */
+    public function getCourseTeacher($courseId, $userId = "me", $optParams = []);
+
+    /**
+     * Get student's submission for a classwork in a course by submission id
+     *
+     * @param int $courseId The Google classroom course id
+     * @param string $classworkId The classwork id
+     * @param string $id The submission id
+     * @return \Google_Service_Classroom_StudentSubmission
+     */
+    public function getStudentSubmissionById($courseId, $classworkId, $id);
+
+    /**
+     * Get user profile by id
+     *
+     * @param string $userId The Google Classroom user id
+     * @return \Google_Service_Classroom_StudentSubmission
+     */
+    public function getUserProfile($userId);
 
 }
