@@ -326,7 +326,7 @@ class UserController extends Controller
     {
         return response([
             'notifications' => $this->userRepository->fetchListing(auth()->user()->notifications()),
-            'is_unread_exist' => auth()->user()->unreadNotifications->count()
+            'unread_count' => auth()->user()->unreadNotifications->count()
         ], 200);
     }
 
@@ -420,7 +420,7 @@ class UserController extends Controller
      */
     public function deleteNotification(Request $request, $notification_id)
     {
-        $is_deleted = $notification = auth()->user()->notifications()->find($notification_id)->delete();
+        $is_deleted = auth()->user()->notifications()->find($notification_id)->delete();
 
         if ($is_deleted) {
             return response([

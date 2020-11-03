@@ -76,6 +76,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
+     * To arrange listing of notifications
      * @param $notifications
      * @return array
      */
