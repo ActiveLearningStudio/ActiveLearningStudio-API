@@ -42,7 +42,7 @@ class OutcomeController extends Controller
             if (count($completed) > 0) {
                 // Assume that this statement already has a result
                 $answers = $service->getAnswersStatementsWithResults($data);
-                dd($answers);
+                // dd($answers);
                 if ($answers) {
                     foreach($answers as $record) {
                         $summary = [];
