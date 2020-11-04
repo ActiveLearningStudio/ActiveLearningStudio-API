@@ -8,6 +8,11 @@ use App\Http\Resources\V1\CurrikiGo\StudentResultResource;
 use Illuminate\Http\Request;
 use App\Services\LearnerRecordStoreService;
 
+/**
+ * @group 15. CurrikiGo Outcome
+ *
+ * APIs for generating outcomes against students' submissions.
+ */
 class OutcomeController extends Controller
 {
     /**
@@ -17,13 +22,11 @@ class OutcomeController extends Controller
      *
      * @param GetStudentResultRequest $studentResultRequest
      *
-     * @response 201 {
-     *   "id": "61ffa986-1dcc-3df0-94d8-a09384b197a7"
-     * }
+     * @responseFile responses/outcome/student-result-summary.json
      *
      * @response 500 {
      *   "errors": [
-     *     "The statement could not be saved due to an error"
+     *     "No results found."
      *   ]
      * }
      *
@@ -42,21 +45,10 @@ class OutcomeController extends Controller
             if (count($completed) > 0) {
                 // Assume that this statement already has a result
                 $answers = $service->getAnswersStatementsWithResults($data);
-                // dd($answers);
                 if ($answers) {
                     foreach($answers as $record) {
-                        $summary = [];
-                        $target = $record->getTarget();
-                        $nameOfActivity = $target->getDefinition()->getName()->getNegotiatedLanguageString();
-                        
-                        $result = $record->getResult();
-                        $summary['name'] = $nameOfActivity;
-                        $summary['score'] = [
-                            'raw' => $result->getScore()->getRaw(),
-                            'max' => $result->getScore()->getMax(),
-                        ];
-                        $summary['duration'] = str_replace(array('PT', 'S'), '', $result->getDuration());
-                        $response[] = $summary;
+                        $summary = $service->getStatementSummary($record);
+                        $response[] = new StudentResultResource($summary);
                     }
                 }
                 

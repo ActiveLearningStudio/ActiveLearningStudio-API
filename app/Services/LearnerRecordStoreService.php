@@ -10,6 +10,7 @@ use \TinCan\Statement;
 use \TinCan\Agent;
 use \TinCan\Verb;
 use \TinCan\Activity;
+use \TinCan\Extensions;
 use \TinCan\LRSResponse;
 
 /**
@@ -47,7 +48,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      */
     public function saveStatement($statement)
     {
-        $statement = \TinCan\Statement::fromJSON($statement);
+        $statement = Statement::fromJSON($statement);
         return $this->service->saveStatement($statement);
     }
 
@@ -64,32 +65,63 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         return $this->service->queryStatements($queryParams);
     }
 
+    /**
+     * Make Agent from JSON
+     *
+     * 
+     * @param string $json A JSON string of an actor
+     * @return \Agent
+     */
     public function makeAgentFromJSON($json)
     {
-        $actor = \TinCan\Agent::fromJSON($json);
+        $actor = Agent::fromJSON($json);
         return $actor;
     }
 
+    /**
+     * Make Verb from an IRI
+     *
+     * 
+     * @param string $iri An IRI string for a verb
+     * @return \Verb
+     */
     public function makeVerb($iri)
     {
-        $verb = new \TinCan\Verb(
+        $verb = new Verb(
             ['id' => $iri]
         );
         return $verb;
     }
 
+    /**
+     * Make Activity from an IRI
+     *
+     * 
+     * @param string $iri An IRI string for an activity object
+     * @return \Activity
+     */
     public function makeActivity($iri)
     {
-        $activity = new \TinCan\Activity(
+        $activity = new Activity(
             ['id' => $iri]
         );
         return $activity;
     }
 
-    public function getCompletedStatements($data)
+    /**
+     * Get 'completed' statements from LRS based on filters
+     *
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getCompletedStatements(array $data)
     {
+        if (empty($data) || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
+            throw new GeneralException("XAPI statement's actor and activity properties are needed.");
+        }
         $actor = $this->makeAgentFromJSON($data['actor']);
-        $verb = $this->makeVerb('http://adlnet.gov/expapi/verbs/completed');
+        $verb = $this->makeVerb(self::COMPLETED_VERB_ID);
         $activity = $this->makeActivity($data['activity']);
         
         $params = [];
@@ -106,16 +138,25 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         }
     }
 
-    public function getAnswersStatements($data)
+    /**
+     * Get 'answered' statements from LRS based on filters
+     *
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAnswersStatements(array $data)
     {
+        if (empty($data) || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
+            throw new GeneralException("XAPI statement's actor and activity properties are needed.");
+        }
         $actor = $this->makeAgentFromJSON($data['actor']);
-        $verb = $this->makeVerb('http://adlnet.gov/expapi/verbs/answered');
+        $verb = $this->makeVerb(self::ANSWERED_VERB_ID);
         $activity = $this->makeActivity($data['activity']);
         $params = [];
         $params['agent'] = $actor;
         $params['verb'] = $verb;
         $params['activity'] = $activity;
-        // $params['limit'] = 2;
         $params['ascending'] = true;
         $params['related_activities'] = true;
         $response = $this->queryStatements($params);
@@ -128,7 +169,15 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         }
     }
 
-    public function getAnswersStatementsWithResults($data) {
+    /**
+     * Get 'answered' statements from LRS based on filters
+     * that have results and category in context in them.
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAnswersStatementsWithResults(array $data) {
         $allAnswers = $this->getAnswersStatements($data);
         $filtered = [];
         if ($allAnswers) {
@@ -147,4 +196,68 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         return $filtered;
     }
 
+    /**
+     * Get summary of an 'answered' statement
+     * 
+     * @param Statement $statement A TinCan API statement object.
+     * @return array
+     */
+    public function getStatementSummary(Statement $statement)
+    {
+        $summary = [];
+        $target = $statement->getTarget();
+        $nameOfActivity = $target->getDefinition()->getName()->getNegotiatedLanguageString();
+        
+        $result = $statement->getResult();
+        $summary['name'] = $nameOfActivity;
+        $summary['score'] = [
+            'raw' => $result->getScore()->getRaw(),
+            'max' => $result->getScore()->getMax(),
+        ];
+        $summary['result_duration'] = $this->formatDuration($result->getDuration());
+        // Get activity duration
+        $extensions = $statement->getContext()->getExtensions();
+        $endingPoint = $this->getEndingPointExtension($extensions);
+        
+        $summary['duration'] = ($endingPoint ? $endingPoint : $summary['result_duration']);
+        
+        return $summary;
+    }
+
+    /**
+     * Retrieve 'ending-point' from a list of extensions in a statement.
+     * 
+     * @param Extensions $extensions A List of Extensions in a statement.
+     * @return string
+     */
+    public function getEndingPointExtension(Extensions $extensions)
+    {
+        $extensionsList = $extensions->asVersion();
+        $endPoint = '';
+        $keyName = self::EXTENSION_ENDING_POINT_IRI;
+        // find the end point
+        if (!empty($extensionsList) && array_key_exists($keyName, $extensionsList)) {
+            $endPoint = $this->formatDuration($extensionsList[$keyName]);
+        }
+        return  $endPoint;
+    }
+
+    /**
+     * Format 'duration' value in seconds to hh:mm:ss format
+     * e.g., PT24S to 0:24
+     * 
+     * @param string $duration
+     * @return string
+     */
+    public function formatDuration($duration) {
+        $raw_duration = str_replace(array('PT', 'S'), '', $duration);
+        $seconds = round($raw_duration);
+     
+        $formatted = sprintf('%02d:%02d', ($seconds / 60 % 60), $seconds % 60);
+        if (($seconds / 3600) >= 1) {
+            $formatted = sprintf('%02d:%02d:%02d', ($seconds / 3600), ($seconds / 60 % 60), $seconds % 60);
+        }
+
+        return $formatted;
+    }
 }
