@@ -88,15 +88,15 @@ class CloneNotification extends Notification
      */
     public function toBroadcast($notifiable)
     {
-        $timestamp = Carbon::now()->addSecond()->toDateTimeString();
+        $timestamp = Carbon::parse(now()->addSecond()->toDateTimeString());
         return new BroadcastMessage(array(
             'notifiable_id' => $notifiable->id,
             'notifiable_type' => get_class($notifiable),
             'data' => $this->toDatabase($notifiable),
             'notifiable' => $notifiable,
             'read_at' => null,
-            'created_at' => $timestamp,
-            'updated_at' => $timestamp,
+            'created_at' => $timestamp->diffForHumans(),
+            'updated_at' => $timestamp->diffForHumans(),
         ));
     }
 
