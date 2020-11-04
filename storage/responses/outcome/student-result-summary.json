@@ -6,8 +6,8 @@
                 "raw": 2,
                 "max": 2
             },
-            "result_duration": "00:14",
-            "duration": "00:18"
+            "duration": "00:14",
+            "ending-point": "00:18"
         },
         {
             "name": "Multiple Choice",
@@ -15,8 +15,8 @@
                 "raw": 0,
                 "max": 2
             },
-            "result_duration": "01:54",
-            "duration": "00:24"
+            "duration": "01:54",
+            "ending-point": "00:24"
         },
         {
             "name": "True/False Question",
@@ -24,8 +24,8 @@
                 "raw": 1,
                 "max": 1
             },
-            "result_duration": "01:58",
-            "duration": "00:28"
+            "duration": "01:58",
+            "ending-point": "00:28"
         }
     ]
 }

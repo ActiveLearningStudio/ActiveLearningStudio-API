@@ -214,12 +214,13 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'raw' => $result->getScore()->getRaw(),
             'max' => $result->getScore()->getMax(),
         ];
-        $summary['result_duration'] = $this->formatDuration($result->getDuration());
+        $summary['duration'] = $this->formatDuration($result->getDuration());
         // Get activity duration
         $extensions = $statement->getContext()->getExtensions();
         $endingPoint = $this->getEndingPointExtension($extensions);
         
-        $summary['duration'] = ($endingPoint ? $endingPoint : $summary['result_duration']);
+        // this is basically the ending point (or the seek point) on the video where the quiz is set.
+        $summary['ending-point'] = ($endingPoint ? $endingPoint : '');
         
         return $summary;
     }
