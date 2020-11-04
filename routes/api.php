@@ -169,7 +169,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     // Outcome
     Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
     
-
     Route::get('error', 'ErrorController@show')->name('api/error');
 
     /*********************** ADMIN PANEL ROUTES ************************/

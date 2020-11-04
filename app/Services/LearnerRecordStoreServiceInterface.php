@@ -10,7 +10,8 @@ use \TinCan\Extensions;
 /**
  * Interface for Learner Record Store service
  */
-interface LearnerRecordStoreServiceInterface {
+interface LearnerRecordStoreServiceInterface
+{
 
     /**
      * Ending-point extension IRI

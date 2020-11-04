@@ -24,7 +24,7 @@ class OutcomeController extends Controller
      *
      * @responseFile responses/outcome/student-result-summary.json
      *
-     * @response 500 {
+     * @response 404 {
      *   "errors": [
      *     "No results found."
      *   ]
@@ -39,27 +39,23 @@ class OutcomeController extends Controller
         $response = [];
         try {
             $service = new LearnerRecordStoreService();
-            
             $completed = $service->getCompletedStatements($data);
-           
             if (count($completed) > 0) {
                 // Assume that this statement already has a result
                 $answers = $service->getAnswersStatementsWithResults($data);
                 if ($answers) {
-                    foreach($answers as $record) {
+                    foreach ($answers as $record) {
                         $summary = $service->getStatementSummary($record);
                         $response[] = new StudentResultResource($summary);
                     }
                 }
-                
                 return response([
                     'summary' => $response,
-                ], 201);
-            }
-            else {
+                ], 200);
+            } else {
                 return response([
                     'errors' => ["No results found."],
-                ], 500);
+                ], 404);
             }
         } catch (Exception $e) {
             return response([

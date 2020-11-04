@@ -133,9 +133,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         if ($response->success) {
             return $response->content->getStatements();
         }
-        else {
-            throw new GeneralException($response->content);
-        }
+        throw new GeneralException($response->content);
     }
 
     /**
@@ -164,9 +162,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         if ($response->success) {
             return $response->content->getStatements();
         }
-        else {
-            throw new GeneralException($response->content);
-        }
+        throw new GeneralException($response->content);
     }
 
     /**
@@ -177,12 +173,13 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      * @throws GeneralException
      * @return array
      */
-    public function getAnswersStatementsWithResults(array $data) {
+    public function getAnswersStatementsWithResults(array $data)
+    {
         $allAnswers = $this->getAnswersStatements($data);
         $filtered = [];
         if ($allAnswers) {
             // iterate and find the statements that have results & Category.
-            foreach($allAnswers as $statement) {
+            foreach ($allAnswers as $statement) {
                 $result = $statement->getResult();
                 // Get Category context
                 $contextActivities = $statement->getContext()->getContextActivities();
@@ -240,7 +237,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         if (!empty($extensionsList) && array_key_exists($keyName, $extensionsList)) {
             $endPoint = $this->formatDuration($extensionsList[$keyName]);
         }
-        return  $endPoint;
+        return $endPoint;
     }
 
     /**
@@ -250,7 +247,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      * @param string $duration
      * @return string
      */
-    public function formatDuration($duration) {
+    public function formatDuration($duration)
+    {
         $raw_duration = str_replace(array('PT', 'S'), '', $duration);
         $seconds = round($raw_duration);
      
