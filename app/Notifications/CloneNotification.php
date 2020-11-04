@@ -49,7 +49,7 @@ class CloneNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail','database','broadcast'];
+        return ['mail','database', 'broadcast'];
     }
 
     /**
@@ -108,6 +108,5 @@ class CloneNotification extends Notification
     {
         return $this->type . ' Notification';
     }
-
-
+    
 }
