@@ -2,10 +2,13 @@
 
 namespace App\Notifications;
 
+use App\Http\Resources\V1\UserResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
+use Carbon\Carbon;
 
 class CloneNotification extends Notification
 {
@@ -46,7 +49,7 @@ class CloneNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail','database'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
@@ -77,4 +80,33 @@ class CloneNotification extends Notification
             'message' => $this->message,
         ];
     }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     * @param  mixed  $notifiable
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($notifiable)
+    {
+        $timestamp = Carbon::now()->addSecond()->toDateTimeString();
+        return new BroadcastMessage(array(
+            'notifiable_id' => $notifiable->id,
+            'notifiable_type' => get_class($notifiable),
+            'data' => $this->toDatabase($notifiable),
+            'notifiable' => $notifiable,
+            'read_at' => null,
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
+        ));
+    }
+
+    /**
+     * Return broadcast message type
+     * @return string
+     */
+    public function broadcastType()
+    {
+        return $this->type . ' Notification';
+    }
+
 }
