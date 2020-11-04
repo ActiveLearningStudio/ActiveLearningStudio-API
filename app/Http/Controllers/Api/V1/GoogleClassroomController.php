@@ -17,6 +17,7 @@ use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCStudentResource;
 use App\Http\Resources\V1\GCSubmissionResource;
 use App\Models\Project;
+use App\Models\Activity;
 use App\Models\GcClasswork;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
@@ -25,6 +26,9 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\App;
+use App\Http\Resources\V1\ActivityResource;
+use App\Http\Resources\V1\PlaylistResource;
 
 /**
  * @group 11. Google Classroom
@@ -434,5 +438,43 @@ class GoogleClassroomController extends Controller
                 'errors' => [$ex->getMessage()],
             ], 500);
         }
+    }
+
+    /**
+     * Get H5P Resource Settings For Google Classroom
+     *
+     *
+     * @urlParam activity required The Id of a activity
+     *
+     * @responseFile responses/h5p/h5p-resource-settings-open.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Activity not found."
+     *   ]
+     * }
+     *
+     * @param Activity $activity
+     * @return Response
+     */
+    public function getH5pResourceSettings(Activity $activity)
+    {
+        // 3 is for indexing approved - see Project Model @indexing property
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->load_content($activity->h5p_content_id);
+        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+        $user_data = null;
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
+        return response([
+            'h5p' => $h5p_data,
+            'activity' => new ActivityResource($activity),
+            'playlist' => new PlaylistResource($activity->playlist),
+        ], 200);
     }
 }

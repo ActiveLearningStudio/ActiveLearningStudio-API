@@ -165,6 +165,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('turnin/{classwork}', 'GoogleClassroomController@turnIn');
         Route::post('validate-summary-access', 'GoogleClassroomController@validateSummaryPageAccess');
         Route::post('classwork/{classwork}/submission', 'GoogleClassroomController@getStudentSubmission');
+        Route::get('activities/{activity}/h5p-resource-settings', 'GoogleClassroomController@getH5pResourceSettings');
     });
 
     Route::get('error', 'ErrorController@show')->name('api/error');
