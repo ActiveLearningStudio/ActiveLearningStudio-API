@@ -304,7 +304,7 @@ class TeamController extends Controller
                     $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                     $team->users()->attach($conUser, ['role' => 'collaborator', 'token' => $token]);
                     $conUser->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
-                } else if ($user['email']) {
+                } elseif ($user['email']) {
                     // TODO: need to send mail to unregistered person and do whatever for that person
                     $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                     $tempUser = new User(['email' => $user['email']]);
