@@ -55,7 +55,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * Search by email
+     * Search by name and email
      *
      * @param $key
      * @return mixed
