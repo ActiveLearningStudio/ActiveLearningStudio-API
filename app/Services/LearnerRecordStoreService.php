@@ -143,7 +143,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      * @throws GeneralException
      * @return array
      */
-    public function getAnswersStatements(array $data)
+    public function getAnsweredStatements(array $data)
     {
         if (empty($data) || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
             throw new GeneralException("XAPI statement's actor and activity properties are needed.");
@@ -155,7 +155,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $params['agent'] = $actor;
         $params['verb'] = $verb;
         $params['activity'] = $activity;
-        $params['ascending'] = true;
+        $params['ascending'] = false;
         $params['related_activities'] = true;
         $response = $this->queryStatements($params);
         
@@ -166,16 +166,16 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
-     * Get 'answered' statements from LRS based on filters
+     * Get the latest 'answered' statements from LRS based on filters
      * that have results and category in context in them.
      * 
      * @param array $data An array of filters.
      * @throws GeneralException
      * @return array
      */
-    public function getAnswersStatementsWithResults(array $data)
+    public function getLatestAnsweredStatementsWithResults(array $data)
     {
-        $allAnswers = $this->getAnswersStatements($data);
+        $allAnswers = $this->getAnsweredStatements($data);
         $filtered = [];
         if ($allAnswers) {
             // iterate and find the statements that have results & Category.
@@ -185,11 +185,17 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 $contextActivities = $statement->getContext()->getContextActivities();
                 $category = $contextActivities->getCategory();
                 if (!empty($category) && !empty($result)) {
-                    $filtered[] = $statement;
+                    // Get activity subID for this statement.
+                    // Each quiz within the activity is identified by a unique GUID.
+                    // We only need to take the most recent submission on an activity into account.
+                    // We've sorted statements in descending order, so the first entry for a subId is the latest
+                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                    if (!array_key_exists($h5pSubContentId, $filtered)) {
+                        $filtered[$h5pSubContentId] = $statement;
+                    }
                 }
             }
         }
-
         return $filtered;
     }
 
@@ -258,5 +264,20 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         }
 
         return $formatted;
+    }
+
+    /**
+     * Retrieve H5P SubContent Id from a list of extensions in a statement.
+     * 
+     * @param Statement $statement An XAPI Statement.
+     * @return string
+     */
+    public function getH5PSubContenIdFromStatement(Statement $statement)
+    {
+        $target = $statement->getTarget();
+        $extensionsList = $target->getDefinition()->getExtensions()->asVersion();
+        $keyName = self::EXTENSION_H5P_SUBCONTENT_ID;
+        // find the sub content id
+        return (!empty($extensionsList) && array_key_exists($keyName, $extensionsList) ? $extensionsList[$keyName] : '');
     }
 }

@@ -42,13 +42,18 @@ class OutcomeController extends Controller
             $completed = $service->getCompletedStatements($data);
             if (count($completed) > 0) {
                 // Assume that this statement already has a result
-                $answers = $service->getAnswersStatementsWithResults($data);
+                $answers = $service->getLatestAnsweredStatementsWithResults($data);
                 if ($answers) {
                     foreach ($answers as $record) {
                         $summary = $service->getStatementSummary($record);
                         $response[] = new StudentResultResource($summary);
                     }
                 }
+                // We'll use the ending-point for ordering the final results.
+                usort($response, function($a, $b) {
+                    return $a['ending-point'] <=> $b['ending-point'];
+                });
+                
                 return response([
                     'summary' => $response,
                 ], 200);

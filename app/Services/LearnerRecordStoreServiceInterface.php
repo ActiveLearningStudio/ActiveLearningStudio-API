@@ -21,6 +21,13 @@ interface LearnerRecordStoreServiceInterface
     const EXTENSION_ENDING_POINT_IRI = 'http://id.tincanapi.com/extension/ending-point';
 
     /**
+     * H5P xAPI subContent ID 
+     * 
+     * @var string
+     */
+    const EXTENSION_H5P_SUBCONTENT_ID = 'http://h5p.org/x-api/h5p-subContentId';
+    
+    /**
      * Answered verb id for XAPI statements
      * 
      * @var string
@@ -95,17 +102,17 @@ interface LearnerRecordStoreServiceInterface
      * @throws GeneralException
      * @return array
      */
-    public function getAnswersStatements(array $data);
+    public function getAnsweredStatements(array $data);
 
     /**
-     * Get 'answered' statements from LRS based on filters
+     * Get the latest 'answered' statements from LRS based on filters
      * that have results and category in context in them.
      * 
      * @param array $data An array of filters.
      * @throws GeneralException
      * @return array
      */
-    public function getAnswersStatementsWithResults(array $data);
+    public function getLatestAnsweredStatementsWithResults(array $data);
 
     /**
      * Get summary of an 'answered' statement
@@ -131,5 +138,13 @@ interface LearnerRecordStoreServiceInterface
      * @return string
      */
     public function formatDuration($duration);
+
+    /**
+     * Retrieve H5P SubContent Id from a list of extensions in a statement.
+     * 
+     * @param Statement $statement An XAPI Statement.
+     * @return string
+     */
+    public function getH5PSubContenIdFromStatement(Statement $statement);
 
 }
