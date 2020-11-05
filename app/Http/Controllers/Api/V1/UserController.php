@@ -7,7 +7,6 @@ use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
-use App\Models\Notification;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
 use App\User;
@@ -70,7 +69,7 @@ class UserController extends Controller
         $data = $userSearchRequest->validated();
 
         return response([
-            'users' => UserForTeamResource::collection($this->userRepository->searchByName($data['search'])),
+            'users' => UserForTeamResource::collection($this->userRepository->searchByEmailAndName($data['search'])),
         ], 200);
     }
 
@@ -346,6 +345,7 @@ class UserController extends Controller
      * }
      *
      * @param Request $request
+     * @param $notification_id
      * @return Response
      */
     public function readNotification(Request $request, $notification_id)
@@ -362,7 +362,6 @@ class UserController extends Controller
         return response([
             'errors' => ['Failed to read notification.'],
         ], 500);
-
     }
 
     /**
