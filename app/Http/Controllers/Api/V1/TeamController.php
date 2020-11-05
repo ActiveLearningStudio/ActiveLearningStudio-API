@@ -147,18 +147,31 @@ class TeamController extends Controller
     {
         $data = $teamRequest->validated();
 
-        $authenticated_user = auth()->user();
-        $team = $authenticated_user->teams()->create($data, ['role' => 'owner']);
+        $auth_user = auth()->user();
+        $team = $auth_user->teams()->create($data, ['role' => 'owner']);
 
         if ($team) {
             $assigned_users = [];
-            foreach ($data['users'] as $user_id) {
-                $user = $this->userRepository->find($user_id);
-                if ($user) {
-                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $team->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
-                    $user->token = $token;
-                    $assigned_users[] = $user;
+            $valid_users = [];
+            foreach ($data['users'] as $user) {
+                $conUser = $this->userRepository->find($user['id']);
+
+                $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
+                if ($conUser) {
+                    $team->users()->attach($conUser, ['role' => 'collaborator', 'token' => $token]);
+                    $conUser->token = $token;
+                    $valid_users[] = $conUser;
+                    $assigned_users[] = [
+                        'user' => $conUser,
+                        'note' => $user['note']
+                    ];
+                } elseif ($user['email']) {
+                    $tempUser = new User(['email' => $user['email']]);
+                    $tempUser->token = $token;
+                    $assigned_users[] = [
+                        'user' => $tempUser,
+                        'note' => $user['note']
+                    ];
                 }
             }
 
@@ -173,7 +186,7 @@ class TeamController extends Controller
 
             event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
 
-            $this->teamRepository->setTeamProjectUser($team, $assigned_projects, $assigned_users);
+            $this->teamRepository->setTeamProjectUser($team, $assigned_projects, $valid_users);
 
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),

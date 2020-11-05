@@ -25,9 +25,9 @@ class InviteToTeamNotification extends Notification
      * @param $sender
      * @param $team
      * @param $token
-     * @param $note
+     * @param string $note
      */
-    public function __construct($sender, $team, $token, $note)
+    public function __construct($sender, $team, $token, $note = '')
     {
         $this->sender = $sender;
         $this->team = $team;
