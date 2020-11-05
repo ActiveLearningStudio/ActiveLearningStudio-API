@@ -168,7 +168,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('classwork/{classwork}/submission', 'GoogleClassroomController@getStudentSubmission');
         Route::get('activities/{activity}/h5p-resource-settings', 'GoogleClassroomController@getH5pResourceSettings');
     });
-
+    // Outcome
+    Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
+    
     Route::get('error', 'ErrorController@show')->name('api/error');
 
     /*********************** ADMIN PANEL ROUTES ************************/
