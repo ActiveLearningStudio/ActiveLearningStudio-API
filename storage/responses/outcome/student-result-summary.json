@@ -1,0 +1,31 @@
+{
+    "summary": [
+        {
+            "name": "Single Choice Set",
+            "score": {
+                "raw": 2,
+                "max": 2
+            },
+            "duration": "00:14",
+            "ending-point": "00:18"
+        },
+        {
+            "name": "Multiple Choice",
+            "score": {
+                "raw": 0,
+                "max": 2
+            },
+            "duration": "01:54",
+            "ending-point": "00:24"
+        },
+        {
+            "name": "True/False Question",
+            "score": {
+                "raw": 1,
+                "max": 1
+            },
+            "duration": "01:58",
+            "ending-point": "00:28"
+        }
+    ]
+}

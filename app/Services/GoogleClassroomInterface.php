@@ -6,7 +6,8 @@ use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 /**
  * Interface for Google Classroom service
  */
-interface GoogleClassroomInterface {
+interface GoogleClassroomInterface
+{
 
     /**
      * Course create state
