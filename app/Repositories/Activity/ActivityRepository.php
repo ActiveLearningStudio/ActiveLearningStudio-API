@@ -370,6 +370,23 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             return false;
         }
         \File::copyDirectory($contentDir . $oldContentID, $contentDir . $newContentID);
+        $this->chown_r($contentDir . $newContentID); // update content directory owner to default apache
         return true;
+    }
+
+    /**
+     * Change owner of the directory
+     * @param $path
+     * @param string $user
+     */
+    protected function chown_r($path, $user = 'www-data'): void
+    {
+        $dir = new \DirectoryIterator($path);
+        foreach ($dir as $item) {
+            chown($item->getPathname(), $user);
+            if ($item->isDir() && !$item->isDot()) {
+                $this->chown_r($item->getPathname());
+            }
+        }
     }
 }

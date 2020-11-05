@@ -6,45 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>API Reference</title>
 
-    <link rel="stylesheet" href="{{ asset('/docs/css/style.css') }}" />
-    <script src="{{ asset('/docs/js/all.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('/api/docs/css/style.css') }}" />
+    <script src="{{ asset('/api/docs/js/all.js') }}"></script>
 
-
-          <script>
+    <script>
         $(function() {
             setupLanguages(["bash","javascript","php","python"]);
         });
-      </script>
-      </head>
+    </script>
+</head>
 
-  <body class="">
+<body class="">
     <a href="#" id="nav-button">
-      <span>
-        NAV
-        <img src="/docs/images/navbar.png" />
-      </span>
+        <span>
+            NAV
+            <img src="/api/docs/images/navbar.png" />
+        </span>
     </a>
     <div class="tocify-wrapper">
-        <img src="/docs/images/logo.png" />
-                    <div class="lang-selector">
-                                  <a href="#" data-language-name="bash">bash</a>
-                                  <a href="#" data-language-name="javascript">javascript</a>
-                                  <a href="#" data-language-name="php">php</a>
-                                  <a href="#" data-language-name="python">python</a>
-                            </div>
-                            <div class="search">
-              <input type="text" class="search" id="input-search" placeholder="Search">
-            </div>
-            <ul class="search-results"></ul>
-              <div id="toc">
-      </div>
-                    <ul class="toc-footer">
-                                  <li><a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a></li>
-                            </ul>
-            </div>
+        <img src="/api/docs/images/logo.png" />
+        <div class="lang-selector">
+            <a href="#" data-language-name="bash">bash</a>
+            <a href="#" data-language-name="javascript">javascript</a>
+            <a href="#" data-language-name="php">php</a>
+            <a href="#" data-language-name="python">python</a>
+        </div>
+        <div class="search">
+            <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+        <div id="toc">
+        </div>
+        <ul class="toc-footer">
+            <li><a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a></li>
+        </ul>
+    </div>
     <div class="page-wrapper">
-      <div class="dark-box"></div>
-      <div class="content">
+        <div class="dark-box"></div>
+        <div class="content">
           <!-- START_INFO -->
 <h1>Info</h1>
 <p>Welcome to the generated API reference.
@@ -58,13 +57,13 @@
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/register" \
+    "http://localhost:8000/api/register" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"first_name":"John","last_name":"Doe","email":"john.doe@currikistudio.org","password":"Password123","organization_name":"Curriki","job_title":"Developer"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/register"
+    "http://localhost:8000/api/register"
 );
 
 let headers = {
@@ -91,7 +90,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/register',
+    'http://localhost:8000/api/register',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -112,7 +111,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/register'
+url = 'http://localhost:8000/api/register'
 payload = {
     "first_name": "John",
     "last_name": "Doe",
@@ -199,13 +198,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/login" \
+    "http://localhost:8000/api/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"john.doe@currikistudio.org","password":"Password123"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/login"
+    "http://localhost:8000/api/login"
 );
 
 let headers = {
@@ -228,7 +227,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/login',
+    'http://localhost:8000/api/login',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -245,7 +244,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/login'
+url = 'http://localhost:8000/api/login'
 payload = {
     "email": "john.doe@currikistudio.org",
     "password": "Password123"
@@ -325,13 +324,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/admin/login" \
+    "http://localhost:8000/api/admin/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"john.doe@currikistudio.org","password":"Password123"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/admin/login"
+    "http://localhost:8000/api/admin/login"
 );
 
 let headers = {
@@ -354,7 +353,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/admin/login',
+    'http://localhost:8000/api/admin/login',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -371,7 +370,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/admin/login'
+url = 'http://localhost:8000/api/admin/login'
 payload = {
     "email": "john.doe@currikistudio.org",
     "password": "Password123"
@@ -459,13 +458,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/login/google" \
+    "http://localhost:8000/api/login/google" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"tokenId":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...","tokenObj":{"token_type":"Bearer","access_token":"ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...","scope":"email profile ...","login_hint":"AJDLj6JUa8yxXrhHdWRHIV0...","expires_in":3599,"id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6I...","session_state":{"extraQueryParams":{"authuser":"0"}},"first_issued_at":1601535932504,"expires_at":1601539531504,"idpId":"google"}}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/login/google"
+    "http://localhost:8000/api/login/google"
 );
 
 let headers = {
@@ -503,7 +502,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/login/google',
+    'http://localhost:8000/api/login/google',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -535,7 +534,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/login/google'
+url = 'http://localhost:8000/api/login/google'
 payload = {
     "tokenId": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...",
     "tokenObj": {
@@ -693,13 +692,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/forgot-password" \
+    "http://localhost:8000/api/forgot-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"john.doe@currikistudio.org"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/forgot-password"
+    "http://localhost:8000/api/forgot-password"
 );
 
 let headers = {
@@ -721,7 +720,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/forgot-password',
+    'http://localhost:8000/api/forgot-password',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -737,7 +736,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/forgot-password'
+url = 'http://localhost:8000/api/forgot-password'
 payload = {
     "email": "john.doe@currikistudio.org"
 }
@@ -790,13 +789,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/reset-password" \
+    "http://localhost:8000/api/reset-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"token":"ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...","email":"john.doe@currikistudio.org","password":"Password123","password_confirmation":"Password123"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/reset-password"
+    "http://localhost:8000/api/reset-password"
 );
 
 let headers = {
@@ -821,7 +820,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/reset-password',
+    'http://localhost:8000/api/reset-password',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -840,7 +839,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/reset-password'
+url = 'http://localhost:8000/api/reset-password'
 payload = {
     "token": "ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...",
     "email": "john.doe@currikistudio.org",
@@ -912,13 +911,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/verify-email" \
+    "http://localhost:8000/api/verify-email" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1,"hash":"9e0f70124a2a88d5435...","signature":"467fbe9a00e7d367553f...","expires":1599754915}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/verify-email"
+    "http://localhost:8000/api/verify-email"
 );
 
 let headers = {
@@ -943,7 +942,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/verify-email',
+    'http://localhost:8000/api/verify-email',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -962,7 +961,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/verify-email'
+url = 'http://localhost:8000/api/verify-email'
 payload = {
     "id": 1,
     "hash": "9e0f70124a2a88d5435...",
@@ -1025,11 +1024,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/logout" \
+    "http://localhost:8000/api/logout" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/logout"
+    "http://localhost:8000/api/logout"
 );
 
 let headers = {
@@ -1046,7 +1045,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/logout',
+    'http://localhost:8000/api/logout',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1059,7 +1058,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/logout'
+url = 'http://localhost:8000/api/logout'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1084,11 +1083,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/subscribe" \
+    "http://localhost:8000/api/v1/subscribe" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/subscribe"
+    "http://localhost:8000/api/v1/subscribe"
 );
 
 let headers = {
@@ -1105,7 +1104,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/subscribe',
+    'http://localhost:8000/api/v1/subscribe',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1118,7 +1117,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/subscribe'
+url = 'http://localhost:8000/api/v1/subscribe'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1161,11 +1160,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/users/me" \
+    -G "http://localhost:8000/api/v1/users/me" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/users/me"
+    "http://localhost:8000/api/v1/users/me"
 );
 
 let headers = {
@@ -1182,7 +1181,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/users/me',
+    'http://localhost:8000/api/v1/users/me',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1195,7 +1194,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/users/me'
+url = 'http://localhost:8000/api/v1/users/me'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1223,6 +1222,171 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/users/me</code></p>
 <!-- END_dfb8fbb6facf7c68af221b2363bceb9e -->
+<!-- START_02b45ced326d10b9bd2b3830a643cefc -->
+<h2>Get All User Notifications</h2>
+<p>Get a list of the users unread notification</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8000/api/v1/users/notifications" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/users/notifications"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8000/api/v1/users/notifications',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/users/notifications'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "notifications": [
+        {
+            "id": "afff2365-a4f3-48ab-8d53-6d958a9e3ab3",
+            "type": "App\\Notifications\\CloneNotification",
+            "notifiable_type": "App\\User",
+            "notifiable_id": 1243,
+            "data": {
+                "message": "Project(26 Project 2) has been duplicated successfully"
+            },
+            "read_at": null,
+            "created_at": "2020-10-16T13:46:33.000000Z",
+            "updated_at": "2020-10-16T13:46:33.000000Z"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/users/notifications</code></p>
+<!-- END_02b45ced326d10b9bd2b3830a643cefc -->
+<!-- START_f6569d03fab83edfbe6501cdae335901 -->
+<h2>Read Notification</h2>
+<p>Read notification of the specified user.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8000/api/v1/users/notifications/1/read" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/users/notifications/1/read"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8000/api/v1/users/notifications/1/read',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/users/notifications/1/read'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to read notification."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "notifications": [
+        {
+            "id": "afff2365-a4f3-48ab-8d53-6d958a9e3ab3",
+            "type": "App\\Notifications\\CloneNotification",
+            "notifiable_type": "App\\User",
+            "notifiable_id": 1243,
+            "data": {
+                "message": "Project(26 Project 2) has been duplicated successfully"
+            },
+            "read_at": null,
+            "created_at": "2020-10-16T13:46:33.000000Z",
+            "updated_at": "2020-10-16T13:46:33.000000Z"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/users/notifications/{notification}/read</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$notification_id</code></td>
+<td>optional</td>
+<td>string required Current id of a notification</td>
+</tr>
+</tbody>
+</table>
+<!-- END_f6569d03fab83edfbe6501cdae335901 -->
 <!-- START_89e22ac0c94b3f953efa67025446e89e -->
 <h2>Get All Users for Team</h2>
 <p>Get a list of the users for Team.</p>
@@ -1230,13 +1394,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/users/search" \
+    "http://localhost:8000/api/v1/users/search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"search":"Abby"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/users/search"
+    "http://localhost:8000/api/v1/users/search"
 );
 
 let headers = {
@@ -1258,7 +1422,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/users/search',
+    'http://localhost:8000/api/v1/users/search',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1274,7 +1438,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/users/search'
+url = 'http://localhost:8000/api/v1/users/search'
 payload = {
     "search": "Abby"
 }
@@ -1330,13 +1494,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/users/update-password" \
+    "http://localhost:8000/api/v1/users/update-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"current_password":"Password123","password":"Password321","password_confirmation":"Password321"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/users/update-password"
+    "http://localhost:8000/api/v1/users/update-password"
 );
 
 let headers = {
@@ -1360,7 +1524,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/users/update-password',
+    'http://localhost:8000/api/v1/users/update-password',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1378,7 +1542,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/users/update-password'
+url = 'http://localhost:8000/api/v1/users/update-password'
 payload = {
     "current_password": "Password123",
     "password": "Password321",
@@ -1453,11 +1617,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/users" \
+    -G "http://localhost:8000/api/v1/users" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/users"
+    "http://localhost:8000/api/v1/users"
 );
 
 let headers = {
@@ -1474,7 +1638,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/users',
+    'http://localhost:8000/api/v1/users',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1487,7 +1651,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/users'
+url = 'http://localhost:8000/api/v1/users'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1537,11 +1701,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/users/1" \
+    -G "http://localhost:8000/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/users/1"
+    "http://localhost:8000/api/v1/users/1"
 );
 
 let headers = {
@@ -1558,7 +1722,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/users/1',
+    'http://localhost:8000/api/v1/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1571,7 +1735,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/users/1'
+url = 'http://localhost:8000/api/v1/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1623,13 +1787,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/users/1" \
+    "http://localhost:8000/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"first_name":"John","last_name":"Doe","organization_name":"Curriki","website":"www.currikistudio.org","job_title":"Developer","address":"20660 Stevens Creek Blvd #332, Cupertino, CA 95014","phone_number":"+1234567890"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/users/1"
+    "http://localhost:8000/api/v1/users/1"
 );
 
 let headers = {
@@ -1657,7 +1821,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/users/1',
+    'http://localhost:8000/api/v1/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1679,7 +1843,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/users/1'
+url = 'http://localhost:8000/api/v1/users/1'
 payload = {
     "first_name": "John",
     "last_name": "Doe",
@@ -1805,11 +1969,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/users/1" \
+    "http://localhost:8000/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/users/1"
+    "http://localhost:8000/api/v1/users/1"
 );
 
 let headers = {
@@ -1826,7 +1990,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/users/1',
+    'http://localhost:8000/api/v1/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1839,7 +2003,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/users/1'
+url = 'http://localhost:8000/api/v1/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1889,11 +2053,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/1/load-shared" \
+    -G "http://localhost:8000/api/v1/projects/1/load-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/load-shared"
+    "http://localhost:8000/api/v1/projects/1/load-shared"
 );
 
 let headers = {
@@ -1910,7 +2074,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/1/load-shared',
+    'http://localhost:8000/api/v1/projects/1/load-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1923,7 +2087,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/load-shared'
+url = 'http://localhost:8000/api/v1/projects/1/load-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1981,13 +2145,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/upload-thumb" \
+    "http://localhost:8000/api/v1/projects/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"thumb":"(binary)"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/upload-thumb"
+    "http://localhost:8000/api/v1/projects/upload-thumb"
 );
 
 let headers = {
@@ -2009,7 +2173,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/upload-thumb',
+    'http://localhost:8000/api/v1/projects/upload-thumb',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2025,7 +2189,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/upload-thumb'
+url = 'http://localhost:8000/api/v1/projects/upload-thumb'
 payload = {
     "thumb": "(binary)"
 }
@@ -2078,11 +2242,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/recent" \
+    -G "http://localhost:8000/api/v1/projects/recent" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/recent"
+    "http://localhost:8000/api/v1/projects/recent"
 );
 
 let headers = {
@@ -2099,7 +2263,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/recent',
+    'http://localhost:8000/api/v1/projects/recent',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2112,7 +2276,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/recent'
+url = 'http://localhost:8000/api/v1/projects/recent'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2190,11 +2354,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/default" \
+    -G "http://localhost:8000/api/v1/projects/default" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/default"
+    "http://localhost:8000/api/v1/projects/default"
 );
 
 let headers = {
@@ -2211,7 +2375,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/default',
+    'http://localhost:8000/api/v1/projects/default',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2224,7 +2388,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/default'
+url = 'http://localhost:8000/api/v1/projects/default'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2302,11 +2466,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/detail" \
+    -G "http://localhost:8000/api/v1/projects/detail" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/detail"
+    "http://localhost:8000/api/v1/projects/detail"
 );
 
 let headers = {
@@ -2323,7 +2487,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/detail',
+    'http://localhost:8000/api/v1/projects/detail',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2336,7 +2500,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/detail'
+url = 'http://localhost:8000/api/v1/projects/detail'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2413,11 +2577,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/update-order" \
+    -G "http://localhost:8000/api/v1/projects/update-order" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/update-order"
+    "http://localhost:8000/api/v1/projects/update-order"
 );
 
 let headers = {
@@ -2434,7 +2598,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/update-order',
+    'http://localhost:8000/api/v1/projects/update-order',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2447,7 +2611,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/update-order'
+url = 'http://localhost:8000/api/v1/projects/update-order'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2470,11 +2634,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/favorites" \
+    -G "http://localhost:8000/api/v1/projects/favorites" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/favorites"
+    "http://localhost:8000/api/v1/projects/favorites"
 );
 
 let headers = {
@@ -2491,7 +2655,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/favorites',
+    'http://localhost:8000/api/v1/projects/favorites',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2504,7 +2668,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/favorites'
+url = 'http://localhost:8000/api/v1/projects/favorites'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2550,13 +2714,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/reorder" \
+    "http://localhost:8000/api/v1/projects/reorder" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"projects":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/reorder"
+    "http://localhost:8000/api/v1/projects/reorder"
 );
 
 let headers = {
@@ -2578,7 +2742,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/reorder',
+    'http://localhost:8000/api/v1/projects/reorder',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2594,7 +2758,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/reorder'
+url = 'http://localhost:8000/api/v1/projects/reorder'
 payload = {
     "projects": []
 }
@@ -2662,11 +2826,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/1/indexing" \
+    -G "http://localhost:8000/api/v1/projects/1/indexing" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/indexing"
+    "http://localhost:8000/api/v1/projects/1/indexing"
 );
 
 let headers = {
@@ -2683,7 +2847,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/1/indexing',
+    'http://localhost:8000/api/v1/projects/1/indexing',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2696,7 +2860,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/indexing'
+url = 'http://localhost:8000/api/v1/projects/1/indexing'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2758,11 +2922,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/1/status-update" \
+    -G "http://localhost:8000/api/v1/projects/1/status-update" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/status-update"
+    "http://localhost:8000/api/v1/projects/1/status-update"
 );
 
 let headers = {
@@ -2779,7 +2943,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/1/status-update',
+    'http://localhost:8000/api/v1/projects/1/status-update',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2792,7 +2956,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/status-update'
+url = 'http://localhost:8000/api/v1/projects/1/status-update'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2838,11 +3002,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/1/share" \
+    "http://localhost:8000/api/v1/projects/1/share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/share"
+    "http://localhost:8000/api/v1/projects/1/share"
 );
 
 let headers = {
@@ -2859,7 +3023,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/1/share',
+    'http://localhost:8000/api/v1/projects/1/share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2872,7 +3036,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/share'
+url = 'http://localhost:8000/api/v1/projects/1/share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2930,11 +3094,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/1/clone" \
+    "http://localhost:8000/api/v1/projects/1/clone" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/clone"
+    "http://localhost:8000/api/v1/projects/1/clone"
 );
 
 let headers = {
@@ -2951,7 +3115,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/1/clone',
+    'http://localhost:8000/api/v1/projects/1/clone',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2964,7 +3128,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/clone'
+url = 'http://localhost:8000/api/v1/projects/1/clone'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3012,11 +3176,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/1/remove-share" \
+    "http://localhost:8000/api/v1/projects/1/remove-share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/remove-share"
+    "http://localhost:8000/api/v1/projects/1/remove-share"
 );
 
 let headers = {
@@ -3033,7 +3197,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/1/remove-share',
+    'http://localhost:8000/api/v1/projects/1/remove-share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3046,7 +3210,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/remove-share'
+url = 'http://localhost:8000/api/v1/projects/1/remove-share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3104,11 +3268,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/1/favorite" \
+    "http://localhost:8000/api/v1/projects/1/favorite" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/favorite"
+    "http://localhost:8000/api/v1/projects/1/favorite"
 );
 
 let headers = {
@@ -3125,7 +3289,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/1/favorite',
+    'http://localhost:8000/api/v1/projects/1/favorite',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3138,7 +3302,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/favorite'
+url = 'http://localhost:8000/api/v1/projects/1/favorite'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3178,11 +3342,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects" \
+    -G "http://localhost:8000/api/v1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects"
+    "http://localhost:8000/api/v1/projects"
 );
 
 let headers = {
@@ -3199,7 +3363,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects',
+    'http://localhost:8000/api/v1/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3212,7 +3376,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects'
+url = 'http://localhost:8000/api/v1/projects'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3258,13 +3422,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects" \
+    "http://localhost:8000/api/v1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"Test Project","description":"This is a test project.","thumb_url":"https:\/\/images.pexels.com\/photos\/2832382"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects"
+    "http://localhost:8000/api/v1/projects"
 );
 
 let headers = {
@@ -3288,7 +3452,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects',
+    'http://localhost:8000/api/v1/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3306,7 +3470,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects'
+url = 'http://localhost:8000/api/v1/projects'
 payload = {
     "name": "Test Project",
     "description": "This is a test project.",
@@ -3383,11 +3547,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/1" \
+    -G "http://localhost:8000/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1"
+    "http://localhost:8000/api/v1/projects/1"
 );
 
 let headers = {
@@ -3404,7 +3568,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/1',
+    'http://localhost:8000/api/v1/projects/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3417,7 +3581,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1'
+url = 'http://localhost:8000/api/v1/projects/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3467,13 +3631,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/projects/1" \
+    "http://localhost:8000/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"Test Project","description":"This is a test project.","thumb_url":"https:\/\/images.pexels.com\/photos\/2832382"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1"
+    "http://localhost:8000/api/v1/projects/1"
 );
 
 let headers = {
@@ -3497,7 +3661,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/projects/1',
+    'http://localhost:8000/api/v1/projects/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3515,7 +3679,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1'
+url = 'http://localhost:8000/api/v1/projects/1'
 payload = {
     "name": "Test Project",
     "description": "This is a test project.",
@@ -3610,11 +3774,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/projects/1" \
+    "http://localhost:8000/api/v1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1"
+    "http://localhost:8000/api/v1/projects/1"
 );
 
 let headers = {
@@ -3631,7 +3795,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/projects/1',
+    'http://localhost:8000/api/v1/projects/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3644,7 +3808,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1'
+url = 'http://localhost:8000/api/v1/projects/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3694,11 +3858,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/playlists/1/load-shared" \
+    -G "http://localhost:8000/api/v1/playlists/1/load-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/playlists/1/load-shared"
+    "http://localhost:8000/api/v1/playlists/1/load-shared"
 );
 
 let headers = {
@@ -3715,7 +3879,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/playlists/1/load-shared',
+    'http://localhost:8000/api/v1/playlists/1/load-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3728,7 +3892,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/playlists/1/load-shared'
+url = 'http://localhost:8000/api/v1/playlists/1/load-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3805,13 +3969,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/1/playlists/reorder" \
+    "http://localhost:8000/api/v1/projects/1/playlists/reorder" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"playlists":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/playlists/reorder"
+    "http://localhost:8000/api/v1/projects/1/playlists/reorder"
 );
 
 let headers = {
@@ -3833,7 +3997,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/1/playlists/reorder',
+    'http://localhost:8000/api/v1/projects/1/playlists/reorder',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3849,7 +4013,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/playlists/reorder'
+url = 'http://localhost:8000/api/v1/projects/1/playlists/reorder'
 payload = {
     "playlists": []
 }
@@ -4051,11 +4215,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/1/playlists/1/clone" \
+    "http://localhost:8000/api/v1/projects/1/playlists/1/clone" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/playlists/1/clone"
+    "http://localhost:8000/api/v1/projects/1/playlists/1/clone"
 );
 
 let headers = {
@@ -4072,7 +4236,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/1/playlists/1/clone',
+    'http://localhost:8000/api/v1/projects/1/playlists/1/clone',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4085,7 +4249,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/playlists/1/clone'
+url = 'http://localhost:8000/api/v1/projects/1/playlists/1/clone'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4138,11 +4302,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/1/playlists" \
+    -G "http://localhost:8000/api/v1/projects/1/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/playlists"
+    "http://localhost:8000/api/v1/projects/1/playlists"
 );
 
 let headers = {
@@ -4159,7 +4323,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/1/playlists',
+    'http://localhost:8000/api/v1/projects/1/playlists',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4172,7 +4336,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/playlists'
+url = 'http://localhost:8000/api/v1/projects/1/playlists'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4352,13 +4516,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/projects/aut/playlists" \
+    "http://localhost:8000/api/v1/projects/molestiae/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/aut/playlists"
+    "http://localhost:8000/api/v1/projects/molestiae/playlists"
 );
 
 let headers = {
@@ -4381,7 +4545,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/projects/aut/playlists',
+    'http://localhost:8000/api/v1/projects/molestiae/playlists',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4398,7 +4562,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/aut/playlists'
+url = 'http://localhost:8000/api/v1/projects/molestiae/playlists'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -4504,11 +4668,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/projects/1/playlists/1" \
+    -G "http://localhost:8000/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/playlists/1"
+    "http://localhost:8000/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -4525,7 +4689,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/projects/1/playlists/1',
+    'http://localhost:8000/api/v1/projects/1/playlists/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4538,7 +4702,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/playlists/1'
+url = 'http://localhost:8000/api/v1/projects/1/playlists/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4620,13 +4784,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/projects/1/playlists/1" \
+    "http://localhost:8000/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/playlists/1"
+    "http://localhost:8000/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -4649,7 +4813,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/projects/1/playlists/1',
+    'http://localhost:8000/api/v1/projects/1/playlists/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4666,7 +4830,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/playlists/1'
+url = 'http://localhost:8000/api/v1/projects/1/playlists/1'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -4786,11 +4950,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/projects/1/playlists/1" \
+    "http://localhost:8000/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/projects/1/playlists/1"
+    "http://localhost:8000/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -4807,7 +4971,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/projects/1/playlists/1',
+    'http://localhost:8000/api/v1/projects/1/playlists/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4820,7 +4984,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/projects/1/playlists/1'
+url = 'http://localhost:8000/api/v1/projects/1/playlists/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4881,11 +5045,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/playlists/1/lti" \
+    -G "http://localhost:8000/api/v1/playlists/1/lti" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/playlists/1/lti"
+    "http://localhost:8000/api/v1/playlists/1/lti"
 );
 
 let headers = {
@@ -4902,7 +5066,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/playlists/1/lti',
+    'http://localhost:8000/api/v1/playlists/1/lti',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4915,7 +5079,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/playlists/1/lti'
+url = 'http://localhost:8000/api/v1/playlists/1/lti'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4986,11 +5150,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/playlists/1/activities/1/clone" \
+    "http://localhost:8000/api/v1/playlists/1/activities/1/clone" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/playlists/1/activities/1/clone"
+    "http://localhost:8000/api/v1/playlists/1/activities/1/clone"
 );
 
 let headers = {
@@ -5007,7 +5171,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/playlists/1/activities/1/clone',
+    'http://localhost:8000/api/v1/playlists/1/activities/1/clone',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5020,7 +5184,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/playlists/1/activities/1/clone'
+url = 'http://localhost:8000/api/v1/playlists/1/activities/1/clone'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5081,13 +5245,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/activities/upload-thumb" \
+    "http://localhost:8000/api/v1/activities/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"thumb":"(binary)"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/upload-thumb"
+    "http://localhost:8000/api/v1/activities/upload-thumb"
 );
 
 let headers = {
@@ -5109,7 +5273,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/activities/upload-thumb',
+    'http://localhost:8000/api/v1/activities/upload-thumb',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5125,7 +5289,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/upload-thumb'
+url = 'http://localhost:8000/api/v1/activities/upload-thumb'
 payload = {
     "thumb": "(binary)"
 }
@@ -5178,11 +5342,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/1/share" \
+    -G "http://localhost:8000/api/v1/activities/1/share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1/share"
+    "http://localhost:8000/api/v1/activities/1/share"
 );
 
 let headers = {
@@ -5199,7 +5363,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/1/share',
+    'http://localhost:8000/api/v1/activities/1/share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5212,7 +5376,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1/share'
+url = 'http://localhost:8000/api/v1/activities/1/share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5316,11 +5480,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/update-order" \
+    -G "http://localhost:8000/api/v1/activities/update-order" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/update-order"
+    "http://localhost:8000/api/v1/activities/update-order"
 );
 
 let headers = {
@@ -5337,7 +5501,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/update-order',
+    'http://localhost:8000/api/v1/activities/update-order',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5350,7 +5514,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/update-order'
+url = 'http://localhost:8000/api/v1/activities/update-order'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5373,11 +5537,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/1/remove-share" \
+    -G "http://localhost:8000/api/v1/activities/1/remove-share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1/remove-share"
+    "http://localhost:8000/api/v1/activities/1/remove-share"
 );
 
 let headers = {
@@ -5394,7 +5558,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/1/remove-share',
+    'http://localhost:8000/api/v1/activities/1/remove-share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5407,7 +5571,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1/remove-share'
+url = 'http://localhost:8000/api/v1/activities/1/remove-share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5512,11 +5676,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/1/detail" \
+    -G "http://localhost:8000/api/v1/activities/1/detail" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1/detail"
+    "http://localhost:8000/api/v1/activities/1/detail"
 );
 
 let headers = {
@@ -5533,7 +5697,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/1/detail',
+    'http://localhost:8000/api/v1/activities/1/detail',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5546,7 +5710,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1/detail'
+url = 'http://localhost:8000/api/v1/activities/1/detail'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5676,11 +5840,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/1/h5p" \
+    -G "http://localhost:8000/api/v1/activities/1/h5p" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1/h5p"
+    "http://localhost:8000/api/v1/activities/1/h5p"
 );
 
 let headers = {
@@ -5697,7 +5861,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/1/h5p',
+    'http://localhost:8000/api/v1/activities/1/h5p',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5710,7 +5874,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1/h5p'
+url = 'http://localhost:8000/api/v1/activities/1/h5p'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -7054,11 +7218,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings" \
+    -G "http://localhost:8000/api/v1/activities/1/h5p-resource-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings"
+    "http://localhost:8000/api/v1/activities/1/h5p-resource-settings"
 );
 
 let headers = {
@@ -7075,7 +7239,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings',
+    'http://localhost:8000/api/v1/activities/1/h5p-resource-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -7088,7 +7252,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings'
+url = 'http://localhost:8000/api/v1/activities/1/h5p-resource-settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -7591,11 +7755,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings-open" \
+    -G "http://localhost:8000/api/v1/activities/1/h5p-resource-settings-open" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings-open"
+    "http://localhost:8000/api/v1/activities/1/h5p-resource-settings-open"
 );
 
 let headers = {
@@ -7612,7 +7776,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings-open',
+    'http://localhost:8000/api/v1/activities/1/h5p-resource-settings-open',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -7625,7 +7789,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1/h5p-resource-settings-open'
+url = 'http://localhost:8000/api/v1/activities/1/h5p-resource-settings-open'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -8418,13 +8582,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/activities" \
+    "http://localhost:8000/api/v1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"ut","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"explicabo","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities"
+    "http://localhost:8000/api/v1/activities"
 );
 
 let headers = {
@@ -8435,7 +8599,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "ut",
+    "content": "explicabo",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -8454,7 +8618,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/activities',
+    'http://localhost:8000/api/v1/activities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -8463,7 +8627,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'ut',
+            'content' =&gt; 'explicabo',
             'playlist_id' =&gt; 1,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -8478,11 +8642,11 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities'
+url = 'http://localhost:8000/api/v1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "ut",
+    "content": "explicabo",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -8644,11 +8808,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/1" \
+    -G "http://localhost:8000/api/v1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1"
+    "http://localhost:8000/api/v1/activities/1"
 );
 
 let headers = {
@@ -8665,7 +8829,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/1',
+    'http://localhost:8000/api/v1/activities/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -8678,7 +8842,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1'
+url = 'http://localhost:8000/api/v1/activities/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -8775,13 +8939,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/activities/1" \
+    "http://localhost:8000/api/v1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"fuga","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"libero","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1"
+    "http://localhost:8000/api/v1/activities/1"
 );
 
 let headers = {
@@ -8792,7 +8956,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "fuga",
+    "content": "libero",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -8812,7 +8976,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/activities/1',
+    'http://localhost:8000/api/v1/activities/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -8821,7 +8985,7 @@ $response = $client-&gt;put(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'fuga',
+            'content' =&gt; 'libero',
             'playlist_id' =&gt; 1,
             'shared' =&gt; false,
             'order' =&gt; 2,
@@ -8837,11 +9001,11 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1'
+url = 'http://localhost:8000/api/v1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "fuga",
+    "content": "libero",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -9028,11 +9192,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/activities/1" \
+    "http://localhost:8000/api/v1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/1"
+    "http://localhost:8000/api/v1/activities/1"
 );
 
 let headers = {
@@ -9049,7 +9213,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/activities/1',
+    'http://localhost:8000/api/v1/activities/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9062,7 +9226,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/1'
+url = 'http://localhost:8000/api/v1/activities/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -9110,11 +9274,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared" \
+    -G "http://localhost:8000/api/v1/activities/modi/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared"
+    "http://localhost:8000/api/v1/activities/modi/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -9131,7 +9295,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared',
+    'http://localhost:8000/api/v1/activities/modi/h5p-resource-settings-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9144,7 +9308,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activities/laborum/h5p-resource-settings-shared'
+url = 'http://localhost:8000/api/v1/activities/modi/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -9649,11 +9813,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activity-types/1/items" \
+    -G "http://localhost:8000/api/v1/activity-types/1/items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-types/1/items"
+    "http://localhost:8000/api/v1/activity-types/1/items"
 );
 
 let headers = {
@@ -9670,7 +9834,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activity-types/1/items',
+    'http://localhost:8000/api/v1/activity-types/1/items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9683,7 +9847,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-types/1/items'
+url = 'http://localhost:8000/api/v1/activity-types/1/items'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -9769,11 +9933,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activity-types" \
+    -G "http://localhost:8000/api/v1/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-types"
+    "http://localhost:8000/api/v1/activity-types"
 );
 
 let headers = {
@@ -9790,7 +9954,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activity-types',
+    'http://localhost:8000/api/v1/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9803,7 +9967,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-types'
+url = 'http://localhost:8000/api/v1/activity-types'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -10592,13 +10756,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/activity-types" \
+    "http://localhost:8000/api/v1/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio","order":0,"image":"\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-types"
+    "http://localhost:8000/api/v1/activity-types"
 );
 
 let headers = {
@@ -10622,7 +10786,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/activity-types',
+    'http://localhost:8000/api/v1/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -10640,7 +10804,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-types'
+url = 'http://localhost:8000/api/v1/activity-types'
 payload = {
     "title": "Audio",
     "order": 0,
@@ -10715,11 +10879,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activity-types/1" \
+    -G "http://localhost:8000/api/v1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-types/1"
+    "http://localhost:8000/api/v1/activity-types/1"
 );
 
 let headers = {
@@ -10736,7 +10900,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activity-types/1',
+    'http://localhost:8000/api/v1/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -10749,7 +10913,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-types/1'
+url = 'http://localhost:8000/api/v1/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -10841,13 +11005,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/activity-types/1" \
+    "http://localhost:8000/api/v1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio","order":0,"image":"\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-types/1"
+    "http://localhost:8000/api/v1/activity-types/1"
 );
 
 let headers = {
@@ -10871,7 +11035,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/activity-types/1',
+    'http://localhost:8000/api/v1/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -10889,7 +11053,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-types/1'
+url = 'http://localhost:8000/api/v1/activity-types/1'
 payload = {
     "title": "Audio",
     "order": 0,
@@ -11026,11 +11190,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/activity-types/1" \
+    "http://localhost:8000/api/v1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-types/1"
+    "http://localhost:8000/api/v1/activity-types/1"
 );
 
 let headers = {
@@ -11047,7 +11211,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/activity-types/1',
+    'http://localhost:8000/api/v1/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11060,7 +11224,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-types/1'
+url = 'http://localhost:8000/api/v1/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11110,11 +11274,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activity-items" \
+    -G "http://localhost:8000/api/v1/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-items"
+    "http://localhost:8000/api/v1/activity-items"
 );
 
 let headers = {
@@ -11131,7 +11295,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activity-items',
+    'http://localhost:8000/api/v1/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11144,7 +11308,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-items'
+url = 'http://localhost:8000/api/v1/activity-items'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11210,13 +11374,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/activity-items" \
+    "http://localhost:8000/api/v1/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio Recorder","description":"Record your voice and play back or download a .wav file of your recording.","order":1,"activity_type_id":1,"type":"h5p","h5pLib":"H5P.AudioRecorder 1.0","image":"\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-items"
+    "http://localhost:8000/api/v1/activity-items"
 );
 
 let headers = {
@@ -11244,7 +11408,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/activity-items',
+    'http://localhost:8000/api/v1/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11266,7 +11430,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-items'
+url = 'http://localhost:8000/api/v1/activity-items'
 payload = {
     "title": "Audio Recorder",
     "description": "Record your voice and play back or download a .wav file of your recording.",
@@ -11389,11 +11553,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/activity-items/1" \
+    -G "http://localhost:8000/api/v1/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-items/1"
+    "http://localhost:8000/api/v1/activity-items/1"
 );
 
 let headers = {
@@ -11410,7 +11574,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/activity-items/1',
+    'http://localhost:8000/api/v1/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11423,7 +11587,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-items/1'
+url = 'http://localhost:8000/api/v1/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11483,13 +11647,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/activity-items/1" \
+    "http://localhost:8000/api/v1/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio Recorder","description":"Record your voice and play back or download a .wav file of your recording.","order":1,"activity_type_id":1,"type":"h5p","h5pLib":"H5P.AudioRecorder 1.0","image":"\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-items/1"
+    "http://localhost:8000/api/v1/activity-items/1"
 );
 
 let headers = {
@@ -11517,7 +11681,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/activity-items/1',
+    'http://localhost:8000/api/v1/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11539,7 +11703,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-items/1'
+url = 'http://localhost:8000/api/v1/activity-items/1'
 payload = {
     "title": "Audio Recorder",
     "description": "Record your voice and play back or download a .wav file of your recording.",
@@ -11680,11 +11844,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/activity-items/1" \
+    "http://localhost:8000/api/v1/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/activity-items/1"
+    "http://localhost:8000/api/v1/activity-items/1"
 );
 
 let headers = {
@@ -11701,7 +11865,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/activity-items/1',
+    'http://localhost:8000/api/v1/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11714,7 +11878,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/activity-items/1'
+url = 'http://localhost:8000/api/v1/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11764,13 +11928,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/go/canvas/projects/1/playlists/1/publish" \
+    "http://localhost:8000/api/v1/go/canvas/projects/1/playlists/1/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"setting_id":1,"counter":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/go/canvas/projects/1/playlists/1/publish"
+    "http://localhost:8000/api/v1/go/canvas/projects/1/playlists/1/publish"
 );
 
 let headers = {
@@ -11793,7 +11957,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/go/canvas/projects/1/playlists/1/publish',
+    'http://localhost:8000/api/v1/go/canvas/projects/1/playlists/1/publish',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11810,7 +11974,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/go/canvas/projects/1/playlists/1/publish'
+url = 'http://localhost:8000/api/v1/go/canvas/projects/1/playlists/1/publish'
 payload = {
     "setting_id": 1,
     "counter": 1
@@ -11924,13 +12088,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/go/moodle/projects/1/playlists/1/publish" \
+    "http://localhost:8000/api/v1/go/moodle/projects/1/playlists/1/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"setting_id":1,"counter":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/go/moodle/projects/1/playlists/1/publish"
+    "http://localhost:8000/api/v1/go/moodle/projects/1/playlists/1/publish"
 );
 
 let headers = {
@@ -11953,7 +12117,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/go/moodle/projects/1/playlists/1/publish',
+    'http://localhost:8000/api/v1/go/moodle/projects/1/playlists/1/publish',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11970,7 +12134,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/go/moodle/projects/1/playlists/1/publish'
+url = 'http://localhost:8000/api/v1/go/moodle/projects/1/playlists/1/publish'
 payload = {
     "setting_id": 1,
     "counter": 1
@@ -12070,11 +12234,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/go/lms-settings/user/me" \
+    -G "http://localhost:8000/api/v1/go/lms-settings/user/me" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/go/lms-settings/user/me"
+    "http://localhost:8000/api/v1/go/lms-settings/user/me"
 );
 
 let headers = {
@@ -12091,7 +12255,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/go/lms-settings/user/me',
+    'http://localhost:8000/api/v1/go/lms-settings/user/me',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12104,7 +12268,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/go/lms-settings/user/me'
+url = 'http://localhost:8000/api/v1/go/lms-settings/user/me'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12158,13 +12322,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/go/lms/projects" \
+    "http://localhost:8000/api/v1/go/lms/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"lms_url":"quo","lti_client_id":12}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/go/lms/projects"
+    "http://localhost:8000/api/v1/go/lms/projects"
 );
 
 let headers = {
@@ -12187,7 +12351,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/go/lms/projects',
+    'http://localhost:8000/api/v1/go/lms/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12204,7 +12368,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/go/lms/projects'
+url = 'http://localhost:8000/api/v1/go/lms/projects'
 payload = {
     "lms_url": "quo",
     "lti_client_id": 12
@@ -12280,13 +12444,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch" \
+    "http://localhost:8000/api/v1/go/canvas/projects/et/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":19}'
+    -d '{"setting_id":3}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch"
+    "http://localhost:8000/api/v1/go/canvas/projects/et/fetch"
 );
 
 let headers = {
@@ -12295,7 +12459,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 19
+    "setting_id": 3
 }
 
 fetch(url, {
@@ -12308,14 +12472,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch',
+    'http://localhost:8000/api/v1/go/canvas/projects/et/fetch',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'setting_id' =&gt; 19,
+            'setting_id' =&gt; 3,
         ],
     ]
 );
@@ -12324,9 +12488,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/go/canvas/projects/tenetur/fetch'
+url = 'http://localhost:8000/api/v1/go/canvas/projects/et/fetch'
 payload = {
-    "setting_id": 19
+    "setting_id": 3
 }
 headers = {
   'Content-Type': 'application/json',
@@ -12412,13 +12576,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/google-classroom/access-token" \
+    "http://localhost:8000/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"repellat"}'
+    -d '{"access_token":"aut"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/google-classroom/access-token"
+    "http://localhost:8000/api/v1/google-classroom/access-token"
 );
 
 let headers = {
@@ -12427,7 +12591,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "repellat"
+    "access_token": "aut"
 }
 
 fetch(url, {
@@ -12440,14 +12604,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/google-classroom/access-token',
+    'http://localhost:8000/api/v1/google-classroom/access-token',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'repellat',
+            'access_token' =&gt; 'aut',
         ],
     ]
 );
@@ -12456,9 +12620,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/google-classroom/access-token'
+url = 'http://localhost:8000/api/v1/google-classroom/access-token'
 payload = {
-    "access_token": "repellat"
+    "access_token": "aut"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -12517,11 +12681,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/google-classroom/courses" \
+    -G "http://localhost:8000/api/v1/google-classroom/courses" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/google-classroom/courses"
+    "http://localhost:8000/api/v1/google-classroom/courses"
 );
 
 let headers = {
@@ -12538,7 +12702,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/google-classroom/courses',
+    'http://localhost:8000/api/v1/google-classroom/courses',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12551,7 +12715,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/google-classroom/courses'
+url = 'http://localhost:8000/api/v1/google-classroom/courses'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12599,13 +12763,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/google-classroom/projects/9/copy" \
+    "http://localhost:8000/api/v1/google-classroom/projects/9/copy" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"course_id":"123"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/google-classroom/projects/9/copy"
+    "http://localhost:8000/api/v1/google-classroom/projects/9/copy"
 );
 
 let headers = {
@@ -12627,7 +12791,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/google-classroom/projects/9/copy',
+    'http://localhost:8000/api/v1/google-classroom/projects/9/copy',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12643,7 +12807,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/google-classroom/projects/9/copy'
+url = 'http://localhost:8000/api/v1/google-classroom/projects/9/copy'
 payload = {
     "course_id": "123"
 }
@@ -12790,6 +12954,138 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_3f6177f199294bd05304ded78263e7fc -->
+<!-- START_749255ce687aecf69dfa83e09197546c -->
+<h2>TurnIn a student&#039;s submission</h2>
+<p>Identifies student's submission on a classwork assignment.
+Attaches a summary page link to the assignment, and turns it in.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/turnin/9" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"hic","course_id":"sed"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/turnin/9"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "hic",
+    "course_id": "sed"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8000/api/v1/google-classroom/turnin/9',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'access_token' =&gt; 'hic',
+            'course_id' =&gt; 'sed',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/turnin/9'
+payload = {
+    "access_token": "hic",
+    "course_id": "sed"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "The assignment has been turned in successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "You are not enrolled in this class."
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Could not retrieve submission for this assignment."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/google-classroom/turnin/{classwork}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>classwork</code></td>
+<td>required</td>
+<td>The Id of a classwork.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>access_token</code></td>
+<td>string</td>
+<td>required</td>
+<td>The stringified of the GAPI access token JSON object</td>
+</tr>
+<tr>
+<td><code>course_id</code></td>
+<td>string</td>
+<td>required</td>
+<td>The Google Classroom course id</td>
+</tr>
+</tbody>
+</table>
+<!-- END_749255ce687aecf69dfa83e09197546c -->
 <h1>12. H5P</h1>
 <p>APIs for H5P management</p>
 <!-- START_369293816da1be491c68109d134f702b -->
@@ -12798,11 +13094,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/h5p/settings" \
+    -G "http://localhost:8000/api/v1/h5p/settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p/settings"
+    "http://localhost:8000/api/v1/h5p/settings"
 );
 
 let headers = {
@@ -12819,7 +13115,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/h5p/settings',
+    'http://localhost:8000/api/v1/h5p/settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12832,7 +13128,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p/settings'
+url = 'http://localhost:8000/api/v1/h5p/settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12855,11 +13151,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/h5p" \
+    -G "http://localhost:8000/api/v1/h5p" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p"
+    "http://localhost:8000/api/v1/h5p"
 );
 
 let headers = {
@@ -12876,7 +13172,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/h5p',
+    'http://localhost:8000/api/v1/h5p',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12889,7 +13185,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p'
+url = 'http://localhost:8000/api/v1/h5p'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12911,11 +13207,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/h5p" \
+    "http://localhost:8000/api/v1/h5p" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p"
+    "http://localhost:8000/api/v1/h5p"
 );
 
 let headers = {
@@ -12932,7 +13228,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/h5p',
+    'http://localhost:8000/api/v1/h5p',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12945,7 +13241,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p'
+url = 'http://localhost:8000/api/v1/h5p'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12968,11 +13264,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/h5p/1" \
+    -G "http://localhost:8000/api/v1/h5p/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p/1"
+    "http://localhost:8000/api/v1/h5p/1"
 );
 
 let headers = {
@@ -12989,7 +13285,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/h5p/1',
+    'http://localhost:8000/api/v1/h5p/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -13002,7 +13298,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p/1'
+url = 'http://localhost:8000/api/v1/h5p/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -13921,11 +14217,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/h5p/1" \
+    "http://localhost:8000/api/v1/h5p/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p/1"
+    "http://localhost:8000/api/v1/h5p/1"
 );
 
 let headers = {
@@ -13942,7 +14238,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/h5p/1',
+    'http://localhost:8000/api/v1/h5p/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -13955,7 +14251,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p/1'
+url = 'http://localhost:8000/api/v1/h5p/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -14003,11 +14299,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/h5p/1" \
+    "http://localhost:8000/api/v1/h5p/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p/1"
+    "http://localhost:8000/api/v1/h5p/1"
 );
 
 let headers = {
@@ -14024,7 +14320,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/h5p/1',
+    'http://localhost:8000/api/v1/h5p/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -14037,7 +14333,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p/1'
+url = 'http://localhost:8000/api/v1/h5p/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -14077,11 +14373,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/h5p/embed/1" \
+    -G "http://localhost:8000/api/v1/h5p/embed/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p/embed/1"
+    "http://localhost:8000/api/v1/h5p/embed/1"
 );
 
 let headers = {
@@ -14098,7 +14394,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/h5p/embed/1',
+    'http://localhost:8000/api/v1/h5p/embed/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -14111,7 +14407,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p/embed/1'
+url = 'http://localhost:8000/api/v1/h5p/embed/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -15021,11 +15317,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/search?query=test&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://localhost:8000/api/v1/search?query=test&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/search"
+    "http://localhost:8000/api/v1/search"
 );
 
 let params = {
@@ -15052,7 +15348,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/search',
+    'http://localhost:8000/api/v1/search',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15072,7 +15368,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/search'
+url = 'http://localhost:8000/api/v1/search'
 params = {
   'query': 'test',
   'sort': 'created_at',
@@ -15190,11 +15486,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/search/advanced?query=test&amp;negativeQuery=badword&amp;userIds=%5B1%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://localhost:8000/api/v1/search/advanced?query=test&amp;negativeQuery=badword&amp;userIds=%5B1%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/search/advanced"
+    "http://localhost:8000/api/v1/search/advanced"
 );
 
 let params = {
@@ -15229,7 +15525,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/search/advanced',
+    'http://localhost:8000/api/v1/search/advanced',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15257,7 +15553,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/search/advanced'
+url = 'http://localhost:8000/api/v1/search/advanced'
 params = {
   'query': 'test',
   'negativeQuery': 'badword',
@@ -15412,11 +15708,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/search/dashboard?query=test&amp;negativeQuery=badword&amp;indexing=%5B3%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://localhost:8000/api/v1/search/dashboard?query=test&amp;negativeQuery=badword&amp;indexing=%5B3%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/search/dashboard"
+    "http://localhost:8000/api/v1/search/dashboard"
 );
 
 let params = {
@@ -15451,7 +15747,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/search/dashboard',
+    'http://localhost:8000/api/v1/search/dashboard',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15479,7 +15775,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/search/dashboard'
+url = 'http://localhost:8000/api/v1/search/dashboard'
 params = {
   'query': 'test',
   'negativeQuery': 'badword',
@@ -15553,18 +15849,18 @@ response.json()</code></pre>
 <pre><code class="language-json">{
     "data": [
         {
-            "id": 302132,
-            "thumb_url": "https:\/\/fivestarmartialartsjackson.com\/wp-content\/uploads\/2017\/04\/default-image.jpg",
-            "title": "Exploring Yosemite",
+            "id": 1,
+            "thumb_url": null,
+            "title": "",
             "model": "Activity",
             "user": {
-                "id": 15,
-                "first_name": "Kevin",
-                "last_name": "Brown",
-                "email": "KBrown@ocde.us",
-                "organization_name": "",
+                "id": 1,
+                "first_name": "test",
+                "last_name": "test",
+                "email": "localuser@local.com",
+                "organization_name": "organization_name",
                 "organization_type": null,
-                "job_title": "",
+                "job_title": "job_title",
                 "address": null,
                 "phone_number": null,
                 "website": null,
@@ -15572,18 +15868,18 @@ response.json()</code></pre>
             }
         },
         {
-            "id": 302132,
-            "thumb_url": "https:\/\/fivestarmartialartsjackson.com\/wp-content\/uploads\/2017\/04\/default-image.jpg",
-            "title": "Exploring Yosemite",
+            "id": 1,
+            "thumb_url": null,
+            "title": "",
             "model": "Activity",
             "user": {
-                "id": 15,
-                "first_name": "Kevin",
-                "last_name": "Brown",
-                "email": "KBrown@ocde.us",
-                "organization_name": "",
+                "id": 1,
+                "first_name": "test",
+                "last_name": "test",
+                "email": "localuser@local.com",
+                "organization_name": "organization_name",
                 "organization_type": null,
-                "job_title": "",
+                "job_title": "job_title",
                 "address": null,
                 "phone_number": null,
                 "website": null,
@@ -15681,13 +15977,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/teams/invite" \
+    "http://localhost:8000/api/v1/teams/invite" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1,"email":"abby@curriki.org"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/invite"
+    "http://localhost:8000/api/v1/teams/invite"
 );
 
 let headers = {
@@ -15710,7 +16006,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/teams/invite',
+    'http://localhost:8000/api/v1/teams/invite',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15727,7 +16023,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/invite'
+url = 'http://localhost:8000/api/v1/teams/invite'
 payload = {
     "id": 1,
     "email": "abby@curriki.org"
@@ -15778,20 +16074,20 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_27a081279577e3f6f78ba3a9814a7143 -->
-<!-- START_af01dd42f1456d1a189e3565718c295d -->
+<!-- START_31fa1500bb158b4c7a39b2330e55a7c0 -->
 <h2>Invite Team Member</h2>
 <p>Invite a team member to the team.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/teams/1/invite" \
+    "http://localhost:8000/api/v1/teams/1/invite-member" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"abby@curriki.org"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/1/invite"
+    "http://localhost:8000/api/v1/teams/1/invite-member"
 );
 
 let headers = {
@@ -15813,7 +16109,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/teams/1/invite',
+    'http://localhost:8000/api/v1/teams/1/invite-member',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15829,7 +16125,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/1/invite'
+url = 'http://localhost:8000/api/v1/teams/1/invite-member'
 payload = {
     "email": "abby@curriki.org"
 }
@@ -15862,7 +16158,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/teams/{team}/invite</code></p>
+<p><code>POST api/v1/teams/{team}/invite-member</code></p>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -15882,7 +16178,7 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_af01dd42f1456d1a189e3565718c295d -->
+<!-- END_31fa1500bb158b4c7a39b2330e55a7c0 -->
 <!-- START_32ba803ff8ac2655c4962881dcfd5956 -->
 <h2>Remove Team Member</h2>
 <p>remove a team member to the team.</p>
@@ -15890,13 +16186,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/teams/1/remove" \
+    "http://localhost:8000/api/v1/teams/1/remove" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/1/remove"
+    "http://localhost:8000/api/v1/teams/1/remove"
 );
 
 let headers = {
@@ -15918,7 +16214,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/teams/1/remove',
+    'http://localhost:8000/api/v1/teams/1/remove',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15934,7 +16230,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/1/remove'
+url = 'http://localhost:8000/api/v1/teams/1/remove'
 payload = {
     "id": 1
 }
@@ -15995,13 +16291,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/teams/1/add-projects" \
+    "http://localhost:8000/api/v1/teams/1/add-projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"ids":"[1]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/1/add-projects"
+    "http://localhost:8000/api/v1/teams/1/add-projects"
 );
 
 let headers = {
@@ -16023,7 +16319,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/teams/1/add-projects',
+    'http://localhost:8000/api/v1/teams/1/add-projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16039,7 +16335,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/1/add-projects'
+url = 'http://localhost:8000/api/v1/teams/1/add-projects'
 payload = {
     "ids": "[1]"
 }
@@ -16100,13 +16396,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/teams/1/remove-project" \
+    "http://localhost:8000/api/v1/teams/1/remove-project" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/1/remove-project"
+    "http://localhost:8000/api/v1/teams/1/remove-project"
 );
 
 let headers = {
@@ -16128,7 +16424,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/teams/1/remove-project',
+    'http://localhost:8000/api/v1/teams/1/remove-project',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16144,7 +16440,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/1/remove-project'
+url = 'http://localhost:8000/api/v1/teams/1/remove-project'
 payload = {
     "id": 1
 }
@@ -16205,13 +16501,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/teams/1/projects/1/add-members" \
+    "http://localhost:8000/api/v1/teams/1/projects/1/add-members" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"ids":"[1]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/1/projects/1/add-members"
+    "http://localhost:8000/api/v1/teams/1/projects/1/add-members"
 );
 
 let headers = {
@@ -16233,7 +16529,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/teams/1/projects/1/add-members',
+    'http://localhost:8000/api/v1/teams/1/projects/1/add-members',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16249,7 +16545,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/1/projects/1/add-members'
+url = 'http://localhost:8000/api/v1/teams/1/projects/1/add-members'
 payload = {
     "ids": "[1]"
 }
@@ -16310,13 +16606,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member" \
+    "http://localhost:8000/api/v1/teams/1/projects/1/remove-member" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member"
+    "http://localhost:8000/api/v1/teams/1/projects/1/remove-member"
 );
 
 let headers = {
@@ -16338,7 +16634,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member',
+    'http://localhost:8000/api/v1/teams/1/projects/1/remove-member',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16354,7 +16650,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/1/projects/1/remove-member'
+url = 'http://localhost:8000/api/v1/teams/1/projects/1/remove-member'
 payload = {
     "id": 1
 }
@@ -16415,11 +16711,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/teams/1" \
+    "http://localhost:8000/api/v1/teams/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/teams/1"
+    "http://localhost:8000/api/v1/teams/1"
 );
 
 let headers = {
@@ -16436,7 +16732,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/teams/1',
+    'http://localhost:8000/api/v1/teams/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16449,7 +16745,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/teams/1'
+url = 'http://localhost:8000/api/v1/teams/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -16499,11 +16795,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/users/report/basic?start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/users/report/basic?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/report/basic"
+    "http://localhost:8000/api/v1/admin/users/report/basic"
 );
 
 let params = {
@@ -16527,7 +16823,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/users/report/basic',
+    'http://localhost:8000/api/v1/admin/users/report/basic',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16544,7 +16840,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/report/basic'
+url = 'http://localhost:8000/api/v1/admin/users/report/basic'
 params = {
   'start': '0',
   'length': '25',
@@ -16623,13 +16919,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/users/bulk/import" \
+    "http://localhost:8000/api/v1/admin/users/bulk/import" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"import_file":"nesciunt"}'
+    -d '{"import_file":"sed"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/bulk/import"
+    "http://localhost:8000/api/v1/admin/users/bulk/import"
 );
 
 let headers = {
@@ -16638,7 +16934,7 @@ let headers = {
 };
 
 let body = {
-    "import_file": "nesciunt"
+    "import_file": "sed"
 }
 
 fetch(url, {
@@ -16651,14 +16947,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/users/bulk/import',
+    'http://localhost:8000/api/v1/admin/users/bulk/import',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'import_file' =&gt; 'nesciunt',
+            'import_file' =&gt; 'sed',
         ],
     ]
 );
@@ -16667,9 +16963,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/bulk/import'
+url = 'http://localhost:8000/api/v1/admin/users/bulk/import'
 payload = {
-    "import_file": "nesciunt"
+    "import_file": "sed"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -16729,11 +17025,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/users/1/roles/1" \
+    -G "http://localhost:8000/api/v1/admin/users/1/roles/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/1/roles/1"
+    "http://localhost:8000/api/v1/admin/users/1/roles/1"
 );
 
 let headers = {
@@ -16750,7 +17046,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/users/1/roles/1',
+    'http://localhost:8000/api/v1/admin/users/1/roles/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16763,7 +17059,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/1/roles/1'
+url = 'http://localhost:8000/api/v1/admin/users/1/roles/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -16816,11 +17112,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/users?start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/users?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users"
+    "http://localhost:8000/api/v1/admin/users"
 );
 
 let params = {
@@ -16844,7 +17140,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/users',
+    'http://localhost:8000/api/v1/admin/users',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16861,7 +17157,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users'
+url = 'http://localhost:8000/api/v1/admin/users'
 params = {
   'start': '0',
   'length': '25',
@@ -16948,13 +17244,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/users" \
+    "http://localhost:8000/api/v1/admin/users" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users"
+    "http://localhost:8000/api/v1/admin/users"
 );
 
 let headers = {
@@ -16982,7 +17278,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/users',
+    'http://localhost:8000/api/v1/admin/users',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17004,7 +17300,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users'
+url = 'http://localhost:8000/api/v1/admin/users'
 payload = {
     "first_name": "Ahmad",
     "last_name": "Mukhtar",
@@ -17102,11 +17398,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/users/1" \
+    -G "http://localhost:8000/api/v1/admin/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/1"
+    "http://localhost:8000/api/v1/admin/users/1"
 );
 
 let headers = {
@@ -17123,7 +17419,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/users/1',
+    'http://localhost:8000/api/v1/admin/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17136,7 +17432,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/1'
+url = 'http://localhost:8000/api/v1/admin/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -17324,13 +17620,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/admin/users/1" \
+    "http://localhost:8000/api/v1/admin/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/1"
+    "http://localhost:8000/api/v1/admin/users/1"
 );
 
 let headers = {
@@ -17358,7 +17654,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/admin/users/1',
+    'http://localhost:8000/api/v1/admin/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17380,7 +17676,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/1'
+url = 'http://localhost:8000/api/v1/admin/users/1'
 payload = {
     "first_name": "Ahmad",
     "last_name": "Mukhtar",
@@ -17496,11 +17792,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/admin/users/1" \
+    "http://localhost:8000/api/v1/admin/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/1"
+    "http://localhost:8000/api/v1/admin/users/1"
 );
 
 let headers = {
@@ -17517,7 +17813,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/admin/users/1',
+    'http://localhost:8000/api/v1/admin/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17530,7 +17826,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/1'
+url = 'http://localhost:8000/api/v1/admin/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -17584,11 +17880,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/users/import/sample-file" \
+    -G "http://localhost:8000/api/v1/admin/users/import/sample-file" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/users/import/sample-file"
+    "http://localhost:8000/api/v1/admin/users/import/sample-file"
 );
 
 let headers = {
@@ -17605,7 +17901,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/users/import/sample-file',
+    'http://localhost:8000/api/v1/admin/users/import/sample-file',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17618,7 +17914,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/users/import/sample-file'
+url = 'http://localhost:8000/api/v1/admin/users/import/sample-file'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -17651,11 +17947,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/activity-types?start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/activity-types?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-types"
+    "http://localhost:8000/api/v1/admin/activity-types"
 );
 
 let params = {
@@ -17679,7 +17975,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/activity-types',
+    'http://localhost:8000/api/v1/admin/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17696,7 +17992,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-types'
+url = 'http://localhost:8000/api/v1/admin/activity-types'
 params = {
   'start': '0',
   'length': '25',
@@ -17825,13 +18121,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/activity-types" \
+    "http://localhost:8000/api/v1/admin/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"itaque","order":1}'
+    -d '{"title":"Audio","image":"veritatis","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-types"
+    "http://localhost:8000/api/v1/admin/activity-types"
 );
 
 let headers = {
@@ -17841,7 +18137,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "itaque",
+    "image": "veritatis",
     "order": 1
 }
 
@@ -17855,7 +18151,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/activity-types',
+    'http://localhost:8000/api/v1/admin/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17863,7 +18159,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'itaque',
+            'image' =&gt; 'veritatis',
             'order' =&gt; 1,
         ],
     ]
@@ -17873,10 +18169,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-types'
+url = 'http://localhost:8000/api/v1/admin/activity-types'
 payload = {
     "title": "Audio",
-    "image": "itaque",
+    "image": "veritatis",
     "order": 1
 }
 headers = {
@@ -17943,11 +18239,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/activity-types/1" \
+    -G "http://localhost:8000/api/v1/admin/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-types/1"
+    "http://localhost:8000/api/v1/admin/activity-types/1"
 );
 
 let headers = {
@@ -17964,7 +18260,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/activity-types/1',
+    'http://localhost:8000/api/v1/admin/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17977,7 +18273,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-types/1'
+url = 'http://localhost:8000/api/v1/admin/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18071,13 +18367,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/admin/activity-types/1" \
+    "http://localhost:8000/api/v1/admin/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"ut","order":1}'
+    -d '{"title":"Audio","image":"est","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-types/1"
+    "http://localhost:8000/api/v1/admin/activity-types/1"
 );
 
 let headers = {
@@ -18087,7 +18383,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "ut",
+    "image": "est",
     "order": 1
 }
 
@@ -18101,7 +18397,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/admin/activity-types/1',
+    'http://localhost:8000/api/v1/admin/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18109,7 +18405,7 @@ $response = $client-&gt;put(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'ut',
+            'image' =&gt; 'est',
             'order' =&gt; 1,
         ],
     ]
@@ -18119,10 +18415,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-types/1'
+url = 'http://localhost:8000/api/v1/admin/activity-types/1'
 payload = {
     "title": "Audio",
-    "image": "ut",
+    "image": "est",
     "order": 1
 }
 headers = {
@@ -18207,11 +18503,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/admin/activity-types/1" \
+    "http://localhost:8000/api/v1/admin/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-types/1"
+    "http://localhost:8000/api/v1/admin/activity-types/1"
 );
 
 let headers = {
@@ -18228,7 +18524,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/admin/activity-types/1',
+    'http://localhost:8000/api/v1/admin/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18241,7 +18537,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-types/1'
+url = 'http://localhost:8000/api/v1/admin/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18289,11 +18585,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/activity-items?start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/activity-items?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-items"
+    "http://localhost:8000/api/v1/admin/activity-items"
 );
 
 let params = {
@@ -18317,7 +18613,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/activity-items',
+    'http://localhost:8000/api/v1/admin/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18334,7 +18630,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-items'
+url = 'http://localhost:8000/api/v1/admin/activity-items'
 params = {
   'start': '0',
   'length': '25',
@@ -18441,13 +18737,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/activity-items" \
+    "http://localhost:8000/api/v1/admin/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"quaerat","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"aut","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-items"
+    "http://localhost:8000/api/v1/admin/activity-items"
 );
 
 let headers = {
@@ -18460,7 +18756,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "quaerat",
+    "image": "aut",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18477,7 +18773,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/activity-items',
+    'http://localhost:8000/api/v1/admin/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18488,7 +18784,7 @@ $response = $client-&gt;post(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'quaerat',
+            'image' =&gt; 'aut',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -18501,13 +18797,13 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-items'
+url = 'http://localhost:8000/api/v1/admin/activity-items'
 payload = {
     "title": "Math",
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "quaerat",
+    "image": "aut",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18613,11 +18909,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/activity-items/1" \
+    -G "http://localhost:8000/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-items/1"
+    "http://localhost:8000/api/v1/admin/activity-items/1"
 );
 
 let headers = {
@@ -18634,7 +18930,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/activity-items/1',
+    'http://localhost:8000/api/v1/admin/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18647,7 +18943,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-items/1'
+url = 'http://localhost:8000/api/v1/admin/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18707,13 +19003,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/admin/activity-items/1" \
+    "http://localhost:8000/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"occaecati","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"molestiae","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-items/1"
+    "http://localhost:8000/api/v1/admin/activity-items/1"
 );
 
 let headers = {
@@ -18726,7 +19022,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "occaecati",
+    "image": "molestiae",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18743,7 +19039,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/admin/activity-items/1',
+    'http://localhost:8000/api/v1/admin/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18754,7 +19050,7 @@ $response = $client-&gt;put(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'occaecati',
+            'image' =&gt; 'molestiae',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -18767,13 +19063,13 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-items/1'
+url = 'http://localhost:8000/api/v1/admin/activity-items/1'
 payload = {
     "title": "Math",
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "occaecati",
+    "image": "molestiae",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -18897,11 +19193,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/admin/activity-items/1" \
+    "http://localhost:8000/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/activity-items/1"
+    "http://localhost:8000/api/v1/admin/activity-items/1"
 );
 
 let headers = {
@@ -18918,7 +19214,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/admin/activity-items/1',
+    'http://localhost:8000/api/v1/admin/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18931,7 +19227,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/activity-items/1'
+url = 'http://localhost:8000/api/v1/admin/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18979,13 +19275,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/projects/indexes" \
+    "http://localhost:8000/api/v1/admin/projects/indexes" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"index_projects":"[1,2,3]","index":3}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects/indexes"
+    "http://localhost:8000/api/v1/admin/projects/indexes"
 );
 
 let headers = {
@@ -19008,7 +19304,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/projects/indexes',
+    'http://localhost:8000/api/v1/admin/projects/indexes',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19025,7 +19321,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/projects/indexes'
+url = 'http://localhost:8000/api/v1/admin/projects/indexes'
 payload = {
     "index_projects": "[1,2,3]",
     "index": 3
@@ -19083,13 +19379,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/projects/starter/1" \
+    "http://localhost:8000/api/v1/admin/projects/starter/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"projects":"[1,2,3]","flag":true}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects/starter/1"
+    "http://localhost:8000/api/v1/admin/projects/starter/1"
 );
 
 let headers = {
@@ -19112,7 +19408,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/projects/starter/1',
+    'http://localhost:8000/api/v1/admin/projects/starter/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19129,7 +19425,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/projects/starter/1'
+url = 'http://localhost:8000/api/v1/admin/projects/starter/1'
 payload = {
     "projects": "[1,2,3]",
     "flag": true
@@ -19187,11 +19483,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/projects/1/indexes/3" \
+    -G "http://localhost:8000/api/v1/admin/projects/1/indexes/3" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects/1/indexes/3"
+    "http://localhost:8000/api/v1/admin/projects/1/indexes/3"
 );
 
 let headers = {
@@ -19208,7 +19504,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/projects/1/indexes/3',
+    'http://localhost:8000/api/v1/admin/projects/1/indexes/3',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19221,7 +19517,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/projects/1/indexes/3'
+url = 'http://localhost:8000/api/v1/admin/projects/1/indexes/3'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -19272,11 +19568,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/projects/1/load-shared" \
+    -G "http://localhost:8000/api/v1/admin/projects/1/load-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects/1/load-shared"
+    "http://localhost:8000/api/v1/admin/projects/1/load-shared"
 );
 
 let headers = {
@@ -19293,7 +19589,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/projects/1/load-shared',
+    'http://localhost:8000/api/v1/admin/projects/1/load-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19306,7 +19602,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/projects/1/load-shared'
+url = 'http://localhost:8000/api/v1/admin/projects/1/load-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -19432,11 +19728,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/projects?mode=1&amp;indexing=1&amp;exclude_starter=0&amp;start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/projects?mode=1&amp;indexing=1&amp;exclude_starter=0&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/projects"
+    "http://localhost:8000/api/v1/admin/projects"
 );
 
 let params = {
@@ -19463,7 +19759,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/projects',
+    'http://localhost:8000/api/v1/admin/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19483,7 +19779,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/projects'
+url = 'http://localhost:8000/api/v1/admin/projects'
 params = {
   'mode': '1',
   'indexing': '1',
@@ -19604,11 +19900,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/lms-settings?start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/lms-settings?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/lms-settings"
+    "http://localhost:8000/api/v1/admin/lms-settings"
 );
 
 let params = {
@@ -19632,7 +19928,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/lms-settings',
+    'http://localhost:8000/api/v1/admin/lms-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19649,7 +19945,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/lms-settings'
+url = 'http://localhost:8000/api/v1/admin/lms-settings'
 params = {
   'start': '0',
   'length': '25',
@@ -19794,13 +20090,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/lms-settings" \
+    "http://localhost:8000/api/v1/admin/lms-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"lms_url":"https:\/\/google.com","lms_access_token":"abcafdgd343asgretgdasgadsfsdfdasgdagsadf","site_name":"Moodle Curriki","lti_client_id":"1","lms_login_id":"1","user_id":1,"lms_name":"Moodle","lms_access_key":"fdaskfasdkjghadskljgh54r325","lms_access_secret":"fasdjhjke4wh54354326","description":"Create LMS Setting for providing access to Moodle."}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/lms-settings"
+    "http://localhost:8000/api/v1/admin/lms-settings"
 );
 
 let headers = {
@@ -19831,7 +20127,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/lms-settings',
+    'http://localhost:8000/api/v1/admin/lms-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19856,7 +20152,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/lms-settings'
+url = 'http://localhost:8000/api/v1/admin/lms-settings'
 payload = {
     "lms_url": "https:\/\/google.com",
     "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
@@ -19975,11 +20271,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/lms-settings/1" \
+    -G "http://localhost:8000/api/v1/admin/lms-settings/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/lms-settings/1"
+    "http://localhost:8000/api/v1/admin/lms-settings/1"
 );
 
 let headers = {
@@ -19996,7 +20292,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/lms-settings/1',
+    'http://localhost:8000/api/v1/admin/lms-settings/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20009,7 +20305,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/lms-settings/1'
+url = 'http://localhost:8000/api/v1/admin/lms-settings/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20072,13 +20368,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/admin/lms-settings/1" \
+    "http://localhost:8000/api/v1/admin/lms-settings/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"lms_url":"https:\/\/google.com","lms_access_token":"abcafdgd343asgretgdasgadsfsdfdasgdagsadf","site_name":"Moodle Curriki","lti_client_id":"1","lms_login_id":"1","user_id":1,"lms_name":"Moodle","lms_access_key":"fdaskfasdkjghadskljgh54r325","lms_access_secret":"fasdjhjke4wh54354326","description":"Create LMS Setting for providing access to Moodle."}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/lms-settings/1"
+    "http://localhost:8000/api/v1/admin/lms-settings/1"
 );
 
 let headers = {
@@ -20109,7 +20405,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/admin/lms-settings/1',
+    'http://localhost:8000/api/v1/admin/lms-settings/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20134,7 +20430,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/lms-settings/1'
+url = 'http://localhost:8000/api/v1/admin/lms-settings/1'
 payload = {
     "lms_url": "https:\/\/google.com",
     "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
@@ -20271,11 +20567,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/admin/lms-settings/1" \
+    "http://localhost:8000/api/v1/admin/lms-settings/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/lms-settings/1"
+    "http://localhost:8000/api/v1/admin/lms-settings/1"
 );
 
 let headers = {
@@ -20292,7 +20588,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/admin/lms-settings/1',
+    'http://localhost:8000/api/v1/admin/lms-settings/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20305,7 +20601,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/lms-settings/1'
+url = 'http://localhost:8000/api/v1/admin/lms-settings/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20353,11 +20649,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/organization-types" \
+    -G "http://localhost:8000/api/v1/admin/organization-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/organization-types"
+    "http://localhost:8000/api/v1/admin/organization-types"
 );
 
 let headers = {
@@ -20374,7 +20670,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/organization-types',
+    'http://localhost:8000/api/v1/admin/organization-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20387,7 +20683,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/organization-types'
+url = 'http://localhost:8000/api/v1/admin/organization-types'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20447,13 +20743,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/admin/organization-types" \
+    "http://localhost:8000/api/v1/admin/organization-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/organization-types"
+    "http://localhost:8000/api/v1/admin/organization-types"
 );
 
 let headers = {
@@ -20477,7 +20773,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/admin/organization-types',
+    'http://localhost:8000/api/v1/admin/organization-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20495,7 +20791,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/organization-types'
+url = 'http://localhost:8000/api/v1/admin/organization-types'
 payload = {
     "name": "randomzv2tga01uxb6q8ojri5ob6",
     "label": "test",
@@ -20557,11 +20853,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/organization-types/1" \
+    -G "http://localhost:8000/api/v1/admin/organization-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/organization-types/1"
+    "http://localhost:8000/api/v1/admin/organization-types/1"
 );
 
 let headers = {
@@ -20578,7 +20874,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/organization-types/1',
+    'http://localhost:8000/api/v1/admin/organization-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20591,7 +20887,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/organization-types/1'
+url = 'http://localhost:8000/api/v1/admin/organization-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20634,13 +20930,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://local.api-studio.com/api/v1/admin/organization-types/1" \
+    "http://localhost:8000/api/v1/admin/organization-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/organization-types/1"
+    "http://localhost:8000/api/v1/admin/organization-types/1"
 );
 
 let headers = {
@@ -20663,7 +20959,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://local.api-studio.com/api/v1/admin/organization-types/1',
+    'http://localhost:8000/api/v1/admin/organization-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20680,7 +20976,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/organization-types/1'
+url = 'http://localhost:8000/api/v1/admin/organization-types/1'
 payload = {
     "name": "randomzv2tga01uxb6q8ojri5ob6",
     "label": "test"
@@ -20753,11 +21049,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://local.api-studio.com/api/v1/admin/organization-types/1" \
+    "http://localhost:8000/api/v1/admin/organization-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/organization-types/1"
+    "http://localhost:8000/api/v1/admin/organization-types/1"
 );
 
 let headers = {
@@ -20774,7 +21070,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://local.api-studio.com/api/v1/admin/organization-types/1',
+    'http://localhost:8000/api/v1/admin/organization-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20787,7 +21083,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/organization-types/1'
+url = 'http://localhost:8000/api/v1/admin/organization-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20835,11 +21131,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs?filter=1&amp;start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/queue-monitor/jobs?filter=1&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs"
+    "http://localhost:8000/api/v1/admin/queue-monitor/jobs"
 );
 
 let params = {
@@ -20864,7 +21160,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs',
+    'http://localhost:8000/api/v1/admin/queue-monitor/jobs',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20882,7 +21178,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs'
+url = 'http://localhost:8000/api/v1/admin/queue-monitor/jobs'
 params = {
   'filter': '1',
   'start': '0',
@@ -20970,11 +21266,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all" \
+    -G "http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/all" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all"
+    "http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/all"
 );
 
 let headers = {
@@ -20991,7 +21287,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all',
+    'http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/all',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21004,7 +21300,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/all'
+url = 'http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/all'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21026,11 +21322,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all" \
+    -G "http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/all" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all"
+    "http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/all"
 );
 
 let headers = {
@@ -21047,7 +21343,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all',
+    'http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/all',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21060,7 +21356,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/all'
+url = 'http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/all'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21083,11 +21379,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1" \
+    -G "http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1"
+    "http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/1"
 );
 
 let headers = {
@@ -21104,7 +21400,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1',
+    'http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21117,7 +21413,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/retry/1'
+url = 'http://localhost:8000/api/v1/admin/queue-monitor/jobs/retry/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21157,11 +21453,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1" \
+    -G "http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1"
+    "http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/1"
 );
 
 let headers = {
@@ -21178,7 +21474,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1',
+    'http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21191,7 +21487,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/queue-monitor/jobs/forget/1'
+url = 'http://localhost:8000/api/v1/admin/queue-monitor/jobs/forget/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21231,11 +21527,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/admin/queue-monitor?filter=1&amp;start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/admin/queue-monitor?filter=1&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/admin/queue-monitor"
+    "http://localhost:8000/api/v1/admin/queue-monitor"
 );
 
 let params = {
@@ -21260,7 +21556,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/admin/queue-monitor',
+    'http://localhost:8000/api/v1/admin/queue-monitor',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21278,7 +21574,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/admin/queue-monitor'
+url = 'http://localhost:8000/api/v1/admin/queue-monitor'
 params = {
   'filter': '1',
   'start': '0',
@@ -21373,11 +21669,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/broadcasting/auth" \
+    -G "http://localhost:8000/api/broadcasting/auth" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/broadcasting/auth"
+    "http://localhost:8000/api/broadcasting/auth"
 );
 
 let headers = {
@@ -21394,7 +21690,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/broadcasting/auth',
+    'http://localhost:8000/api/broadcasting/auth',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21407,7 +21703,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/broadcasting/auth'
+url = 'http://localhost:8000/api/broadcasting/auth'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21430,11 +21726,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/organization-types" \
+    -G "http://localhost:8000/api/v1/organization-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/organization-types"
+    "http://localhost:8000/api/v1/organization-types"
 );
 
 let headers = {
@@ -21451,7 +21747,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/organization-types',
+    'http://localhost:8000/api/v1/organization-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21464,7 +21760,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/organization-types'
+url = 'http://localhost:8000/api/v1/organization-types'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21475,44 +21771,7 @@ response.json()</code></pre>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "data": [
-        {
-            "id": 1,
-            "name": "k12",
-            "label": "K-12",
-            "order": 0
-        },
-        {
-            "id": 3,
-            "name": "businesscorp",
-            "label": "Business\/Corporation",
-            "order": 1
-        },
-        {
-            "id": 4,
-            "name": "nonprofit",
-            "label": "Nonprofit",
-            "order": 2
-        },
-        {
-            "id": 5,
-            "name": "govedu",
-            "label": "Government\/EDU",
-            "order": 3
-        },
-        {
-            "id": 6,
-            "name": "other",
-            "label": "Other",
-            "order": 4
-        },
-        {
-            "id": 2,
-            "name": "highered",
-            "label": "Higher Education",
-            "order": 5
-        }
-    ]
+    "data": []
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/organization-types</code></p>
@@ -21523,11 +21782,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/h5p/h5p-result/my" \
+    -G "http://localhost:8000/api/v1/h5p/h5p-result/my" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/h5p/h5p-result/my"
+    "http://localhost:8000/api/v1/h5p/h5p-result/my"
 );
 
 let headers = {
@@ -21544,7 +21803,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/h5p/h5p-result/my',
+    'http://localhost:8000/api/v1/h5p/h5p-result/my',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21557,7 +21816,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/h5p/h5p-result/my'
+url = 'http://localhost:8000/api/v1/h5p/h5p-result/my'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21584,11 +21843,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://local.api-studio.com/api/v1/user-lms-settings" \
+    -G "http://localhost:8000/api/v1/user-lms-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/user-lms-settings"
+    "http://localhost:8000/api/v1/user-lms-settings"
 );
 
 let headers = {
@@ -21605,7 +21864,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://local.api-studio.com/api/v1/user-lms-settings',
+    'http://localhost:8000/api/v1/user-lms-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21618,7 +21877,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/user-lms-settings'
+url = 'http://localhost:8000/api/v1/user-lms-settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21641,11 +21900,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://local.api-studio.com/api/v1/xapi/statements" \
+    "http://localhost:8000/api/v1/xapi/statements" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://local.api-studio.com/api/v1/xapi/statements"
+    "http://localhost:8000/api/v1/xapi/statements"
 );
 
 let headers = {
@@ -21662,7 +21921,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://local.api-studio.com/api/v1/xapi/statements',
+    'http://localhost:8000/api/v1/xapi/statements',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21675,7 +21934,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://local.api-studio.com/api/v1/xapi/statements'
+url = 'http://localhost:8000/api/v1/xapi/statements'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'

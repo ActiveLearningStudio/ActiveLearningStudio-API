@@ -2,7 +2,7 @@
     "variables": [],
     "info": {
         "name": "Curriki API",
-        "_postman_id": "811b4fcf-a04d-4bb3-8f0c-b03aca65e7c1",
+        "_postman_id": "d819987c-92ab-4050-a3f7-a5dcd02a131e",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -46,6 +46,34 @@
                             "protocol": "http",
                             "host": "localhost:8000",
                             "path": "api\/login",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"john.doe@currikistudio.org\",\n    \"password\": \"Password123\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Admin Login",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/admin\/login",
                             "query": []
                         },
                         "method": "POST",
@@ -266,6 +294,90 @@
                             "raw": "[]"
                         },
                         "description": "Get the authenticated user detail.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All User Notifications",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/notifications",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the users unread notification",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Read Notification",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/notifications\/:notification\/read",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Read notification of the specified user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Users for Team",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/users\/search",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"search\": \"Abby\"\n}"
+                        },
+                        "description": "Get a list of the users for Team.",
                         "response": []
                     }
                 },
@@ -588,6 +700,162 @@
                     }
                 },
                 {
+                    "name": "api\/v1\/projects\/update-order",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/update-order",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Favorite Projects",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/favorites",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get a list of the favorite projects of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Reorder Projects",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/reorder",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"projects\": []\n}"
+                        },
+                        "description": "Reorder projects of a user.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Indexing Request",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/indexing",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Make the indexing request for a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Status Update",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/status-update",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Update the status of the project, draft to final or vice versa.",
+                        "response": []
+                    }
+                },
+                {
                     "name": "Share Project",
                     "request": {
                         "url": {
@@ -696,6 +964,42 @@
                     }
                 },
                 {
+                    "name": "Favorite\/Unfavorite Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/projects\/:project\/favorite",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project"
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Favorite\/Unfavorite the specified project for a user.",
+                        "response": []
+                    }
+                },
+                {
                     "name": "Get All Projects",
                     "request": {
                         "url": {
@@ -745,7 +1049,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"name\": \"Test Project\",\n    \"description\": \"This is a test project.\",\n    \"thumb_url\": \"https:\\\/\\\/images.pexels.com\\\/photos\\\/2832382\",\n    \"is_public\": true\n}"
+                            "raw": "{\n    \"name\": \"Test Project\",\n    \"description\": \"This is a test project.\",\n    \"thumb_url\": \"https:\\\/\\\/images.pexels.com\\\/photos\\\/2832382\"\n}"
                         },
                         "description": "Create a new project in storage for a user.",
                         "response": []
@@ -1027,7 +1331,7 @@
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "accusantium",
+                                    "value": "aliquam",
                                     "description": "The Id of a project Example 1"
                                 }
                             ]
@@ -1318,6 +1622,34 @@
                     }
                 },
                 {
+                    "name": "api\/v1\/activities\/update-order",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/activities\/update-order",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
                     "name": "Remove Share Activity",
                     "request": {
                         "url": {
@@ -1547,7 +1879,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"Science of Golf: Why Balls Have Dimples\",\n    \"type\": \"h5p\",\n    \"content\": \"iste\",\n    \"playlist_id\": 1,\n    \"order\": 2,\n    \"h5p_content_id\": 59,\n    \"thumb_url\": \"null\",\n    \"subject_id\": \"null\",\n    \"education_level_id\": \"null\"\n}"
+                            "raw": "{\n    \"title\": \"Science of Golf: Why Balls Have Dimples\",\n    \"type\": \"h5p\",\n    \"content\": \"et\",\n    \"playlist_id\": 1,\n    \"order\": 2,\n    \"h5p_content_id\": 59,\n    \"thumb_url\": \"null\",\n    \"subject_id\": \"null\",\n    \"education_level_id\": \"null\"\n}"
                         },
                         "description": "Create a new activity.",
                         "response": []
@@ -1619,7 +1951,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"title\": \"Science of Golf: Why Balls Have Dimples\",\n    \"type\": \"h5p\",\n    \"content\": \"molestiae\",\n    \"playlist_id\": 1,\n    \"shared\": false,\n    \"order\": 2,\n    \"h5p_content_id\": 59,\n    \"thumb_url\": \"null\",\n    \"subject_id\": \"null\",\n    \"education_level_id\": \"null\"\n}"
+                            "raw": "{\n    \"title\": \"Science of Golf: Why Balls Have Dimples\",\n    \"type\": \"h5p\",\n    \"content\": \"amet\",\n    \"playlist_id\": 1,\n    \"shared\": false,\n    \"order\": 2,\n    \"h5p_content_id\": 59,\n    \"thumb_url\": \"null\",\n    \"subject_id\": \"null\",\n    \"education_level_id\": \"null\"\n}"
                         },
                         "description": "Update the specified activity.",
                         "response": []
@@ -1673,7 +2005,7 @@
                                 {
                                     "id": "activity",
                                     "key": "activity",
-                                    "value": "suscipit",
+                                    "value": "et",
                                     "description": "The Id of a activity"
                                 }
                             ]
@@ -2235,7 +2567,7 @@
                                 {
                                     "id": "project",
                                     "key": "project",
-                                    "value": "nostrum",
+                                    "value": "natus",
                                     "description": "The Id of the project Example 1"
                                 }
                             ]
@@ -2253,7 +2585,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"setting_id\": 17\n}"
+                            "raw": "{\n    \"setting_id\": 15\n}"
                         },
                         "description": "",
                         "response": []
@@ -2271,7 +2603,7 @@
                         "url": {
                             "protocol": "http",
                             "host": "localhost:8000",
-                            "path": "api\/v1\/go\/access-token",
+                            "path": "api\/v1\/google-classroom\/access-token",
                             "query": []
                         },
                         "method": "POST",
@@ -2287,7 +2619,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"access_token\": \"ducimus\"\n}"
+                            "raw": "{\n    \"access_token\": \"dolorem\"\n}"
                         },
                         "description": "Save GAPI access token in the database.",
                         "response": []
@@ -2299,7 +2631,7 @@
                         "url": {
                             "protocol": "http",
                             "host": "localhost:8000",
-                            "path": "api\/v1\/go\/courses",
+                            "path": "api\/v1\/google-classroom\/courses",
                             "query": []
                         },
                         "method": "GET",
@@ -2327,7 +2659,7 @@
                         "url": {
                             "protocol": "http",
                             "host": "localhost:8000",
-                            "path": "api\/v1\/go\/projects\/:project\/copy",
+                            "path": "api\/v1\/google-classroom\/projects\/:project\/copy",
                             "query": [],
                             "variable": [
                                 {
@@ -2354,6 +2686,42 @@
                             "raw": "{\n    \"course_id\": \"123\"\n}"
                         },
                         "description": "Copy whole project to google classroom either as a new course or into an existing course.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "TurnIn a student's submission",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/google-classroom\/turnin\/:classwork",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "classwork",
+                                    "key": "classwork",
+                                    "value": "9",
+                                    "description": "The Id of a classwork."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"access_token\": \"occaecati\",\n    \"course_id\": \"facilis\"\n}"
+                        },
+                        "description": "Identifies student's submission on a classwork assignment.\nAttaches a summary page link to the assignment, and turns it in.",
                         "response": []
                     }
                 }
@@ -2659,6 +3027,36 @@
                                     "disabled": false
                                 },
                                 {
+                                    "key": "startDate",
+                                    "value": "2020-04-30+00%3A00%3A00",
+                                    "description": "Start date for search by date range.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "endDate",
+                                    "value": "2020-04-30+23%3A59%3A59",
+                                    "description": "End date for search by date range.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "subjectIds",
+                                    "value": "%5B%27ComputerScience%27%5D",
+                                    "description": "Array of subject ids to match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "educationLevelIds",
+                                    "value": "%5B%27Preschool+%28Ages+0-4%29%27%5D",
+                                    "description": "Array of education level ids to match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "h5pLibraries",
+                                    "value": "%5B%27H5P.InteractiveVideo+1.21%27%5D",
+                                    "description": "Array of h5p libraries to match.",
+                                    "disabled": false
+                                },
+                                {
                                     "key": "model",
                                     "value": "activities",
                                     "description": "Index to filter by.",
@@ -2705,7 +3103,1966 @@
                             "mode": "raw",
                             "raw": "[]"
                         },
-                        "description": "Advance search for projects, playlists and activities",
+                        "description": "Advance search for projects, playlists and activities having indexing approved",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Dashboard search",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/search\/dashboard",
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "test",
+                                    "description": "Query to search.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "negativeQuery",
+                                    "value": "badword",
+                                    "description": "Terms that should not exist.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "indexing",
+                                    "value": "%5B3%5D",
+                                    "description": "Indexing requested, approved or not approved.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "startDate",
+                                    "value": "2020-04-30+00%3A00%3A00",
+                                    "description": "Start date for search by date range.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "endDate",
+                                    "value": "2020-04-30+23%3A59%3A59",
+                                    "description": "End date for search by date range.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "subjectIds",
+                                    "value": "%5B%27ComputerScience%27%5D",
+                                    "description": "Array of subject ids to match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "educationLevelIds",
+                                    "value": "%5B%27Preschool+%28Ages+0-4%29%27%5D",
+                                    "description": "Array of education level ids to match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "h5pLibraries",
+                                    "value": "%5B%27H5P.InteractiveVideo+1.21%27%5D",
+                                    "description": "Array of h5p libraries to match.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "model",
+                                    "value": "activities",
+                                    "description": "Index to filter by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "created_at",
+                                    "description": "Field to sort by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "order",
+                                    "value": "desc",
+                                    "description": "Order to sort by.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "0",
+                                    "description": "Index where the pagination start from.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "size",
+                                    "value": "10",
+                                    "description": "Number of records to return.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Dashboard search for projects, playlists and activities irrespective of indexing status",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "14. Team",
+            "description": "\nAPIs for team management",
+            "item": [
+                {
+                    "name": "Invite Team Member",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/invite",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"id\": 1,\n    \"email\": \"abby@curriki.org\"\n}"
+                        },
+                        "description": "Invite a team member while creating a team.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Invite Team Member",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/:team\/invite-member",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"abby@curriki.org\"\n}"
+                        },
+                        "description": "Invite a team member to the team.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Team Member",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/:team\/remove",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"id\": 1\n}"
+                        },
+                        "description": "remove a team member to the team.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add Projects to the Team",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/:team\/add-projects",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"ids\": \"[1]\"\n}"
+                        },
+                        "description": "Add projects to the team.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Project from the Team",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/:team\/remove-project",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"id\": 1\n}"
+                        },
+                        "description": "Remove a project from the team.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Add Members to the Team Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/:team\/projects\/:project\/add-members",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"ids\": \"[1]\"\n}"
+                        },
+                        "description": "Add members to a specified project of specified team.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Member from the Team Project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/:team\/projects\/:project\/remove-member",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"id\": 1\n}"
+                        },
+                        "description": "Remove member from a specified project of specified team.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Remove Team",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/teams\/:team",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "team",
+                                    "key": "team",
+                                    "value": "1",
+                                    "description": "The Id of a team"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Remove the specified team of a user.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1001. Admin\/Users",
+            "description": "\nAPIs for users on admin panel.",
+            "item": [
+                {
+                    "name": "Users Basic Report",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users\/report\/basic",
+                            "query": [
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the paginated response of the users with basic reporting (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Bulk Import",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users\/bulk\/import",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"import_file\": \"minima\"\n}"
+                        },
+                        "description": "Bulk import the users from CSV file.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Change User Role",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users\/:user\/roles\/:role",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "user",
+                                    "key": "user",
+                                    "value": "1",
+                                    "description": "The Id of a user."
+                                },
+                                {
+                                    "id": "role",
+                                    "key": "role",
+                                    "value": "1",
+                                    "description": "Role 0 or 1, 1 for making admin, 0 for removing from admin."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Make any user admin or remove from admin.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users",
+                            "query": [
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the paginated response with pagination links (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"first_name\": \"Ahmad\",\n    \"last_name\": \"Mukhtar\",\n    \"organization_name\": \"Studio\",\n    \"organization_type\": \"K-12\",\n    \"job_title\": \"2\",\n    \"email\": \"ahmedmukhtar1133@gmail.com\",\n    \"password\": \"kljd@Fi4R\"\n}"
+                        },
+                        "description": "Creates the new user in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users\/:user",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "user",
+                                    "key": "user",
+                                    "value": "1",
+                                    "description": "The Id of a user"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified user data.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users\/:user",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "user",
+                                    "key": "user",
+                                    "value": "1",
+                                    "description": "The Id of a user"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"first_name\": \"Ahmad\",\n    \"last_name\": \"Mukhtar\",\n    \"organization_name\": \"Studio\",\n    \"organization_type\": \"K-12\",\n    \"job_title\": \"2\",\n    \"email\": \"ahmedmukhtar1133@gmail.com\",\n    \"password\": \"kljd@Fi4R\"\n}"
+                        },
+                        "description": "Updates the user data in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete User",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users\/:user",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "user",
+                                    "key": "user",
+                                    "value": "1",
+                                    "description": "The Id of a user"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Deletes the user record from database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Download Sample File",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/users\/import\/sample-file",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Download import sample file for users.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1002. Admin\/Activity Types",
+            "description": "\nAPIs for activity types on admin panel.",
+            "item": [
+                {
+                    "name": "Get All Activity Types",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-types",
+                            "query": [
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the paginated response with pagination links (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-types",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Audio\",\n    \"image\": \"totam\",\n    \"order\": 1\n}"
+                        },
+                        "description": "Creates the new activity type in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-types\/:activity_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_type",
+                                    "key": "activity_type",
+                                    "value": "1",
+                                    "description": "The Id of a activity type"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified Activity Type data.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-types\/:activity_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_type",
+                                    "key": "activity_type",
+                                    "value": "1",
+                                    "description": "The Id of a activity type"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Audio\",\n    \"image\": \"maxime\",\n    \"order\": 1\n}"
+                        },
+                        "description": "Updates the activity type in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete Activity Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-types\/:activity_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_type",
+                                    "key": "activity_type",
+                                    "value": "1",
+                                    "description": "The Id of a activity type"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Deletes the activity type from database.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1003. Admin\/Activity Items",
+            "description": "\nAPIs for activity items on admin panel.",
+            "item": [
+                {
+                    "name": "Get All Activity Items",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-items",
+                            "query": [
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the paginated response with pagination links (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-items",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Math\",\n    \"description\": \"Create Math activities.\",\n    \"demo_activity_id\": 1,\n    \"demo_video_id\": 1,\n    \"image\": \"earum\",\n    \"order\": 1,\n    \"type\": \"h5p\",\n    \"activity_type_id\": 1,\n    \"h5pLib\": \"H5P.DocumentsUpload 1.0\"\n}"
+                        },
+                        "description": "Creates the new activity item in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-items\/:activity_item",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_item",
+                                    "key": "activity_item",
+                                    "value": "1",
+                                    "description": "The Id of a activity item"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified Activity Item data.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-items\/:activity_item",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_item",
+                                    "key": "activity_item",
+                                    "value": "1",
+                                    "description": "The Id of a activity item"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Math\",\n    \"description\": \"Create Math activities.\",\n    \"demo_activity_id\": 1,\n    \"demo_video_id\": 1,\n    \"image\": \"libero\",\n    \"order\": 1,\n    \"type\": \"h5p\",\n    \"activity_type_id\": 1,\n    \"h5pLib\": \"H5P.DocumentsUpload 1.0\"\n}"
+                        },
+                        "description": "Updates the activity item in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete Activity Item",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/activity-items\/:activity_item",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "activity_item",
+                                    "key": "activity_item",
+                                    "value": "1",
+                                    "description": "The Id of a activity item"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Deletes the activity item from database.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1004. Admin\/Projects",
+            "description": "\nAPIs for projects on admin panel.",
+            "item": [
+                {
+                    "name": "Projects indexing Bulk",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/projects\/indexes",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"index_projects\": \"[1,2,3]\",\n    \"index\": 3\n}"
+                        },
+                        "description": "Modify the index value of a projects in bulk.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Starter Project Toggle",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/projects\/starter\/:flag",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"projects\": \"[1,2,3]\",\n    \"flag\": true\n}"
+                        },
+                        "description": "Toggle the starter flag of any project",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Project Indexing",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/projects\/:project\/indexes\/:index",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "Project Id."
+                                },
+                                {
+                                    "id": "index",
+                                    "key": "index",
+                                    "value": "3",
+                                    "description": "New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Modify the index value of a project.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get the shared project",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/projects\/:project\/load-shared",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "project",
+                                    "key": "project",
+                                    "value": "1",
+                                    "description": "The Id of a project."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified project data.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Projects.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/projects",
+                            "query": [
+                                {
+                                    "key": "mode",
+                                    "value": "1",
+                                    "description": "1 for starter projects, 0 for non-starter. Default all.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "indexing",
+                                    "value": "1",
+                                    "description": "Integer value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Default None.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "exclude_starter",
+                                    "value": "0",
+                                    "description": "Boolean value to exclude the user starter projects. Default false.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the paginated response with pagination links (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1005. Admin\/LMS Settings",
+            "description": "\nAPIs for lms settings on admin panel.",
+            "item": [
+                {
+                    "name": "Get All LMS Settings for listing.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/lms-settings",
+                            "query": [
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the paginated response with pagination links (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create LMS Setting",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/lms-settings",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"lms_url\": \"https:\\\/\\\/google.com\",\n    \"lms_access_token\": \"abcafdgd343asgretgdasgadsfsdfdasgdagsadf\",\n    \"site_name\": \"Moodle Curriki\",\n    \"lti_client_id\": \"1\",\n    \"lms_login_id\": \"1\",\n    \"user_id\": 1,\n    \"lms_name\": \"Moodle\",\n    \"lms_access_key\": \"fdaskfasdkjghadskljgh54r325\",\n    \"lms_access_secret\": \"fasdjhjke4wh54354326\",\n    \"description\": \"Create LMS Setting for providing access to Moodle.\"\n}"
+                        },
+                        "description": "Creates the new lms setting in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get LMS Setting",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/lms-settings\/:lms_setting",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "lms_setting",
+                                    "key": "lms_setting",
+                                    "value": "1",
+                                    "description": "The Id of a lms setting"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified lms setting data.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update LMS Setting",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/lms-settings\/:lms_setting",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "lms_setting",
+                                    "key": "lms_setting",
+                                    "value": "1",
+                                    "description": "The Id of a lms setting"
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"lms_url\": \"https:\\\/\\\/google.com\",\n    \"lms_access_token\": \"abcafdgd343asgretgdasgadsfsdfdasgdagsadf\",\n    \"site_name\": \"Moodle Curriki\",\n    \"lti_client_id\": \"1\",\n    \"lms_login_id\": \"1\",\n    \"user_id\": 1,\n    \"lms_name\": \"Moodle\",\n    \"lms_access_key\": \"fdaskfasdkjghadskljgh54r325\",\n    \"lms_access_secret\": \"fasdjhjke4wh54354326\",\n    \"description\": \"Create LMS Setting for providing access to Moodle.\"\n}"
+                        },
+                        "description": "Updates the lms setting in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete LMS Setting",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/lms-settings\/:lms_setting",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "lms_setting",
+                                    "key": "lms_setting",
+                                    "value": "1",
+                                    "description": "The Id of a lms setting"
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Deletes the lms setting from database.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1006. Admin\/Organization Types",
+            "description": "\nAPIs for organization types on admin panel.",
+            "item": [
+                {
+                    "name": "Get All Organization Types",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/organization-types",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the all organization types.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Create Organization Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/organization-types",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"randomzv2tga01uxb6q8ojri5ob6\",\n    \"label\": \"test\",\n    \"order\": 1\n}"
+                        },
+                        "description": "Creates the new organization type in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get Organization Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/organization-types\/:organization_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "organization_type",
+                                    "key": "organization_type",
+                                    "value": "1",
+                                    "description": "The Id of a organization type"
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Get the specified Organization Type data.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Update Organization Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/organization-types\/:organization_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "organization_type",
+                                    "key": "organization_type",
+                                    "value": "1",
+                                    "description": "The Id of a organization type."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"randomzv2tga01uxb6q8ojri5ob6\",\n    \"label\": \"test\"\n}"
+                        },
+                        "description": "Updates the organization type data in database.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete Organization Type",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/organization-types\/:organization_type",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "organization_type",
+                                    "key": "organization_type",
+                                    "value": "1",
+                                    "description": "The Id of a organization type."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Deletes the organization type from database.",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "1007. Admin\/Queues",
+            "description": "\nAPIs for queues monitoring on admin panel.",
+            "item": [
+                {
+                    "name": "Get All Jobs",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/queue-monitor\/jobs",
+                            "query": [
+                                {
+                                    "key": "filter",
+                                    "value": "1",
+                                    "description": "1 for pending jobs, 2 for failed. Default 1.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the pending or failed jobs paginated response with pagination links (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Retry All Failed Jobs",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/queue-monitor\/jobs\/retry\/all",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete All Failed Jobs",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/queue-monitor\/jobs\/forget\/all",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Retry Specific Failed Job",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/queue-monitor\/jobs\/retry\/:job",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "job",
+                                    "key": "job",
+                                    "value": "1",
+                                    "description": "The integer Id of a job."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Retry failed job by ID.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Delete Specific Failed Job",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/queue-monitor\/jobs\/forget\/:job",
+                            "query": [],
+                            "variable": [
+                                {
+                                    "id": "job",
+                                    "key": "job",
+                                    "value": "1",
+                                    "description": "The integer Id of a job."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Delete failed job by ID.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get All Queues Logs",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/admin\/queue-monitor",
+                            "query": [
+                                {
+                                    "key": "filter",
+                                    "value": "1",
+                                    "description": "1 for running jobs, 2 for failed, 3 for completed. Default all.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "start",
+                                    "value": "0",
+                                    "description": "Offset for getting the paginated response, Default 0.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "length",
+                                    "value": "25",
+                                    "description": "Limit for getting the paginated records, Default 25.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Returns the paginated response with pagination links (DataTables are fully supported - All Params).",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "general",
+            "description": "",
+            "item": [
+                {
+                    "name": "Authenticate the request for channel access.",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/broadcasting\/auth",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "api\/v1\/organization-types",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/organization-types",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "api\/v1\/h5p\/h5p-result\/my",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/h5p\/h5p-result\/my",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Get a full list of LMS settings available to the user",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/user-lms-settings",
+                            "query": []
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "Save an xAPI Statement",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/v1\/xapi\/statements",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]"
+                        },
+                        "description": "Creates a new statement in the database.",
                         "response": []
                     }
                 }

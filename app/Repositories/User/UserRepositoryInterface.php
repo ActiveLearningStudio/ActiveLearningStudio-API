@@ -29,4 +29,11 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @return bool
      */
     public function parseToken($accessToken);
+
+    /**
+     * To arrange listing of notifications
+     * @param $notifications
+     * @return mixed
+     */
+    public function fetchListing($notifications);
 }

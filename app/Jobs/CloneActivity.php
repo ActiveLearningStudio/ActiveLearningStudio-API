@@ -63,7 +63,6 @@ class CloneActivity implements ShouldQueue
             $message = "Your request to $process activity [" . $this->activity->title . "] has been completed and available";
             $user_id = $userRepository->parseToken($this->token);
             $user = User::find($user_id);
-            broadcast(new \App\Events\SendMessage($message, $user_id));
             $userName = rtrim($user->first_name . ' ' . $user->last_name, ' ');
             $user->notify(new CloneNotification($message, $process, $userName));
         } catch (\Exception $e) {
