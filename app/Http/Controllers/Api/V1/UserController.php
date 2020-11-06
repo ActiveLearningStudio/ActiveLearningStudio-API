@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProfileUpdateRequest;
+use App\Http\Requests\V1\UserSearchRequest;
+use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
@@ -11,6 +13,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\V1\NotificationListResource;
 
 /**
  * @group 2. User
@@ -46,6 +49,27 @@ class UserController extends Controller
     {
         return response([
             'users' => UserResource::collection($this->userRepository->all()),
+        ], 200);
+    }
+
+    /**
+     * Get All Users for Team
+     *
+     * Get a list of the users for Team.
+     *
+     * @bodyParam search string required Search string for User Example: Abby
+     *
+     * @responseFile responses/user/users-for-team.json
+     *
+     * @param UserSearchRequest $userSearchRequest
+     * @return Response
+     */
+    public function getUsersForTeam(UserSearchRequest $userSearchRequest)
+    {
+        $data = $userSearchRequest->validated();
+
+        return response([
+            'users' => UserForTeamResource::collection($this->userRepository->searchByEmailAndName($data['search'])),
         ], 200);
     }
 
@@ -286,4 +310,127 @@ class UserController extends Controller
             'errors' => ['Failed to delete profile.'],
         ], 500);
     }
+
+    /**
+     * Get All User Notifications
+     *
+     * Get a list of the users unread notification
+     *
+     * @responseFile responses/notifications/notifications.json
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function listNotifications(Request $request)
+    {
+        return response([
+            'notifications' => $this->userRepository->fetchListing(auth()->user()->notifications()),
+            'unread_count' => auth()->user()->unreadNotifications->count()
+        ], 200);
+    }
+
+    /**
+     * Read Notification
+     *
+     * Read notification of the specified user.
+     *
+     * @urlParam $notification_id string required Current id of a notification Example: 123
+     *
+     * @responseFile responses/notifications/notifications.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to read notification."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param $notification_id
+     * @return Response
+     */
+    public function readNotification(Request $request, $notification_id)
+    {
+        $notification = auth()->user()->unreadNotifications()->find($notification_id);
+        if ($notification) {
+            $notification->markAsRead();
+
+            return response([
+                'notifications' => $this->userRepository->fetchListing(auth()->user()->notifications),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to read notification.'],
+        ], 500);
+    }
+
+    /**
+     * Read All Notification
+     *
+     * Read all notification of the specified user.
+     *
+     * @responseFile responses/notifications/notifications.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to read notifications."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function readAllNotification(Request $request)
+    {
+        $notifications = auth()->user()->unreadNotifications;
+        if ($notifications) {
+            $notifications->markAsRead();
+
+            return response([
+                'notifications' => $this->userRepository->fetchListing(auth()->user()->notifications()),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to read notifications.'],
+        ], 500);
+
+    }
+
+    /**
+     * Delete Notification
+     *
+     * Remove the specified notification from storage.
+     *
+     * @urlParam $notification_id string required Current id of a notification Example: 123
+     *
+     * @response {
+     *   "message": "Notification has been deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to delete notification."
+     *   ]
+     * }
+     *
+     * @param $notification_id
+     * @return Response
+     */
+    public function deleteNotification(Request $request, $notification_id)
+    {
+        $is_deleted = auth()->user()->notifications()->find($notification_id)->delete();
+
+        if ($is_deleted) {
+            return response([
+                'message' => 'Notification has been deleted successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to delete notification.'],
+        ], 500);
+    }
+
+
 }

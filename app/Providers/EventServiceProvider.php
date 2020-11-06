@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\TeamCreatedEvent;
+use App\Listeners\TeamCreationListener;
 use App\Listeners\UserRegistrationListener;
+use App\Notifications\InviteToTeamNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -20,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
 //            SendEmailVerificationNotification::class,
             UserRegistrationListener::class,
         ],
+        TeamCreatedEvent::class => [
+            TeamCreationListener::class,
+        ]
     ];
 
     /**

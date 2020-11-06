@@ -20,3 +20,4 @@ yarn-error.log
 .vscode/*
 /nbproject
 .idea/
+laravel-echo-server.lock

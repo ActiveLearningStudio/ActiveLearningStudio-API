@@ -1,0 +1,16 @@
+{
+    "notifications": [
+        {
+            "id": "afff2365-a4f3-48ab-8d53-6d958a9e3ab3",
+            "type": "App\\Notifications\\CloneNotification",
+            "notifiable_type": "App\\User",
+            "notifiable_id": 1243,
+            "data": {
+                "message": "Project(26 Project 2) has been duplicated successfully"
+            },
+            "read_at": null,
+            "created_at": "2020-10-16T13:46:33.000000Z",
+            "updated_at": "2020-10-16T13:46:33.000000Z"
+        }
+    ]
+}

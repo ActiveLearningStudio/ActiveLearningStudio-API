@@ -231,7 +231,31 @@ class AuthController extends Controller
     }
 
     /**
-     * CUSTOM ADMIN LOGIN VERIFICATION
+     * Admin Login
+     *
+     * @bodyParam email string required The email of a user Example: john.doe@currikistudio.org
+     * @bodyParam password string required The password corresponded to the email Example: Password123
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid Credentials."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Email is not verified."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unauthorized!"
+     *   ]
+     * }
+     *
      * @param LoginRequest $loginRequest
      * @return Application|ResponseFactory|Response
      * @throws \Throwable

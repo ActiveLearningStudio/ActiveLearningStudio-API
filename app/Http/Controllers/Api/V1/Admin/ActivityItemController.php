@@ -14,6 +14,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+/**
+ * @group 1003. Admin/Activity Items
+ *
+ * APIs for activity items on admin panel.
+ */
 class ActivityItemController extends Controller
 {
     private $repository;
@@ -29,6 +34,15 @@ class ActivityItemController extends Controller
     }
 
     /**
+     * Get All Activity Items
+     *
+     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/activity-item/activity-items.json
+     *
      * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
@@ -39,6 +53,14 @@ class ActivityItemController extends Controller
     }
 
     /**
+     * Get Activity Item
+     *
+     * Get the specified Activity Item data.
+     *
+     * @urlParam activity_item required The Id of a activity item Example: 1
+     *
+     * @responseFile responses/admin/activity-item/activity-item.json
+     *
      * @param $id
      * @return ActivityItemResource
      * @throws GeneralException
@@ -50,6 +72,21 @@ class ActivityItemController extends Controller
     }
 
     /**
+     * Create Activity Item
+     *
+     * Creates the new activity item in database.
+     *
+     * @response {
+     *   "message": "Activity item created successfully!",
+     *   "data": ["Created activity item data array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to create activity item, please try again later!"
+     *   ]
+     * }
+     *
      * @param StoreActivityItem $request
      * @return ActivityItemResource|Application|ResponseFactory|Response
      * @throws GeneralException
@@ -62,6 +99,23 @@ class ActivityItemController extends Controller
     }
 
     /**
+     * Update Activity Item
+     *
+     * Updates the activity item in database.
+     *
+     * @urlParam activity_item required The Id of a activity item Example: 1
+     *
+     * @response {
+     *   "message": "Activity item data updated successfully!",
+     *   "data": ["Updated activity item data array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to update activity item, please try again later."
+     *   ]
+     * }
+     *
      * @param StoreActivityItem $request
      * @param $id
      * @return Application|ResponseFactory|Response
@@ -75,6 +129,22 @@ class ActivityItemController extends Controller
     }
 
     /**
+     * Delete Activity Item
+     *
+     * Deletes the activity item from database.
+     *
+     * @urlParam activity_item required The Id of a activity item Example: 1
+     *
+     * @response {
+     *   "message": "Activity item deleted successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to delete activity item, please try again later."
+     *   ]
+     * }
+     *
      * @param $id
      * @return Application|Factory|View
      * @throws GeneralException

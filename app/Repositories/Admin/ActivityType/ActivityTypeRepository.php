@@ -29,7 +29,7 @@ class ActivityTypeRepository extends BaseRepository
      */
     public function getAll($data)
     {
-        $this->setDtParams($data);
+        $this->setDtParams($data)->enableRelDtSearch(['title'], $this->dtSearchValue);
         $this->query = $this->model->when($data['q'] ?? null, function ($query) use ($data) {
             return $query->search(['title'], $data['q']);
         });

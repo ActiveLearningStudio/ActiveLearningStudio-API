@@ -5,6 +5,15 @@ namespace App\Http\Requests\Admin;
 use App\Rules\StrongPassword;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @bodyParam first_name string required First name of the user. Example: Ahmad
+ * @bodyParam last_name string required Last name of the user. Example: Mukhtar
+ * @bodyParam organization_name string required Organization name. Example: Studio
+ * @bodyParam organization_type string required Valid organization type. Example: K-12
+ * @bodyParam job_title string required Job title of the user in organization. Example: 2
+ * @bodyParam email email required Valid Email. Example: ahmedmukhtar1133@gmail.com
+ * @bodyParam password password required Must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character. Example: kljd@Fi4R
+ */
 class UpdateUser extends FormRequest
 {
     /**
