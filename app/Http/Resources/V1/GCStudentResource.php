@@ -16,7 +16,8 @@ class GCStudentResource extends JsonResource
     {
         return [
             'id' => $this->userId,
-            'email' => $this->profile->emailAddress
+            // Keeping the code, just in case we need it.
+            // 'email' => $this->profile->emailAddress
         ];
     }
 }
