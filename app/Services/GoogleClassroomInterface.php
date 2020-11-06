@@ -38,6 +38,20 @@ interface GoogleClassroomInterface
     const COURSE_STATE_ACTIVE = 'ACTIVE';
 
     /**
+     * Turned-In state for an assignment
+     * 
+     * @var string
+     */
+    const ASSIGNMENT_STATE_TURNED_IN = 'TURNED_IN';
+
+    /**
+     * Returned state for an assignment
+     * 
+     * @var string
+     */
+    const ASSIGNMENT_STATE_RETURNED = 'RETURNED';
+
+    /**
      * Get Google Client object
      * 
      * @return \Google_Client
@@ -186,5 +200,14 @@ interface GoogleClassroomInterface
      * @return \Google_Service_Classroom_StudentSubmission
      */
     public function getUserProfile($userId);
+
+    /**
+     * Check if the assignment is in a submitted state
+     * Turned in and 'returned' (by teacher) are both considered submitted for our use case.
+     *
+     * @param string $state The state of the assignment.
+     * @return boolean
+     */
+    public function isAssignmentSubmitted($state);
 
 }

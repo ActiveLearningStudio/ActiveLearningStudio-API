@@ -40,7 +40,7 @@ class GoogleClassroom implements GoogleClassroomInterface
     {
         $client = new \Google_Client();
         $client->setApplicationName(config('google.gapi_application_name'));
-        $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS, \Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY, \Google_Service_Classroom::CLASSROOM_PROFILE_EMAILS]);
+        $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS, \Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY]);
         $credentials = config('google.gapi_class_credentials');
 
         $client->setAuthConfig(json_decode($credentials, true));
@@ -493,6 +493,19 @@ class GoogleClassroom implements GoogleClassroomInterface
         return $userProfiles->get(
             $userId
         );
+    }
+
+    /**
+     * Check if the assignment is in a submitted state
+     * Turned in and 'returned' (by teacher) are both considered submitted for our use case.
+     *
+     * @param string $state The state of the assignment.
+     * @return boolean
+     */
+    public function isAssignmentSubmitted($state)
+    {
+        $submittedStates = [self::ASSIGNMENT_STATE_TURNED_IN, self::ASSIGNMENT_STATE_RETURNED];
+        return (in_array($state, $submittedStates) ? true : false);
     }
     
     /**
