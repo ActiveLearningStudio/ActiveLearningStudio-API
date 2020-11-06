@@ -310,7 +310,6 @@ class GoogleClassroom implements GoogleClassroomInterface
 
             // Iterate over activities
             $activities = $playlist->activities;
-            $courseWorkCount = 0;
             foreach ($activities as $activity) {
                 if (empty($activity->title)) {
                     continue;
@@ -328,7 +327,6 @@ class GoogleClassroom implements GoogleClassroomInterface
                 $courseWork = $this->createCourseWork($courseWorkData);
 
                 $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
-                $courseWorkCount++;
             }
             $count++;
         }
