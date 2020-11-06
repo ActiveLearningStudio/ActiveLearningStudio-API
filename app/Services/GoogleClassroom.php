@@ -318,42 +318,17 @@ class GoogleClassroom implements GoogleClassroomInterface
                 $activity->shared = true;
                 $activity->save();
 
-                // Make an assignment URL with context of
-                // classroom id, user id (teacher), and the h5p activity id
-                $userId = auth()->user()->id;
-                $activityLink = '/gclass/launch/' . $userId . '/' . $course->id . '/' . $activity->id;
+                $courseWorkData = [
+                    'course_id' => $course->id,
+                    'topic_id' => $topic->topicId,
+                    'activity_id' => $activity->id,
+                    'activity_title' => $activity->title,
+                    'activity_link' => $frontURL . '/activity/' . $activity->id . '/shared'
+                ];
+                $courseWork = $this->createCourseWork($courseWorkData);
 
-                // We need to save the classwork id in the database, and also need to retrieve it later.
-                // So we make a dummy insertion in the database, and append the id in the link.
-                // We have to do this way because, we cannot update the 'Materials' link for classwork 
-                $classworkItem = $this->gc_classwork->create([
-                    'classwork_id' => uniqid(),
-                    'path' => $activityLink,
-                    'course_id' => $course->id
-                ]);
-
-                if ($classworkItem) {
-                    // Now, we append the activity link with our database id.
-                    $activityLink .= '/' . $classworkItem->id;
-                    
-                    $courseWorkData = [
-                        'course_id' => $course->id,
-                        'topic_id' => $topic->topicId,
-                        'activity_id' => $activity->id,
-                        'activity_title' => $activity->title,
-                        'activity_link' => $frontURL . $activityLink
-                    ];
-                    $courseWork = $this->createCourseWork($courseWorkData);
-                    
-                    // Once coursework id is generated, we'll update that in our database.
-                    $this->gc_classwork->update([
-                        'classwork_id' => $courseWork->id,
-                        'path' => $activityLink
-                    ], $classworkItem->id);
-                   
-                    $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
-                    $courseWorkCount++;
-                }
+                $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
+                $courseWorkCount++;
             }
             $count++;
         }
