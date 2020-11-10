@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\TeamAddMemberRequest;
 use App\Http\Requests\V1\TeamAddProjectRequest;
 use App\Http\Requests\V1\TeamInviteMemberRequest;
+use App\Http\Requests\V1\TeamInviteMembersRequest;
 use App\Http\Requests\V1\TeamInviteRequest;
 use App\Http\Requests\V1\TeamRemoveMemberRequest;
 use App\Http\Requests\V1\TeamRemoveProjectRequest;
@@ -19,6 +20,7 @@ use App\Notifications\InviteToTeamNotification;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use App\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -256,6 +258,75 @@ class TeamController extends Controller
 
         return response([
             'errors' => ['Failed to invite user to the team.'],
+        ], 500);
+    }
+
+    /**
+     * Invite Team Members
+     *
+     * Invite a bundle of users to the team.
+     *
+     * @bodyParam users array required The array of the users Example: [{id: 1, first_name: Jean, last_name: Erik, name: "Jean Erik"}, {id: "Kairo@Seed.com", email: "Kairo@Seed.com"}]
+     *
+     * @response {
+     *   "message": "Users have been invited to the team successfully."
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You do not have permission to invite users to the team."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to invite users to the team."
+     *   ]
+     * }
+     *
+     * @param TeamInviteMembersRequest $inviteMembersRequest
+     * @param Team $team
+     * @return Response
+     */
+    public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Team $team)
+    {
+        $data = $inviteMembersRequest->validated();
+        $auth_user = auth()->user();
+        $owner = $team->getUserAttribute();
+
+        if ($owner->id === $auth_user->id) {
+            $invited = true;
+            foreach ($data['users'] as $user) {
+                $conUser = $this->userRepository->findByField('email', $user['email']);
+                $note = array_key_exists('note', $data) ? $data['note'] : '';
+
+                if ($conUser) {
+                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
+                    $team->users()->attach($conUser, ['role' => 'collaborator', 'token' => $token]);
+                    $conUser->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
+                } elseif ($user['email']) {
+                    // TODO: need to send mail to unregistered person and do whatever for that person
+                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
+                    $tempUser = new User(['email' => $user['email']]);
+                    $tempUser->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
+                } else {
+                    $invited = false;
+                }
+            }
+
+            if ($invited) {
+                return response([
+                    'message' => 'Users have been invited to the team successfully.',
+                ], 200);
+            }
+        } else {
+            return response([
+                'message' => 'You do not have permission to invite users to the team.',
+            ], 403);
+        }
+
+        return response([
+            'errors' => ['Failed to invite users to the team.'],
         ], 500);
     }
 

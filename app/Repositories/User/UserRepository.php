@@ -2,12 +2,11 @@
 
 namespace App\Repositories\User;
 
+use App\Http\Resources\V1\NotificationListResource;
 use App\Repositories\BaseRepository;
-use App\Repositories\User\UserRepositoryInterface;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Laravel\Passport\Passport;
 use Lcobucci\JWT\Parser;
@@ -55,6 +54,17 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
+     * Search by name and email
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function searchByEmailAndName($key)
+    {
+        return $this->model->search($key)->get();
+    }
+
+    /**
      * @param $accessToken
      * @return bool
      */
@@ -74,5 +84,21 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         } else {
             return false;
         }
+    }
+
+    /**
+     * To arrange listing of notifications
+     * @param $notifications
+     * @return array
+     */
+    public function fetchListing($notifications)
+    {
+        $returnNotifications = [];
+        $yesterdayNotifications = clone $notifications;
+        $olderNotifications = clone $notifications;
+        $returnNotifications['today'] = NotificationListResource::collection($notifications->with('notifiable')->whereDate('created_at', Carbon::today())->get());
+        $returnNotifications['yesterday'] = NotificationListResource::collection($yesterdayNotifications->with('notifiable')->whereDate('created_at', Carbon::yesterday())->get());
+        $returnNotifications['older'] = NotificationListResource::collection($olderNotifications->with('notifiable')->whereDate('created_at', '<', Carbon::yesterday())->get());
+        return $returnNotifications;
     }
 }

@@ -310,7 +310,6 @@ class GoogleClassroom implements GoogleClassroomInterface
 
             // Iterate over activities
             $activities = $playlist->activities;
-            $courseWorkCount = 0;
             foreach ($activities as $activity) {
                 if (empty($activity->title)) {
                     continue;
@@ -352,7 +351,6 @@ class GoogleClassroom implements GoogleClassroomInterface
                     ], $classworkItem->id);
                    
                     $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
-                    $courseWorkCount++;
                 }
             }
             $count++;
@@ -365,11 +363,12 @@ class GoogleClassroom implements GoogleClassroomInterface
      * Check if student is enrolled in a class
      *
      * @param int $courseId
+     * @param string $userId
      * @return \Google_Service_Classroom_Student
      */
-    public function getEnrolledStudent($courseId)
+    public function getEnrolledStudent($courseId, $userId = "me")
     {
-        return $this->service->courses_students->get($courseId, "me");
+        return $this->service->courses_students->get($courseId, $userId);
     }
 
     /**
@@ -378,9 +377,26 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param int $courseId
      * @param string $classworkId
      * @param mixed $userId
-     * @return string
+     * @return \Google_Service_Classroom_ListStudentSubmissionsResponse
      */
     public function getFirstStudentSubmission($courseId, $classworkId, $userId = "me")
+    {
+        $submissions = $this->getStudentSubmissions($courseId, $classworkId, $userId);
+        // Grab the first submission
+        $first = $submissions[0];
+        
+        return $first;
+    }
+
+    /**
+     * Get student's submissions for a classwork in a course.
+     *
+     * @param int $courseId
+     * @param string $classworkId
+     * @param mixed $userId
+     * @return \Google_Service_Classroom_ListStudentSubmissionsResponse
+     */
+    public function getStudentSubmissions($courseId, $classworkId, $userId = "me")
     {
         $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
         // Submissions associated with this courseWork for this student
@@ -390,10 +406,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             array('userId' => $userId)
         );
         // Grab the first submission
-        $submissions = $retval->studentSubmissions;
-        $first = $submissions[0];
-        
-        return $first->id;
+        return $retval->studentSubmissions;
     }
 
     /**
@@ -433,6 +446,66 @@ class GoogleClassroom implements GoogleClassroomInterface
         $requestBody = new \Google_Service_Classroom_TurnInStudentSubmissionRequest;
         return $studentSubmissions->turnIn($courseId, $courseWorkId, $id, $requestBody); 
     }
+
+    /**
+     * Check if user is a teacher in a class
+     *
+     * @param int $courseId
+     * @param string $userId
+     * @param array $optParams
+     * @return \Google_Service_Classroom_Teacher
+     */
+    public function getCourseTeacher($courseId, $userId = "me", $optParams = [])
+    {
+        return $this->service->courses_teachers->get($courseId, $userId, $optParams);
+    }
+
+    /**
+     * Get student's submission for a classwork in a course by submission id
+     *
+     * @param int $courseId The Google classroom course id
+     * @param string $classworkId The classwork id
+     * @param string $id The submission id
+     * @return \Google_Service_Classroom_StudentSubmission
+     */
+    public function getStudentSubmissionById($courseId, $classworkId, $id)
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+        return $studentSubmissions->get(
+            $courseId,
+            $classworkId,
+            $id
+        );
+    }
+
+    /**
+     * Get user profile by id
+     *
+     * @param string $userId The Google Classroom user id
+     * @return \Google_Service_Classroom_StudentSubmission
+     */
+    public function getUserProfile($userId)
+    {
+        // GET https://classroom.googleapis.com/v1/userProfiles/{userId}
+        $userProfiles = $this->service->userProfiles;
+        return $userProfiles->get(
+            $userId
+        );
+    }
+
+    /**
+     * Check if the assignment is in a submitted state
+     * Turned in and 'returned' (by teacher) are both considered submitted for our use case.
+     *
+     * @param string $state The state of the assignment.
+     * @return boolean
+     */
+    public function isAssignmentSubmitted($state)
+    {
+        $submittedStates = [self::ASSIGNMENT_STATE_TURNED_IN, self::ASSIGNMENT_STATE_RETURNED];
+        return (in_array($state, $submittedStates) ? true : false);
+    }
+    
     /**
      * Determine front URL of the application.
      *

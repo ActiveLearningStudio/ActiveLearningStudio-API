@@ -22,8 +22,9 @@ class NotificationListResource extends JsonResource
             'notifiable_id' => $this->notifiable_id,
             'data' => $this->data,
             'read_at' => $this->read_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->diffForHumans(),
+            'updated_at' => $this->updated_at->diffForHumans(),
+            'notifiable' => $this->notifiable
         ];
     }
 }

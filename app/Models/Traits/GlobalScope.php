@@ -30,4 +30,20 @@ trait GlobalScope
         return $query;
     }
 
+    /**
+     * Global scope for date range
+     *
+     * @param $query
+     * @param $range
+     * @param string $column
+     * @return mixed
+     *
+     */
+    public function scopeDateBetween($query, $range, $column = 'created_at')
+    {
+        $range[0] = date($range[0]); // start date
+        $range[1] = date($range[1]) . ' 23:59:59'; // end date make sure everything for today is covered
+        return $query->whereBetween($column, $range);
+    }
+
 }

@@ -17,6 +17,7 @@ class InviteToTeamNotification extends Notification
     public $sender;
     public $team;
     public $token;
+    public $note;
 
     /**
      * Create a new notification instance.
@@ -24,12 +25,14 @@ class InviteToTeamNotification extends Notification
      * @param $sender
      * @param $team
      * @param $token
+     * @param $note
      */
-    public function __construct($sender, $team, $token)
+    public function __construct($sender, $team, $token, $note)
     {
         $this->sender = $sender;
         $this->team = $team;
         $this->token = $token;
+        $this->note = $note;
         // $this->pageUrl = config('app.front_end_url') . '/teams/invite';
         $this->pageUrl = config('app.front_end_url');
     }
@@ -60,6 +63,7 @@ class InviteToTeamNotification extends Notification
         return (new MailMessage)
             ->subject('Invite to the Team')
             ->line($this->sender->first_name . ' has invited you to join the team ' . $this->team->name)
+            ->line($this->note)
             // ->action('Join the Team', $this->pageUrl . '?token=' . $this->token);
             ->action('Join the Team', $this->pageUrl . '/teams/' . $this->team->id . '/projects');
     }
