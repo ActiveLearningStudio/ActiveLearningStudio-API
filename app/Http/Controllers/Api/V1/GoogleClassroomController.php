@@ -315,7 +315,7 @@ class GoogleClassroomController extends Controller
                     // Get the student's submission...
                     $firstSubmission = $service->getFirstStudentSubmission($courseId, $classwork->classwork_id);
 
-                    if ($firstSubmission && $firstSubmission->state != 'TURNED_IN') {
+                    if ($firstSubmission && $firstSubmission->state !== GoogleClassroom::ASSIGNMENT_STATE_TURNED_IN) {
                         $firstSubmissionId = $firstSubmission->id;
                         // Submission obtained...
                         // Now make a link.
@@ -405,6 +405,13 @@ class GoogleClassroomController extends Controller
             // If the user does have access to it, then we find who the user is; student or a teacher.
             $submissionRes = $service->getStudentSubmissionById($courseId, $gcClassworkId, $gcSubmissionId);
             if (isset($submissionRes->courseId)) {
+                // Check if the submission is turned In or not.
+                if (!$service->isAssignmentSubmitted($submissionRes->state)) {
+                    // return an error that the summary page is not available yet.
+                    return response([
+                        'errors' => ['The summary page is unavailable as the assignment is not turned in yet.'],
+                    ], 404);
+                }
                 // Get student's user id
                 $userId = $submissionRes->userId;
                 // Retrieve student's profile by id

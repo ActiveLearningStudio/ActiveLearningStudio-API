@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Services\LearnerRecordStoreService;
 
 /**
+ * @group 16. XAPI
+ *
  * An XAPI Controller Class
  * Handles xAPI operations.
  */
