@@ -26,7 +26,10 @@ class SaveOrganization extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'parent_id' => 'integer|exists:App\Models\Organization,id'
+            'domain' => 'required|string|max:255',
+            'image' => 'image|max:1000',
+            'parent_id' => 'integer|exists:App\Models\Organization,id',
+            'admin_id' => 'integer|exists:App\User,id'
         ];
     }
 }

@@ -28,6 +28,9 @@ class UserResource extends JsonResource
             'is_admin' => $this->isAdmin(), // needed to show on admin weather user is admin or not
             'organization_name' => $this->organization_name,
             'projects' =>  ProjectResource::collection($this->whenLoaded('projects')),
+            'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->role->display_name;
+            }),
         ];
     }
 }

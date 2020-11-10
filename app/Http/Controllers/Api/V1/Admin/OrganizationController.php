@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Admin\Organization\OrganizationRepository;
 use App\Http\Resources\V1\Admin\OrganizationResource;
 use App\Http\Requests\Admin\SaveOrganization;
+use App\Http\Resources\V1\Admin\UserResource;
 
 /**
  * @authenticated
@@ -78,7 +79,7 @@ class OrganizationController extends Controller
     public function update(SaveOrganization $request, $id)
     {
         $validated = $request->validated();
-        $response = $this->organizationRepository->update($id, $validated);
+        $response = $this->organizationRepository->update($id, $validated, $request->clone_project_id, $request->member_id);
         return response(['message' => $response['message'], 'data' => new OrganizationResource($response['data'])], 200);
     }
 
@@ -105,11 +106,24 @@ class OrganizationController extends Controller
     /**
      * Display a listing of the parent organizations options, other then itself and its exiting children.
      *
+     * @param Request $request
      * @param $id
      * @return AnonymousResourceCollection
      */
-    public function showParentOptions($id)
+    public function showParentOptions(Request $request, $id)
     {
-        return OrganizationResource::collection($this->organizationRepository->getParentOptions($id));
+        return OrganizationResource::collection($this->organizationRepository->getParentOptions($request->all(), $id));
+    }
+
+    /**
+     * Display a listing of the user member options, other then the exiting ones.
+     *
+     * @param Request $request
+     * @param $id
+     * @return AnonymousResourceCollection
+     */
+    public function showMemberOptions(Request $request, $id)
+    {
+        return UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $id));
     }
 }

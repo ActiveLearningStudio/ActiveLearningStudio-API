@@ -22,6 +22,9 @@ class OrganizationResource extends JsonResource
             'parent' =>  new OrganizationResource($this->whenLoaded('parent')),
             'projects' =>  ProjectResource::collection($this->whenLoaded('projects')),
             'children' =>  OrganizationResource::collection($this->whenLoaded('children')),
+            'users' =>  UserResource::collection($this->whenLoaded('users')),
+            'image' => $this->image,
+            'domain' => $this->domain,
         ];
     }
 }

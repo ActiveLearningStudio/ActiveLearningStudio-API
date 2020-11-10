@@ -20,6 +20,8 @@ class Organization extends Model
     protected $fillable = [
         'name',
         'description',
+        'domain',
+        'image',
         'parent_id'
     ];
 
@@ -28,7 +30,7 @@ class Organization extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'organization_user_roles')->withPivot('organization_role_type_id')->withTimestamps();
+        return $this->belongsToMany('App\User', 'organization_user_roles')->using('App\Models\OrganizationUserRole')->withPivot('organization_role_type_id')->withTimestamps();
     }
 
     /**

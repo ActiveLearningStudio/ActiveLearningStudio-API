@@ -32,6 +32,7 @@ class Project extends Model
         'clone_ctr',
         'order',
         'status',
+        'organization_id',
         'organization_visibility_type_id'
     ];
 

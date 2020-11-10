@@ -71,10 +71,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $authUser
      * @param Project $project
      * @param string $token
+     * @param int $organization_id
      * @return Response
      * @throws GeneralException
      */
-    public function clone($authUser, Project $project, $token)
+    public function clone($authUser, Project $project, $token, $organization_id = null)
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
@@ -94,6 +95,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'is_user_starter' => (bool) $project->starter_project, // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
+
+            if($organization_id) {
+                $data['organization_id'] = $organization_id;
+                $data['organization_visibility_type_id'] = 1;
+            }
 
             return \DB::transaction(function () use ($authUser, $data, $project, $token) {
                 $cloned_project = $authUser->projects()->create($data, ['role' => 'owner']);

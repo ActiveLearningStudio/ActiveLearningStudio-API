@@ -213,6 +213,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('organizations/report/basic', 'OrganizationController@reportBasic')->name('organizations.report.basic');
         Route::apiResource('organizations', 'OrganizationController');
         Route::get('organizations/{id}/parent-options', 'OrganizationController@showParentOptions')->name('organizations.parent-options');
+        Route::get('organizations/{id}/member-options', 'OrganizationController@showMemberOptions')->name('organizations.member-options');
     });
 
     // admin public routes for downloads / uploads
