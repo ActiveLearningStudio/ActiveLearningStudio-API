@@ -32,6 +32,14 @@ class Team extends Model
     }
 
     /**
+     * Get the invited users for the team
+     */
+    public function invitedUsers()
+    {
+        return $this->hasMany('App\Models\InvitedTeamUser', 'team_id');
+    }
+
+    /**
      * Get the projects for the team
      */
     public function projects()

@@ -17,6 +17,7 @@ use App\Http\Resources\V1\TeamResource;
 use App\Models\Project;
 use App\Models\Team;
 use App\Notifications\InviteToTeamNotification;
+use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -37,6 +38,7 @@ class TeamController extends Controller
     private $teamRepository;
     private $userRepository;
     private $projectRepository;
+    private $invitedTeamUserRepository;
 
     /**
      * TeamController constructor.
@@ -44,16 +46,19 @@ class TeamController extends Controller
      * @param TeamRepositoryInterface $teamRepository
      * @param UserRepositoryInterface $userRepository
      * @param ProjectRepositoryInterface $projectRepository
+     * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
      */
     public function __construct(
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
-        ProjectRepositoryInterface $projectRepository
+        ProjectRepositoryInterface $projectRepository,
+        InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
     )
     {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
+        $this->invitedTeamUserRepository = $invitedTeamUserRepository;
 
         // $this->authorizeResource(Team::class, 'teams');
     }
@@ -153,26 +158,39 @@ class TeamController extends Controller
         if ($team) {
             $assigned_users = [];
             $valid_users = [];
+            $invited_users = [];
+
             foreach ($data['users'] as $user) {
-                $conUser = $this->userRepository->find($user['id']);
+                $con_user = $this->userRepository->find($user['id']);
 
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                if ($conUser) {
-                    $team->users()->attach($conUser, ['role' => 'collaborator', 'token' => $token]);
-                    $conUser->token = $token;
-                    $valid_users[] = $conUser;
+                if ($con_user) {
+                    $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
+                    $con_user->token = $token;
+                    $valid_users[] = $con_user;
                     $assigned_users[] = [
-                        'user' => $conUser,
+                        'user' => $con_user,
                         'note' => $user['note']
                     ];
                 } elseif ($user['email']) {
-                    $tempUser = new User(['email' => $user['email']]);
-                    $tempUser->token = $token;
+                    $temp_user = new User(['email' => $user['email']]);
+                    $temp_user->token = $token;
+
                     $assigned_users[] = [
-                        'user' => $tempUser,
+                        'user' => $temp_user,
                         'note' => $user['note']
                     ];
+
+                    $invited_users[] = [
+                        'invited_email' => $user['email'],
+                        'team_id' => $team->id,
+                        'token' => $token
+                    ];
                 }
+            }
+
+            foreach ($invited_users as $invited_user) {
+                $this->invitedTeamUserRepository->create($invited_user);
             }
 
             $assigned_projects = [];
@@ -310,18 +328,24 @@ class TeamController extends Controller
         if ($owner->id === $auth_user->id) {
             $invited = true;
             foreach ($data['users'] as $user) {
-                $conUser = $this->userRepository->findByField('email', $user['email']);
+                $con_user = $this->userRepository->findByField('email', $user['email']);
                 $note = array_key_exists('note', $data) ? $data['note'] : '';
 
-                if ($conUser) {
+                if ($con_user) {
                     $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $team->users()->attach($conUser, ['role' => 'collaborator', 'token' => $token]);
-                    $conUser->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
+                    $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
+                    $con_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
                 } elseif ($user['email']) {
-                    // TODO: need to send mail to unregistered person and do whatever for that person
                     $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $tempUser = new User(['email' => $user['email']]);
-                    $tempUser->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
+                    $temp_user = new User(['email' => $user['email']]);
+                    $temp_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
+
+                    $invited_user = array(
+                        'invited_email' => $user['email'],
+                        'team_id' => $team->id,
+                        'token' => $token,
+                    );
+                    $this->invitedTeamUserRepository->create($invited_user);
                 } else {
                     $invited = false;
                 }

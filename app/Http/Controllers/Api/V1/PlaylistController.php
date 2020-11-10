@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\PlaylistUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\PlaylistRequest;
 use App\Http\Resources\V1\PlaylistResource;
@@ -253,6 +254,8 @@ class PlaylistController extends Controller
         $is_updated = $this->playlistRepository->update($data, $playlist->id);
 
         if ($is_updated) {
+            event(new PlaylistUpdatedEvent($project, $playlist, $project->users));
+
             return response([
                 'playlist' => new PlaylistResource($this->playlistRepository->find($playlist->id)),
             ], 200);

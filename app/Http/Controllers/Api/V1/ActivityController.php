@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\ActivityUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ActivityRequest;
 use App\Http\Resources\V1\ActivityResource;
@@ -10,6 +11,7 @@ use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Jobs\CloneActivity;
 use App\Models\Activity;
+use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
@@ -205,7 +207,10 @@ class ActivityController extends Controller
         ]), $activity->id);
 
         if ($is_updated) {
+            event(new ActivityUpdatedEvent($activity->playlist->project, $activity->playlist, $activity, $activity->playlist->project->users));
+
             $this->update_h5p($request->get('data'), $activity->h5p_content_id);
+
             return response([
                 'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
             ], 200);
@@ -627,10 +632,21 @@ class ActivityController extends Controller
     private function hasPermission(Activity $activity)
     {
         $authenticated_user = auth()->user();
-        $project_users = $activity->playlist->project->users;
-
+        $project = $activity->playlist->project;
+        $project_users = $project->users;
         foreach ($project_users as $project_user) {
             if ($authenticated_user->id === $project_user->id) {
+                return true;
+            }
+        }
+
+        $project_teams = $project->teams;
+        foreach ($project_teams as $project_team) {
+            $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
+                ->where('project_id', $project->id)
+                ->where('user_id', $authenticated_user->id)
+                ->first();
+            if ($team_project_user) {
                 return true;
             }
         }
