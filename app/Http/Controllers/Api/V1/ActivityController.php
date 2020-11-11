@@ -629,6 +629,12 @@ class ActivityController extends Controller
         ], 400);
     }
 
+    /**
+     * Check permission
+     *
+     * @param Activity $activity
+     * @return bool
+     */
     private function hasPermission(Activity $activity)
     {
         $authenticated_user = auth()->user();
@@ -645,7 +651,7 @@ class ActivityController extends Controller
             $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
                 ->where('project_id', $project->id)
                 ->where('user_id', $authenticated_user->id)
-                ->first();
+                ->exists();
             if ($team_project_user) {
                 return true;
             }

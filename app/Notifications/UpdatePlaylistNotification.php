@@ -17,7 +17,6 @@ class UpdatePlaylistNotification extends Notification
     public $sender;
     public $project;
     public $playlist;
-    public $token;
 
     /**
      * Create a new notification instance.
@@ -25,14 +24,12 @@ class UpdatePlaylistNotification extends Notification
      * @param $sender
      * @param $project
      * @param $playlist
-     * @param $token
      */
-    public function __construct($sender, $project, $playlist, $token)
+    public function __construct($sender, $project, $playlist)
     {
         $this->sender = $sender;
         $this->project = $project;
         $this->playlist = $playlist;
-        $this->token = $token;
         $this->pageUrl = config('app.front_end_url');
     }
 

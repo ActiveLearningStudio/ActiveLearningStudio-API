@@ -18,7 +18,6 @@ class UpdateActivityNotification extends Notification
     public $project;
     public $playlist;
     public $activity;
-    public $token;
 
     /**
      * Create a new notification instance.
@@ -27,15 +26,13 @@ class UpdateActivityNotification extends Notification
      * @param $project
      * @param $playlist
      * @param $activity
-     * @param $token
      */
-    public function __construct($sender, $project, $playlist, $activity, $token)
+    public function __construct($sender, $project, $playlist, $activity)
     {
         $this->sender = $sender;
         $this->project = $project;
         $this->playlist = $playlist;
         $this->activity = $activity;
-        $this->token = $token;
         $this->pageUrl = config('app.front_end_url');
     }
 

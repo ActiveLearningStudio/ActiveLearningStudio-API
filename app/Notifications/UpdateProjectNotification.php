@@ -23,13 +23,11 @@ class UpdateProjectNotification extends Notification
      *
      * @param $sender
      * @param $project
-     * @param $token
      */
-    public function __construct($sender, $project, $token)
+    public function __construct($sender, $project)
     {
         $this->sender = $sender;
         $this->project = $project;
-        $this->token = $token;
         $this->pageUrl = config('app.front_end_url');
     }
 

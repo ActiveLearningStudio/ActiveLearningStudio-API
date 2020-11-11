@@ -32,8 +32,7 @@ class ProjectUpdateListener
     {
         $auth_user = auth()->user();
         foreach ($event->users as $user) {
-            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-            $user->notify(new UpdateProjectNotification($auth_user, $event->project, $token));
+            $user->notify(new UpdateProjectNotification($auth_user, $event->project));
         }
     }
 

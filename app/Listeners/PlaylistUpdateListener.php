@@ -32,8 +32,7 @@ class PlaylistUpdateListener
     {
         $auth_user = auth()->user();
         foreach ($event->users as $user) {
-            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-            $user->notify(new UpdatePlaylistNotification($auth_user, $event->project, $event->playlist, $token));
+            $user->notify(new UpdatePlaylistNotification($auth_user, $event->project, $event->playlist));
         }
     }
 

@@ -156,55 +156,7 @@ class TeamController extends Controller
         $team = $auth_user->teams()->create($data, ['role' => 'owner']);
 
         if ($team) {
-            $assigned_users = [];
-            $valid_users = [];
-            $invited_users = [];
-
-            foreach ($data['users'] as $user) {
-                $con_user = $this->userRepository->find($user['id']);
-
-                $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                if ($con_user) {
-                    $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
-                    $con_user->token = $token;
-                    $valid_users[] = $con_user;
-                    $assigned_users[] = [
-                        'user' => $con_user,
-                        'note' => $user['note']
-                    ];
-                } elseif ($user['email']) {
-                    $temp_user = new User(['email' => $user['email']]);
-                    $temp_user->token = $token;
-
-                    $assigned_users[] = [
-                        'user' => $temp_user,
-                        'note' => $user['note']
-                    ];
-
-                    $invited_users[] = [
-                        'invited_email' => $user['email'],
-                        'team_id' => $team->id,
-                        'token' => $token
-                    ];
-                }
-            }
-
-            foreach ($invited_users as $invited_user) {
-                $this->invitedTeamUserRepository->create($invited_user);
-            }
-
-            $assigned_projects = [];
-            foreach ($data['projects'] as $project_id) {
-                $project = $this->projectRepository->find($project_id);
-                if ($project) {
-                    $team->projects()->attach($project);
-                    $assigned_projects[] = $project;
-                }
-            }
-
-            event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
-
-            $this->teamRepository->setTeamProjectUser($team, $assigned_projects, $valid_users);
+            $this->teamRepository->createTeam($team, $data);
 
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
@@ -270,26 +222,22 @@ class TeamController extends Controller
 
         if ($owner->id === $auth_user->id) {
             $user = $this->userRepository->findByField('email', $data['email']);
-
             if ($user) {
-                $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                $team->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
-
-                $user->notify(new InviteToTeamNotification($auth_user, $team, $token));
+                $this->teamRepository->inviteToTeam($team, $user);
 
                 return response([
                     'message' => 'User has been invited to the team successfully.',
                 ], 200);
             }
-        } else {
+
             return response([
-                'message' => 'You do not have permission to invite user to the team.',
-            ], 403);
+                'errors' => ['Failed to invite user to the team.'],
+            ], 500);
         }
 
         return response([
-            'errors' => ['Failed to invite user to the team.'],
-        ], 500);
+            'message' => 'You do not have permission to invite user to the team.',
+        ], 403);
     }
 
     /**
@@ -326,45 +274,22 @@ class TeamController extends Controller
         $owner = $team->getUserAttribute();
 
         if ($owner->id === $auth_user->id) {
-            $invited = true;
-            foreach ($data['users'] as $user) {
-                $con_user = $this->userRepository->findByField('email', $user['email']);
-                $note = array_key_exists('note', $data) ? $data['note'] : '';
-
-                if ($con_user) {
-                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
-                    $con_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
-                } elseif ($user['email']) {
-                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $temp_user = new User(['email' => $user['email']]);
-                    $temp_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
-
-                    $invited_user = array(
-                        'invited_email' => $user['email'],
-                        'team_id' => $team->id,
-                        'token' => $token,
-                    );
-                    $this->invitedTeamUserRepository->create($invited_user);
-                } else {
-                    $invited = false;
-                }
-            }
+            $invited = $this->teamRepository->inviteMembers($team, $data);
 
             if ($invited) {
                 return response([
                     'message' => 'Users have been invited to the team successfully.',
                 ], 200);
             }
-        } else {
+
             return response([
-                'message' => 'You do not have permission to invite users to the team.',
-            ], 403);
+                'errors' => ['Failed to invite users to the team.'],
+            ], 500);
         }
 
         return response([
-            'errors' => ['Failed to invite users to the team.'],
-        ], 500);
+            'message' => 'You do not have permission to invite users to the team.',
+        ], 403);
     }
 
     /**
