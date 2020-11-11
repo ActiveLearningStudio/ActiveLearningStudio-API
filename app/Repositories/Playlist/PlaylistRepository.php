@@ -175,4 +175,23 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             ->with('project')
             ->first();
     }
+    
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber()
+    {
+        $projects = Project::all();
+        foreach($projects as $project) {
+            $playlists = $project->playlists()->whereNull('order')->orderBy('created_at')->get();
+            if(!empty($playlists)) {
+                $order = 1;
+                foreach($playlists as $playlist) {
+                    $playlist->order = $order;
+                    $playlist->save();
+                    $order++;
+                }
+            }
+        }
+    }
 }
