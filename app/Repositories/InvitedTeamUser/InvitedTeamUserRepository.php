@@ -38,14 +38,13 @@ class InvitedTeamUserRepository extends BaseRepository implements InvitedTeamUse
     }
 
     /**
-     * Delete the cached user after account created
+     * Delete the invited user after account created
      *
      * @param $email
-     * @return bool
      */
     public function delete($email)
     {
-        return $this->model->where('invited_email', $email)->delete();
+        $this->model->where('invited_email', $email)->delete();
     }
 
     /**
