@@ -256,7 +256,6 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $summary['ending-point'] = ($endingPoint ? $endingPoint : '');
         // Get Verb
         $summary['verb'] = $statement->getVerb()->getDisplay()->getNegotiatedLanguageString();
-        $summary['is_skipped'] = ($summary['verb'] === 'skipped');
         
         return $summary;
     }
