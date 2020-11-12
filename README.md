@@ -1,6 +1,9 @@
 # About CurrikiStudio
 CurrikiStudio is an open source authoring platform for education. It is designed to let content authors develop and publish effective, engaging learning experiences quickly and easily.
 
+## Learn More
+Learn more about CurrikiStudio at https://www.curriki.org
+
 ## About the CurrikiStudio API
 The CurrikiStudio API was developed in PHP using the Laravel framework.  All of its end points support the REST protocol.
 
