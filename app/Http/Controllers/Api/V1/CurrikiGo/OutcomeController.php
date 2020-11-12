@@ -53,7 +53,7 @@ class OutcomeController extends Controller
                 }
                 
                 // Find any skipped interactions as well
-                $skipped = $service->getStatementsByVerb('skipped', $data);
+                $skipped = $service->getSkippedStatements($data);
                 if ($skipped) {
                     foreach ($skipped as $key => $record) {
                         if (!in_array($key, $answeredIds)) {

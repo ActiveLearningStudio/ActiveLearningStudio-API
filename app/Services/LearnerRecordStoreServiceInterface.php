@@ -172,4 +172,13 @@ interface LearnerRecordStoreServiceInterface
      */
     public function getStatementsByVerb($verb, array $data);
 
+    /**
+     * Get the 'skipped' statements from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getSkippedStatements(array $data);
+
 }

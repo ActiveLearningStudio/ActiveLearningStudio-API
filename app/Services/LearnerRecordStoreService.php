@@ -230,6 +230,39 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Get the 'skipped' statements from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getSkippedStatements(array $data)
+    {
+        $skipped = $this->getStatementsByVerb('skipped', $data);
+        $filtered = [];
+        if ($skipped) {
+            // iterate and find the statements that have results & Category.
+            foreach ($skipped as $statement) {
+                $result = $statement->getResult();
+                // Get Category context
+                $contextActivities = $statement->getContext()->getContextActivities();
+                $category = $contextActivities->getCategory();
+                if (!empty($category) && !empty($result)) {
+                    // Get activity subID for this statement.
+                    // Each quiz within the activity is identified by a unique GUID.
+                    // We only need to take the most recent submission on an activity into account.
+                    // We've sorted statements in descending order, so the first entry for a subId is the latest
+                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                    if (!array_key_exists($h5pSubContentId, $filtered)) {
+                        $filtered[$h5pSubContentId] = $statement;
+                    }
+                }
+            }
+        }
+        return $filtered;
+    }
+
+    /**
      * Get summary of an 'answered' statement
      * 
      * @param Statement $statement A TinCan API statement object.
