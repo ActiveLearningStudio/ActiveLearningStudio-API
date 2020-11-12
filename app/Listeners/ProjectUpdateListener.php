@@ -2,13 +2,16 @@
 
 namespace App\Listeners;
 
-use App\Events\TeamCreatedEvent;
-use App\Notifications\InviteToTeamNotification;
+use App\Events\ProjectUpdatedEvent;
+use App\Notifications\UpdateProjectNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
-class TeamCreationListener
+class ProjectUpdateListener
 {
+
     /**
      * Create the event listener.
      *
@@ -22,14 +25,15 @@ class TeamCreationListener
     /**
      * Handle the event.
      *
-     * @param TeamCreatedEvent $event
+     * @param ProjectUpdatedEvent $event
      * @return void
      */
-    public function handle(TeamCreatedEvent $event)
+    public function handle(ProjectUpdatedEvent $event)
     {
         $auth_user = auth()->user();
         foreach ($event->users as $user) {
-            $user['user']->notify(new InviteToTeamNotification($auth_user, $event->team, $user['user']->token, $user['note']));
+            $user->notify(new UpdateProjectNotification($auth_user, $event->project));
         }
     }
+
 }

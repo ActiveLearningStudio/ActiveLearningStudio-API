@@ -2,13 +2,16 @@
 
 namespace App\Listeners;
 
-use App\Events\TeamCreatedEvent;
-use App\Notifications\InviteToTeamNotification;
+use App\Events\PlaylistUpdatedEvent;
+use App\Notifications\UpdatePlaylistNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
-class TeamCreationListener
+class PlaylistUpdateListener
 {
+
     /**
      * Create the event listener.
      *
@@ -22,14 +25,15 @@ class TeamCreationListener
     /**
      * Handle the event.
      *
-     * @param TeamCreatedEvent $event
+     * @param PlaylistUpdatedEvent $event
      * @return void
      */
-    public function handle(TeamCreatedEvent $event)
+    public function handle(PlaylistUpdatedEvent $event)
     {
         $auth_user = auth()->user();
         foreach ($event->users as $user) {
-            $user['user']->notify(new InviteToTeamNotification($auth_user, $event->team, $user['user']->token, $user['note']));
+            $user->notify(new UpdatePlaylistNotification($auth_user, $event->project, $event->playlist));
         }
     }
+
 }

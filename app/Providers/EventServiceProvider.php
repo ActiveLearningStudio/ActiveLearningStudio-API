@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\ActivityUpdatedEvent;
+use App\Events\PlaylistUpdatedEvent;
+use App\Events\ProjectUpdatedEvent;
 use App\Events\TeamCreatedEvent;
+use App\Listeners\ActivityUpdateListener;
+use App\Listeners\PlaylistUpdateListener;
+use App\Listeners\ProjectUpdateListener;
 use App\Listeners\TeamCreationListener;
 use App\Listeners\UserRegistrationListener;
 use App\Notifications\InviteToTeamNotification;
@@ -25,6 +31,15 @@ class EventServiceProvider extends ServiceProvider
         ],
         TeamCreatedEvent::class => [
             TeamCreationListener::class,
+        ],
+        ProjectUpdatedEvent::class => [
+            ProjectUpdateListener::class,
+        ],
+        PlaylistUpdatedEvent::class => [
+            PlaylistUpdateListener::class,
+        ],
+        ActivityUpdatedEvent::class => [
+            ActivityUpdateListener::class,
         ]
     ];
 
