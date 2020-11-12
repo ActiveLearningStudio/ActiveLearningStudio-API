@@ -348,4 +348,12 @@ class PlaylistController extends Controller
             "message" =>  "Your request to $process playlist [$playlist->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
+    
+    /**
+     * @uses One time script to populate all missing order number
+     */
+    public function populateOrderNumber()
+    {
+        $this->playlistRepository->populateOrderNumber();
+    }
 }
