@@ -40,6 +40,13 @@ interface LearnerRecordStoreServiceInterface
      * @var string
      */
     const COMPLETED_VERB_ID = 'http://adlnet.gov/expapi/verbs/completed';
+
+    /**
+     * Skipped verb id for XAPI statements
+     * 
+     * @var string
+     */
+    const SKIPPED_VERB_ID = 'http://id.tincanapi.com/verb/skipped';
     
     /**
      * Save Statement
@@ -146,5 +153,23 @@ interface LearnerRecordStoreServiceInterface
      * @return string
      */
     public function getH5PSubContenIdFromStatement(Statement $statement);
+
+    /**
+     * Get Verb ID from name.
+     * 
+     * @param string $verb Name of the verb. Example: answered
+     * @return string|bool
+     */
+    public function getVerbFromName($verb);
+
+    /**
+     * Get statements by verb from LRS based on filters
+     *
+     * @param string $verb The name of the verb to get statements for
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getStatementsByVerb($verb, array $data);
 
 }
