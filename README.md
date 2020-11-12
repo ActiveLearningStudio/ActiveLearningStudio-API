@@ -11,6 +11,9 @@ The CurrikiStudio API was developed in PHP using the Laravel framework.  All of 
 A Docker image is available to install the CurrikiStudio API here:
 https://hub.docker.com/r/curriki/api
 
+The complete CurrikiStudio suite, including the API and the ReactJS client can be installed to an AWS account using our CloudFormation template:
+https://github.com/ActiveLearningStudio/curriki-eks
+
 ## Documentation
 
 The API end points are documented here:
