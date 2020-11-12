@@ -30,10 +30,10 @@ class PlaylistUpdateListener
      */
     public function handle(PlaylistUpdatedEvent $event)
     {
-        $auth_user = auth()->user();
-        foreach ($event->users as $user) {
-            $user->notify(new UpdatePlaylistNotification($auth_user, $event->project, $event->playlist));
-        }
+//        $auth_user = auth()->user();
+//        foreach ($event->users as $user) {
+//            $user->notify(new UpdatePlaylistNotification($auth_user, $event->project, $event->playlist));
+//        }
     }
 
 }
