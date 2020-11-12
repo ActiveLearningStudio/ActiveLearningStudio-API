@@ -17,4 +17,4 @@ https://github.com/ActiveLearningStudio/curriki-eks
 ## Documentation
 
 The API end points are documented here:
-https://dev.curriki.org/api 
+<a href="https://dev.currikistudio.org/api" target="new">https://dev.currikistudio.org/api</a> 
