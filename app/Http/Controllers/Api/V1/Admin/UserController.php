@@ -19,12 +19,18 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
+/**
+ * @group 1001. Admin/Users
+ *
+ * APIs for users on admin panel.
+ */
 class UserController extends Controller
 {
     private $userRepository;
 
     /**
      * UserController constructor.
+     *
      * @param UserRepository $userRepository
      */
     public function __construct(UserRepository $userRepository)
@@ -33,6 +39,15 @@ class UserController extends Controller
     }
 
     /**
+     * Get All Users
+     *
+     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/user/users.json
+     *
      * @param Request $request
      * @return AnonymousResourceCollection
      */
@@ -42,6 +57,14 @@ class UserController extends Controller
     }
 
     /**
+     * Get User
+     *
+     * Get the specified user data.
+     *
+     * @urlParam user required The Id of a user Example: 1
+     *
+     * @responseFile responses/admin/user/user.json
+     *
      * @param $id
      * @return UserResource
      * @throws GeneralException
@@ -53,6 +76,21 @@ class UserController extends Controller
     }
 
     /**
+     * Create User
+     *
+     * Creates the new user in database.
+     *
+     * @response {
+     *   "message": "User created successfully!",
+     *   "data": ["Created User Data Array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to create user, please try again later."
+     *   ]
+     * }
+     *
      * @param StoreUser $request
      * @return UserResource|Application|ResponseFactory|Response
      * @throws GeneralException
@@ -65,6 +103,23 @@ class UserController extends Controller
     }
 
     /**
+     * Update User
+     *
+     * Updates the user data in database.
+     *
+     * @urlParam user required The Id of a user Example: 1
+     *
+     * @response {
+     *   "message": "User data updated successfully!",
+     *   "data": ["Updated User Data Array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to update user, please try again later."
+     *   ]
+     * }
+     *
      * @param UpdateUser $request
      * @param $id
      * @return UserResource|Application|ResponseFactory|Response
@@ -78,6 +133,28 @@ class UserController extends Controller
     }
 
     /**
+     * Delete User
+     *
+     * Deletes the user record from database.
+     *
+     * @urlParam user required The Id of a user Example: 1
+     *
+     * @response {
+     *   "message": "User deleted successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "You cannot delete your own user."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to delete user, please try again later."
+     *   ]
+     * }
+     *
      * @param $id
      * @return Application|Factory|View
      * @throws GeneralException
@@ -88,6 +165,15 @@ class UserController extends Controller
     }
 
     /**
+     * Users Basic Report
+     *
+     * Returns the paginated response of the users with basic reporting (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/user/users_report.json
+     *
      * @param Request $request
      * @return Application|ResponseFactory|Response
      */
@@ -97,7 +183,20 @@ class UserController extends Controller
     }
 
     /**
-     * Users import sample file
+     * Download Sample File
+     *
+     * Download import sample file for users.
+     *
+     * @response {
+     *   "file": "Downloadable sample file."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Sample file not found!"
+     *   ]
+     * }
+     *
      * @return BinaryFileResponse
      * @throws GeneralException
      */
@@ -111,9 +210,28 @@ class UserController extends Controller
     }
 
     /**
+     * Bulk Import
+     *
+     * Bulk import the users from CSV file.
+     *
+     * @response 206 {
+     *   "errors": ["Failed to import some rows data, please download detailed error report."],
+     *   "report": "https://currikistudio.org/api/storage/temporary/users-import-report.csv"
+     * }
+     *
+     * @response 200 {
+     *   "message": "All users data imported successfully!"
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Empty or bad formatted file, please download sample file for proper format."
+     *   ]
+     * }
+     *
      * @param ImportBulkUsers $request
      * @return Application|ResponseFactory|Response
-     * @throws GeneralException
+     * @throws GeneralException|\Throwable
      */
     public function bulkImport(ImportBulkUsers $request)
     {
@@ -127,6 +245,23 @@ class UserController extends Controller
     }
 
     /**
+     * Change User Role
+     *
+     * Make any user admin or remove from admin.
+     *
+     * @urlParam user required The Id of a user. Example: 1
+     * @urlParam role required Role 0 or 1, 1 for making admin, 0 for removing from admin. Example: 1
+     *
+     * @response 200 {
+     *   "message": "User role is changed successfully!"
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "You cannot change the role of yourself."
+     *   ]
+     * }
+     *
      * @param User $user
      * @param $role
      * @return Application|ResponseFactory|Response

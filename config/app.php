@@ -185,6 +185,10 @@ return [
         // MetricsServiceProvider provides services for SaaS features in CurrikiStudio
         App\Providers\MetricsServiceProvider::class,
 
+        /*
+         * Custom Service Providers
+         */
+        App\Providers\QueueMonitorProvider::class,
     ],
 
     /*

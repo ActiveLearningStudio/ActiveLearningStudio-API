@@ -4,6 +4,9 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @bodyParam import_file file required The import file must be a file of type: CSV.
+ */
 class ImportBulkUsers extends FormRequest
 {
     /**

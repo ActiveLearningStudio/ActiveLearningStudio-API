@@ -6,6 +6,8 @@ use App\Services\GoogleClassroomInterface;
 use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCTopicResource;
 use App\Http\Resources\V1\GCCourseWorkResource;
+use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
+use App\Exceptions\GeneralException;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -22,15 +24,23 @@ class GoogleClassroom implements GoogleClassroomInterface
     protected $service;
 
     /**
+     * Google Classwork repository  object
+     *
+     * @var GcClassworkInterface
+     */
+    protected $gc_classwork;
+
+    /**
      * Creates an instance of the class
+     * 
      *
      * @return void
      */
-    function __construct()
+    function __construct($accessTokenStr = null)
     {
         $client = new \Google_Client();
         $client->setApplicationName(config('google.gapi_application_name'));
-        $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS]);
+        $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS, \Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY]);
         $credentials = config('google.gapi_class_credentials');
 
         $client->setAuthConfig(json_decode($credentials, true));
@@ -42,6 +52,9 @@ class GoogleClassroom implements GoogleClassroomInterface
         if (auth()->user()) {
             $accessToken = json_decode(auth()->user()->gapi_access_token, true);
             $client->setAccessToken($accessToken);
+        } else if($accessTokenStr) {
+            $accessToken = json_decode($accessTokenStr, true);
+            $client->setAccessToken($accessToken);
         }
 
         if ($client->isAccessTokenExpired()) {
@@ -49,9 +62,14 @@ class GoogleClassroom implements GoogleClassroomInterface
             if ($client->getRefreshToken()) {
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
             } else {
+                throw new GeneralException('Did not get a proper Google Classroom token, '.
+                'either you have no access to Classroom, '.
+                'or you may need to revoke the permission for this app. ');
                 // @TODO - this flow doesn't actually kick in.
                 // Request authorization from the user.
-                $authUrl = $client->createAuthUrl();
+                // The flow below maybe implemented later on.
+
+                /* $authUrl = $client->createAuthUrl();
                 // header("Location: $authUrl");
                 // printf("Open the following link in your browser:\n%s\n", $authUrl);
                 // print 'Enter verification code: ';
@@ -63,8 +81,8 @@ class GoogleClassroom implements GoogleClassroomInterface
 
                 // Check to see if there was an error.
                 if (array_key_exists('error', $accessToken)) {
-                    throw new Exception(join(', ', $accessToken));
-                }
+                    throw new GeneralException(join(', ', $accessToken));
+                } */
             }
             // // Save the token to a file.
             // if (!file_exists(dirname($tokenPath))) {
@@ -83,6 +101,18 @@ class GoogleClassroom implements GoogleClassroomInterface
     public function getClient()
     {
         return $this->service->getClient();
+    }
+
+    /**
+     * Set GcClasswork repository object
+     * 
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     *
+     * @return void
+     */
+    public function setGcClassworkObject(GcClassworkRepositoryInterface $gcClassworkRepository)
+    {
+        return $this->gc_classwork = $gcClassworkRepository;
     }
 
     /**
@@ -159,6 +189,7 @@ class GoogleClassroom implements GoogleClassroomInterface
                 'url' => $data['activity_link']
             ]
         ]);
+        $courseWork->setMaxpoints(100);
         $courseWork->setState(self::COURSEWORK_STATE_PUBLISHED);
 
         return $this->service->courses_courseWork->create($data['course_id'], $courseWork);
@@ -215,8 +246,13 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param Project $project
      * @param int|null $courseId The id of the course
      * @return array
+     * @throws GeneralException
      */
-    public function createProjectAsCourse(Project $project, $courseId = null) {
+    public function createProjectAsCourse(Project $project, $courseId = null)
+    {
+        if (!$this->gc_classwork) {
+            throw new GeneralException("GcClasswork repository object is required");
+        }
         $frontURL = $this->getFrontURL();
         $return = [];
         // If course already exists
@@ -274,7 +310,6 @@ class GoogleClassroom implements GoogleClassroomInterface
 
             // Iterate over activities
             $activities = $playlist->activities;
-            $courseWorkCount = 0;
             foreach ($activities as $activity) {
                 if (empty($activity->title)) {
                     continue;
@@ -292,7 +327,6 @@ class GoogleClassroom implements GoogleClassroomInterface
                 $courseWork = $this->createCourseWork($courseWorkData);
 
                 $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
-                $courseWorkCount++;
             }
             $count++;
         }
@@ -300,6 +334,153 @@ class GoogleClassroom implements GoogleClassroomInterface
         return $return;
     }
 
+    /**
+     * Check if student is enrolled in a class
+     *
+     * @param int $courseId
+     * @param string $userId
+     * @return \Google_Service_Classroom_Student
+     */
+    public function getEnrolledStudent($courseId, $userId = "me")
+    {
+        return $this->service->courses_students->get($courseId, $userId);
+    }
+
+    /**
+     * Get first student's submission for a classwork in a course.
+     *
+     * @param int $courseId
+     * @param string $classworkId
+     * @param mixed $userId
+     * @return \Google_Service_Classroom_ListStudentSubmissionsResponse
+     */
+    public function getFirstStudentSubmission($courseId, $classworkId, $userId = "me")
+    {
+        $submissions = $this->getStudentSubmissions($courseId, $classworkId, $userId);
+        // Grab the first submission
+        $first = $submissions[0];
+        
+        return $first;
+    }
+
+    /**
+     * Get student's submissions for a classwork in a course.
+     *
+     * @param int $courseId
+     * @param string $classworkId
+     * @param mixed $userId
+     * @return \Google_Service_Classroom_ListStudentSubmissionsResponse
+     */
+    public function getStudentSubmissions($courseId, $classworkId, $userId = "me")
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+        // Submissions associated with this courseWork for this student
+        $retval = $studentSubmissions->listCoursesCourseWorkStudentSubmissions(
+            $courseId,
+            $classworkId,
+            array('userId' => $userId)
+        );
+        // Grab the first submission
+        return $retval->studentSubmissions;
+    }
+
+    /**
+     * Adds/modifies submission with an attachment
+     *
+     * @param int $courseId The course id
+     * @param string $classworkId The classwork id
+     * @param string $id The submission id
+     * @param string $attachmentLink The URL for attachment
+     * @return string
+     */
+    public function modifySubmissionAttachment($courseId, $courseWorkId, $id, $attachmentLink)
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+        $frontURL = $this->getFrontURL();
+        $postBody = [
+            'link' => [
+                'url' => $frontURL . $attachmentLink
+            ]
+        ];
+        $requestBody = new \Google_Service_Classroom_ModifyAttachmentsRequest;
+        $requestBody->setAddAttachments($postBody);
+        return $studentSubmissions->modifyAttachments($courseId, $courseWorkId, $id, $requestBody);
+    }
+
+    /**
+     * TurnIn an assignment
+     *
+     * @param int $courseId The course id
+     * @param string $classworkId The classwork id
+     * @param string $id The submission id
+     * @return \Google_Service_Classroom_ClassroomEmpty
+     */
+    public function turnIn($courseId, $courseWorkId, $id)
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+        $requestBody = new \Google_Service_Classroom_TurnInStudentSubmissionRequest;
+        return $studentSubmissions->turnIn($courseId, $courseWorkId, $id, $requestBody); 
+    }
+
+    /**
+     * Check if user is a teacher in a class
+     *
+     * @param int $courseId
+     * @param string $userId
+     * @param array $optParams
+     * @return \Google_Service_Classroom_Teacher
+     */
+    public function getCourseTeacher($courseId, $userId = "me", $optParams = [])
+    {
+        return $this->service->courses_teachers->get($courseId, $userId, $optParams);
+    }
+
+    /**
+     * Get student's submission for a classwork in a course by submission id
+     *
+     * @param int $courseId The Google classroom course id
+     * @param string $classworkId The classwork id
+     * @param string $id The submission id
+     * @return \Google_Service_Classroom_StudentSubmission
+     */
+    public function getStudentSubmissionById($courseId, $classworkId, $id)
+    {
+        $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
+        return $studentSubmissions->get(
+            $courseId,
+            $classworkId,
+            $id
+        );
+    }
+
+    /**
+     * Get user profile by id
+     *
+     * @param string $userId The Google Classroom user id
+     * @return \Google_Service_Classroom_StudentSubmission
+     */
+    public function getUserProfile($userId)
+    {
+        // GET https://classroom.googleapis.com/v1/userProfiles/{userId}
+        $userProfiles = $this->service->userProfiles;
+        return $userProfiles->get(
+            $userId
+        );
+    }
+
+    /**
+     * Check if the assignment is in a submitted state
+     * Turned in and 'returned' (by teacher) are both considered submitted for our use case.
+     *
+     * @param string $state The state of the assignment.
+     * @return boolean
+     */
+    public function isAssignmentSubmitted($state)
+    {
+        $submittedStates = [self::ASSIGNMENT_STATE_TURNED_IN, self::ASSIGNMENT_STATE_RETURNED];
+        return (in_array($state, $submittedStates) ? true : false);
+    }
+    
     /**
      * Determine front URL of the application.
      *

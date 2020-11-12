@@ -15,6 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
+/**
+ * @group 1005. Admin/LMS Settings
+ *
+ * APIs for lms settings on admin panel.
+ */
 class LmsSettingController extends Controller
 {
     private $lmsSettingRepository;
@@ -29,6 +34,15 @@ class LmsSettingController extends Controller
     }
 
     /**
+     * Get All LMS Settings for listing.
+     *
+     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/lms-setting/lms-settings.json
+     *
      * @param Request $request
      * @return LmsSettingCollection
      */
@@ -39,6 +53,14 @@ class LmsSettingController extends Controller
     }
 
     /**
+     * Get LMS Setting
+     *
+     * Get the specified lms setting data.
+     *
+     * @urlParam lms_setting required The Id of a lms setting Example: 1
+     *
+     * @responseFile responses/admin/lms-setting/lms-setting.json
+     *
      * @param $id
      * @return LmsSettingResource
      * @throws GeneralException
@@ -50,6 +72,21 @@ class LmsSettingController extends Controller
     }
 
     /**
+     * Create LMS Setting
+     *
+     * Creates the new lms setting in database.
+     *
+     * @response {
+     *   "message": "Setting created successfully!",
+     *   "data": ["Created Setting Data Array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to create setting, please try again later!"
+     *   ]
+     * }
+     *
      * @param StoreLmsSetting $request
      * @return LmsSettingResource|Application|ResponseFactory|Response
      * @throws GeneralException
@@ -62,6 +99,23 @@ class LmsSettingController extends Controller
     }
 
     /**
+     * Update LMS Setting
+     *
+     * Updates the lms setting in database.
+     *
+     * @urlParam lms_setting required The Id of a lms setting Example: 1
+     *
+     * @response {
+     *   "message": "LMS setting data updated successfully!",
+     *   "data": ["Updated LMS setting data array"]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to update LMS setting, please try again later."
+     *   ]
+     * }
+     *
      * @param StoreLmsSetting $request
      * @param $id
      * @return Application|ResponseFactory|Response
@@ -75,6 +129,22 @@ class LmsSettingController extends Controller
     }
 
     /**
+     * Delete LMS Setting
+     *
+     * Deletes the lms setting from database.
+     *
+     * @urlParam lms_setting required The Id of a lms setting Example: 1
+     *
+     * @response {
+     *   "message": "LMS setting deleted successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to delete LMS setting, please try again later."
+     *   ]
+     * }
+     *
      * @param $id
      * @return Application|Factory|View
      * @throws GeneralException

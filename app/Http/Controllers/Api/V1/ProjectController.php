@@ -51,13 +51,15 @@ class ProjectController extends Controller
     public function index()
     {
         $authenticated_user = auth()->user();
-
+/*
+        This returns all projects if the user is admin and breaks the frontend for that user given the number of projects
+        Something like it might be implemented in admin API but not here
         if ($authenticated_user->isAdmin()) {
             return response([
                 'projects' => ProjectResource::collection($this->projectRepository->all()),
             ], 200);
         }
-
+*/
         return response([
             'projects' => ProjectResource::collection($authenticated_user->projects),
         ], 200);

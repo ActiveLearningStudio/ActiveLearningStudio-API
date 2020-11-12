@@ -1,0 +1,41 @@
+{
+    "data": [
+        {
+            "id": 1242,
+            "name": "123security products",
+            "email": "wirelessproducts.wl@gmail.com",
+            "first_name": "123security",
+            "last_name": "products",
+            "job_title": "123securityproducts",
+            "organization_type": "Architecture design",
+            "is_admin": false,
+            "organization_name": "North Kansas City Schools"
+        },
+        {
+            "id": 824,
+            "name": "168xoso com",
+            "email": "168xosocom@gmail.com",
+            "first_name": "168xoso",
+            "last_name": "com",
+            "job_title": "",
+            "organization_type": "K-12",
+            "is_admin": false,
+            "organization_name": "North Kansas City Schools"
+        }
+    ],
+    "links": {
+        "first": "https://www.currikistudio.org/api/v1/admin/users?page=1",
+        "last": "https://www.currikistudio.org/api/v1/admin/users?page=66",
+        "prev": null,
+        "next": "https://www.currikistudio.org/api/v1/admin/users?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 66,
+        "path": "https://www.currikistudio.org/api/v1/admin/users",
+        "per_page": "25",
+        "to": 25,
+        "total": 1632
+    }
+}
