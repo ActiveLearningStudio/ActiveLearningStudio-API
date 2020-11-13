@@ -373,7 +373,7 @@ class ActivityController extends Controller
             event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
 
             return response([
-                'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
+                'activity' => $updated_activity,
             ], 200);
         }
 
@@ -412,7 +412,7 @@ class ActivityController extends Controller
             event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
 
             return response([
-                'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
+                'activity' => $updated_activity,
             ], 200);
         }
 
