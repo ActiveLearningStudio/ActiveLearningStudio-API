@@ -61,7 +61,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function searchByEmailAndName($key)
     {
-        return $this->model->search($key)->get();
+        return $this->model->searchByEmailAndName($key)->get();
     }
 
     /**

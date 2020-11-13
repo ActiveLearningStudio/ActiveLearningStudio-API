@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\PlaylistUpdatedEvent;
+use App\Events\ProjectUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\PlaylistRequest;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Http\Resources\V1\ProjectResource;
 use App\Jobs\ClonePlayList;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,17 +26,24 @@ use Illuminate\Http\Response;
 class PlaylistController extends Controller
 {
 
+    private $projectRepository;
     private $playlistRepository;
     private $activityRepository;
 
     /**
      * PlaylistController constructor.
      *
+     * @param ProjectRepositoryInterface $projectRepository
      * @param PlaylistRepositoryInterface $playlistRepository
      * @param ActivityRepositoryInterface $activityRepository
      */
-    public function __construct(PlaylistRepositoryInterface $playlistRepository, ActivityRepositoryInterface $activityRepository)
+    public function __construct(
+        ProjectRepositoryInterface $projectRepository,
+        PlaylistRepositoryInterface $playlistRepository,
+        ActivityRepositoryInterface $activityRepository
+    )
     {
+        $this->projectRepository = $projectRepository;
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
 
@@ -94,6 +105,9 @@ class PlaylistController extends Controller
         $playlist = $project->playlists()->create($data);
 
         if ($playlist) {
+            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+            event(new ProjectUpdatedEvent($updated_project));
+
             return response([
                 'playlist' => new PlaylistResource($playlist),
             ], 201);
@@ -207,6 +221,9 @@ class PlaylistController extends Controller
     {
         $this->playlistRepository->saveList($request->playlists);
 
+        $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+        event(new ProjectUpdatedEvent($updated_project));
+
         return response([
             'playlists' => PlaylistResource::collection($project->playlists()->orderBy('order')->get()),
         ], 200);
@@ -253,8 +270,11 @@ class PlaylistController extends Controller
         $is_updated = $this->playlistRepository->update($data, $playlist->id);
 
         if ($is_updated) {
+            $updated_playlist = new PlaylistResource($this->playlistRepository->find($playlist->id));
+            event(new PlaylistUpdatedEvent($project, $updated_playlist));
+
             return response([
-                'playlist' => new PlaylistResource($this->playlistRepository->find($playlist->id)),
+                'playlist' => $updated_playlist,
             ], 200);
         }
 
@@ -345,7 +365,7 @@ class PlaylistController extends Controller
             "message" =>  "Your request to $process playlist [$playlist->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
-    
+
     /**
      * @uses One time script to populate all missing order number
      */

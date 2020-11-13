@@ -26,8 +26,9 @@ class TeamRequest extends FormRequest
         return [
             'name' => 'required|string|max:80',
             'description' => 'required|string|max:1000',
-            'users' => 'array|exists:App\User,id',
+            'users' => 'required|array',
             'projects' => 'array|exists:App\Models\Project,id',
+            'note' => 'string|min:0',
         ];
     }
 }
