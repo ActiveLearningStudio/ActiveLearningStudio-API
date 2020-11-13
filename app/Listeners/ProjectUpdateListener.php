@@ -30,10 +30,10 @@ class ProjectUpdateListener
      */
     public function handle(ProjectUpdatedEvent $event)
     {
-        $auth_user = auth()->user();
-        foreach ($event->users as $user) {
-            $user->notify(new UpdateProjectNotification($auth_user, $event->project));
-        }
+//        $auth_user = auth()->user();
+//        foreach ($event->users as $user) {
+//            $user->notify(new UpdateProjectNotification($auth_user, $event->project));
+//        }
     }
 
 }

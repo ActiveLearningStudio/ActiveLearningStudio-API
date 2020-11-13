@@ -30,10 +30,10 @@ class ActivityUpdateListener
      */
     public function handle(ActivityUpdatedEvent $event)
     {
-        $auth_user = auth()->user();
-        foreach ($event->users as $user) {
-            $user->notify(new UpdateActivityNotification($auth_user, $event->project, $event->playlist, $event->activity));
-        }
+//        $auth_user = auth()->user();
+//        foreach ($event->users as $user) {
+//            $user->notify(new UpdateActivityNotification($auth_user, $event->project, $event->playlist, $event->activity));
+//        }
     }
 
 }

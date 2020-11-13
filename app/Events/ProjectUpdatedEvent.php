@@ -4,7 +4,6 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -16,18 +15,15 @@ class ProjectUpdatedEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $project;
-    public $users;
 
     /**
      * Create a new event instance.
      *
      * @param $project
-     * @param $users
      */
-    public function __construct($project, $users)
+    public function __construct($project)
     {
         $this->project = $project;
-        $this->users = $users;
     }
 
     /**
@@ -38,6 +34,21 @@ class ProjectUpdatedEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         return new PrivateChannel('project-update');
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        $authenticated_user = auth()->user();
+
+        return [
+            'userId' => $authenticated_user->id,
+            'project' => $this->project,
+        ];
     }
 
 }

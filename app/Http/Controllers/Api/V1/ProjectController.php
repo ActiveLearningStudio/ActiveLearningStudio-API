@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\ProjectUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectUpdateRequest;
@@ -284,8 +285,11 @@ class ProjectController extends Controller
         ], $project->id);
 
         if ($is_updated) {
+            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+            event(new ProjectUpdatedEvent($updated_project));
+
             return response([
-                'project' => new ProjectResource($this->projectRepository->find($project->id)),
+                'project' => $updated_project,
             ], 200);
         }
 
@@ -319,8 +323,11 @@ class ProjectController extends Controller
         ], $project->id);
 
         if ($is_updated) {
+            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+            event(new ProjectUpdatedEvent($updated_project));
+
             return response([
-                'project' => new ProjectResource($this->projectRepository->find($project->id)),
+                'project' => $updated_project,
             ], 200);
         }
 
@@ -358,8 +365,11 @@ class ProjectController extends Controller
         $is_updated = $this->projectRepository->update($data, $project->id);
 
         if ($is_updated) {
+            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+            event(new ProjectUpdatedEvent($updated_project));
+
             return response([
-                'project' => new ProjectResource($this->projectRepository->find($project->id)),
+                'project' => $updated_project,
             ], 200);
         }
 

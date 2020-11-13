@@ -4,7 +4,6 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -17,20 +16,17 @@ class PlaylistUpdatedEvent implements ShouldBroadcast
 
     public $project;
     public $playlist;
-    public $users;
 
     /**
      * Create a new event instance.
      *
      * @param $project
      * @param $playlist
-     * @param $users
      */
-    public function __construct($project, $playlist, $users)
+    public function __construct($project, $playlist)
     {
         $this->project = $project;
         $this->playlist = $playlist;
-        $this->users = $users;
     }
 
     /**
@@ -41,6 +37,21 @@ class PlaylistUpdatedEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         return new PrivateChannel('playlist-update');
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        $authenticated_user = auth()->user();
+
+        return [
+            'userId' => $authenticated_user->id,
+            'playlist' => $this->playlist,
+        ];
     }
 
 }
