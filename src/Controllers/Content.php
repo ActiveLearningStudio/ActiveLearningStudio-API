@@ -65,15 +65,30 @@ class Content implements ControllerInterface
         global $CFG;        
         $redirect_url = $CFG->apphome.'/mod/curriki/content/processtolms';
         $redirect_url = U::add_url_parm($redirect_url, 'PHPSESSID', session_id());
-        $lti_client_id = $_SESSION['lti']['issuer_client'];
-        $lti13_deeplink = $_SESSION['lti']['lti13_deeplink'];
-        $port = parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_PORT) ? ':'.parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_PORT):'';
-        $lms_url = parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_SCHEME)
-                    .'://'.parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_HOST).$port;
-        
-        $studio_url = CURRIKI_STUDIO_HOST.'/lti/content/'.urlencode($lms_url).'/'.$lti_client_id.'/'.urlencode($redirect_url);
-        $response = new RedirectResponse($studio_url);
-        $response->send();
+
+        if ( isset($_SESSION['lti_post']['lti_version']) && $_SESSION['lti_post']['lti_version'] === 'LTI-1p0' ) {
+            // handle LTI 1.0
+            $oauth_consumer_key = $_SESSION['lti_post']['oauth_consumer_key'];
+            $content_item_return_url = $_SESSION['lti_post']['content_item_return_url'];
+            $port = parse_url($content_item_return_url, PHP_URL_PORT) ? ':'.parse_url($content_item_return_url, PHP_URL_PORT):'';
+            $lms_url = parse_url($content_item_return_url, PHP_URL_SCHEME)
+                        .'://'.parse_url($content_item_return_url, PHP_URL_HOST).$port;
+            
+            $studio_url = CURRIKI_STUDIO_HOST.'/lti/content/'.urlencode($lms_url).'/'.$oauth_consumer_key.'/'.urlencode($redirect_url);
+            $response = new RedirectResponse($studio_url);
+            $response->send();
+        }elseif ( isset($_SESSION['lti']['issuer_client']) ) {
+            // handle LTI 1.3
+            $lti_client_id = $_SESSION['lti']['issuer_client'];
+            $lti13_deeplink = $_SESSION['lti']['lti13_deeplink'];
+            $port = parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_PORT) ? ':'.parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_PORT):'';
+            $lms_url = parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_SCHEME)
+                        .'://'.parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_HOST).$port;
+            
+            $studio_url = CURRIKI_STUDIO_HOST.'/lti/content/'.urlencode($lms_url).'/'.$lti_client_id.'/'.urlencode($redirect_url);
+            $response = new RedirectResponse($studio_url);
+            $response->send();
+        }
     }
 
     public function processtolms()
@@ -94,8 +109,10 @@ class Content implements ControllerInterface
                 $additionalParams['placementHeight'] = $displayHeight;
             }
         }
-        
-        $icon = CURRIKI_STUDIO_HOST.'/favicon-apple.png';                                           
+        $icon = false;
+        if ( $fa_icon !== false ) {
+            $icon = $CFG->fontawesome.'/png/'.str_replace('fa-','',$fa_icon).'.png';
+        }                
 
         // Set up to send the response
         if ( $this->deeplink ) {
