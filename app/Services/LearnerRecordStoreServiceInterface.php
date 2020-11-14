@@ -97,10 +97,11 @@ interface LearnerRecordStoreServiceInterface
      * Get 'completed' statements from LRS based on filters
      *
      * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
      * @throws GeneralException
      * @return array
      */
-    public function getCompletedStatements(array $data);
+    public function getCompletedStatements(array $data, int $limit = 0);
 
     /**
      * Get 'answered' statements from LRS based on filters

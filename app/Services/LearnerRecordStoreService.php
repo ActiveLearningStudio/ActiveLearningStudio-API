@@ -112,10 +112,11 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      * Get 'completed' statements from LRS based on filters
      *
      * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
      * @throws GeneralException
      * @return array
      */
-    public function getCompletedStatements(array $data)
+    public function getCompletedStatements(array $data, int $limit = 0)
     {
         if (empty($data) || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
             throw new GeneralException("XAPI statement's actor and activity properties are needed.");
@@ -129,6 +130,9 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $params['verb'] = $verb;
         $params['activity'] = $activity;
         $params['related_activities'] = true;
+        if ($limit > 0) {
+            $params['limit'] = $limit;
+        }
         $response = $this->queryStatements($params);
         if ($response->success) {
             return $response->content->getStatements();
