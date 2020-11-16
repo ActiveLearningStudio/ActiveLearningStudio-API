@@ -220,7 +220,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param $value
      * @return mixed
      */
-    public function scopeSearch($query, $value)
+    public function scopeSearchByEmailAndName($query, $value)
     {
         return $query->orWhereRaw("email ILIKE '%" . $value . "%'")->orWhereRaw("CONCAT(first_name, ' ', last_name) ILIKE '%" . $value . "%'");
     }
