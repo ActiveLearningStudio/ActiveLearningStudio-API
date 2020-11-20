@@ -53,7 +53,9 @@ class ActivityUpdatedEvent implements ShouldBroadcast
 
         return [
             'userId' => $authenticated_user->id,
-            'activity' => $this->activity,
+            'projectId' => $this->project->id,
+            'playlistId' => $this->playlist->id,
+            'activityId' => $this->activity->id,
         ];
     }
 

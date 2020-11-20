@@ -47,7 +47,7 @@ class ProjectUpdatedEvent implements ShouldBroadcast
 
         return [
             'userId' => $authenticated_user->id,
-            'project' => $this->project,
+            'projectId' => $this->project->id,
         ];
     }
 

@@ -51,7 +51,8 @@ class PlaylistUpdatedEvent implements ShouldBroadcastNow
 
         return [
             'userId' => $authenticated_user->id,
-            'playlist' => $this->playlist,
+            'projectId' => $this->project->id,
+            'playlistId' => $this->playlist->id,
         ];
     }
 
