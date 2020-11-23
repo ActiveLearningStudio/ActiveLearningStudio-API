@@ -245,13 +245,12 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $skipped = $this->getStatementsByVerb('skipped', $data);
         $filtered = [];
         if ($skipped) {
-            // iterate and find the statements that have results & Category.
+            // iterate and find the statements that have results.
             foreach ($skipped as $statement) {
                 $result = $statement->getResult();
                 // Get Category context
                 $contextActivities = $statement->getContext()->getContextActivities();
-                $category = $contextActivities->getCategory();
-                if (!empty($category) && !empty($result)) {
+                if (!empty($result)) {
                     // Get activity subID for this statement.
                     // Each quiz within the activity is identified by a unique GUID.
                     // We only need to take the most recent submission on an activity into account.
