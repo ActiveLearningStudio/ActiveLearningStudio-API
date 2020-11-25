@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "37c20adb4a54f05ba9d079c1a703bb44",
+    "content-hash": "28f2c238dd332d555a06a442923460bb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -60,16 +60,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.161.2",
+            "version": "3.163.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2703896142f292058ce9d6c9026a9329a89778e0"
+                "reference": "ef46d2daf80f2a21809608ada7ba76dddfd103cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2703896142f292058ce9d6c9026a9329a89778e0",
-                "reference": "2703896142f292058ce9d6c9026a9329a89778e0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ef46d2daf80f2a21809608ada7ba76dddfd103cd",
+                "reference": "ef46d2daf80f2a21809608ada7ba76dddfd103cd",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-11-16T19:11:59+00:00"
+            "time": "2020-11-20T19:13:16+00:00"
         },
         {
             "name": "babenkoivan/elastic-adapter",
@@ -477,6 +477,53 @@
                 "math"
             ],
             "time": "2020-08-18T23:57:15+00:00"
+        },
+        {
+            "name": "coraxster/flysystem-aws-s3-v3-minio",
+            "version": "1.0.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/coraxster/flysystem-aws-s3-v3-minio.git",
+                "reference": "963b771021be0eda570064a2a5051e1192c3afbd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/coraxster/flysystem-aws-s3-v3-minio/zipball/963b771021be0eda570064a2a5051e1192c3afbd",
+                "reference": "963b771021be0eda570064a2a5051e1192c3afbd",
+                "shasum": ""
+            },
+            "require": {
+                "aws/aws-sdk-php": "^3.0.0",
+                "league/flysystem": "^1.0.40",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "henrikbjorn/phpspec-code-coverage": "~1.0.1",
+                "phpspec/phpspec": "^2.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Flysystem\\AwsS3v3\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "Flysystem adapter for the AWS S3 SDK v3.x, forked for minio support",
+            "time": "2017-09-26T08:08:44+00:00"
         },
         {
             "name": "defuse/php-encryption",
@@ -2679,53 +2726,6 @@
                 "storage"
             ],
             "time": "2020-08-23T07:39:11+00:00"
-        },
-        {
-            "name": "league/flysystem-aws-s3-v3",
-            "version": "1.0.29",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "4e25cc0582a36a786c31115e419c6e40498f6972"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/4e25cc0582a36a786c31115e419c6e40498f6972",
-                "reference": "4e25cc0582a36a786c31115e419c6e40498f6972",
-                "shasum": ""
-            },
-            "require": {
-                "aws/aws-sdk-php": "^3.20.0",
-                "league/flysystem": "^1.0.40",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "henrikbjorn/phpspec-code-coverage": "~1.0.1",
-                "phpspec/phpspec": "^2.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\Flysystem\\AwsS3v3\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Frank de Jonge",
-                    "email": "info@frenky.net"
-                }
-            ],
-            "description": "Flysystem adapter for the AWS S3 SDK v3.x",
-            "time": "2020-10-08T18:58:37+00:00"
         },
         {
             "name": "league/mime-type-detection",
