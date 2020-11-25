@@ -491,9 +491,7 @@ class LaravelH5p
         // Try to find content with $id.
         $content = self::$core->loadContent($id);
 
-        $h5p_content_path = storage_path('app/public/h5p/content/' . $id);
-
-
+        // $h5p_content_path = storage_path('app/public/h5p/content/' . $id);
         // load from S3 if not exists locally - ! \File::exists($h5p_content_path)
         // load from S3 if exists there
         if (\Storage::disk('minio')->exists('/content/' . $id)) {
