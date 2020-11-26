@@ -56,6 +56,7 @@ class OutcomeController extends Controller
                     $answers = $service->getLatestAnsweredStatementsWithResults($data);
                     $answeredIds = [];
                     if ($answers) {
+                        $answeredIds = array_keys($answers);
                         foreach ($answers as $record) {
                             $summary = $service->getStatementSummary($record);
                             $response[] = new StudentResultResource($summary);
@@ -65,9 +66,11 @@ class OutcomeController extends Controller
                     // Find any skipped interactions as well
                     $skipped = $service->getSkippedStatements($data);
                     if ($skipped) {
-                        foreach ($skipped as $record) {
-                            $summary = $service->getStatementSummary($record);
-                            $response[] = new StudentResultResource($summary);
+                        foreach ($skipped as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $summary = $service->getStatementSummary($record);
+                                $response[] = new StudentResultResource($summary);
+                            }
                         }
                     }
 
