@@ -275,8 +275,14 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     {
         $summary = [];
         $target = $statement->getTarget();
-        $nameOfActivity = $target->getDefinition()->getName()->getNegotiatedLanguageString();
-        
+        $nameOfActivity = 'Unknown Quiz set';
+        $definition = $target->getDefinition();
+        // In some cases, we do not have a 'name' property for the object.
+        // So, we've added an additional check here.
+        // @todo - the LRS statements generated need to have this property
+        if (!$definition->getName()->isEmpty()) {
+            $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
+        }
         $result = $statement->getResult();
         $summary['name'] = $nameOfActivity;
         $summary['score'] = [
