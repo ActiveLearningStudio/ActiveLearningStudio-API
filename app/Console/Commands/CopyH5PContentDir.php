@@ -40,26 +40,30 @@ class CopyH5PContentDir extends Command
      */
     public function handle()
     {
-        Log::info('Script Started: Copying the H5P content directory to S3 Bucket. Start Time: ' . now());
-        $client = new S3Client([
-            'credentials' => [
-                'key' => config('filesystems.disks.minio.key'),
-                'secret' => config('filesystems.disks.minio.secret')
-            ],
-            'region' => config('filesystems.disks.minio.region'),
-            'version' => 'latest',
-            'use_path_style_endpoint' => true,
-            'endpoint' => config('filesystems.disks.minio.endpoint'),
-        ]);
+        if ($this->confirm('Are you sure you want to copy the H5P content to S3?')) {
+            Log::info('Script Started: Copying the H5P content directory to S3 Bucket. Start Time: ' . now());
+            $this->info('Script Started: Copying the H5P content directory to S3 Bucket. Start Time: ' . now());
+            $client = new S3Client([
+                'credentials' => [
+                    'key' => config('filesystems.disks.minio.key'),
+                    'secret' => config('filesystems.disks.minio.secret')
+                ],
+                'region' => config('filesystems.disks.minio.region'),
+                'version' => 'latest',
+                'use_path_style_endpoint' => true,
+                'endpoint' => config('filesystems.disks.minio.endpoint'),
+            ]);
 
-        $path = storage_path('app/public/h5p/content/'); // H5P Content directory path
-        $dest = 's3://' . config('filesystems.disks.minio.bucket') . '/content'; // upload path of S3 bucket
+            $path = storage_path('app/public/h5p/content/'); // H5P Content directory path
+            $dest = 's3://' . config('filesystems.disks.minio.bucket') . '/h5p/content'; // upload path of S3 bucket
 
-        // Create a transfer object.
-        $manager = new Transfer($client, $path, $dest);
+            // Create a transfer object.
+            $manager = new Transfer($client, $path, $dest);
 
-        // Perform the transfer synchronously.
-        $manager->transfer();
-        Log::info('H5P copy content directory script finished successfully! End Time: ' . now());
+            // Perform the transfer synchronously.
+            $manager->transfer();
+            $this->info('H5P copy content directory script finished successfully! End Time: ' . now());
+            Log::info('H5P copy content directory script finished successfully! End Time: ' . now());
+        }
     }
 }

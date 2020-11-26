@@ -10,6 +10,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
 use App\Repositories\User\UserRepository;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -359,6 +360,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      * @param $oldContentID
      * @param $newContentID
      * @return false
+     * @throws FileNotFoundException
      */
     protected function copy_content_data($oldContentID, $newContentID): bool
     {
@@ -366,10 +368,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             return false;
         }
         $contentDir = storage_path('app/public/h5p/content/');
-        if (!file_exists($contentDir . $oldContentID)) {
-            return false;
-        }
-        \File::copyDirectory($contentDir . $oldContentID, $contentDir . $newContentID);
+
+        // validate and copy the content data
+        $this->validate_and_copy($contentDir, $oldContentID, $newContentID);
         $this->chown_r($contentDir . $newContentID); // update content directory owner to default apache
         return true;
     }
@@ -381,11 +382,62 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      */
     protected function chown_r($path, $user = 'www-data'): void
     {
-        $dir = new \DirectoryIterator($path);
-        foreach ($dir as $item) {
-            chown($item->getPathname(), $user);
-            if ($item->isDir() && !$item->isDot()) {
-                $this->chown_r($item->getPathname());
+        try {
+            if (\File::exists($path)) {
+                $dir = new \DirectoryIterator($path);
+                foreach ($dir as $item) {
+                    chown($item->getPathname(), $user);
+                    if ($item->isDir() && !$item->isDot()) {
+                        $this->chown_r($item->getPathname());
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+    }
+
+    /**
+     * Copy the H5P Content data
+     * Validate the src and destination
+     * @param $contentDir
+     * @param $oldContentID
+     * @param $newContentID
+     * @throws FileNotFoundException
+     */
+    protected function validate_and_copy($contentDir, $oldContentID, $newContentID): void
+    {
+        // check s3 storage enable
+        $s3_enable = config('constants.enable_s3_h5p');
+        $exists_locally = \File::exists($contentDir . $oldContentID);
+        $exists_cloud = Storage::disk('minio')->exists("h5p/content/{$oldContentID}");
+
+        // if s3 bucket storage enabled
+        if ($s3_enable) {
+            if ($exists_cloud) {
+                // if src and destination both are on same s3 bucket -then perform copying of the files
+                $files = Storage::disk('minio')->allFiles("h5p/content/{$oldContentID}");
+                foreach ($files as $file) {
+                    $copied_file = str_replace($oldContentID, $newContentID, $file);
+                    Storage::disk('minio')->copy($file, $copied_file);
+                }
+            } elseif ($exists_locally) {
+                // if content folder is locally saved - then upload to S3 bucket
+                $files = Storage::disk('public')->allFiles("h5p/content/{$oldContentID}");
+                foreach ($files as $file) {
+                    $copied_file = str_replace($oldContentID, $newContentID, $file);
+                    Storage::disk('minio')->put($copied_file, Storage::disk('public')->get($file));
+                }
+            }
+        } else if ($exists_locally) {
+            // destination and src both are local
+            \File::copyDirectory($contentDir . $oldContentID, $contentDir . $newContentID);
+        } elseif ($exists_cloud) {
+            // if exist on cloud - then copy from cloud to local
+            $files = Storage::disk('minio')->allFiles("h5p/content/{$oldContentID}");
+            foreach ($files as $file) {
+                $copied_file = str_replace($oldContentID, $newContentID, $file);
+                Storage::disk('public')->put($copied_file, Storage::disk('minio')->get($file));
             }
         }
     }

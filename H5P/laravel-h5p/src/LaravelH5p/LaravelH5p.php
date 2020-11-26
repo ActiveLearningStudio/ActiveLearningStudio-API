@@ -494,7 +494,7 @@ class LaravelH5p
         // $h5p_content_path = storage_path('app/public/h5p/content/' . $id);
         // load from S3 if not exists locally - ! \File::exists($h5p_content_path)
         // load from S3 if exists there
-        if (\Storage::disk('minio')->exists('/content/' . $id)) {
+        if (\Storage::disk('minio')->exists('/h5p/content/' . $id)) {
             // load the files from the bucket if enable
             $params = json_decode($content['params'], true);
             array_walk_recursive($params, 'self::update_path', $id);
@@ -522,7 +522,7 @@ class LaravelH5p
         if ($key === 'path' && !filter_var($item, FILTER_VALIDATE_URL)) {
             $s3_endpoint = config('filesystems.disks.minio.endpoint');
             $s3_bucket = config('filesystems.disks.minio.bucket');
-            $item = "{$s3_endpoint}{$s3_bucket}/content/{$id}/" . $item;
+            $item = "{$s3_endpoint}{$s3_bucket}/h5p/content/{$id}/" . $item;
         }
     }
 

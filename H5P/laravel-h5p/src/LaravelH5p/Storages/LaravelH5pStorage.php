@@ -389,8 +389,8 @@ class LaravelH5pStorage implements H5PFileStorage
         }
 
         // save on S3 if enable or folder exists there
-        if ($s3_enable || \Storage::disk('minio')->exists('/content/' . $toId)) {
-            \Storage::disk('minio')->put("/content/{$toId}/{$file_dir}/{$filename}", file_get_contents($source_path), 'public');
+        if ($s3_enable || \Storage::disk('minio')->exists('/h5p/content/' . $toId)) {
+            \Storage::disk('minio')->put("/h5p/content/{$toId}/{$file_dir}/{$filename}", file_get_contents($source_path), 'public');
         } else {
             // file_exists("{$this->path}/content/{$toId}/") - to check if folder exists locally
             copy($source_path, $target_path);
