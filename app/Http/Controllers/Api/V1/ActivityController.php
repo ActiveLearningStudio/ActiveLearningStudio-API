@@ -324,7 +324,6 @@ class ActivityController extends Controller
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
         if ($activity->playlist->project->user) {
-            // TODO: is this correct?
             $data['user_name'] = $activity->playlist->project->user;
             $data['user_id'] = $activity->playlist->project->id;
         }

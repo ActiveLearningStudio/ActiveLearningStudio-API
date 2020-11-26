@@ -23,3 +23,15 @@ Broadcast::channel('user-channel.{userId}', function ($user, $userId) {
     Log::info("userId : ". $userId);
     return (int) $user->id === (int) $userId;
 });
+
+Broadcast::channel('project-update', function () {
+    return true;
+});
+
+Broadcast::channel('playlist-update', function () {
+    return true;
+});
+
+Broadcast::channel('activity-update', function () {
+    return true;
+});

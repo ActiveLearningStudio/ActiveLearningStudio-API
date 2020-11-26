@@ -12,6 +12,7 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
+//use Gnello\Mattermost\Laravel\Facades\Mattermost;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +24,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     private $userRepository;
     private $projectRepository;
     private $invitedTeamUserRepository;
+    private $matDriver;
 
     /**
      * TeamRepository constructor.
@@ -44,6 +46,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
+
+//        $this->matDriver = Mattermost::server('default');
     }
 
     /**
@@ -293,30 +297,43 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      */
     public function getTeamDetail($teamId)
     {
+        $authenticated_user = auth()->user();
         $team = $this->model->find($teamId);
 
         if ($team) {
+            $team_projects = [];
             foreach ($team->projects as $team_project) {
-                $team_project_users = DB::table('team_project_user')
+                $tpu = DB::table('team_project_user')
                     ->where('team_id', $team->id)
                     ->where('project_id', $team_project->id)
-                    ->get();
+                    ->where('user_id', $authenticated_user->id)
+                    ->first();
 
-                $project_users = [];
-                foreach ($team_project_users as $team_project_user) {
-                    $user = User::find($team_project_user->user_id);
-                    if ($user) {
-                        $project_users[] = [
-                            'id' => $user->id,
-                            'first_name' => $user->first_name,
-                            'last_name' => $user->last_name,
-                            'email' => $user->email,
-                        ];
+                if ($tpu) {
+                    $team_project_users = DB::table('team_project_user')
+                        ->where('team_id', $team->id)
+                        ->where('project_id', $team_project->id)
+                        ->get();
+
+                    $project_users = [];
+                    foreach ($team_project_users as $team_project_user) {
+                        $user = User::find($team_project_user->user_id);
+                        if ($user) {
+                            $project_users[] = [
+                                'id' => $user->id,
+                                'first_name' => $user->first_name,
+                                'last_name' => $user->last_name,
+                                'email' => $user->email,
+                            ];
+                        }
                     }
-                }
 
-                $team_project->users = $project_users;
+                    $team_project->users = $project_users;
+                    $team_projects[] = $team_project;
+                }
             }
+
+            $team->projects = $team_projects;
 
             foreach ($team->users as $team_user) {
                 $team_project_users = DB::table('team_project_user')

@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 class GoogleClassroom implements GoogleClassroomInterface
 {
     /**
-     * Google Classroom Serivce object
+     * Google Classroom Service object
      *
      * @var \Google_Service_Classroom
      */
@@ -32,7 +32,8 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Creates an instance of the class
-     * 
+     *
+     * @param $accessTokenStr
      *
      * @return void
      */
@@ -105,7 +106,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * Set GcClasswork repository object
-     * 
+     *
      * @param GcClassworkRepositoryInterface $gcClassworkRepository
      *
      * @return void
@@ -324,7 +325,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
                 // We need to save the classwork id in the database, and also need to retrieve it later.
                 // So we make a dummy insertion in the database, and append the id in the link.
-                // We have to do this way because, we cannot update the 'Materials' link for classwork 
+                // We have to do this way because, we cannot update the 'Materials' link for classwork
                 $classworkItem = $this->gc_classwork->create([
                     'classwork_id' => uniqid(),
                     'path' => $activityLink,
@@ -334,7 +335,7 @@ class GoogleClassroom implements GoogleClassroomInterface
                 if ($classworkItem) {
                     // Now, we append the activity link with our database id.
                     $activityLink .= '/' . $classworkItem->id;
-                    
+
                     $courseWorkData = [
                         'course_id' => $course->id,
                         'topic_id' => $topic->topicId,
@@ -343,13 +344,13 @@ class GoogleClassroom implements GoogleClassroomInterface
                         'activity_link' => $frontURL . $activityLink
                     ];
                     $courseWork = $this->createCourseWork($courseWorkData);
-                    
+
                     // Once coursework id is generated, we'll update that in our database.
                     $this->gc_classwork->update([
                         'classwork_id' => $courseWork->id,
                         'path' => $activityLink
                     ], $classworkItem->id);
-                   
+
                     $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
                 }
             }
@@ -384,7 +385,7 @@ class GoogleClassroom implements GoogleClassroomInterface
         $submissions = $this->getStudentSubmissions($courseId, $classworkId, $userId);
         // Grab the first submission
         $first = $submissions[0];
-        
+
         return $first;
     }
 
@@ -444,7 +445,7 @@ class GoogleClassroom implements GoogleClassroomInterface
     {
         $studentSubmissions = $this->service->courses_courseWork_studentSubmissions;
         $requestBody = new \Google_Service_Classroom_TurnInStudentSubmissionRequest;
-        return $studentSubmissions->turnIn($courseId, $courseWorkId, $id, $requestBody); 
+        return $studentSubmissions->turnIn($courseId, $courseWorkId, $id, $requestBody);
     }
 
     /**
@@ -505,7 +506,7 @@ class GoogleClassroom implements GoogleClassroomInterface
         $submittedStates = [self::ASSIGNMENT_STATE_TURNED_IN, self::ASSIGNMENT_STATE_RETURNED];
         return (in_array($state, $submittedStates) ? true : false);
     }
-    
+
     /**
      * Determine front URL of the application.
      *
