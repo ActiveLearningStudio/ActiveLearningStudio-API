@@ -29,7 +29,7 @@ class LmsSettingRepository extends BaseRepository
      */
     public function getAll($data)
     {
-        return $this->setDtParams($data)->getDtPaginated(['user']);
+        return $this->setDtParams($data)->enableRelDtSearch(["email", "first_name"], $this->dtSearchValue)->getDtPaginated(['user']);
     }
 
     /**
