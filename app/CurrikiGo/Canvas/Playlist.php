@@ -50,7 +50,7 @@ class Playlist
     public function send(PlaylistModel $playlist, $data)
     {
         $user = Auth::user();
-        $projectNameSlug = strtolower(implode('-', explode(' ', $playlist->project->name)));
+        $projectNameSlug = CourseHelper::urlTitle($playlist->project->name);
         $sisId = $projectNameSlug . '-' . $user->id . '-' . $playlist->project->id;
         
         $lmsSettings = $this->canvasClient->getLmsSettings();
@@ -87,6 +87,8 @@ class Playlist
         } else {
             // create new course and add playlist
             $courseData = ['name' => $playlist->project->name];
+            // Addig a date stamp to sis id
+            $sisId .=  '-' . date('YmdHis'); 
             $course = $this->canvasClient->run(new CreateCourseCommand($accountId, $courseData, $sisId));
             $module = $this->canvasClient->run(new CreateModuleCommand($course->id, ["name" => $moduleName]));
             $moduleItem['title'] = $playlist->title . ($data['counter'] > 0 ? ' (' . $data['counter'] . ')' : '');

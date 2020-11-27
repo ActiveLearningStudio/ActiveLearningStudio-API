@@ -45,7 +45,7 @@ class Course
         $accountId = "self";
 
         $user = Auth::user();
-        $projectNameSlug = strtolower(implode('-', explode(' ', $project->name)));
+        $projectNameSlug = CourseHelper::urlTitle($project->name);
         $sisId = $projectNameSlug . '-' . $user->id . '-' . $project->id;
 
         $courses = $this->canvasClient->run(new GetCoursesCommand($accountId, $project->name, $sisId));
