@@ -37,7 +37,8 @@ class Course
     {
         $course = null;
         foreach ($list as $key => $item) {
-            if (trim($item->sis_course_id) === trim($sisId)) {
+            $pos = strpos(trim($item->sis_course_id), trim($sisId));
+            if ($pos !== false) {
                 $course = $item;
                 break;                
             }
@@ -62,5 +63,36 @@ class Course
             }
         }
         return $module;
+    }
+
+    /**
+     * Create human-friendly URL string
+     * 
+     * @param string $str Input string
+     * @param string $separator Word separator (usually '-' or '_') 
+     * @param bool $lowercase Whether to transform the output string to lowercase
+     * @return string|null
+     */
+    public static function urlTitle(string $str, string $separator = '-', bool $lowercase = true): string
+    {
+        $qSeparator = preg_quote($separator, '#');
+
+		$trans = [
+			'&.+?;' => '',
+			'[^\w\d _-]' => '',
+			'\s+' => $separator,
+			'(' . $qSeparator . ')+' => $separator,
+		];
+
+		$str = strip_tags($str);
+		foreach ($trans as $key => $val) {
+			$str = preg_replace('#' . $key . '#iu', $val, $str);
+		}
+
+		if ($lowercase === true) {
+			$str = mb_strtolower($str);
+		}
+
+		return trim(trim($str, $separator));
     }
 }
