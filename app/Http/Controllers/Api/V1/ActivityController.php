@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\ActivityUpdatedEvent;
+use App\Events\PlaylistUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ActivityRequest;
 use App\Http\Resources\V1\ActivityResource;
@@ -10,9 +12,12 @@ use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Jobs\CloneActivity;
 use App\Models\Activity;
+use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
+use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
@@ -29,15 +34,21 @@ use H5pCore;
 class ActivityController extends Controller
 {
 
+    private $playlistRepository;
     private $activityRepository;
 
     /**
      * ActivityController constructor.
      *
+     * @param PlaylistRepositoryInterface $playlistRepository
      * @param ActivityRepositoryInterface $activityRepository
      */
-    public function __construct(ActivityRepositoryInterface $activityRepository)
+    public function __construct(
+        PlaylistRepositoryInterface $playlistRepository,
+        ActivityRepositoryInterface $activityRepository
+    )
     {
+        $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
     }
 
@@ -130,6 +141,9 @@ class ActivityController extends Controller
         $activity = $this->activityRepository->create($data);
 
         if ($activity) {
+            $updated_playlist = new PlaylistResource($this->playlistRepository->find($data['playlist_id']));
+            event(new PlaylistUpdatedEvent($updated_playlist->project, $updated_playlist));
+
             return response([
                 'activity' => new ActivityResource($activity),
             ], 201);
@@ -206,8 +220,13 @@ class ActivityController extends Controller
 
         if ($is_updated) {
             $this->update_h5p($request->get('data'), $activity->h5p_content_id);
+
+            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
+            $playlist = new PlaylistResource($updated_activity->playlist);
+            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
+
             return response([
-                'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
+                'activity' => $updated_activity,
             ], 200);
         }
 
@@ -222,6 +241,7 @@ class ActivityController extends Controller
      * @param $request
      * @param int $id
      * @return mixed
+     * @throws H5PException
      */
     public function update_h5p($request, $id)
     {
@@ -304,7 +324,6 @@ class ActivityController extends Controller
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
         if ($activity->playlist->project->user) {
-            // TODO: is this correct?
             $data['user_name'] = $activity->playlist->project->user;
             $data['user_id'] = $activity->playlist->project->id;
         }
@@ -348,8 +367,12 @@ class ActivityController extends Controller
         ], $activity->id);
 
         if ($is_updated) {
+            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
+            $playlist = new PlaylistResource($updated_activity->playlist);
+            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
+
             return response([
-                'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
+                'activity' => $updated_activity,
             ], 200);
         }
 
@@ -383,8 +406,12 @@ class ActivityController extends Controller
         ], $activity->id);
 
         if ($is_updated) {
+            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
+            $playlist = new PlaylistResource($updated_activity->playlist);
+            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
+
             return response([
-                'activity' => new ActivityResource($this->activityRepository->find($activity->id)),
+                'activity' => $updated_activity,
             ], 200);
         }
 
@@ -463,7 +490,7 @@ class ActivityController extends Controller
         $isDuplicate = ($activity->playlist_id == $playlist->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         return response([
-            "message" =>  "Your request to $process  activity [$activity->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            "message" => "Your request to $process  activity [$activity->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 
@@ -624,13 +651,30 @@ class ActivityController extends Controller
         ], 400);
     }
 
+    /**
+     * Check permission
+     *
+     * @param Activity $activity
+     * @return bool
+     */
     private function hasPermission(Activity $activity)
     {
         $authenticated_user = auth()->user();
-        $project_users = $activity->playlist->project->users;
-
+        $project = $activity->playlist->project;
+        $project_users = $project->users;
         foreach ($project_users as $project_user) {
             if ($authenticated_user->id === $project_user->id) {
+                return true;
+            }
+        }
+
+        $project_teams = $project->teams;
+        foreach ($project_teams as $project_team) {
+            $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
+                ->where('project_id', $project->id)
+                ->where('user_id', $authenticated_user->id)
+                ->exists();
+            if ($team_project_user) {
                 return true;
             }
         }

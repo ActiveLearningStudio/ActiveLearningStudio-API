@@ -112,10 +112,11 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      * Get 'completed' statements from LRS based on filters
      *
      * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
      * @throws GeneralException
      * @return array
      */
-    public function getCompletedStatements(array $data)
+    public function getCompletedStatements(array $data, int $limit = 0)
     {
         if (empty($data) || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
             throw new GeneralException("XAPI statement's actor and activity properties are needed.");
@@ -129,6 +130,9 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $params['verb'] = $verb;
         $params['activity'] = $activity;
         $params['related_activities'] = true;
+        if ($limit > 0) {
+            $params['limit'] = $limit;
+        }
         $response = $this->queryStatements($params);
         if ($response->success) {
             return $response->content->getStatements();
@@ -159,6 +163,36 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $params['related_activities'] = true;
         $response = $this->queryStatements($params);
         
+        if ($response->success) {
+            return $response->content->getStatements();
+        }
+        throw new GeneralException($response->content);
+    }
+
+    /**
+     * Get statements by verb from LRS based on filters
+     *
+     * @param string $verb The name of the verb to get statements for
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getStatementsByVerb($verb, array $data)
+    {
+        $verbId = $this->getVerbFromName($verb);
+        if (empty($data) || !$verbId || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
+            throw new GeneralException("XAPI statement's actor, verb and activity properties are needed.");
+        }
+        $actor = $this->makeAgentFromJSON($data['actor']);
+        $verb = $this->makeVerb($verbId);
+        $activity = $this->makeActivity($data['activity']);
+        
+        $params = [];
+        $params['agent'] = $actor;
+        $params['verb'] = $verb;
+        $params['activity'] = $activity;
+        $params['related_activities'] = true;
+        $response = $this->queryStatements($params);
         if ($response->success) {
             return $response->content->getStatements();
         }
@@ -200,6 +234,38 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Get the 'skipped' statements from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getSkippedStatements(array $data)
+    {
+        $skipped = $this->getStatementsByVerb('skipped', $data);
+        $filtered = [];
+        if ($skipped) {
+            // iterate and find the statements that have results.
+            foreach ($skipped as $statement) {
+                $result = $statement->getResult();
+                // Get Category context
+                $contextActivities = $statement->getContext()->getContextActivities();
+                if (!empty($result)) {
+                    // Get activity subID for this statement.
+                    // Each quiz within the activity is identified by a unique GUID.
+                    // We only need to take the most recent submission on an activity into account.
+                    // We've sorted statements in descending order, so the first entry for a subId is the latest
+                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                    if (!array_key_exists($h5pSubContentId, $filtered)) {
+                        $filtered[$h5pSubContentId] = $statement;
+                    }
+                }
+            }
+        }
+        return $filtered;
+    }
+
+    /**
      * Get summary of an 'answered' statement
      * 
      * @param Statement $statement A TinCan API statement object.
@@ -209,8 +275,14 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     {
         $summary = [];
         $target = $statement->getTarget();
-        $nameOfActivity = $target->getDefinition()->getName()->getNegotiatedLanguageString();
-        
+        $nameOfActivity = 'Unknown Quiz set';
+        $definition = $target->getDefinition();
+        // In some cases, we do not have a 'name' property for the object.
+        // So, we've added an additional check here.
+        // @todo - the LRS statements generated need to have this property
+        if (!$definition->getName()->isEmpty()) {
+            $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
+        }
         $result = $statement->getResult();
         $summary['name'] = $nameOfActivity;
         $summary['score'] = [
@@ -224,6 +296,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         
         // this is basically the ending point (or the seek point) on the video where the quiz is set.
         $summary['ending-point'] = ($endingPoint ? $endingPoint : '');
+        // Get Verb
+        $summary['verb'] = $statement->getVerb()->getDisplay()->getNegotiatedLanguageString();
         
         return $summary;
     }
@@ -280,4 +354,21 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         // find the sub content id
         return (!empty($extensionsList) && array_key_exists($keyName, $extensionsList) ? $extensionsList[$keyName] : '');
     }
+
+    /**
+     * Get Verb ID from name.
+     * 
+     * @param string $verb Name of the verb. Example: answered
+     * @return string|bool
+     */
+    public function getVerbFromName($verb)
+    {
+        $verbsList = [
+            'answered' => self::ANSWERED_VERB_ID,
+            'completed' => self::COMPLETED_VERB_ID,
+            'skipped' => self::SKIPPED_VERB_ID
+        ];
+        return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
+    }
+    
 }

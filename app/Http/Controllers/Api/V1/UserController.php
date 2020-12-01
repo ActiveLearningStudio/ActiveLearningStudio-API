@@ -83,7 +83,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: do we need user create functionality for admin ?
         return response([
             'errors' => ['Forbidden. Please use register to create new user.'],
         ], 403);
