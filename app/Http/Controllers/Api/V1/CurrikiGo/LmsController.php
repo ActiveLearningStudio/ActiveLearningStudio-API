@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\CurrikiGo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProjectPublicResource;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,16 +20,18 @@ class LmsController extends Controller
 {
     private $lmsSettingRepository;
     private $projectRepository;
+    private $activityRepository;
 
     /**
      * LmsController constructor.
      *
      * @param $lmsSettingRepository LmsSettingRepositoryInterface
      */
-    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository)
+    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository, ActivityRepositoryInterface $activityRepository)
     {
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->projectRepository = $projectRepository;
+        $this->activityRepository = $activityRepository;
     }
 
     /**
@@ -64,6 +67,39 @@ class LmsController extends Controller
 
         return response([
             'projects' => ProjectPublicResource::collection($projects),
+        ], 200);
+    }
+
+    public function activities(Request $request)
+    {
+        // Check LMS settings for authorization
+/*
+        $settings = $this->lmsSettingRepository->fetchByLmsUrlAndLtiClientId($request->lms_url, $request->lti_client_id);
+        if(empty($settings))
+            return response(['errors' => ['Unauthorized']], 401);
+*/
+        // Fetch Elastic Search results
+        $data = [
+            'query' => $request->input('query', 'a'),
+            'from' => $request->input('from', 0),
+            'size' => 12,
+            'model' => 'activities',
+            'indexing' => [3]
+        ];
+
+        if($request->has('subject'))
+            $data['subjectIds'] = [$request->input('subject')];
+        if($request->has('level'))
+            $data['educationLevelIds'] = [$request->input('level')];
+        if($request->has('start'))
+            $data['startDate'] = $request->input('start', '');
+        if($request->has('end'))
+            $data['endDate'] = $request->input('end', '');
+
+        $results = $this->activityRepository->advanceSearchForm($data);
+
+        return response([
+            'activities' => $results,
         ], 200);
     }
 }
