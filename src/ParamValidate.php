@@ -42,5 +42,23 @@ class ParamValidate
         return isset($_SESSION['lti_post']) && isset($_SESSION['lti_post']['activity']) ? $_SESSION['lti_post']['activity'] : null;
     }
 
+    public static function toolPlatformInfo($session)
+    {
+        $lti_jwt = $session['tsugi_jwt'];
+        $lti_claim_tool_platform = "https://purl.imsglobal.org/spec/lti/claim/tool_platform";
+        $tool_family_code = $lti_jwt->body->{$lti_claim_tool_platform};
+        return property_exists($tool_family_code, 'product_family_code') ? $tool_family_code->product_family_code : null;
+    }
+
+    public static function isCanvas($session) {
+        $tool_family_code = self::toolPlatformInfo($session);
+        return $tool_family_code === 'canvas'; 
+    }
+
+    public static function isMoodle($session) {
+        $tool_family_code = self::toolPlatformInfo($session);
+        return $tool_family_code === 'moodle'; 
+    }
+
 
 }
