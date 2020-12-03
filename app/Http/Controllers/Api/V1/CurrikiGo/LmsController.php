@@ -26,6 +26,8 @@ class LmsController extends Controller
      * LmsController constructor.
      *
      * @param $lmsSettingRepository LmsSettingRepositoryInterface
+     * @param $projectRepository ProjectRepositoryInterface
+     * @param $activityRepository ActivityRepositoryInterface
      */
     public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository, ActivityRepositoryInterface $activityRepository)
     {
@@ -72,6 +74,15 @@ class LmsController extends Controller
 
     public function activities(Request $request)
     {
+        $request->validate([
+            'query' => 'string|max:255',
+            'from' => 'integer',
+            'subject' => 'string|max:255',
+            'level' => 'string|max:255',
+            'start' => 'string|max:255',
+            'end' => 'string|max:255',
+        ]);
+
         // Check LMS settings for authorization
 /*
         $settings = $this->lmsSettingRepository->fetchByLmsUrlAndLtiClientId($request->lms_url, $request->lti_client_id);
@@ -87,14 +98,21 @@ class LmsController extends Controller
             'indexing' => [3]
         ];
 
-        if($request->has('subject'))
+        if ($request->has('subject')) {
             $data['subjectIds'] = [$request->input('subject')];
-        if($request->has('level'))
+        }
+
+        if ($request->has('level')) {
             $data['educationLevelIds'] = [$request->input('level')];
-        if($request->has('start'))
+        }
+
+        if ($request->has('start')) {
             $data['startDate'] = $request->input('start', '');
-        if($request->has('end'))
+        }
+
+        if ($request->has('end')) {
             $data['endDate'] = $request->input('end', '');
+        }
 
         $results = $this->activityRepository->advanceSearchForm($data);
 

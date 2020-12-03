@@ -160,9 +160,9 @@ class Project extends Model
     public function getFavoredAttribute()
     {
         $user = auth()->user();
-        if($user)
+        if ($user) {
             return $this->favoredByUsers->find(auth()->user()->id) ? true : false;
-        else
-            return false;
+        }
+        return false;
     }
 }
