@@ -47,6 +47,13 @@ interface LearnerRecordStoreServiceInterface
      * @var string
      */
     const SKIPPED_VERB_ID = 'http://id.tincanapi.com/verb/skipped';
+
+    /**
+     * Attempted verb id for XAPI statements
+     * 
+     * @var string
+     */
+    const ATTEMPTED_VERB_ID = 'http://adlnet.gov/expapi/verbs/attempted';
     
     /**
      * Save Statement
@@ -181,5 +188,14 @@ interface LearnerRecordStoreServiceInterface
      * @return array
      */
     public function getSkippedStatements(array $data);
+
+    /**
+     * Get the 'attempted' statements from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAttemptedStatements(array $data);
 
 }

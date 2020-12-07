@@ -63,6 +63,18 @@ class OutcomeController extends Controller
                         }
                     }
                     
+                    // Find any interacted/attempted interactions as well
+                    $attempted = $service->getAttemptedStatements($data);
+                    if ($attempted) {
+                        foreach ($attempted as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $summary = $service->getStatementSummary($record);
+                                $response[] = new StudentResultResource($summary);
+                                $answeredIds[] = $key;
+                            }
+                        }
+                    }
+                   
                     // Find any skipped interactions as well
                     $skipped = $service->getSkippedStatements($data);
                     if ($skipped) {
@@ -70,6 +82,7 @@ class OutcomeController extends Controller
                             if (!in_array($key, $answeredIds)) {
                                 $summary = $service->getStatementSummary($record);
                                 $response[] = new StudentResultResource($summary);
+                                $answeredIds[] = $key;
                             }
                         }
                     }
