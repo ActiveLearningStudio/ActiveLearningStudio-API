@@ -6,11 +6,11 @@ require_once "config.php";
 
 use Pimple\Container;
 use CurrikiTsugi\App;
-use Tsugi\Core\LTIX;
+// use Tsugi\Core\LTIX;
 use CurrikiTsugi\Interfaces\ControllerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-$LTI = LTIX::requireData();
+// $LTI = LTIX::requireData();
 $container = new Container();
 
 $container[Request::class] = function($c){

@@ -29,6 +29,7 @@ class App
                 call_user_func(array($this->controller, 'index'));
             }            
         } else {
+            $LTI = LTIX::requireData();
             // Obtain User ID
             $user_id = $LTI->user->id; //TSUGI member ID
             // Obtain User Email
@@ -49,7 +50,7 @@ class App
                 $playlist_studio_link = CURRIKI_STUDIO_HOST . "/playlist/$playlist_id/preview/lti";
                 $redirect_to_studio_url = $playlist_studio_link . "?" . $lti_token_params;
                 header("Location: $redirect_to_studio_url");
-            } elseif ($activity_id && $playlist_id) {
+            } elseif ($activity_id) { // && $playlist_id
                 // Check if the grade is being passedback
                 $is_gradepassback = (int) U::get($_GET, "gpb");
                 if ($is_gradepassback) {
