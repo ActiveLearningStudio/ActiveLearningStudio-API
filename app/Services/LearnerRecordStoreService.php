@@ -266,6 +266,36 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Get the 'attempted' statements from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAttemptedStatements(array $data)
+    {
+        $attempted = $this->getStatementsByVerb('attempted', $data);
+        $filtered = [];
+        if ($attempted) {
+            // iterate and find the statements that have results.
+            foreach ($attempted as $statement) {
+                // Get Parent context
+                $contextActivities = $statement->getContext()->getContextActivities();
+                $parent = $contextActivities->getParent();
+                
+                if (!empty($parent)) {
+                    // Get activity subID for this statement.
+                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                    if (!array_key_exists($h5pSubContentId, $filtered)) {
+                        $filtered[$h5pSubContentId] = $statement;
+                    }
+                }
+            }
+        }
+        return $filtered;
+    }
+
+    /**
      * Get summary of an 'answered' statement
      * 
      * @param Statement $statement A TinCan API statement object.
@@ -285,11 +315,20 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         }
         $result = $statement->getResult();
         $summary['name'] = $nameOfActivity;
-        $summary['score'] = [
-            'raw' => $result->getScore()->getRaw(),
-            'max' => $result->getScore()->getMax(),
-        ];
-        $summary['duration'] = $this->formatDuration($result->getDuration());
+        if ($result) {
+            $summary['score'] = [
+                'raw' => $result->getScore()->getRaw(),
+                'max' => $result->getScore()->getMax(),
+            ];
+            $summary['duration'] = $this->formatDuration($result->getDuration());
+        } else {
+            $summary['score'] = [
+                'raw' => 0,
+                'max' => 0
+            ];
+            $summary['duration'] = '00:00';
+        }
+        
         // Get activity duration
         $extensions = $statement->getContext()->getExtensions();
         $endingPoint = $this->getEndingPointExtension($extensions);
@@ -366,7 +405,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $verbsList = [
             'answered' => self::ANSWERED_VERB_ID,
             'completed' => self::COMPLETED_VERB_ID,
-            'skipped' => self::SKIPPED_VERB_ID
+            'skipped' => self::SKIPPED_VERB_ID,
+            'attempted' => self::ATTEMPTED_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
