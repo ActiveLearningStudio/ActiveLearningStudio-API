@@ -6,6 +6,7 @@ echo "APP_ENV=local" >> .env
 echo "APP_KEY=" >> .env
 echo "APP_DEBUG=true" >> .env
 echo "APP_URL=${APP_URL}" >> .env
+echo "APP_ALLOWED_URL=${APP_ALLOWED_URL}" >> .env
 echo "FRONT_END_URL=${FRONT_END_URL}" >> .env
 echo "LOG_CHANNEL=stack" >> .env
 echo "DB_CONNECTION=${DB_CONNECTION}" >> .env

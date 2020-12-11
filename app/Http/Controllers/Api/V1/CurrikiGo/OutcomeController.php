@@ -39,24 +39,54 @@ class OutcomeController extends Controller
         $response = [];
         try {
             $service = new LearnerRecordStoreService();
-            $completed = $service->getCompletedStatements($data);
+            $completed = $service->getCompletedStatements($data, 1);
             if (count($completed) > 0) {
-                // Assume that this statement already has a result
-                $answers = $service->getLatestAnsweredStatementsWithResults($data);
-                if ($answers) {
-                    foreach ($answers as $record) {
-                        $summary = $service->getStatementSummary($record);
-                        $response[] = new StudentResultResource($summary);
+                // Get 'other' activity IRI from the statement
+                // that now has the unique context of the attempt.
+                $attemptIRI = '';
+                foreach ($completed as $statement) {
+                    $contextActivities = $statement->getContext()->getContextActivities();
+                    $other = $contextActivities->getOther();
+                    if (!empty($other)) {
+                        $attemptIRI = end($other)->getId();
                     }
                 }
-                // We'll use the ending-point for ordering the final results.
-                usort($response, function($a, $b) {
-                    return $a['ending-point'] <=> $b['ending-point'];
-                });
-                
-                return response([
-                    'summary' => $response,
-                ], 200);
+                if (!empty($attemptIRI)) {
+                    $data['activity'] = $attemptIRI;
+                    $answers = $service->getLatestAnsweredStatementsWithResults($data);
+                    $answeredIds = [];
+                    if ($answers) {
+                        $answeredIds = array_keys($answers);
+                        foreach ($answers as $record) {
+                            $summary = $service->getStatementSummary($record);
+                            $response[] = new StudentResultResource($summary);
+                        }
+                    }
+                    
+                    // Find any skipped interactions as well
+                    $skipped = $service->getSkippedStatements($data);
+                    if ($skipped) {
+                        foreach ($skipped as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $summary = $service->getStatementSummary($record);
+                                $response[] = new StudentResultResource($summary);
+                            }
+                        }
+                    }
+
+                    // We'll use the ending-point for ordering the final results.
+                    usort($response, function($a, $b) {
+                        return $a['ending-point'] <=> $b['ending-point'];
+                    });
+                    
+                    return response([
+                        'summary' => $response,
+                    ], 200);
+                } else {
+                    return response([
+                        'errors' => ["No results found."],
+                    ], 404);
+                }
             } else {
                 return response([
                     'errors' => ["No results found."],
