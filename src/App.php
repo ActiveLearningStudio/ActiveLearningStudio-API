@@ -18,7 +18,7 @@ class App
     
     public function bootstrap()
     {        
-        global $LTI;
+        global $LTI, $CFG;
         
         if (!is_null($this->controller)) {
             global $path_info_parts;            
@@ -116,6 +116,7 @@ EOT;
                 foreach(['user_id', 'tool_platform', 'is_learner'] as $extra_param) {
                     $redirect_to_studio_url .= '&' . $extra_param . '=' . urlencode($$extra_param);
                 }
+                $redirect_to_studio_url .= '&homepage=' . urlencode($CFG->wwwroot);
                 $redirect_to_studio_url = addSession($redirect_to_studio_url);
                 
                 header("Location: $redirect_to_studio_url");
