@@ -6,13 +6,14 @@ use App\Events\TeamCreatedEvent;
 use App\Models\Project;
 use App\Models\Team;
 use App\Notifications\InviteToTeamNotification;
+use App\Notifications\MatAccountCreatedNotification;
 use App\Repositories\BaseRepository;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
-//use Gnello\Mattermost\Laravel\Facades\Mattermost;
+use Gnello\Mattermost\Laravel\Facades\Mattermost;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +48,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $this->projectRepository = $projectRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
 
-//        $this->matDriver = Mattermost::server('default');
+        $this->matDriver = Mattermost::server('default');
     }
 
     /**
@@ -62,10 +63,16 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $valid_users = [];
         $invited_users = [];
 
+        $mat_team = $this->createMattermostTeam($team);
+        if ($mat_team) {
+            $auth_user = auth()->user();
+            $this->addToMattermostTeam($mat_team, $auth_user);
+        }
+
         foreach ($data['users'] as $user) {
+            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
             $con_user = $this->userRepository->find($user['id']);
 
-            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
             if ($con_user) {
                 $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
                 $con_user->token = $token;
@@ -358,5 +365,66 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         }
 
         return $team;
+    }
+
+    /**
+     * Create Mattermost Team
+     *
+     * @param $team
+     * @return mixed
+     */
+    private function createMattermostTeam($team)
+    {
+        $result = $this->matDriver->getTeamModel()->createTeam([
+            'name' => $team->id,
+            'display_name' => $team->name,
+            'type' => 'I',
+        ]);
+
+        if ($result->getStatusCode() == 201) {
+            $mat_team = $result->getBody();
+            $team->mat_id = $mat_team['id'];
+            $team->save();
+
+            return $mat_team;
+        }
+
+        return null;
+    }
+
+    private function addToMattermostTeam($mat_team, $user)
+    {
+        $team_model = $this->matDriver->getTeamModel();
+        $user_model = $this->matDriver->getUserModel();
+
+        $result = $user_model->getUserByEmail($user->email);
+        if ($result->getStatusCode() == 200) {
+            $mat_user = $result->getBody();
+        } elseif ($result->getStatusCode() == 404) {
+            $password = Str::random(20);
+
+            $create_result = $user_model->createUser([
+                'email' => $user->email,
+                'username' => $user->email,
+                'password' => $password
+            ]);
+
+            if ($create_result->getStatusCode() == 201) {
+                $mat_user = $create_result->getBody();
+
+                $user->notify(new MatAccountCreatedNotification($mat_team, $password));
+            }
+        }
+
+        if ($mat_user) {
+            $add_result = $team_model->addUser($mat_team['id'], [
+                'team_id' => $mat_team['id'],
+                'user_id' => $mat_user['id']
+            ]);
+
+            if ($add_result->getStatusCode() == 201) {
+                // TODO: need to add action
+            }
+        }
     }
 }

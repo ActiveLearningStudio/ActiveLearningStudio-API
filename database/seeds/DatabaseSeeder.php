@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            OrganizationTypeSeeder::class,
             ActivityTypeSeeder::class,
             H5pElasticsearchFieldsTableSeeder::class,
             MembershipTypeSeeder::class,

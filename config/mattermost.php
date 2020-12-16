@@ -29,6 +29,8 @@ return [
 
     'default' => env('MATTERMOST_SERVER', 'default'),
 
+    'host' => env('MATTERMOST_HOST', 'localhost'),
+
     /*
     |--------------------------------------------------------------------------
     | Mattermost Servers
@@ -47,7 +49,7 @@ return [
             'password' => env('MATTERMOST_PASSWORD', '1234'),
             'guzzle' => []
         ],
-        
+
         'bearer' => [
             'auth' => env('MATTERMOST_AUTH', 'bearer'),
             'host' => env('MATTERMOST_HOST', 'localhost'),
