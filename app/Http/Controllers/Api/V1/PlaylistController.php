@@ -195,12 +195,18 @@ class PlaylistController extends Controller
      * @param Playlist $playlist
      * @return Response
      */
-    // TODO: need to update
     public function loadLti(Playlist $playlist)
     {
+        $availablePlaylist = $this->playlistRepository->getPlaylistWithProject($playlist);
+        if ($availablePlaylist) {
+            return response([
+                'playlist' => new PlaylistResource($availablePlaylist),
+            ], 200);
+        }
+
         return response([
-            'playlist' => new PlaylistResource($this->playlistRepository->getPlaylistWithProject($playlist)),
-        ], 200);
+            'message' => 'Playlist is not available.',
+        ], 404);
     }
 
     /**
