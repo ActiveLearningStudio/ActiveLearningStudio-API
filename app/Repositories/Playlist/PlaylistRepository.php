@@ -171,8 +171,30 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      */
     public function getPlaylistWithProject(Playlist $playlist)
     {
-        return $this->model->where('id', $playlist->id)
+        return $this->model::whereHas('project', function ($query_project) {
+            $query_project->where('shared', true);
+        })
+            ->where('id', $playlist->id)
             ->with('project')
             ->first();
+    }
+
+    /**
+     * To Populate missing order number, One time script
+     */
+    public function populateOrderNumber()
+    {
+        $projects = Project::all();
+        foreach($projects as $project) {
+            $playlists = $project->playlists()->whereNull('order')->orderBy('created_at')->get();
+            if(!empty($playlists)) {
+                $order = 1;
+                foreach($playlists as $playlist) {
+                    $playlist->order = $order;
+                    $playlist->save();
+                    $order++;
+                }
+            }
+        }
     }
 }

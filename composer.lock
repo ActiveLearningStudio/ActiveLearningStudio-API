@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4227a2bf05b907b33e39d0be0dfad10",
+    "content-hash": "6d5de5ea2ab9661cb04013eefc668afb",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1410,6 +1410,107 @@
                 }
             ],
             "time": "2020-04-28T08:47:37+00:00"
+        },
+        {
+            "name": "gnello/laravel-mattermost-driver",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gnello/laravel-mattermost-driver.git",
+                "reference": "1c9b4e957f6f2f9e6e176203a23619f81d250869"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gnello/laravel-mattermost-driver/zipball/1c9b4e957f6f2f9e6e176203a23619f81d250869",
+                "reference": "1c9b4e957f6f2f9e6e176203a23619f81d250869",
+                "shasum": ""
+            },
+            "require": {
+                "gnello/php-mattermost-driver": "^2.3",
+                "illuminate/support": "^5.0||^6.0||^7.0",
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Gnello\\Mattermost\\Laravel\\MattermostServiceProvider"
+                    ],
+                    "aliases": {
+                        "Mattermost": "Gnello\\Mattermost\\Laravel\\Facades\\Mattermost"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gnello\\Mattermost\\Laravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luca Agnello",
+                    "email": "luca@gnello.com"
+                }
+            ],
+            "description": "Laravel integration of php-mattermost-driver",
+            "homepage": "https://github.com/gnello/laravel-mattermost-driver",
+            "keywords": [
+                "Mattermost",
+                "chat"
+            ],
+            "time": "2020-09-02T08:16:02+00:00"
+        },
+        {
+            "name": "gnello/php-mattermost-driver",
+            "version": "v2.14.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gnello/php-mattermost-driver.git",
+                "reference": "83696d9e1b1bedc2562a3ca420daa126214421f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gnello/php-mattermost-driver/zipball/83696d9e1b1bedc2562a3ca420daa126214421f4",
+                "reference": "83696d9e1b1bedc2562a3ca420daa126214421f4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.2",
+                "php": ">=5.5.0",
+                "pimple/pimple": "~3.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "symfony/var-dumper": "^3.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gnello\\Mattermost\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luca Agnello",
+                    "email": "luca@gnello.com"
+                }
+            ],
+            "description": "The Php Driver to interact with the Mattermost Web Service API",
+            "homepage": "https://github.com/gnello/php-mattermost-driver",
+            "keywords": [
+                "Mattermost",
+                "chat"
+            ],
+            "time": "2020-09-20T08:28:00+00:00"
         },
         {
             "name": "google/apiclient",
@@ -3990,6 +4091,56 @@
                 }
             ],
             "time": "2020-07-08T09:08:33+00:00"
+        },
+        {
+            "name": "pimple/pimple",
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silexphp/Pimple.git",
+                "reference": "e55d12f9d6a0e7f9c85992b73df1267f46279930"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/e55d12f9d6a0e7f9c85992b73df1267f46279930",
+                "reference": "e55d12f9d6a0e7f9c85992b73df1267f46279930",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5",
+                "psr/container": "^1.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^3.4|^4.4|^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple, a simple Dependency Injection Container",
+            "homepage": "https://pimple.symfony.com",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "time": "2020-03-03T09:12:48+00:00"
         },
         {
             "name": "predis/predis",

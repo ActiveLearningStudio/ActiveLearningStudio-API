@@ -40,6 +40,20 @@ interface LearnerRecordStoreServiceInterface
      * @var string
      */
     const COMPLETED_VERB_ID = 'http://adlnet.gov/expapi/verbs/completed';
+
+    /**
+     * Skipped verb id for XAPI statements
+     * 
+     * @var string
+     */
+    const SKIPPED_VERB_ID = 'http://id.tincanapi.com/verb/skipped';
+
+    /**
+     * Attempted verb id for XAPI statements
+     * 
+     * @var string
+     */
+    const ATTEMPTED_VERB_ID = 'http://adlnet.gov/expapi/verbs/attempted';
     
     /**
      * Save Statement
@@ -90,10 +104,11 @@ interface LearnerRecordStoreServiceInterface
      * Get 'completed' statements from LRS based on filters
      *
      * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
      * @throws GeneralException
      * @return array
      */
-    public function getCompletedStatements(array $data);
+    public function getCompletedStatements(array $data, int $limit = 0);
 
     /**
      * Get 'answered' statements from LRS based on filters
@@ -146,5 +161,41 @@ interface LearnerRecordStoreServiceInterface
      * @return string
      */
     public function getH5PSubContenIdFromStatement(Statement $statement);
+
+    /**
+     * Get Verb ID from name.
+     * 
+     * @param string $verb Name of the verb. Example: answered
+     * @return string|bool
+     */
+    public function getVerbFromName($verb);
+
+    /**
+     * Get statements by verb from LRS based on filters
+     *
+     * @param string $verb The name of the verb to get statements for
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getStatementsByVerb($verb, array $data);
+
+    /**
+     * Get the 'skipped' statements from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getSkippedStatements(array $data);
+
+    /**
+     * Get the 'attempted' statements from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAttemptedStatements(array $data);
 
 }

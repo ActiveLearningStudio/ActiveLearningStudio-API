@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
+use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
@@ -26,17 +28,28 @@ class AuthController extends Controller
 {
     private $userRepository;
     private $userLoginRepository;
+    private $invitedTeamUserRepository;
+    private $teamRepository;
 
     /**
      * AuthController constructor.
      *
      * @param UserRepositoryInterface $userRepository
      * @param UserLoginRepositoryInterface $userLoginRepository
+     * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+     * @param TeamRepositoryInterface $teamRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository, UserLoginRepositoryInterface $userLoginRepository)
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        UserLoginRepositoryInterface $userLoginRepository,
+        InvitedTeamUserRepositoryInterface $invitedTeamUserRepository,
+        TeamRepositoryInterface $teamRepository
+    )
     {
         $this->userRepository = $userRepository;
         $this->userLoginRepository = $userLoginRepository;
+        $this->invitedTeamUserRepository = $invitedTeamUserRepository;
+        $this->teamRepository = $teamRepository;
     }
 
     /**
@@ -73,6 +86,17 @@ class AuthController extends Controller
         $user = $this->userRepository->create($data);
 
         if ($user) {
+            $invited_users = $this->invitedTeamUserRepository->searchByEmail($data['email']);
+            if ($invited_users) {
+                foreach ($invited_users as $invited_user) {
+                    $team = $this->teamRepository->find($invited_user->team_id);
+                    if ($team) {
+                        $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                        $this->invitedTeamUserRepository->delete($data['email']);
+                    }
+                }
+            }
+
             event(new Registered($user));
 
 //            return response([

@@ -26,6 +26,7 @@ Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+    Route::get('playlists/update-order', 'PlaylistController@populateOrderNumber');
 
     Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView')->name('metrics.activity-log');
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
@@ -157,6 +158,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('h5p/embed/{id}', 'H5pController@embed');
     // Public route used for LTI previews
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
+    Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments

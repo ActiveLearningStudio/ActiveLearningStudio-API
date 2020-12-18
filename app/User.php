@@ -117,7 +117,10 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function projects()
     {
-        return $this->belongsToMany('App\Models\Project', 'user_project')->withPivot('role')->orderBy('order','asc')->withTimestamps();
+        return $this->belongsToMany('App\Models\Project', 'user_project')
+            ->withPivot('role')
+            ->orderBy('order','asc')
+            ->withTimestamps();
     }
 
     /**
@@ -126,8 +129,14 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function playlists()
     {
-        return $this->hasManyThrough('App\Models\Playlist', 'App\Models\Pivots\UserProject', 'user_id', 'project_id',
-            'id', 'project_id');
+        return $this->hasManyThrough(
+            'App\Models\Playlist',
+            'App\Models\Pivots\UserProject',
+            'user_id',
+            'project_id',
+            'id',
+            'project_id'
+        );
     }
 
     /**
@@ -228,7 +237,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param $value
      * @return mixed
      */
-    public function scopeSearch($query, $value)
+    public function scopeSearchByEmailAndName($query, $value)
     {
         return $query->orWhereRaw("email ILIKE '%" . $value . "%'")->orWhereRaw("CONCAT(first_name, ' ', last_name) ILIKE '%" . $value . "%'");
     }

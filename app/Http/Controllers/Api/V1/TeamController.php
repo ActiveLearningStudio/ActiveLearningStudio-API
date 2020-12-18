@@ -17,6 +17,7 @@ use App\Http\Resources\V1\TeamResource;
 use App\Models\Project;
 use App\Models\Team;
 use App\Notifications\InviteToTeamNotification;
+use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -37,6 +38,7 @@ class TeamController extends Controller
     private $teamRepository;
     private $userRepository;
     private $projectRepository;
+    private $invitedTeamUserRepository;
 
     /**
      * TeamController constructor.
@@ -44,16 +46,19 @@ class TeamController extends Controller
      * @param TeamRepositoryInterface $teamRepository
      * @param UserRepositoryInterface $userRepository
      * @param ProjectRepositoryInterface $projectRepository
+     * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
      */
     public function __construct(
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
-        ProjectRepositoryInterface $projectRepository
+        ProjectRepositoryInterface $projectRepository,
+        InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
     )
     {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
+        $this->invitedTeamUserRepository = $invitedTeamUserRepository;
 
         // $this->authorizeResource(Team::class, 'teams');
     }
@@ -147,33 +152,11 @@ class TeamController extends Controller
     {
         $data = $teamRequest->validated();
 
-        $authenticated_user = auth()->user();
-        $team = $authenticated_user->teams()->create($data, ['role' => 'owner']);
+        $auth_user = auth()->user();
+        $team = $auth_user->teams()->create($data, ['role' => 'owner']);
 
         if ($team) {
-            $assigned_users = [];
-            foreach ($data['users'] as $user_id) {
-                $user = $this->userRepository->find($user_id);
-                if ($user) {
-                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $team->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
-                    $user->token = $token;
-                    $assigned_users[] = $user;
-                }
-            }
-
-            $assigned_projects = [];
-            foreach ($data['projects'] as $project_id) {
-                $project = $this->projectRepository->find($project_id);
-                if ($project) {
-                    $team->projects()->attach($project);
-                    $assigned_projects[] = $project;
-                }
-            }
-
-            event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
-
-            $this->teamRepository->setTeamProjectUser($team, $assigned_projects, $assigned_users);
+            $this->teamRepository->createTeam($team, $data);
 
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
@@ -239,26 +222,22 @@ class TeamController extends Controller
 
         if ($owner->id === $auth_user->id) {
             $user = $this->userRepository->findByField('email', $data['email']);
-
             if ($user) {
-                $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                $team->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
-
-                $user->notify(new InviteToTeamNotification($auth_user, $team, $token));
+                $this->teamRepository->inviteToTeam($team, $user);
 
                 return response([
                     'message' => 'User has been invited to the team successfully.',
                 ], 200);
             }
-        } else {
+
             return response([
-                'message' => 'You do not have permission to invite user to the team.',
-            ], 403);
+                'errors' => ['Failed to invite user to the team.'],
+            ], 500);
         }
 
         return response([
-            'errors' => ['Failed to invite user to the team.'],
-        ], 500);
+            'message' => 'You do not have permission to invite user to the team.',
+        ], 403);
     }
 
     /**
@@ -295,39 +274,22 @@ class TeamController extends Controller
         $owner = $team->getUserAttribute();
 
         if ($owner->id === $auth_user->id) {
-            $invited = true;
-            foreach ($data['users'] as $user) {
-                $conUser = $this->userRepository->findByField('email', $user['email']);
-                $note = array_key_exists('note', $data) ? $data['note'] : '';
-
-                if ($conUser) {
-                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $team->users()->attach($conUser, ['role' => 'collaborator', 'token' => $token]);
-                    $conUser->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
-                } elseif ($user['email']) {
-                    // TODO: need to send mail to unregistered person and do whatever for that person
-                    $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-                    $tempUser = new User(['email' => $user['email']]);
-                    $tempUser->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
-                } else {
-                    $invited = false;
-                }
-            }
+            $invited = $this->teamRepository->inviteMembers($team, $data);
 
             if ($invited) {
                 return response([
                     'message' => 'Users have been invited to the team successfully.',
                 ], 200);
             }
-        } else {
+
             return response([
-                'message' => 'You do not have permission to invite users to the team.',
-            ], 403);
+                'errors' => ['Failed to invite users to the team.'],
+            ], 500);
         }
 
         return response([
-            'errors' => ['Failed to invite users to the team.'],
-        ], 500);
+            'message' => 'You do not have permission to invite users to the team.',
+        ], 403);
     }
 
     /**
