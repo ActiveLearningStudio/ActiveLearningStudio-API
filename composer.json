@@ -12,6 +12,7 @@
         "babenkoivan/elastic-migrations": "^1.2",
         "babenkoivan/elastic-scout-driver": "^1.2",
         "babenkoivan/elastic-scout-driver-plus": "^1.7",
+        "coraxster/flysystem-aws-s3-v3-minio": "^1.0",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",

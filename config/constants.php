@@ -17,4 +17,14 @@ return [
      | Possible Values: false|'string_url'
      */
     'server_proxy' => env('SERVER_PROXY', 'api'),
+
+    /*
+     |--------------------------------------------------------------------------
+     | H5P STORAGE
+     |--------------------------------------------------------------------------
+     |
+     | This value is to enable S3 storage for H5P
+     | Possible Values: false|true
+     */
+    'enable_s3_h5p' => env('ENABLE_S3_H5P', false),
 ];

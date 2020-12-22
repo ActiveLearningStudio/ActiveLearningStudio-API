@@ -97,6 +97,7 @@ class LaravelH5p
 
     public static function get_h5p_storage($path = '', $absolute = FALSE)
     {
+//        return new LaravelH5pStorage(Storage::disk('minio')->url('h5p'));
         if ($absolute) {
             $h5p_path = storage_path('app/public/h5p' . $path);
             if (!file_exists($h5p_path)) {
@@ -490,12 +491,39 @@ class LaravelH5p
         // Try to find content with $id.
         $content = self::$core->loadContent($id);
 
+        // $h5p_content_path = storage_path('app/public/h5p/content/' . $id);
+        // load from S3 if not exists locally - ! \File::exists($h5p_content_path)
+        // load from S3 if exists there
+        if (\Storage::disk('minio')->exists('/h5p/content/' . $id)) {
+            // load the files from the bucket if enable
+            $params = json_decode($content['params'], true);
+            array_walk_recursive($params, 'self::update_path', $id);
+            $content['filtered'] = json_encode($params);
+            $content['params'] = json_encode($params);
+        }
+
         if (!$content) {
             return trans('h5p.content.can_not_find_content', ['id' => $id]);
         }
         $content['language'] = self::get_language();
 
         return $content;
+    }
+
+    /**
+     * Append s3 endpoint if relative URL
+     * @param $item
+     * @param $key
+     * @param $id
+     */
+    public static function update_path(&$item, $key, $id)
+    {
+        // if path key and URL is relative then append S3 bucket host
+        if ($key === 'path' && !filter_var($item, FILTER_VALIDATE_URL)) {
+            $s3_endpoint = config('filesystems.disks.minio.endpoint');
+            $s3_bucket = config('filesystems.disks.minio.bucket');
+            $item = "{$s3_endpoint}{$s3_bucket}/h5p/content/{$id}/" . $item;
+        }
     }
 
     public function load_content($id)
