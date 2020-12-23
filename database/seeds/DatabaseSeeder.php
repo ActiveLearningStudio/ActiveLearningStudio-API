@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             MembershipTypeSeeder::class,
             OrganizationRoleTypeSeeder::class,
             OrganizationVisibilityTypeSeeder::class,
+            OrganizationSeeder::class,
         ]);
     }
 }
