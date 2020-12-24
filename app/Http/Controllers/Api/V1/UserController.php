@@ -7,6 +7,7 @@ use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\OrganizationResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
 use App\User;
@@ -431,5 +432,18 @@ class UserController extends Controller
         ], 500);
     }
 
+    /**
+     * Get All User Organizations
+     *
+     * Get a list of the users organizations
+     *
+     * @responseFile responses/organization/organizations.json
+     *
+     * @return Response
+     */
+    public function getOrganizations()
+    {
+        return OrganizationResource::collection(auth()->user()->organizations);
+    }
 
 }

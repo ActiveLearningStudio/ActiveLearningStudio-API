@@ -35,6 +35,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('organization-types', 'OrganizationTypesController@index');
 
     Route::middleware(['auth:api', 'verified'])->group(function () {
+        Route::get('users/organizations', 'UserController@getOrganizations');
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::get('users/notifications', 'UserController@listNotifications');
