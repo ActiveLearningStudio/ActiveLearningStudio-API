@@ -446,4 +446,52 @@ class UserController extends Controller
         return OrganizationResource::collection(auth()->user()->organizations);
     }
 
+    /**
+     * Set Default Organization
+     *
+     * Set default organization for the user.
+     *
+     * @bodyParam organization_id int required The id of the organization to be set as default Example: 1
+     *
+     * @response {
+     *   "message": "Default organization has been set successfully."
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid request."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to set default organization."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function setDefaultOrganization(Request $request)
+    {
+        $data = $request->validate([
+            'organization_id' => ['required', 'exists:organizations,id']
+        ]);
+
+        $authenticated_user = auth()->user();
+
+        $is_updated = $this->userRepository->update([
+            'default_organization' => $data['organization_id'],
+        ], $authenticated_user->id);
+
+        if ($is_updated) {
+            return response([
+                'message' => 'Default organization has been set successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to set default organization.'],
+        ], 500);
+    }
 }
