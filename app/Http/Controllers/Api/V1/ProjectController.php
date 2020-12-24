@@ -62,7 +62,7 @@ class ProjectController extends Controller
         }
 */
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->projects),
+            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $authenticated_user->default_organization)->get()),
         ], 200);
     }
 
@@ -86,7 +86,7 @@ class ProjectController extends Controller
         }
 
         return response([
-            'projects' => ProjectDetailResource::collection($authenticated_user->projects),
+            'projects' => ProjectDetailResource::collection($authenticated_user->projects()->where('organization_id', $authenticated_user->default_organization)->get()),
         ], 200);
     }
 
@@ -178,6 +178,7 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
+     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
      *
      * @responseFile 201 responses/project/project.json
      *
@@ -195,6 +196,7 @@ class ProjectController extends Controller
         $data = $projectRequest->validated();
         $authenticated_user = auth()->user();
         $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
+        $data['organization_id'] = $authenticated_user->default_organization;
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
 
         if ($project) {
@@ -345,6 +347,7 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
+     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
      *
      * @responseFile responses/project/project.json
      *

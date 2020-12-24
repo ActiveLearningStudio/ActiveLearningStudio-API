@@ -202,8 +202,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function fetchRecentPublic($limit)
     {
+        $authenticated_user = auth()->user();
         // 3 is for indexing approved - see Project Model @indexing property
-        return $this->model->where('indexing', 3)->orderBy('created_at', 'desc')->limit($limit)->get();
+        return $this->model->where('indexing', 3)->where('organization_id', $authenticated_user->default_organization)->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 
     /**
