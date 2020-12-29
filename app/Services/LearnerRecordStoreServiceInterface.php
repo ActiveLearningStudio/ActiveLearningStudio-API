@@ -198,4 +198,14 @@ interface LearnerRecordStoreServiceInterface
      */
     public function getAttemptedStatements(array $data);
 
+    /**
+     * Find if the answered statement is for an aggregate H5P
+     * 
+     * @param array $data An array of filters.
+     * @param string $objectId An activity Object Id
+     * @throws GeneralException
+     * @return bool
+     */
+    public function isAggregateH5P(array $data, string $objectId);
+
 }
