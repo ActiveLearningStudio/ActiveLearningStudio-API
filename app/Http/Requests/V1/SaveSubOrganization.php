@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveOrganization extends FormRequest
+class SaveSubOrganization extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +27,8 @@ class SaveOrganization extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'domain' => 'required|string|max:255',
-            'image' => 'required|image|max:1000',
-            'admin_id' => 'required|integer|exists:App\User,id',
-            'parent_id' => 'integer|exists:App\Models\Organization,id'
+            'image' => 'required',
+            'admin_id' => 'required|integer|exists:App\User,id'
         ];
     }
 }

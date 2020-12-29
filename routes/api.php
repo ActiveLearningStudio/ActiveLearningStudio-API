@@ -121,6 +121,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('search/advanced', 'SearchController@advance');
         Route::get('search/dashboard', 'SearchController@dashboard');
 
+        // Suborganizations
+        Route::post('suborganizations/upload-thumb', 'SuborganizationController@uploadThumb');
+        Route::apiResource('suborganizations', 'SuborganizationController');
+
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {
             // LMS Settings
