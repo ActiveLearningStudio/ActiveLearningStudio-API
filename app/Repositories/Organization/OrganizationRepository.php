@@ -123,4 +123,26 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return $this->query->whereNotIn('id', $notInIds)->orderBy('first_name', 'asc')->paginate();
         }
     }
+
+    /**
+     * Add user for the specified role in default suborganization
+     *
+     * @param $id
+     * @param array $data
+     * @return Model
+     */
+    public function addUser($id, $data)
+    {
+        $organization = $this->find($id);
+
+        try {
+            $organization->users()->attach($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+        return false;
+    }
 }

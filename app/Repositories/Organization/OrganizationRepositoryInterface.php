@@ -37,4 +37,13 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getMemberOptions($data, $id);
+
+    /**
+     * Add user for the specified role in default suborganization
+     *
+     * @param $id
+     * @param array $data
+     * @return Model
+     */
+    public function addUser($id, $data);
 }

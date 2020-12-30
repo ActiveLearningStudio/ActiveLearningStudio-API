@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\SuborganizationSave;
+use App\Http\Requests\V1\SuborganizationAddUser;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -178,7 +179,7 @@ class SuborganizationController extends Controller
      *
      * Remove the specified suborganization.
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam suborganization int required The Id of a suborganization Example: 1
      *
      * @response {
      *   "message": "Suborganization has been deleted successfully."
@@ -211,9 +212,8 @@ class SuborganizationController extends Controller
     /**
      * Show Member Options
      *
-     * Display a listing of the user member options, other then the exiting ones.
+     * Display a listing of the user member options for default suborganization, other then the exiting ones.
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string required Query to search users against Example: leo
      *
      * @responseFile responses/organization/member-options.json
@@ -226,7 +226,7 @@ class SuborganizationController extends Controller
      *
      * @return Response
      */
-    public function showMemberOptions(Request $request, $id)
+    public function showMemberOptions(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'query' => 'required|string|max:255',
@@ -238,8 +238,52 @@ class SuborganizationController extends Controller
             ], 400);
         }
 
+        $authenticated_user = auth()->user();
+        $id = $authenticated_user->default_organization;
+
         return response([
             'member-options' => UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $id))
         ], 200);
+    }
+
+    /**
+     * Add Suborganization User
+     *
+     * Add user for the specified role in default suborganization
+     *
+     * @bodyParam user_id int required Id of the user to be added Example: 1
+     * @bodyParam role_id int required Id of the role for added user Example: 1
+     *
+     * @response {
+     *   "message": "User has been added successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to add user."
+     *   ]
+     * }
+     *
+     * @param SuborganizationAddUser $request
+     * @return Response
+     */
+    public function addUser(SuborganizationAddUser $request)
+    {
+        $data = $request->validated();
+
+        $authenticated_user = auth()->user();
+        $id = $authenticated_user->default_organization;
+
+        $is_added = $this->organizationRepository->addUser($id, $data);
+
+        if ($is_added) {
+            return response([
+                'message' => 'User has been added successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to add user.'],
+        ], 500);
     }
 }
