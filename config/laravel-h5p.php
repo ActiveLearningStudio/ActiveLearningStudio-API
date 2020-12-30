@@ -42,4 +42,5 @@ return [
 	'h5p_hub_is_enabled' => FALSE,
 	'h5p_version' => '1.8.2',
 	'h5p_preview_flag' => 8,
+	'h5p_enable_lrs_content_types' => TRUE,
 ];
