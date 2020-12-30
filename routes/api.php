@@ -124,6 +124,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // Suborganizations
         Route::post('suborganizations/upload-thumb', 'SuborganizationController@uploadThumb');
         Route::apiResource('suborganizations', 'SuborganizationController');
+        Route::get('suborganizations/{id}/member-options', 'SuborganizationController@showMemberOptions')->name('suborganizations.member-options');
 
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {

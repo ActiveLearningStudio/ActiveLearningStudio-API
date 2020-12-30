@@ -28,4 +28,13 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @param $id
      */
     public function deleteSuborganization($id);
+
+    /**
+     * To get the users to add in specific suborganization
+     *
+     * @param $data
+     * @param $id
+     * @return mixed
+     */
+    public function getMemberOptions($data, $id);
 }

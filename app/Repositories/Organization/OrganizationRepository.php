@@ -102,4 +102,25 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             Log::error($e->getMessage());
         }
     }
+
+    /**
+     * Get the member options to add in specific suborganization
+     *
+     * @param $data
+     * @param $id
+     * @return mixed
+     */
+    public function getMemberOptions($data, $id)
+    {
+        if ($organization = $this->model->whereId($id)->first()) {
+            $notInIds = $organization->users->modelKeys();
+
+            $this->query = $this->userRepository->model->when($data['query'] ?? null, function ($query) use ($data) {
+                $query->search(['email'], $data['query']);
+                return $query;
+            });
+
+            return $this->query->whereNotIn('id', $notInIds)->orderBy('first_name', 'asc')->paginate();
+        }
+    }
 }

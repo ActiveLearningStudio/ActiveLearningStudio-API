@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
-use App\Http\Requests\V1\SaveSubOrganization;
+use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -109,10 +109,10 @@ class SuborganizationController extends Controller
      *   ]
      * }
      *
-     * @param SaveSubOrganization $request
+     * @param SuborganizationSave $request
      * @return Response
      */
-    public function store(SaveSubOrganization $request)
+    public function store(SuborganizationSave $request)
     {
         $data = $request->validated();
         $authenticated_user = auth()->user();
@@ -150,11 +150,11 @@ class SuborganizationController extends Controller
      *   ]
      * }
      *
-     * @param SaveSubOrganization $request
+     * @param SuborganizationSave $request
      * @param Organization $suborganization
      * @return Response
      */
-    public function update(SaveSubOrganization $request, Organization $suborganization)
+    public function update(SuborganizationSave $request, Organization $suborganization)
     {
         $data = $request->validated();
 
@@ -206,5 +206,40 @@ class SuborganizationController extends Controller
         return response([
             'errors' => ['Failed to delete suborganization.'],
         ], 500);
+    }
+
+    /**
+     * Show Member Options
+     *
+     * Display a listing of the user member options, other then the exiting ones.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam query string required Query to search users against Example: leo
+     *
+     * @responseFile responses/organization/member-options.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "The query field is required."
+     *   ]
+     * }
+     *
+     * @return Response
+     */
+    public function showMemberOptions(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'query' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => $validator->errors()->all()
+            ], 400);
+        }
+
+        return response([
+            'member-options' => UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $id))
+        ], 200);
     }
 }
