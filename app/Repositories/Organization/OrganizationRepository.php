@@ -189,4 +189,17 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         return false;
     }
+
+    /**
+     * To fetch organization users
+     *
+     * @param $id
+     * @return Model
+     */
+    public function fetchOrganizationUsers($id)
+    {
+        $organization = $this->find($id);
+
+        return $organization->users;
+    }
 }

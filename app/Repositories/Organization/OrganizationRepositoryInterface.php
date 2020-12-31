@@ -64,4 +64,12 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function deleteUser($id, $data);
+
+    /**
+     * To fetch organization users
+     *
+     * @param $id
+     * @return Model
+     */
+    public function fetchOrganizationUsers($id);
 }

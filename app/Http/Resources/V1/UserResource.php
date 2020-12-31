@@ -30,6 +30,9 @@ class UserResource extends JsonResource
             'subscribed' => $this->subscribed,
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at,
+            'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->role->display_name;
+            })
         ];
     }
 }

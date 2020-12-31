@@ -1,0 +1,18 @@
+{
+    "organization-users": [
+        {
+            "id": 1,
+            "first_name": "local",
+            "last_name": "user",
+            "email": "localuser@local.com",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "organization_role": "Administrator"
+        }
+    ]
+}

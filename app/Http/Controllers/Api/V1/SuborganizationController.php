@@ -390,4 +390,22 @@ class SuborganizationController extends Controller
             'errors' => ['Failed to delete user.'],
         ], 500);
     }
+
+    /**
+     * Get All Users For Default Suborganization
+     *
+     * Get a list of the users for a user's default organization.
+     *
+     * @responseFile responses/organization/organization-users.json
+     *
+     * @return Response
+     */
+    public function getUsers()
+    {
+        $authenticated_user = auth()->user();
+
+        return response([
+            'organization-users' => UserResource::collection($this->organizationRepository->fetchOrganizationUsers($authenticated_user->default_organization))
+        ], 200);
+    }
 }
