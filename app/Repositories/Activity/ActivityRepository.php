@@ -362,41 +362,47 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      * @param array $data
      * @return array
      */
-    public function ltiSearchForm ($request) {
+    public function ltiSearchForm ($request)
+    {
         // Fetch Elastic Search results
         $data = [
             'query' => $request->input('query', ''),
             'from' => $request->input('from', 0),
             'size' => 10,
             'model' => 'activities',
-            'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3]
+            'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
         ];
 
         // Check LMS settings for authorization when searching private projects
         if (empty($data['indexing'])) {
             $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))->first();
 
-            if (empty($lmsSetting))
+            if (empty($lmsSetting)) {
                 $data['indexing'] = [3]; // Switching to public only
-            else
+            } else {
                 $data['userIds'] = [$lmsSetting->user_id];
+            }
         }
 
         // If a an author is provided, limit to projects from that user only
         if ($request->has('author')) {
             $author = User::where('email', $request->input('author'))->first();
-            if(!empty($author))
+            
+            if (!empty($author)) {
                 $data['userIds'] = [$author->id];
+            }
         }
 
         $data['subjectIds'] = $request->has('subject') ? [$request->input('subject')] : [];
         $data['educationLevelIds'] = $request->has('level') ? [$request->input('level')] : [];
 
-        if ($request->has('start'))
+        if ($request->has('start')) {
             $data['startDate'] = $request->input('start', '');
+        }
 
-        if ($request->has('end'))
+        if ($request->has('end')) {
             $data['endDate'] = $request->input('end', '');
+        }
 
         return $this->advanceSearchForm($data);
     }
