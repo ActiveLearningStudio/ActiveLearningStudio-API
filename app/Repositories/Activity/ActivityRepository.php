@@ -362,7 +362,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      * @param array $data
      * @return array
      */
-    public function ltiSearchForm ($request)
+    public function ltiSearchForm($request)
     {
         // Fetch Elastic Search results
         $data = [
@@ -387,7 +387,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         // If a an author is provided, limit to projects from that user only
         if ($request->has('author')) {
             $author = User::where('email', $request->input('author'))->first();
-            
+
             if (!empty($author)) {
                 $data['userIds'] = [$author->id];
             }
