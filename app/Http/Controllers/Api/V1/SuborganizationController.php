@@ -8,10 +8,12 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Requests\V1\SuborganizationAddUser;
+use App\Http\Requests\V1\SuborganizationUpdateUser;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Organization;
+use Illuminate\Validation\Rule;
 
 /**
  * @authenticated
@@ -284,6 +286,108 @@ class SuborganizationController extends Controller
 
         return response([
             'errors' => ['Failed to add user.'],
+        ], 500);
+    }
+
+    /**
+     * Update Suborganization User
+     *
+     * Update user for the specified role in default suborganization
+     *
+     * @bodyParam user_id int required Id of the user to be updated Example: 1
+     * @bodyParam role_id int required Id of the role for updated user Example: 1
+     *
+     * @response {
+     *   "message": "User has been updated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update user."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateUser $request
+     * @return Response
+     */
+    public function updateUser(SuborganizationUpdateUser $request)
+    {
+        $data = $request->validated();
+
+        $authenticated_user = auth()->user();
+        $id = $authenticated_user->default_organization;
+
+        $is_updated = $this->organizationRepository->updateUser($id, $data);
+
+        if ($is_updated) {
+            return response([
+                'message' => 'User has been updated successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update user.'],
+        ], 500);
+    }
+
+    /**
+     * Remove Suborganization User
+     *
+     * Remove the specified user from default suborganization.
+     *
+     * @bodyParam user_id int required Id of the user to be deleted Example: 1
+     *
+     * @response {
+     *   "message": "User has been deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to delete user."
+     *   ]
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "The user_id field is required."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteUser(Request $request)
+    {
+        $authenticated_user = auth()->user();
+        $default_organization = $authenticated_user->default_organization;
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => [
+                'required',
+                'integer',
+                'exists:App\User,id',
+                Rule::exists('organization_user_roles')->where(function ($query) use ($default_organization) {
+                    return $query->where('organization_id', $default_organization);
+                })
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => $validator->errors()->all()
+            ], 400);
+        }
+
+        $is_deleted = $this->organizationRepository->deleteUser($default_organization, $request->all());
+
+        if ($is_deleted) {
+            return response([
+                'message' => 'User has been deleted successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to delete user.'],
         ], 500);
     }
 }

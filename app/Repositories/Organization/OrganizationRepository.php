@@ -125,7 +125,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
-     * Add user for the specified role in default suborganization
+     * Add user for the specified role in particular suborganization
      *
      * @param $id
      * @param array $data
@@ -137,6 +137,50 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         try {
             $organization->users()->attach($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Update user for the specified role in particular suborganization
+     *
+     * @param $id
+     * @param array $data
+     * @return Model
+     */
+    public function updateUser($id, $data)
+    {
+        $organization = $this->find($id);
+
+        try {
+            $organization->users()->updateExistingPivot($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete the specified user in a particular suborganization
+     *
+     * @param $id
+     * @param array $data
+     * @return Model
+     */
+    public function deleteUser($id, $data)
+    {
+        $organization = $this->find($id);
+
+        try {
+            $organization->users()->detach($data['user_id']);
 
             return true;
         } catch (\Exception $e) {

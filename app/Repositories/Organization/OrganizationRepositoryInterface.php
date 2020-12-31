@@ -46,4 +46,22 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function addUser($id, $data);
+
+    /**
+     * Update user for the specified role in particular suborganization
+     *
+     * @param $id
+     * @param array $data
+     * @return Model
+     */
+    public function updateUser($id, $data);
+
+    /**
+     * Delete the specified user in a particular suborganization
+     *
+     * @param $id
+     * @param array $data
+     * @return Model
+     */
+    public function deleteUser($id, $data);
 }
