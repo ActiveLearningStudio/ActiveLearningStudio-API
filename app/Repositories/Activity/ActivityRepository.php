@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Activity;
 
+use App\User;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
@@ -355,6 +357,56 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 }
             }
         }
+    }
+
+    /**
+     * Gets activities for LTI external tool search from CurrikiGo
+     * @param array $data
+     * @return array
+     */
+    public function ltiSearchForm($request)
+    {
+        // Fetch Elastic Search results
+        $data = [
+            'query' => $request->input('query', ''),
+            'from' => $request->input('from', 0),
+            'size' => 10,
+            'model' => 'activities',
+            'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
+        ];
+
+        // Check LMS settings for authorization when searching private projects
+        if (empty($data['indexing'])) {
+            $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))->first();
+
+            if (empty($lmsSetting)) {
+                $data['indexing'] = [3]; // Switching to public only
+            } else {
+                $data['userIds'] = [$lmsSetting->user_id];
+            }
+        }
+
+        // If a an author is provided, limit to projects from that user only
+        if ($request->has('author')) {
+            $author = User::where('email', $request->input('author'))->first();
+
+            if (!empty($author)) {
+                $data['userIds'] = [$author->id];
+            }
+        }
+
+        $data['subjectIds'] = $request->has('subject') ? [$request->input('subject')] : [];
+        $data['educationLevelIds'] = $request->has('level') ? [$request->input('level')] : [];
+
+        if ($request->has('start')) {
+            $data['startDate'] = $request->input('start', '');
+        }
+
+        if ($request->has('end')) {
+            $data['endDate'] = $request->input('end', '');
+        }
+
+        return $this->advanceSearchForm($data);
     }
 
     /**

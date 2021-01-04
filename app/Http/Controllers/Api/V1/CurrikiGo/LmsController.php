@@ -81,43 +81,13 @@ class LmsController extends Controller
             'level' => 'string|max:255',
             'start' => 'string|max:255',
             'end' => 'string|max:255',
+            'author' => 'string|max:255',
+            'private' => 'integer',
+            'ltiClientId' => 'integer|required',
         ]);
 
-        // Check LMS settings for authorization
-/*
-        $settings = $this->lmsSettingRepository->fetchByLmsUrlAndLtiClientId($request->lms_url, $request->lti_client_id);
-        if(empty($settings))
-            return response(['errors' => ['Unauthorized']], 401);
-*/
-        // Fetch Elastic Search results
-        $data = [
-            'query' => $request->input('query', 'a'),
-            'from' => $request->input('from', 0),
-            'size' => 12,
-            'model' => 'activities',
-            'indexing' => [3]
-        ];
-
-        if ($request->has('subject')) {
-            $data['subjectIds'] = [$request->input('subject')];
-        }
-
-        if ($request->has('level')) {
-            $data['educationLevelIds'] = [$request->input('level')];
-        }
-
-        if ($request->has('start')) {
-            $data['startDate'] = $request->input('start', '');
-        }
-
-        if ($request->has('end')) {
-            $data['endDate'] = $request->input('end', '');
-        }
-
-        $results = $this->activityRepository->advanceSearchForm($data);
-
         return response([
-            'activities' => $results,
+            'activities' => $this->activityRepository->ltiSearchForm($request),
         ], 200);
     }
 }
