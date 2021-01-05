@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveOrganization extends FormRequest
+class CreateOrganization extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Admin\Organization\OrganizationRepository;
 use App\Http\Resources\V1\Admin\OrganizationResource;
-use App\Http\Requests\Admin\SaveOrganization;
+use App\Http\Requests\Admin\CreateOrganization;
+use App\Http\Requests\Admin\UpdateOrganization;
 use App\Http\Resources\V1\Admin\UserResource;
 
 /**
@@ -44,11 +45,11 @@ class OrganizationController extends Controller
     /**
      * Store a newly created Organization in storage.
      *
-     * @param SaveOrganization $request
+     * @param CreateOrganization $request
      * @return OrganizationResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function store(SaveOrganization $request)
+    public function store(CreateOrganization $request)
     {
         $validated = $request->validated();
         $response = $this->organizationRepository->create($validated);
@@ -71,12 +72,12 @@ class OrganizationController extends Controller
     /**
      * Update the specified Organization in storage.
      *
-     * @param SaveOrganization $request
+     * @param UpdateOrganization $request
      * @param $id
      * @return OrganizationResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function update(SaveOrganization $request, $id)
+    public function update(UpdateOrganization $request, $id)
     {
         $validated = $request->validated();
         $response = $this->organizationRepository->update($id, $validated, $request->clone_project_id, $request->member_id);
