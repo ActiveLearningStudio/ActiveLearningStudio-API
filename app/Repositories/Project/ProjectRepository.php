@@ -310,6 +310,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function favoriteUpdate($authenticated_user, $project)
     {
-        return $authenticated_user->favoriteProjects()->toggle([$project->id]);
+        $defaultOrganization = $authenticated_user->default_organization;
+
+        if ($authenticated_user->favoriteProjects()->where('id', $project->id)->wherePivot('organization_id', $defaultOrganization)->first()) {
+            return $authenticated_user->favoriteProjects()->wherePivot('organization_id', $defaultOrganization)->detach($project->id);
+        } else {
+            return $authenticated_user->favoriteProjects()->attach($project->id, ['organization_id' => $defaultOrganization]);
+        }
     }
 }

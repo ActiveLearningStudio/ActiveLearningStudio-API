@@ -561,13 +561,13 @@ class ProjectController extends Controller
     {
         $updateStatus = $this->projectRepository->favoriteUpdate(auth()->user(), $project);
 
-        if (!empty($updateStatus['attached'])) {
+        if ($updateStatus) {
+            $message = 'This resource will be removed from your Favorites. ';
+            $message .= 'You will no longer be able to reuse/remix its contents into your projects.';
+        } else {
             $message = 'This resource has been added to your favorites! ';
             $message .= 'Once a resource has been added to your favorites, ';
             $message .= 'you can preview and add them to your own projects.';
-        } else {
-            $message = 'This resource will be removed from your Favorites. ';
-            $message .= 'You will no longer be able to reuse/remix its contents into your projects.';
         }
 
         return response([
@@ -588,8 +588,12 @@ class ProjectController extends Controller
     {
         $authenticated_user = auth()->user();
 
+        $favoriteProjects = $authenticated_user->favoriteProjects()
+                            ->wherePivot('organization_id', $authenticated_user->default_organization)
+                            ->get();
+
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->favoriteProjects),
+            'projects' => ProjectResource::collection($favoriteProjects),
         ], 200);
     }
 }
