@@ -8,7 +8,9 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
+use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
@@ -29,7 +31,9 @@ class AuthController extends Controller
     private $userRepository;
     private $userLoginRepository;
     private $invitedTeamUserRepository;
+    private $invitedOrganizationUserRepository;
     private $teamRepository;
+    private $organizationRepository;
 
     /**
      * AuthController constructor.
@@ -37,19 +41,25 @@ class AuthController extends Controller
      * @param UserRepositoryInterface $userRepository
      * @param UserLoginRepositoryInterface $userLoginRepository
      * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+     * @param InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
      * @param TeamRepositoryInterface $teamRepository
+     * @param OrganizationRepositoryInterface $organizationRepository
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
         UserLoginRepositoryInterface $userLoginRepository,
         InvitedTeamUserRepositoryInterface $invitedTeamUserRepository,
-        TeamRepositoryInterface $teamRepository
+        InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
+        TeamRepositoryInterface $teamRepository,
+        OrganizationRepositoryInterface $organizationRepository
     )
     {
         $this->userRepository = $userRepository;
         $this->userLoginRepository = $userLoginRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
+        $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
         $this->teamRepository = $teamRepository;
+        $this->organizationRepository = $organizationRepository;
     }
 
     /**
@@ -98,6 +108,17 @@ class AuthController extends Controller
             }
 
             event(new Registered($user));
+
+            $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($data['email']);
+            if ($invited_users) {
+                foreach ($invited_users as $invited_user) {
+                    $organization = $this->organizationRepository->find($invited_user->organization_id);
+                    if ($organization) {
+                        $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                        $this->invitedOrganizationUserRepository->delete($data['email']);
+                    }
+                }
+            }
 
 //            return response([
 //                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"

@@ -36,6 +36,8 @@ use App\Repositories\GcClasswork\GcClassworkRepository;
 use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepository;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
+use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepository;
+use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Organization\OrganizationRepository;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
@@ -67,6 +69,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(GcClassworkRepositoryInterface::class, GcClassworkRepository::class);
         $this->app->bind(InvitedTeamUserRepositoryInterface::class, InvitedTeamUserRepository::class);
         $this->app->bind(OrganizationRepositoryInterface::class, OrganizationRepository::class);
+        $this->app->bind(InvitedOrganizationUserRepositoryInterface::class, InvitedOrganizationUserRepository::class);
     }
 
     /**

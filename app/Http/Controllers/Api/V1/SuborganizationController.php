@@ -9,6 +9,7 @@ use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Requests\V1\SuborganizationAddUser;
 use App\Http\Requests\V1\SuborganizationUpdateUser;
+use App\Http\Requests\V1\SuborganizationInviteMember;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -47,10 +48,10 @@ class SuborganizationController extends Controller
      */
     public function index()
     {
-        $authenticated_user = auth()->user();
+        $authenticatedUser = auth()->user();
 
         return response([
-            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($authenticated_user->default_organization)),
+            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($authenticatedUser->default_organization)),
         ], 200);
     }
 
@@ -118,8 +119,8 @@ class SuborganizationController extends Controller
     public function store(SuborganizationSave $request)
     {
         $data = $request->validated();
-        $authenticated_user = auth()->user();
-        $data['parent_id'] = $authenticated_user->default_organization;
+        $authenticatedUser = auth()->user();
+        $data['parent_id'] = $authenticatedUser->default_organization;
         $suborganization = $this->organizationRepository->createSuborganization($data);
 
         if ($suborganization) {
@@ -240,8 +241,8 @@ class SuborganizationController extends Controller
             ], 400);
         }
 
-        $authenticated_user = auth()->user();
-        $id = $authenticated_user->default_organization;
+        $authenticatedUser = auth()->user();
+        $id = $authenticatedUser->default_organization;
 
         return response([
             'member-options' => UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $id))
@@ -273,8 +274,8 @@ class SuborganizationController extends Controller
     {
         $data = $request->validated();
 
-        $authenticated_user = auth()->user();
-        $id = $authenticated_user->default_organization;
+        $authenticatedUser = auth()->user();
+        $id = $authenticatedUser->default_organization;
 
         $is_added = $this->organizationRepository->addUser($id, $data);
 
@@ -287,6 +288,60 @@ class SuborganizationController extends Controller
         return response([
             'errors' => ['Failed to add user.'],
         ], 500);
+    }
+
+    /**
+     * Invite Organization Member
+     *
+     * Invite a organization member to the team.
+     *
+     * @bodyParam email string required The email of the user Example: abby@curriki.org
+     *
+     * @response {
+     *   "message": "Users have been invited to the organization successfully."
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You do not have permission to invite users to the organization."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to invite users to the organization."
+     *   ]
+     * }
+     *
+     * @param SuborganizationInviteMember $request
+     * @return Response
+     */
+    public function inviteMembers(SuborganizationInviteMember $request)
+    {
+        $data = $request->validated();
+
+        $authenticatedUser = auth()->user();
+        $defaultOrganization = $authenticatedUser->defaultOrganization;
+
+        $admin = $this->organizationRepository->getAdmin($defaultOrganization);
+
+        if ($admin->id === $authenticatedUser->id) {
+            $invited = $this->organizationRepository->inviteMember($authenticatedUser, $defaultOrganization, $data);
+
+            if ($invited) {
+                return response([
+                    'message' => 'Users have been invited to the organization successfully.',
+                ], 200);
+            }
+
+            return response([
+                'errors' => ['Failed to invite users to the organization.'],
+            ], 500);
+        }
+
+        return response([
+            'message' => 'You do not have permission to invite users to the organization.',
+        ], 403);
     }
 
     /**
@@ -314,8 +369,8 @@ class SuborganizationController extends Controller
     {
         $data = $request->validated();
 
-        $authenticated_user = auth()->user();
-        $id = $authenticated_user->default_organization;
+        $authenticatedUser = auth()->user();
+        $id = $authenticatedUser->default_organization;
 
         $is_updated = $this->organizationRepository->updateUser($id, $data);
 
@@ -358,8 +413,8 @@ class SuborganizationController extends Controller
      */
     public function deleteUser(Request $request)
     {
-        $authenticated_user = auth()->user();
-        $default_organization = $authenticated_user->default_organization;
+        $authenticatedUser = auth()->user();
+        $default_organization = $authenticatedUser->default_organization;
 
         $validator = Validator::make($request->all(), [
             'user_id' => [
@@ -402,10 +457,10 @@ class SuborganizationController extends Controller
      */
     public function getUsers()
     {
-        $authenticated_user = auth()->user();
+        $authenticatedUser = auth()->user();
 
         return response([
-            'organization-users' => UserResource::collection($this->organizationRepository->fetchOrganizationUsers($authenticated_user->default_organization))
+            'organization-users' => UserResource::collection($this->organizationRepository->fetchOrganizationUsers($authenticatedUser->default_organization))
         ], 200);
     }
 }

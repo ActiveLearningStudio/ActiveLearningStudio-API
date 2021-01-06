@@ -249,4 +249,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany('App\Models\Project', 'user_favorite_project')->withTimestamps();
     }
+
+    /**
+     * Get the default organization associated with the user.
+     */
+    public function defaultOrganization()
+    {
+        return $this->belongsTo('App\Models\Organization', 'default_organization');
+    }
 }

@@ -7,21 +7,33 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Arr;
+use App\Notifications\OrganizationInvite;
+use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use App\User;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
     private $userRepository;
+    private $invitedOrganizationUserRepository;
 
     /**
      * Organization Repository constructor.
      *
      * @param Organization $model
      * @param UserRepositoryInterface $userRepository
+     * @param InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
      */
-    public function __construct(Organization $model, UserRepositoryInterface $userRepository)
+    public function __construct(
+        Organization $model,
+        UserRepositoryInterface $userRepository,
+        InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
+    )
     {
         $this->userRepository = $userRepository;
         parent::__construct($model);
+        $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
     }
 
     /**
@@ -224,5 +236,59 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         $organization = $this->find($id);
 
         return $organization->users;
+    }
+
+    /**
+     * Get admin
+     *
+     * @param Organization $organization
+     * @return Model
+     */
+    public function getAdmin($organization)
+    {
+        try {
+            if ($organization) {
+                return $organization->users()->wherePivot('organization_role_type_id', 1)->first();
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+    }
+
+    /**
+     * Invite member to the organization
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @param $data
+     * @return bool
+     */
+    public function inviteMember($authenticatedUser, $organization, $data)
+    {
+        $invited = true;
+
+        $user = $this->userRepository->findByField('email', $data['email']);
+        $note = array_key_exists('note', $data) ? $data['note'] : '';
+
+        if ($user) {
+            $organization->users()->attach($user, ['organization_role_type_id' => $data['role_id']]);
+            $user->notify(new OrganizationInvite($authenticatedUser, $organization, $token, $note));
+        } elseif ($data['email']) {
+            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
+            $temp_user = new User(['email' => $data['email']]);
+            $temp_user->notify(new OrganizationInvite($authenticatedUser, $organization, $token, $note));
+
+            $invited_user = array(
+                'invited_email' => $data['email'],
+                'organization_id' => $organization->id,
+                'organization_role_type_id' => $data['role_id'],
+                'token' => $token,
+            );
+            $this->invitedOrganizationUserRepository->create($invited_user);
+        } else {
+            $invited = false;
+        }
+
+        return $invited;
     }
 }

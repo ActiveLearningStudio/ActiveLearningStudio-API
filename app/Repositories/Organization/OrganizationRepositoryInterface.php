@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Organization;
 
+use App\User;
 use App\Models\Organization;
 use App\Repositories\EloquentRepositoryInterface;
 
@@ -72,4 +73,22 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function fetchOrganizationUsers($id);
+
+    /**
+     * Get admin
+     *
+     * @param Organization $organization
+     * @return Model
+     */
+    public function getAdmin($organization);
+
+    /**
+     * Invite member to the organization
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @param $data
+     * @return bool
+     */
+    public function inviteMember($authenticatedUser, $organization, $data);
 }
