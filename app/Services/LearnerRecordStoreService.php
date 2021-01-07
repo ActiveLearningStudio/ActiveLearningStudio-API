@@ -12,6 +12,7 @@ use \TinCan\Verb;
 use \TinCan\Activity;
 use \TinCan\Extensions;
 use \TinCan\LRSResponse;
+use App\CurrikiGo\LRS\InteractionFactory;
 
 /**
  * Learner Record Store Service class
@@ -303,6 +304,47 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Get the 'interacted' statements from LRS based on filters
+     * Filters the ones that have the results
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getInteractedResultStatements(array $data)
+    {
+        $attempted = $this->getStatementsByVerb('interacted', $data);
+        $allowedInteractions = $this->allowedInteractionsList();
+        $filtered = [];
+        if ($attempted) {
+            // iterate and find the statements that have results.
+            foreach ($attempted as $statement) {
+                $result = $statement->getResult();
+                // Get Category context
+                $contextActivities = $statement->getContext()->getContextActivities();
+                $category = $contextActivities->getCategory();
+                $categoryId = '';
+                $h5pInteraction = '';
+                if (!empty($category)) {
+                    $categoryId = end($category)->getId();
+                    $h5pInteraction = explode("/", $categoryId);
+                    $h5pInteraction = end($h5pInteraction);
+                }
+                
+                if (!empty($category) && in_array($h5pInteraction, $allowedInteractions) && !empty($result)) {
+                    $objectId = $statement->getTarget()->getId();
+                    // Get activity subID for this statement.
+                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                    if (!array_key_exists($h5pSubContentId, $filtered)) {
+                        $filtered[$h5pSubContentId] = $statement;
+                    }
+                }
+            }
+        }
+        return $filtered;
+    }
+
+    /**
      * Find if the statement is for an aggregate H5P
      * 
      * @param array $data An array of filters.
@@ -389,6 +431,20 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Get summary of an 'interacted' (non-scoring) statement
+     * 
+     * @param Statement $statement A TinCan API statement object.
+     * @return array
+     */
+    public function getNonScoringStatementSummary(Statement $statement)
+    {
+        $summary = [];
+        $interactionFactory = new InteractionFactory();
+        $interaction = $interactionFactory->initInteraction($statement);
+        return $interaction->summary();
+    }
+
+    /**
      * Retrieve 'ending-point' from a list of extensions in a statement.
      * 
      * @param Extensions $extensions A List of Extensions in a statement.
@@ -453,9 +509,24 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'answered' => self::ANSWERED_VERB_ID,
             'completed' => self::COMPLETED_VERB_ID,
             'skipped' => self::SKIPPED_VERB_ID,
-            'attempted' => self::ATTEMPTED_VERB_ID
+            'attempted' => self::ATTEMPTED_VERB_ID,
+            'interacted' => self::INTERACTED_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
-    
+
+    /**
+     * List of allowed non-scoring interactions.
+     * 
+     * @return array
+     */
+    public function allowedInteractionsList()
+    {
+        $allowed = [
+            'H5P.SimpleMultiChoice-1.1',
+            'H5P.OpenEndedQuestion-1.0',
+        ];
+        return $allowed;
+    }
+
 }

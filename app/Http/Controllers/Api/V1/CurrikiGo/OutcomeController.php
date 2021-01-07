@@ -91,9 +91,24 @@ class OutcomeController extends Controller
                     usort($response, function($a, $b) {
                         return $a['ending-point'] <=> $b['ending-point'];
                     });
+
+                    // Get Non-scoring Interactions
+                    $nonScoringResponse = [];
+                    $interacted = $service->getInteractedResultStatements($data);
+
+                    if ($interacted) {
+                        foreach ($interacted as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $summary = $service->getNonScoringStatementSummary($record);
+                                $nonScoringResponse[] = new StudentResultResource($summary);
+                                $answeredIds[] = $key;
+                            }
+                        }
+                    }
                     
                     return response([
                         'summary' => $response,
+                        'non-scoring' => $nonScoringResponse
                     ], 200);
                 } else {
                     return response([
