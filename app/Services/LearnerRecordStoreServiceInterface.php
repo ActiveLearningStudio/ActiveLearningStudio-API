@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use App\Services\LearnerRecordStoreConstantsInterface;
 use \TinCan\Statement;
 use \TinCan\Agent;
 use \TinCan\Verb;
@@ -10,51 +12,9 @@ use \TinCan\Extensions;
 /**
  * Interface for Learner Record Store service
  */
-interface LearnerRecordStoreServiceInterface
+interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstantsInterface
 {
 
-    /**
-     * Ending-point extension IRI
-     * 
-     * @var string
-     */
-    const EXTENSION_ENDING_POINT_IRI = 'http://id.tincanapi.com/extension/ending-point';
-
-    /**
-     * H5P xAPI subContent ID 
-     * 
-     * @var string
-     */
-    const EXTENSION_H5P_SUBCONTENT_ID = 'http://h5p.org/x-api/h5p-subContentId';
-    
-    /**
-     * Answered verb id for XAPI statements
-     * 
-     * @var string
-     */
-    const ANSWERED_VERB_ID = 'http://adlnet.gov/expapi/verbs/answered';
-
-    /**
-     * Completed verb id for XAPI statements
-     * 
-     * @var string
-     */
-    const COMPLETED_VERB_ID = 'http://adlnet.gov/expapi/verbs/completed';
-
-    /**
-     * Skipped verb id for XAPI statements
-     * 
-     * @var string
-     */
-    const SKIPPED_VERB_ID = 'http://id.tincanapi.com/verb/skipped';
-
-    /**
-     * Attempted verb id for XAPI statements
-     * 
-     * @var string
-     */
-    const ATTEMPTED_VERB_ID = 'http://adlnet.gov/expapi/verbs/attempted';
-    
     /**
      * Save Statement
      *
@@ -207,5 +167,30 @@ interface LearnerRecordStoreServiceInterface
      * @return bool
      */
     public function isAggregateH5P(array $data, string $objectId);
+
+    /**
+     * List of allowed non-scoring interactions.
+     * 
+     * @return array
+     */
+    public function allowedInteractionsList();
+
+    /**
+     * Get the 'interacted' statements from LRS based on filters
+     * Filters the ones that have the results
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getInteractedResultStatements(array $data);
+
+    /**
+     * Get summary of an 'interacted' (non-scoring) statement
+     * 
+     * @param Statement $statement A TinCan API statement object.
+     * @return array
+     */
+    public function getNonScoringStatementSummary(Statement $statement);
 
 }
