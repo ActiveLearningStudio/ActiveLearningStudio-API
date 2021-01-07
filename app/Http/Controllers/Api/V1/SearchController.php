@@ -57,6 +57,11 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
+        $authenticated_user = auth()->user();
+        $organizationId = $authenticated_user->default_organization;
+
+        $data['organizationIds'] = [$organizationId];
+
         $projects = $this->activityRepository->searchForm($data);
 
         return response([
@@ -100,6 +105,11 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
         $data['indexing'] = [3];
+
+        $authenticated_user = auth()->user();
+        $organizationId = $authenticated_user->default_organization;
+
+        $data['organizationIds'] = [$organizationId];
 
         $results = $this->activityRepository->advanceSearchForm($data);
 
@@ -145,6 +155,11 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
         $data['userIds'] = [auth()->user()->id];
+
+        $authenticated_user = auth()->user();
+        $organizationId = $authenticated_user->default_organization;
+
+        $data['organizationIds'] = [$organizationId];
 
         $results = $this->activityRepository->advanceSearchForm($data);
 
