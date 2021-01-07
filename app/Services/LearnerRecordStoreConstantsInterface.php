@@ -3,7 +3,7 @@
 namespace App\Services;
 
 /**
- * Interface for Learner Record Store service
+ * Interface for Learner Record Store constants
  */
 interface LearnerRecordStoreConstantsInterface
 {
