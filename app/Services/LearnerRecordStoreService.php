@@ -438,7 +438,6 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      */
     public function getNonScoringStatementSummary(Statement $statement)
     {
-        $summary = [];
         $interactionFactory = new InteractionFactory();
         $interaction = $interactionFactory->initInteraction($statement);
         return $interaction->summary();
