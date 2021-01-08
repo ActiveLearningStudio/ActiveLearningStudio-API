@@ -138,12 +138,19 @@ class AuthController extends Controller
      *
      * @bodyParam email string required The email of a user Example: john.doe@currikistudio.org
      * @bodyParam password string required The password corresponded to the email Example: Password123
+     * @bodyParam domain string required Organization domain to get data for Example: curriki
      *
      * @responseFile responses/user/user-with-token.json
      *
      * @response 400 {
      *   "errors": [
      *     "Invalid Credentials."
+     *   ]
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid Domain."
      *   ]
      * }
      *
@@ -159,6 +166,8 @@ class AuthController extends Controller
     public function login(LoginRequest $loginRequest)
     {
         $data = $loginRequest->validated();
+        $domain = $data['domain'];
+        unset($data['domain']);
 
         if (!auth()->attempt($data)) {
             return response([
@@ -167,6 +176,16 @@ class AuthController extends Controller
         }
 
         $user = auth()->user();
+
+        if (!$organization = $user->organizations()->where('domain', $domain)->first()) {
+            return response([
+                'errors' => ['Invalid Domain.'],
+            ], 400);
+        } else {
+            $is_updated = $this->userRepository->update([
+                'default_organization' => $organization->id,
+            ], $user->id);
+        }
 
         if (!$user->email_verified_at) {
             return response([
