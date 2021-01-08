@@ -34,6 +34,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
     Route::get('organization-types', 'OrganizationTypesController@index');
 
+    Route::get('organization/get-by-domain', 'OrganizationController@getByDomain')->name('organization.get-by-domain');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::get('users/organizations', 'UserController@getOrganizations');
         Route::put('users/default-organization', 'UserController@setDefaultOrganization');

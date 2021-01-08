@@ -28,7 +28,7 @@ class SuborganizationController extends Controller
     private $organizationRepository;
 
     /**
-     * OrganizationController constructor.
+     * SuborganizationController constructor.
      *
      * @param OrganizationRepositoryInterface $organizationRepository
      */
