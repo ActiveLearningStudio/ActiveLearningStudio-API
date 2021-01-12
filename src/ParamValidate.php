@@ -60,5 +60,17 @@ class ParamValidate
         return $tool_family_code === 'moodle'; 
     }
 
+    public static function getCustomFieldsInfo($session)
+    {
+        $lti_jwt = $session['tsugi_jwt'];
+        $lti_claim_custom = "https://purl.imsglobal.org/spec/lti/claim/custom";
+        return property_exists($lti_jwt->body, $lti_claim_custom) ? $lti_jwt->body->{$lti_claim_custom} : null;
+    }
+
+    public static function getKeyInCustomFields($session, $key) {
+        $custom_fields = self::getCustomFieldsInfo($session);
+        return property_exists($custom_fields, $key) ? $custom_fields->{$key} : null;
+    }
+
 
 }

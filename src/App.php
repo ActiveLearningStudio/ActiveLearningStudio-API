@@ -30,10 +30,20 @@ class App
             }            
         } else {
             $LTI = LTIX::requireData();
+           
+            $course_id = ParamValidate::getKeyInCustomFields($_SESSION, 'course_id');
+            $custom_email_id = ParamValidate::getKeyInCustomFields($_SESSION, 'person_email_primary');
+            
+            //    $LTI->var_dump();
+            //    exit;
             // Obtain User ID
             $user_id = $LTI->user->id; //TSUGI member ID
             // Obtain User Email
             $user_email = $LTI->user->email ?: false; //Canvas User email
+            if (!$user_email && !empty($custom_email_id)) {
+                // Try to obtain it from the custom fields.
+                $user_email = $person_email_primary;
+            }
             // Obtain User role
             $is_learner = !$LTI->user->instructor;
             $tool_platform = ParamValidate::toolPlatformInfo($_SESSION);
@@ -114,7 +124,7 @@ EOT;
                 $lti_token_params = http_build_query($_SESSION['lti_post']);
                 $activity_studio_link = CURRIKI_STUDIO_HOST . "/lti-tools/activity/$activity_id";
                 $redirect_to_studio_url = $activity_studio_link . "?" . $lti_token_params;
-                foreach(['user_id', 'tool_platform', 'is_learner', 'submission_id'] as $extra_param) {
+                foreach(['user_id', 'tool_platform', 'is_learner', 'submission_id', 'course_id'] as $extra_param) {
                     $redirect_to_studio_url .= '&' . $extra_param . '=' . urlencode($$extra_param);
                 }
                 $redirect_to_studio_url .= '&homepage=' . urlencode($CFG->wwwroot);

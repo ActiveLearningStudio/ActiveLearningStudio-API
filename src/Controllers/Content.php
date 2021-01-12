@@ -14,6 +14,7 @@ use \Tsugi\Util\LTI;
 use \Tsugi\Util\LTI13;
 use \Tsugi\UI\Lessons;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use CurrikiTsugi\ParamValidate;
 
 class Content implements ControllerInterface
 {
@@ -78,6 +79,7 @@ class Content implements ControllerInterface
             $response = new RedirectResponse($studio_url);
             $response->send();
         }elseif ( isset($_SESSION['lti']['issuer_client']) ) {
+            $custom_email_id = ParamValidate::getKeyInCustomFields($_SESSION, 'person_email_primary');
             // handle LTI 1.3
             $lti_client_id = $_SESSION['lti']['issuer_client'];
             $lti13_deeplink = $_SESSION['lti']['lti13_deeplink'];
@@ -86,6 +88,9 @@ class Content implements ControllerInterface
                         .'://'.parse_url($lti13_deeplink->deep_link_return_url, PHP_URL_HOST).$port;
             
             $studio_url = CURRIKI_STUDIO_HOST.'/lti/content/'.urlencode($lms_url).'/'.$lti_client_id.'/'.urlencode($redirect_url);
+            if (!empty($custom_email_id)) {
+                $studio_url .= '?user_email=' . urlencode($custom_email_id);
+            }
             $response = new RedirectResponse($studio_url);
             $response->send();
         }
