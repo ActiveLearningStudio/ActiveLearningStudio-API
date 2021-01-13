@@ -375,10 +375,15 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         // Check LMS settings for authorization when searching private projects
         if (empty($data['indexing'])) {
-            $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))->first();
+            // There can be many LmsSettings for different users sharing the same
+            // lti_client_id. Need to find the user first
+            $user = User::where('email', $request->input('userEmail'))->first();
+            $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))
+                ->where('user_id', $user->id)
+                ->first();
 
-            if (empty($lmsSetting)) {
-                $data['indexing'] = [3]; // Switching to public only
+            if (empty($user) || empty($lmsSetting)) {
+                return [];
             } else {
                 $data['userIds'] = [$lmsSetting->user_id];
             }
