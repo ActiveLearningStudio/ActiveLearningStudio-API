@@ -12,6 +12,7 @@ use \TinCan\Verb;
 use \TinCan\Activity;
 use \TinCan\Extensions;
 use \TinCan\LRSResponse;
+use App\CurrikiGo\LRS\InteractionFactory;
 
 /**
  * Learner Record Store Service class
@@ -219,12 +220,17 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 $contextActivities = $statement->getContext()->getContextActivities();
                 $category = $contextActivities->getCategory();
                 if (!empty($category) && !empty($result)) {
-                    // Get activity subID for this statement.
                     // Each quiz within the activity is identified by a unique GUID.
                     // We only need to take the most recent submission on an activity into account.
                     // We've sorted statements in descending order, so the first entry for a subId is the latest
+                    // We also need to exclude 'answered' statements for the aggregate types
+                    // Rule for that is, if we're able to find more than 1 answered statements for the object id, for the same attempt
+                    // then it's an aggregate.
+                    $objectId = $statement->getTarget()->getId();
+                    $isAggregateH5P = $this->isAggregateH5P($data, $objectId); 
+                    // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered)) {
+                    if (!array_key_exists($h5pSubContentId, $filtered) && !$isAggregateH5P) {
                         $filtered[$h5pSubContentId] = $statement;
                     }
                 }
@@ -284,6 +290,49 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 $parent = $contextActivities->getParent();
                 
                 if (!empty($parent)) {
+                    $objectId = $statement->getTarget()->getId();
+                    $isAggregateH5P = $this->isAggregateH5P($data, $objectId); 
+                    // Get activity subID for this statement.
+                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                    if (!array_key_exists($h5pSubContentId, $filtered) && !$isAggregateH5P) {
+                        $filtered[$h5pSubContentId] = $statement;
+                    }
+                }
+            }
+        }
+        return $filtered;
+    }
+
+    /**
+     * Get the 'interacted' statements from LRS based on filters
+     * Filters the ones that have the results
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getInteractedResultStatements(array $data)
+    {
+        $attempted = $this->getStatementsByVerb('interacted', $data);
+        $allowedInteractions = $this->allowedInteractionsList();
+        $filtered = [];
+        if ($attempted) {
+            // iterate and find the statements that have results.
+            foreach ($attempted as $statement) {
+                $result = $statement->getResult();
+                // Get Category context
+                $contextActivities = $statement->getContext()->getContextActivities();
+                $category = $contextActivities->getCategory();
+                $categoryId = '';
+                $h5pInteraction = '';
+                if (!empty($category)) {
+                    $categoryId = end($category)->getId();
+                    $h5pInteraction = explode("/", $categoryId);
+                    $h5pInteraction = end($h5pInteraction);
+                }
+                
+                if (!empty($category) && in_array($h5pInteraction, $allowedInteractions) && !empty($result)) {
+                    $objectId = $statement->getTarget()->getId();
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
                     if (!array_key_exists($h5pSubContentId, $filtered)) {
@@ -293,6 +342,46 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             }
         }
         return $filtered;
+    }
+
+    /**
+     * Find if the statement is for an aggregate H5P
+     * 
+     * @param array $data An array of filters.
+     * @param string $objectId An activity Object Id
+     * @throws GeneralException
+     * @return bool
+     */
+    public function isAggregateH5P(array $data, string $objectId)
+    {
+        $attemptId = $data['activity'];
+        // Get all related answered statetmentn for the object id
+        $data['activity'] = $objectId;
+        $allAnswers = $this->getAnsweredStatements($data);
+        $count = 0;
+        if ($allAnswers) {
+            // iterate and find the statements that have results & Category.
+            foreach ($allAnswers as $statement) {
+                $attemptIRI = '';
+                $result = $statement->getResult();
+                // Get Category context
+                $contextActivities = $statement->getContext()->getContextActivities();
+                $category = $contextActivities->getCategory();
+                
+                $other = $contextActivities->getOther();
+                if (!empty($other)) {
+                    $attemptIRI = end($other)->getId();
+                }
+                if ($attemptIRI === $attemptId && (!empty($category) && !empty($result))) {
+                    ++$count;
+                }
+                // If we have 2 or more records, then it's an aggregate H5P statement
+                if ($count > 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -339,6 +428,19 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $summary['verb'] = $statement->getVerb()->getDisplay()->getNegotiatedLanguageString();
         
         return $summary;
+    }
+
+    /**
+     * Get summary of an 'interacted' (non-scoring) statement
+     * 
+     * @param Statement $statement A TinCan API statement object.
+     * @return array
+     */
+    public function getNonScoringStatementSummary(Statement $statement)
+    {
+        $interactionFactory = new InteractionFactory();
+        $interaction = $interactionFactory->initInteraction($statement);
+        return $interaction->summary();
     }
 
     /**
@@ -406,9 +508,24 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'answered' => self::ANSWERED_VERB_ID,
             'completed' => self::COMPLETED_VERB_ID,
             'skipped' => self::SKIPPED_VERB_ID,
-            'attempted' => self::ATTEMPTED_VERB_ID
+            'attempted' => self::ATTEMPTED_VERB_ID,
+            'interacted' => self::INTERACTED_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
-    
+
+    /**
+     * List of allowed non-scoring interactions.
+     * 
+     * @return array
+     */
+    public function allowedInteractionsList()
+    {
+        $allowed = [
+            'H5P.SimpleMultiChoice-1.1',
+            'H5P.OpenEndedQuestion-1.0',
+        ];
+        return $allowed;
+    }
+
 }
