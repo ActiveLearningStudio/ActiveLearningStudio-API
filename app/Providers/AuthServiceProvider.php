@@ -7,12 +7,14 @@ use App\Models\ActivityItem;
 use App\Models\ActivityType;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Models\Organization;
 use App\Policies\ActivityItemPolicy;
 use App\Policies\ActivityPolicy;
 use App\Policies\ActivityTypePolicy;
 use App\Policies\PlaylistPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\OrganizationPolicy;
 use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -32,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         Activity::class => ActivityPolicy::class,
         ActivityType::class => ActivityTypePolicy::class,
         ActivityItem::class => ActivityItemPolicy::class,
+        Organization::class => OrganizationPolicy::class,
     ];
 
     /**

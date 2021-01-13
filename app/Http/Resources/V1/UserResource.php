@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Http\Resources\V1\OrganizationResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,6 +31,7 @@ class UserResource extends JsonResource
             'subscribed' => $this->subscribed,
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at,
+            'default_organization' => new OrganizationResource($this->defaultOrganization),
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->display_name;
             })

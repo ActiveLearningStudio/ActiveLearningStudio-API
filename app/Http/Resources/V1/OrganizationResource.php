@@ -25,6 +25,10 @@ class OrganizationResource extends JsonResource
             'users' =>  UserResource::collection($this->whenLoaded('users')),
             'image' => $this->image,
             'domain' => $this->domain,
+            'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->role->display_name;
+            }),
+            'default_organization' => $this->when(auth()->user() && auth()->user()->default_organization == $this->id, true),
         ];
     }
 }

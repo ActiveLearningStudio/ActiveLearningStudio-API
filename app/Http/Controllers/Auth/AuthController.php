@@ -185,6 +185,8 @@ class AuthController extends Controller
             $is_updated = $this->userRepository->update([
                 'default_organization' => $organization->id,
             ], $user->id);
+
+            $user = $organization->users()->where('id', $user->id)->first();
         }
 
         if (!$user->email_verified_at) {

@@ -35,6 +35,8 @@ class SuborganizationController extends Controller
     public function __construct(OrganizationRepositoryInterface $organizationRepository)
     {
         $this->organizationRepository = $organizationRepository;
+
+        $this->authorizeResource(Organization::class, 'suborganization');
     }
     
     /**
@@ -77,6 +79,8 @@ class SuborganizationController extends Controller
      */
     public function uploadThumb(Request $request)
     {
+        $this->authorize('uploadThumb', Organization::class);
+
         $validator = Validator::make($request->all(), [
             'thumb' => 'required|image|max:102400',
         ]);
@@ -132,6 +136,25 @@ class SuborganizationController extends Controller
         return response([
             'errors' => ['Could not create suborganization. Please try again later.'],
         ], 500);
+    }
+
+    /**
+     * Get Suborganization
+     *
+     * Get the specified suborganization detail.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/organization/suborganization.json
+     *
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function show(Organization $suborganization)
+    {
+        return response([
+            'suborganization' => new OrganizationResource($suborganization),
+        ], 200);
     }
 
     /**
@@ -231,6 +254,8 @@ class SuborganizationController extends Controller
      */
     public function showMemberOptions(Request $request)
     {
+        $this->authorize('viewMemberOptions', Organization::class);
+
         $validator = Validator::make($request->all(), [
             'query' => 'required|string|max:255',
         ]);
@@ -272,6 +297,8 @@ class SuborganizationController extends Controller
      */
     public function addUser(SuborganizationAddUser $request)
     {
+        $this->authorize('addUser', Organization::class);
+
         $data = $request->validated();
 
         $authenticatedUser = auth()->user();
@@ -318,6 +345,8 @@ class SuborganizationController extends Controller
      */
     public function inviteMembers(SuborganizationInviteMember $request)
     {
+        $this->authorize('inviteMembers', Organization::class);
+
         $data = $request->validated();
 
         $authenticatedUser = auth()->user();
@@ -367,6 +396,8 @@ class SuborganizationController extends Controller
      */
     public function updateUser(SuborganizationUpdateUser $request)
     {
+        $this->authorize('updateUser', Organization::class);
+
         $data = $request->validated();
 
         $authenticatedUser = auth()->user();
@@ -413,6 +444,8 @@ class SuborganizationController extends Controller
      */
     public function deleteUser(Request $request)
     {
+        $this->authorize('deleteUser', Organization::class);
+
         $authenticatedUser = auth()->user();
         $default_organization = $authenticatedUser->default_organization;
 
@@ -457,6 +490,8 @@ class SuborganizationController extends Controller
      */
     public function getUsers()
     {
+        $this->authorize('viewAnyUser', Organization::class);
+
         $authenticatedUser = auth()->user();
 
         return response([

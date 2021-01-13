@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\NotificationListResource;
+use Illuminate\Validation\Rule;
 
 /**
  * @group 2. User
@@ -474,8 +475,15 @@ class UserController extends Controller
      */
     public function setDefaultOrganization(Request $request)
     {
+        $authenticated_user = auth()->user();
+
         $data = $request->validate([
-            'organization_id' => ['required', 'exists:organizations,id']
+            'organization_id' => [
+                'required',
+                Rule::exists('organization_user_roles')->where(function ($query) use ($authenticated_user) {
+                    $query->where('user_id', $authenticated_user->id);
+                }),
+            ],
         ]);
 
         $authenticated_user = auth()->user();
