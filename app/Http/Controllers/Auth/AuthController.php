@@ -166,7 +166,7 @@ class AuthController extends Controller
     public function login(LoginRequest $loginRequest)
     {
         $data = $loginRequest->validated();
-        $domain = $data['domain'];
+        $domain = isset($data['domain']) ? $data['domain'] : null;
         unset($data['domain']);
 
         if (!auth()->attempt($data)) {

@@ -26,7 +26,6 @@ class LoginRequest extends FormRequest
         return [
             'email' => 'required|email',
             'password' => 'required',
-            'domain' => 'required|string|max:255|exists:App\Models\Organization,domain',
         ];
     }
 }
