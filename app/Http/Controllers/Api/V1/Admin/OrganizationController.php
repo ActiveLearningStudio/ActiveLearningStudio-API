@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Admin\Organization\OrganizationRepository;
 use App\Http\Resources\V1\Admin\OrganizationResource;
-use App\Http\Requests\Admin\CreateOrganization;
-use App\Http\Requests\Admin\UpdateOrganization;
+use App\Http\Requests\Admin\OrganizationCreate;
+use App\Http\Requests\Admin\OrganizationUpdate;
+use App\Http\Requests\Admin\OrganizationRemoveUser;
 use App\Http\Resources\V1\Admin\UserResource;
+use App\Models\Organization;
+use App\User;
 
 /**
  * @authenticated
@@ -45,11 +48,11 @@ class OrganizationController extends Controller
     /**
      * Store a newly created Organization in storage.
      *
-     * @param CreateOrganization $request
+     * @param OrganizationCreate $request
      * @return OrganizationResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function store(CreateOrganization $request)
+    public function store(OrganizationCreate $request)
     {
         $validated = $request->validated();
         $response = $this->organizationRepository->create($validated);
@@ -72,12 +75,12 @@ class OrganizationController extends Controller
     /**
      * Update the specified Organization in storage.
      *
-     * @param UpdateOrganization $request
+     * @param OrganizationUpdate $request
      * @param $id
      * @return OrganizationResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function update(UpdateOrganization $request, $id)
+    public function update(OrganizationUpdate $request, $id)
     {
         $validated = $request->validated();
         $response = $this->organizationRepository->update($id, $validated, $request->clone_project_id, $request->member_id);
@@ -126,5 +129,35 @@ class OrganizationController extends Controller
     public function showMemberOptions(Request $request, $id)
     {
         return UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $id));
+    }
+
+    /**
+     * Remove Organization User
+     *
+     * Remove the user from the specified organization.
+     *
+     * @urlParam organization int required Id of the organization to deleted user from. Example: 1
+     * @urlParam user int required Id of the user to be deleted. Example: 1
+     *
+     * @response {
+     *   "message": "Organization User Deleted!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to delete user."
+     *   ]
+     * }
+     *
+     * @param OrganizationRemoveUser $request
+     * @param int $organization
+     * @param int $user
+     * @return Response
+     */
+    public function deleteUser(OrganizationRemoveUser $request, $organization, $user)
+    {
+        $validated = $request->validated();
+
+        return response(['message' => $this->organizationRepository->deleteUser($organization, $user)], 200);
     }
 }

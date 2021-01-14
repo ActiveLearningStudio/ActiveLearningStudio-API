@@ -213,4 +213,23 @@ class OrganizationRepository extends BaseRepository
         }
         return $ids;
     }
+
+    /**
+     * Delete the specified user in a particular suborganization
+     *
+     * @param $orgId
+     * @param $usrId
+     * @return mixed
+     * @throws GeneralException
+     */
+    public function deleteUser($orgId, $usrId)
+    {
+        try {
+            $this->model->find($orgId)->users()->detach($usrId);
+            return 'Organization User Deleted!';
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        throw new GeneralException('Unable to delete organization user, please try again later!');
+    }
 }

@@ -236,6 +236,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // organizations
         Route::get('organizations/report/basic', 'OrganizationController@reportBasic')->name('organizations.report.basic');
         Route::apiResource('organizations', 'OrganizationController');
+        Route::delete('organizations/{organization}/user/{user}', 'OrganizationController@deleteUser')->name('organizations.delete-user');
         Route::get('organizations/{id}/parent-options', 'OrganizationController@showParentOptions')->name('organizations.parent-options');
         Route::get('organizations/{id}/member-options', 'OrganizationController@showMemberOptions')->name('organizations.member-options');
     });
