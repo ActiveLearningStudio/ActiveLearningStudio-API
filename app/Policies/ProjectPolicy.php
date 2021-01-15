@@ -119,6 +119,10 @@ class ProjectPolicy
 
     private function hasPermission(User $user, Project $project, $role = null)
     {
+        if (!($project->organization_id == $user->default_organization)) {
+            return false;
+        }
+
         $project_users = $project->users;
         foreach ($project_users as $project_user) {
             if ($user->id === $project_user->id && (!$role || $role === $project_user->pivot->role)) {
