@@ -744,6 +744,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
             }
         }
 
+        H5pHelper::rearrangeContentParams($content, 'H5P.InteractiveBook');
         return $content;
     }
 

@@ -229,4 +229,33 @@ class H5pHelper
         $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
         return $content['id'];
     }
+
+    public static function rearrangeContentParams(&$content, $library)
+    {
+        if ($library === 'H5P.InteractiveBook') {
+            $params = json_decode($content['params']);
+            // get chapters with updated params
+            $chaptersRearranged = array_filter($params->chapters, function($item) { return property_exists($item, 'chapter'); });
+            if (empty($chaptersRearranged)) {
+                $chaptersRearranged = array_map(function($chapter) { 
+                    return (object) array('chapter' => $chapter, "lockPage" => false); 
+                }, $params->chapters);
+                $params->chapters = $chaptersRearranged;
+                $content['params'] = json_encode($params);
+            }
+            
+            $filtered = json_decode($content['filtered']);
+            if ($filtered) {
+                // get chapters with updated filtered
+                $chaptersRearrangedF = array_filter($filtered->chapters, function($item) { return property_exists($item, 'chapter'); });
+                if (empty($chaptersRearrangedF)) {
+                    $chaptersRearrangedF = array_map(function($chapter) { 
+                        return (object) array('chapter' => $chapter, "lockPage" => false); 
+                    }, $filtered->chapters);
+                    $filtered->chapters = $chaptersRearrangedF;
+                    $content['filtered'] = json_encode($filtered);
+                }
+            }
+        }
+    }
 }
