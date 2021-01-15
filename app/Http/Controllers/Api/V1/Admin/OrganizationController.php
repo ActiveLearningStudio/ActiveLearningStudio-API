@@ -16,9 +16,9 @@ use App\User;
 /**
  * @authenticated
  *
- * @group  Organization API
+ * @group  Admin Organization API
  *
- * APIs for Organization
+ * Admin APIs for Organization
  */
 class OrganizationController extends Controller
 {
@@ -35,7 +35,11 @@ class OrganizationController extends Controller
     }
     
     /**
-     * Display a listing of the Organization.
+     * Get Organizations
+     *
+     * Get a list of the Organizations.
+     *
+     * @responseFile responses/admin/organization/organizations.json
      * 
      * @param Request $request
      * @return AnonymousResourceCollection
@@ -46,7 +50,18 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Store a newly created Organization in storage.
+     * Create Organization
+     *
+     * Create a new organization.
+     *
+     * @bodyParam name string required Name of a organization Example: tfa
+     * @bodyParam description string required Description of a organization Example: This is a test organization.
+     * @bodyParam domain string required Domain of a organization Example: tfa
+     * @bodyParam image image required Image to upload Example: (binary)
+     * @bodyParam admin_id int required Id of the organization admin user Example: 1
+     * @bodyParam parent_id int Id of the parent organization Example: 1
+     *
+     * @responseFile responses/admin/organization/organization.json
      *
      * @param OrganizationCreate $request
      * @return OrganizationResource|Application|ResponseFactory|Response
@@ -60,7 +75,13 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Display the specified Organization.
+     * Get Organization
+     *
+     * Get the specified organization detail.
+     *
+     * @urlParam id required The Id of the organization Example: 1
+     *
+     * @responseFile responses/admin/organization/organization-detail.json
      *
      * @param $id
      * @return OrganizationResource
@@ -73,7 +94,19 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Update the specified Organization in storage.
+     * Update Organization
+     *
+     * Update the specified organization.
+     *
+     * @urlParam id required The Id of a organization Example: 1
+     * @bodyParam name string required Name of a organization Example: tfa
+     * @bodyParam description string required Description of a organization Example: This is a test organization.
+     * @bodyParam domain string required Domain of a organization Example: tfa
+     * @bodyParam image image Image to upload Example: (binary)
+     * @bodyParam member_id int Id of the user to add as member in organization Example: 1
+     * @bodyParam parent_id int Id of the parent organization Example: 1
+     *
+     * @responseFile responses/admin/organization/organization.json
      *
      * @param OrganizationUpdate $request
      * @param $id
@@ -88,7 +121,15 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Remove the specified Organization from storage.
+     * Remove Organization
+     *
+     * Remove the specified organization.
+     *
+     * @urlParam id int required The Id of a organization Example: 1
+     *
+     * @response {
+     *   "message": "Organization Deleted!"
+     * }
      *
      * @param $id
      * @return Application|Factory|View
@@ -100,6 +141,15 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Organization Basic Report
+     *
+     * Returns the paginated response of the Organization with basic reporting (DataTables are fully supported - All Params).
+     *
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile responses/admin/organization/organizations_report.json
+     *
      * @param Request $request
      * @return Application|ResponseFactory|Response
      */
@@ -108,7 +158,13 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Display parent organizations options
+     *
      * Display a listing of the parent organizations options, other then itself and its exiting children.
+     *
+     * @urlParam id int required The Id of a organization Example: 1
+     *
+     * @responseFile responses/admin/organization/organization-parent-options.json
      *
      * @param Request $request
      * @param $id
@@ -119,8 +175,15 @@ class OrganizationController extends Controller
         return OrganizationResource::collection($this->organizationRepository->getParentOptions($request->all(), $id));
     }
 
+
     /**
+     * Display member options
+     *
      * Display a listing of the user member options, other then the exiting ones.
+     *
+     * @urlParam id int required The Id of a organization Example: 1
+     *
+     * @responseFile responses/admin/organization/organization-member-options.json
      *
      * @param Request $request
      * @param $id

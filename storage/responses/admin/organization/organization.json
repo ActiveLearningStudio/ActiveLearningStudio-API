@@ -1,0 +1,10 @@
+{
+    "message": "Organization created successfully!",
+    "data": {
+        "id": 27,
+        "name": "Admin Org",
+        "description": "Admin Org",
+        "image": "/storage/organizations/Iq0Rw2UvlsmO8DsZwCWNj396ruysLyEKGqiWaDqk.jpeg",
+        "domain": "adminorg"
+    }
+}
