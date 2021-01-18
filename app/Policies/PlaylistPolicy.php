@@ -96,6 +96,10 @@ class PlaylistPolicy
 
     private function hasPermission(User $user, Project $project)
     {
+        if (!($project->organization_id == $user->default_organization)) {
+            return false;
+        }
+
         $project_users = $project->users;
         foreach ($project_users as $project_user) {
             if ($user->id === $project_user->id) {
