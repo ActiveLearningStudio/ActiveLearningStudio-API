@@ -232,7 +232,7 @@ class H5pHelper
 
     public static function rearrangeContentParams(&$content, $library)
     {
-        if ($library === 'H5P.InteractiveBook') {
+        if ($content['libraryName'] === $library && $library === 'H5P.InteractiveBook') {
             $params = json_decode($content['params']);
             // get chapters with updated params
             $chaptersRearranged = array_filter($params->chapters, function($item) { return property_exists($item, 'chapter'); });
