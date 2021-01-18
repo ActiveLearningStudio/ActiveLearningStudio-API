@@ -237,6 +237,7 @@ class LaravelH5p
                 'H5P' => trans('laravel-h5p.h5p'),
             ),
             'hubIsEnabled' => config('laravel-h5p.h5p_hub_is_enabled'),
+            'reportingIsEnabled' => config('laravel-h5p.h5p_enable_lrs_content_types'),
         );
 
         if (Auth::check()) {
