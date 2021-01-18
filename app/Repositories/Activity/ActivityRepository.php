@@ -372,7 +372,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $data = [
             'query' => $request->input('query', ''),
             'from' => $request->input('from', 0),
-            'size' => 10,
+            'size' => 11,
             'model' => 'activities',
             'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
         ];
