@@ -171,9 +171,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      */
     public function getPlaylistWithProject(Playlist $playlist)
     {
-        return $this->model::whereHas('project', function ($query_project) {
-            $query_project->where('shared', true);
-        })
+        return $this->model::whereHas('project')
             ->where('id', $playlist->id)
             ->with('project')
             ->first();
