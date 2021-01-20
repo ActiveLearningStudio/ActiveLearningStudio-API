@@ -391,10 +391,10 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         // If a an author is provided, limit to projects from that user only
         if ($request->has('author') && $request->input('private', 0) !== '1') {
-            $authors = User::where('email', 'like', '%'.$request->input('author').'%')
-                ->orWhere('name', 'like', '%'.$request->input('author').'%')
-                ->orWhere('first_name', 'like', '%'.$request->input('author').'%')
-                ->orWhere('last_name', 'like', '%'.$request->input('author').'%')
+            $authors = User::where('email', 'like', '%' . $request->input('author') . '%')
+                ->orWhere('name', 'like', '%' . $request->input('author') . '%')
+                ->orWhere('first_name', 'like', '%' . $request->input('author') . '%')
+                ->orWhere('last_name', 'like', '%' . $request->input('author') . '%')
                 ->pluck('id');
 
             if (empty($authors)) {
