@@ -5,14 +5,16 @@
             "thumb_url": "/storage/uploads/5f1083871600f.png",
             "title": "",
             "model": "Activity",
-            "user": null
+            "user": null,
+            "created_at": "2020-07-29T20:51:30.000000Z"
         },
         {
             "id": 999,
             "thumb_url": "/storage/uploads/5ef42a8dc4386.png",
             "title": "About The National Parks",
             "model": "Playlist",
-            "user": null
+            "user": null,
+            "created_at": "2020-07-29T20:51:30.000000Z"
         },
         {
             "id": 999,
@@ -21,7 +23,8 @@
             "description": "Algebra 1 ACPS Curriki Resources",
             "favored": false,
             "model": "Project",
-            "user": null
+            "user": null,
+            "created_at": "2020-07-29T20:51:30.000000Z"
         }
     ],
     "meta": {

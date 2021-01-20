@@ -5,14 +5,16 @@
             "thumb_url": null,
             "title": "",
             "model": "Activity",
-            "user": null
+            "user": null,
+            "created_at": "2020-07-29T20:51:30.000000Z"
         },
         {
             "id": 9,
             "thumb_url": "/storage/uploads/i6kOcAFcvBGd3yabpnbUKaqUARdUQsJ8LJLzzDUW.png",
             "title": "Chapter 2: What is money?",
             "model": "Playlist",
-            "user": null
+            "user": null,
+            "created_at": "2020-07-29T20:51:30.000000Z"
         },
         {
             "id": 9,
@@ -21,7 +23,8 @@
             "description": "You have important decisions to make about your educations and career – wouldn’t it be nice if you could better understand the forces of globalization and automation first? What information do you need to gauge salary prospects, the risk of automation, and foreign competition as you compare your options?",
             "favored": false,
             "model": "Project",
-            "user": null
+            "user": null,
+            "created_at": "2020-07-29T20:51:30.000000Z"
         }
     ],
     "meta": {

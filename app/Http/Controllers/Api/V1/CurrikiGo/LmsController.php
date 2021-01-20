@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\CurrikiGo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProjectPublicResource;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
+use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,16 +20,20 @@ class LmsController extends Controller
 {
     private $lmsSettingRepository;
     private $projectRepository;
+    private $activityRepository;
 
     /**
      * LmsController constructor.
      *
      * @param $lmsSettingRepository LmsSettingRepositoryInterface
+     * @param $projectRepository ProjectRepositoryInterface
+     * @param $activityRepository ActivityRepositoryInterface
      */
-    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository)
+    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository, ActivityRepositoryInterface $activityRepository)
     {
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->projectRepository = $projectRepository;
+        $this->activityRepository = $activityRepository;
     }
 
     /**
@@ -64,6 +69,26 @@ class LmsController extends Controller
 
         return response([
             'projects' => ProjectPublicResource::collection($projects),
+        ], 200);
+    }
+
+    public function activities(Request $request)
+    {
+        $request->validate([
+            'query' => 'string|max:255',
+            'from' => 'integer',
+            'subject' => 'string|max:255',
+            'level' => 'string|max:255',
+            'start' => 'string|max:255',
+            'end' => 'string|max:255',
+            'author' => 'string|max:255',
+            'private' => 'integer',
+            'userEmail' => 'string|required|max:255',
+            'ltiClientId' => 'integer|required',
+        ]);
+
+        return response([
+            'activities' => $this->activityRepository->ltiSearchForm($request),
         ], 200);
     }
 }

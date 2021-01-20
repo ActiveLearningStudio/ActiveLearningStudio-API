@@ -171,11 +171,12 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      */
     public function getPlaylistWithProject(Playlist $playlist)
     {
-        return $this->model->where('id', $playlist->id)
+        return $this->model::whereHas('project')
+            ->where('id', $playlist->id)
             ->with('project')
             ->first();
     }
-    
+
     /**
      * To Populate missing order number, One time script
      */

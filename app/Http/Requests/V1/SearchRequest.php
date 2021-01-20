@@ -28,7 +28,7 @@ class SearchRequest extends FormRequest
             'negativeQuery' => 'string|max:255',
             'indexing' => 'array|in:null,1,2,3',
             'startDate' => 'date',
-            'endDate' => 'date',
+            'endDate' => 'date|after_or_equal:startDate',
             'userIds' => 'array|exists:App\User,id',
             'h5pLibraries' => 'array|exists:App\Models\ActivityItem,h5pLib',
             'subjectIds' => 'array|exists:App\Models\Activity,subject_id',
