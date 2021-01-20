@@ -48,7 +48,8 @@ class OutcomeController extends Controller
                     $contextActivities = $statement->getContext()->getContextActivities();
                     $other = $contextActivities->getOther();
                     if (!empty($other)) {
-                        $attemptIRI = end($other)->getId();
+                        // Get the attempt IRI, which is the first index of the array.
+                        $attemptIRI = current($other)->getId();
                     }
                 }
                 if (!empty($attemptIRI)) {
