@@ -48,7 +48,8 @@ class OutcomeController extends Controller
                     $contextActivities = $statement->getContext()->getContextActivities();
                     $other = $contextActivities->getOther();
                     if (!empty($other)) {
-                        $attemptIRI = end($other)->getId();
+                        // Get the attempt IRI, which is the first index of the array.
+                        $attemptIRI = current($other)->getId();
                     }
                 }
                 if (!empty($attemptIRI)) {
@@ -63,6 +64,18 @@ class OutcomeController extends Controller
                         }
                     }
                     
+                    // Find any interacted/attempted interactions as well
+                    $attempted = $service->getAttemptedStatements($data);
+                    if ($attempted) {
+                        foreach ($attempted as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $summary = $service->getStatementSummary($record);
+                                $response[] = new StudentResultResource($summary);
+                                $answeredIds[] = $key;
+                            }
+                        }
+                    }
+                   
                     // Find any skipped interactions as well
                     $skipped = $service->getSkippedStatements($data);
                     if ($skipped) {
@@ -70,6 +83,7 @@ class OutcomeController extends Controller
                             if (!in_array($key, $answeredIds)) {
                                 $summary = $service->getStatementSummary($record);
                                 $response[] = new StudentResultResource($summary);
+                                $answeredIds[] = $key;
                             }
                         }
                     }
@@ -78,9 +92,24 @@ class OutcomeController extends Controller
                     usort($response, function($a, $b) {
                         return $a['ending-point'] <=> $b['ending-point'];
                     });
+
+                    // Get Non-scoring Interactions
+                    $nonScoringResponse = [];
+                    $interacted = $service->getInteractedResultStatements($data);
+
+                    if ($interacted) {
+                        foreach ($interacted as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $summary = $service->getNonScoringStatementSummary($record);
+                                $nonScoringResponse[] = new StudentResultResource($summary);
+                                $answeredIds[] = $key;
+                            }
+                        }
+                    }
                     
                     return response([
                         'summary' => $response,
+                        'non-scoring' => $nonScoringResponse
                     ], 200);
                 } else {
                     return response([

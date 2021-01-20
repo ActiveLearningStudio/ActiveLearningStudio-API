@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Activity;
 
+use App\User;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
@@ -353,6 +355,66 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 }
             }
         }
+    }
+
+    /**
+     * Gets activities for LTI external tool search from CurrikiGo
+     * @param array $data
+     * @return array
+     */
+    public function ltiSearchForm($request)
+    {
+        // Fetch Elastic Search results
+        $data = [
+            'query' => $request->input('query', ''),
+            'from' => $request->input('from', 0),
+            'size' => 11,
+            'model' => 'activities',
+            'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
+        ];
+
+        // Check LMS settings for authorization when searching private projects
+        if (empty($data['indexing'])) {
+            // There can be many LmsSettings for different users sharing the same
+            // lti_client_id. Need to find the user first
+            $user = User::where('email', $request->input('userEmail'))->first();
+            $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (empty($user) || empty($lmsSetting)) {
+                return [];
+            } else {
+                $data['userIds'] = [$lmsSetting->user_id];
+            }
+        }
+
+        // If a an author is provided, limit to projects from that user only
+        if ($request->has('author') && $request->input('private', 0) !== '1') {
+            $authors = User::where('email', 'like', '%' . $request->input('author') . '%')
+                ->orWhere('name', 'like', '%' . $request->input('author') . '%')
+                ->orWhere('first_name', 'like', '%' . $request->input('author') . '%')
+                ->orWhere('last_name', 'like', '%' . $request->input('author') . '%')
+                ->pluck('id');
+
+            if ($authors->isEmpty()) {
+                return [];
+            }
+            $data['userIds'] = $authors->toArray();
+        }
+
+        $data['subjectIds'] = $request->has('subject') ? [$request->input('subject')] : [];
+        $data['educationLevelIds'] = $request->has('level') ? [$request->input('level')] : [];
+
+        if ($request->has('start')) {
+            $data['startDate'] = $request->input('start', '');
+        }
+
+        if ($request->has('end')) {
+            $data['endDate'] = $request->input('end', '');
+        }
+
+        return $this->advanceSearchForm($data);
     }
 
     /**

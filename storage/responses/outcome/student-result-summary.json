@@ -8,7 +8,7 @@
             },
             "duration": "00:13",
             "ending-point": "00:02",
-            "verb": "answered",
+            "verb": "answered"
         },
         {
             "name": "Single Choice Set",
@@ -18,7 +18,7 @@
             },
             "duration": "00:32",
             "ending-point": "00:03",
-            "verb": "answered",
+            "verb": "answered"
         },
         {
             "name": "2nd Single Choice Set",
@@ -28,7 +28,7 @@
             },
             "duration": "00:18",
             "ending-point": "00:03",
-            "verb": "answered",
+            "verb": "answered"
         },
         {
             "name": "Multiple Choice",
@@ -38,7 +38,7 @@
             },
             "duration": "00:11",
             "ending-point": "00:04",
-            "verb": "answered",
+            "verb": "answered"
         },
         {
             "name": "True/False Question",
@@ -48,7 +48,7 @@
             },
             "duration": "00:15",
             "ending-point": "00:05",
-            "verb": "answered",
+            "verb": "answered"
         },
         {
             "name": "2nd True/False Question",
@@ -58,7 +58,7 @@
             },
             "duration": "00:14",
             "ending-point": "00:05",
-            "verb": "answered",
+            "verb": "answered"
         },
         {
             "name": "Summary",
@@ -68,7 +68,49 @@
             },
             "duration": "00:03",
             "ending-point": "00:06",
-            "verb": "answered",
+            "verb": "answered"
+        }
+    ],
+    "non-scoring": [
+        {
+          "correct-pattern": null,
+          "interaction": "choice",
+          "name": "",
+          "description": "Were there some dominant emotions amongst the four emotions listed in the above question? (Please select all that apply)",
+          "scorable": false,
+          "choices": [
+            "Introspective",
+            "Encouraged",
+            "Joyful",
+            "Secure",
+            "No dominant components. I felt a combination of these emotions"
+          ],
+          "response": [
+            "Introspective",
+            "Encouraged",
+            "Secure"
+          ],
+          "raw-response": "0[,]1[,]3",
+          "verb": "interacted"
+        },
+        {
+          "correct-pattern": null,
+          "interaction": "choice",
+          "name": "",
+          "description": "How introspective \u2013 encouraged \u2013 joyful - secure were you while completing the task? (Consider your overall response as a combination of these emotions)\u00a0*",
+          "scorable": false,
+          "choices": [
+            "Very highly",
+            "Highly",
+            "Moderately",
+            "A little",
+            "Not at all"
+          ],
+          "response": [
+            "Highly"
+          ],
+          "raw-response": "1",
+          "verb": "interacted"
         }
     ]
 }
