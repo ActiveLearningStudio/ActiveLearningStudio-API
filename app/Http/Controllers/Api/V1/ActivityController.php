@@ -50,6 +50,8 @@ class ActivityController extends Controller
     {
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
+
+        $this->authorizeResource(Activity::class, 'activity');
     }
 
     /**
@@ -57,14 +59,20 @@ class ActivityController extends Controller
      *
      * Get a list of activities
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
      * @responseFile responses/activity/activities.json
      *
+     * @param Playlist $playlist
      * @return Response
+     * @throws AuthorizationException
      */
-    public function index()
+    public function index(Playlist $playlist)
     {
+        $this->authorize('view', $playlist->project);
+
         return response([
-            'activities' => ActivityResource::collection($this->activityRepository->all()),
+            'activities' => ActivityResource::collection($playlist->activities),
         ], 200);
     }
 
@@ -112,10 +120,10 @@ class ActivityController extends Controller
      *
      * Create a new activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
-     * @bodyParam playlist_id int The Id of a playlist Example: 1
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam h5p_content_id int The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
@@ -131,17 +139,21 @@ class ActivityController extends Controller
      * }
      *
      * @param ActivityRequest $request
+     * @param Playlist $playlist
      * @return Response
+     * @throws AuthorizationException
      */
-    public function store(ActivityRequest $request)
+    public function store(ActivityRequest $request, Playlist $playlist)
     {
+        $this->authorize('view', $playlist->project);
+
         $data = $request->validated();
 
-        $data['order'] = $this->activityRepository->getOrder($data['playlist_id']) + 1;
-        $activity = $this->activityRepository->create($data);
+        $data['order'] = $this->activityRepository->getOrder($playlist->id) + 1;
+        $activity = $playlist->activities()->create($data);
 
         if ($activity) {
-            $updated_playlist = new PlaylistResource($this->playlistRepository->find($data['playlist_id']));
+            $updated_playlist = new PlaylistResource($this->playlistRepository->find($playlist->id));
             event(new PlaylistUpdatedEvent($updated_playlist->project, $updated_playlist));
 
             return response([
@@ -159,15 +171,29 @@ class ActivityController extends Controller
      *
      * Get the specified activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity.json
      *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid playlist or activity id."
+     *   ]
+     * }
+     *
+     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function show(Activity $activity)
+    public function show(Playlist $playlist, Activity $activity)
     {
+        if ($activity->playlist_id !== $playlist->id) {
+            return response([
+                'errors' => ['Invalid playlist or activity id.'],
+            ], 400);
+        }
+
         return response([
             'activity' => new ActivityResource($activity),
         ], 200);

@@ -77,16 +77,16 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
 
-        Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
+        Route::post('playlists.activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
-        Route::get('activities/{activity}/share', 'ActivityController@share');
-        Route::get('activities/update-order', 'ActivityController@populateOrderNumber');
-        Route::get('activities/{activity}/remove-share', 'ActivityController@removeShare');
-        Route::get('activities/{activity}/detail', 'ActivityController@detail');
-        Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
-        Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
-        Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
-        Route::apiResource('activities', 'ActivityController');
+        Route::get('playlists.activities/{activity}/share', 'ActivityController@share');
+        Route::get('playlists.activities/update-order', 'ActivityController@populateOrderNumber');
+        Route::get('playlists.activities/{activity}/remove-share', 'ActivityController@removeShare');
+        Route::get('playlists.activities/{activity}/detail', 'ActivityController@detail');
+        Route::get('playlists.activities/{activity}/h5p', 'ActivityController@h5p');
+        Route::get('playlists.activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
+        Route::get('playlists.activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
+        Route::apiResource('playlists.activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
