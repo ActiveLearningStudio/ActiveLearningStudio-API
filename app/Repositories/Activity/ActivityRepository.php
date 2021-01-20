@@ -397,7 +397,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 ->orWhere('last_name', 'like', '%'.$request->input('author').'%')
                 ->pluck('id');
 
-            if (empty($authors)) {
+            if ($authors->isEmpty()) {
                 return [];
             }
             $data['userIds'] = $authors->toArray();
