@@ -39,18 +39,17 @@ class OutcomeController extends Controller
         $response = [];
         try {
             $service = new LearnerRecordStoreService();
-            $completed = $service->getCompletedStatements($data, 1);
-            if (count($completed) > 0) {
+            $submitted = $service->getSubmittedCurrikiStatements($data, 1);
+            
+            if (count($submitted) > 0) {
                 // Get 'other' activity IRI from the statement
                 // that now has the unique context of the attempt.
                 $attemptIRI = '';
-                foreach ($completed as $statement) {
+                foreach ($submitted as $statement) {
                     $contextActivities = $statement->getContext()->getContextActivities();
                     $other = $contextActivities->getOther();
-                    if (!empty($other)) {
-                        // Get the attempt IRI, which is the first index of the array.
-                        $attemptIRI = current($other)->getId();
-                    }
+                    // Get the attempt IRI
+                    $attemptIRI = $service->findAttemptIRI($other);
                 }
                 if (!empty($attemptIRI)) {
                     $data['activity'] = $attemptIRI;
