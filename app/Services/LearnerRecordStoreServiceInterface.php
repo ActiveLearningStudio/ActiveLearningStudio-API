@@ -193,4 +193,13 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function getNonScoringStatementSummary(Statement $statement);
 
+    /**
+     * Find grouping info from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return array
+     */
+    public function findGroupingInfo(array $other);
+
 }

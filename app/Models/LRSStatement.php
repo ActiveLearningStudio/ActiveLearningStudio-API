@@ -20,12 +20,13 @@ class LRSStatement extends Model
      */
     protected $fillable = [
         'statement_id',
+        'statement_uuid',
         'actor_id',
         'class_id',
         'project_id',
         'playlist_id',
-        'page_completion',
-        'assignment_submission',
+        'page_completed',
+        'assignment_submitted',
         'object_id',
         'duration',
         'datetime',

@@ -16,7 +16,8 @@ class CreateLrsStatementsData extends Migration
         Schema::create('lrs_statements_data', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('statement_id')->index();
-            $table->unsignedBigInteger('actor_id')->index();
+            $table->uuid('statement_uuid')->index();
+            $table->string('actor_id')->index();
             $table->string('actor_homepage', 150);
             $table->unsignedBigInteger('class_id')->index(); // or course id for canvas
             $table->unsignedBigInteger('project_id')->index(); // from curriki
@@ -29,14 +30,14 @@ class CreateLrsStatementsData extends Migration
             $table->text('question')->nullable();
             $table->text('options')->nullable();
             $table->text('answer')->nullable();
-            $table->boolean('page_completion')->nullable()->index();
-            $table->boolean('assignment_submission')->nullable()->index();
+            $table->boolean('page_completed')->nullable()->index();
+            $table->boolean('assignment_submitted')->nullable()->index();
             $table->string('verb', 30)->index();
             $table->string('platform', 45)->nullable()->index();
-            $table->unsignedBigInteger('object_id')->index();
-            $table->string('object_name', 150)->index();
+            $table->string('object_id')->index(); // target id (iri)
+            $table->string('object_name', 150)->index(); // target name
             $table->string('activity_category', 45)->nullable();
-            $table->float('duration', 8, 2)->nullable();
+            $table->float('duration', 8, 2)->nullable(); // duration of the result
             $table->string('score', 11)->nullable(); //scaled
             $table->timestamp('datetime'); //interaction datetime.
             $table->timestamps();

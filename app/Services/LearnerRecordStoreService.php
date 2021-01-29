@@ -539,4 +539,47 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         return $allowed;
     }
 
+    /**
+     * Find grouping info from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return array
+     */
+    public function findGroupingInfo(array $other)
+    {
+        $info = [
+            'activity' => '',
+            'class' => '',
+            'class_type' => '',
+            'submission' => '',
+            'attempt' => ''
+        ];
+        if (!empty($other)) {
+            $attempt_pattern = "/\/activity\/(\d*)\/submission\/(.*)\/(\d*)/";
+            $class_pattern = "/\/(gclass|lti)\/(\d*)/";
+            $matches = [];
+            $class_matches = [];
+            // Other regexes saved for later.
+            // "/\/activity\/\d*\/submission\/\w*$/",
+            // "/\/(gclass|lti)\/\d*/",
+            foreach ($other as $i) {
+                if (preg_match($attempt_pattern, $i->getId(), $matches)) {
+                    $info['activity'] = $matches[1];
+                    $info['submission'] = $matches[2];
+                    $info['attempt'] = $matches[3];
+                    break;
+                }
+            }
+            foreach ($other as $i) {
+                if (preg_match($class_pattern, $i->getId(), $class_matches)) {
+                    $info['class_type'] = $class_matches[1];
+                    $info['class'] = $class_matches[2];
+                    break;
+                }
+            }
+        }
+        return $info;
+    }
+
 }

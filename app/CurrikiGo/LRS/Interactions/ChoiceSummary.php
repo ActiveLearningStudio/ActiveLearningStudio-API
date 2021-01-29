@@ -37,6 +37,7 @@ class ChoiceSummary extends InteractionSummary
         $summary['scorable'] = $this->isScorable();
         if ($result) {
             $summary['choices'] = $this->getChoicesListArray();
+            $summary['correct-pattern'] = $this->getComponentListArray();
             $summary['response'] = $this->getDescriptiveResponses();
             $summary['raw-response'] = $this->getRawResponse();
             // Get Interaction type
@@ -111,5 +112,22 @@ class ChoiceSummary extends InteractionSummary
             $return[$values['id']] = $values['description'][$languageKey];
         }
         return $return;
+    }
+
+    /**
+     * Get compnent list array
+     * It contains the correct response pattern, which shows the correct answers or sequence.
+     * @return string
+     */
+    public function getComponentListArray()
+    {
+        // student responses.
+        $responsePattern = $this->getCorrectResponsesPattern();
+        // Check if it's a scorable type
+        if ($this->isScorable()) {
+            // it's a good possibility that the responses are concatenated by [,]
+            return explode('[,]', $responsePattern);
+        }
+        return $responsePattern;
     }
 }
