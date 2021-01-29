@@ -42,6 +42,17 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Build Statement from JSON
+     *
+     * @param string $statement A stringified xAPI statment
+     * @return \Statement
+     */
+    public function buildStatementfromJSON($statement)
+    {
+        return Statement::fromJSON($statement);
+    }
+
+    /**
      * Save Statement
      *
      * @param string $statement A stringified xAPI statment
@@ -49,7 +60,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      */
     public function saveStatement($statement)
     {
-        $statement = Statement::fromJSON($statement);
+        $statement = $this->buildStatementfromJSON($statement);
         return $this->service->saveStatement($statement);
     }
 

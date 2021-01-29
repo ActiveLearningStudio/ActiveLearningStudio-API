@@ -114,6 +114,21 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'lrs_pgsql' => [
+            'driver' => 'pgsql',
+            'url' => env('LRS_DATABASE_URL'),
+            'host' => env('LRS_DB_HOST', '127.0.0.1'),
+            'port' => env('LRS_DB_PORT', '5432'),
+            'database' => env('LRS_DB_DATABASE', 'forge'),
+            'username' => env('LRS_DB_USERNAME', 'forge'),
+            'password' => env('LRS_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
     ],
 
     /*

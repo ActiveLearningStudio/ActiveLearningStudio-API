@@ -36,6 +36,8 @@ use App\Repositories\GcClasswork\GcClassworkRepository;
 use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepository;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
+use App\Repositories\LRSStatementsData\LRSStatementsDataRepository;
+use App\Repositories\LRSStatementsData\LRSStatementsDataRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -64,6 +66,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserLmsSettingsRepositoryInterface::class, UserLmsSettingsRepository::class);
         $this->app->bind(GcClassworkRepositoryInterface::class, GcClassworkRepository::class);
         $this->app->bind(InvitedTeamUserRepositoryInterface::class, InvitedTeamUserRepository::class);
+        $this->app->bind(LRSStatementsDataRepositoryInterface::class, LRSStatementsDataRepository::class);
     }
 
     /**
