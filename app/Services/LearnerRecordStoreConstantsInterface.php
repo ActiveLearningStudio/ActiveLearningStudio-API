@@ -55,4 +55,11 @@ interface LearnerRecordStoreConstantsInterface
      * @var string
      */
     const INTERACTED_VERB_ID = 'http://adlnet.gov/expapi/verbs/interacted';
+
+    /**
+     * Submitted-Curriki verb id for XAPI statements
+     * 
+     * @var string
+     */
+    const SUBMITTED_CURRIKI_VERB_ID = 'http://adlnet.gov/expapi/verbs/submitted-curriki';
 }
