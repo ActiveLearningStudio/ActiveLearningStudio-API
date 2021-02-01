@@ -7,9 +7,9 @@ use App\CurrikiGo\LRS\InteractionSummary;
 use \TinCan\Statement;
 
 /**
- * Fill-in Interaction summary class
+ * Matching Interaction summary class
  */
-class FillInSummary extends InteractionSummary// implements InteractionSummaryInterface
+class MatchingSummary extends InteractionSummary// implements InteractionSummaryInterface
 {
 
     /**
@@ -73,14 +73,12 @@ class FillInSummary extends InteractionSummary// implements InteractionSummaryIn
      */
     public function getFormattedResponse()
     {
-        // student responses.
+        // student response
+        // A list of matching pairs, where each pair consists of a source item id followed by a target item id. 
+        // Items can appear in multiple (or zero) pairs. 
+        // Items within a pair are delimited by [.]. Pairs are delimited by [,].
         $response = $this->getRawResponse();
-        // Check if it's a scorable type
-        if ($this->isScorable()) {
-            // it's a good possibility that the responses are concatenated by [,]
-            return explode('[,]', $this->getRawResponse());
-        }
-        return $response;
+        return $this->formatMatchingResponse($response);
     }
 
     /**
@@ -95,7 +93,7 @@ class FillInSummary extends InteractionSummary// implements InteractionSummaryIn
         $return = [];
         // Check if it's a scorable type
         foreach ($responsePattern as $pattern) {
-            $return[] = str_replace('[,]', ' | ', $pattern);
+            $return[] = $this->formatMatchingResponse($responsePattern);
         }
         return $return;
     }
@@ -107,8 +105,80 @@ class FillInSummary extends InteractionSummary// implements InteractionSummaryIn
      */
     public function getChoicesListArray()
     {
-        // This  Interaction type doesn't have a separate component list.
-        // it uses correct response pattern instead.
-        return $this->getComponentListArray();
+        $source = $this->prepareMatchingChoiceList($this->getRawSource());
+        $target = $this->prepareMatchingChoiceList($this->getRawTarget());
+        $choices[] = '{source} ' . implode(" | ", $source);
+        $choices[] = '{target} ' . implode(" | ", $target);
+        return $choices;
+    }
+
+    /**
+     * Get raw quiz choices
+     *
+     * @return array
+     */
+    private function getRawSource()
+    {
+        $definition = $this->getDefinition();
+        return $definition->getSource();
+    }
+
+    /**
+     * Get raw quiz choices
+     *
+     * @return array
+     */
+    private function getRawTarget()
+    {
+        $definition = $this->getDefinition();
+        return $definition->getTarget();
+    }
+
+    /**
+     * Prepare choice list in an array.
+     * 
+     * @param array $list
+     * @param string $languageKey Defaults to en-US
+     * @return array
+     */
+    private function prepareMatchingChoiceList($list, $languageKey = 'en-US')
+    {
+        if (!is_array($list)) {
+            return $list;
+        }
+        $return = [];
+        foreach ($list as $values) {
+            $return[$values['id']] = trim($values['description'][$languageKey]);
+        }
+        return $return;
+    }
+
+    /**
+     * Get formatted Match pattern response
+     *
+     * @return string
+     */
+    private function formatMatchingResponse($response)
+    {
+        // student response
+        // A list of matching pairs, where each pair consists of a source item id followed by a target item id. 
+        // Items can appear in multiple (or zero) pairs. 
+        // Items within a pair are delimited by [.]. Pairs are delimited by [,].
+        $answer = [];
+        $source = $this->prepareMatchingChoiceList($this->getRawSource());
+        $target = $this->prepareMatchingChoiceList($this->getRawTarget());
+        // Check if it's a scorable type
+        if ($this->isScorable()) {
+            $pairs = explode('[,]', $this->getRawResponse()); 
+            // for response, target is listed first and source as second.
+            if (!empty($pairs)) {
+                foreach($pairs as $pair) {
+                    $items = explode('[.]', $pair);
+                    $answer[] = $source[$items[0]] . ' | ' . $target[$items[1]];
+                }
+                return $answer;
+            }
+        }
+        return $response;
     }
 }

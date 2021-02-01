@@ -63,4 +63,11 @@ interface LearnerRecordStoreConstantsInterface
      */
     const SUBMITTED_CURRIKI_VERB_ID = 'http://adlnet.gov/expapi/verbs/submitted-curriki';
 
+    /**
+     * Assignment Submitted Verb Name
+     * 
+     * @var string
+     */
+    const SUBMITTED_VERB_NAME = 'submitted-curriki';
+
 }

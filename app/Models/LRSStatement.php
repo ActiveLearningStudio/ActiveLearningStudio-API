@@ -38,11 +38,27 @@ class LRSStatement extends Model
         'verb',
         'platform',
         'project_name',
-        'score',
+        'score_scaled',
+        'score_min',
+        'score_max',
+        'score_raw',
         'playlist_name',
         'assignment_id',
         'assignment_name',
         'page',
         'question'
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'score_scaled' => null,
+        'score_min' => null,
+        'score_max' => null,
+        'score_raw' => null,
+        'page' => null
     ];
 }

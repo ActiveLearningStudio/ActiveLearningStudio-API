@@ -143,5 +143,17 @@ abstract class InteractionSummary
      * Will be implemented by sub-classes
      */
     abstract public function summary();
+
+    /**
+     * Abstract method for the interaction choices
+     * Will be implemented by sub-classes
+     */
+    abstract public function getChoicesListArray();
+
+    /**
+     * Abstract method for compnent list array
+     * Will be implemented by sub-classes
+     */
+    abstract public function getComponentListArray();
     
 }

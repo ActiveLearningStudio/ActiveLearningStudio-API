@@ -21,7 +21,7 @@ class ExtractXAPIJSONController extends Controller
                 ->offset($offset)
                 ->limit($limit)
                 ->where('voided', false)
-                ->where('id', 738) //747
+                ->where('id', 750) //747 //738
                 ->orderby('id', 'DESC')
                 ->get();
 
@@ -103,7 +103,7 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['actor_id'] = $actor->getAccount()->getName();
                     $insertData['actor_homepage'] = $actor->getAccount()->getHomePage();
                 }
-
+                
                 $insertData['statement_id'] = $row->id;
                 $insertData['statement_uuid'] = $statement->getId();
                 $insertData['class_id'] = $groupingInfo['class'];
@@ -112,7 +112,7 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['object_id'] = $target->getId();
                 $insertData['project_id'] = $projectId;
                 $insertData['playlist_id'] = $playlistId;
-                $insertData['assignment_submitted'] = ($verb === LearnerRecordStoreService::SUBMITTED_CURRIKI_VERB_ID ? TRUE : FALSE);
+                $insertData['assignment_submitted'] = ($verb === LearnerRecordStoreService::SUBMITTED_VERB_NAME ? TRUE : FALSE);
                 
                 $insertData['activity_category'] = $h5pInteraction;
                 $insertData['verb'] = $verb;
@@ -128,24 +128,29 @@ class ExtractXAPIJSONController extends Controller
                 $interaction = $interactionFactory->initInteraction($statement);
                 if ($interaction) {
                     $interactionSummary = $interaction->summary();
+                    print_r($interactionSummary);
                     
                     // Pull this from interaction...
                     $insertData['question'] = $interactionSummary['description'];
-                    $insertData['duration'] = ($interactionSummary['duration'] ?? null);
+                    $insertData['duration'] = (!empty($interactionSummary['raw-duration']) ? $interactionSummary['raw-duration'] : null);
                     $insertData['options'] = (isset($interactionSummary['choices']) ? implode(", ", $interactionSummary['choices']) : null);
                     if (isset($interactionSummary['response']) && !empty($interactionSummary['response'])) { 
                         $insertData['answer'] = (is_array($interactionSummary['response']) ? implode(", ", $interactionSummary['response']) : $interactionSummary['response']);
                     }
-                    $insertData['score'] = $interactionSummary['scorable'] ? $interactionSummary['score']['scaled'] : null;
+                    if ($interactionSummary['scorable'] || (isset($interactionSummary['score']) && $interactionSummary['score']['max'] > 0)) {
+                        $insertData['score_scaled'] = $interactionSummary['score']['scaled'];
+                        $insertData['score_min'] = $interactionSummary['score']['min'];
+                        $insertData['score_max'] = $interactionSummary['score']['max'];
+                        $insertData['score_raw'] = $interactionSummary['score']['raw'];
+                    }
                 }
                 // need to determine column layout interaction on 'completed'.
-                $insertData['page'] = 0;
+                $insertData['page'] = null;
                 $insertData['page_completed'] = false;
                 
-                
-                print_r($statement);
+                //print_r($statement);
                 print_r($insertData);
-                exit;
+                //exit;
                 $inserted = $lrsStatementsRepository->create($insertData);
                 if ($inserted) {
                     echo 'Inserted';

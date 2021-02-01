@@ -38,8 +38,27 @@ class ChoiceSummary extends InteractionSummary
         if ($result) {
             $summary['choices'] = $this->getChoicesListArray();
             $summary['correct-pattern'] = $this->getComponentListArray();
-            $summary['response'] = $this->getDescriptiveResponses();
+            $summary['response'] = $this->getFormattedResponse();
             $summary['raw-response'] = $this->getRawResponse();
+            if ($result->getScore()) {
+                $summary['score'] = [
+                    'raw' => $result->getScore()->getRaw(),
+                    'min' => $result->getScore()->getMin(),
+                    'max' => $result->getScore()->getMax(),
+                    'scaled' => $result->getScore()->getScaled(),
+                ];
+                $summary['duration'] = xAPIFormatDuration($result->getDuration());
+                $summary['raw-duration'] = xAPIFormatDuration($result->getDuration(), false);
+            } else {
+                $summary['score'] = [
+                    'raw' => 0,
+                    'max' => 0,
+                    'min' => 0,
+                    'scaled' => 0,
+                ];
+                $summary['duration'] = '00:00';
+                $summary['raw-duration'] = 0;
+            }
             // Get Interaction type
         }
         // Get Verb
@@ -62,7 +81,7 @@ class ChoiceSummary extends InteractionSummary
      *
      * @return array
      */
-    public function getDescriptiveResponses()
+    public function getFormattedResponse()
     {
         // student responses.
         $responses = $this->getResponses();
@@ -115,7 +134,7 @@ class ChoiceSummary extends InteractionSummary
     }
 
     /**
-     * Get compnent list array
+     * Get component list array
      * It contains the correct response pattern, which shows the correct answers or sequence.
      * @return string
      */
@@ -123,9 +142,16 @@ class ChoiceSummary extends InteractionSummary
     {
         // student responses.
         $responsePattern = $this->getCorrectResponsesPattern();
+        
         // Check if it's a scorable type
         if ($this->isScorable()) {
             // it's a good possibility that the responses are concatenated by [,]
+            if (is_array($responsePattern)) {
+                $responsePattern = array_map(function ($arr) {
+                    return explode('[,]', $arr);
+                }, $responsePattern);
+                return $responsePattern;
+            } 
             return explode('[,]', $responsePattern);
         }
         return $responsePattern;

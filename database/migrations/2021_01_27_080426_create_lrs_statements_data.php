@@ -19,7 +19,7 @@ class CreateLrsStatementsData extends Migration
             $table->uuid('statement_uuid')->index();
             $table->string('actor_id')->index();
             $table->string('actor_homepage', 150);
-            $table->unsignedBigInteger('class_id')->index(); // or course id for canvas
+            $table->unsignedBigInteger('class_id')->nullable()->index(); // or course id for canvas
             $table->unsignedBigInteger('project_id')->index(); // from curriki
             $table->string('project_name'); // from curriki
             $table->unsignedBigInteger('playlist_id')->index(); // from curriki
@@ -37,8 +37,11 @@ class CreateLrsStatementsData extends Migration
             $table->string('object_id')->index(); // target id (iri)
             $table->string('object_name', 150)->index(); // target name
             $table->string('activity_category', 45)->nullable();
-            $table->float('duration', 8, 2)->nullable(); // duration of the result
-            $table->string('score', 11)->nullable(); //scaled
+            $table->float('duration', 11, 2)->nullable(); // duration of the result
+            $table->float('score_scaled', 1, 3)->nullable(); //scaled
+            $table->float('score_min', 11, 2)->nullable(); 
+            $table->float('score_max', 11, 2)->nullable();
+            $table->float('score_raw', 11, 2)->nullable();
             $table->timestamp('datetime'); //interaction datetime.
             $table->timestamps();
         });

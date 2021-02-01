@@ -7,9 +7,9 @@ use App\CurrikiGo\LRS\InteractionSummary;
 use \TinCan\Statement;
 
 /**
- * Fill-in Interaction summary class
+ * True-False Interaction summary class
  */
-class FillInSummary extends InteractionSummary// implements InteractionSummaryInterface
+class TrueFalseSummary extends InteractionSummary// implements InteractionSummaryInterface
 {
 
     /**
@@ -73,14 +73,8 @@ class FillInSummary extends InteractionSummary// implements InteractionSummaryIn
      */
     public function getFormattedResponse()
     {
-        // student responses.
-        $response = $this->getRawResponse();
-        // Check if it's a scorable type
-        if ($this->isScorable()) {
-            // it's a good possibility that the responses are concatenated by [,]
-            return explode('[,]', $this->getRawResponse());
-        }
-        return $response;
+        // student response: Either true or false
+        return $this->getRawResponse();
     }
 
     /**
@@ -91,13 +85,7 @@ class FillInSummary extends InteractionSummary// implements InteractionSummaryIn
     public function getComponentListArray()
     {
         // response pattern is an array of strings.
-        $responsePattern = $this->getCorrectResponsesPattern();
-        $return = [];
-        // Check if it's a scorable type
-        foreach ($responsePattern as $pattern) {
-            $return[] = str_replace('[,]', ' | ', $pattern);
-        }
-        return $return;
+        return $this->getCorrectResponsesPattern();
     }
 
     /**
@@ -108,7 +96,7 @@ class FillInSummary extends InteractionSummary// implements InteractionSummaryIn
     public function getChoicesListArray()
     {
         // This  Interaction type doesn't have a separate component list.
-        // it uses correct response pattern instead.
-        return $this->getComponentListArray();
+        // It has a fixed choice list.
+        return ['true', 'false'];
     }
 }
