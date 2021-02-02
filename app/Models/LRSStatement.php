@@ -59,6 +59,7 @@ class LRSStatement extends Model
         'score_min' => null,
         'score_max' => null,
         'score_raw' => null,
-        'page' => null
+        'page' => null,
+        'page_completed' => false
     ];
 }

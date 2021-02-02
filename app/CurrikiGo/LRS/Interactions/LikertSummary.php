@@ -7,9 +7,9 @@ use App\CurrikiGo\LRS\InteractionSummary;
 use \TinCan\Statement;
 
 /**
- * Choice Interaction summary class
+ * Likert Interaction summary class
  */
-class ChoiceSummary extends InteractionSummary
+class LikertSummary extends InteractionSummary
 {
     /**
      * Initialize
@@ -29,7 +29,6 @@ class ChoiceSummary extends InteractionSummary
     public function summary()
     {
         $definition = $this->getDefinition();
-        // $summary['correct-pattern'] = $this->getCorrectResponsesPattern();
         $summary['interaction'] = $this->getInteractionType();
         $result = $this->getResult();
         $summary['name'] = $this->getName();
@@ -67,44 +66,27 @@ class ChoiceSummary extends InteractionSummary
     }
 
     /**
-     * Get student response array
-     *
-     * @return array
-     */
-    public function getResponses()
-    {
-        if (!empty($this->getResult())) {
-            return explode('[,]', $this->getResult()->getResponse());
-        }
-        return [];
-        
-    }
-
-    /**
      * Get descriptive student responses
      *
      * @return array
      */
     public function getFormattedResponse()
     {
-        // student responses.
-        $responses = $this->getResponses();
+        // student response.
+        $response = $this->getRawResponse();
         $choices = $this->getChoicesListArray();
-        $answers = [];
-        foreach ($responses as $value) {
-            $answers[] = $choices[$value];
-        }
-        return $answers;
+        
+        return (array_key_exists($response, $choices) ? $choices[$response] : '');
     }
 
     /**
-     * Get quiz choices array
+     * Get quiz scale array
      *
      * @return array
      */
     public function getChoicesListArray()
     {
-        return $this->prepareChoiceList($this->getRawChoices());
+        return $this->prepareScaleList($this->getRawScale());
     }
 
     /**
@@ -112,20 +94,20 @@ class ChoiceSummary extends InteractionSummary
      *
      * @return array
      */
-    private function getRawChoices()
+    private function getRawScale()
     {
         $definition = $this->getDefinition();
-        return $definition->getChoices();
+        return $definition->getScale();
     }
     
     /**
-     * Prepare choice list in an array.
+     * Prepare scale list in an array.
      * 
      * @param array $list
      * @param string $languageKey Defaults to en-US
      * @return array
      */
-    private function prepareChoiceList($list, $languageKey = 'en-US')
+    private function prepareScaleList($list, $languageKey = 'en-US')
     {
         if (!is_array($list)) {
             return $list;
@@ -144,20 +126,6 @@ class ChoiceSummary extends InteractionSummary
      */
     public function getComponentListArray()
     {
-        // student responses.
-        $responsePattern = $this->getCorrectResponsesPattern();
-        
-        // Check if it's a scorable type
-        if ($this->isScorable()) {
-            // it's a good possibility that the responses are concatenated by [,]
-            if (is_array($responsePattern)) {
-                $responsePattern = array_map(function ($arr) {
-                    return explode('[,]', $arr);
-                }, $responsePattern);
-                return $responsePattern;
-            } 
-            return explode('[,]', $responsePattern);
-        }
-        return $responsePattern;
+        return $this->getCorrectResponsesPattern();
     }
 }

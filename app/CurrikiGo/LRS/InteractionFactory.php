@@ -7,6 +7,7 @@ use App\CurrikiGo\LRS\Interactions\ChoiceSummary;
 use App\CurrikiGo\LRS\Interactions\FillInSummary;
 use App\CurrikiGo\LRS\Interactions\TrueFalseSummary;
 use App\CurrikiGo\LRS\Interactions\MatchingSummary;
+use App\CurrikiGo\LRS\Interactions\LikertSummary;
 use App\CurrikiGo\LRS\Interactions\OtherSummary;
 
 /**
@@ -36,6 +37,8 @@ class InteractionFactory
                 return new TrueFalseSummary($statement);
             case 'matching':
                 return new MatchingSummary($statement);
+            case 'likert':
+                return new LikertSummary($statement);
             default:
                 // When there is no interaction type
                 return new OtherSummary($statement);

@@ -21,7 +21,8 @@ class ExtractXAPIJSONController extends Controller
                 ->offset($offset)
                 ->limit($limit)
                 ->where('voided', false)
-                ->where('id', 750) //747 //738
+                ->where('id', '<=', 845) //747 //738  //840 //794
+                //->where('id', '<', )
                 ->orderby('id', 'DESC')
                 ->get();
 
@@ -30,7 +31,7 @@ class ExtractXAPIJSONController extends Controller
             foreach ($xapiStatements as $row) {
                 $insertData = [];
                 echo '<pre>';
-                print_r($row);
+                //print_r($row);
               
                 $statement = $service->buildStatementfromJSON($row->data);
                 $context = $statement->getContext();
@@ -47,12 +48,14 @@ class ExtractXAPIJSONController extends Controller
                 }
                 
                 $nameOfActivity = 'Unknown Quiz set';
+                $defaultActivityName = true;
                 $definition = $target->getDefinition();
                 // In some cases, we do not have a 'name' property for the object.
                 // So, we've added an additional check here.
                 // @todo - the LRS statements generated need to have this property
                 if (!$definition->getName()->isEmpty()) {
                     $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
+                    $defaultActivityName = false;
                 }
                 $result = $statement->getResult();
                 /*$summary['name'] = $nameOfActivity;
@@ -127,7 +130,9 @@ class ExtractXAPIJSONController extends Controller
                 $interactionFactory = new InteractionFactory();
                 $interaction = $interactionFactory->initInteraction($statement);
                 if ($interaction) {
+                    //print_r($interaction);
                     $interactionSummary = $interaction->summary();
+                    echo 'Interaction Summary:';
                     print_r($interactionSummary);
                     
                     // Pull this from interaction...
@@ -144,24 +149,34 @@ class ExtractXAPIJSONController extends Controller
                         $insertData['score_raw'] = $interactionSummary['score']['raw'];
                     }
                 }
+                // Overriding object name, when we have Questionnaire H5P, and object name is not available.
+                if ($defaultActivityName && ($h5pInteraction 
+                && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Questionnaire/', $h5pInteraction, $matches))) {
+                    $insertData['object_name'] = $matches[0];
+                }
                 // need to determine column layout interaction on 'completed'.
-                $insertData['page'] = null;
-                $insertData['page_completed'] = false;
+                if (($h5pInteraction 
+                && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Column/', $h5pInteraction))) {
+                    $insertData['page'] = $insertData['object_name'];
+                    $insertData['page_completed'] = $insertData['verb'] === 'completed' ? true : false;
+                }
                 
                 //print_r($statement);
                 print_r($insertData);
                 //exit;
                 $inserted = $lrsStatementsRepository->create($insertData);
                 if ($inserted) {
-                    echo 'Inserted';
-                    print_r($inserted);
+                    echo 'Inserted'. $insertData['statement_id'];
+                    //print_r($inserted);
 
                 }
-                exit;
-                \Log::info('this is new statement: ', print_r($statement, true));
+                //exit;
+                //\Log::info('this is new statement: ', print_r($statement, true));
                 
-                exit;
+                //exit;
             }
+            exit('statements inserted');
+            \Log::info('this is new statement: ', print_r($statement, true));
         } catch (Exception $e) {
             echo $e->getMessage();
             exit;
