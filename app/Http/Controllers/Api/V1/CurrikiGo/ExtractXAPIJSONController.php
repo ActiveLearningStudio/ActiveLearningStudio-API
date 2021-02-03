@@ -21,7 +21,7 @@ class ExtractXAPIJSONController extends Controller
                 ->offset($offset)
                 ->limit($limit)
                 ->where('voided', false)
-                ->where('id', '<=', 845) //747 //738  //840 //794
+                ->where('id', '<=', 774) //747 //738  //840 //794
                 //->where('id', '<', )
                 ->orderby('id', 'DESC')
                 ->get();
@@ -163,7 +163,7 @@ class ExtractXAPIJSONController extends Controller
                 
                 //print_r($statement);
                 print_r($insertData);
-                //exit;
+                exit;
                 $inserted = $lrsStatementsRepository->create($insertData);
                 if ($inserted) {
                     echo 'Inserted'. $insertData['statement_id'];

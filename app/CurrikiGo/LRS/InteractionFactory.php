@@ -29,6 +29,7 @@ class InteractionFactory
         $interactionType = $definition->getInteractionType();
         switch ($interactionType) {
             case 'choice':
+            case 'sequencing':
                 return new ChoiceSummary($statement);
             case 'fill-in':
             case 'long-fill-in':

@@ -30,7 +30,6 @@ class MatchingSummary extends InteractionSummary// implements InteractionSummary
     public function summary()
     {
         $definition = $this->getDefinition();
-        // $summary['correct-pattern'] = $this->getCorrectResponsesPattern();
         $summary['interaction'] = $this->getInteractionType();
         $result = $this->getResult();
         $summary['name'] = $this->getName();
@@ -91,9 +90,11 @@ class MatchingSummary extends InteractionSummary// implements InteractionSummary
         // response pattern is an array of strings.
         $responsePattern = $this->getCorrectResponsesPattern();
         $return = [];
-        // Check if it's a scorable type
-        foreach ($responsePattern as $pattern) {
-            $return[] = $this->formatMatchingResponse($responsePattern);
+        if (!empty($responsePattern)) {
+            // Check if it's a scorable type
+            foreach ($responsePattern as $pattern) {
+                $return[] = $this->formatMatchingResponse($pattern);
+            }
         }
         return $return;
     }
@@ -167,18 +168,14 @@ class MatchingSummary extends InteractionSummary// implements InteractionSummary
         $answer = [];
         $source = $this->prepareMatchingChoiceList($this->getRawSource());
         $target = $this->prepareMatchingChoiceList($this->getRawTarget());
-        // Check if it's a scorable type
-        if ($this->isScorable()) {
-            $pairs = explode('[,]', $this->getRawResponse()); 
-            // for response, target is listed first and source as second.
-            if (!empty($pairs)) {
-                foreach($pairs as $pair) {
-                    $items = explode('[.]', $pair);
-                    $answer[] = $source[$items[0]] . ' | ' . $target[$items[1]];
-                }
-                return $answer;
+        $pairs = explode('[,]', $response); 
+        // for response, target is listed first and source as second.
+        if (!empty($pairs)) {
+            foreach($pairs as $pair) {
+                $items = explode('[.]', $pair);
+                $answer[] = $source[$items[0]] . ' | ' . $target[$items[1]];
             }
         }
-        return $response;
+        return $answer;
     }
 }
