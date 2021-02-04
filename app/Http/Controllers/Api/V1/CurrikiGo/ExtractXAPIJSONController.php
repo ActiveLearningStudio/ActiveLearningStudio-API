@@ -10,20 +10,33 @@ use App\Services\LearnerRecordStoreService;
 use Illuminate\Support\Facades\DB;
 use App\CurrikiGo\LRS\InteractionFactory;
 
+/**
+ * @group 16. XAPI
+ *
+ * Cron job for XAPI extract
+ */
 class ExtractXAPIJSONController extends Controller
 {
-    public function handle(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository)
+    /**
+     * Runs the extract job script
+     *
+     * @param  ActivityRepositoryInterface  $activityRepository
+     * @param  LRSStatementsDataRepositoryInterface  $lrsStatementsRepository
+     * @return void
+     */
+    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository)
     {
-        
+        $max_statement_id = $lrsStatementsRepository->findMaxByField('statement_id');
+
         $offset = 0;
-        $limit = 1;
-        $xapiStatements = DB::connection('lrs_pgsql')->table('trax_xapiserver_statements')->select()
+        $limit = config('xapi.lrs_job_row_limit');
+        $xapiStatements = DB::connection('lrs_pgsql')->table(config('xapi.lrs_db_statements_table'))->select()
                 ->offset($offset)
                 ->limit($limit)
                 ->where('voided', false)
-                ->where('id', '<=', 774) //747 //738  //840 //794
+                //->where('id', '>', $max_statement_id) //747 //738  //840 //794
                 //->where('id', '<', )
-                ->orderby('id', 'DESC')
+                ->orderby('id', 'ASC')
                 ->get();
 
         try {
@@ -31,8 +44,8 @@ class ExtractXAPIJSONController extends Controller
             foreach ($xapiStatements as $row) {
                 $insertData = [];
                 echo '<pre>';
-                //print_r($row);
-              
+                print_r($row);
+              //exit;
                 $statement = $service->buildStatementfromJSON($row->data);
                 $context = $statement->getContext();
                 $contextActivities = $context->getContextActivities();
@@ -58,27 +71,12 @@ class ExtractXAPIJSONController extends Controller
                     $defaultActivityName = false;
                 }
                 $result = $statement->getResult();
-                /*$summary['name'] = $nameOfActivity;
-                if ($result) {
-                    $summary['score'] = [
-                        'raw' => $result->getScore()->getRaw(),
-                        'max' => $result->getScore()->getMax(),
-                    ];
-                    $summary['duration'] = $this->formatDuration($result->getDuration());
-                } else {
-                    $summary['score'] = [
-                        'raw' => 0,
-                        'max' => 0
-                    ];
-                    $summary['duration'] = '00:00';
-                }*/
                 
                 // Get activity duration
                 $extensions = $context->getExtensions();
                 $endingPoint = $service->getEndingPointExtension($extensions);
                 
                 // this is basically the ending point (or the seek point) on the video where the quiz is set.
-                //$summary['ending-point'] = ($endingPoint ? $endingPoint : '');
                 // REMOVE THIS
                 $groupingInfo['activity'] = 18045;
                 $activity = $activityRepository->find($groupingInfo['activity']);
@@ -126,7 +124,6 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['assignment_id'] = $activityId;
                 $insertData['assignment_name'] = $activityName;
 
-                //$interactionSummary = $service->getNonScoringStatementSummary($statement);
                 $interactionFactory = new InteractionFactory();
                 $interaction = $interactionFactory->initInteraction($statement);
                 if ($interaction) {

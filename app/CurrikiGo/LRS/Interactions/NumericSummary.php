@@ -7,11 +7,10 @@ use App\CurrikiGo\LRS\InteractionSummary;
 use \TinCan\Statement;
 
 /**
- * True-False Interaction summary class
+ * Numeric Interaction summary class
  */
-class TrueFalseSummary extends InteractionSummary
+class NumericSummary extends InteractionSummary
 {
-
     /**
      * Initialize
      *
@@ -29,7 +28,7 @@ class TrueFalseSummary extends InteractionSummary
      */
     public function getFormattedResponse()
     {
-        // student response: Either true or false
+        // student response
         return $this->getRawResponse();
     }
 
@@ -41,18 +40,27 @@ class TrueFalseSummary extends InteractionSummary
     public function getComponentListArray()
     {
         // response pattern is an array of strings.
-        return $this->getCorrectResponsesPattern();
+        $return = [];
+        $responsePattern = $this->getCorrectResponsesPattern();
+        if (!empty($responsePattern)) {
+            // Check if it's a scorable type
+            foreach ($responsePattern as $pattern) {
+                $range = explode("[:]", $pattern);
+                $return[] = ($range[0] !== '' ? 'minimum '. $range[0] : '') . ($range[1] !== '' ? ($range[0] !== '' ? ', ' : '') . 'maximum '. $range[1] : '');
+            }
+        }
+        return $return;
     }
 
     /**
-     * Get quiz choices array
+     * Get fill-in choices array
      *
      * @return array
      */
     public function getChoicesListArray()
     {
-        // This  Interaction type doesn't have a separate component list.
-        // It has a fixed choice list.
-        return ['true', 'false'];
+        // This Interaction type doesn't have a separate component list.
+        // it uses correct response pattern instead.
+        return $this->getComponentListArray();
     }
 }

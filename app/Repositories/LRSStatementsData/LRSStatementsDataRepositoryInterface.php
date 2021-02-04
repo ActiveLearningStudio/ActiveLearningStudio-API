@@ -9,5 +9,10 @@ use Illuminate\Support\Collection;
 
 interface LRSStatementsDataRepositoryInterface extends EloquentRepositoryInterface
 {
-
+    
+    /**
+     * @param string $field
+     * @return mixed
+     */
+    public function findMaxByField($field);
 }

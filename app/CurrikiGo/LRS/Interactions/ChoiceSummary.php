@@ -22,56 +22,11 @@ class ChoiceSummary extends InteractionSummary
     }
 
     /**
-     * Interaction summary
-     *
-     * @return array
-     */
-    public function summary()
-    {
-        $definition = $this->getDefinition();
-        // $summary['correct-pattern'] = $this->getCorrectResponsesPattern();
-        $summary['interaction'] = $this->getInteractionType();
-        $result = $this->getResult();
-        $summary['name'] = $this->getName();
-        $summary['description'] = $this->getDescription();
-        $summary['scorable'] = $this->isScorable();
-        if ($result) {
-            $summary['choices'] = $this->getChoicesListArray();
-            $summary['correct-pattern'] = $this->getComponentListArray();
-            $summary['response'] = $this->getFormattedResponse();
-            $summary['raw-response'] = $this->getRawResponse();
-            if ($result->getScore()) {
-                $summary['score'] = [
-                    'raw' => $result->getScore()->getRaw(),
-                    'min' => $result->getScore()->getMin(),
-                    'max' => $result->getScore()->getMax(),
-                    'scaled' => $result->getScore()->getScaled(),
-                ];
-                $summary['duration'] = xAPIFormatDuration($result->getDuration());
-                $summary['raw-duration'] = xAPIFormatDuration($result->getDuration(), false);
-            } else {
-                $summary['score'] = [
-                    'raw' => 0,
-                    'max' => 0,
-                    'min' => 0,
-                    'scaled' => 0,
-                ];
-                $summary['duration'] = '00:00';
-                $summary['raw-duration'] = 0;
-            }
-            // Get Interaction type
-        }
-        // Get Verb
-        $summary['verb'] = $this->getVerb();
-        return $summary;
-    }
-
-    /**
      * Get student response array
      *
      * @return array
      */
-    public function getResponses()
+    private function getResponses()
     {
         if (!empty($this->getResult())) {
             return explode('[,]', $this->getResult()->getResponse());

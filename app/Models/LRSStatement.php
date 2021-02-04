@@ -55,6 +55,24 @@ class LRSStatement extends Model
      * @var array
      */
     protected $attributes = [
+        
+        'actor_id' => null,
+        'actor_homepage' => null,
+        'class_id' => null,
+        'project_id' => null,
+        'project_name' => null,
+        'playlist_id' => null,
+        'playlist_name' => null,
+        'assignment_id' => null,
+        'assignment_name' => null,
+        'question' => null,
+        'options' => null,
+        'answer' => null,
+        'assignment_submitted' => false,
+        'platform' => null,
+        'object_name' => null,
+        'activity_category' => null,
+        'duration' => null,
         'score_scaled' => null,
         'score_min' => null,
         'score_max' => null,

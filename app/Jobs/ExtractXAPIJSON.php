@@ -34,7 +34,7 @@ class ExtractXAPIJSON implements ShouldQueue
     {
         $offset = 10;
         $limit = 1;
-        $xapi_statements = DB::connection('lrs_pgsql')->table('trax_xapiserver_statements')->select()
+        $xapi_statements = DB::connection('lrs_pgsql')->table(config('xapi.lrs_db_statements_table'))->select()
                 ->offset($offset)
                 ->limit($limit)
                 ->get();
