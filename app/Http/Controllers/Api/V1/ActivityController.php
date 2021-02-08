@@ -204,12 +204,12 @@ class ActivityController extends Controller
      *
      * Update the specified activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
-     * @bodyParam playlist_id int The Id of a playlist Example: 1
-     * @bodyParam shared bool required The status of share of a activity Example: false
+     * @bodyParam shared bool The status of share of a activity Example: false
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam h5p_content_id int The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
@@ -218,31 +218,33 @@ class ActivityController extends Controller
      *
      * @responseFile responses/activity/activity.json
      *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid playlist or activity id."
+     *   ]
+     * }
+     *
      * @response 500 {
      *   "errors": [
      *     "Failed to update activity."
      *   ]
      * }
      *
-     * @param Request $request
+     * @param ActivityRequest $request
+     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function update(Request $request, Activity $activity)
+    public function update(ActivityRequest $request, Playlist $playlist, Activity $activity)
     {
-        // TODO: need validation
-        $is_updated = $this->activityRepository->update($request->only([
-            'playlist_id',
-            'title',
-            'type',
-            'content',
-            'shared',
-            'order',
-            'thumb_url',
-            'subject_id',
-            'education_level_id',
-            'h5p_content_id',
-        ]), $activity->id);
+        if ($activity->playlist_id !== $playlist->id) {
+            return response([
+                'errors' => ['Invalid playlist or activity id.'],
+            ], 400);
+        }
+
+        $data = $request->validated();
+        $is_updated = $this->activityRepository->update($data, $activity->id);
 
         if ($is_updated) {
             $this->update_h5p($request->get('data'), $activity->h5p_content_id);

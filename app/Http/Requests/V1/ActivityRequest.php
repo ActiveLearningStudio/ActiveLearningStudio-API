@@ -28,6 +28,7 @@ class ActivityRequest extends FormRequest
             'type' => 'required|string|max:255',
             'content' => 'required|string|max:255',
             'order' => 'integer',
+            'shared' => 'boolean',
             'h5p_content_id' => 'integer',
             'thumb_url' => 'string',
             'subject_id' => 'nullable|string',

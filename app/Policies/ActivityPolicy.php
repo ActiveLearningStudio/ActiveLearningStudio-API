@@ -55,8 +55,7 @@ class ActivityPolicy
      */
     public function update(User $user, Activity $activity)
     {
-        // TODO: need to update
-        return true;
+        return $user->isAdmin() || $this->hasPermission($user, $activity->playlist->project);
     }
 
     /**
