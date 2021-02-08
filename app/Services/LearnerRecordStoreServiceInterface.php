@@ -202,4 +202,13 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function findGroupingInfo(array $other);
 
+    /**
+     * Get Verb from statement
+     * 
+     * @param Verb $verb A TinCan API verb object.
+     * 
+     * @return array
+     */
+    public function getVerbFromStatement(Verb $verb);
+
 }

@@ -55,7 +55,7 @@ abstract class InteractionSummary
     {
         $definition = $this->getDefinition();
         $nameOfActivity = '';
-        if (!$definition->getName()->isEmpty()) {
+        if (!empty($definition) && !$definition->getName()->isEmpty()) {
             $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
         }
         return $nameOfActivity;

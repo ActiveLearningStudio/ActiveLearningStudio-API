@@ -410,7 +410,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         // In some cases, we do not have a 'name' property for the object.
         // So, we've added an additional check here.
         // @todo - the LRS statements generated need to have this property
-        if (!$definition->getName()->isEmpty()) {
+        if (!empty($definition) && !$definition->getName()->isEmpty()) {
             $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
         }
         $result = $statement->getResult();
@@ -580,6 +580,25 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             }
         }
         return $info;
+    }
+
+    /**
+     * Get Verb from statement
+     * 
+     * @param Verb $verb A TinCan API verb object.
+     * 
+     * @return array
+     */
+    public function getVerbFromStatement(Verb $verb)
+    {
+        if (!empty($verb->getDisplay)) {
+            return $verb->getDisplay()->getNegotiatedLanguageString();
+        } 
+        // find it from the id
+        $iri = $verb->getId();
+        $verbName = explode("/", $iri);
+        $verbName = end($verbName);
+        return $verbName;
     }
 
 }
