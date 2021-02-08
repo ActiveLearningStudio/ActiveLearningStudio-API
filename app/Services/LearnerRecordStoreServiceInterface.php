@@ -135,10 +135,11 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      *
      * @param string $verb The name of the verb to get statements for
      * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
      * @throws GeneralException
      * @return array
      */
-    public function getStatementsByVerb($verb, array $data);
+    public function getStatementsByVerb($verb, array $data, int $limit = 0);
 
     /**
      * Get the 'skipped' statements from LRS based on filters
@@ -192,6 +193,25 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      * @return array
      */
     public function getNonScoringStatementSummary(Statement $statement);
+
+    /**
+     * Get 'submitted-curriki' statements from LRS based on filters
+     *
+     * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
+     * @throws GeneralException
+     * @return array
+     */
+    public function getSubmittedCurrikiStatements(array $data, int $limit = 0);
+
+    /**
+     * Find 'attempt iri' from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return string
+     */
+    public function findAttemptIRI(array $other);
 
     /**
      * Find grouping info from the list

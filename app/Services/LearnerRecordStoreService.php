@@ -186,10 +186,11 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      *
      * @param string $verb The name of the verb to get statements for
      * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
      * @throws GeneralException
      * @return array
      */
-    public function getStatementsByVerb($verb, array $data)
+    public function getStatementsByVerb($verb, array $data, int $limit = 0)
     {
         $verbId = $this->getVerbFromName($verb);
         if (empty($data) || !$verbId || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
@@ -204,6 +205,9 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $params['verb'] = $verb;
         $params['activity'] = $activity;
         $params['related_activities'] = true;
+        if ($limit > 0) {
+            $params['limit'] = $limit;
+        }
         $response = $this->queryStatements($params);
         if ($response->success) {
             return $response->content->getStatements();
@@ -380,9 +384,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 $category = $contextActivities->getCategory();
                 
                 $other = $contextActivities->getOther();
-                if (!empty($other)) {
-                    $attemptIRI = end($other)->getId();
-                }
+                $attemptIRI = $this->findAttemptIRI($other);
                 if ($attemptIRI === $attemptId && (!empty($category) && !empty($result))) {
                     ++$count;
                 }
@@ -455,6 +457,20 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Get 'submitted-curriki' statements from LRS based on filters
+     *
+     * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
+     * @throws GeneralException
+     * @return array
+     */
+    public function getSubmittedCurrikiStatements(array $data, int $limit = 0)
+    {
+        $submitted = $this->getStatementsByVerb('submitted-curriki', $data, $limit);
+        return $submitted;
+    }
+
+    /**
      * Retrieve 'ending-point' from a list of extensions in a statement.
      * 
      * @param Extensions $extensions A List of Extensions in a statement.
@@ -520,7 +536,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'completed' => self::COMPLETED_VERB_ID,
             'skipped' => self::SKIPPED_VERB_ID,
             'attempted' => self::ATTEMPTED_VERB_ID,
-            'interacted' => self::INTERACTED_VERB_ID
+            'interacted' => self::INTERACTED_VERB_ID,
+            'submitted-curriki' => self::INTERACTED_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
@@ -537,6 +554,29 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'H5P.OpenEndedQuestion-1.0',
         ];
         return $allowed;
+    }
+
+    /**
+     * Find 'attempt iri' from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return string
+     */
+    public function findAttemptIRI(array $other)
+    {
+        if (!empty($other)) {
+            $pattern = "/\/activity\/\d*\/submission\/.*\/\d*/";
+            // Other regexes saved for later.
+            // "/\/activity\/\d*\/submission\/\w*$/",
+            // "/\/(gclass|lti)\/\d*/",
+            foreach ($other as $i) {
+                if (preg_match($pattern, $i->getId())) {
+                    return $i->getId();
+                }
+            }
+        }
+        return '';
     }
 
     /**

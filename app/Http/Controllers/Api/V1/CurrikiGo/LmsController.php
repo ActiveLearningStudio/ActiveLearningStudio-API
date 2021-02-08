@@ -65,7 +65,7 @@ class LmsController extends Controller
 
         $lms_url = $request->input('lms_url');
         $lti_client_id = $request->input('lti_client_id');
-        $projects = $this->projectRepository->fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id);
+        $projects = $this->projectRepository->fetchByLtiClient($lti_client_id);
 
         return response([
             'projects' => ProjectPublicResource::collection($projects),
