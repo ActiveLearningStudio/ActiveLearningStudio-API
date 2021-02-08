@@ -42,6 +42,17 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Build Statement from JSON
+     *
+     * @param string $statement A stringified xAPI statment
+     * @return \Statement
+     */
+    public function buildStatementfromJSON($statement)
+    {
+        return Statement::fromJSON($statement);
+    }
+
+    /**
      * Save Statement
      *
      * @param string $statement A stringified xAPI statment
@@ -49,7 +60,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      */
     public function saveStatement($statement)
     {
-        $statement = Statement::fromJSON($statement);
+        $statement = $this->buildStatementfromJSON($statement);
         return $this->service->saveStatement($statement);
     }
 
@@ -401,7 +412,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         // In some cases, we do not have a 'name' property for the object.
         // So, we've added an additional check here.
         // @todo - the LRS statements generated need to have this property
-        if (!$definition->getName()->isEmpty()) {
+        if (!empty($definition) && !$definition->getName()->isEmpty()) {
             $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
         }
         $result = $statement->getResult();
@@ -566,6 +577,68 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             }
         }
         return '';
+    }
+
+    /**
+     * Find grouping info from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return array
+     */
+    public function findGroupingInfo(array $other)
+    {
+        $info = [
+            'activity' => '',
+            'class' => '',
+            'class_type' => '',
+            'submission' => '',
+            'attempt' => ''
+        ];
+        if (!empty($other)) {
+            $attempt_pattern = "/\/activity\/(\d*)\/submission\/(.*)\/(\d*)/";
+            $class_pattern = "/\/(gclass|lti)\/(\d*)/";
+            $matches = [];
+            $class_matches = [];
+            // Other regexes saved for later.
+            // "/\/activity\/\d*\/submission\/\w*$/",
+            // "/\/(gclass|lti)\/\d*/",
+            foreach ($other as $i) {
+                if (preg_match($attempt_pattern, $i->getId(), $matches)) {
+                    $info['activity'] = $matches[1];
+                    $info['submission'] = $matches[2];
+                    $info['attempt'] = $matches[3];
+                    break;
+                }
+            }
+            foreach ($other as $i) {
+                if (preg_match($class_pattern, $i->getId(), $class_matches)) {
+                    $info['class_type'] = $class_matches[1];
+                    $info['class'] = $class_matches[2];
+                    break;
+                }
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * Get Verb from statement
+     * 
+     * @param Verb $verb A TinCan API verb object.
+     * 
+     * @return array
+     */
+    public function getVerbFromStatement(Verb $verb)
+    {
+        if (!empty($verb->getDisplay)) {
+            return $verb->getDisplay()->getNegotiatedLanguageString();
+        } 
+        // find it from the id
+        $iri = $verb->getId();
+        $verbName = explode("/", $iri);
+        $verbName = end($verbName);
+        return $verbName;
     }
 
 }

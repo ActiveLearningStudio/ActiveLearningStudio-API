@@ -213,4 +213,22 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function findAttemptIRI(array $other);
 
+    /**
+     * Find grouping info from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return array
+     */
+    public function findGroupingInfo(array $other);
+
+    /**
+     * Get Verb from statement
+     * 
+     * @param Verb $verb A TinCan API verb object.
+     * 
+     * @return array
+     */
+    public function getVerbFromStatement(Verb $verb);
+
 }
