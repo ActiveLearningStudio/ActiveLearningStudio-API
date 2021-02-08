@@ -103,8 +103,7 @@ class ExtractXAPIJSONController extends Controller
                     }
                     continue;
                 }
-                // REMOVE THIS
-                $groupingInfo['activity'] = 18045;
+                
                 $activity = $activityRepository->find($groupingInfo['activity']);
                 $activityId = null;
                 $activityName = null;
@@ -181,6 +180,7 @@ class ExtractXAPIJSONController extends Controller
                 }
             }
             \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script ended');
+            return 'Extract XAPI JSON Cron run successfully.';
         } catch (Exception $e) {
             \Log::error($e->getMessage());
         }

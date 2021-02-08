@@ -46,8 +46,12 @@ class ChoiceSummary extends InteractionSummary
         $responses = $this->getResponses();
         $choices = $this->getChoicesListArray();
         $answers = [];
-        foreach ($responses as $value) {
-            $answers[] = $choices[$value];
+        if (!empty($responses)) {
+            foreach ($responses as $value) {
+                if (array_key_exists($value, $choices)) {
+                    $answers[] = $choices[$value];
+                }
+            }
         }
         return $answers;
     }
