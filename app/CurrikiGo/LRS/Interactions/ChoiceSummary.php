@@ -22,38 +22,17 @@ class ChoiceSummary extends InteractionSummary
     }
 
     /**
-     * Interaction summary
-     *
-     * @return array
-     */
-    public function summary()
-    {
-        $definition = $this->getDefinition();
-        // $summary['correct-pattern'] = $this->getCorrectResponsesPattern();
-        $summary['interaction'] = $this->getInteractionType();
-        $result = $this->getResult();
-        $summary['name'] = $this->getName();
-        $summary['description'] = $this->getDescription();
-        $summary['scorable'] = $this->isScorable();
-        if ($result) {
-            $summary['choices'] = $this->getChoicesListArray();
-            $summary['response'] = $this->getDescriptiveResponses();
-            $summary['raw-response'] = $this->getRawResponse();
-            // Get Interaction type
-        }
-        // Get Verb
-        $summary['verb'] = $this->getVerb();
-        return $summary;
-    }
-
-    /**
      * Get student response array
      *
      * @return array
      */
-    public function getResponses()
+    private function getResponses()
     {
-        return explode('[,]', $this->getResult()->getResponse());
+        if (!empty($this->getResult())) {
+            return explode('[,]', $this->getResult()->getResponse());
+        }
+        return [];
+        
     }
 
     /**
@@ -61,14 +40,18 @@ class ChoiceSummary extends InteractionSummary
      *
      * @return array
      */
-    public function getDescriptiveResponses()
+    public function getFormattedResponse()
     {
         // student responses.
         $responses = $this->getResponses();
         $choices = $this->getChoicesListArray();
         $answers = [];
-        foreach ($responses as $value) {
-            $answers[] = $choices[$value];
+        if (!empty($responses) && !empty($choices)) {
+            foreach ($responses as $value) {
+                if (array_key_exists($value, $choices)) {
+                    $answers[] = $choices[$value];
+                }
+            }
         }
         return $answers;
     }
@@ -111,5 +94,29 @@ class ChoiceSummary extends InteractionSummary
             $return[$values['id']] = $values['description'][$languageKey];
         }
         return $return;
+    }
+
+    /**
+     * Get component list array
+     * It contains the correct response pattern, which shows the correct answers or sequence.
+     * @return string
+     */
+    public function getComponentListArray()
+    {
+        // student responses.
+        $responsePattern = $this->getCorrectResponsesPattern();
+        
+        // Check if it's a scorable type
+        if ($this->isScorable()) {
+            // it's a good possibility that the responses are concatenated by [,]
+            if (is_array($responsePattern)) {
+                $responsePattern = array_map(function ($arr) {
+                    return explode('[,]', $arr);
+                }, $responsePattern);
+                return $responsePattern;
+            } 
+            return explode('[,]', $responsePattern);
+        }
+        return $responsePattern;
     }
 }

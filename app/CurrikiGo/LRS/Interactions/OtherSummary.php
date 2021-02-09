@@ -7,9 +7,10 @@ use App\CurrikiGo\LRS\InteractionSummary;
 use \TinCan\Statement;
 
 /**
- * Fill-in Interaction summary class
+ * Other interations summary class
+ * Defines methods for when there is no interaction.
  */
-class FillInSummary extends InteractionSummary
+class OtherSummary extends InteractionSummary
 {
 
     /**
@@ -46,27 +47,18 @@ class FillInSummary extends InteractionSummary
      */
     public function getComponentListArray()
     {
-        // response pattern is an array of strings.
-        $return = [];
-        $responsePattern = $this->getCorrectResponsesPattern();
-        if (!empty($responsePattern)) {
-            // Check if it's a scorable type
-            foreach ($responsePattern as $pattern) {
-                $return[] = str_replace('[,]', ' | ', $pattern);
-            }
-        }
-        return $return;
+        // there is no response pattern
+        return [];
     }
 
     /**
-     * Get fill-in choices array
+     * Get quiz choices array
      *
      * @return array
      */
     public function getChoicesListArray()
     {
-        // This Interaction type doesn't have a separate component list.
-        // it uses correct response pattern instead.
-        return $this->getComponentListArray();
+        // This  Interaction type doesn't have a separate component list.
+        return [];
     }
 }
