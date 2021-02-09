@@ -231,4 +231,20 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function getVerbFromStatement(Verb $verb);
 
+    /**
+     * Get H5P Interaction from category
+     * 
+     * @param array An array of Category IRIs
+     * 
+     * @return string
+     */
+    public function getH5PInterationFromCategory($category);
+
+    /**
+     * Is interaction one of the allowed aggregates?
+     * 
+     * @return bool
+     */
+    public function isAllowedAggregateH5P($interaction);
+
 }
