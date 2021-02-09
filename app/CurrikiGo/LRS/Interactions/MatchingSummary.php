@@ -65,8 +65,13 @@ class MatchingSummary extends InteractionSummary
     {
         $source = $this->prepareMatchingChoiceList($this->getRawSource());
         $target = $this->prepareMatchingChoiceList($this->getRawTarget());
-        $choices[] = '{source} ' . implode(" | ", $source);
-        $choices[] = '{target} ' . implode(" | ", $target);
+        $choices = [];
+        if (!empty($source)) {
+            $choices[] = '{source} ' . implode(" | ", $source);
+        }
+        if (!empty($target)) {
+            $choices[] = '{target} ' . implode(" | ", $target);
+        }
         return $choices;
     }
 
@@ -123,11 +128,15 @@ class MatchingSummary extends InteractionSummary
         // Items can appear in multiple (or zero) pairs. 
         // Items within a pair are delimited by [.]. Pairs are delimited by [,].
         $answer = [];
+        if (empty($response)) {
+            return $answer;
+        }
         $source = $this->prepareMatchingChoiceList($this->getRawSource());
         $target = $this->prepareMatchingChoiceList($this->getRawTarget());
-        $pairs = explode('[,]', $response); 
+        $pairs = explode('[,]', trim($response));
+       
         // for response, target is listed first and source as second.
-        if (!empty($pairs)) {
+        if (!empty($pairs) && !empty($source) && !empty($target)) {
             foreach($pairs as $pair) {
                 // "correctResponsesPattern": [
                 // "0[.]2[,]0[.]1[,]0[.]0[,]1[.]3[,]1[.]4[,]1[.]5"
