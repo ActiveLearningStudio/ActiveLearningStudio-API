@@ -242,7 +242,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     // Rule for that is, if we're able to find more than 1 answered statements for the object id, for the same attempt
                     // then it's an aggregate.
                     $objectId = $statement->getTarget()->getId();
-                    $isAggregateH5P = $this->isAggregateH5P($data, $objectId); 
+                    $h5pInteraction = $this->getH5PInterationFromCategory($category);
+                    $isAggregateH5P = ($this->isAllowedAggregateH5P($h5pInteraction) ? $this->isAggregateH5P($data, $objectId) : false); 
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
                     if (!array_key_exists($h5pSubContentId, $filtered) && !$isAggregateH5P) {
@@ -639,6 +640,45 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $verbName = explode("/", $iri);
         $verbName = end($verbName);
         return $verbName;
+    }
+
+    /**
+     * Get H5P Interaction from category
+     * 
+     * @param array An array of Category IRIs
+     * 
+     * @return string
+     */
+    public function getH5PInterationFromCategory($category)
+    {
+        $h5pInteraction = '';
+        if (!empty($category)) {
+            $categoryId = end($category)->getId();
+            $h5pInteraction = explode("/", $categoryId);
+            $h5pInteraction = end($h5pInteraction);
+        }
+        return $h5pInteraction;
+    }
+
+    /**
+     * Is interaction one of the allowed aggregates?
+     * 
+     * @return bool
+     */
+    public function isAllowedAggregateH5P($interaction)
+    {
+        $allowed = [
+            'H5P.CoursePresentation',
+            'H5P.InteractiveVideo',
+            'H5P.Column'
+        ];
+
+        foreach ($allowed as $h5p) {
+            if (preg_match('/^' . $h5p . '/', $interaction)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
