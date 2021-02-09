@@ -129,8 +129,16 @@ class MatchingSummary extends InteractionSummary
         // for response, target is listed first and source as second.
         if (!empty($pairs)) {
             foreach($pairs as $pair) {
+                // "correctResponsesPattern": [
+                // "0[.]2[,]0[.]1[,]0[.]0[,]1[.]3[,]1[.]4[,]1[.]5"
+                // ], 
+                // target[.]source[,]target[.]source
+                // Although, it should be the other way around; as per XAPI docs
+                // A list of matching pairs, where each pair consists of a source item id followed by a target item id.
+                // Items can appear in multiple (or zero) pairs. Items within a pair are delimited by [.]. Pairs are delimited by [,].
+                // H5P has it wrong... @TODO
                 $items = explode('[.]', $pair);
-                $answer[] = $source[$items[0]] . ' | ' . $target[$items[1]];
+                $answer[] = (isset($target[$items[0]]) ? $target[$items[0]] : '') . ' | ' . (isset($source[$items[1]]) ? $source[$items[1]] : '');
             }
         }
         return $answer;
