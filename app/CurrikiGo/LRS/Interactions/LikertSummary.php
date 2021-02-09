@@ -32,7 +32,7 @@ class LikertSummary extends InteractionSummary
         $response = $this->getRawResponse();
         $choices = $this->getChoicesListArray();
         
-        return (array_key_exists($response, $choices) ? $choices[$response] : '');
+        return (!empty($choices) && array_key_exists($response, $choices) ? $choices[$response] : '');
     }
 
     /**
