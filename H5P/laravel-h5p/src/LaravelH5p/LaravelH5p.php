@@ -252,7 +252,7 @@ class LaravelH5p
         } elseif (isset($_GET['gcuid'])) {
             $settings['user'] = array(
                 'name' => $_GET['gcuid'],
-                'mail' => $_GET['gcuid'] . '@curriki.org',
+                'mail' => $_GET['gcuid'] . '@currikistudio.org',
             );
         }
 
