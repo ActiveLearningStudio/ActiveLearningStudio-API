@@ -172,7 +172,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     });
     // Outcome
     Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
-    
+
     Route::get('error', 'ErrorController@show')->name('api/error');
 
     /*********************** ADMIN PANEL ROUTES ************************/
@@ -189,6 +189,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/assign/starter-projects', 'UserController@assignStarterProjects')->name('users.assign.starter-projects');
         Route::get('users/{user}/roles/{role}', 'UserController@updateRole')->name('users.update.role');
         Route::apiResource('users', 'UserController');
+
+        //groups
+        Route::apiResource('groups', 'GroupController');
 
         // projects
         Route::post('projects/indexes', 'ProjectController@updateIndexes');
