@@ -249,6 +249,11 @@ class LaravelH5p
                 'name' => Auth::user()->name,
                 'mail' => Auth::user()->email,
             );
+        } elseif (isset($_GET['gcuid'])) {
+            $settings['user'] = array(
+                'name' => $_GET['gcuid'],
+                'mail' => $_GET['gcuid'] . '@currikistudio.org',
+            );
         }
 
         return $settings;
