@@ -465,11 +465,18 @@ class ActivityController extends Controller
      *   ]
      * }
      *
+     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function destroy(Activity $activity)
+    public function destroy(Playlist $playlist, Activity $activity)
     {
+        if ($activity->playlist_id !== $playlist->id) {
+            return response([
+                'errors' => ['Invalid playlist or activity id.'],
+            ], 400);
+        }
+
         $is_deleted = $this->activityRepository->delete($activity->id);
 
         if ($is_deleted) {
