@@ -222,14 +222,19 @@ class LaravelH5p
      */
     private static function get_core_settings()
     {
+        
+        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
+        if (isset($_GET['gcuid'])) {
+            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId'.'&gcuid='.$_GET['gcuid'];
+        }
+
         $settings = array(
             'baseUrl' => config('app.url'),
             'url' => self::get_h5p_storage(), // for uploaded
             'postUserStatistics' => config('laravel-h5p.h5p_track_user') && Auth::check(),
             'ajax' => array(
                 'setFinished' => config('app.url') . '/api/v1/h5p/ajax/finish', // route('h5p.ajax.finish')
-                'contentUserData' => config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
-                // 'contentUserData' => route('h5p.ajax.content-user-data', ['content_id' => ':contentId', 'data_type' => ':dataType', 'sub_content_id' => ':subContentId']),
+                'contentUserData' => $contentUserDataUrl,
             ),
             'saveFreq' => config('laravel-h5p.h5p_save_content_state', FALSE) ? config('laravel-h5p.h5p_save_content_frequency', 30) : FALSE,
             'siteUrl' => config('app.url'),
