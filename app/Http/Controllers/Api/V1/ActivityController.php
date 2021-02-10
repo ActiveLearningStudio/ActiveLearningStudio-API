@@ -453,6 +453,7 @@ class ActivityController extends Controller
      *
      * Remove the specified activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @response {
