@@ -7,11 +7,10 @@ use App\CurrikiGo\LRS\InteractionSummary;
 use \TinCan\Statement;
 
 /**
- * Fill-in Interaction summary class
+ * Numeric Interaction summary class
  */
-class FillInSummary extends InteractionSummary
+class NumericSummary extends InteractionSummary
 {
-
     /**
      * Initialize
      *
@@ -29,14 +28,8 @@ class FillInSummary extends InteractionSummary
      */
     public function getFormattedResponse()
     {
-        // student responses.
-        $response = $this->getRawResponse();
-        // Check if it's a scorable type
-        if ($this->isScorable()) {
-            // it's a good possibility that the responses are concatenated by [,]
-            return explode('[,]', $this->getRawResponse());
-        }
-        return $response;
+        // student response
+        return $this->getRawResponse();
     }
 
     /**
@@ -52,7 +45,8 @@ class FillInSummary extends InteractionSummary
         if (!empty($responsePattern)) {
             // Check if it's a scorable type
             foreach ($responsePattern as $pattern) {
-                $return[] = str_replace('[,]', ' | ', $pattern);
+                $range = explode("[:]", $pattern);
+                $return[] = ($range[0] !== '' ? 'minimum '. $range[0] : '') . ($range[1] !== '' ? ($range[0] !== '' ? ', ' : '') . 'maximum '. $range[1] : '');
             }
         }
         return $return;
