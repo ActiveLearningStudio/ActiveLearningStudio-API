@@ -1,0 +1,10 @@
+FROM quay.io/curriki/curriki-api-base:latest
+
+EXPOSE 8000
+
+COPY ./openshift/api-init-container.sh /usr/local/bin/
+COPY ./openshift/api-entrypoint.sh /usr/local/bin/
+COPY ./openshift/api-laravel-echo-server.sh /usr/local/bin/
+COPY ./openshift/api-queue-worker.sh /usr/local/bin/
+
+CMD [ "/bin/sh", "-c", "/usr/local/bin/api-entrypoint.sh" ]

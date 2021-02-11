@@ -132,3 +132,27 @@ if (!function_exists('is_valid_date')) {
         return (bool)strtotime($date);
     }
 }
+
+if (!function_exists('xAPIFormatDuration')) {
+    /**
+     * Format 'duration' value in seconds to hh:mm:ss format
+     * e.g., PT24S to 0:24
+     * 
+     * @param string $duration
+     * @param boolean $formatValue Return formatted value in hh:mm:ss format. Defaults to true
+     * @return string
+     */
+    function xAPIFormatDuration($duration, $formatValue = true)
+    {
+        $rawDuration = str_replace(array('PT', 'S'), '', $duration);
+        if ($formatValue) {
+            $seconds = round($rawDuration);
+            $formatted = sprintf('%02d:%02d', ($seconds / 60 % 60), $seconds % 60);
+            if (($seconds / 3600) >= 1) {
+                $formatted = sprintf('%02d:%02d:%02d', ($seconds / 3600), ($seconds / 60 % 60), $seconds % 60);
+            }
+            return $formatted;
+        }
+        return $rawDuration;
+    }
+}

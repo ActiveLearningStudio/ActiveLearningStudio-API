@@ -42,6 +42,17 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Build Statement from JSON
+     *
+     * @param string $statement A stringified xAPI statment
+     * @return \Statement
+     */
+    public function buildStatementfromJSON($statement)
+    {
+        return Statement::fromJSON($statement);
+    }
+
+    /**
      * Save Statement
      *
      * @param string $statement A stringified xAPI statment
@@ -49,7 +60,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      */
     public function saveStatement($statement)
     {
-        $statement = Statement::fromJSON($statement);
+        $statement = $this->buildStatementfromJSON($statement);
         return $this->service->saveStatement($statement);
     }
 
@@ -175,10 +186,11 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      *
      * @param string $verb The name of the verb to get statements for
      * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
      * @throws GeneralException
      * @return array
      */
-    public function getStatementsByVerb($verb, array $data)
+    public function getStatementsByVerb($verb, array $data, int $limit = 0)
     {
         $verbId = $this->getVerbFromName($verb);
         if (empty($data) || !$verbId || !array_key_exists('actor', $data) || !array_key_exists('activity', $data)) {
@@ -193,6 +205,9 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $params['verb'] = $verb;
         $params['activity'] = $activity;
         $params['related_activities'] = true;
+        if ($limit > 0) {
+            $params['limit'] = $limit;
+        }
         $response = $this->queryStatements($params);
         if ($response->success) {
             return $response->content->getStatements();
@@ -227,7 +242,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     // Rule for that is, if we're able to find more than 1 answered statements for the object id, for the same attempt
                     // then it's an aggregate.
                     $objectId = $statement->getTarget()->getId();
-                    $isAggregateH5P = $this->isAggregateH5P($data, $objectId); 
+                    $h5pInteraction = $this->getH5PInterationFromCategory($category);
+                    $isAggregateH5P = ($this->isAllowedAggregateH5P($h5pInteraction) ? $this->isAggregateH5P($data, $objectId) : false); 
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
                     if (!array_key_exists($h5pSubContentId, $filtered) && !$isAggregateH5P) {
@@ -369,9 +385,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 $category = $contextActivities->getCategory();
                 
                 $other = $contextActivities->getOther();
-                if (!empty($other)) {
-                    $attemptIRI = end($other)->getId();
-                }
+                $attemptIRI = $this->findAttemptIRI($other);
                 if ($attemptIRI === $attemptId && (!empty($category) && !empty($result))) {
                     ++$count;
                 }
@@ -399,7 +413,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         // In some cases, we do not have a 'name' property for the object.
         // So, we've added an additional check here.
         // @todo - the LRS statements generated need to have this property
-        if (!$definition->getName()->isEmpty()) {
+        if (!empty($definition) && !$definition->getName()->isEmpty()) {
             $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
         }
         $result = $statement->getResult();
@@ -441,6 +455,20 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $interactionFactory = new InteractionFactory();
         $interaction = $interactionFactory->initInteraction($statement);
         return $interaction->summary();
+    }
+
+    /**
+     * Get 'submitted-curriki' statements from LRS based on filters
+     *
+     * @param array $data An array of filters.
+     * @param int $limit The number of statements to fetch
+     * @throws GeneralException
+     * @return array
+     */
+    public function getSubmittedCurrikiStatements(array $data, int $limit = 0)
+    {
+        $submitted = $this->getStatementsByVerb('submitted-curriki', $data, $limit);
+        return $submitted;
     }
 
     /**
@@ -509,7 +537,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'completed' => self::COMPLETED_VERB_ID,
             'skipped' => self::SKIPPED_VERB_ID,
             'attempted' => self::ATTEMPTED_VERB_ID,
-            'interacted' => self::INTERACTED_VERB_ID
+            'interacted' => self::INTERACTED_VERB_ID,
+            'submitted-curriki' => self::INTERACTED_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
@@ -526,6 +555,130 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'H5P.OpenEndedQuestion-1.0',
         ];
         return $allowed;
+    }
+
+    /**
+     * Find 'attempt iri' from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return string
+     */
+    public function findAttemptIRI(array $other)
+    {
+        if (!empty($other)) {
+            $pattern = "/\/activity\/\d*\/submission\/.*\/\d*/";
+            // Other regexes saved for later.
+            // "/\/activity\/\d*\/submission\/\w*$/",
+            // "/\/(gclass|lti)\/\d*/",
+            foreach ($other as $i) {
+                if (preg_match($pattern, $i->getId())) {
+                    return $i->getId();
+                }
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Find grouping info from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return array
+     */
+    public function findGroupingInfo(array $other)
+    {
+        $info = [
+            'activity' => '',
+            'class' => '',
+            'class_type' => '',
+            'submission' => '',
+            'attempt' => ''
+        ];
+        if (!empty($other)) {
+            $attempt_pattern = "/\/activity\/(\d*)\/submission\/(.*)\/(\d*)/";
+            $class_pattern = "/\/(gclass|lti)\/(\d*)/";
+            $matches = [];
+            $class_matches = [];
+            // Other regexes saved for later.
+            // "/\/activity\/\d*\/submission\/\w*$/",
+            // "/\/(gclass|lti)\/\d*/",
+            foreach ($other as $i) {
+                if (preg_match($attempt_pattern, $i->getId(), $matches)) {
+                    $info['activity'] = $matches[1];
+                    $info['submission'] = $matches[2];
+                    $info['attempt'] = $matches[3];
+                    break;
+                }
+            }
+            foreach ($other as $i) {
+                if (preg_match($class_pattern, $i->getId(), $class_matches)) {
+                    $info['class_type'] = $class_matches[1];
+                    $info['class'] = $class_matches[2];
+                    break;
+                }
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * Get Verb from statement
+     * 
+     * @param Verb $verb A TinCan API verb object.
+     * 
+     * @return array
+     */
+    public function getVerbFromStatement(Verb $verb)
+    {
+        if (!empty($verb->getDisplay)) {
+            return $verb->getDisplay()->getNegotiatedLanguageString();
+        } 
+        // find it from the id
+        $iri = $verb->getId();
+        $verbName = explode("/", $iri);
+        $verbName = end($verbName);
+        return $verbName;
+    }
+
+    /**
+     * Get H5P Interaction from category
+     * 
+     * @param array An array of Category IRIs
+     * 
+     * @return string
+     */
+    public function getH5PInterationFromCategory($category)
+    {
+        $h5pInteraction = '';
+        if (!empty($category)) {
+            $categoryId = end($category)->getId();
+            $h5pInteraction = explode("/", $categoryId);
+            $h5pInteraction = end($h5pInteraction);
+        }
+        return $h5pInteraction;
+    }
+
+    /**
+     * Is interaction one of the allowed aggregates?
+     * 
+     * @return bool
+     */
+    public function isAllowedAggregateH5P($interaction)
+    {
+        $allowed = [
+            'H5P.CoursePresentation',
+            'H5P.InteractiveVideo',
+            'H5P.Column'
+        ];
+
+        foreach ($allowed as $h5p) {
+            if (preg_match('/^' . $h5p . '/', $interaction)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
