@@ -349,6 +349,8 @@ class ActivityController extends Controller
      */
     public function detail(Activity $activity)
     {
+        $this->authorize('view', $activity->playlist->project);
+
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
         if ($activity->playlist->project->user) {
@@ -390,6 +392,8 @@ class ActivityController extends Controller
      */
     public function share(Activity $activity)
     {
+        $this->authorize('view', $activity->playlist->project);
+
         $is_updated = $this->activityRepository->update([
             'shared' => true,
         ], $activity->id);
@@ -429,6 +433,8 @@ class ActivityController extends Controller
      */
     public function removeShare(Activity $activity)
     {
+        $this->authorize('view', $activity->playlist->project);
+
         $is_updated = $this->activityRepository->update([
             'shared' => false,
         ], $activity->id);
@@ -522,6 +528,8 @@ class ActivityController extends Controller
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
+        $this->authorize('view', $activity->playlist->project);
+
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($activity->playlist_id == $playlist->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
@@ -542,6 +550,8 @@ class ActivityController extends Controller
      */
     public function h5p(Activity $activity)
     {
+        $this->authorize('view', $activity->playlist->project);
+
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();
@@ -626,6 +636,8 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsOpen(Activity $activity)
     {
+        $this->authorize('view', $activity->playlist->project);
+
         if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
@@ -662,6 +674,8 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsShared(Activity $activity)
     {
+        $this->authorize('view', $activity->playlist->project);
+
         // 3 is for indexing approved - see Project Model @indexing property
         if ($activity->shared || ($activity->playlist->project->indexing === 3)) {
             $h5p = App::make('LaravelH5p');
