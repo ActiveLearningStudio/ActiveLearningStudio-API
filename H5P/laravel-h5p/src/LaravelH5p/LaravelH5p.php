@@ -222,7 +222,6 @@ class LaravelH5p
      */
     private static function get_core_settings()
     {
-        $_GET['gcuid'] = "11111";
         $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
         if (isset($_GET['gcuid'])) {
             $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId'.'&gcuid='.$_GET['gcuid'];
