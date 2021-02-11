@@ -14,7 +14,7 @@ class AddDefaultOrganizationToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('default_organization')->nullable()->default(null);
+            $table->unsignedBigInteger('default_organization')->nullable()->default(1);
             $table->foreign('default_organization')->references('id')->on('organizations');
         });
     }
