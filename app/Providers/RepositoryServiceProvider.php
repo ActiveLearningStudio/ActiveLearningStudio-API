@@ -38,6 +38,8 @@ use App\Repositories\InvitedTeamUser\InvitedTeamUserRepository;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\LRSStatementsData\LRSStatementsDataRepository;
 use App\Repositories\LRSStatementsData\LRSStatementsDataRepositoryInterface;
+use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
+use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -67,6 +69,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(GcClassworkRepositoryInterface::class, GcClassworkRepository::class);
         $this->app->bind(InvitedTeamUserRepositoryInterface::class, InvitedTeamUserRepository::class);
         $this->app->bind(LRSStatementsDataRepositoryInterface::class, LRSStatementsDataRepository::class);
+        $this->app->bind(ContentUserDataGoRepositoryInterface::class, ContentUserDataGoRepository::class);
     }
 
     /**
