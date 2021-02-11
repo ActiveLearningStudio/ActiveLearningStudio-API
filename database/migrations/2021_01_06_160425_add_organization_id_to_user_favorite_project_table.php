@@ -14,7 +14,7 @@ class AddOrganizationIdToUserFavoriteProjectTable extends Migration
     public function up()
     {
         Schema::table('user_favorite_project', function (Blueprint $table) {
-            $table->unsignedBigInteger('organization_id')->nullable()->default(null);
+            $table->unsignedBigInteger('organization_id')->nullable()->default(1);
             $table->foreign('organization_id')->references('id')->on('organizations');
         });
     }
