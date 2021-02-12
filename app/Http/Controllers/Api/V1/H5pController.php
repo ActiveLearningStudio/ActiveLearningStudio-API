@@ -619,9 +619,12 @@ class H5pController extends Controller
         if ($contentId === NULL ||
             $dataId === NULL ||
             $subContentId === NULL ||
-            $userId === NULL ||
-            $data === NULL) {
+            $userId === NULL) {
         return; // Missing parameters
+        }
+        
+        if ($data === NULL) {
+            return response()->json(["data" => false, "success" => true]);
         }
         
         if ($request->get('gcuid')) {
