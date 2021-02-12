@@ -105,7 +105,14 @@ class OutcomeController extends Controller
                             }
                         }
                     }
-                    
+                    // Since we usually do not have ending-point for most non-scoring items, and 
+                    // since normally the LRS will return the oldest statements first
+                    // we want to reverse the order of the statements to show on the summary page
+                    // so it's first in, first out.
+                    if (!empty($nonScoringResponse)) {
+                        $nonScoringResponse = array_reverse($nonScoringResponse);
+                    }
+
                     return response([
                         'summary' => $response,
                         'non-scoring' => $nonScoringResponse

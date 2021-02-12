@@ -32,7 +32,7 @@ return [
 	'h5p_icon' => TRUE,
 	'h5p_track_user' => TRUE,
 	'h5p_ext_communication' => TRUE,
-	'h5p_save_content_state' => FALSE,
+	'h5p_save_content_state' => 7,
 	'h5p_save_content_frequency' => 30,
 	'h5p_site_key' => [
 		'h5p_h5p_site_uuid' => "b37a7188-2508-4cea-b03d-09e7416f24ce",
