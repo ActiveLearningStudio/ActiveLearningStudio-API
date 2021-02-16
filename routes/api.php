@@ -50,7 +50,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
-        ]);;
+        ]);
 
         Route::post('teams/invite', 'TeamController@inviteTeamMember');
         Route::post('teams/{team}/invite-member', 'TeamController@inviteMember');
@@ -61,6 +61,18 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
         Route::apiResource('teams', 'TeamController');
+
+        //Groups
+        Route::post('groups/invite', 'GroupController@inviteGroupMember');
+        Route::post('groups/{group}/invite-member', 'GroupController@inviteMember');
+        Route::post('groups/{group}/invite-members', 'GroupController@inviteMembers');
+        Route::post('groups/{group}/remove', 'GroupController@removeMember');
+        Route::post('groups/{group}/add-projects', 'GroupController@addProjects');
+        Route::post('groups/{group}/remove-project', 'GroupController@removeProject');
+        Route::post('groups/{group}/projects/{project}/add-members', 'GroupController@addMembersToProject');
+        Route::post('groups/{group}/projects/{project}/remove-member', 'GroupController@removeMemberFromProject');
+        Route::apiResource('groups', 'GroupController');
+
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::get('projects/recent', 'ProjectController@recent');
@@ -189,7 +201,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
     // Outcome
     Route::get('xapi-extract', 'CurrikiGo\ExtractXAPIJSONController@runJob');
-    
+
     Route::get('error', 'ErrorController@show')->name('api/error');
 
     /*********************** ADMIN PANEL ROUTES ************************/

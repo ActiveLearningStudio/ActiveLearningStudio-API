@@ -113,6 +113,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the groups for the user
+     */
+    public function groups()
+    {
+        return $this->belongsToMany('App\Models\Group', 'user_group')->withPivot('role')->withTimestamps();
+    }
+
+    /**
      * Get the projects for the user
      */
     public function projects()
