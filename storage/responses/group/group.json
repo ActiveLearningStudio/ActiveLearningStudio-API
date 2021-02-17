@@ -1,0 +1,26 @@
+{
+    "groups": [
+        {
+            "id": 1,
+            "name": "Test Group",
+            "description": "This is a test group.",
+            "thumb_url": "https://images.pexels.com/photos/2832382",
+            "shared": true,
+            "starter_project": null,
+            "is_public": true,
+            "created_at": "2020-09-06T19:21:08.000000Z",
+            "updated_at": "2020-09-06T19:21:08.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Math Group",
+            "description": "This is a test math group.",
+            "thumb_url": "https://images.pexels.com/photos/2832384",
+            "shared": true,
+            "starter_project": null,
+            "is_public": true,
+            "created_at": "2020-09-07T19:21:08.000000Z",
+            "updated_at": "2020-09-07T19:21:08.000000Z"
+        }
+    ]
+}

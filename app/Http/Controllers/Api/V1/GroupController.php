@@ -69,7 +69,7 @@ class GroupController extends Controller
      *
      * Get a list of the groups of a user.
      *
-     * @responseFile responses/group/groups.json
+     * @responseFile responses/group/group.json
      *
      * @return Response
      */
