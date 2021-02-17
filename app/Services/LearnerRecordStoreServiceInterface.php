@@ -213,4 +213,38 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function findAttemptIRI(array $other);
 
+    /**
+     * Find grouping info from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return array
+     */
+    public function findGroupingInfo(array $other);
+
+    /**
+     * Get Verb from statement
+     * 
+     * @param Verb $verb A TinCan API verb object.
+     * 
+     * @return array
+     */
+    public function getVerbFromStatement(Verb $verb);
+
+    /**
+     * Get H5P Interaction from category
+     * 
+     * @param array An array of Category IRIs
+     * 
+     * @return string
+     */
+    public function getH5PInterationFromCategory($category);
+
+    /**
+     * Is interaction one of the allowed aggregates?
+     * 
+     * @return bool
+     */
+    public function isAllowedAggregateH5P($interaction);
+
 }

@@ -40,7 +40,7 @@ interface LearnerRecordStoreConstantsInterface
      * 
      * @var string
      */
-    const SKIPPED_VERB_ID = 'http://id.tincanapi.com/verb/skipped';
+    const SKIPPED_VERB_ID = 'http://adlnet.gov/expapi/verbs/skipped';
 
     /**
      * Attempted verb id for XAPI statements
@@ -62,4 +62,12 @@ interface LearnerRecordStoreConstantsInterface
      * @var string
      */
     const SUBMITTED_CURRIKI_VERB_ID = 'http://adlnet.gov/expapi/verbs/submitted-curriki';
+
+    /**
+     * Assignment Submitted Verb Name
+     * 
+     * @var string
+     */
+    const SUBMITTED_VERB_NAME = 'submitted-curriki';
+
 }

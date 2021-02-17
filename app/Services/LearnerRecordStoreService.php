@@ -42,6 +42,17 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Build Statement from JSON
+     *
+     * @param string $statement A stringified xAPI statment
+     * @return \Statement
+     */
+    public function buildStatementfromJSON($statement)
+    {
+        return Statement::fromJSON($statement);
+    }
+
+    /**
      * Save Statement
      *
      * @param string $statement A stringified xAPI statment
@@ -49,7 +60,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      */
     public function saveStatement($statement)
     {
-        $statement = Statement::fromJSON($statement);
+        $statement = $this->buildStatementfromJSON($statement);
         return $this->service->saveStatement($statement);
     }
 
@@ -231,7 +242,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     // Rule for that is, if we're able to find more than 1 answered statements for the object id, for the same attempt
                     // then it's an aggregate.
                     $objectId = $statement->getTarget()->getId();
-                    $isAggregateH5P = $this->isAggregateH5P($data, $objectId); 
+                    $h5pInteraction = $this->getH5PInterationFromCategory($category);
+                    $isAggregateH5P = ($this->isAllowedAggregateH5P($h5pInteraction) ? $this->isAggregateH5P($data, $objectId) : false); 
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
                     if (!array_key_exists($h5pSubContentId, $filtered) && !$isAggregateH5P) {
@@ -257,18 +269,13 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         if ($skipped) {
             // iterate and find the statements that have results.
             foreach ($skipped as $statement) {
-                $result = $statement->getResult();
-                // Get Category context
-                $contextActivities = $statement->getContext()->getContextActivities();
-                if (!empty($result)) {
-                    // Get activity subID for this statement.
-                    // Each quiz within the activity is identified by a unique GUID.
-                    // We only need to take the most recent submission on an activity into account.
-                    // We've sorted statements in descending order, so the first entry for a subId is the latest
-                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered)) {
-                        $filtered[$h5pSubContentId] = $statement;
-                    }
+                // Get activity subID for this statement.
+                // Each quiz within the activity is identified by a unique GUID.
+                // We only need to take the most recent submission on an activity into account.
+                // We've sorted statements in descending order, so the first entry for a subId is the latest
+                $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                if (!array_key_exists($h5pSubContentId, $filtered)) {
+                    $filtered[$h5pSubContentId] = $statement;
                 }
             }
         }
@@ -401,7 +408,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         // In some cases, we do not have a 'name' property for the object.
         // So, we've added an additional check here.
         // @todo - the LRS statements generated need to have this property
-        if (!$definition->getName()->isEmpty()) {
+        if (!empty($definition) && !$definition->getName()->isEmpty()) {
             $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
         }
         $result = $statement->getResult();
@@ -526,7 +533,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'skipped' => self::SKIPPED_VERB_ID,
             'attempted' => self::ATTEMPTED_VERB_ID,
             'interacted' => self::INTERACTED_VERB_ID,
-            'submitted-curriki' => self::INTERACTED_VERB_ID
+            'submitted-curriki' => self::SUBMITTED_CURRIKI_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
@@ -566,6 +573,107 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             }
         }
         return '';
+    }
+
+    /**
+     * Find grouping info from the list
+     * 
+     * @param array $other The list of activity IRIs
+     * 
+     * @return array
+     */
+    public function findGroupingInfo(array $other)
+    {
+        $info = [
+            'activity' => '',
+            'class' => '',
+            'class_type' => '',
+            'submission' => '',
+            'attempt' => ''
+        ];
+        if (!empty($other)) {
+            $attempt_pattern = "/\/activity\/(\d*)\/submission\/(.*)\/(\d*)/";
+            $class_pattern = "/\/(gclass|lti)\/(\d*)/";
+            $matches = [];
+            $class_matches = [];
+            // Other regexes saved for later.
+            // "/\/activity\/\d*\/submission\/\w*$/",
+            // "/\/(gclass|lti)\/\d*/",
+            foreach ($other as $i) {
+                if (preg_match($attempt_pattern, $i->getId(), $matches)) {
+                    $info['activity'] = $matches[1];
+                    $info['submission'] = $matches[2];
+                    $info['attempt'] = $matches[3];
+                    break;
+                }
+            }
+            foreach ($other as $i) {
+                if (preg_match($class_pattern, $i->getId(), $class_matches)) {
+                    $info['class_type'] = $class_matches[1];
+                    $info['class'] = $class_matches[2];
+                    break;
+                }
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * Get Verb from statement
+     * 
+     * @param Verb $verb A TinCan API verb object.
+     * 
+     * @return array
+     */
+    public function getVerbFromStatement(Verb $verb)
+    {
+        if (!empty($verb->getDisplay)) {
+            return $verb->getDisplay()->getNegotiatedLanguageString();
+        } 
+        // find it from the id
+        $iri = $verb->getId();
+        $verbName = explode("/", $iri);
+        $verbName = end($verbName);
+        return $verbName;
+    }
+
+    /**
+     * Get H5P Interaction from category
+     * 
+     * @param array An array of Category IRIs
+     * 
+     * @return string
+     */
+    public function getH5PInterationFromCategory($category)
+    {
+        $h5pInteraction = '';
+        if (!empty($category)) {
+            $categoryId = end($category)->getId();
+            $h5pInteraction = explode("/", $categoryId);
+            $h5pInteraction = end($h5pInteraction);
+        }
+        return $h5pInteraction;
+    }
+
+    /**
+     * Is interaction one of the allowed aggregates?
+     * 
+     * @return bool
+     */
+    public function isAllowedAggregateH5P($interaction)
+    {
+        $allowed = [
+            'H5P.CoursePresentation',
+            'H5P.InteractiveVideo',
+            'H5P.Column'
+        ];
+
+        foreach ($allowed as $h5p) {
+            if (preg_match('/^' . $h5p . '/', $interaction)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

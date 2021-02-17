@@ -110,7 +110,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::post('ajax/rebuild-cache', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@rebuildCache')->name('h5p.ajax.rebuild-cache');
             Route::any('ajax/filter', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@filter')->name('h5p.ajax.filter');
             Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name('h5p.ajax.finish');
-            Route::any('ajax/content-user-data', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@contentUserData')->name('h5p.ajax.content-user-data');
+            Route::any('ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
             Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
         });
 
@@ -172,9 +172,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('validate-summary-access', 'GoogleClassroomController@validateSummaryPageAccess');
         Route::post('classwork/{classwork}/submission', 'GoogleClassroomController@getStudentSubmission');
         Route::get('activities/{activity}/h5p-resource-settings', 'GoogleClassroomController@getH5pResourceSettings');
+        Route::any('h5p/ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
     });
     // Outcome
     Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
+    // Outcome
+    Route::get('xapi-extract', 'CurrikiGo\ExtractXAPIJSONController@runJob');
 
     Route::get('error', 'ErrorController@show')->name('api/error');
 

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
 
 /**
  * @group 12. H5P
@@ -25,6 +26,19 @@ use Illuminate\Validation\ValidationException;
  */
 class H5pController extends Controller
 {
+
+    private $contentUserDataGoRepository;
+
+    /**
+     * ActivityController constructor.
+     * 
+     * @param ContentUserDataGoRepositoryInterface $contentUserDataGoRepository
+     */
+    public function __construct(ContentUserDataGoRepositoryInterface $contentUserDataGoRepository)
+    {
+        $this->contentUserDataGoRepository = $contentUserDataGoRepository;
+    }
+
     /**
      * Get H5Ps
      *
@@ -590,5 +604,59 @@ class H5pController extends Controller
         // The uploaded file was not a valid H5P package
         @unlink($interface->getUploadedH5pPath());
         return FALSE;
+    }
+    
+    public function contentUserData(Request $request)
+    {
+        $contentId =$request->get('content_id');
+        $dataId =$request->get('data_type');
+        $subContentId =$request->get('sub_content_id');
+        $userId = $request->get('gcuid');
+        $data = $request->input("data");
+        $preload = $request->input("preload");
+        $invalidate = $request->input("invalidate");
+
+        if ($contentId === NULL ||
+            $dataId === NULL ||
+            $subContentId === NULL ||
+            $userId === NULL) {
+        return; // Missing parameters
+        }
+        
+        if ($data === NULL) {
+            return response()->json(["data" => false, "success" => true]);
+        }
+        
+        if ($request->get('gcuid')) {
+            if ($data === '0') {
+                $records = $this->contentUserDataGoRepository->deleteComposite($contentId, $userId, $subContentId, $dataId);
+            }else {
+                $records = $this->contentUserDataGoRepository->fetchByCompositeKey($contentId, $userId, $subContentId, $dataId);
+                
+                if ($records->count() === 0) {
+                    $this->contentUserDataGoRepository->create([
+                        'content_id' => $contentId,
+                        'user_id' => $userId,
+                        'sub_content_id' => $subContentId,
+                        'data_id' => $dataId,
+                        'data' => $data,
+                        'preload' => $preload,
+                        'invalidate' => $invalidate,
+                        'go_integration' => 'google-classroom',
+                    ]);
+                }else {
+                    $this->contentUserDataGoRepository->updateComposite([
+                        'data' => $data,
+                        'preload' => $preload,
+                        'invalidate' => $invalidate,
+                    ], $contentId, $userId, $subContentId, $dataId);
+                }
+            }
+
+            // Inserted, updated or deleted
+            H5PCore::ajaxSuccess();
+            exit;
+        }
+        return response()->json($request->all());
     }
 }

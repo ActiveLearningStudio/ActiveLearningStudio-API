@@ -222,16 +222,20 @@ class LaravelH5p
      */
     private static function get_core_settings()
     {
+        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
+        if (isset($_GET['gcuid'])) {
+            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId'.'&gcuid='.$_GET['gcuid'];
+        }
+
         $settings = array(
             'baseUrl' => config('app.url'),
             'url' => self::get_h5p_storage(), // for uploaded
             'postUserStatistics' => config('laravel-h5p.h5p_track_user') && Auth::check(),
             'ajax' => array(
                 'setFinished' => config('app.url') . '/api/v1/h5p/ajax/finish', // route('h5p.ajax.finish')
-                'contentUserData' => config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '/?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId',
-                // 'contentUserData' => route('h5p.ajax.content-user-data', ['content_id' => ':contentId', 'data_type' => ':dataType', 'sub_content_id' => ':subContentId']),
+                'contentUserData' => $contentUserDataUrl,
             ),
-            'saveFreq' => config('laravel-h5p.h5p_save_content_state', FALSE) ? config('laravel-h5p.h5p_save_content_frequency', 30) : FALSE,
+            'saveFreq' => config('laravel-h5p.h5p_save_content_state'),
             'siteUrl' => config('app.url'),
             'l10n' => array(
                 'H5P' => trans('laravel-h5p.h5p'),
@@ -244,6 +248,11 @@ class LaravelH5p
             $settings['user'] = array(
                 'name' => Auth::user()->name,
                 'mail' => Auth::user()->email,
+            );
+        } elseif (isset($_GET['gcuid'])) {
+            $settings['user'] = array(
+                'name' => $_GET['gcuid'],
+                'mail' => $_GET['gcuid'] . '@currikistudio.org',
             );
         }
 
@@ -396,7 +405,7 @@ class LaravelH5p
         );
 
         // Get preloaded user data for the current user
-        if (config('laravel-h5p.h5p_save_content_state') && Auth::check()) {
+        /*if (config('laravel-h5p.h5p_save_content_state') && Auth::check()) {
             $results = DB::select("
                 SELECT hcud.sub_content_id, hcud.data_id, hcud.data
                 FROM h5p_contents_user_data hcud
@@ -404,6 +413,23 @@ class LaravelH5p
                 AND content_id = ?
                 AND preload = 1
             ", [Auth::user()->id, $content['id']]);
+
+            if ($results) {
+                foreach ($results as $result) {
+                    $settings['contentUserData'][$result->sub_content_id][$result->data_id] = $result->data;
+                }
+            }
+        }*/
+        
+        // Get preloaded user data for the current user
+        if (isset($_GET['gcuid'])) {
+            $results = DB::select("
+                SELECT hcud.sub_content_id, hcud.data_id, hcud.data
+                FROM h5p_contents_user_data_go hcud
+                WHERE user_id = ?
+                AND content_id = ?
+                AND preload = true
+            ", [$_GET['gcuid'], $content['id']]);
 
             if ($results) {
                 foreach ($results as $result) {

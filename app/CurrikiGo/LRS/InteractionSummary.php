@@ -55,7 +55,7 @@ abstract class InteractionSummary
     {
         $definition = $this->getDefinition();
         $nameOfActivity = '';
-        if (!$definition->getName()->isEmpty()) {
+        if (!empty($definition) && !$definition->getName()->isEmpty()) {
             $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
         }
         return $nameOfActivity;
@@ -139,9 +139,66 @@ abstract class InteractionSummary
     }
 
     /**
-     * Abstract method for the interaction summary.
+     * Interaction summary
+     *
+     * @return array
+     */
+    public function summary()
+    {
+        $definition = $this->getDefinition();
+        // $summary['correct-pattern'] = $this->getCorrectResponsesPattern();
+        $summary['interaction'] = $this->getInteractionType();
+        $result = $this->getResult();
+        $summary['name'] = $this->getName();
+        $summary['description'] = $this->getDescription();
+        $summary['scorable'] = $this->isScorable();
+        if ($result) {
+            $summary['response'] = $this->getFormattedResponse();
+            $summary['raw-response'] = $this->getRawResponse();
+            $summary['choices'] = $this->getChoicesListArray();
+            $summary['correct-pattern'] = $this->getComponentListArray();
+            if ($result->getScore()) {
+                $summary['score'] = [
+                    'raw' => $result->getScore()->getRaw(),
+                    'min' => $result->getScore()->getMin(),
+                    'max' => $result->getScore()->getMax(),
+                    'scaled' => $result->getScore()->getScaled(),
+                ];
+                $summary['duration'] = xAPIFormatDuration($result->getDuration());
+                $summary['raw-duration'] = xAPIFormatDuration($result->getDuration(), false);
+            } else {
+                $summary['score'] = [
+                    'raw' => 0,
+                    'max' => 0,
+                    'min' => 0,
+                    'scaled' => 0,
+                ];
+                $summary['duration'] = '00:00';
+                $summary['raw-duration'] = 0;
+            }
+        }
+        // Get Verb
+        $summary['verb'] = $this->getVerb();
+        return $summary;
+    }
+
+    /**
+     * Abstract method for getting descriptive student responses
+     * Will be implemented by sub-classes
+     * @return array
+     */
+    abstract public function getFormattedResponse();
+
+    /**
+     * Abstract method for the interaction choices
      * Will be implemented by sub-classes
      */
-    abstract public function summary();
+    abstract public function getChoicesListArray();
+
+    /**
+     * Abstract method for compnent list array
+     * Will be implemented by sub-classes
+     */
+    abstract public function getComponentListArray();
     
 }
