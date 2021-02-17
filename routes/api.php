@@ -148,7 +148,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     });
 
     // public route for get user's shared projects
-    Route::post('get-shared-projects', 'UserController@sharedProjects');
+    Route::post('projects/shared', 'UserController@sharedProjects');
 
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
     // H5P Activity public route

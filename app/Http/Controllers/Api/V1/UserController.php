@@ -444,7 +444,7 @@ class UserController extends Controller
      */
     public function sharedProjects(SharedProjectRequest $request)
     {
-        $user = User::with(['projects'=> function($q){
+        $user = User::with(['projects' => function($q){
                         $q->where('shared', true);
                     }])
                     ->whereId($request->user_id)->first();
