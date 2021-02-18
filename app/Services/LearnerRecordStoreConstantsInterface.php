@@ -103,6 +103,6 @@ interface LearnerRecordStoreConstantsInterface
      * 
      * @var string
      */
-    const EXTENSION_H5P_CHAPTER_INDEX = 'http://currikistudio.org/x-api/h5p-chapter-Index';
+    const EXTENSION_H5P_CHAPTER_INDEX = 'http://currikistudio.org/x-api/h5p-chapter-index';
 
 }
