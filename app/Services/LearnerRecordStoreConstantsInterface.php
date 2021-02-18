@@ -70,4 +70,39 @@ interface LearnerRecordStoreConstantsInterface
      */
     const SUBMITTED_VERB_NAME = 'submitted-curriki';
 
+    /**
+     * Google Classroom Alternate Course ID 
+     * 
+     * @var string
+     */
+    const EXTENSION_GCLASS_ALTERNATE_COURSE_ID = 'http://currikistudio.org/x-api/gclass-alternate-course-id';
+
+    /**
+     * Google Classroom Enrollment Code
+     * 
+     * @var string
+     */
+    const EXTENSION_GCLASS_ENROLLMENT_CODE = 'http://currikistudio.org/x-api/gclass-enrollment-code';
+
+    /**
+     * Course Name (Google Classroom / LMS)
+     * 
+     * @var string
+     */
+    const EXTENSION_COURSE_NAME = 'http://currikistudio.org/x-api/course-name';
+
+    /**
+     * H5P Chapter/Slide/Page Name
+     * 
+     * @var string
+     */
+    const EXTENSION_H5P_CHAPTER_NAME = 'http://currikistudio.org/x-api/h5p-chapter-name';
+
+    /**
+     * H5P Chapter/Slide/Page Index
+     * 
+     * @var string
+     */
+    const EXTENSION_H5P_CHAPTER_INDEX = 'http://currikistudio.org/x-api/h5p-chapter-index';
+
 }
