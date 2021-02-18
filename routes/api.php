@@ -147,6 +147,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
     });
 
+    // public route for get user's shared projects
+    Route::post('projects/shared', 'UserController@sharedProjects');
+
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
     // H5P Activity public route
     Route::get('h5p/activity/{activity}/visibility/{visibility}', 'H5pController@showByActivity');
@@ -175,7 +178,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
     // Outcome
     Route::get('xapi-extract', 'CurrikiGo\ExtractXAPIJSONController@runJob');
-    
+
     Route::get('error', 'ErrorController@show')->name('api/error');
 
     /*********************** ADMIN PANEL ROUTES ************************/

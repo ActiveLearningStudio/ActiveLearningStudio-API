@@ -12,6 +12,7 @@ use \TinCan\Verb;
 use \TinCan\Activity;
 use \TinCan\Extensions;
 use \TinCan\LRSResponse;
+use \TinCan\ActivityDefinition;
 use App\CurrikiGo\LRS\InteractionFactory;
 
 /**
@@ -269,18 +270,13 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         if ($skipped) {
             // iterate and find the statements that have results.
             foreach ($skipped as $statement) {
-                $result = $statement->getResult();
-                // Get Category context
-                $contextActivities = $statement->getContext()->getContextActivities();
-                if (!empty($result)) {
-                    // Get activity subID for this statement.
-                    // Each quiz within the activity is identified by a unique GUID.
-                    // We only need to take the most recent submission on an activity into account.
-                    // We've sorted statements in descending order, so the first entry for a subId is the latest
-                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered)) {
-                        $filtered[$h5pSubContentId] = $statement;
-                    }
+                // Get activity subID for this statement.
+                // Each quiz within the activity is identified by a unique GUID.
+                // We only need to take the most recent submission on an activity into account.
+                // We've sorted statements in descending order, so the first entry for a subId is the latest
+                $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                if (!array_key_exists($h5pSubContentId, $filtered)) {
+                    $filtered[$h5pSubContentId] = $statement;
                 }
             }
         }
@@ -522,6 +518,19 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $keyName = self::EXTENSION_H5P_SUBCONTENT_ID;
         // find the sub content id
         return (!empty($extensionsList) && array_key_exists($keyName, $extensionsList) ? $extensionsList[$keyName] : '');
+    }
+
+    /**
+     * Retrieve a specific object extension from a list of extensions in an Activity definition.
+     * 
+     * @param ActivityDefinition $definition An Activity Defintion object.
+     * @param string $needle A extension IRI to look for.
+     * @return string
+     */
+    public function getExtensionValueFromList(ActivityDefinition $definition, $needle)
+    {
+        $extensionsList = $definition->getExtensions()->asVersion();
+        return (!empty($extensionsList) && array_key_exists($needle, $extensionsList) ? $extensionsList[$needle] : null);
     }
 
     /**
