@@ -46,7 +46,12 @@ class LRSStatement extends Model
         'assignment_id',
         'assignment_name',
         'page',
-        'question'
+        'question',
+        'glass_alternate_course_id',
+        'glass_enrollment_code',
+        'course_name',
+        'chapter_name',
+        'chapter_index'
     ];
 
     /**
@@ -78,6 +83,11 @@ class LRSStatement extends Model
         'score_max' => null,
         'score_raw' => null,
         'page' => null,
-        'page_completed' => false
+        'page_completed' => false,
+        'glass_alternate_course_id' => null,
+        'glass_enrollment_code' => null,
+        'course_name' => null,
+        'chapter_name' => null,
+        'chapter_index' => null
     ];
 }
