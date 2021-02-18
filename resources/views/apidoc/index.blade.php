@@ -4932,13 +4932,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/projects/aut/playlists" \
+    "http://localhost:8000/api/v1/projects/illum/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/aut/playlists"
+    "http://localhost:8000/api/v1/projects/illum/playlists"
 );
 
 let headers = {
@@ -4961,7 +4961,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8000/api/v1/projects/aut/playlists',
+    'http://localhost:8000/api/v1/projects/illum/playlists',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4978,7 +4978,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/projects/aut/playlists'
+url = 'http://localhost:8000/api/v1/projects/illum/playlists'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -9001,7 +9001,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"voluptatem","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"rerum","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/activities"
@@ -9015,7 +9015,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "voluptatem",
+    "content": "rerum",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -9043,7 +9043,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'voluptatem',
+            'content' =&gt; 'rerum',
             'playlist_id' =&gt; 1,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -9062,7 +9062,7 @@ url = 'http://localhost:8000/api/v1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "voluptatem",
+    "content": "rerum",
     "playlist_id": 1,
     "order": 2,
     "h5p_content_id": 59,
@@ -9358,7 +9358,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"libero","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"dolores","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/activities/1"
@@ -9372,7 +9372,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "libero",
+    "content": "dolores",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -9401,7 +9401,7 @@ $response = $client-&gt;put(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'libero',
+            'content' =&gt; 'dolores',
             'playlist_id' =&gt; 1,
             'shared' =&gt; false,
             'order' =&gt; 2,
@@ -9421,7 +9421,7 @@ url = 'http://localhost:8000/api/v1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "libero",
+    "content": "dolores",
     "playlist_id": 1,
     "shared": false,
     "order": 2,
@@ -9690,11 +9690,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/activities/in/h5p-resource-settings-shared" \
+    -G "http://localhost:8000/api/v1/activities/sit/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/activities/in/h5p-resource-settings-shared"
+    "http://localhost:8000/api/v1/activities/sit/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -9711,7 +9711,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8000/api/v1/activities/in/h5p-resource-settings-shared',
+    'http://localhost:8000/api/v1/activities/sit/h5p-resource-settings-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9724,7 +9724,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/activities/in/h5p-resource-settings-shared'
+url = 'http://localhost:8000/api/v1/activities/sit/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12924,13 +12924,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/iure/fetch" \
+    "http://localhost:8000/api/v1/go/canvas/projects/saepe/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":1}'
+    -d '{"setting_id":8}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/iure/fetch"
+    "http://localhost:8000/api/v1/go/canvas/projects/saepe/fetch"
 );
 
 let headers = {
@@ -12939,7 +12939,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 1
+    "setting_id": 8
 }
 
 fetch(url, {
@@ -12952,14 +12952,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8000/api/v1/go/canvas/projects/iure/fetch',
+    'http://localhost:8000/api/v1/go/canvas/projects/saepe/fetch',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'setting_id' =&gt; 1,
+            'setting_id' =&gt; 8,
         ],
     ]
 );
@@ -12968,9 +12968,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/go/canvas/projects/iure/fetch'
+url = 'http://localhost:8000/api/v1/go/canvas/projects/saepe/fetch'
 payload = {
-    "setting_id": 1
+    "setting_id": 8
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13059,7 +13059,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"deleniti"}'
+    -d '{"access_token":"tenetur"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/access-token"
@@ -13071,7 +13071,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "deleniti"
+    "access_token": "tenetur"
 }
 
 fetch(url, {
@@ -13091,7 +13091,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'deleniti',
+            'access_token' =&gt; 'tenetur',
         ],
     ]
 );
@@ -13102,7 +13102,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/access-token'
 payload = {
-    "access_token": "deleniti"
+    "access_token": "tenetur"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13445,7 +13445,7 @@ Attaches a summary page link to the assignment, and turns it in.</p>
     "http://localhost:8000/api/v1/google-classroom/turnin/9" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"et","course_id":"commodi"}'
+    -d '{"access_token":"et","course_id":"aut"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/turnin/9"
@@ -13458,7 +13458,7 @@ let headers = {
 
 let body = {
     "access_token": "et",
-    "course_id": "commodi"
+    "course_id": "aut"
 }
 
 fetch(url, {
@@ -13479,7 +13479,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'access_token' =&gt; 'et',
-            'course_id' =&gt; 'commodi',
+            'course_id' =&gt; 'aut',
         ],
     ]
 );
@@ -13491,7 +13491,7 @@ import json
 url = 'http://localhost:8000/api/v1/google-classroom/turnin/9'
 payload = {
     "access_token": "et",
-    "course_id": "commodi"
+    "course_id": "aut"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13577,7 +13577,7 @@ If the user is authenticated and is a student, validate if the submission is his
     "http://localhost:8000/api/v1/google-classroom/validate-summary-access" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"numquam","course_id":"excepturi","gc_classwork_id":"eos","gc_submission_id":"cumque"}'
+    -d '{"access_token":"aut","course_id":"ut","gc_classwork_id":"minima","gc_submission_id":"et"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/validate-summary-access"
@@ -13589,10 +13589,10 @@ let headers = {
 };
 
 let body = {
-    "access_token": "numquam",
-    "course_id": "excepturi",
-    "gc_classwork_id": "eos",
-    "gc_submission_id": "cumque"
+    "access_token": "aut",
+    "course_id": "ut",
+    "gc_classwork_id": "minima",
+    "gc_submission_id": "et"
 }
 
 fetch(url, {
@@ -13612,10 +13612,10 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'numquam',
-            'course_id' =&gt; 'excepturi',
-            'gc_classwork_id' =&gt; 'eos',
-            'gc_submission_id' =&gt; 'cumque',
+            'access_token' =&gt; 'aut',
+            'course_id' =&gt; 'ut',
+            'gc_classwork_id' =&gt; 'minima',
+            'gc_submission_id' =&gt; 'et',
         ],
     ]
 );
@@ -13626,10 +13626,10 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/validate-summary-access'
 payload = {
-    "access_token": "numquam",
-    "course_id": "excepturi",
-    "gc_classwork_id": "eos",
-    "gc_submission_id": "cumque"
+    "access_token": "aut",
+    "course_id": "ut",
+    "gc_classwork_id": "minima",
+    "gc_submission_id": "et"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13704,7 +13704,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/classwork/9/submission" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"quo","course_id":"aut"}'
+    -d '{"access_token":"aut","course_id":"quae"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/classwork/9/submission"
@@ -13716,8 +13716,8 @@ let headers = {
 };
 
 let body = {
-    "access_token": "quo",
-    "course_id": "aut"
+    "access_token": "aut",
+    "course_id": "quae"
 }
 
 fetch(url, {
@@ -13737,8 +13737,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'quo',
-            'course_id' =&gt; 'aut',
+            'access_token' =&gt; 'aut',
+            'course_id' =&gt; 'quae',
         ],
     ]
 );
@@ -13749,8 +13749,8 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/classwork/9/submission'
 payload = {
-    "access_token": "quo",
-    "course_id": "aut"
+    "access_token": "aut",
+    "course_id": "quae"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13837,11 +13837,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/google-classroom/activities/et/h5p-resource-settings" \
+    -G "http://localhost:8000/api/v1/google-classroom/activities/corrupti/h5p-resource-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/activities/et/h5p-resource-settings"
+    "http://localhost:8000/api/v1/google-classroom/activities/corrupti/h5p-resource-settings"
 );
 
 let headers = {
@@ -13858,7 +13858,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8000/api/v1/google-classroom/activities/et/h5p-resource-settings',
+    'http://localhost:8000/api/v1/google-classroom/activities/corrupti/h5p-resource-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -13871,7 +13871,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/google-classroom/activities/et/h5p-resource-settings'
+url = 'http://localhost:8000/api/v1/google-classroom/activities/corrupti/h5p-resource-settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18326,7 +18326,7 @@ response.json()</code></pre>
 </table>
 <!-- END_922a50d789de16cc2c31d9ae805a7c6b -->
 <!-- START_4a7209122ce1cc7f6675a03fcb71cf33 -->
-<h2>Get Group</h2>
+<h2>Get Group Detail</h2>
 <p>Get the specified group detail.</p>
 <blockquote>
 <p>Example request:</p>
@@ -20014,7 +20014,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/admin/users/bulk/import" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"import_file":"vel"}'
+    -d '{"import_file":"laborum"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/admin/users/bulk/import"
@@ -20026,7 +20026,7 @@ let headers = {
 };
 
 let body = {
-    "import_file": "vel"
+    "import_file": "laborum"
 }
 
 fetch(url, {
@@ -20046,7 +20046,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'import_file' =&gt; 'vel',
+            'import_file' =&gt; 'laborum',
         ],
     ]
 );
@@ -20057,7 +20057,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/admin/users/bulk/import'
 payload = {
-    "import_file": "vel"
+    "import_file": "laborum"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -21216,7 +21216,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/admin/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"et","order":1}'
+    -d '{"title":"Audio","image":"corporis","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/admin/activity-types"
@@ -21229,7 +21229,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "et",
+    "image": "corporis",
     "order": 1
 }
 
@@ -21251,7 +21251,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'et',
+            'image' =&gt; 'corporis',
             'order' =&gt; 1,
         ],
     ]
@@ -21264,7 +21264,7 @@ import json
 url = 'http://localhost:8000/api/v1/admin/activity-types'
 payload = {
     "title": "Audio",
-    "image": "et",
+    "image": "corporis",
     "order": 1
 }
 headers = {
@@ -21462,7 +21462,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/admin/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"enim","order":1}'
+    -d '{"title":"Audio","image":"dolorem","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/admin/activity-types/1"
@@ -21475,7 +21475,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "enim",
+    "image": "dolorem",
     "order": 1
 }
 
@@ -21497,7 +21497,7 @@ $response = $client-&gt;put(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'enim',
+            'image' =&gt; 'dolorem',
             'order' =&gt; 1,
         ],
     ]
@@ -21510,7 +21510,7 @@ import json
 url = 'http://localhost:8000/api/v1/admin/activity-types/1'
 payload = {
     "title": "Audio",
-    "image": "enim",
+    "image": "dolorem",
     "order": 1
 }
 headers = {
@@ -21832,7 +21832,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/admin/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"harum","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"dolorem","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/admin/activity-items"
@@ -21848,7 +21848,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "harum",
+    "image": "dolorem",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -21876,7 +21876,7 @@ $response = $client-&gt;post(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'harum',
+            'image' =&gt; 'dolorem',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -21895,7 +21895,7 @@ payload = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "harum",
+    "image": "dolorem",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -22098,7 +22098,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"veniam","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"in","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/admin/activity-items/1"
@@ -22114,7 +22114,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "veniam",
+    "image": "in",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -22142,7 +22142,7 @@ $response = $client-&gt;put(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'veniam',
+            'image' =&gt; 'in',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -22161,7 +22161,7 @@ payload = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "veniam",
+    "image": "in",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
