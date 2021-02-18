@@ -45,7 +45,8 @@ class AuthServiceProvider extends ServiceProvider
 
         // Adding Gates for Publishing
         Gate::define('publish-to-lms', function ($user, $project) {
-            return $user->isAdmin() || $this->hasPermission($user, $project);
+            // If the project is either shared, or the user is admin, or if user is the owner, then allow to publish
+            return $project->shared === true || $user->isAdmin() || $this->hasPermission($user, $project);
         });
 
         Gate::define('fetch-lms-course', function ($user, $project) {
