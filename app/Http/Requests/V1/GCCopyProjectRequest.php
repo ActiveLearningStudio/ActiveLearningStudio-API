@@ -24,7 +24,8 @@ class GCCopyProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => 'sometimes|integer'
+            'course_id' => 'sometimes|integer',
+            'access_token' => 'nullable'
         ];
     }
 }
