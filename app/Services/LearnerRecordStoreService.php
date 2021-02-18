@@ -12,6 +12,7 @@ use \TinCan\Verb;
 use \TinCan\Activity;
 use \TinCan\Extensions;
 use \TinCan\LRSResponse;
+use \TinCan\ActivityDefinition;
 use App\CurrikiGo\LRS\InteractionFactory;
 
 /**
@@ -517,6 +518,19 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $keyName = self::EXTENSION_H5P_SUBCONTENT_ID;
         // find the sub content id
         return (!empty($extensionsList) && array_key_exists($keyName, $extensionsList) ? $extensionsList[$keyName] : '');
+    }
+
+    /**
+     * Retrieve a specific object extension from a list of extensions in an Activity definition.
+     * 
+     * @param ActivityDefinition $definition An Activity Defintion object.
+     * @param string $needle A extension IRI to look for.
+     * @return string
+     */
+    public function getExtensionValueFromList(ActivityDefinition $definition, $needle)
+    {
+        $extensionsList = $definition->getExtensions()->asVersion();
+        return (!empty($extensionsList) && array_key_exists($needle, $extensionsList) ? $extensionsList[$needle] : null);
     }
 
     /**
