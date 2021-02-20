@@ -562,7 +562,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $allowed = [
             'H5P.SimpleMultiChoice-1.1',
             'H5P.OpenEndedQuestion-1.0',
-            'H5P.StarRating-1.0'
+            'H5P.StarRating-1.0',
+            'H5P.NonscoreableDragQuestion-1.0'
         ];
         return $allowed;
     }
