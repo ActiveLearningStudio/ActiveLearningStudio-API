@@ -29,6 +29,9 @@ class OrganizationResource extends JsonResource
                 return $this->pivot->role->display_name;
             }),
             'default_organization' => $this->when(auth()->user() && auth()->user()->default_organization == $this->id, true),
+            'projects_count' => $this->when($this->projects_count, $this->projects_count),
+            'suborganization_count' => $this->when($this->children_count, $this->children_count),
+            'users_count' => $this->when($this->users_count, $this->users_count),
         ];
     }
 }

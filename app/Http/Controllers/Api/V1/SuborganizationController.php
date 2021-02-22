@@ -153,7 +153,7 @@ class SuborganizationController extends Controller
     public function show(Organization $suborganization)
     {
         return response([
-            'suborganization' => new OrganizationResource($suborganization),
+            'suborganization' => new OrganizationResource($suborganization->load('parent')->loadCount(['projects', 'children', 'users'])),
         ], 200);
     }
 
