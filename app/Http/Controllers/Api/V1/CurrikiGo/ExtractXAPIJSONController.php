@@ -144,6 +144,20 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['assignment_id'] = $activityId;
                 $insertData['assignment_name'] = $activityName;
 
+                // Extract information from object.definition.extensions
+                if ($target->getObjectType() === 'Activity' && !empty($definition)) {
+                    $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
+                    $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
+                    $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
+                    $chapterName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_NAME);
+                    $chapterIndex = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_INDEX);
+                    $insertData['glass_alternate_course_id'] = $glassAltCourseId;
+                    $insertData['glass_enrollment_code'] = $glassEnrollmentCode;
+                    $insertData['course_name'] = $courseName;
+                    $insertData['chapter_name'] = $chapterName;
+                    $insertData['chapter_index'] = $chapterIndex;
+                }
+
                 $interactionFactory = new InteractionFactory();
                 $interaction = $interactionFactory->initInteraction($statement);
                 if ($interaction) {

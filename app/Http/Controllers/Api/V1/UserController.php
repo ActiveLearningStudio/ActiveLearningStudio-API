@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProfileUpdateRequest;
+use App\Http\Requests\V1\SharedProjectRequest;
 use App\Http\Requests\V1\UserSearchRequest;
+use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\OrganizationResource;
@@ -501,5 +503,26 @@ class UserController extends Controller
         return response([
             'errors' => ['Failed to set default organization.'],
         ], 500);
+    }
+
+    /**
+     * Get All Shared Projects
+     *
+     * Get a list of the shared projects of a user.
+     *
+     * @responseFile responses/project/projects.json
+     *
+     * @return Response
+     */
+    public function sharedProjects(SharedProjectRequest $request)
+    {
+        $user = User::with(['projects' => function($q){
+                        $q->where('shared', true);
+                    }])
+                    ->whereId($request->user_id)->first();
+
+        return response([
+            'projects' => ProjectResource::collection($user->projects),
+        ], 200);
     }
 }
