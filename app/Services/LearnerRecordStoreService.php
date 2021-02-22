@@ -12,6 +12,7 @@ use \TinCan\Verb;
 use \TinCan\Activity;
 use \TinCan\Extensions;
 use \TinCan\LRSResponse;
+use \TinCan\ActivityDefinition;
 use App\CurrikiGo\LRS\InteractionFactory;
 
 /**
@@ -269,18 +270,13 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         if ($skipped) {
             // iterate and find the statements that have results.
             foreach ($skipped as $statement) {
-                $result = $statement->getResult();
-                // Get Category context
-                $contextActivities = $statement->getContext()->getContextActivities();
-                if (!empty($result)) {
-                    // Get activity subID for this statement.
-                    // Each quiz within the activity is identified by a unique GUID.
-                    // We only need to take the most recent submission on an activity into account.
-                    // We've sorted statements in descending order, so the first entry for a subId is the latest
-                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered)) {
-                        $filtered[$h5pSubContentId] = $statement;
-                    }
+                // Get activity subID for this statement.
+                // Each quiz within the activity is identified by a unique GUID.
+                // We only need to take the most recent submission on an activity into account.
+                // We've sorted statements in descending order, so the first entry for a subId is the latest
+                $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                if (!array_key_exists($h5pSubContentId, $filtered)) {
+                    $filtered[$h5pSubContentId] = $statement;
                 }
             }
         }
@@ -525,6 +521,19 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Retrieve a specific object extension from a list of extensions in an Activity definition.
+     * 
+     * @param ActivityDefinition $definition An Activity Defintion object.
+     * @param string $needle A extension IRI to look for.
+     * @return string
+     */
+    public function getExtensionValueFromList(ActivityDefinition $definition, $needle)
+    {
+        $extensionsList = $definition->getExtensions()->asVersion();
+        return (!empty($extensionsList) && array_key_exists($needle, $extensionsList) ? $extensionsList[$needle] : null);
+    }
+
+    /**
      * Get Verb ID from name.
      * 
      * @param string $verb Name of the verb. Example: answered
@@ -538,7 +547,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'skipped' => self::SKIPPED_VERB_ID,
             'attempted' => self::ATTEMPTED_VERB_ID,
             'interacted' => self::INTERACTED_VERB_ID,
-            'submitted-curriki' => self::INTERACTED_VERB_ID
+            'submitted-curriki' => self::SUBMITTED_CURRIKI_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
@@ -553,6 +562,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $allowed = [
             'H5P.SimpleMultiChoice-1.1',
             'H5P.OpenEndedQuestion-1.0',
+            'H5P.StarRating-1.0',
+            'H5P.NonscoreableDragQuestion-1.0'
         ];
         return $allowed;
     }

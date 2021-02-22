@@ -84,7 +84,7 @@ class LmsController extends Controller
             'author' => 'string|max:255',
             'private' => 'integer',
             'userEmail' => 'string|required|max:255',
-            'ltiClientId' => 'integer|required',
+            'ltiClientId' => 'string|required',
         ]);
 
         return response([

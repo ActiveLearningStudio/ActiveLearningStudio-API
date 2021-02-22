@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GCCopyProjectRequest extends FormRequest
+class SharedProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class GCCopyProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => 'sometimes|integer',
-            'access_token' => 'nullable'
+            'user_id' => 'required|integer|exists:users,id',
         ];
     }
 }

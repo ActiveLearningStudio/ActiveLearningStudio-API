@@ -49,12 +49,13 @@ class GoogleClassroom implements GoogleClassroomInterface
         $client->setAccessType('offline');
         $client->setPrompt('select_account consent');
 
-        // @Todo - at the moment, we're taking token from the database for the authenticated user.
-        if (auth()->user()) {
-            $accessToken = json_decode(auth()->user()->gapi_access_token, true);
-            $client->setAccessToken($accessToken);
-        } else if($accessTokenStr) {
+        // If token is provided, then prefer that.
+        if ($accessTokenStr) {
             $accessToken = json_decode($accessTokenStr, true);
+            $client->setAccessToken($accessToken);
+        } elseif (auth()->user()) {
+            // @Todo - at the moment, we're taking token from the database for the authenticated user.
+            $accessToken = json_decode(auth()->user()->gapi_access_token, true);
             $client->setAccessToken($accessToken);
         }
 
