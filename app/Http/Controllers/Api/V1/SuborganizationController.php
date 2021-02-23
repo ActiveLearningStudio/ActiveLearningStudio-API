@@ -279,6 +279,7 @@ class SuborganizationController extends Controller
      *
      * Add user for the specified role in default suborganization
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam user_id int required Id of the user to be added Example: 1
      * @bodyParam role_id int required Id of the role for added user Example: 1
      *
@@ -295,16 +296,13 @@ class SuborganizationController extends Controller
      * @param SuborganizationAddUser $request
      * @return Response
      */
-    public function addUser(SuborganizationAddUser $request)
+    public function addUser(SuborganizationAddUser $request, Organization $suborganization)
     {
-        $this->authorize('addUser', Organization::class);
+        $this->authorize('addUser', $suborganization);
 
         $data = $request->validated();
 
-        $authenticatedUser = auth()->user();
-        $id = $authenticatedUser->default_organization;
-
-        $is_added = $this->organizationRepository->addUser($id, $data);
+        $is_added = $this->organizationRepository->addUser($suborganization->id, $data);
 
         if ($is_added) {
             return response([
