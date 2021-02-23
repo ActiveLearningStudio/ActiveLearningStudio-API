@@ -318,57 +318,45 @@ class SuborganizationController extends Controller
     /**
      * Invite Organization Member
      *
-     * Invite a organization member to the team.
+     * Invite a member to the organization.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam email string required The email of the user Example: abby@curriki.org
+     * @bodyParam role_id int required Id of the role for invited user Example: 1
+     * @bodyParam note string The note for the user Example: Welcome
      *
      * @response {
-     *   "message": "Users have been invited to the organization successfully."
-     * }
-     *
-     * @response 403 {
-     *   "errors": [
-     *     "You do not have permission to invite users to the organization."
-     *   ]
+     *   "message": "User have been invited to the organization successfully."
      * }
      *
      * @response 500 {
      *   "errors": [
-     *     "Failed to invite users to the organization."
+     *     "Failed to invite user to the organization."
      *   ]
      * }
      *
      * @param SuborganizationInviteMember $request
      * @return Response
      */
-    public function inviteMembers(SuborganizationInviteMember $request)
+    public function inviteMembers(SuborganizationInviteMember $request, Organization $suborganization)
     {
-        $this->authorize('inviteMembers', Organization::class);
+        $this->authorize('inviteMembers', $suborganization);
 
         $data = $request->validated();
 
         $authenticatedUser = auth()->user();
-        $defaultOrganization = $authenticatedUser->defaultOrganization;
 
-        $admin = $this->organizationRepository->getAdmin($defaultOrganization);
+        $invited = $this->organizationRepository->inviteMember($authenticatedUser, $suborganization, $data);
 
-        if ($admin->id === $authenticatedUser->id) {
-            $invited = $this->organizationRepository->inviteMember($authenticatedUser, $defaultOrganization, $data);
-
-            if ($invited) {
-                return response([
-                    'message' => 'Users have been invited to the organization successfully.',
-                ], 200);
-            }
-
+        if ($invited) {
             return response([
-                'errors' => ['Failed to invite users to the organization.'],
-            ], 500);
+                'message' => 'User have been invited to the organization successfully.',
+            ], 200);
         }
 
         return response([
-            'message' => 'You do not have permission to invite users to the organization.',
-        ], 403);
+            'errors' => ['Failed to invite user to the organization.'],
+        ], 500);
     }
 
     /**

@@ -82,11 +82,12 @@ class OrganizationPolicy
      * Determine whether the user can invite members.
      *
      * @param User $user
+     * @param Organization $organization
      * @return mixed
      */
-    public function inviteMembers(User $user)
+    public function inviteMembers(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $user->defaultOrganization), [1, 2]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
     }
 
     /**
