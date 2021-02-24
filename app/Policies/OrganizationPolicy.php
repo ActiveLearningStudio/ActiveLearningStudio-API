@@ -48,11 +48,12 @@ class OrganizationPolicy
      * Determine whether the user can upload thumb.
      *
      * @param User $user
+     * @param Organization $organization
      * @return mixed
      */
-    public function uploadThumb(User $user)
+    public function uploadThumb(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $user->defaultOrganization) == 1;
+        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
     }
 
     /**

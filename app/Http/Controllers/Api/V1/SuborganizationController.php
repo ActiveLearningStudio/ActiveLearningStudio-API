@@ -62,6 +62,7 @@ class SuborganizationController extends Controller
      *
      * Upload thumbnail image for a suborganization
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam thumb image required Thumbnail image to upload Example: (binary)
      *
      * @response {
@@ -75,11 +76,12 @@ class SuborganizationController extends Controller
      * }
      *
      * @param Request $request
+     * @param Organization $suborganization
      * @return Response
      */
-    public function uploadThumb(Request $request)
+    public function uploadThumb(Request $request, Organization $suborganization)
     {
-        $this->authorize('uploadThumb', Organization::class);
+        $this->authorize('uploadThumb', $suborganization);
 
         $validator = Validator::make($request->all(), [
             'thumb' => 'required|image|max:102400',
