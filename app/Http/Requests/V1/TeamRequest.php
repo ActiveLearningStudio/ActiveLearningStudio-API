@@ -24,6 +24,7 @@ class TeamRequest extends FormRequest
     public function rules()
     {
         return [
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
             'name' => 'required|string|max:80',
             'description' => 'required|string|max:1000',
             'users' => 'required|array',

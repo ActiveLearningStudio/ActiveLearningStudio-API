@@ -154,7 +154,7 @@ class GroupController extends Controller
         $data = $groupRequest->validated();
 
         $auth_user = auth()->user();
-        $data['organization_id'] = $auth_user->default_organization;
+        // $data['organization_id'] = $auth_user->default_organization;
         $group = $auth_user->groups()->create($data, ['role' => 'owner']);
 
         if ($group) {
