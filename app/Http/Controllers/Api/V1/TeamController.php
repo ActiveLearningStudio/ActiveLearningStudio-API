@@ -153,7 +153,7 @@ class TeamController extends Controller
         $data = $teamRequest->validated();
 
         $auth_user = auth()->user();
-        $data['organization_id'] = $auth_user->default_organization;
+        // $data['organization_id'] = $auth_user->default_organization;
         $team = $auth_user->teams()->create($data, ['role' => 'owner']);
 
         if ($team) {
