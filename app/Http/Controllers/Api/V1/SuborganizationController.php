@@ -294,6 +294,7 @@ class SuborganizationController extends Controller
      * }
      *
      * @param SuborganizationAddUser $request
+     * @param Organization $suborganization
      * @return Response
      */
     public function addUser(SuborganizationAddUser $request, Organization $suborganization)
@@ -336,6 +337,7 @@ class SuborganizationController extends Controller
      * }
      *
      * @param SuborganizationInviteMember $request
+     * @param Organization $suborganization
      * @return Response
      */
     public function inviteMembers(SuborganizationInviteMember $request, Organization $suborganization)
@@ -466,22 +468,22 @@ class SuborganizationController extends Controller
     }
 
     /**
-     * Get All Users For Default Suborganization
+     * Get All Users For a Suborganization
      *
-     * Get a list of the users for a user's default organization.
+     * Get a list of the users for a suborganization.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam page The pagination page no to show  Example: 1
      *
      * @responseFile responses/organization/organization-users.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
-    public function getUsers()
+    public function getUsers(Organization $suborganization)
     {
-        $this->authorize('viewAnyUser', Organization::class);
+        $this->authorize('viewAnyUser', $suborganization);
 
-        $authenticatedUser = auth()->user();
-
-        return response([
-            'organization-users' => UserResource::collection($this->organizationRepository->fetchOrganizationUsers($authenticatedUser->default_organization))
-        ], 200);
+        return UserResource::collection($this->organizationRepository->fetchOrganizationUsers($suborganization));
     }
 }

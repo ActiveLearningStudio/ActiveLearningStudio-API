@@ -113,14 +113,15 @@ class OrganizationPolicy
     }
 
     /**
-     * Determine whether the user can view any user.
+     * Determine whether the user can view any organization's user.
      *
      * @param User $user
+     * @param Organization $organization
      * @return mixed
      */
-    public function viewAnyUser(User $user)
+    public function viewAnyUser(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $user->defaultOrganization), [1, 2]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
     }
 
     /**

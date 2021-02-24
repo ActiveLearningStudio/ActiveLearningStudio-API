@@ -228,14 +228,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     /**
      * To fetch organization users
      *
-     * @param $id
+     * @param Organization $organization
      * @return Model
      */
-    public function fetchOrganizationUsers($id)
+    public function fetchOrganizationUsers($organization)
     {
-        $organization = $this->find($id);
-
-        return $organization->users;
+        return $organization->users()->withCount([
+            'projects' => function ($query) use ($organization) {
+                $query->where('organization_id', $organization->id);
+            },
+            'teams' => function ($query) use ($organization) {
+                $query->where('organization_id', $organization->id);
+            },
+            'groups' => function ($query) use ($organization) {
+                $query->where('organization_id', $organization->id);
+            }
+        ])
+        ->paginate();
     }
 
     /**

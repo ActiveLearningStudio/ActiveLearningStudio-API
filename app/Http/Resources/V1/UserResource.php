@@ -34,7 +34,10 @@ class UserResource extends JsonResource
             'default_organization' => new OrganizationResource($this->defaultOrganization),
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->display_name;
-            })
+            }),
+            'projects_count' => $this->when($this->projects_count, $this->projects_count),
+            'teams_count' => $this->when($this->teams_count, $this->teams_count),
+            'groups_count' => $this->when($this->groups_count, $this->groups_count)
         ];
     }
 }

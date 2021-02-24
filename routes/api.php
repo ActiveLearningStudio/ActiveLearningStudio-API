@@ -138,7 +138,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // Suborganizations
         Route::post('suborganizations/upload-thumb', 'SuborganizationController@uploadThumb');
         Route::get('suborganizations/member-options', 'SuborganizationController@showMemberOptions')->name('suborganizations.member-options');
-        Route::get('suborganizations/users', 'SuborganizationController@getUsers')->name('suborganizations.get-users');
+        Route::get('suborganizations/{suborganization}/users', 'SuborganizationController@getUsers')->name('suborganizations.get-users');
         Route::post('suborganizations/{suborganization}/add-user', 'SuborganizationController@addUser')->name('suborganizations.add-user');
         Route::post('suborganizations/{suborganization}/invite-members', 'SuborganizationController@inviteMembers')->name('suborganizations.invite-members');
         Route::put('suborganizations/update-user', 'SuborganizationController@updateUser')->name('suborganizations.update-user');
