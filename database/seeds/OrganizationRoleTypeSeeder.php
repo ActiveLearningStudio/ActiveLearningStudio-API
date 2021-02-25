@@ -17,8 +17,8 @@ class OrganizationRoleTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_role_types')->insert([
-            'name' => 'moderator',
-            'display_name' => 'Moderator'
+            'name' => 'course_creator',
+            'display_name' => 'Course Creator'
         ]);
 
         DB::table('organization_role_types')->insert([
