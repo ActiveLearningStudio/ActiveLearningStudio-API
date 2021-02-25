@@ -154,8 +154,11 @@ class SuborganizationController extends Controller
      */
     public function show(Organization $suborganization)
     {
+        $authenticatedUser = auth()->user();
+        $userOrganization = $authenticatedUser->organizations()->find($suborganization->id);
+
         return response([
-            'suborganization' => new OrganizationResource($suborganization->load('parent')->loadCount(['projects', 'children', 'users'])),
+            'suborganization' => new OrganizationResource($userOrganization->load('parent')->loadCount(['projects', 'children', 'users'])),
         ], 200);
     }
 
