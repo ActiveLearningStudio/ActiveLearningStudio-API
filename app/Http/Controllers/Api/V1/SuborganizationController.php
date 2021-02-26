@@ -317,7 +317,7 @@ class SuborganizationController extends Controller
 
         $data = $request->validated();
 
-        $is_added = $this->organizationRepository->addUser($suborganization->id, $data);
+        $is_added = $this->organizationRepository->addUser($suborganization, $data);
 
         if ($is_added) {
             return response([

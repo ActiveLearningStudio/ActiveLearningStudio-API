@@ -160,14 +160,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     /**
      * Add user for the specified role in particular suborganization
      *
-     * @param $id
+     * @param Organization $organization
      * @param array $data
      * @return Model
      */
-    public function addUser($id, $data)
+    public function addUser($organization, $data)
     {
-        $organization = $this->find($id);
-
         try {
             $organization->users()->attach($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
 
