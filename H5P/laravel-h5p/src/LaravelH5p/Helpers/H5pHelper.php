@@ -246,6 +246,9 @@ class H5pHelper
             
             $filtered = json_decode($content['filtered']);
             if ($filtered) {
+                if ( !property_exists($filtered, 'chapters') && property_exists($params, 'chapters') ) {
+                    $filtered->chapters = $params->chapters;
+                }
                 // get chapters with updated filtered
                 $chaptersRearrangedF = array_filter($filtered->chapters, function($item) { return property_exists($item, 'chapter'); });
                 if (empty($chaptersRearrangedF)) {
@@ -253,8 +256,8 @@ class H5pHelper
                         return (object) array('chapter' => $chapter, "lockPage" => false); 
                     }, $filtered->chapters);
                     $filtered->chapters = $chaptersRearrangedF;
-                    $content['filtered'] = json_encode($filtered);
                 }
+                $content['filtered'] = json_encode($filtered);
             }
         }
     }
