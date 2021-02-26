@@ -28,7 +28,8 @@ class SuborganizationSave extends FormRequest
             'description' => 'required|string|max:255',
             'domain' => 'required|string|max:255',
             'image' => 'required',
-            'admin_id' => 'required|integer|exists:App\User,id'
+            'admin_id' => 'required|integer|exists:App\User,id',
+            'parent_id' => 'required|integer|exists:App\Models\Organization,id'
         ];
     }
 }

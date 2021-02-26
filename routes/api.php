@@ -143,7 +143,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganizations/{suborganization}/invite-members', 'SuborganizationController@inviteMembers')->name('suborganizations.invite-members');
         Route::put('suborganizations/update-user', 'SuborganizationController@updateUser')->name('suborganizations.update-user');
         Route::delete('suborganizations/delete-user', 'SuborganizationController@deleteUser')->name('suborganizations.delete-user');
-        Route::apiResource('suborganizations', 'SuborganizationController');
+        Route::apiResource('suborganizations', 'SuborganizationController')->except([
+            'index'
+        ]);
+        Route::get('suborganizations/{suborganization}/index', 'SuborganizationController@index')->name('suborganizations.index');
 
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {

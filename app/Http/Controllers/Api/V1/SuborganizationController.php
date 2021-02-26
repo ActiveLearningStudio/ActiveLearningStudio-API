@@ -35,25 +35,26 @@ class SuborganizationController extends Controller
     public function __construct(OrganizationRepositoryInterface $organizationRepository)
     {
         $this->organizationRepository = $organizationRepository;
-
-        $this->authorizeResource(Organization::class, 'suborganization');
     }
     
     /**
      * Get All Suborganization
      *
      * Get a list of the suborganizations for a user's default organization.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile responses/organization/suborganizations.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
-    public function index()
+    public function index(Organization $suborganization)
     {
-        $authenticatedUser = auth()->user();
+        $this->authorize('viewAny', $suborganization);
 
         return response([
-            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($authenticatedUser->default_organization)),
+            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($suborganization->id)),
         ], 200);
     }
 
@@ -110,6 +111,7 @@ class SuborganizationController extends Controller
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
      * @bodyParam admin_id int required Id of the suborganization admin user Example: 1
+     * @bodyParam parent_id int required Id of the parent organization Example: 1
      *
      * @responseFile 201 responses/organization/suborganization.json
      *
@@ -125,8 +127,10 @@ class SuborganizationController extends Controller
     public function store(SuborganizationSave $request)
     {
         $data = $request->validated();
-        $authenticatedUser = auth()->user();
-        $data['parent_id'] = $authenticatedUser->default_organization;
+
+        $organization = Organization::find($data['parent_id']);
+        $this->authorize('create', $organization);
+
         $suborganization = $this->organizationRepository->createSuborganization($data);
 
         if ($suborganization) {
@@ -154,6 +158,8 @@ class SuborganizationController extends Controller
      */
     public function show(Organization $suborganization)
     {
+        $this->authorize('view', $suborganization);
+
         $authenticatedUser = auth()->user();
         $userOrganization = $authenticatedUser->organizations()->find($suborganization->id);
 
@@ -188,6 +194,8 @@ class SuborganizationController extends Controller
      */
     public function update(SuborganizationSave $request, Organization $suborganization)
     {
+        $this->authorize('update', $suborganization);
+
         $data = $request->validated();
 
         $is_updated = $this->organizationRepository->update($suborganization->id, $data);
@@ -227,6 +235,8 @@ class SuborganizationController extends Controller
      */
     public function destroy(Organization $suborganization)
     {
+        $this->authorize('delete', $suborganization);
+
         $is_deleted = $this->organizationRepository->deleteSuborganization($suborganization->id);
 
         if ($is_deleted) {

@@ -14,11 +14,12 @@ class OrganizationPolicy
      * Determine whether the user can view any suborganization.
      *
      * @param  User  $user
+     * @param  Organization  $organization
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $user->defaultOrganization) == 1;
+        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
     }
 
     /**
@@ -37,11 +38,12 @@ class OrganizationPolicy
      * Determine whether the user can create suborganization.
      *
      * @param  User  $user
+     * @param  Organization $organization
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $user->defaultOrganization) == 1;
+        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
     }
 
     /**
@@ -140,8 +142,8 @@ class OrganizationPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\User  $user
-     * @param  \App\Organization  $organization
+     * @param  User  $user
+     * @param  Organization  $organization
      * @return mixed
      */
     public function delete(User $user, Organization $organization)
@@ -186,7 +188,7 @@ class OrganizationPolicy
 
         if ($defaultOrganization) {
             return $defaultOrganization->pivot->organization_role_type_id;
-        } else {
+        } else if ($organization->parent) {
             return $this->getUserDefaultOrganizationRole($user, $organization->parent);
         }
 
