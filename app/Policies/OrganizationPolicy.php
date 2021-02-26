@@ -110,11 +110,12 @@ class OrganizationPolicy
      * Determine whether the user can delete user.
      *
      * @param User $user
+     * @param Organization $organization
      * @return mixed
      */
-    public function deleteUser(User $user)
+    public function deleteUser(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $user->defaultOrganization), [1, 2]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
     }
 
     /**

@@ -200,14 +200,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     /**
      * Delete the specified user in a particular suborganization
      *
-     * @param $id
+     * @param Organization $organization
      * @param array $data
      * @return Model
      */
-    public function deleteUser($id, $data)
+    public function deleteUser($organization, $data)
     {
-        $organization = $this->find($id);
-
         try {
             $organization->users()->detach($data['user_id']);
 

@@ -422,6 +422,7 @@ class SuborganizationController extends Controller
      *
      * Remove the specified user from default suborganization.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam user_id int required Id of the user to be deleted Example: 1
      *
      * @response {
@@ -441,22 +442,20 @@ class SuborganizationController extends Controller
      * }
      *
      * @param Request $request
+     * @param Organization $suborganization
      * @return Response
      */
-    public function deleteUser(Request $request)
+    public function deleteUser(Request $request, Organization $suborganization)
     {
-        $this->authorize('deleteUser', Organization::class);
-
-        $authenticatedUser = auth()->user();
-        $default_organization = $authenticatedUser->default_organization;
+        $this->authorize('deleteUser', $suborganization);
 
         $validator = Validator::make($request->all(), [
             'user_id' => [
                 'required',
                 'integer',
                 'exists:App\User,id',
-                Rule::exists('organization_user_roles')->where(function ($query) use ($default_organization) {
-                    return $query->where('organization_id', $default_organization);
+                Rule::exists('organization_user_roles')->where(function ($query) use ($suborganization) {
+                    return $query->where('organization_id', $suborganization->id);
                 })
             ]
         ]);
@@ -467,7 +466,7 @@ class SuborganizationController extends Controller
             ], 400);
         }
 
-        $is_deleted = $this->organizationRepository->deleteUser($default_organization, $request->all());
+        $is_deleted = $this->organizationRepository->deleteUser($suborganization, $request->all());
 
         if ($is_deleted) {
             return response([
