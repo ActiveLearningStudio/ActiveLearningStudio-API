@@ -98,11 +98,12 @@ class OrganizationPolicy
      * Determine whether the user can update user.
      *
      * @param User $user
+     * @param Organization $organization
      * @return mixed
      */
-    public function updateUser(User $user)
+    public function updateUser(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $user->defaultOrganization), [1, 2]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
     }
 
     /**

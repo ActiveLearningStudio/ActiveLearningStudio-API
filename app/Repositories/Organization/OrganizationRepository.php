@@ -182,14 +182,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     /**
      * Update user for the specified role in particular suborganization
      *
-     * @param $id
+     * @param Organization $organization
      * @param array $data
      * @return Model
      */
-    public function updateUser($id, $data)
+    public function updateUser($organization, $data)
     {
-        $organization = $this->find($id);
-
         try {
             $organization->users()->updateExistingPivot($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
 

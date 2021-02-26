@@ -380,6 +380,7 @@ class SuborganizationController extends Controller
      *
      * Update user for the specified role in default suborganization
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam user_id int required Id of the user to be updated Example: 1
      * @bodyParam role_id int required Id of the role for updated user Example: 1
      *
@@ -394,18 +395,16 @@ class SuborganizationController extends Controller
      * }
      *
      * @param SuborganizationUpdateUser $request
+     * @param Organization $suborganization
      * @return Response
      */
-    public function updateUser(SuborganizationUpdateUser $request)
+    public function updateUser(SuborganizationUpdateUser $request, Organization $suborganization)
     {
-        $this->authorize('updateUser', Organization::class);
+        $this->authorize('updateUser', $suborganization);
 
         $data = $request->validated();
 
-        $authenticatedUser = auth()->user();
-        $id = $authenticatedUser->default_organization;
-
-        $is_updated = $this->organizationRepository->updateUser($id, $data);
+        $is_updated = $this->organizationRepository->updateUser($suborganization, $data);
 
         if ($is_updated) {
             return response([
