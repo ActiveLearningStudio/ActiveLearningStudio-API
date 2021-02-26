@@ -255,6 +255,7 @@ class SuborganizationController extends Controller
      *
      * Display a listing of the user member options for default suborganization, other then the exiting ones.
      *
+     * @urlParam suborganization int required The Id of a suborganization Example: 1
      * @bodyParam query string required Query to search users against Example: leo
      *
      * @responseFile responses/organization/member-options.json
@@ -265,11 +266,12 @@ class SuborganizationController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @return Response
      */
-    public function showMemberOptions(Request $request)
+    public function showMemberOptions(Request $request, Organization $suborganization)
     {
-        $this->authorize('viewMemberOptions', Organization::class);
+        $this->authorize('viewMemberOptions', $suborganization);
 
         $validator = Validator::make($request->all(), [
             'query' => 'required|string|max:255',
@@ -281,11 +283,8 @@ class SuborganizationController extends Controller
             ], 400);
         }
 
-        $authenticatedUser = auth()->user();
-        $id = $authenticatedUser->default_organization;
-
         return response([
-            'member-options' => UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $id))
+            'member-options' => UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $suborganization))
         ], 200);
     }
 

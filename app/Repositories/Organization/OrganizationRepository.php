@@ -119,25 +119,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      * Get the member options to add in specific suborganization
      *
      * @param $data
-     * @param $id
+     * @param Organization $organization
      * @return mixed
      */
-    public function getMemberOptions($data, $id)
+    public function getMemberOptions($data, $organization)
     {
-        if ($organization = $this->model->whereId($id)->first()) {
-            $userNotInIds = $organization->users->modelKeys();
+        $userNotInIds = $organization->users->modelKeys();
 
-            $userInIds = $this->getParentOrganizationUserIds([], $organization);
+        $userInIds = $this->getParentOrganizationUserIds([], $organization);
 
-            $userInIds = array_diff($userInIds, $userNotInIds);
+        $userInIds = array_diff($userInIds, $userNotInIds);
 
-            $this->query = $this->userRepository->model->when($data['query'] ?? null, function ($query) use ($data) {
-                $query->search(['email'], $data['query']);
-                return $query;
-            });
+        $this->query = $this->userRepository->model->when($data['query'] ?? null, function ($query) use ($data) {
+            $query->search(['email'], $data['query']);
+            return $query;
+        });
 
-            return $this->query->whereNotIn('id', $userNotInIds)->whereIn('id', $userInIds)->orderBy('first_name', 'asc')->paginate();
-        }
+        return $this->query->whereNotIn('id', $userNotInIds)->whereIn('id', $userInIds)->orderBy('first_name', 'asc')->paginate();
     }
 
     /**

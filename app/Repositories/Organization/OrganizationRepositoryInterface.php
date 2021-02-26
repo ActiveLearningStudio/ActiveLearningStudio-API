@@ -34,10 +34,10 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * To get the users to add in specific suborganization
      *
      * @param $data
-     * @param $id
+     * @param Organization $organization
      * @return mixed
      */
-    public function getMemberOptions($data, $id);
+    public function getMemberOptions($data, $organization);
 
     /**
      * Add user for the specified role in default suborganization
