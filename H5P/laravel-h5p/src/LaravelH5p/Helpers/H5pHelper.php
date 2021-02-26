@@ -246,7 +246,7 @@ class H5pHelper
             
             $filtered = json_decode($content['filtered']);
             if ($filtered) {
-                if (!property_exists($filtered, 'chapters')) {
+                if ( !property_exists($filtered, 'chapters') && property_exists($params, 'chapters') ) {
                     $filtered->chapters = $params->chapters;
                 }
                 // get chapters with updated filtered
