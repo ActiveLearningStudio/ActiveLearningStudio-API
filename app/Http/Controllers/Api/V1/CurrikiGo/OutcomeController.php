@@ -52,7 +52,9 @@ class OutcomeController extends Controller
                     $attemptIRI = $service->findAttemptIRI($other);
                 }
                 if (!empty($attemptIRI)) {
-                    $data['activity'] = $attemptIRI;
+                    // UPDATE: We want to accumulate all responses, and each attempt is not a unique attempt anymore.
+                    // So, we just check for an attempt, and then keep the search by submission id.
+                    // $data['activity'] = $attemptIRI;
                     $answers = $service->getLatestAnsweredStatementsWithResults($data);
                     $answeredIds = [];
                     if ($answers) {
@@ -75,23 +77,6 @@ class OutcomeController extends Controller
                         }
                     }
                    
-                    // Find any skipped interactions as well
-                    $skipped = $service->getSkippedStatements($data);
-                    if ($skipped) {
-                        foreach ($skipped as $key => $record) {
-                            if (!in_array($key, $answeredIds)) {
-                                $summary = $service->getStatementSummary($record);
-                                $response[] = new StudentResultResource($summary);
-                                $answeredIds[] = $key;
-                            }
-                        }
-                    }
-
-                    // We'll use the ending-point for ordering the final results.
-                    usort($response, function($a, $b) {
-                        return $a['ending-point'] <=> $b['ending-point'];
-                    });
-
                     // Get Non-scoring Interactions
                     $nonScoringResponse = [];
                     $interacted = $service->getInteractedResultStatements($data);
@@ -112,6 +97,37 @@ class OutcomeController extends Controller
                     if (!empty($nonScoringResponse)) {
                         $nonScoringResponse = array_reverse($nonScoringResponse);
                     }
+
+                    // Check for any aggregates completed statements, before finalizing skipped
+                    // This happens for Quesionnaire, Interactive Video, Course Presentation
+                    $aggregateCompleted = $service->getAggregatesCompletedStatements($data);
+
+                    if ($aggregateCompleted) {
+                        foreach ($aggregateCompleted as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $answeredIds[] = $key;
+                            }
+                        }
+                    }
+
+                    // Find any skipped interactions as well
+                    // Note: Non-scoring activities such as 'quesitonnaire' triggers a skipped as well.
+                    // We need to account for that when reporting skipped.
+                    $skipped = $service->getSkippedStatements($data);
+                    if ($skipped) {
+                        foreach ($skipped as $key => $record) {
+                            if (!in_array($key, $answeredIds)) {
+                                $summary = $service->getStatementSummary($record);
+                                $response[] = new StudentResultResource($summary);
+                                $answeredIds[] = $key;
+                            }
+                        }
+                    }
+
+                    // We'll use the ending-point for ordering the final results.
+                    usort($response, function($a, $b) {
+                        return $a['ending-point'] <=> $b['ending-point'];
+                    });
 
                     return response([
                         'summary' => $response,
