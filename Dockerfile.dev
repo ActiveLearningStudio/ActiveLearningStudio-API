@@ -82,8 +82,7 @@ RUN touch /var/log/cron.log
 
 #RUN chown -R 1000 /var/www/html
 
-COPY ./api/database ./
-COPY ./api/composer* ./
+COPY ./api ./
 RUN composer install
 
 # USER root
