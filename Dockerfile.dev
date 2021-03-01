@@ -82,8 +82,9 @@ RUN touch /var/log/cron.log
 
 #RUN chown -R 1000 /var/www/html
 
-RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
-    composer clear-cache
+COPY composer*.json ./
+RUN composer install
+
 # USER root
 COPY ./api/entrypoint.api.sh /var/www/html/
 # RUN chmod 777 /var/www/html/entrypoint.api.sh
