@@ -83,7 +83,7 @@ RUN touch /var/log/cron.log
 #RUN chown -R 1000 /var/www/html
 
 
-COPY composer.lock composer.json ./
+COPY api/composer.lock api/composer.json ./
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 COPY ./api ./
