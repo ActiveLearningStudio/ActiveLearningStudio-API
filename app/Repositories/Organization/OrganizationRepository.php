@@ -44,7 +44,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchSuborganizations($parent_id)
     {
-        return $this->model->where('parent_id', $parent_id)->get();
+        return $this->model->with('parent')->where('parent_id', $parent_id)->get();
     }
 
     /**
