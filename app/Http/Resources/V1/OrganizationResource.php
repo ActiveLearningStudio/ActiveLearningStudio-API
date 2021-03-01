@@ -23,6 +23,7 @@ class OrganizationResource extends JsonResource
             'projects' =>  ProjectResource::collection($this->whenLoaded('projects')),
             'children' =>  OrganizationResource::collection($this->whenLoaded('children')),
             'users' =>  UserResource::collection($this->whenLoaded('users')),
+            'admins' =>  UserResource::collection($this->whenLoaded('admins')),
             'image' => $this->image,
             'domain' => $this->domain,
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {

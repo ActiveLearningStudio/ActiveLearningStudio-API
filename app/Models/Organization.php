@@ -34,11 +34,35 @@ class Organization extends Model
     }
 
     /**
+     * The admin users that belong to the organization.
+     */
+    public function admins()
+    {
+        return $this->users()->wherePivot('organization_role_type_id', 1);
+    }
+
+    /**
      * Get the projects for the organization.
      */
     public function projects()
     {
         return $this->hasMany('App\Models\Project');
+    }
+
+    /**
+     * Get the teams for the organization.
+     */
+    public function teams()
+    {
+        return $this->hasMany('App\Models\Team');
+    }
+
+    /**
+     * Get the groups for the organization.
+     */
+    public function groups()
+    {
+        return $this->hasMany('App\Models\Group');
     }
 
     /**

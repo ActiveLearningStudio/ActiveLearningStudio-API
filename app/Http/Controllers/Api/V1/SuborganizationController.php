@@ -164,7 +164,7 @@ class SuborganizationController extends Controller
         $userOrganization = $authenticatedUser->organizations()->find($suborganization->id);
 
         return response([
-            'suborganization' => new OrganizationResource($userOrganization->load('parent')->loadCount(['projects', 'children', 'users'])),
+            'suborganization' => new OrganizationResource($userOrganization->load('parent')->loadCount(['projects', 'children', 'users', 'groups', 'teams'])),
         ], 200);
     }
 
