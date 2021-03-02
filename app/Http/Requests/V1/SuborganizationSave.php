@@ -23,12 +23,16 @@ class SuborganizationSave extends FormRequest
      */
     public function rules()
     {
+        $suborganization = $this->route('suborganization');
+
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|max:255|unique:organizations',
+            'domain' => 'required|string|min:3|max:255|unique:organizations,domain' . ($suborganization ? ',' . $suborganization->id : ''),
             'image' => 'required',
-            'admin_id' => 'required|integer|exists:App\User,id',
+            'admins' => 'required|array|exists:App\User,id',
+            'users.*.user_id' => 'integer|exists:App\User,id',
+            'users.*.role_id' => 'integer|exists:App\Models\OrganizationRoleType,id',
             'parent_id' => 'required|integer|exists:App\Models\Organization,id'
         ];
     }

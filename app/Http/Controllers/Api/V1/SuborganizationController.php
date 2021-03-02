@@ -110,7 +110,8 @@ class SuborganizationController extends Controller
      * @bodyParam description string required Description of a suborganization Example: This is a test suborganization.
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
-     * @bodyParam admin_id int required Id of the suborganization admin user Example: 1
+     * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
+     * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      *
      * @responseFile 201 responses/organization/suborganization.json
@@ -131,7 +132,7 @@ class SuborganizationController extends Controller
         $organization = Organization::find($data['parent_id']);
         $this->authorize('create', $organization);
 
-        $suborganization = $this->organizationRepository->createSuborganization($data);
+        $suborganization = $this->organizationRepository->createSuborganization($organization, $data);
 
         if ($suborganization) {
             return response([
@@ -178,7 +179,8 @@ class SuborganizationController extends Controller
      * @bodyParam description string required Description of a suborganization Example: This is a test suborganization.
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
-     * @bodyParam admin_id int required Id of the suborganization admin user Example: 1
+     * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
+     * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      *
      * @responseFile responses/organization/suborganization.json
      *
@@ -198,7 +200,7 @@ class SuborganizationController extends Controller
 
         $data = $request->validated();
 
-        $is_updated = $this->organizationRepository->update($suborganization->id, $data);
+        $is_updated = $this->organizationRepository->update($suborganization, $data);
 
         if ($is_updated) {
             $updated_suborganization = new OrganizationResource($this->organizationRepository->find($suborganization->id));

@@ -446,7 +446,7 @@ class UserController extends Controller
      */
     public function getOrganizations()
     {
-        return OrganizationResource::collection(auth()->user()->organizations);
+        return OrganizationResource::collection(auth()->user()->organizations()->with('parent')->get());
     }
 
     /**
