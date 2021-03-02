@@ -9,6 +9,7 @@ use App\Http\Requests\V1\ProjectUpdateRequest;
 use App\Http\Resources\V1\ProjectDetailResource;
 use App\Http\Resources\V1\ProjectResource;
 use App\Jobs\CloneProject;
+use App\Models\Organization;
 use App\Models\Project;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Contracts\Foundation\Application;
@@ -37,7 +38,7 @@ class ProjectController extends Controller
     {
         $this->projectRepository = $projectRepository;
 
-        $this->authorizeResource(Project::class, 'project');
+        // $this->authorizeResource(Project::class, 'project');
     }
 
     /**
@@ -49,8 +50,10 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Organization $suborganization)
     {
+        $this->authorize('viewAny', [Project::class, $suborganization]);
+
         $authenticated_user = auth()->user();
 /*
         This returns all projects if the user is admin and breaks the frontend for that user given the number of projects
@@ -75,8 +78,10 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function detail()
+    public function detail(Organization $suborganization)
     {
+        $this->authorize('view', [Project::class, $suborganization]);
+
         $authenticated_user = auth()->user();
 
         if ($authenticated_user->isAdmin()) {
@@ -191,8 +196,10 @@ class ProjectController extends Controller
      * @param ProjectRequest $projectRequest
      * @return Response
      */
-    public function store(ProjectRequest $projectRequest)
+    public function store(ProjectRequest $projectRequest, Organization $suborganization)
     {
+        $this->authorize('create', [Project::class, $suborganization]);
+
         $data = $projectRequest->validated();
         $authenticated_user = auth()->user();
         $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
@@ -280,8 +287,10 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function share(Project $project)
+    public function share(Project $project, Organization $suborganization)
     {
+        $this->authorize('share', [Project::class, $suborganization]);
+
         $is_updated = $this->projectRepository->update([
             'shared' => true,
         ], $project->id);
@@ -361,8 +370,10 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function update(ProjectUpdateRequest $projectUpdateRequest, Project $project)
+    public function update(ProjectUpdateRequest $projectUpdateRequest, Organization $suborganization,  Project $project)
     {
+        $this->authorize('update', [Project::class, $suborganization]);
+
         $data = $projectUpdateRequest->validated();
 
         $is_updated = $this->projectRepository->update($data, $project->id);
@@ -401,8 +412,10 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function destroy(Project $project)
+    public function destroy(Organization $suborganization, Project $project)
     {
+        $this->authorize('delete', [Project::class, $suborganization]);
+
         $is_deleted = $this->projectRepository->delete($project->id);
 
         if ($is_deleted) {

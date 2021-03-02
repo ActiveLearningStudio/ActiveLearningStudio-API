@@ -17,6 +17,7 @@ use App\Http\Requests\V1\Group\GroupRequest;
 use App\Http\Resources\V1\GroupResource;
 use App\Models\Project;
 use App\Models\Group;
+use App\Models\Organization;
 use App\Notifications\InviteToGroupNotification;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
@@ -73,8 +74,10 @@ class GroupController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Organization $suborganization)
     {
+        $this->authorize('viewAny', [Group::class, $suborganization]);
+
         $authenticated_user = auth()->user();
 
         if ($authenticated_user->isAdmin()) {
@@ -149,8 +152,10 @@ class GroupController extends Controller
      * @param GroupRequest $groupRequest
      * @return Response
      */
-    public function store(GroupRequest $groupRequest)
+    public function store(GroupRequest $groupRequest, Organization $suborganization)
     {
+        $this->authorize('create', [Group::class, $suborganization]);
+
         $data = $groupRequest->validated();
 
         $auth_user = auth()->user();
@@ -182,8 +187,10 @@ class GroupController extends Controller
      * @param Group $group
      * @return Response
      */
-    public function show(Group $group)
+    public function show(Group $group, Organization $suborganization)
     {
+        $this->authorize('view', [Group::class, $suborganization]);
+
         return response([
             'group' => new GroupResource($this->groupRepository->getGroupDetail($group->id)),
         ], 200);
@@ -609,8 +616,10 @@ class GroupController extends Controller
      * @param Group $group
      * @return Response
      */
-    public function update(GroupUpdateRequest $groupUpdateRequest, Group $group)
+    public function update(GroupUpdateRequest $groupUpdateRequest, Organization $suborganization, Group $group)
     {
+        $this->authorize('update', [Group::class, $suborganization]);
+
         $data = $groupUpdateRequest->validated();
 
         $is_updated = $this->groupRepository->update($data, $group->id);
@@ -646,8 +655,10 @@ class GroupController extends Controller
      * @param Group $group
      * @return Response
      */
-    public function destroy(Group $group)
+    public function destroy(Organization $suborganization, Group $group)
     {
+        $this->authorize('delete', [Group::class, $suborganization]);
+
         $is_deleted = $this->groupRepository->delete($group->id);
 
         if ($is_deleted) {

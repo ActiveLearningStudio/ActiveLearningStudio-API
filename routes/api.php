@@ -60,7 +60,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/remove-project', 'TeamController@removeProject');
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
-        Route::apiResource('teams', 'TeamController');
+        Route::apiResource('suborganization.teams', 'TeamController');
 
         //Groups
         Route::post('groups/invite', 'GroupController@inviteGroupMember');
@@ -71,7 +71,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('groups/{group}/remove-project', 'GroupController@removeProject');
         Route::post('groups/{group}/projects/{project}/add-members', 'GroupController@addMembersToProject');
         Route::post('groups/{group}/projects/{project}/remove-member', 'GroupController@removeMemberFromProject');
-        Route::apiResource('groups', 'GroupController');
+        Route::apiResource('suborganization.groups', 'GroupController');
 
 
         Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
@@ -87,7 +87,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/clone', 'ProjectController@clone');
         Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('projects/{project}/favorite', 'ProjectController@favorite');
-        Route::apiResource('projects', 'ProjectController');
+        Route::apiResource('suborganization.projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');

@@ -36,12 +36,12 @@ class SuborganizationController extends Controller
     {
         $this->organizationRepository = $organizationRepository;
     }
-    
+
     /**
      * Get All Suborganization
      *
      * Get a list of the suborganizations for a user's default organization.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile responses/organization/suborganizations.json
@@ -483,7 +483,7 @@ class SuborganizationController extends Controller
      * Get All Users For a Suborganization
      *
      * Get a list of the users for a suborganization.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam page The pagination page no to show  Example: 1
      *

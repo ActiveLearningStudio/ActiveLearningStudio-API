@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Organization;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\Project;
 use App\User;
@@ -17,9 +18,10 @@ class ProjectPolicy
      * @param User $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Organization $suborganization)
     {
-        return true;
+        // return $user->isAdmin() || $this->hasPermission($user, $project);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2]);
     }
 
     /**
@@ -29,9 +31,9 @@ class ProjectPolicy
      * @param Project $project
      * @return mixed
      */
-    public function view(User $user, Project $project)
+    public function view(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $project);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2]);
     }
 
     /**
@@ -40,9 +42,9 @@ class ProjectPolicy
      * @param User $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Organization $suborganization)
     {
-        return true;
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2]);
     }
 
     /**
@@ -52,9 +54,9 @@ class ProjectPolicy
      * @param Project $project
      * @return mixed
      */
-    public function update(User $user, Project $project)
+    public function update(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $project);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2]);
     }
 
     /**
@@ -64,9 +66,9 @@ class ProjectPolicy
      * @param Project $project
      * @return mixed
      */
-    public function share(User $user, Project $project)
+    public function share(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $project);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1]);
     }
 
     /**
@@ -88,9 +90,9 @@ class ProjectPolicy
      * @param Project $project
      * @return mixed
      */
-    public function delete(User $user, Project $project)
+    public function delete(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $project, 'owner');
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1]);
     }
 
     /**
@@ -142,5 +144,25 @@ class ProjectPolicy
         }
 
         return false;
+    }
+
+    /**
+     * Get user default organization role
+     *
+     * @param  User  $user
+     * @param  Organization  $organization
+     * @return mixed
+     */
+    private function getUserDefaultOrganizationRole(User $user, Organization  $organization)
+    {
+        $defaultOrganization = $user->organizations()->wherePivot('organization_id', $organization->id)->first();
+
+        if ($defaultOrganization) {
+            return $defaultOrganization->pivot->organization_role_type_id;
+        } else if ($organization->parent) {
+            return $this->getUserDefaultOrganizationRole($user, $organization->parent);
+        }
+
+        return 0;
     }
 }

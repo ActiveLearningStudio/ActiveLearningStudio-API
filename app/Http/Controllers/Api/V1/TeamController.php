@@ -14,6 +14,7 @@ use App\Http\Requests\V1\TeamRemoveProjectRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
+use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
 use App\Notifications\InviteToTeamNotification;
@@ -72,8 +73,10 @@ class TeamController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Organization $suborganization)
     {
+        $this->authorize('viewAny', [Team::class, $suborganization]);
+
         $authenticated_user = auth()->user();
 
         if ($authenticated_user->isAdmin()) {
@@ -148,8 +151,10 @@ class TeamController extends Controller
      * @param TeamRequest $teamRequest
      * @return Response
      */
-    public function store(TeamRequest $teamRequest)
+    public function store(TeamRequest $teamRequest, Organization $suborganization)
     {
+        $this->authorize('create', [Team::class, $suborganization]);
+
         $data = $teamRequest->validated();
 
         $auth_user = auth()->user();
@@ -181,8 +186,10 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function show(Team $team)
+    public function show(Organization $suborganization, Team $team)
     {
+        $this->authorize('view', [Team::class, $suborganization]);
+
         return response([
             'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
         ], 200);
@@ -603,8 +610,10 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function update(TeamUpdateRequest $teamUpdateRequest, Team $team)
+    public function update(TeamUpdateRequest $teamUpdateRequest, Organization $suborganization, Team $team)
     {
+        $this->authorize('update', [Team::class, $suborganization]);
+
         $data = $teamUpdateRequest->validated();
 
         $is_updated = $this->teamRepository->update($data, $team->id);
@@ -640,8 +649,10 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function destroy(Team $team)
+    public function destroy(Organization $suborganization, Team $team)
     {
+        $this->authorize('delete', [Team::class, $suborganization]);
+
         $is_deleted = $this->teamRepository->delete($team->id);
 
         if ($is_deleted) {
