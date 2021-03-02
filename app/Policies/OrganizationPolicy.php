@@ -19,7 +19,7 @@ class OrganizationPolicy
      */
     public function viewAny(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
+        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2, 3]);
     }
 
     /**
@@ -31,7 +31,7 @@ class OrganizationPolicy
      */
     public function view(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
+        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2, 3]);
     }
 
     /**

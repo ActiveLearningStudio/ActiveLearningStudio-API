@@ -19,9 +19,10 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     /**
      * To create a suborganization
      *
+     * @param Organization $organization
      * @param $data
      */
-    public function createSuborganization($data);
+    public function createSuborganization($organization, $data);
 
     /**
      * To delete a suborganization

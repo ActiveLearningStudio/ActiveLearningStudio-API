@@ -12,6 +12,7 @@ use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryIn
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
@@ -54,43 +55,61 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     /**
      * To create a suborganization
      *
+     * @param Organization $organization
      * @param $data
      * @return Response
      * @throws GeneralException
      */
-    public function createSuborganization($data)
+    public function createSuborganization($organization, $data)
     {
-        $user = $this->userRepository->find($data['admin_id']);
+        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => 1]);
+
+        foreach ($data['users'] as $user) {
+            $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
+        }
 
         try {
-            return $user->organizations()->create(Arr::except($data, ['admin_id']), ['organization_role_type_id' => 1]);
+            DB::beginTransaction();
+
+            $suborganization = $organization->children()->create(Arr::except($data, ['admins', 'users']));
+
+            if ($suborganization) {
+                $suborganization->users()->sync($userRoles);
+                DB::commit();
+            }
+
+            return $suborganization;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            DB::rollBack();
         }
     }
 
     /**
      * Update suborganization
      *
-     * @param $id
+     * @param Organization $organization
      * @param array $data
      * @return Model
      */
-    public function update($id, $data)
+    public function update($organization, $data)
     {
-        $organization = $this->find($id);
+        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => 1]);
+
+        foreach ($data['users'] as $user) {
+            $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
+        }
+
         try {
-            $is_updated = $organization->update(Arr::except($data, ['admin_id']));
+            DB::beginTransaction();
+
+            $is_updated = $organization->update(Arr::except($data, ['admins', 'users']));
             // update the organization data
             if ($is_updated) {
-                $oldAdmin = $organization->users()->wherePivot('organization_role_type_id', 1)->first();
-
-                if ($oldAdmin->id != $data['admin_id']) {
-                    $organization->users()->detach($oldAdmin->id);
-
-                    $organization->users()->attach($data['admin_id'], ['organization_role_type_id' => 1]);
-                }
+                $organization->users()->sync($userRoles);
+                DB::commit();
             }
+
             return $is_updated;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
