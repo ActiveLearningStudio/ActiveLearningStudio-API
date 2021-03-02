@@ -16,7 +16,12 @@ class H5pHelper
 {
     public static function current_user_can($permission)
     {
-        return true;
+        $currentUserCan = true;
+        $permissionsConfig = ["manage_h5p_libraries" => false];
+        if (array_key_exists($permission, $permissionsConfig)) {
+            $currentUserCan = $permissionsConfig[$permission];
+        }
+        return $currentUserCan;
     }
 
     public static function nonce($token)
