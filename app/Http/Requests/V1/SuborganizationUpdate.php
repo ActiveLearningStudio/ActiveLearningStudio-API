@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SuborganizationSave extends FormRequest
+class SuborganizationUpdate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,6 @@ class SuborganizationSave extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|min:3|max:255|unique:organizations',
             'image' => 'required',
             'admins' => 'required|array|exists:App\User,id',
             'users.*.user_id' => 'integer|exists:App\User,id',

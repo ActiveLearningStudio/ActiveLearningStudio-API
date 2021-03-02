@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\SuborganizationSave;
+use App\Http\Requests\V1\SuborganizationUpdate;
 use App\Http\Requests\V1\SuborganizationAddUser;
 use App\Http\Requests\V1\SuborganizationUpdateUser;
 use App\Http\Requests\V1\SuborganizationInviteMember;
@@ -194,7 +195,7 @@ class SuborganizationController extends Controller
      * @param Organization $suborganization
      * @return Response
      */
-    public function update(SuborganizationSave $request, Organization $suborganization)
+    public function update(SuborganizationUpdate $request, Organization $suborganization)
     {
         $this->authorize('update', $suborganization);
 
