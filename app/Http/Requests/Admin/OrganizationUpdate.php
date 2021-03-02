@@ -26,7 +26,7 @@ class OrganizationUpdate extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|max:255',
+            'domain' => 'required|string|max:255|unique:organizations',
             'image' => 'image|max:1000',
             'member_id' => 'integer|exists:App\User,id',
             'parent_id' => 'integer|exists:App\Models\Organization,id'

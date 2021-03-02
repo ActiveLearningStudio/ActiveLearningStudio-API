@@ -26,7 +26,7 @@ class OrganizationCreate extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|max:255',
+            'domain' => 'required|string|max:255|unique:organizations',
             'image' => 'required|image|max:1000',
             'admin_id' => 'required|integer|exists:App\User,id',
             'parent_id' => 'integer|exists:App\Models\Organization,id'
