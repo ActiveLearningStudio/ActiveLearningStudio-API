@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
+use App\Http\Resources\V1\OrganizationRoleResource;
 use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Requests\V1\SuborganizationUpdate;
 use App\Http\Requests\V1\SuborganizationAddUser;
@@ -15,6 +16,7 @@ use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Organization;
+use App\Models\OrganizationRoleType;
 use Illuminate\Validation\Rule;
 
 /**
@@ -500,5 +502,19 @@ class SuborganizationController extends Controller
         $this->authorize('viewAnyUser', $suborganization);
 
         return UserResource::collection($this->organizationRepository->fetchOrganizationUsers($suborganization));
+    }
+
+    /**
+     * Get User Roles For Suborganization
+     *
+     * Get a list of the users roles for suborganization.
+     *
+     * @responseFile responses/organization/organization-roles.json
+     *
+     * @return Response
+     */
+    public function getRoles()
+    {
+        return OrganizationRoleResource::collection(OrganizationRoleType::all());
     }
 }
