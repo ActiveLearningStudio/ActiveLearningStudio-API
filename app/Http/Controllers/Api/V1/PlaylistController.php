@@ -66,7 +66,7 @@ class PlaylistController extends Controller
      */
     public function index(Project $project)
     {
-        $this->authorize('view', $project);
+        // $this->authorize('view', $project); // commented because already authorizes from constructor
 
         return response([
             'playlists' => PlaylistResource::collection($project->playlists()->orderBy('order')->get()),
@@ -97,7 +97,7 @@ class PlaylistController extends Controller
      */
     public function store(PlaylistRequest $playlistRequest, Project $project)
     {
-        $this->authorize('view', $project);
+        // $this->authorize('view', $project);// commented because already authorizes from constructor
 
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
