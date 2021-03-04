@@ -25,6 +25,7 @@ class SearchRequest extends FormRequest
     {
         return [
             'query' => 'required|string|max:255',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
             'negativeQuery' => 'string|max:255',
             'indexing' => 'array|in:null,1,2,3',
             'startDate' => 'date',
