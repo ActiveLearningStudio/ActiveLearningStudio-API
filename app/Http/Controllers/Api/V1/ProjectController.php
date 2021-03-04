@@ -80,7 +80,7 @@ class ProjectController extends Controller
      */
     public function detail(Organization $suborganization)
     {
-        $this->authorize('view', [Project::class, $suborganization]);
+       $this->authorize('view', [Project::class, $suborganization]);
 
         $authenticated_user = auth()->user();
 
@@ -229,8 +229,10 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function show(Project $project)
+    public function show(Organization $suborganization, Project $project)
     {
+        $this->authorize('view', [Project::class, $suborganization]);
+
         return response([
             'project' => new ProjectResource($project),
         ], 200);
