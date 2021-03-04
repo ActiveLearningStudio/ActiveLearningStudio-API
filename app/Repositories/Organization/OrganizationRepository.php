@@ -295,12 +295,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         $note = array_key_exists('note', $data) ? $data['note'] : '';
 
         if ($user) {
-            $organization->users()->attach($user, ['organization_role_type_id' => $data['role_id']]);
-            $user->notify(new OrganizationInvite($authenticatedUser, $organization, $token, $note));
+            $organization->users()->syncWithoutDetaching([$user->id => ['organization_role_type_id' => $data['role_id']]]);
+            $user->notify(new OrganizationInvite($authenticatedUser, $organization, 'login', $note));
         } elseif ($data['email']) {
             $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
             $temp_user = new User(['email' => $data['email']]);
-            $temp_user->notify(new OrganizationInvite($authenticatedUser, $organization, $token, $note));
+            $temp_user->notify(new OrganizationInvite($authenticatedUser, $organization, 'register', $note));
 
             $invited_user = array(
                 'invited_email' => $data['email'],
@@ -316,3 +316,4 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         return $invited;
     }
 }
+
