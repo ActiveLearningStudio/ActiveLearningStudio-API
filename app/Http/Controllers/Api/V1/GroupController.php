@@ -187,7 +187,7 @@ class GroupController extends Controller
      * @param Group $group
      * @return Response
      */
-    public function show(Group $group, Organization $suborganization)
+    public function show(Organization $suborganization, Group $group)
     {
         $this->authorize('view', [Group::class, $suborganization]);
 
