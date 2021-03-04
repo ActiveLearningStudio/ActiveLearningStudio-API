@@ -176,6 +176,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     });
     // Outcome
     Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
+    Route::post('outcome/summary-grouped', 'CurrikiGo\OutcomeController@getStudentResultGroupedSummary');
     // Outcome
     Route::get('xapi-extract', 'CurrikiGo\ExtractXAPIJSONController@runJob');
 

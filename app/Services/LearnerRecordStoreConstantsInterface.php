@@ -20,6 +20,13 @@ interface LearnerRecordStoreConstantsInterface
      * @var string
      */
     const EXTENSION_H5P_SUBCONTENT_ID = 'http://h5p.org/x-api/h5p-subContentId';
+
+    /**
+     * H5P xAPI subContent ID 
+     * 
+     * @var string
+     */
+    const EXTENSION_H5P_LOCAL_CONTENT_ID = 'http://h5p.org/x-api/h5p-local-content-id';
     
     /**
      * Answered verb id for XAPI statements
