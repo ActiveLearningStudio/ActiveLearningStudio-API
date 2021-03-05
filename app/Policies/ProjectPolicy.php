@@ -72,6 +72,18 @@ class ProjectPolicy
     }
 
     /**
+     * Determine whether the user can get favorite project.
+     *
+     * @param User $user
+     * @param Organization $suborganization
+     * @return mixed
+     */
+    public function favorite(User $user, Organization $suborganization)
+    {
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+    }
+
+    /**
      * Determine whether the user can remove share the project.
      *
      * @param User $user

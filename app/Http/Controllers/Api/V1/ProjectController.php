@@ -65,7 +65,7 @@ class ProjectController extends Controller
         }
 */
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $authenticated_user->default_organization)->get()),
+            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $suborganization->id)->get()),
         ], 200);
     }
 
@@ -91,7 +91,7 @@ class ProjectController extends Controller
         }
 
         return response([
-            'projects' => ProjectDetailResource::collection($authenticated_user->projects()->where('organization_id', $authenticated_user->default_organization)->get()),
+            'projects' => ProjectDetailResource::collection($authenticated_user->projects()->where('organization_id', $suborganization->id)->get()),
         ], 200);
     }
 
@@ -121,7 +121,7 @@ class ProjectController extends Controller
      * @return Response
      */
     // TODO: need to update documentation
-    public function default()
+    public function default(Organization $suborganization)
     {
         $default_email = config('constants.curriki-demo-email');
 
@@ -203,7 +203,7 @@ class ProjectController extends Controller
         $data = $projectRequest->validated();
         $authenticated_user = auth()->user();
         $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
-        $data['organization_id'] = $authenticated_user->default_organization;
+        $data['organization_id'] = $suborganization->id;
         $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
 
         if ($project) {
@@ -599,12 +599,14 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function getFavorite()
+    public function getFavorite(Organization $suborganization)
     {
+        $this->authorize('favorite', [Project::class, $suborganization]);
+
         $authenticated_user = auth()->user();
 
         $favoriteProjects = $authenticated_user->favoriteProjects()
-                            ->wherePivot('organization_id', $authenticated_user->default_organization)
+                            ->wherePivot('organization_id', $suborganization->id)
                             ->get();
 
         return response([
