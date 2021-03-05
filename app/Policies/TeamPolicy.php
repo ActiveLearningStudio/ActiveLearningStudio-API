@@ -21,7 +21,7 @@ class TeamPolicy
      */
     public function viewAny(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
     }
 
     /**
@@ -33,7 +33,7 @@ class TeamPolicy
      */
     public function view(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,3]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,2, 3]);
     }
 
     /**

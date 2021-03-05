@@ -68,6 +68,7 @@ class GroupController extends Controller
     /**
      * Get All Groups
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * Get a list of the groups of a user.
      *
      * @responseFile responses/group/group.json
@@ -138,6 +139,7 @@ class GroupController extends Controller
      *
      * Create a new group in storage for a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam name string required Name of a group Example: Test Group
      * @bodyParam description string required Description of a group Example: This is a test group.
      *
@@ -159,7 +161,6 @@ class GroupController extends Controller
         $data = $groupRequest->validated();
 
         $auth_user = auth()->user();
-        // $data['organization_id'] = $auth_user->default_organization;
         $group = $auth_user->groups()->create($data, ['role' => 'owner']);
 
         if ($group) {
@@ -180,6 +181,7 @@ class GroupController extends Controller
      *
      * Get the specified group detail.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam group required The Id of a group Example: 1
      *
      * @responseFile 201 responses/group/group.json
@@ -600,6 +602,7 @@ class GroupController extends Controller
      *
      * Update the specified group of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam group required The Id of a group Example: 1
      * @bodyParam name string required Name of a group Example: Test Group
      * @bodyParam description string required Description of a group Example: This is a test group.
@@ -640,6 +643,7 @@ class GroupController extends Controller
      *
      * Remove the specified group of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam group required The Id of a group Example: 1
      *
      * @response {

@@ -21,7 +21,7 @@ class GroupPolicy
      */
     public function viewAny(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
     }
 
     /**
@@ -33,7 +33,7 @@ class GroupPolicy
      */
     public function view(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,2]);
+        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
     }
 
     /**

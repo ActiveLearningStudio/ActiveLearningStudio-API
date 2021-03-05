@@ -74,19 +74,19 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('suborganization.groups', 'GroupController');
 
 
-        Route::post('projects/upload-thumb', 'ProjectController@uploadThumb');
-        Route::get('projects/recent', 'ProjectController@recent');
+        Route::post('suborganization/{suborganization}/projects/upload-thumb', 'ProjectController@uploadThumb');
+        Route::get('suborganization/{suborganization}/projects/recent', 'ProjectController@recent');
         Route::get('suborganization/{suborganization}/projects/default', 'ProjectController@default');
-        Route::get('projects/detail', 'ProjectController@detail');
+        Route::get('suborganization/{suborganization}/projects/detail', 'ProjectController@detail');
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::get('suborganization/{suborganization}/projects/favorites', 'ProjectController@getFavorite');
         Route::post('projects/reorder', 'ProjectController@reorder');
         Route::get('projects/{project}/indexing', 'ProjectController@indexing');
         Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
-        Route::post('projects/{project}/share', 'ProjectController@share');
-        Route::post('projects/{project}/clone', 'ProjectController@clone');
-        Route::post('projects/{project}/remove-share', 'ProjectController@removeShare');
-        Route::post('projects/{project}/favorite', 'ProjectController@favorite');
+        Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
+        Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
+        Route::post('suborganization/{suborganization}/projects/{project}/remove-share', 'ProjectController@removeShare');
+        Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::apiResource('suborganization.projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');

@@ -45,7 +45,7 @@ class ProjectController extends Controller
      * Get All Projects
      *
      * Get a list of the projects of a user.
-     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/project/projects.json
      *
      * @return Response
@@ -73,7 +73,7 @@ class ProjectController extends Controller
      * Get All Projects Detail
      *
      * Get a list of the projects of a user with detail.
-     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/project/projects-with-detail.json
      *
      * @return Response
@@ -99,15 +99,17 @@ class ProjectController extends Controller
      * Get Recent Projects
      *
      * Get a list of the recent projects of a user.
-     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/project/projects-with-detail.json
      *
      * @return Response
      */
-    public function recent()
+    public function recent(Organization $suborganization)
     {
+        $this->authorize('recent', [Project::class, $suborganization]);
+
         return response([
-            'projects' => ProjectDetailResource::collection($this->projectRepository->fetchRecentPublic(5)),
+            'projects' => ProjectDetailResource::collection($this->projectRepository->fetchRecentPublic(5, $suborganization->id)),
         ], 200);
     }
 
@@ -115,6 +117,8 @@ class ProjectController extends Controller
      * Get Default Projects
      *
      * Get a list of the default projects.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile responses/project/projects-with-detail.json
      *
@@ -141,6 +145,7 @@ class ProjectController extends Controller
      *
      * Upload thumbnail image for a project
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam thumb image required Thumbnail image to upload Example: (binary)
      *
      * @response {
@@ -156,8 +161,10 @@ class ProjectController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function uploadThumb(Request $request)
+    public function uploadThumb(Request $request, Organization $suborganization)
     {
+        $this->authorize('uploadThumb', [Project::class, $suborganization]);
+
         $validator = Validator::make($request->all(), [
             'thumb' => 'required|image|max:102400',
         ]);
@@ -179,6 +186,8 @@ class ProjectController extends Controller
      * Create Project
      *
      * Create a new project in storage for a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
@@ -223,6 +232,7 @@ class ProjectController extends Controller
      * Get the specified project detail.
      *
      * @urlParam project required The Id of a project Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile 201 responses/project/project.json
      *
@@ -277,6 +287,7 @@ class ProjectController extends Controller
      * Share the specified project of a user.
      *
      * @urlParam project required The Id of a project Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile responses/project/project.json
      *
@@ -289,7 +300,7 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function share(Project $project, Organization $suborganization)
+    public function share(Organization $suborganization, Project $project)
     {
         $this->authorize('share', [Project::class, $suborganization]);
 
@@ -316,6 +327,7 @@ class ProjectController extends Controller
      *
      * Remove share the specified project of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam project required The Id of a project Example: 1
      *
      * @responseFile responses/project/project-not-shared.json
@@ -329,8 +341,10 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function removeShare(Project $project)
+    public function removeShare(Organization $suborganization, Project $project)
     {
+        $this->authorize('share', [Project::class, $suborganization]);
+
         $is_updated = $this->projectRepository->update([
             'shared' => false,
         ], $project->id);
@@ -355,6 +369,7 @@ class ProjectController extends Controller
      * Update the specified project of a user.
      *
      * @urlParam project required The Id of a project Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
@@ -399,6 +414,7 @@ class ProjectController extends Controller
      *
      * Remove the specified project of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
@@ -436,6 +452,7 @@ class ProjectController extends Controller
      *
      * Clone the specified project of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
@@ -452,8 +469,10 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function clone(Request $request, Project $project)
+    public function clone(Request $request, Organization $suborganization, Project $project)
     {
+        $this->authorize('clone', [Project::class, $suborganization]);
+
         $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         // pushed cloning of project in background
@@ -562,6 +581,7 @@ class ProjectController extends Controller
      *
      * Favorite/Unfavorite the specified project for a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
@@ -572,9 +592,11 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function favorite(Request $request, Project $project)
+    public function favorite(Request $request, Organization $suborganization, Project $project)
     {
-        $updateStatus = $this->projectRepository->favoriteUpdate(auth()->user(), $project);
+        $this->authorize('mark_favorite', [Project::class, $suborganization]);
+
+        $updateStatus = $this->projectRepository->favoriteUpdate(auth()->user(), $project, $suborganization->id);
 
         if ($updateStatus) {
             $message = 'This resource will be removed from your Favorites. ';
@@ -592,6 +614,8 @@ class ProjectController extends Controller
 
     /**
      * Get All Favorite Projects
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * Get a list of the favorite projects of a user.
      *

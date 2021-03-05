@@ -55,11 +55,7 @@ class SearchController extends Controller
      */
     public function search(SearchRequest $searchRequest)
     {
-        $data = $searchRequest->validated();
-
-        // $authenticated_user = auth()->user();
-        // $organizationId = $authenticated_user->default_organization;
-
+        $data                    = $searchRequest->validated();
         $data['organizationIds'] = [$data['organization_id']];
 
         $projects = $this->activityRepository->searchForm($data);
@@ -105,9 +101,6 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
         $data['indexing'] = [3];
-
-        // $authenticated_user = auth()->user();
-        // $organizationId = $authenticated_user->default_organization;
 
         $data['organizationIds'] = [$data['organization_id']];
 
@@ -155,9 +148,6 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
         $data['userIds'] = [auth()->user()->id];
-
-        // $authenticated_user = auth()->user();
-        // $organizationId = $authenticated_user->default_organization;
 
         $data['organizationIds'] = [$data['organization_id']];
 
