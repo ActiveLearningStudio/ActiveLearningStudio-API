@@ -64,10 +64,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => 1]);
 
-        if (isset($data['users'])) {
-            foreach ($data['users'] as $user) {
-                $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
-            }
+        foreach ($data['users'] as $user) {
+            $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
         }
 
         try {
@@ -98,10 +96,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => 1]);
 
-        if (isset($data['users'])) {
-            foreach ($data['users'] as $user) {
-                $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
-            }
+        foreach ($data['users'] as $user) {
+            $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
         }
 
         try {
