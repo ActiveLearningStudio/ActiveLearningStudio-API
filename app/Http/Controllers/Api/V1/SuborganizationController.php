@@ -193,7 +193,7 @@ class SuborganizationController extends Controller
      *   ]
      * }
      *
-     * @param SuborganizationSave $request
+     * @param SuborganizationUpdate $request
      * @param Organization $suborganization
      * @return Response
      */

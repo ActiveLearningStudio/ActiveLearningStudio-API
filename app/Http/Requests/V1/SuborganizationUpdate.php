@@ -28,8 +28,9 @@ class SuborganizationUpdate extends FormRequest
             'description' => 'required|string|max:255',
             'image' => 'required',
             'admins' => 'required|array|exists:App\User,id',
-            'users.*.user_id' => 'integer|exists:App\User,id',
-            'users.*.role_id' => 'integer|exists:App\Models\OrganizationRoleType,id',
+            'users' => 'required|array',
+            'users.*.user_id' => 'required_with:users.*.role_id|integer|exists:App\User,id',
+            'users.*.role_id' => 'required_with:users.*.user_id|integer|exists:App\Models\OrganizationRoleType,id',
             'parent_id' => 'required|integer|exists:App\Models\Organization,id'
         ];
     }

@@ -26,11 +26,12 @@ class SuborganizationSave extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|min:3|max:255|unique:organizations',
+            'domain' => 'required|string|min:2|max:255|unique:organizations',
             'image' => 'required',
             'admins' => 'required|array|exists:App\User,id',
-            'users.*.user_id' => 'integer|exists:App\User,id',
-            'users.*.role_id' => 'integer|exists:App\Models\OrganizationRoleType,id',
+            'users' => 'required|array',
+            'users.*.user_id' => 'required_with:users.*.role_id|integer|exists:App\User,id',
+            'users.*.role_id' => 'required_with:users.*.user_id|integer|exists:App\Models\OrganizationRoleType,id',
             'parent_id' => 'required|integer|exists:App\Models\Organization,id'
         ];
     }
