@@ -136,6 +136,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('search/dashboard', 'SearchController@dashboard');
 
         // Suborganizations
+        Route::get('suborganizations/visibility-types', 'SuborganizationController@getVisibilityTypes')->name('suborganizations.get-visibility-types');
         Route::get('suborganizations/roles', 'SuborganizationController@getRoles')->name('suborganizations.get-roles');
         Route::post('suborganizations/{suborganization}/upload-thumb', 'SuborganizationController@uploadThumb');
         Route::get('suborganizations/{suborganization}/member-options', 'SuborganizationController@showMemberOptions')->name('suborganizations.member-options');
