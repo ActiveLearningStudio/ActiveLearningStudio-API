@@ -67,6 +67,8 @@ class TeamController extends Controller
     /**
      * Get All Teams
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * Get a list of the teams of a user.
      *
      * @responseFile responses/team/teams.json
@@ -137,6 +139,8 @@ class TeamController extends Controller
      *
      * Create a new team in storage for a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
      *
@@ -158,7 +162,6 @@ class TeamController extends Controller
         $data = $teamRequest->validated();
 
         $auth_user = auth()->user();
-        // $data['organization_id'] = $auth_user->default_organization;
         $team = $auth_user->teams()->create($data, ['role' => 'owner']);
 
         if ($team) {
@@ -179,6 +182,7 @@ class TeamController extends Controller
      *
      * Get the specified team detail.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
      *
      * @responseFile 201 responses/team/team.json
@@ -594,6 +598,7 @@ class TeamController extends Controller
      *
      * Update the specified team of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
@@ -634,6 +639,7 @@ class TeamController extends Controller
      *
      * Remove the specified team of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
      *
      * @response {

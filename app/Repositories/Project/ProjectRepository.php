@@ -213,13 +213,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * To fetch recent public project
      *
      * @param $limit
+     * @param $organization_id
      * @return Project $projects
      */
-    public function fetchRecentPublic($limit)
+    public function fetchRecentPublic($limit, $organization_id)
     {
         $authenticated_user = auth()->user();
         // 3 is for indexing approved - see Project Model @indexing property
-        return $this->model->where('indexing', 3)->where('organization_id', $authenticated_user->default_organization)->orderBy('created_at', 'desc')->limit($limit)->get();
+        return $this->model->where('indexing', 3)->where('organization_id', $organization_id)->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 
     /**
@@ -321,16 +322,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * @param $authenticated_user
      * @param $project
+     * @param $organization_id
      * @return bool
      */
-    public function favoriteUpdate($authenticated_user, $project)
+    public function favoriteUpdate($authenticated_user, $project, $organization_id)
     {
-        $defaultOrganization = $authenticated_user->default_organization;
-
-        if ($authenticated_user->favoriteProjects()->where('id', $project->id)->wherePivot('organization_id', $defaultOrganization)->first()) {
-            return $authenticated_user->favoriteProjects()->wherePivot('organization_id', $defaultOrganization)->detach($project->id);
+        if ($authenticated_user->favoriteProjects()->where('id', $project->id)->wherePivot('organization_id', $organization_id)->first()) {
+            return $authenticated_user->favoriteProjects()->wherePivot('organization_id', $organization_id)->detach($project->id);
         } else {
-            return $authenticated_user->favoriteProjects()->attach($project->id, ['organization_id' => $defaultOrganization]);
+            return $authenticated_user->favoriteProjects()->attach($project->id, ['organization_id' => $organization_id]);
         }
     }
 }

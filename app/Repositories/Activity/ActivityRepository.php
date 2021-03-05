@@ -378,7 +378,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         ];
 
         $user = User::where('email', $request->input('userEmail'))->first();
-        // $organizationId = $user->default_organization;
         $data['organizationIds'] = [$request->input('organization_id')];
 
         // Check LMS settings for authorization when searching private projects
