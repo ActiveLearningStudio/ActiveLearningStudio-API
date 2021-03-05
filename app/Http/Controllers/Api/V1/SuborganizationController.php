@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Resources\V1\OrganizationRoleResource;
+use App\Http\Resources\V1\OrganizationVisibilityTypeResource;
 use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Requests\V1\SuborganizationUpdate;
 use App\Http\Requests\V1\SuborganizationAddUser;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Organization;
 use App\Models\OrganizationRoleType;
+use App\Models\OrganizationVisibilityType;
 use Illuminate\Validation\Rule;
 
 /**
@@ -516,5 +518,19 @@ class SuborganizationController extends Controller
     public function getRoles()
     {
         return OrganizationRoleResource::collection(OrganizationRoleType::all());
+    }
+
+    /**
+     * Get Visibility Types For Suborganization
+     *
+     * Get a list of the visibility types for suborganization.
+     *
+     * @responseFile responses/organization/organization-visibility-types.json
+     *
+     * @return Response
+     */
+    public function getVisibilityTypes()
+    {
+        return OrganizationVisibilityTypeResource::collection(OrganizationVisibilityType::all());
     }
 }
