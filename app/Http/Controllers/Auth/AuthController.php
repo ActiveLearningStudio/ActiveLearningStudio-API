@@ -238,24 +238,7 @@ class AuthController extends Controller
      * @return Response
      */
     public function loginWithGoogle(Request $request)
-    {   //print_r($request->all());die;
-        $domain = isset($request->domain) ? $request->domain : null;
-        $user   = auth()->user();
-
-        if (isset($domain) && !$organization = $user->organizations()->where('domain', $domain)->first()) {
-            return response([
-                'errors' => ['Invalid Domain.'],
-            ], 400);
-        } else {die('no');
-            $is_updated = $this->userRepository->update([
-                'default_organization' => $organization->id,
-            ], $user->id);
-
-            $user = $organization->users()->where('id', $user->id)->first();
-
-        }
-
-
+    {
         $client = new \Google_Client();
         $client->setClientId(config('google.gapi_client_id'));
         $result = $client->verifyIdToken($request->tokenId);

@@ -33,6 +33,8 @@ class OrganizationResource extends JsonResource
             'projects_count' => $this->when($this->projects_count, $this->projects_count),
             'suborganization_count' => $this->when($this->children_count, $this->children_count),
             'users_count' => $this->when($this->users_count, $this->users_count),
+            'groups_count' => $this->groups_count,
+            'teams_count' => $this->teams_count,
         ];
     }
 }

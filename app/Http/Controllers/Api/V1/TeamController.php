@@ -79,13 +79,7 @@ class TeamController extends Controller
     {
         $this->authorize('viewAny', [Team::class, $suborganization]);
 
-        $authenticated_user = auth()->user();
-
-        if ($authenticated_user->isAdmin()) {
-            $teams = $this->teamRepository->all();
-        } else {
-            $teams = $authenticated_user->teams;
-        }
+        $teams = Team::whereOrganizationId($suborganization->id)->get();
 
         $teamDetails = [];
         foreach ($teams as $team) {

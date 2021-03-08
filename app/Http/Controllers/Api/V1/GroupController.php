@@ -79,13 +79,7 @@ class GroupController extends Controller
     {
         $this->authorize('viewAny', [Group::class, $suborganization]);
 
-        $authenticated_user = auth()->user();
-
-        if ($authenticated_user->isAdmin()) {
-            $groups = $this->groupRepository->all();
-        } else {
-            $groups = $authenticated_user->groups;
-        }
+        $groups = Group::whereOrganizationId($suborganization->id)->get();
 
         $groupDetails = [];
         foreach ($groups as $group) {
