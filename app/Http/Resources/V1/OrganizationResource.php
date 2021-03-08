@@ -29,6 +29,9 @@ class OrganizationResource extends JsonResource
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->display_name;
             }),
+            'organization_role_id' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->role->id;
+            }),
             'default_organization' => $this->when(auth()->user() && auth()->user()->default_organization == $this->id, true),
             'projects_count' => $this->when($this->projects_count, $this->projects_count),
             'suborganization_count' => $this->when($this->children_count, $this->children_count),
