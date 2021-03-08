@@ -31,6 +31,9 @@ class UserResource extends JsonResource
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->display_name;
             }),
+            'organization_role_id' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->role->id;
+            }),
             'created_at' => $this->created_at ? $this->created_at->format('d-M-Y') : null,
             'updated_at' => $this->updated_at ? $this->updated_at->format('d-M-Y') : null,
         ];

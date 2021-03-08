@@ -260,7 +260,7 @@ class SuborganizationController extends Controller
     /**
      * Show Member Options
      *
-     * Display a listing of the user member options for default suborganization, other then the exiting ones.
+     * Display a listing of the user member options for suborganization, other then the exiting ones.
      *
      * @urlParam suborganization int required The Id of a suborganization Example: 1
      * @bodyParam query string required Query to search users against Example: leo
@@ -282,6 +282,7 @@ class SuborganizationController extends Controller
 
         $validator = Validator::make($request->all(), [
             'query' => 'required|string|max:255',
+            'page' => 'required|in:create,update',
         ]);
 
         if ($validator->fails()) {

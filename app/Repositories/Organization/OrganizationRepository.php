@@ -147,18 +147,21 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function getMemberOptions($data, $organization)
     {
-        $userNotInIds = $organization->users->modelKeys();
+        $organizationUserIds = $organization->users->modelKeys();
+        $parentOrganizationUserIds = $this->getParentOrganizationUserIds([], $organization);
 
-        $userInIds = $this->getParentOrganizationUserIds([], $organization);
-
-        $userInIds = array_diff($userInIds, $userNotInIds);
+        if ($data['page'] === 'create') {
+            $userInIds = array_merge($organizationUserIds, $parentOrganizationUserIds);
+        } else if ($data['page'] === 'update') {
+            $userInIds = array_diff($parentOrganizationUserIds, $organizationUserIds);
+        }
 
         $this->query = $this->userRepository->model->when($data['query'] ?? null, function ($query) use ($data) {
             $query->search(['email'], $data['query']);
             return $query;
         });
 
-        return $this->query->whereNotIn('id', $userNotInIds)->whereIn('id', $userInIds)->orderBy('first_name', 'asc')->paginate();
+        return $this->query->whereIn('id', $userInIds)->orderBy('first_name', 'asc')->paginate();
     }
 
     /**
