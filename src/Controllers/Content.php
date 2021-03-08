@@ -70,7 +70,7 @@ class Content implements ControllerInterface
         if ( isset($_SESSION['lti_post']['lti_version']) && $_SESSION['lti_post']['lti_version'] === 'LTI-1p0' ) {
             // handle LTI 1.0
             $oauth_consumer_key = $_SESSION['lti_post']['oauth_consumer_key'];
-            $content_item_return_url = $_SESSION['lti_post']['content_item_return_url'];
+            $content_item_return_url = isset($_SESSION['lti_post']['content_item_return_url']) ? $_SESSION['lti_post']['content_item_return_url'] : $_SESSION['lti_post']['tool_consumer_instance_url'];
             $port = parse_url($content_item_return_url, PHP_URL_PORT) ? ':'.parse_url($content_item_return_url, PHP_URL_PORT):'';
             $lms_url = parse_url($content_item_return_url, PHP_URL_SCHEME)
                         .'://'.parse_url($content_item_return_url, PHP_URL_HOST).$port;
