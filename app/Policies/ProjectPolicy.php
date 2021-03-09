@@ -34,7 +34,7 @@ class ProjectPolicy
      */
     public function view(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
+       return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
     }
 
     /**

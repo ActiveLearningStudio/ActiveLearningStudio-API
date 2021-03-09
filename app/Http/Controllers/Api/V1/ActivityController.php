@@ -14,6 +14,7 @@ use App\Jobs\CloneActivity;
 use App\Models\Activity;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
+use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
@@ -51,7 +52,7 @@ class ActivityController extends Controller
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
 
-        $this->authorizeResource(Activity::class, 'activity');
+        // $this->authorizeResource(Activity::class, 'activity');
     }
 
     /**
@@ -69,7 +70,7 @@ class ActivityController extends Controller
      */
     public function index(Playlist $playlist)
     {
-        $this->authorize('view', $playlist->project);
+        $this->authorize('viewAny', [Project::class, $playlist->project->organization]);
 
         return response([
             'activities' => ActivityResource::collection($playlist->activities),
@@ -145,7 +146,7 @@ class ActivityController extends Controller
      */
     public function store(ActivityRequest $request, Playlist $playlist)
     {
-        $this->authorize('view', $playlist->project);
+        $this->authorize('create', [Project::class, $playlist->project->organization]);
 
         $data = $request->validated();
 
