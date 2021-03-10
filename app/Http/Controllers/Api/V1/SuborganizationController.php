@@ -48,18 +48,30 @@ class SuborganizationController extends Controller
      * Get a list of the suborganizations for a user's default organization.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam query string required Query to search suborganization against Example: Vivensity
      *
      * @responseFile responses/organization/suborganizations.json
      *
+     * @param Request $request
      * @param Organization $suborganization
      * @return Response
      */
-    public function index(Organization $suborganization)
+    public function index(Request $request, Organization $suborganization)
     {
         $this->authorize('viewAny', $suborganization);
 
+        $validator = Validator::make($request->all(), [
+            'query' => 'string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => $validator->errors()->all()
+            ], 400);
+        }
+
         return response([
-            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($suborganization->id)),
+            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($request->all(), $suborganization)),
         ], 200);
     }
 
@@ -273,6 +285,7 @@ class SuborganizationController extends Controller
      *   ]
      * }
      *
+     * @param Request $request
      * @param Organization $suborganization
      * @return Response
      */

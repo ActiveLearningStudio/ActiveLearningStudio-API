@@ -40,16 +40,44 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     /**
      * To fetch suborganizations
      *
-     * @param $parent_id
+     * @param $data
+     * @param Organization $organization
      * @return Organization $organizations
      */
-    public function fetchSuborganizations($parent_id)
+    public function fetchSuborganizations($data, $organization)
     {
+        if (isset($data['query']) && !empty($data['query'])) {
+            $parentIds = $this->getSuborganizationIds($organization);
+        } else {
+            $parentIds[] = $organization->id;
+        }
+
         return $this->model
                 ->with(['parent', 'admins'])
                 ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
-                ->where('parent_id', $parent_id)
+                ->whereIn('parent_id', $parentIds)
+                ->when($data['query'] ?? null, function ($query) use ($data) {
+                    $query->where('name', 'like', '%' . $data['query'] . '%');
+                    return $query;
+                })
                 ->get();
+    }
+
+    /**
+     * Get ids for nested suborganizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getSuborganizationIds($organization, $organizationIds = [])
+    {
+        $organizationIds[] = $organization->id;
+        foreach ($organization->children as $child) {
+            $organizationIds = $this->getSuborganizationIds($child, $organizationIds);
+        }
+
+        return $organizationIds;
     }
 
     /**

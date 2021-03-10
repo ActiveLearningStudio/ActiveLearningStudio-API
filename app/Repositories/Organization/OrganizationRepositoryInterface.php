@@ -11,10 +11,20 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     /**
      * To fetch suborganizations
      *
-     * @param $parent_id
+     * @param $data
+     * @param Organization $organization
      * @return Organization $organizations
      */
-    public function fetchSuborganizations($parent_id);
+    public function fetchSuborganizations($data, $organization);
+
+    /**
+     * Get ids for nested suborganizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getSuborganizationIds($organization, $organizationIds = []);
 
     /**
      * To create a suborganization
