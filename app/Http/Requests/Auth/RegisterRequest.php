@@ -32,6 +32,7 @@ class RegisterRequest extends FormRequest
             'organization_name' => 'required|string|max:50',
             'organization_type' => 'required|string|max:255|exists:organization_types,label',
             'job_title' => 'required|string|max:255',
+            'domain' => 'required|string|max:255|exists:organizations'
         ];
     }
 }

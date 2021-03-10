@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 /**
  * @group 1. Authentication
@@ -69,8 +70,10 @@ class AuthController extends Controller
      * @bodyParam last_name string required Last name of a user Example: Doe
      * @bodyParam email string required Email of a user Example: john.doe@currikistudio.org
      * @bodyParam password string required Password Example: Password123
-     * @bodyParam organization_name string Organization name of a user Example: Curriki
-     * @bodyParam job_title string Job title of a user Example: Developer
+     * @bodyParam organization_name string required Organization name of a user Example: Curriki
+     * @bodyParam organization_type string required Organization type of a user Example: Nonprofit
+     * @bodyParam job_title string required Job title of a user Example: Developer
+     * @bodyParam domain string required Organization domain user is registering for Example: currikistudio
      *
      * @response 201 {
      *   "message": "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
@@ -93,7 +96,7 @@ class AuthController extends Controller
         $data['remember_token'] = Str::random(64);
         $data['email_verified_at'] = now();
 
-        $user = $this->userRepository->create($data);
+        $user = $this->userRepository->create(Arr::except($data, ['domain']));
 
         if ($user) {
             $invited_users = $this->invitedTeamUserRepository->searchByEmail($data['email']);
@@ -110,13 +113,18 @@ class AuthController extends Controller
             event(new Registered($user));
 
             $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($data['email']);
-            if ($invited_users) {
+            if ($invited_users->isNotEmpty()) {
                 foreach ($invited_users as $invited_user) {
                     $organization = $this->organizationRepository->find($invited_user->organization_id);
                     if ($organization) {
                         $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
                         $this->invitedOrganizationUserRepository->delete($data['email']);
                     }
+                }
+            } else {
+                $organization = $this->organizationRepository->findByField('domain', $data['domain']);
+                if ($organization) {
+                    $organization->users()->attach($user, ['organization_role_type_id' => 3]);
                 }
             }
 
