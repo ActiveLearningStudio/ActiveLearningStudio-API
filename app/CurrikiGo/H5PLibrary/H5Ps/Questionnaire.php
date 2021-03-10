@@ -6,9 +6,9 @@ use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
 use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
 
 /**
- * Column H5P library
+ * Questionnaire H5P library
  */
-class Column implements H5PLibraryInterface
+class Questionnaire implements H5PLibraryInterface
 {
     /**
      * Library content
@@ -35,9 +35,9 @@ class Column implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            if (isset($this->content['content']) && !empty($this->content['content'])) {
-                foreach ($this->content['content'] as $item) {
-                    $meta[] = $this->buildIndex($item['content']);
+            if (isset($this->content['questionnaireElements']) && !empty($this->content['questionnaireElements'])) {
+                foreach ($this->content['questionnaireElements'] as $item) {
+                    $meta[] = $this->buildIndex($item['library']);
                 }
             }
         }

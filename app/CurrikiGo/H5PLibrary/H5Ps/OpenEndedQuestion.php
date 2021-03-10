@@ -3,11 +3,12 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
+use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
 
 /**
- * Common H5P library
+ * OpenEndedQuestion H5P library
  */
-class Common implements H5PLibraryInterface
+class OpenEndedQuestion implements H5PLibraryInterface
 {
     /**
      * Library content
@@ -34,9 +35,7 @@ class Common implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            if (isset($this->content['title'])) {
-                $meta['title'] = $this->content['title'];
-            }
+            $meta['question'] = $this->content['question'];
         }
         return $meta;
     }

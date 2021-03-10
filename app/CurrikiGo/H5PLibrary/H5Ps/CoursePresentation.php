@@ -6,9 +6,9 @@ use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
 use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
 
 /**
- * Column H5P library
+ * CoursePresentation H5P library
  */
-class Column implements H5PLibraryInterface
+class CoursePresentation implements H5PLibraryInterface
 {
     /**
      * Library content
@@ -35,23 +35,28 @@ class Column implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            if (isset($this->content['content']) && !empty($this->content['content'])) {
-                foreach ($this->content['content'] as $item) {
-                    $meta[] = $this->buildIndex($item['content']);
+            if (isset($this->content['presentation']) && isset($this->content['presentation']['slides']) && !empty($this->content['presentation']['slides'])) {
+                foreach ($this->content['presentation']['slides'] as $item) {
+                    $meta[] = $this->buildSlide($item['elements']);
                 }
             }
         }
         return $meta;
     }
 
-    private function buildIndex($content)
+    private function buildSlide($elements)
     {
         $data = [];
-        $data['sub-content-id'] = $content['subContentId'];
-        $data['library'] = $content['library'];
-        $data['content-type'] = $content['metadata']['contentType'];
-        $data['title'] = $content['metadata']['title'];
-        $data['content'] = $this->loadContentByLibrary($data['library'], $content['params']);
+        foreach ($elements as $item) {
+            $element = [];
+            $content = $item['action'];
+            $element['sub-content-id'] = $content['subContentId'];
+            $element['library'] = $content['library'];
+            $element['content-type'] = $content['metadata']['contentType'];
+            $element['title'] = $content['metadata']['title'];
+            $element['content'] = $this->loadContentByLibrary($element['library'], $content['params']);
+            $data[] = $element;
+        }
         return $data;
     }
 

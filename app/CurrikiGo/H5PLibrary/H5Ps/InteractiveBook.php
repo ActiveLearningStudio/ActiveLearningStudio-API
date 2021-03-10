@@ -36,7 +36,7 @@ class InteractiveBook implements H5PLibraryInterface
         $meta = [];
         if (!empty($this->content)) {
             if (isset($this->content['chapters']) && !empty($this->content['chapters'])) {
-                foreach($this->content['chapters'] as $chapter) {
+                foreach ($this->content['chapters'] as $chapter) {
                     $meta[] = $this->buildChapter($chapter['chapter']);
                 }
             }
