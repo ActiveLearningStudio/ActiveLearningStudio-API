@@ -3,7 +3,7 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
-use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
+use App\CurrikiGo\H5PLibrary\Helpers\H5PHelper;
 
 /**
  * Questionnaire H5P library
@@ -51,19 +51,8 @@ class Questionnaire implements H5PLibraryInterface
         $data['library'] = $content['library'];
         $data['content-type'] = $content['metadata']['contentType'];
         $data['title'] = $content['metadata']['title'];
-        $data['content'] = $this->loadContentByLibrary($data['library'], $content['params']);
+        $data['content'] = H5PHelper::loadContentByLibrary($data['library'], $content['params']);
         return $data;
-    }
-
-    private function loadContentByLibrary($library, $content)
-    {
-        $h5pFactory = new H5PLibraryFactory();
-        $h5pLib = $h5pFactory->init($library, $content);
-        $h5pMeta = [];
-        if ($h5pLib) {
-            $h5pMeta = $h5pLib->buildMeta();
-        }
-        return $h5pMeta;
     }
 
 }

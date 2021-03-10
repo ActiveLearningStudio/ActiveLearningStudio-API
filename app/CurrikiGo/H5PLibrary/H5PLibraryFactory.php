@@ -45,6 +45,8 @@ class H5PLibraryFactory
                 return new MultiChoice($content);
             case 'CoursePresentation':
                 return new CoursePresentation($content);
+            case 'TrueFalse':
+                return new TrueFalse($content);                
             default:
                 // When there is no interaction type
                 return new Common($content);

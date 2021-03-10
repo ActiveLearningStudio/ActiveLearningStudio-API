@@ -6,9 +6,9 @@ use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
 use App\CurrikiGo\H5PLibrary\Helpers\H5PHelper;
 
 /**
- * Column H5P library
+ * InteractiveVideo H5P library
  */
-class Column implements H5PLibraryInterface
+class InteractiveVideo implements H5PLibraryInterface
 {
     /**
      * Library content
@@ -35,16 +35,20 @@ class Column implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            if (isset($this->content['content']) && !empty($this->content['content'])) {
-                foreach ($this->content['content'] as $item) {
-                    $meta[] = $this->buildIndex($item['content']);
+            if (isset($this->content['interactiveVideo']) && isset($this->content['interactiveVideo']['assets']) 
+            && !empty($this->content['interactiveVideo']['assets'])) {
+                foreach ($this->content['interactiveVideo']['assets']['interactions'] as $item) {
+                    $meta[] = $this->buildInteraction($item['action']);
+                }
+                if (isset($this->content['interactiveVideo']['summary']) && isset($this->content['interactiveVideo']['summary']['task']) && !empty($this->content['interactiveVideo']['summary']['task'])) {
+                    $meta[] = $this->buildInteraction($this->content['interactiveVideo']['summary']['task']);
                 }
             }
         }
         return $meta;
     }
 
-    private function buildIndex($content)
+    private function buildInteraction($content)
     {
         $data = [];
         $data['sub-content-id'] = $content['subContentId'];

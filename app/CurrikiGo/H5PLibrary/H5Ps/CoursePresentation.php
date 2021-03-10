@@ -3,7 +3,7 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
-use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
+use App\CurrikiGo\H5PLibrary\Helpers\H5PHelper;
 
 /**
  * CoursePresentation H5P library
@@ -35,7 +35,8 @@ class CoursePresentation implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            if (isset($this->content['presentation']) && isset($this->content['presentation']['slides']) && !empty($this->content['presentation']['slides'])) {
+            if (isset($this->content['presentation']) && isset($this->content['presentation']['slides']) 
+            && !empty($this->content['presentation']['slides'])) {
                 foreach ($this->content['presentation']['slides'] as $item) {
                     $meta[] = $this->buildSlide($item['elements']);
                 }
@@ -54,21 +55,10 @@ class CoursePresentation implements H5PLibraryInterface
             $element['library'] = $content['library'];
             $element['content-type'] = $content['metadata']['contentType'];
             $element['title'] = $content['metadata']['title'];
-            $element['content'] = $this->loadContentByLibrary($element['library'], $content['params']);
+            $element['content'] = H5PHelper::loadContentByLibrary($element['library'], $content['params']);
             $data[] = $element;
         }
         return $data;
-    }
-
-    private function loadContentByLibrary($library, $content)
-    {
-        $h5pFactory = new H5PLibraryFactory();
-        $h5pLib = $h5pFactory->init($library, $content);
-        $h5pMeta = [];
-        if ($h5pLib) {
-            $h5pMeta = $h5pLib->buildMeta();
-        }
-        return $h5pMeta;
     }
 
 }
