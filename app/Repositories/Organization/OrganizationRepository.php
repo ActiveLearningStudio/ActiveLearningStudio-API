@@ -175,8 +175,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function getMemberOptions($data, $organization)
     {
-        $organizationUserIds = $organization->users->modelKeys();
-        $parentOrganizationUserIds = $this->getParentOrganizationUserIds([], $organization);
+        $organizationUserIds = $organization->users()->wherePivot('organization_role_type_id', '<>', 1)->get()->modelKeys();
+        $organizationAdminUserIds = $organization->users()->wherePivot('organization_role_type_id', 1)->get()->modelKeys();
+        $parentOrganizationUserIds = $this->getParentOrganizationUserIds([], $organization, $organizationAdminUserIds);
 
         if ($data['page'] === 'create') {
             $userInIds = array_merge($organizationUserIds, $parentOrganizationUserIds);
@@ -197,15 +198,19 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      *
      * @param $userIds
      * @param $organization
+     * @param $organizationAdminUserIds
      * @return array
      */
-    public function getParentOrganizationUserIds($userIds, $organization)
+    public function getParentOrganizationUserIds($userIds, $organization, $organizationAdminUserIds)
     {
         if ($parentOrganization = $organization->parent) {
-            $ids = $parentOrganization->users->modelKeys();
+            $ids = $parentOrganization->users()->wherePivot('organization_role_type_id', '<>', 1)->get()->modelKeys();
+            $adminIds = $parentOrganization->users()->wherePivot('organization_role_type_id', 1)->get()->modelKeys();
+            $ids = array_diff($ids, $organizationAdminUserIds);
+            $organizationAdminUserIds = array_merge($organizationAdminUserIds, $adminIds);
             $userIds = array_merge($userIds, $ids);
 
-            $userIds = $this->getParentOrganizationUserIds($userIds, $parentOrganization);
+            $userIds = $this->getParentOrganizationUserIds($userIds, $parentOrganization, $organizationAdminUserIds);
         }
 
         return $userIds;
