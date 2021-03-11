@@ -45,17 +45,16 @@ class CoursePresentation implements H5PLibraryInterface
         return $meta;
     }
 
+    /**
+     * Build a slide meta
+     *
+     * @return array
+     */
     private function buildSlide($elements)
     {
         $data = [];
         foreach ($elements as $item) {
-            $element = [];
-            $content = $item['action'];
-            $element['sub-content-id'] = $content['subContentId'];
-            $element['library'] = $content['library'];
-            $element['content-type'] = $content['metadata']['contentType'];
-            $element['title'] = $content['metadata']['title'];
-            $element['content'] = H5PHelper::loadContentByLibrary($element['library'], $content['params']);
+            $element = H5PHelper::buildElement($item['action']);
             $data[] = $element;
         }
         return $data;

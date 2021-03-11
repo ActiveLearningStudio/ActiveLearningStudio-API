@@ -11,6 +11,9 @@ use App\CurrikiGo\H5PLibrary\H5Ps\OpenEndedQuestion;
 use App\CurrikiGo\H5PLibrary\H5Ps\NonScoreableDragQuestion;
 use App\CurrikiGo\H5PLibrary\H5Ps\MultiChoice;
 use App\CurrikiGo\H5PLibrary\H5Ps\CoursePresentation;
+use App\CurrikiGo\H5PLibrary\H5Ps\InteractiveVideo;
+use App\CurrikiGo\H5PLibrary\H5Ps\TrueFalse;
+use App\CurrikiGo\H5PLibrary\H5Ps\Summary;
 
 /**
  * Factory Class for H5P Libraries
@@ -45,6 +48,10 @@ class H5PLibraryFactory
                 return new MultiChoice($content);
             case 'CoursePresentation':
                 return new CoursePresentation($content);
+            case 'InteractiveVideo':
+                return new InteractiveVideo($content);
+            case 'Summary':
+                return new Summary($content);
             case 'TrueFalse':
                 return new TrueFalse($content);                
             default:

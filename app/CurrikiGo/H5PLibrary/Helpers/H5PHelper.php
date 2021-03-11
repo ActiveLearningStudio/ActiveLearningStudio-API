@@ -28,6 +28,12 @@ class H5PHelper
         return $h5pMeta;
     }
 
+    /**
+     * Prepare element from content meta data
+     * 
+     * @param array $content The content array
+     * @return array
+     */
     public static function buildElement($content)
     {
         $data = [];

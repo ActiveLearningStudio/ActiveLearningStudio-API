@@ -37,14 +37,14 @@ class InteractiveBook implements H5PLibraryInterface
         if (!empty($this->content)) {
             if (isset($this->content['chapters']) && !empty($this->content['chapters'])) {
                 foreach ($this->content['chapters'] as $chapter) {
-                    $meta[] = $this->buildChapter($chapter['chapter']);
+                    $meta[] = H5PHelper::buildElement($chapter['chapter']);
                 }
             }
         }
         return $meta;
     }
 
-    private function buildChapter($chapter)
+    /*private function buildChapter($chapter)
     {
         $data = [];
         $data['sub-content-id'] = $chapter['subContentId'];
@@ -53,6 +53,6 @@ class InteractiveBook implements H5PLibraryInterface
         $data['title'] = $chapter['metadata']['title'];
         $data['content'] = H5PHelper::loadContentByLibrary($data['library'], $chapter['params']);
         return $data;
-    }
+    }*/
 
 }

@@ -3,12 +3,11 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
-use App\CurrikiGo\H5PLibrary\Helpers\H5PHelper;
 
 /**
- * Column H5P library
+ * Summary H5P library
  */
-class Column implements H5PLibraryInterface
+class Summary implements H5PLibraryInterface
 {
     /**
      * Library content
@@ -35,10 +34,11 @@ class Column implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            if (isset($this->content['content']) && !empty($this->content['content'])) {
-                foreach ($this->content['content'] as $item) {
-                    $meta[] = H5PHelper::buildElement($item['content']);
-                }
+            if (isset($this->content['intro'])) {
+                $meta['title'] = $this->content['intro'];
+            }
+            if (!empty($this->content['summaries'])) {
+                $meta['children'] = $this->content['summaries'];
             }
         }
         return $meta;
