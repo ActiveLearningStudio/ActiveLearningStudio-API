@@ -121,11 +121,6 @@ class AuthController extends Controller
                         $this->invitedOrganizationUserRepository->delete($data['email']);
                     }
                 }
-            } else {
-                $organization = $this->organizationRepository->findByField('domain', $data['domain']);
-                if ($organization) {
-                    $organization->users()->attach($user, ['organization_role_type_id' => 3]);
-                }
             }
 
 //            return response([
