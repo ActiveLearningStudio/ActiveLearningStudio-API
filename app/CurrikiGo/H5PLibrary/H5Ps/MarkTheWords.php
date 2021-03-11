@@ -1,20 +1,19 @@
 <?php
 
-namespace App\CurrikiGo\H5PLibrary\Helpers;
+namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
-use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
 
 /**
- * Quiz Adapter class
+ * MarkTheWords H5P library
  */
-class QuizAdapter implements H5PLibraryInterface
+class MarkTheWords implements H5PLibraryInterface
 {
     /**
      * Library content
      *
      */
-    protected $content;
+    private $content;
     
     /**
      * Initialize
@@ -35,7 +34,12 @@ class QuizAdapter implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            $meta['questions'] = $this->content['question'];
+            if (isset($this->content['taskDescription'])) {
+                $meta['description'] = $this->content['taskDescription'];
+            }
+            if (isset($this->content['textField'])) {
+                $meta['text'] = $this->content['textField'];
+            }
         }
         return $meta;
     }

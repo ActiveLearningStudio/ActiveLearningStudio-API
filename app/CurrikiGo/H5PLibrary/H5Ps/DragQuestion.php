@@ -1,20 +1,19 @@
 <?php
 
-namespace App\CurrikiGo\H5PLibrary\Helpers;
+namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
-use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
 
 /**
- * Quiz Adapter class
+ * DragQuestion H5P library
  */
-class QuizAdapter implements H5PLibraryInterface
+class DragQuestion implements H5PLibraryInterface
 {
     /**
      * Library content
      *
      */
-    protected $content;
+    private $content;
     
     /**
      * Initialize
@@ -35,7 +34,6 @@ class QuizAdapter implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            $meta['questions'] = $this->content['question'];
         }
         return $meta;
     }

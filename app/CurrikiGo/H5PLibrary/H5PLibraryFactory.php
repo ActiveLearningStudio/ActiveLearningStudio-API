@@ -14,6 +14,12 @@ use App\CurrikiGo\H5PLibrary\H5Ps\CoursePresentation;
 use App\CurrikiGo\H5PLibrary\H5Ps\InteractiveVideo;
 use App\CurrikiGo\H5PLibrary\H5Ps\TrueFalse;
 use App\CurrikiGo\H5PLibrary\H5Ps\Summary;
+use App\CurrikiGo\H5PLibrary\H5Ps\Blanks;
+use App\CurrikiGo\H5PLibrary\H5Ps\DragQuestion;
+use App\CurrikiGo\H5PLibrary\H5Ps\DragText;
+use App\CurrikiGo\H5PLibrary\H5Ps\MarkTheWords;
+use App\CurrikiGo\H5PLibrary\H5Ps\SingleChoiceSet;
+use App\CurrikiGo\H5PLibrary\H5Ps\StarRating;
 
 /**
  * Factory Class for H5P Libraries
@@ -53,7 +59,19 @@ class H5PLibraryFactory
             case 'Summary':
                 return new Summary($content);
             case 'TrueFalse':
-                return new TrueFalse($content);                
+                return new TrueFalse($content);
+            case 'Blanks':
+                return new Blanks($content);
+            case 'DragQuestion':
+                return new DragQuestion($content);          
+            case 'DragText':
+                return new DragText($content);          
+            case 'MarkTheWords':
+                return new MarkTheWords($content);
+            case 'SingleChoiceSet':
+                return new SingleChoiceSet($content);
+            case 'StarRating':
+                return new StarRating($content);
             default:
                 // When there is no interaction type
                 return new Common($content);

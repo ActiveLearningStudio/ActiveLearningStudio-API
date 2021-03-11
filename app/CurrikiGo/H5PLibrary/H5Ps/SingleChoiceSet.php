@@ -5,9 +5,9 @@ namespace App\CurrikiGo\H5PLibrary\H5Ps;
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
 
 /**
- * Summary H5P library
+ * SingleChoiceSet H5P library
  */
-class Summary implements H5PLibraryInterface
+class SingleChoiceSet implements H5PLibraryInterface
 {
     /**
      * Library content
@@ -34,15 +34,13 @@ class Summary implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            if (isset($this->content['intro'])) {
-                $meta['title'] = $this->content['intro'];
-            }
-            if (!empty($this->content['summaries'])) {
+            if (isset($this->content['choices'])) {
                 $meta['children'] = [];
-                foreach ($this->content['summaries'] as $summary) {
+                foreach ($this->content['choices'] as $choice) {
                     $entry = [];
-                    $entry['sub-content-id'] = $summary['subContentId'];
-                    $entry['question'] = $summary['summary'];
+                    $entry['sub-content-id'] = $choice['subContentId'];
+                    $entry['question'] = $choice['question'];
+                    $entry['answers'] = $choice['answers'];
                     $meta['children'][] = $entry;
                 }
             }
