@@ -26,7 +26,7 @@ class SuborganizationSave extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|min:2|max:255|unique:organizations',
+            'domain' => 'required|alpha_dash|min:2|max:255|unique:organizations,domain',
             'image' => 'required',
             'admins' => 'required|array|exists:App\User,id',
             'users' => 'required|array',
