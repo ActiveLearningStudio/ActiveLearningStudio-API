@@ -405,14 +405,14 @@ class GoogleClassroomController extends Controller
             $service = new GoogleClassroom($accessToken);
         } catch (\Google_Service_Exception $ex) {
             return response([
-                'student'=>null,
-                'teacher'=>null,
+                'student' => null,
+                'teacher' => null,
                 'errors' => [['code' => 1, 'msg' => 'Failed to initialize gAPI service.']],
             ], 500);
         } catch (\Exception $ex) {
             return response([
-                'student'=>null,
-                'teacher'=>null,
+                'student' => null,
+                'teacher' => null,
                 'errors' => [['code' => 1, 'msg' => $ex->getMessage()]],
             ], 500);
         }
@@ -442,8 +442,8 @@ class GoogleClassroomController extends Controller
             $student = $service->getEnrolledStudent($courseId, $studentId);
         } catch (\Google_Service_Exception $ex) {
             return response([
-                'student'=>null,
-                'teacher'=>null,
+                'student' => null,
+                'teacher' => null,
                 'errors' => [['code' => 2, 'msg' => 'Student is not enrolled in this course.']],
             ], 404);
         }
