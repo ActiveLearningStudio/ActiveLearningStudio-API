@@ -80,6 +80,7 @@ class GoogleClassroomController extends Controller
                 // if pageSize is not set, then server will set the maximum limit
                 // so we need to iterate through all pages
                 'pageSize' => 100,
+                'teacherId' => 'me', // only return courses that the user is enrolled as a teacher.
                 'courseStates' => GoogleClassroom::COURSE_STATE_ACTIVE
             );
             $courses = $service->getCourses($params);
@@ -177,8 +178,9 @@ class GoogleClassroomController extends Controller
 
         try {
             $data = $copyProjectRequest->validated();
+            $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
-            $service = new GoogleClassroom();
+            $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
             $course = $service->createProjectAsCourse($project, $courseId);
 

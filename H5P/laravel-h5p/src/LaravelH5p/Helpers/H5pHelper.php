@@ -16,7 +16,12 @@ class H5pHelper
 {
     public static function current_user_can($permission)
     {
-        return true;
+        $currentUserCan = true;
+        $permissionsConfig = ["manage_h5p_libraries" => false];
+        if (array_key_exists($permission, $permissionsConfig)) {
+            $currentUserCan = $permissionsConfig[$permission];
+        }
+        return $currentUserCan;
     }
 
     public static function nonce($token)
@@ -246,6 +251,9 @@ class H5pHelper
             
             $filtered = json_decode($content['filtered']);
             if ($filtered) {
+                if ( !property_exists($filtered, 'chapters') && property_exists($params, 'chapters') ) {
+                    $filtered->chapters = $params->chapters;
+                }
                 // get chapters with updated filtered
                 $chaptersRearrangedF = array_filter($filtered->chapters, function($item) { return property_exists($item, 'chapter'); });
                 if (empty($chaptersRearrangedF)) {
@@ -253,8 +261,8 @@ class H5pHelper
                         return (object) array('chapter' => $chapter, "lockPage" => false); 
                     }, $filtered->chapters);
                     $filtered->chapters = $chaptersRearrangedF;
-                    $content['filtered'] = json_encode($filtered);
                 }
+                $content['filtered'] = json_encode($filtered);
             }
         }
     }

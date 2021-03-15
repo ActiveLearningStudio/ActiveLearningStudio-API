@@ -8,6 +8,8 @@ use \TinCan\Agent;
 use \TinCan\Verb;
 use \TinCan\Activity;
 use \TinCan\Extensions;
+use \TinCan\LRSResponse;
+use \TinCan\ActivityDefinition;
 
 /**
  * Interface for Learner Record Store service
@@ -246,5 +248,23 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      * @return bool
      */
     public function isAllowedAggregateH5P($interaction);
+
+    /**
+     * Retrieve a specific object extension from a list of extensions in an Activity definition.
+     * 
+     * @param ActivityDefinition $definition An Activity Defintion object.
+     * @param string $needle A extension IRI to look for.
+     * @return string
+     */
+    public function getExtensionValueFromList(ActivityDefinition $definition, $needle);
+
+    /**
+     * Get the 'completed' statements for aggregatecontent-types from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAggregatesCompletedStatements(array $data);
 
 }
