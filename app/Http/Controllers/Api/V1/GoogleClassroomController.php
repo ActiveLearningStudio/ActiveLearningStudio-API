@@ -407,13 +407,13 @@ class GoogleClassroomController extends Controller
             return response([
                 'student'=>null,
                 'teacher'=>null,
-                'errors' => [['code'=>1, 'msg'=>'Failed to initialize gAPI service.']],
+                'errors' => [['code' => 1, 'msg' => 'Failed to initialize gAPI service.']],
             ], 500);
         } catch (\Exception $ex) {
             return response([
                 'student'=>null,
                 'teacher'=>null,
-                'errors' => [['code'=>1, 'msg'=>$ex->getMessage()]],
+                'errors' => [['code' => 1, 'msg' => $ex->getMessage()]],
             ], 500);
         }
 
@@ -433,7 +433,7 @@ class GoogleClassroomController extends Controller
             return response([
                 'teacher' => ($teacher) ? GCTeacherResource::make($teacher)->resolve() : false,
                 'student' => null,
-                'errors' => [['code'=>3, 'msg'=>'Student submission is not available.']],
+                'errors' => [['code' => 3, 'msg' => 'Student submission is not available.']],
             ], 404);
         }
 
@@ -444,7 +444,7 @@ class GoogleClassroomController extends Controller
             return response([
                 'student'=>null,
                 'teacher'=>null,
-                'errors' => [['code'=>2, 'msg'=>'Student is not enrolled in this course.']],
+                'errors' => [['code' => 2, 'msg' => 'Student is not enrolled in this course.']],
             ], 404);
         }
 
@@ -453,7 +453,7 @@ class GoogleClassroomController extends Controller
             return response([
                 'teacher' => ($teacher) ? GCTeacherResource::make($teacher)->resolve() : false,
                 'student' => GCStudentResource::make($student)->resolve(),
-                'errors' => [['code'=>3, 'msg'=>'The summary page is unavailable as the assignment is not turned in yet.']],
+                'errors' => [['code' => 3, 'msg' => 'The summary page is unavailable as the assignment is not turned in yet.']],
             ], 404);
         }
 
