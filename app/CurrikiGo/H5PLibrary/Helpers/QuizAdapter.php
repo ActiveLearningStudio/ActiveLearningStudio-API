@@ -35,7 +35,9 @@ class QuizAdapter implements H5PLibraryInterface
     {
         $meta = [];
         if (!empty($this->content)) {
-            $meta['questions'] = $this->content['question'];
+            if (isset($this->content['question'])) {
+                $meta['questions'] = $this->content['question'];
+            }
         }
         return $meta;
     }

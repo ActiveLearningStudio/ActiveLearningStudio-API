@@ -42,7 +42,9 @@ class Summary implements H5PLibraryInterface
                 foreach ($this->content['summaries'] as $summary) {
                     $entry = [];
                     $entry['sub-content-id'] = $summary['subContentId'];
-                    $entry['question'] = $summary['summary'];
+                    if (isset($summary['summary'])) {
+                        $entry['question'] = $summary['summary'];
+                    }
                     $meta['children'][] = $entry;
                 }
             }

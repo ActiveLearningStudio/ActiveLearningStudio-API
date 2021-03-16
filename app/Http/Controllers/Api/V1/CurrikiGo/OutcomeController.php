@@ -206,7 +206,7 @@ class OutcomeController extends Controller
                     // Extract information from object.definition.extensions
                     if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                         $h5pContentId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_LOCAL_CONTENT_ID);
-                        $h5pContent = H5PContent::findOrFail(19581);//7);//38074);
+                        $h5pContent = H5PContent::findOrFail(19590);//19581);//7);//38074);
                         /*var_dump($h5pContent);
                         exit;
                         print_r($h5pContent->parameters);
@@ -222,10 +222,15 @@ class OutcomeController extends Controller
                     if ($h5pLib) {
                         $h5pMeta = $h5pLib->buildMeta();
                     }
-                    echo '<pre>';
-                    print_r($h5pMeta);
-                    
-                    exit('in here');
+                    //echo '<pre>';
+                    //print_r($h5pMeta);
+                    //$needle = '558ea16f-6866-44f8-a822-5ef8b8b25c25';//'f6937923-bd5b-4c32-8de5-a9d1d8d28884';
+                    //echo $key = recursive_array_search($needle, $h5pMeta);
+                    //$myVal = $h5pMeta[11]['content'][3]['content'][0]['sub-content-id'];
+                    //recursive_array_search_insert($needle, $h5pMeta, ['answer' => 'my answer']);
+                    //print_r($h5pMeta);
+                    //echo $myVal;
+                    //exit('in here');
                     // UPDATE: We want to accumulate all responses, and each attempt is not a unique attempt anymore.
                     // So, we just check for an attempt, and then keep the search by submission id.
                     // $data['activity'] = $attemptIRI;
@@ -233,9 +238,10 @@ class OutcomeController extends Controller
                     $answeredIds = [];
                     if ($answers) {
                         $answeredIds = array_keys($answers);
-                        foreach ($answers as $record) {
+                        foreach ($answers as $key => $record) {
                             $summary = $service->getStatementSummary($record);
                             $response[] = new StudentResultResource($summary);
+                            recursive_array_search_insert($key, $h5pMeta, ['answer' => $summary]);
                         }
                     }
                     
@@ -247,6 +253,7 @@ class OutcomeController extends Controller
                                 $summary = $service->getStatementSummary($record);
                                 $response[] = new StudentResultResource($summary);
                                 $answeredIds[] = $key;
+                                recursive_array_search_insert($key, $h5pMeta, ['answer' => $summary]);
                             }
                         }
                     }
@@ -261,6 +268,7 @@ class OutcomeController extends Controller
                                 $summary = $service->getNonScoringStatementSummary($record);
                                 $nonScoringResponse[] = new StudentResultResource($summary);
                                 $answeredIds[] = $key;
+                                recursive_array_search_insert($key, $h5pMeta, ['answer' => $summary]);
                             }
                         }
                     }
@@ -294,10 +302,13 @@ class OutcomeController extends Controller
                                 $summary = $service->getStatementSummary($record);
                                 $response[] = new StudentResultResource($summary);
                                 $answeredIds[] = $key;
+                                recursive_array_search_insert($key, $h5pMeta, ['answer' => $summary]);
                             }
                         }
                     }
-
+                    //print_r($h5pMeta);
+                    //echo $myVal;
+                    //exit('in here');
                     // We'll use the ending-point for ordering the final results.
                     usort($response, function($a, $b) {
                         return $a['ending-point'] <=> $b['ending-point'];
@@ -305,7 +316,8 @@ class OutcomeController extends Controller
 
                     return response([
                         'summary' => $response,
-                        'non-scoring' => $nonScoringResponse
+                        'non-scoring' => $nonScoringResponse,
+                        'h5p' => $h5pMeta
                     ], 200);
                 } else {
                     return response([
@@ -323,5 +335,7 @@ class OutcomeController extends Controller
             ], 500);
         }
     }
+
+    
 
 }

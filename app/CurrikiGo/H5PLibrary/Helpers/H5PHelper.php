@@ -40,7 +40,7 @@ class H5PHelper
         $data['sub-content-id'] = $content['subContentId'];
         $data['library'] = $content['library'];
         $data['content-type'] = $content['metadata']['contentType'];
-        $data['title'] = $content['metadata']['title'];
+        $data['title'] = (isset($content['metadata']['title']) ? $content['metadata']['title'] : $data['content-type']);
         $data['content'] = self::loadContentByLibrary($data['library'], $content['params']);
         return $data;
     }

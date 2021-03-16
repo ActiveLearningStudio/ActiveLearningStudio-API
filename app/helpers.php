@@ -156,3 +156,36 @@ if (!function_exists('xAPIFormatDuration')) {
         return $rawDuration;
     }
 }
+
+if (!function_exists('recursive_array_search')) {
+    function recursive_array_search($needle, $haystack, $currentKey = '') {
+        foreach($haystack as $key=>$value) {
+            if (is_array($value)) {
+                $nextKey = recursive_array_search($needle,$value, $currentKey . '[' . $key . ']');
+                if ($nextKey) {
+                    return $nextKey;
+                }
+            }
+            else if($value==$needle) {
+                return is_numeric($key) ? $currentKey . '[' .$key . ']' : $currentKey . '["' .$key . '"]';
+            }
+        }
+        return false;
+    }
+}
+
+if (!function_exists('recursive_array_search_insert')) {
+    function recursive_array_search_insert($needle, &$haystack, $insert = '') {
+        if (is_array($haystack)) {
+            foreach ($haystack as $key => $value) {
+                if (is_array($value)) {
+                    $haystack[$key] = recursive_array_search_insert($needle, $value, $insert);
+                } elseif ($key === 'sub-content-id' && $value == $needle) {
+                    $haystack['content'] += $insert;
+                    break;          
+                }
+            }
+        }
+        return $haystack;
+    }
+}

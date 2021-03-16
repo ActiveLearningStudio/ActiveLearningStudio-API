@@ -37,8 +37,10 @@ class InteractiveVideo implements H5PLibraryInterface
         if (!empty($this->content)) {
             if (isset($this->content['interactiveVideo']) && isset($this->content['interactiveVideo']['assets']) 
             && !empty($this->content['interactiveVideo']['assets'])) {
-                foreach ($this->content['interactiveVideo']['assets']['interactions'] as $item) {
-                    $meta[] = H5PHelper::buildElement($item['action']);
+                if (isset($this->content['interactiveVideo']['assets']['interactions'])) {
+                    foreach ($this->content['interactiveVideo']['assets']['interactions'] as $item) {
+                        $meta[] = H5PHelper::buildElement($item['action']);
+                    }
                 }
                 if (isset($this->content['interactiveVideo']['summary']) && isset($this->content['interactiveVideo']['summary']['task']) && !empty($this->content['interactiveVideo']['summary']['task'])) {
                     $meta[] = H5PHelper::buildElement($this->content['interactiveVideo']['summary']['task']);
