@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
@@ -21,6 +23,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * @group 1. Authentication
@@ -33,7 +36,9 @@ class AuthController extends Controller
     private $userLoginRepository;
     private $invitedTeamUserRepository;
     private $invitedOrganizationUserRepository;
+    private $invitedGroupUserRepository;
     private $teamRepository;
+    private $groupRepository;
     private $organizationRepository;
 
     /**
@@ -43,7 +48,9 @@ class AuthController extends Controller
      * @param UserLoginRepositoryInterface $userLoginRepository
      * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
      * @param InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
+     * @param InvitedGroupUserRepositoryInterface $invitedGroupUserRepository
      * @param TeamRepositoryInterface $teamRepository
+     * @param GroupRepositoryInterface $groupRepository
      * @param OrganizationRepositoryInterface $organizationRepository
      */
     public function __construct(
@@ -51,7 +58,9 @@ class AuthController extends Controller
         UserLoginRepositoryInterface $userLoginRepository,
         InvitedTeamUserRepositoryInterface $invitedTeamUserRepository,
         InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
+        InvitedGroupUserRepositoryInterface $invitedGroupUserRepository,
         TeamRepositoryInterface $teamRepository,
+        GroupRepositoryInterface $groupRepository,
         OrganizationRepositoryInterface $organizationRepository
     )
     {
@@ -59,7 +68,9 @@ class AuthController extends Controller
         $this->userLoginRepository = $userLoginRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
         $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
+        $this->invitedGroupUserRepository = $invitedGroupUserRepository;
         $this->teamRepository = $teamRepository;
+        $this->groupRepository = $groupRepository;
         $this->organizationRepository = $organizationRepository;
     }
 
@@ -119,6 +130,17 @@ class AuthController extends Controller
                     if ($organization) {
                         $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
                         $this->invitedOrganizationUserRepository->delete($data['email']);
+                    }
+                }
+            }
+
+            $invited_users = $this->invitedGroupUserRepository->searchByEmail($data['email']);
+            if ($invited_users->isNotEmpty()) {
+                foreach ($invited_users as $invited_user) {
+                    $group = $this->groupRepository->find($invited_user->organization_id);
+                    if ($group) {
+                        $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                        $this->invitedGroupUserRepository->delete($data['email']);
                     }
                 }
             }
@@ -242,6 +264,17 @@ class AuthController extends Controller
      */
     public function loginWithGoogle(Request $request)
     {
+        $validator = Validator::make($request->all(),
+        [
+            'domain' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => ['domain name is required.'],
+            ], 400);
+        }
+
         $client = new \Google_Client();
         $client->setClientId(config('google.gapi_client_id'));
         $result = $client->verifyIdToken($request->tokenId);
@@ -258,6 +291,49 @@ class AuthController extends Controller
                     'remember_token' => Str::random(64),
                     'email_verified_at' => now(),
                 ]);
+
+                if ($user) {
+                    $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
+                    if ($invited_users) {
+                        foreach ($invited_users as $invited_user) {
+                            $team = $this->teamRepository->find($invited_user->team_id);
+                            if ($team) {
+                                $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                $this->invitedTeamUserRepository->delete($user->email);
+                            }
+                        }
+                    }
+
+                    $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
+                    if ($invited_users->isNotEmpty()) {
+                        foreach ($invited_users as $invited_user) {
+                            $organization = $this->organizationRepository->find($invited_user->organization_id);
+                            if ($organization) {
+                                $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                                $this->invitedOrganizationUserRepository->delete($user->email);
+                            }
+                        }
+                    }
+
+                    $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
+                    if ($invited_users->isNotEmpty()) {
+                        foreach ($invited_users as $invited_user) {
+                            $group = $this->groupRepository->find($invited_user->organization_id);
+                            if ($group) {
+                                $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                $this->invitedGroupUserRepository->delete($user->email);
+                            }
+                        }
+                    }
+
+                }
+            }
+            else{
+                if (!$organization = $user->organizations()->where('domain', $request->domain)->first()) {
+                    return response([
+                        'errors' => ['Invalid Domain.'],
+                    ], 400);
+                }
             }
             $user->gapi_access_token = $request->tokenObj;
             $user->save();
