@@ -30,7 +30,7 @@ class UserLmsSettingsController extends Controller
         if($this->repo->all() == '[null]'){
             return response([
                 'errors' => ['LMS settings not found for this user.'],
-            ], 404);
+            ], 200);
         }
 
         return UserLmsSettingResource::collection($this->repo->all());
