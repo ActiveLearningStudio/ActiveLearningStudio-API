@@ -63,6 +63,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Passport::routes();
+
+        Gate::before(function ($user, $ability) {
+            return true;
+        });
     }
 
     /**
