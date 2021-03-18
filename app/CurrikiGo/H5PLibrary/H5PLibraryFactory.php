@@ -20,6 +20,7 @@ use App\CurrikiGo\H5PLibrary\H5Ps\DragText;
 use App\CurrikiGo\H5PLibrary\H5Ps\MarkTheWords;
 use App\CurrikiGo\H5PLibrary\H5Ps\SingleChoiceSet;
 use App\CurrikiGo\H5PLibrary\H5Ps\StarRating;
+use App\CurrikiGo\H5PLibrary\H5Ps\PersonalityQuiz;
 
 /**
  * Factory Class for H5P Libraries
@@ -72,6 +73,8 @@ class H5PLibraryFactory
                 return new SingleChoiceSet($content);
             case 'StarRating':
                 return new StarRating($content);
+            case 'PersonalityQuiz':
+                return new PersonalityQuiz($content);
             default:
                 // When there is no interaction type
                 return new Common($content);
