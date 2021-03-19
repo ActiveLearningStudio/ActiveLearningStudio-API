@@ -258,4 +258,13 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function getExtensionValueFromList(ActivityDefinition $definition, $needle);
 
+    /**
+     * Get the 'completed' statements for aggregatecontent-types from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAggregatesCompletedStatements(array $data);
+
 }

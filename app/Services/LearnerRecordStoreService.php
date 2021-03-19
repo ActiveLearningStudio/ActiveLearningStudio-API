@@ -357,6 +357,44 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     }
 
     /**
+     * Get the 'completed' statements for aggregatecontent-types from LRS based on filters
+     * 
+     * @param array $data An array of filters.
+     * @throws GeneralException
+     * @return array
+     */
+    public function getAggregatesCompletedStatements(array $data)
+    {
+        $completed = $this->getStatementsByVerb('completed', $data);
+        $filtered = [];
+        if ($completed) {
+            // iterate and find the statements that have results.
+            foreach ($completed as $statement) {
+                // Get Category context
+                $contextActivities = $statement->getContext()->getContextActivities();
+                $category = $contextActivities->getCategory();
+                $categoryId = '';
+                $h5pInteraction = '';
+                if (!empty($category)) {
+                    $categoryId = end($category)->getId();
+                    $h5pInteraction = explode("/", $categoryId);
+                    $h5pInteraction = end($h5pInteraction);
+                }
+                
+                if (!empty($category) && $this->isAllowedAggregateH5P($h5pInteraction)) {
+                    $objectId = $statement->getTarget()->getId();
+                    // Get activity subID for this statement.
+                    $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
+                    if (!array_key_exists($h5pSubContentId, $filtered)) {
+                        $filtered[$h5pSubContentId] = $statement;
+                    }
+                }
+            }
+        }
+        return $filtered;
+    }
+
+    /**
      * Find if the statement is for an aggregate H5P
      * 
      * @param array $data An array of filters.
@@ -563,7 +601,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'H5P.SimpleMultiChoice-1.1',
             'H5P.OpenEndedQuestion-1.0',
             'H5P.StarRating-1.0',
-            'H5P.NonscoreableDragQuestion-1.0'
+            'H5P.NonscoreableDragQuestion-1.0',
+            'H5P.PersonalityQuiz-1.0'
         ];
         return $allowed;
     }
@@ -681,7 +720,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         $allowed = [
             'H5P.CoursePresentation',
             'H5P.InteractiveVideo',
-            'H5P.Column'
+            'H5P.Column',
+            'H5P.Questionnaire'
         ];
 
         foreach ($allowed as $h5p) {
