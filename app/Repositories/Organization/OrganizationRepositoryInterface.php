@@ -80,10 +80,11 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     /**
      * To fetch organization users
      *
+     * @param $data
      * @param Organization $organization
      * @return Model
      */
-    public function fetchOrganizationUsers($organization);
+    public function fetchOrganizationUsers($data, $organization);
 
     /**
      * Get admin

@@ -279,10 +279,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     /**
      * To fetch organization users
      *
+     * @param $data
      * @param Organization $organization
      * @return Model
      */
-    public function fetchOrganizationUsers($organization)
+    public function fetchOrganizationUsers($data, $organization)
     {
         return $organization->users()->withCount([
             'projects' => function ($query) use ($organization) {
@@ -295,6 +296,10 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $query->where('organization_id', $organization->id);
             }
         ])
+        ->when($data['query'] ?? null, function ($query) use ($data) {
+            $query->where('email', 'like', '%' . $data['query'] . '%');
+            return $query;
+        })
         ->paginate();
     }
 
