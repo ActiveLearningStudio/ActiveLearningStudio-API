@@ -150,6 +150,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         ]);
         Route::get('suborganizations/{suborganization}/index', 'SuborganizationController@index')->name('suborganizations.index');
 
+        // Permissions
+        Route::get('permissions', 'OrganizationPermissionTypeController@index')->name('permissions.index');
+
         // CurrikiGo
         Route::group(['prefix' => 'go'], function () {
             // LMS Settings

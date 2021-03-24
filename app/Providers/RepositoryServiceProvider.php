@@ -49,6 +49,8 @@ use App\Repositories\Organization\OrganizationRepository;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepository;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
+use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepository;
+use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -82,6 +84,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ContentUserDataGoRepositoryInterface::class, ContentUserDataGoRepository::class);
         $this->app->bind(OrganizationRepositoryInterface::class, OrganizationRepository::class);
         $this->app->bind(InvitedOrganizationUserRepositoryInterface::class, InvitedOrganizationUserRepository::class);
+        $this->app->bind(OrganizationPermissionTypeRepositoryInterface::class, OrganizationPermissionTypeRepository::class);
     }
 
     /**
