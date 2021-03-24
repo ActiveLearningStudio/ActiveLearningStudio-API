@@ -23,10 +23,12 @@ class OrganizationUpdate extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('organization');
+
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|min:3|max:255|unique:organizations',
+            'domain' => 'required|string|min:3|max:255|unique:organizations,domain,' . $id,
             'image' => 'image|max:1000',
             'member_id' => 'integer|exists:App\User,id',
             'parent_id' => 'integer|exists:App\Models\Organization,id'
