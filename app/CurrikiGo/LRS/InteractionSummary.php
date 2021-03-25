@@ -58,7 +58,7 @@ abstract class InteractionSummary
         if (!empty($definition) && !$definition->getName()->isEmpty()) {
             $nameOfActivity = $definition->getName()->getNegotiatedLanguageString();
         }
-        return $nameOfActivity;
+        return strip_tags(html_entity_decode($nameOfActivity));
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class InteractionSummary
         if (!$definition->getDescription()->isEmpty()) {
             $description = $definition->getDescription()->getNegotiatedLanguageString();
         }
-        return $description;
+        return strip_tags(html_entity_decode($description));
     }
 
     /**
