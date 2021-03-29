@@ -33,14 +33,13 @@ class ExtractXAPIJSONController extends Controller
             $max_statement_id = 0;
         }
         \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script - started from max ID: '. $max_statement_id);
-        
         $offset = 0;
         $limit = config('xapi.lrs_job_row_limit');
         $xapiStatements = DB::connection('lrs_pgsql')->table(config('xapi.lrs_db_statements_table'))->select()
                 ->offset($offset)
                 ->limit($limit)
                 ->where('voided', false)
-                ->where('id', 10)
+                ->where('id', '>', $max_statement_id)
                 ->orderby('id', 'ASC')
                 ->get();
 
