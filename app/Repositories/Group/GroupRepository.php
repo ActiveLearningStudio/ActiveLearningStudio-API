@@ -10,6 +10,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
 //use Gnello\Mattermost\Laravel\Facades\Mattermost;
@@ -25,6 +26,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     private $projectRepository;
     private $invitedGroupUserRepository;
     private $matDriver;
+    private $organizationRepository;
 
     /**
      * GroupRepository constructor.
@@ -33,12 +35,14 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
      * @param UserRepositoryInterface $userRepository
      * @param ProjectRepositoryInterface $projectRepository
      * @param InvitedGroupUserRepositoryInterface $invitedGroupUserRepository
+     * @param OrganizationRepositoryInterface $organizationRepository
      */
     public function __construct(
         Group $model,
         UserRepositoryInterface $userRepository,
         ProjectRepositoryInterface $projectRepository,
-        InvitedGroupUserRepositoryInterface $invitedGroupUserRepository
+        InvitedGroupUserRepositoryInterface $invitedGroupUserRepository,
+        OrganizationRepositoryInterface $organizationRepository
     )
     {
         parent::__construct($model);
@@ -46,6 +50,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
         $this->invitedGroupUserRepository = $invitedGroupUserRepository;
+        $this->organizationRepository = $organizationRepository;
 
 //        $this->matDriver = Mattermost::server('default');
     }
@@ -130,7 +135,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
      * @param $data
      * @return bool
      */
-    public function inviteMembers($group, $data)
+    public function inviteMembers($suborganization, $group, $data)
     {
         $auth_user = auth()->user();
 
@@ -146,7 +151,15 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
             } elseif ($user['email']) {
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                 $temp_user = new User(['email' => $user['email']]);
-                $temp_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
+
+                // added org invitation for outside users
+                $data2['role_id'] = 3;
+                $data2['email'] = $user['email'];
+                $data2['note'] = $note;
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data2);
+                // ended org invitation for outside users
+
+                // $temp_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
 
                 $invited_user = array(
                     'invited_email' => $user['email'],

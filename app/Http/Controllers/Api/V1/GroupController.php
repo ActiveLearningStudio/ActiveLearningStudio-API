@@ -79,7 +79,11 @@ class GroupController extends Controller
     {
         $this->authorize('viewAny', [Group::class, $suborganization]);
 
-        $groups = Group::whereOrganizationId($suborganization->id)->get();
+        $user_id = auth()->user()->id;
+        $groups = Group::with(['users' => function($q) use ($user_id) {
+                            $q->where('user_id', $user_id);
+                        }])
+                        ->whereOrganizationId($suborganization->id)->get();
 
         $groupDetails = [];
         foreach ($groups as $group) {
@@ -269,17 +273,18 @@ class GroupController extends Controller
      * }
      *
      * @param GroupInviteMembersRequest $inviteMembersRequest
+     * @param Organization $suborganization
      * @param Group $group
      * @return Response
      */
-    public function inviteMembers(GroupInviteMembersRequest $inviteMembersRequest, Group $group)
+    public function inviteMembers(GroupInviteMembersRequest $inviteMembersRequest, Organization $suborganization, Group $group)
     {
         $data = $inviteMembersRequest->validated();
         $auth_user = auth()->user();
         $owner = $group->getUserAttribute();
 
         if ($owner->id === $auth_user->id) {
-            $invited = $this->groupRepository->inviteMembers($group, $data);
+            $invited = $this->groupRepository->inviteMembers($suborganization, $group, $data);
 
             if ($invited) {
                 return response([

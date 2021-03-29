@@ -54,7 +54,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('teams/invite', 'TeamController@inviteTeamMember');
         Route::post('teams/{team}/invite-member', 'TeamController@inviteMember');
-        Route::post('teams/{team}/invite-members', 'TeamController@inviteMembers');
+        Route::post('suborganization/{suborganization}/teams/{team}/invite-members', 'TeamController@inviteMembers');
         Route::post('teams/{team}/remove', 'TeamController@removeMember');
         Route::post('teams/{team}/add-projects', 'TeamController@addProjects');
         Route::post('teams/{team}/remove-project', 'TeamController@removeProject');
@@ -65,7 +65,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         //Groups
         Route::post('groups/invite', 'GroupController@inviteGroupMember');
         Route::post('groups/{group}/invite-member', 'GroupController@inviteMember');
-        Route::post('groups/{group}/invite-members', 'GroupController@inviteMembers');
+        Route::post('suborganization/{suborganization}/groups/{group}/invite-members', 'GroupController@inviteMembers');
         Route::post('groups/{group}/remove', 'GroupController@removeMember');
         Route::post('groups/{group}/add-projects', 'GroupController@addProjects');
         Route::post('groups/{group}/remove-project', 'GroupController@removeProject');
