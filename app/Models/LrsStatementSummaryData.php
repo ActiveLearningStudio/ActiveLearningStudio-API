@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LrsStatementSummeryData extends Model
+class LrsStatementSummaryData extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,9 +12,12 @@ class LrsStatementSummeryData extends Model
      * @var array
      */
     protected $fillable = [
-        'class_id',
+        'statement_id',
+        'statement_uuid',
+        'actor_id',
+        'actor_homepage',
         'assignment_name',
-        'user_id',
+        // 'user_id',
         'page_name',
         'is_page_accessed',
         'is_event_interacted',

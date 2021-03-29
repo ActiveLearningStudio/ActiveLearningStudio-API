@@ -585,7 +585,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'skipped' => self::SKIPPED_VERB_ID,
             'attempted' => self::ATTEMPTED_VERB_ID,
             'interacted' => self::INTERACTED_VERB_ID,
-            'submitted-curriki' => self::SUBMITTED_CURRIKI_VERB_ID
+            'submitted-curriki' => self::SUBMITTED_CURRIKI_VERB_ID,
+            'summary-curriki' => self::Summary_Curriki_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
