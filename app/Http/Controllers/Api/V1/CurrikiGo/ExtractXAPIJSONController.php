@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\LRSStatementsData\LRSStatementsDataRepositoryInterface;
+use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepositoryInterface;
 use App\Services\LearnerRecordStoreService;
 use Illuminate\Support\Facades\DB;
 use App\CurrikiGo\LRS\InteractionFactory;
@@ -22,9 +23,10 @@ class ExtractXAPIJSONController extends Controller
      *
      * @param  ActivityRepositoryInterface  $activityRepository
      * @param  LRSStatementsDataRepositoryInterface  $lrsStatementsRepository
+     * @param  LRSStatementsSummaryDataRepositoryInterface  $lrsStatementsSummaryDataRepositoryInterface
      * @return void
      */
-    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository)
+    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface)
     {
         $max_statement_id = $lrsStatementsRepository->findMaxByField('statement_id');
         if (!$max_statement_id) {
@@ -160,8 +162,10 @@ class ExtractXAPIJSONController extends Controller
 
                 $interactionFactory = new InteractionFactory();
                 $interaction = $interactionFactory->initInteraction($statement);
+                $interactionSummaryGlobal = '';
                 if ($interaction) {
                     $interactionSummary = $interaction->summary();
+                    $interactionSummaryGlobal = $interactionSummary;
                     // Pull this from interaction...
                     $insertData['question'] = $interactionSummary['description'];
                     $insertData['duration'] = (!empty($interactionSummary['raw-duration']) ? $interactionSummary['raw-duration'] : null);
@@ -187,10 +191,36 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['page'] = $insertData['object_name'];
                     $insertData['page_completed'] = $insertData['verb'] === 'completed' ? true : false;
                 }
-                
                 $inserted = $lrsStatementsRepository->create($insertData);
+               
                 if ($inserted) {
                     \Log::info(date('Y-m-d h:i:s') . ' - XAPI statement with id: ' . $row->id . ' processed');
+                    //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
+                    if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
+                        if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {
+                            $responseObject = (is_array(json_decode($interactionSummaryGlobal['response'], true)) ? json_decode($interactionSummaryGlobal['response'], true) : false);
+                            if (!empty($responseObject)) {
+                                foreach ($responseObject as $response) {
+                                    $insertSummary = [];
+                                    $insertSummary['statement_id'] = $insertData['statement_id'];
+                                    $insertSummary['statement_uuid'] = $insertData['statement_uuid'];
+                                    $insertSummary['actor_homepage'] = $insertData['actor_homepage'];
+                                    $insertSummary['class_id'] = $insertData['class_id'];
+                                    $insertSummary['assignment_name'] = $insertData['assignment_name'];
+                                    $insertSummary['actor_id'] = $insertData['actor_id'];
+                                    $insertSummary['page_name'] = $response['title'];
+                                    $insertSummary['is_page_accessed'] = $response['accessed'];
+                                    $insertSummary['is_event_interacted'] = $response['interacted'];
+                                    $insertSummary['interacted_count'] = $response['interacted_count'];
+                                    $insertSummary['total_interactions'] = $response['total_interactions'];
+                                    $insertSummary['score'] = $response['score'];
+                                    $lrsStatementsSummaryDataRepositoryInterface->create($insertSummary);
+
+                                    \Log::info(date('Y-m-d h:i:s') . ' - RDBMS custom verb statement with statement id : ' . $insertData['statement_id'] . ' processed');
+                                }
+                            }
+                        }
+                    }
                 }
             }
             \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script ended');
