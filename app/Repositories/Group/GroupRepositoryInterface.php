@@ -33,7 +33,7 @@ interface GroupRepositoryInterface extends EloquentRepositoryInterface
      * @param $data
      * @return bool
      */
-    public function inviteMembers($group, $data);
+    public function inviteMembers($suborganization, $group, $data);
 
     /**
      * Set Group / Project / User relationship

@@ -79,7 +79,13 @@ class TeamController extends Controller
     {
         $this->authorize('viewAny', [Team::class, $suborganization]);
 
-        $teams = Team::whereOrganizationId($suborganization->id)->get();
+        $user_id = auth()->user()->id;
+        // \DB::enableQueryLog();
+        $teams = Team::with(['users' => function($q) use ($user_id) {
+                            $q->where('user_id', $user_id);
+                        }])
+                        ->whereOrganizationId($suborganization->id)->get();
+        // print_r(\DB::getQueryLog());die;
 
         $teamDetails = [];
         foreach ($teams as $team) {
@@ -270,17 +276,18 @@ class TeamController extends Controller
      * }
      *
      * @param TeamInviteMembersRequest $inviteMembersRequest
+     * @param Organization $suborganization
      * @param Team $team
      * @return Response
      */
-    public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Team $team)
+    public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Organization $suborganization,  Team $team)
     {
         $data = $inviteMembersRequest->validated();
         $auth_user = auth()->user();
         $owner = $team->getUserAttribute();
 
         if ($owner->id === $auth_user->id) {
-            $invited = $this->teamRepository->inviteMembers($team, $data);
+            $invited = $this->teamRepository->inviteMembers($suborganization, $team, $data);
 
             if ($invited) {
                 return response([

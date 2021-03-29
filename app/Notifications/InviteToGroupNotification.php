@@ -65,7 +65,7 @@ class InviteToGroupNotification extends Notification
             ->line($this->sender->first_name . ' has invited you to join the group ' . $this->group->name)
             ->line($this->note)
             // ->action('Join the Team', $this->pageUrl . '?token=' . $this->token);
-            ->action('Join the Team', $this->pageUrl . '/groups/' . $this->group->id . '/projects');
+            ->action('Join the Group', $this->pageUrl . '/groups/' . $this->group->id . '/projects');
     }
 
     /**

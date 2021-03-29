@@ -8,6 +8,7 @@ use App\Models\Team;
 use App\Notifications\InviteToTeamNotification;
 use App\Repositories\BaseRepository;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -25,6 +26,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     private $projectRepository;
     private $invitedTeamUserRepository;
     private $matDriver;
+    private $organizationRepository;
 
     /**
      * TeamRepository constructor.
@@ -33,12 +35,14 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      * @param UserRepositoryInterface $userRepository
      * @param ProjectRepositoryInterface $projectRepository
      * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+     * @param OrganizationRepositoryInterface $organizationRepository
      */
     public function __construct(
         Team $model,
         UserRepositoryInterface $userRepository,
         ProjectRepositoryInterface $projectRepository,
-        InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+        InvitedTeamUserRepositoryInterface $invitedTeamUserRepository,
+        OrganizationRepositoryInterface $organizationRepository
     )
     {
         parent::__construct($model);
@@ -46,6 +50,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
+        $this->organizationRepository = $organizationRepository;
 
 //        $this->matDriver = Mattermost::server('default');
     }
@@ -130,7 +135,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      * @param $data
      * @return bool
      */
-    public function inviteMembers($team, $data)
+    public function inviteMembers($suborganization, $team, $data)
     {
         $auth_user = auth()->user();
 
@@ -146,6 +151,14 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             } elseif ($user['email']) {
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                 $temp_user = new User(['email' => $user['email']]);
+
+                // added org invitation for outside users
+                $data2['role_id'] = 3;
+                $data2['email'] = $user['email'];
+                $data2['note'] = $note;
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data2);
+                // ended org invitation for outside users
+
                 $temp_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
 
                 $invited_user = array(
