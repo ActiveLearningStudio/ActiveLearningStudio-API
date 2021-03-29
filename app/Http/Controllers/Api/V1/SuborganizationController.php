@@ -603,4 +603,22 @@ class SuborganizationController extends Controller
             'errors' => ['Failed to add role.'],
         ], 500);
     }
+
+    /**
+     * Get User Permissions
+     *
+     * Get the logged-in user's permissions in the suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/organization/organization-user-permissions.json
+     *
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function getUserPermissions(Organization $suborganization)
+    {
+        $authenticatedUser = auth()->user();
+        return new OrganizationRoleResource($this->organizationRepository->fetchOrganizationUserPermissions($authenticatedUser, $suborganization));
+    }
 }

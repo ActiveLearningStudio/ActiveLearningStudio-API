@@ -119,4 +119,12 @@ class Organization extends Model
     {
         return $this->hasMany('App\Models\OrganizationRoleType');
     }
+
+    /**
+     * The user roles that belong to the organization.
+     */
+    public function userRoles()
+    {
+        return $this->belongsToMany('App\Models\OrganizationRoleType', 'organization_user_roles');
+    }
 }

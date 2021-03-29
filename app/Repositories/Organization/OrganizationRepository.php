@@ -386,5 +386,19 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         return $invited;
     }
-}
 
+    /**
+     * To fetch organization user permissions
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @return Model
+     */
+    public function fetchOrganizationUserPermissions($authenticatedUser, $organization)
+    {
+        return $organization->userRoles()
+                ->wherePivot('user_id', $authenticatedUser->id)
+                ->with('permissions')
+                ->first();
+    }
+}
