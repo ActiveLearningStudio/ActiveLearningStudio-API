@@ -313,7 +313,7 @@ class SuborganizationController extends Controller
     /**
      * Add Suborganization User
      *
-     * Add user for the specified role in default suborganization
+     * Add user for the specified role in suborganization
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam user_id int required Id of the user to be added Example: 1
