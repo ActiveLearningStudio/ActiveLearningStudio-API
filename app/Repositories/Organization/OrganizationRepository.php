@@ -237,6 +237,36 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Add role for particular organization
+     *
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function addRole($organization, $data)
+    {
+        try {
+            DB::beginTransaction();
+
+            $role = $organization->roles()->create([
+                'name' => $data['name'],
+                'display_name' => $data['display_name'],
+            ]);
+
+            $role->permissions()->attach($data['permissions']);
+
+            DB::commit();
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollBack();
+        }
+
+        return false;
+    }
+
+    /**
      * Update user for the specified role in particular suborganization
      *
      * @param Organization $organization

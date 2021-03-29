@@ -36,7 +36,7 @@ class OrganizationPermissionTypeController extends Controller
      *
      * @bodyParam query string required Query to search organization permission types against Example: edit
      *
-     * @responseFile responses/organization/suborganizations.json
+     * @responseFile responses/permission-type/permissions.json
      *
      * @param Request $request
      * @return Response

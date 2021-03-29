@@ -18,4 +18,12 @@ class OrganizationRoleType extends Model
         'name',
         'display_name'
     ];
+
+    /**
+     * The permissions that belong to the role.
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany('App\Models\OrganizationPermissionType', 'organization_role_permissions', 'organization_role_type_id', 'organization_permission_type_id')->withTimestamps();
+    }
 }

@@ -111,4 +111,12 @@ class Organization extends Model
     {
         return $this->belongsTo('App\Models\Organization');
     }
+
+    /**
+     * Get the roles for the organization.
+     */
+    public function roles()
+    {
+        return $this->hasMany('App\Models\OrganizationRoleType');
+    }
 }
