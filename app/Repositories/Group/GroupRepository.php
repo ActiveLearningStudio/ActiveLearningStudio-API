@@ -159,7 +159,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data2);
                 // ended org invitation for outside users
 
-                $temp_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
+                // $temp_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
 
                 $invited_user = array(
                     'invited_email' => $user['email'],

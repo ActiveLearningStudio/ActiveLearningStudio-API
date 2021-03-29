@@ -159,7 +159,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data2);
                 // ended org invitation for outside users
 
-                $temp_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
+                // $temp_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
 
                 $invited_user = array(
                     'invited_email' => $user['email'],
