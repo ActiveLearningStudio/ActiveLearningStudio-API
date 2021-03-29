@@ -18,15 +18,4 @@ class LRSStatementsSummaryDataRepository extends BaseRepository implements LRSSt
     {
         parent::__construct($model);
     }
-
-    /**
-     * Find Max value by field
-     *
-     * @param string $field
-     * @return mixed
-     */
-    public function findMaxByField($field)
-    {
-        return $this->model->max($field);
-    }
 }

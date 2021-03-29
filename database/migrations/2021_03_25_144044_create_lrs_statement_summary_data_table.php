@@ -21,8 +21,7 @@ class CreateLrsStatementSummaryDataTable extends Migration
             $table->string('actor_homepage', 150)->nullable();
             $table->string('class_id')->nullable()->index();
             $table->string('assignment_name')->nullable();
-            // $table->string('user_id')->index();
-            $table->string('page_name');
+            $table->string('page_name')->nullable();
             $table->boolean('is_page_accessed')->index();
             $table->boolean('is_event_interacted')->index();
             $table->integer('interacted_count');

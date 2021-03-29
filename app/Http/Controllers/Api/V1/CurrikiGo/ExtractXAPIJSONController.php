@@ -191,17 +191,16 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['page'] = $insertData['object_name'];
                     $insertData['page_completed'] = $insertData['verb'] === 'completed' ? true : false;
                 }
-              
                 $inserted = $lrsStatementsRepository->create($insertData);
                
                 if ($inserted) {
                     \Log::info(date('Y-m-d h:i:s') . ' - XAPI statement with id: ' . $row->id . ' processed');
                     //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
-                    if($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)){
-                        if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) { 
-                            $responseObject = (is_array(json_decode($interactionSummaryGlobal['response'],true)) ? json_decode($interactionSummaryGlobal['response'],true) : false);
-                            if(!empty($responseObject)){
-                                foreach($responseObject as $response){
+                    if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
+                        if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {
+                            $responseObject = (is_array(json_decode($interactionSummaryGlobal['response'], true)) ? json_decode($interactionSummaryGlobal['response'], true) : false);
+                            if (!empty($responseObject)) {
+                                foreach ($responseObject as $response) {
                                     $insertSummary = [];
                                     $insertSummary['statement_id'] = $insertData['statement_id'];
                                     $insertSummary['statement_uuid'] = $insertData['statement_uuid'];

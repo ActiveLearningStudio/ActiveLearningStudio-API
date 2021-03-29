@@ -17,7 +17,6 @@ class LrsStatementSummaryData extends Model
         'actor_id',
         'actor_homepage',
         'assignment_name',
-        // 'user_id',
         'page_name',
         'is_page_accessed',
         'is_event_interacted',
