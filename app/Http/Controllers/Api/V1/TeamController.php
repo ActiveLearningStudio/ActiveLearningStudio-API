@@ -26,6 +26,7 @@ use App\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 /**
  * @group 14. Team
@@ -80,12 +81,12 @@ class TeamController extends Controller
         $this->authorize('viewAny', [Team::class, $suborganization]);
 
         $user_id = auth()->user()->id;
-        // \DB::enableQueryLog();
-        $teams = Team::with(['users' => function($q) use ($user_id) {
+
+        $teams = Team::whereHas('users', function ($q) use ($user_id) {
                             $q->where('user_id', $user_id);
-                        }])
-                        ->whereOrganizationId($suborganization->id)->get();
-        // print_r(\DB::getQueryLog());die;
+                        })
+                        ->whereOrganizationId($suborganization->id)
+                        ->get();
 
         $teamDetails = [];
         foreach ($teams as $team) {
