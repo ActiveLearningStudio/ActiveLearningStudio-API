@@ -34,7 +34,7 @@ class SearchController extends Controller
      *
      * Search projects, playlists and activities for deep linking
      *
-     * @queryParam query required Query to search. Example: test
+     * @queryParam query Query to search. Example: test
      * @queryParam sort Field to sort by. Example: created_at
      * @queryParam order Order to sort by. Example: desc
      * @queryParam from Index where the pagination start from. Example: 0
@@ -70,7 +70,7 @@ class SearchController extends Controller
      *
      * Advance search for projects, playlists and activities having indexing approved
      *
-     * @queryParam query required Query to search. Example: test
+     * @queryParam query Query to search. Example: test
      * @queryParam negativeQuery Terms that should not exist. Example: badword
      * @queryParam userIds Array of user ids to match. Example: [1]
      * @queryParam startDate Start date for search by date range. Example: 2020-04-30 00:00:00
@@ -114,7 +114,7 @@ class SearchController extends Controller
      *
      * Dashboard search for projects, playlists and activities irrespective of indexing status
      *
-     * @queryParam  query required Query to search. Example: test
+     * @queryParam  query Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
      * @queryParam  indexing Indexing requested, approved or not approved. Example: [3]
      * @queryParam  startDate Start date for search by date range. Example: 2020-04-30 00:00:00
