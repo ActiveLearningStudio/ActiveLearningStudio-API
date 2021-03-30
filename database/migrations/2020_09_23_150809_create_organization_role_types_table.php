@@ -17,6 +17,8 @@ class CreateOrganizationRoleTypesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('display_name');
+            $table->unsignedBigInteger('organization_id')->nullable()->default(1);
+            $table->foreign('organization_id')->references('id')->on('organizations');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -13,10 +13,12 @@ class AddOrganisationIdToOrganizationRoleTypesTable extends Migration
      */
     public function up()
     {
-        Schema::table('organization_role_types', function (Blueprint $table) {
-            $table->unsignedBigInteger('organization_id')->nullable()->default(1);
-            $table->foreign('organization_id')->references('id')->on('organizations');
-        });
+        if (!Schema::hasColumn('organization_role_types', 'organization_id')) {
+            Schema::table('organization_role_types', function (Blueprint $table) {
+                $table->unsignedBigInteger('organization_id')->nullable()->default(1);
+                $table->foreign('organization_id')->references('id')->on('organizations');
+            });
+        }
     }
 
     /**

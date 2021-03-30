@@ -12,6 +12,11 @@ class OrganizationRoleTypeSeeder extends Seeder
     public function run()
     {
         DB::table('organization_role_types')->insert([
+            'name' => 'super_admin',
+            'display_name' => 'Super Admin'
+        ]);
+
+        DB::table('organization_role_types')->insert([
             'name' => 'admin',
             'display_name' => 'Administrator'
         ]);
