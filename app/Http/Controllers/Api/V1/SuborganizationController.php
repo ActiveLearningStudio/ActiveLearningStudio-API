@@ -619,6 +619,9 @@ class SuborganizationController extends Controller
     public function getUserPermissions(Organization $suborganization)
     {
         $authenticatedUser = auth()->user();
-        return new OrganizationRoleResource($this->organizationRepository->fetchOrganizationUserPermissions($authenticatedUser, $suborganization));
+
+        return response([
+            'permissions' => $this->organizationRepository->fetchOrganizationUserPermissions($authenticatedUser, $suborganization),
+        ], 200);
     }
 }

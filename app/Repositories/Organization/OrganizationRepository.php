@@ -396,9 +396,18 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchOrganizationUserPermissions($authenticatedUser, $organization)
     {
-        return $organization->userRoles()
+        $orgUsrPermissions = $organization->userRoles()
                 ->wherePivot('user_id', $authenticatedUser->id)
                 ->with('permissions')
                 ->first();
+
+        $response['activeRole'] = $orgUsrPermissions['name'];
+        $response['roleId'] = $orgUsrPermissions['id'];
+
+        foreach ($orgUsrPermissions['permissions'] as $permission) {
+            $response[$permission['feature']][] = $permission['name'];
+        }
+
+        return $response;
     }
 }
