@@ -102,7 +102,7 @@ class SuborganizationController extends Controller
         $this->authorize('uploadThumb', $suborganization);
 
         $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image|max:102400',
+            'thumb' => 'required|mimes:jpg,jpeg,png,svg|max:102400',
         ]);
 
         if ($validator->fails()) {
