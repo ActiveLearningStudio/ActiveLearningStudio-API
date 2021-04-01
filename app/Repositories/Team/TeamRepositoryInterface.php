@@ -13,10 +13,20 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     /**
      * Create pivots data on team creation
      *
+     * @param $suborganization
      * @param $team
      * @param $data
      */
-    public function createTeam($team, $data);
+    public function createTeam($suborganization, $team, $data);
+
+    /**
+     * Update pivots data on team update
+     *
+     * @param $suborganization
+     * @param $team
+     * @param $data
+     */
+    public function updateTeam($suborganization, $team, $data);
 
     /**
      * Invite user to the team
