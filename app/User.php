@@ -249,7 +249,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $query->orWhereRaw("first_name ILIKE '%" . $value . "%'")
                      ->orWhereRaw("email ILIKE '%" . $value . "%'")
-                     ->orWhereRaw("CONCAT(first_name, ' ', last_name) ILIKE '%" . $value . "%'");
+                     ->orWhereRaw("CONCAT(first_name, ' ', last_name) ILIKE '%" . $value . "%'")
+                     ->orderBy("first_name", "ASC")
+                     ->orderBy("email", "ASC");
 
     }
 
