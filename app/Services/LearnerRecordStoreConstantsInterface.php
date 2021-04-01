@@ -112,4 +112,11 @@ interface LearnerRecordStoreConstantsInterface
      */
     const EXTENSION_H5P_CHAPTER_INDEX = 'http://currikistudio.org/x-api/h5p-chapter-index';
 
+    /**
+     * Shared Activity Referrer
+     * 
+     * @var string
+     */
+    const EXTENSION_REFERRER = 'http://id.tincanapi.com/extension/referrer';
+
 }

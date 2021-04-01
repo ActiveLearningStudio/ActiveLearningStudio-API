@@ -153,11 +153,13 @@ class ExtractXAPIJSONController extends Controller
                     $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
                     $chapterName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_NAME);
                     $chapterIndex = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_INDEX);
+                    $referrer = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_REFERRER);
                     $insertData['glass_alternate_course_id'] = $glassAltCourseId;
                     $insertData['glass_enrollment_code'] = $glassEnrollmentCode;
                     $insertData['course_name'] = $courseName;
                     $insertData['chapter_name'] = $chapterName;
                     $insertData['chapter_index'] = $chapterIndex;
+                    $insertData['referrer'] = $referrer;
                 }
 
                 $interactionFactory = new InteractionFactory();
