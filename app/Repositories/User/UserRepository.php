@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Laravel\Passport\Passport;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -100,5 +101,30 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $returnNotifications['yesterday'] = NotificationListResource::collection($yesterdayNotifications->with('notifiable')->whereDate('created_at', Carbon::yesterday())->get());
         $returnNotifications['older'] = NotificationListResource::collection($olderNotifications->with('notifiable')->whereDate('created_at', '<', Carbon::yesterday())->get());
         return $returnNotifications;
+    }
+
+    /**
+     * Check if user has the specified permission in the provided organization
+     *
+     * @param $user
+     * @param $permission
+     * @param $organization
+     * @return boolean
+     */
+    public function hasPermissionTo($user, $permission, $organization)
+    {
+        $hasPermissionTo =  $organization->userRoles()
+                            ->wherePivot('user_id', $user->id)
+                            ->whereHas('permissions', function (Builder $query) use ($permission) {
+                                $query->where('name', '=', $permission);
+                            })->get();
+
+        if ($hasPermissionTo->count()) {
+            return true;
+        } elseif ($organization->parent) {
+            return $this->hasPermissionTo($user, $permission, $organization->parent);
+        }
+
+        return false;
     }
 }

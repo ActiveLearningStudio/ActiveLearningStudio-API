@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
+use App\Repositories\User\UserRepositoryInterface;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -264,5 +265,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function defaultOrganization()
     {
         return $this->belongsTo('App\Models\Organization', 'default_organization');
+    }
+
+    /**
+     * Check if user has the specified permission in the provided organization
+     *
+     * @param $permission
+     * @param $organization
+     * @return boolean
+     */
+    public function hasPermissionTo($permission, $organization)
+    {
+        $userRepository = resolve(UserRepositoryInterface::class);
+        return $userRepository->hasPermissionTo($this, $permission, $organization);
     }
 }

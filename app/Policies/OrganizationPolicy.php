@@ -31,7 +31,7 @@ class OrganizationPolicy
      */
     public function view(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2, 3]);
+        return $user->hasPermissionTo('organization:view', $organization);
     }
 
     /**

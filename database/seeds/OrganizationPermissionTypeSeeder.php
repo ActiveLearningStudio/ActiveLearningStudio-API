@@ -66,6 +66,18 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Organization'
         ]);
 
+        DB::table('organization_permission_types')->insert([
+            'name' => 'organization:add-admin',
+            'display_name' => 'Add Organization Admin',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'organization:delete-admin',
+            'display_name' => 'Delete Organization Admin',
+            'feature' => 'Organization'
+        ]);
+
         // Projects
         DB::table('organization_permission_types')->insert([
             'name' => 'project:edit',
@@ -180,6 +192,12 @@ class OrganizationPermissionTypeSeeder extends Seeder
         DB::table('organization_permission_types')->insert([
             'name' => 'activity:create',
             'display_name' => 'Create Activity',
+            'feature' => 'Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'activity:upload',
+            'display_name' => 'Upload Activity',
             'feature' => 'Activity'
         ]);
 
@@ -352,19 +370,6 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'name' => 'search:dashboard',
             'display_name' => 'Dashboard Search',
             'feature' => 'Search'
-        ]);
-
-        // User
-        DB::table('organization_permission_types')->insert([
-            'name' => 'user:edit',
-            'display_name' => 'Edit User',
-            'feature' => 'User'
-        ]);
-
-        DB::table('organization_permission_types')->insert([
-            'name' => 'user:view',
-            'display_name' => 'View User',
-            'feature' => 'User'
         ]);
     }
 }

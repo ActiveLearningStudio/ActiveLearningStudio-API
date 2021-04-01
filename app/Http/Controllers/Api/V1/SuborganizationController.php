@@ -624,4 +624,45 @@ class SuborganizationController extends Controller
             'permissions' => $this->organizationRepository->fetchOrganizationUserPermissions($authenticatedUser, $suborganization),
         ], 200);
     }
+
+    /**
+     * User has permission
+     *
+     * Check if user has the specified permission in the provided organization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam permission string required Permission to check user access Example: organization:view
+     *
+     * @response {
+     *   "userHasPermission": true
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "The permission field is required."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function userHasPermission(Request $request, Organization $suborganization)
+    {
+        $this->authorize('viewAnyUser', $suborganization);
+
+        $validator = Validator::make($request->all(), [
+            'permission' => 'required|string|max:255|exists:organization_permission_types,name',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => $validator->errors()->all()
+            ], 400);
+        }
+
+        return response([
+            'userHasPermission' => auth()->user()->hasPermissionTo($request->permission, $suborganization),
+        ], 200);
+    }
 }
