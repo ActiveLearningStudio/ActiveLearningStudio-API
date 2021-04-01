@@ -675,8 +675,6 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsShared(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
-
         // 3 is for indexing approved - see Project Model @indexing property
         if ($activity->shared || ($activity->playlist->project->indexing === 3)) {
             $h5p = App::make('LaravelH5p');

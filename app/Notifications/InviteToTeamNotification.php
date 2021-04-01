@@ -61,11 +61,11 @@ class InviteToTeamNotification extends Notification
         // }
 
         return (new MailMessage)
-            ->subject('Invite to the Team')
-            ->line($this->sender->first_name . ' has invited you to join the team ' . $this->team->name)
+            ->subject('Invited to the Team')
+            ->line($this->sender->first_name . ' had invited you to in the ' . $this->team->name.' team')
             ->line($this->note)
             // ->action('Join the Team', $this->pageUrl . '?token=' . $this->token);
-            ->action('Join the Team', $this->pageUrl . '/teams/' . $this->team->id . '/projects');
+            ->action('View the Team', $this->pageUrl . '/teams/' . $this->team->id);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\TeamCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\TeamAddMemberRequest;
 use App\Http\Requests\V1\TeamAddProjectRequest;
@@ -24,9 +23,7 @@ use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Maatwebsite\Excel\Concerns\ToArray;
 
 /**
  * @group 14. Team
@@ -166,7 +163,7 @@ class TeamController extends Controller
         $team = $auth_user->teams()->create($data, ['role' => 'owner']);
 
         if ($team) {
-            $this->teamRepository->createTeam($team, $data);
+            $this->teamRepository->createTeam($suborganization, $team, $data);
 
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
@@ -626,6 +623,9 @@ class TeamController extends Controller
         $is_updated = $this->teamRepository->update($data, $team->id);
 
         if ($is_updated) {
+
+            $this->teamRepository->updateTeam($suborganization, $team, $data);
+
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
             ], 200);
