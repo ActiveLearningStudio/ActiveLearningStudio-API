@@ -205,12 +205,7 @@ class OutcomeController extends Controller
                     // Extract information from object.definition.extensions
                     if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                         $h5pContentId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_LOCAL_CONTENT_ID);
-                        //$h5pContent = H5PContent::findOrFail($h5pContentId);
-                        $h5pContent = H5PContent::findOrFail(19591);//19581);//7);//38074); //19590
-                        /*var_dump($h5pContent);
-                        exit;
-                        print_r($h5pContent->parameters);
-                        exit;*/
+                        $h5pContent = H5PContent::findOrFail($h5pContentId);
                     }
                 }
                 
@@ -222,9 +217,6 @@ class OutcomeController extends Controller
                     if ($h5pLib) {
                         $h5pMeta = $h5pLib->buildMeta();
                     }
-                    /*echo '<pre>';
-                    print_r($h5pMeta);
-                    exit;*/
                    
                     // UPDATE: We want to accumulate all responses, and each attempt is not a unique attempt anymore.
                     // So, we just check for an attempt, and then keep the search by submission id.
