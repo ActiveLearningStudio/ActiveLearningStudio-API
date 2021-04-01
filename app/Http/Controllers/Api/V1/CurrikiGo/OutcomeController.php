@@ -130,7 +130,7 @@ class OutcomeController extends Controller
                     usort($response, function($a, $b) {
                         return $a['ending-point'] <=> $b['ending-point'];
                     });
-
+                    
                     return response([
                         'summary' => $response,
                         'non-scoring' => $nonScoringResponse

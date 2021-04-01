@@ -54,8 +54,8 @@ class LmsController extends Controller
     {
         // TODO: need to update validation
         $validator = Validator::make($request->all(), [
-            'lms_url' => 'required',
-            'lti_client_id' => 'required'
+            'lti_client_id' => 'required',
+            'user_email' => 'required|email',
         ]);
 
         if ($validator->fails()) {
@@ -63,9 +63,10 @@ class LmsController extends Controller
             return response(['error' => $messages], 400);
         }
 
-        $lms_url = $request->input('lms_url');
-        $lti_client_id = $request->input('lti_client_id');
-        $projects = $this->projectRepository->fetchByLtiClient($lti_client_id);
+        $projects = $this->projectRepository->fetchByLtiClientAndEmail(
+            $request->input('lti_client_id'),
+            $request->input('user_email')
+        );
 
         return response([
             'projects' => ProjectPublicResource::collection($projects),
