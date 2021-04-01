@@ -267,4 +267,13 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function getAggregatesCompletedStatements(array $data);
 
+    /**
+     * Get SubContentId from category
+     * 
+     * @param array An array of Parent IRIs
+     * 
+     * @return string
+     */
+    public function getParentSubContentId($parent);
+
 }

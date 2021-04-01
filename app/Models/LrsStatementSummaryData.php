@@ -15,6 +15,7 @@ class LrsStatementSummaryData extends Model
         'statement_id',
         'statement_uuid',
         'actor_id',
+        'class_id',
         'actor_homepage',
         'assignment_name',
         'page_name',
