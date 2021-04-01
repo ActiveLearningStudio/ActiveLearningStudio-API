@@ -175,17 +175,17 @@ if (!function_exists('recursive_array_search')) {
 }
 
 if (!function_exists('recursive_array_search_insert')) {
-    function recursive_array_search_insert($needle, &$haystack, $insert = '') {
-        if (is_array($haystack)) {
-            foreach ($haystack as $key => $value) {
-                if (is_array($value)) {
-                    $haystack[$key] = recursive_array_search_insert($needle, $value, $insert);
-                } elseif ($key === 'sub-content-id' && $value == $needle) {
-                    $haystack['content'] += $insert;
-                    break;          
+    function recursive_array_search_insert($value, &$node, $insert = '') {
+        if (is_array($node)) {
+            if (isset($node['sub-content-id']) && $value === $node['sub-content-id']) {
+                if (!isset($node['answer'])) {
+                    $node['answer'] = [];
                 }
+                $node['answer'][] = $insert;
+            }
+            foreach ($node as &$childNode) {
+                recursive_array_search_insert($value, $childNode, $insert);
             }
         }
-        return $haystack;
     }
 }
