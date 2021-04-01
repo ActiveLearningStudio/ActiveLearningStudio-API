@@ -150,8 +150,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $valid_users[] = $con_user;
                 $assigned_users[] = [
                     'user' => $con_user,
-                    'note' => $note,
-                    'user_type' => 'Member'
+                    'note' => $note
                 ];
             } elseif ($user['email']) {
                 $temp_user = new User(['email' => $user['email']]);
@@ -163,12 +162,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $data['note'] = $note;
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data);
                 // ended org invitation for outside users
-
-                $assigned_users[] = [
-                    'user' => $temp_user,
-                    'note' => $note,
-                    'user_type' => 'New'
-                ];
 
                 $invited_users[] = [
                     'invited_email' => $user['email'],

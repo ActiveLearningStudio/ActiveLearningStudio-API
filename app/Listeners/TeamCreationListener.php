@@ -29,9 +29,7 @@ class TeamCreationListener
     {
         $auth_user = auth()->user();
         foreach ($event->users as $user) {
-            if ($user['user_type'] == 'Member') {
-                $user['user']->notify(new InviteToTeamNotification($auth_user, $event->team, $user['user']->token, $user['note']));
-            }
+            $user['user']->notify(new InviteToTeamNotification($auth_user, $event->team, $user['user']->token, $user['note']));
         }
     }
 }
