@@ -620,7 +620,11 @@ class TeamController extends Controller
 
         $data = $teamUpdateRequest->validated();
 
-        $is_updated = $this->teamRepository->update($data, $team->id);
+        $teamData = [];
+        $teamData['name'] = $data['name'];
+        $teamData['description'] = $data['description'];
+
+        $is_updated = $this->teamRepository->update($teamData, $team->id);
 
         if ($is_updated) {
 
