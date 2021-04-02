@@ -141,11 +141,17 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
         foreach ($data['users'] as $user) {
             $con_user = $this->userRepository->find($user['id']);
-            $note = array_key_exists('note', $user) ? $user['note'] : '';
+            $userRow = $team->users()->find($user['id']);
 
+            if ($userRow) {
+                continue;
+            }
+
+            $note = array_key_exists('note', $user) ? $user['note'] : '';
             $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
+
             if ($con_user) {
-                $team->users()->syncWithoutDetaching($con_user, ['role' => 'collaborator', 'token' => $token]);
+                $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
                 $con_user->token = $token;
                 $valid_users[] = $con_user;
                 $assigned_users[] = [
@@ -177,16 +183,20 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
         $assigned_projects = [];
         foreach ($data['projects'] as $project_id) {
+            $projectRow = $team->projects()->find($project_id);
+            if ($projectRow) {
+                continue;
+            }
             $project = $this->projectRepository->find($project_id);
             if ($project) {
-                $team->projects()->syncWithoutDetaching($project);
+                $team->projects()->attach($project);
                 $assigned_projects[] = $project;
             }
         }
 
         event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
 
-        $this->updateTeamProjectUser($team, $assigned_projects, $valid_users);
+        $this->setTeamProjectUser($team, $assigned_projects, $valid_users);
     }
 
     /**
@@ -286,65 +296,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                                 'updated_at' => now(),
                             ],
                         ]);
-                }
-            }
-        }
-    }
-
-    /**
-     * Update Team / Project / User relationship
-     *
-     * @param $team
-     * @param $projects
-     * @param $users
-     */
-    public function updateTeamProjectUser($team, $projects, $users)
-    {
-        $team = $this->model->find($team->id);
-        $auth_user = auth()->user();
-
-        if ($team) {
-            foreach ($projects as $project) {
-
-                $result = DB::table('team_project_user')
-                            ->where("team_id", $team->id)
-                            ->where("project_id", $project->id)
-                            ->where("user_id", $auth_user->id)
-                            ->first();
-                if (!$result)
-                {
-                    DB::table('team_project_user')
-                        ->insertOrIgnore([
-                            [
-                                'team_id' => $team->id,
-                                'project_id' => $project->id,
-                                'user_id' => $auth_user->id,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ],
-                        ]);
-
-                    foreach ($users as $user) {
-
-                        $result = DB::table('team_project_user')
-                            ->where("team_id", $team->id)
-                            ->where("project_id", $project->id)
-                            ->where("user_id", $user->id)
-                            ->first();
-
-                        if (!$result) {
-                            DB::table('team_project_user')
-                                ->insertOrIgnore([
-                                    [
-                                        'team_id' => $team->id,
-                                        'project_id' => $project->id,
-                                        'user_id' => $user->id,
-                                        'created_at' => now(),
-                                        'updated_at' => now(),
-                                    ],
-                                ]);
-                        }
-                    }
                 }
             }
         }
