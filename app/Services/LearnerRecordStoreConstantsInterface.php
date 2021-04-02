@@ -64,6 +64,13 @@ interface LearnerRecordStoreConstantsInterface
     const SUBMITTED_CURRIKI_VERB_ID = 'http://adlnet.gov/expapi/verbs/submitted-curriki';
 
     /**
+     * Sumamry-Curriki verb id for XAPI statements
+     * 
+     * @var string
+     */
+    const SUMMARY_CURRIKI_VERB_ID = 'http://adlnet.gov/expapi/verbs/summary-curriki';
+
+    /**
      * Assignment Submitted Verb Name
      * 
      * @var string
@@ -104,5 +111,12 @@ interface LearnerRecordStoreConstantsInterface
      * @var string
      */
     const EXTENSION_H5P_CHAPTER_INDEX = 'http://currikistudio.org/x-api/h5p-chapter-index';
+
+    /**
+     * Shared Activity Referrer
+     * 
+     * @var string
+     */
+    const EXTENSION_REFERRER = 'http://id.tincanapi.com/extension/referrer';
 
 }

@@ -366,9 +366,9 @@ class UserController extends Controller
     }
 
     /**
-     * Read All Notification
+     * Read All Notifications
      *
-     * Read all notification of the specified user.
+     * Read all notifications of the specified user.
      *
      * @responseFile responses/notifications/notifications.json
      *

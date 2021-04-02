@@ -342,13 +342,33 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     $h5pInteraction = explode("/", $categoryId);
                     $h5pInteraction = end($h5pInteraction);
                 }
+
+                $parent = $contextActivities->getParent();
+                $parentSubContentId = $this->getParentSubContentId($parent);
                 
                 if (!empty($category) && in_array($h5pInteraction, $allowedInteractions) && !empty($result)) {
                     $objectId = $statement->getTarget()->getId();
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered)) {
-                        $filtered[$h5pSubContentId] = $statement;
+                    $key = (!empty($parentSubContentId) ? $parentSubContentId . '-' . $h5pSubContentId : $h5pSubContentId);
+                    // If h5p interaction is PersonalityQuiz, then take title into account
+                    if ($h5pInteraction === 'H5P.PersonalityQuiz-1.0') {
+                        $target = $statement->getTarget();
+                        $definition = $target->getDefinition();
+                        // In some cases, we do not have a 'name' property for the object.
+                        // So, we've added an additional check here.
+                        // @todo - the LRS statements generated need to have this property
+                        $description = '';
+                        if (!$definition->getDescription()->isEmpty()) {
+                            $description = $definition->getDescription()->getNegotiatedLanguageString();
+                            $description = strip_tags(html_entity_decode($description));
+                            $descriptionMD5 = substr(md5($description), 0, 8);
+                            $key .= '-' . $descriptionMD5;
+                        }
+                    }
+
+                    if (!array_key_exists($key, $filtered)) {
+                        $filtered[$key] = $statement;
                     }
                 }
             }
@@ -585,7 +605,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'skipped' => self::SKIPPED_VERB_ID,
             'attempted' => self::ATTEMPTED_VERB_ID,
             'interacted' => self::INTERACTED_VERB_ID,
-            'submitted-curriki' => self::SUBMITTED_CURRIKI_VERB_ID
+            'submitted-curriki' => self::SUBMITTED_CURRIKI_VERB_ID,
+            'summary-curriki' => self::SUMMARY_CURRIKI_VERB_ID
         ];
         return (array_key_exists($verb, $verbsList) ? $verbsList[$verb] : false);
     }
@@ -601,7 +622,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             'H5P.SimpleMultiChoice-1.1',
             'H5P.OpenEndedQuestion-1.0',
             'H5P.StarRating-1.0',
-            'H5P.NonscoreableDragQuestion-1.0'
+            'H5P.NonscoreableDragQuestion-1.0',
+            'H5P.PersonalityQuiz-1.0'
         ];
         return $allowed;
     }
@@ -707,6 +729,30 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             $h5pInteraction = end($h5pInteraction);
         }
         return $h5pInteraction;
+    }
+
+    /**
+     * Get SubContentId from category
+     * 
+     * @param array An array of Parent IRIs
+     * 
+     * @return string
+     */
+    public function getParentSubContentId($parent)
+    {
+        $parentSubContentId = '';
+        if (!empty($parent)) {
+            $parentId = end($parent)->getId();
+            $parsedParent = parse_url($parentId);
+            $queryParams = [];
+            if (isset($parsedParent['query']) && !empty($parsedParent['query'])) {
+                parse_str($parsedParent['query'], $queryParams);
+                if ($queryParams && isset($queryParams['subContentId'])) {
+                    $parentSubContentId = $queryParams['subContentId'];
+                }
+            }
+        }
+        return $parentSubContentId;
     }
 
     /**

@@ -244,7 +244,7 @@ return [
      * If you want to use this, please be aware of the following rules:
      * - the image size must be 230 x 52
      */
-    'logo' => false,
+    'logo' => resource_path('views') . '/api/logo.png',
 
     /*
      * Name for the group of routes which do not have a @group set.

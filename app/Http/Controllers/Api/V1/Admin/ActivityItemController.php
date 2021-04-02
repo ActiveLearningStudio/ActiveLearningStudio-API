@@ -53,7 +53,7 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Get Activity Item
+     * Get Specified Activity Item
      *
      * Get the specified Activity Item data.
      *
@@ -72,7 +72,7 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Create Activity Item
+     * Create New Activity Item
      *
      * Creates the new activity item in database.
      *
@@ -99,7 +99,7 @@ class ActivityItemController extends Controller
     }
 
     /**
-     * Update Activity Item
+     * Update Specified Activity Item
      *
      * Updates the activity item in database.
      *
