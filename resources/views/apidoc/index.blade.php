@@ -48,7 +48,7 @@
           <!-- START_INFO -->
 <h1>Info</h1>
 <p>Welcome to the generated API reference.
-<a href="{{ route("apidoc.json") }}">Get Postman Collection</a></p>
+<a href="{{ asset('/api/docs/collection.json') }}">Get Postman Collection</a></p>
 <!-- END_INFO -->
 <h1>1. Authentication</h1>
 <p>APIs for Authentication</p>
