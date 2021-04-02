@@ -145,7 +145,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
             $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
             if ($con_user) {
-                $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
+                $team->users()->syncWithoutDetaching($con_user, ['role' => 'collaborator', 'token' => $token]);
                 $con_user->token = $token;
                 $valid_users[] = $con_user;
                 $assigned_users[] = [
@@ -179,7 +179,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         foreach ($data['projects'] as $project_id) {
             $project = $this->projectRepository->find($project_id);
             if ($project) {
-                $team->projects()->sync($project);
+                $team->projects()->syncWithoutDetaching($project);
                 $assigned_projects[] = $project;
             }
         }
