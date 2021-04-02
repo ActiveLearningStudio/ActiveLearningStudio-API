@@ -624,7 +624,11 @@ class GroupController extends Controller
 
         $data = $groupUpdateRequest->validated();
 
-        $is_updated = $this->groupRepository->update($data, $group->id);
+        $groupData = [];
+        $groupData['name'] = $data['name'];
+        $groupData['description'] = $data['description'];
+
+        $is_updated = $this->groupRepository->update($groupData, $group->id);
 
         if ($is_updated) {
             $this->groupRepository->updateGroup($suborganization, $group, $data);
