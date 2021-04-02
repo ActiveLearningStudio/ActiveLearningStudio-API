@@ -181,22 +181,11 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $this->invitedTeamUserRepository->create($invited_user);
         }
 
-        $assigned_projects = [];
-        foreach ($data['projects'] as $project_id) {
-            $projectRow = $team->projects()->find($project_id);
-            if ($projectRow) {
-                continue;
-            }
-            $project = $this->projectRepository->find($project_id);
-            if ($project) {
-                $team->projects()->attach($project);
-                $assigned_projects[] = $project;
-            }
-        }
+        $team->projects()->sync($data['projects']);
 
-        event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
+        event(new TeamCreatedEvent($team, $data['projects'], $assigned_users));
 
-        $this->setTeamProjectUser($team, $assigned_projects, $valid_users);
+        $this->updateTeamProjectUser($team, $data['projects'], $valid_users);
     }
 
     /**
@@ -291,6 +280,51 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             [
                                 'team_id' => $team->id,
                                 'project_id' => $project->id,
+                                'user_id' => $user->id,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ],
+                        ]);
+                }
+            }
+        }
+    }
+
+        /**
+     * Update Team / Project / User relationship
+     *
+     * @param $team
+     * @param $projects
+     * @param $users
+     */
+    public function updateTeamProjectUser($team, $projects, $users)
+    {
+        $team = $this->model->find($team->id);
+        $auth_user = auth()->user();
+
+        if ($team) {
+            DB::table('team_project_user')
+                ->where('team_id', $team->id)
+                ->delete();
+
+            foreach ($projects as $projectId) {
+                DB::table('team_project_user')
+                    ->insertOrIgnore([
+                        [
+                            'team_id' => $team->id,
+                            'project_id' => $projectId,
+                            'user_id' => $auth_user->id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ],
+                    ]);
+
+                foreach ($users as $user) {
+                    DB::table('team_project_user')
+                        ->insertOrIgnore([
+                            [
+                                'team_id' => $team->id,
+                                'project_id' => $projectId,
                                 'user_id' => $user->id,
                                 'created_at' => now(),
                                 'updated_at' => now(),
