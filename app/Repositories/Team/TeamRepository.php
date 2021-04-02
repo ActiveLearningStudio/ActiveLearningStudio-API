@@ -87,10 +87,10 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $data['role_id'] = 3;
-                $data['email'] = $user['email'];
-                $data['note'] = $user['note'];
-                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data);
+                $inviteData['role_id'] = 3;
+                $inviteData['email'] = $user['email'];
+                $inviteData['note'] = $user['note'];
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
                 // ended org invitation for outside users
 
                 $assigned_users[] = [
@@ -163,10 +163,10 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $data['role_id'] = 3;
-                $data['email'] = $user['email'];
-                $data['note'] = $note;
-                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data);
+                $inviteData['role_id'] = 3;
+                $inviteData['email'] = $user['email'];
+                $inviteData['note'] = $note;
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
                 // ended org invitation for outside users
 
                 $invited_users[] = [

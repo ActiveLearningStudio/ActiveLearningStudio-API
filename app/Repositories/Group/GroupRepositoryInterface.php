@@ -13,10 +13,20 @@ interface GroupRepositoryInterface extends EloquentRepositoryInterface
     /**
      * Create pivots data on group creation
      *
+     * @param $suborganization
      * @param $group
      * @param $data
      */
-    public function createGroup($group, $data);
+    public function createGroup($suborganization, $group, $data);
+
+    /**
+     * Update pivots data on group creation
+     *
+     * @param $suborganization
+     * @param $group
+     * @param $data
+     */
+    public function updateGroup($suborganization, $group, $data);
 
     /**
      * Invite user to the group

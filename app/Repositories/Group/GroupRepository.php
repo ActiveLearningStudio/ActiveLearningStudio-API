@@ -58,14 +58,16 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     /**
      * Create pivots data on group creation
      *
+     * @param $suborganization
      * @param $group
      * @param $data
      */
-    public function createGroup($group, $data)
+    public function createGroup($suborganization, $group, $data)
     {
         $assigned_users = [];
         $valid_users = [];
         $invited_users = [];
+        $auth_user = auth()->user();
 
         foreach ($data['users'] as $user) {
             $con_user = $this->userRepository->find($user['id']);
@@ -82,6 +84,13 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
             } elseif ($user['email']) {
                 $temp_user = new User(['email' => $user['email']]);
                 $temp_user->token = $token;
+
+                // added org invitation for outside users
+                $inviteData['role_id'] = 3;
+                $inviteData['email'] = $user['email'];
+                $inviteData['note'] = $user['note'];
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
+                // ended org invitation for outside users
 
                 $assigned_users[] = [
                     'user' => $temp_user,
@@ -112,6 +121,68 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         event(new GroupCreatedEvent($group, $assigned_projects, $assigned_users));
 
         $this->setGroupProjectUser($group, $assigned_projects, $valid_users);
+    }
+
+    /**
+     * Update pivots data on group update
+     *
+     * @param $suborganization
+     * @param $group
+     * @param $data
+     */
+    public function updateGroup($suborganization, $group, $data)
+    {
+        $assigned_users = [];
+        $valid_users = [];
+        $invited_users = [];
+        $auth_user = auth()->user();
+
+        foreach ($data['users'] as $user) {
+            $con_user = $this->userRepository->find($user['id']);
+            $userRow = $group->users()->find($user['id']);
+            if ($userRow) {
+                continue;
+            }
+
+            $note = array_key_exists('note', $user) ? $user['note'] : '';
+            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
+
+            if ($con_user) {
+                $group->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
+                $con_user->token = $token;
+                $valid_users[] = $con_user;
+                $assigned_users[] = [
+                    'user' => $con_user,
+                    'note' => $note
+                ];
+            } elseif ($user['email']) {
+                $temp_user = new User(['email' => $user['email']]);
+                $temp_user->token = $token;
+
+                // added org invitation for outside users
+                $inviteData['role_id'] = 3;
+                $inviteData['email'] = $user['email'];
+                $inviteData['note'] = $note;
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
+                // ended org invitation for outside users
+
+                $invited_users[] = [
+                    'invited_email' => $user['email'],
+                    'group_id' => $group->id,
+                    'token' => $token
+                ];
+            }
+        }
+
+        foreach ($invited_users as $invited_user) {
+            $this->invitedTeamUserRepository->create($invited_user);
+        }
+
+        $group->projects()->sync($data['projects']);
+
+        event(new GroupCreatedEvent($group, $data['projects'], $assigned_users));
+
+        $this->updateGroupProjectUser($group, $data['projects'], $valid_users);
     }
 
     /**
@@ -153,10 +224,10 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 $temp_user = new User(['email' => $user['email']]);
 
                 // added org invitation for outside users
-                $data2['role_id'] = 3;
-                $data2['email'] = $user['email'];
-                $data2['note'] = $note;
-                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data2);
+                $inviteData['role_id'] = 3;
+                $inviteData['email'] = $user['email'];
+                $inviteData['note'] = $note;
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
                 // ended org invitation for outside users
 
                 // $temp_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
@@ -208,6 +279,51 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                             [
                                 'group_id' => $group->id,
                                 'project_id' => $project->id,
+                                'user_id' => $user->id,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ],
+                        ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Update Group / Project / User relationship
+     *
+     * @param $group
+     * @param $projects
+     * @param $users
+     */
+    public function updateGroupProjectUser($group, $projects, $users)
+    {
+        $group = $this->model->find($group->id);
+        $auth_user = auth()->user();
+
+        if ($group) {
+            DB::table('group_project_user')
+                ->where('group_id', $group->id)
+                ->delete();
+
+            foreach ($projects as $projectId) {
+                DB::table('group_project_user')
+                    ->insertOrIgnore([
+                        [
+                            'group_id' => $group->id,
+                            'project_id' => $projectId,
+                            'user_id' => $auth_user->id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ],
+                    ]);
+
+                foreach ($users as $user) {
+                    DB::table('group_project_user')
+                        ->insertOrIgnore([
+                            [
+                                'group_id' => $group->id,
+                                'project_id' => $projectId,
                                 'user_id' => $user->id,
                                 'created_at' => now(),
                                 'updated_at' => now(),
