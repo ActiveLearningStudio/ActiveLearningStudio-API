@@ -175,7 +175,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         }
 
         foreach ($invited_users as $invited_user) {
-            $this->invitedTeamUserRepository->create($invited_user);
+            $this->invitedGroupUserRepository->create($invited_user);
         }
 
         $group->projects()->sync($data['projects']);
