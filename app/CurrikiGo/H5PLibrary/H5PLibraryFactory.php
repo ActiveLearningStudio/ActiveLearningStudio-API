@@ -33,51 +33,52 @@ class H5PLibraryFactory
      *
      * @param string $library The library name
      * @param array $content The meta data content.
+     * @param string $parent The parent element subContentId
      * @return H5PLibraryFactory
      */
-    public function init($library, $content)
+    public function init($library, $content, $parent = '')
     {
         $library = $this->cleanString($library);
         switch ($library) {
             case 'InteractiveBook':
-                return new InteractiveBook($content);
+                return new InteractiveBook($content, $parent);
             case 'Column':
-                return new Column($content);
+                return new Column($content, $parent);
             case 'Questionnaire':
-                return new Questionnaire($content);
+                return new Questionnaire($content, $parent);
             case 'OpenEndedQuestion':
-                return new OpenEndedQuestion($content);
+                return new OpenEndedQuestion($content, $parent);
             case 'SimpleMultiChoice':
-                return new SimpleMultiChoice($content);
+                return new SimpleMultiChoice($content, $parent);
             case 'NonscoreableDragQuestion':
-                return new NonScoreableDragQuestion($content);
+                return new NonScoreableDragQuestion($content, $parent);
             case 'MultiChoice':
-                return new MultiChoice($content);
+                return new MultiChoice($content, $parent);
             case 'CoursePresentation':
-                return new CoursePresentation($content);
+                return new CoursePresentation($content, $parent);
             case 'InteractiveVideo':
-                return new InteractiveVideo($content);
+                return new InteractiveVideo($content, $parent);
             case 'Summary':
-                return new Summary($content);
+                return new Summary($content, $parent);
             case 'TrueFalse':
-                return new TrueFalse($content);
+                return new TrueFalse($content, $parent);
             case 'Blanks':
-                return new Blanks($content);
+                return new Blanks($content, $parent);
             case 'DragQuestion':
-                return new DragQuestion($content);          
+                return new DragQuestion($content, $parent);          
             case 'DragText':
-                return new DragText($content);          
+                return new DragText($content, $parent);          
             case 'MarkTheWords':
-                return new MarkTheWords($content);
+                return new MarkTheWords($content, $parent);
             case 'SingleChoiceSet':
-                return new SingleChoiceSet($content);
+                return new SingleChoiceSet($content, $parent);
             case 'StarRating':
-                return new StarRating($content);
+                return new StarRating($content, $parent);
             case 'PersonalityQuiz':
-                return new PersonalityQuiz($content);
+                return new PersonalityQuiz($content, $parent);
             default:
                 // When there is no interaction type
-                return new Common($content);
+                return new Common($content, $parent);
         }
     }
 

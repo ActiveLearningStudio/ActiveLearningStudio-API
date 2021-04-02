@@ -15,12 +15,13 @@ class H5PHelper
      * 
      * @param string $library The H5P library name
      * @param array $content The content array
+     * @param string $parent The parent element subContentId
      * @return array
      */
-    public static function loadContentByLibrary($library, $content)
+    public static function loadContentByLibrary($library, $content, $parent)
     {
         $h5pFactory = new H5PLibraryFactory();
-        $h5pLib = $h5pFactory->init($library, $content);
+        $h5pLib = $h5pFactory->init($library, $content, $parent);
         $h5pMeta = [];
         if ($h5pLib) {
             $h5pMeta = $h5pLib->buildMeta();
@@ -41,7 +42,7 @@ class H5PHelper
         $data['library'] = $content['library'];
         $data['content-type'] = $content['metadata']['contentType'];
         $data['title'] = (isset($content['metadata']['title']) ? $content['metadata']['title'] : $data['content-type']);
-        $data['content'] = self::loadContentByLibrary($data['library'], $content['params']);
+        $data['content'] = self::loadContentByLibrary($data['library'], $content['params'], $content['subContentId']);
         return $data;
     }
 
