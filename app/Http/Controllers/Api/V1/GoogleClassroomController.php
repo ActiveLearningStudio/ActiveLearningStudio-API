@@ -15,6 +15,7 @@ use App\Http\Requests\V1\GCGetStudentSubmissionRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCStudentResource;
+use App\Http\Resources\V1\GCTeacherResource;
 use App\Http\Resources\V1\GCSubmissionResource;
 use App\Models\Project;
 use App\Models\Activity;
@@ -375,6 +376,7 @@ class GoogleClassroomController extends Controller
      * If the user is authenticated and is a student, validate if the submission is his.
      * 
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
+     * @bodyParam student_id the google user id for the student
      * @bodyParam course_id string required The Google Classroom course id
      * @bodyParam gc_classwork_id string required The Id of the classwork
      * @bodyParam gc_submission_id string required The Id of the student's submission
@@ -398,55 +400,67 @@ class GoogleClassroomController extends Controller
         $courseId = $data['course_id'];
         $gcClassworkId = $data['gc_classwork_id'];
         $gcSubmissionId = $data['gc_submission_id'];
-        
-        try {
-            // Should we validate if the student is in the course?
-            $service = new GoogleClassroom($accessToken);
 
-            // See if the user has access to the submission or not. If not then we just throw an error
-            // If the user does have access to it, then we find who the user is; student or a teacher.
-            $submissionRes = $service->getStudentSubmissionById($courseId, $gcClassworkId, $gcSubmissionId);
-            if (isset($submissionRes->courseId)) {
-                // Check if the submission is turned In or not.
-                if (!$service->isAssignmentSubmitted($submissionRes->state)) {
-                    // return an error that the summary page is not available yet.
-                    return response([
-                        'errors' => ['The summary page is unavailable as the assignment is not turned in yet.'],
-                    ], 404);
-                }
-                // Get student's user id
-                $userId = $submissionRes->userId;
-                // Retrieve student's profile by id
-                $userRes = $service->getEnrolledStudent($courseId, $userId);
-                
-                if (isset($userRes->userId)) {
-                    return response([
-                        'student' => GCStudentResource::make($userRes)->resolve()
-                    ], 200);
-                } else {
-                    $response = json_decode($userRes);
-                    return response([
-                        'errors' => [$response->error->message],
-                    ], 500);
-                }
-            } else {
-                // user does not have access, so through an error
-                return response([
-                    'errors' => ['Either the entity was not found or you do not have permission to view it.'],
-                ], 404);
-            }
+        try {
+            $service = new GoogleClassroom($accessToken);
         } catch (\Google_Service_Exception $ex) {
-            // Could obtain error message like that.
-            // $response = json_decode($ex->getMessage());
-            // $response->error->message
             return response([
-                'errors' => ['Either the entity was not found or you do not have permission to view it.'],
-            ], 404);
+                'student' => null,
+                'teacher' => null,
+                'errors' => [['code' => 1, 'msg' => 'Failed to initialize gAPI service.']],
+            ], 500);
         } catch (\Exception $ex) {
             return response([
-                'errors' => [$ex->getMessage()],
+                'student' => null,
+                'teacher' => null,
+                'errors' => [['code' => 1, 'msg' => $ex->getMessage()]],
             ], 500);
         }
+
+        // Check if we're a teacher
+        // We return the teacher information only if this is true
+        try{
+            $teacher = $service->getCourseTeacher($courseId);
+        } catch (\Google_Service_Exception $ex) {
+            $teacher = false;
+        }
+
+        // Get submission
+        try {
+            $submissionRes = $service->getStudentSubmissionById($courseId, $gcClassworkId, $gcSubmissionId);
+            $studentId = $submissionRes->userId;
+        } catch (\Google_Service_Exception $ex) {
+            return response([
+                'teacher' => ($teacher) ? GCTeacherResource::make($teacher)->resolve() : false,
+                'student' => null,
+                'errors' => [['code' => 3, 'msg' => 'Student submission is not available.']],
+            ], 404);
+        }
+
+        // Get student and check enrollment
+        try {
+            $student = $service->getEnrolledStudent($courseId, $studentId);
+        } catch (\Google_Service_Exception $ex) {
+            return response([
+                'student' => null,
+                'teacher' => null,
+                'errors' => [['code' => 2, 'msg' => 'Student is not enrolled in this course.']],
+            ], 404);
+        }
+
+        // Check if the submission is turned In or not.
+        if (!$service->isAssignmentSubmitted($submissionRes->state)) {
+            return response([
+                'teacher' => ($teacher) ? GCTeacherResource::make($teacher)->resolve() : false,
+                'student' => GCStudentResource::make($student)->resolve(),
+                'errors' => [['code' => 3, 'msg' => 'The summary page is unavailable as the assignment is not turned in yet.']],
+            ], 404);
+        }
+
+        return response([
+            'student' => GCStudentResource::make($student)->resolve(),
+            'teacher' => ($teacher) ? GCTeacherResource::make($teacher)->resolve() : false,
+        ], 200);
     }
 
     /**

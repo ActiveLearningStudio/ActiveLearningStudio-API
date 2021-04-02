@@ -94,7 +94,7 @@ class TeamController extends Controller
     }
 
     /**
-     * Invite Team Member
+     * Invite Team
      *
      * Invite a team member while creating a team.
      *
