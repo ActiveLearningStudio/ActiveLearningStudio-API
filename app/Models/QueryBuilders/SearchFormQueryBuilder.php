@@ -254,7 +254,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (!empty($this->h5pLibraries)) {
-            $andQueries[] = [
+            $queries[] = [
                 'terms' => [
                     'h5p_library' => $this->h5pLibraries
                 ]
@@ -263,7 +263,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
 
         if (!empty($this->indexing)) {
             if (in_array('null', $this->indexing, true)) {
-                $andQueries[] = [
+                $queries[] = [
                     'bool' => [
                         'should' => [
                             [
@@ -284,7 +284,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                     ]
                 ];
             } else {
-                $andQueries[] = [
+                $queries[] = [
                     'terms' => [
                         'indexing' => $this->indexing
                     ]
