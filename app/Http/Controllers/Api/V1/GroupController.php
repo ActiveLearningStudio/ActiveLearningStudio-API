@@ -162,7 +162,7 @@ class GroupController extends Controller
         $group = $auth_user->groups()->create($data, ['role' => 'owner']);
 
         if ($group) {
-            $this->groupRepository->createGroup($group, $data);
+            $this->groupRepository->createGroup($suborganization, $group, $data);
 
             return response([
                 'group' => new GroupResource($this->groupRepository->getGroupDetail($group->id)),
@@ -627,6 +627,8 @@ class GroupController extends Controller
         $is_updated = $this->groupRepository->update($data, $group->id);
 
         if ($is_updated) {
+            $this->groupRepository->updateGroup($suborganization, $group, $data);
+
             return response([
                 'group' => new GroupResource($this->groupRepository->getGroupDetail($group->id)),
             ], 200);
