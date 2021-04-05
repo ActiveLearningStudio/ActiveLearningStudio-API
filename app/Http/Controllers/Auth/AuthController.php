@@ -318,7 +318,7 @@ class AuthController extends Controller
                     $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
                     if ($invited_users->isNotEmpty()) {
                         foreach ($invited_users as $invited_user) {
-                            $group = $this->groupRepository->find($invited_user->organization_id);
+                            $group = $this->groupRepository->find($invited_user->group_id);
                             if ($group) {
                                 $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
                                 $this->invitedGroupUserRepository->delete($user->email);
