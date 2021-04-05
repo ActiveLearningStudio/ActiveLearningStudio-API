@@ -67,7 +67,7 @@ class BrightcoveController extends Controller
             $user_data = null;
             $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
             return response(['h5p' => $h5p_data], 200);
-        }else {
+        } else {
             return response(['h5p' => null], 404);
         }
     }
