@@ -46,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //CurrikiGo integrations - Brightcove Player etc.
+        // CurrikiGo integrations - Brightcove Player etc.
         $this->mapApiGoIntegrationRoutes();
     }
 
