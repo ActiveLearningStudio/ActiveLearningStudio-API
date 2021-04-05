@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This File defines handlers for Google classroom.
+ * This File defines handlers for Brightcove.
  */
 
 namespace App\Http\Controllers\Api\V1;
@@ -13,9 +13,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 
 /**
- * @group 11. Google Classroom
  *
- * APIs for Google Classroom
+ * APIs for Brightcove
  */
 class BrightcoveController extends Controller
 {
@@ -27,7 +26,7 @@ class BrightcoveController extends Controller
     private $h5pContentRepository;
 
     /**
-     * Instantiate a GoogleClassroom instance.
+     * Instantiate a Brightcove repositories instance.
      *
      * @param H5pContentRepositoryInterface $h5pContentRepository
      */
@@ -37,7 +36,7 @@ class BrightcoveController extends Controller
     }
 
     /**
-     * Get H5P Resource Settings For Google Classroom
+     * Get H5P Resource Settings For Brightcove
      *
      *
      * @urlParam activity required The Id of a activity
