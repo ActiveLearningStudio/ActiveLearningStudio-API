@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
-    Route::group(['prefix' => 
-    'brightcove'], function () {
+    Route::group(['prefix' => 'brightcove'], function () {
         Route::get('{accountId}/{videoId}/h5p-resource-settings', 'BrightcoveController@getH5pResourceSettings');
     });
 });

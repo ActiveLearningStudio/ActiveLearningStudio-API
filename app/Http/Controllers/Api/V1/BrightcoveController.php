@@ -39,18 +39,15 @@ class BrightcoveController extends Controller
      * Get H5P Resource Settings For Brightcove
      *
      *
-     * @param account id for brightcove video
-     * @param video id for brightcove video
+     * @param int $accountId for brightcove video
+     * @param int $videoId for brightcove video
      *
      * @responseFile responses/h5p/h5p-resource-settings-open.json
      *
-     * @response 400 {
-     *   "errors": [
-     *     "Activity not found."
-     *   ]
+     * @response 404 {
+     *   "h5p": null
      * }
      *
-     * @param Activity $activity
      * @return Response
      */
     public function getH5pResourceSettings($accountId, $videoId)
