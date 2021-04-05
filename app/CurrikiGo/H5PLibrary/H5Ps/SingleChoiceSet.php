@@ -3,28 +3,14 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
+use App\CurrikiGo\H5PLibrary\H5PLibraryBase;
 
 /**
  * SingleChoiceSet H5P library
  */
-class SingleChoiceSet implements H5PLibraryInterface
+class SingleChoiceSet extends H5PLibraryBase implements H5PLibraryInterface
 {
-    /**
-     * Library content
-     *
-     */
-    private $content;
     
-    /**
-     * Initialize
-     *
-     * @param array $content
-     */
-    public function __construct(array $content)
-    {
-        $this->content = $content;
-    }
-
     /**
      * Build meta from content
      *
@@ -39,6 +25,7 @@ class SingleChoiceSet implements H5PLibraryInterface
                 foreach ($this->content['choices'] as $choice) {
                     $entry = [];
                     $entry['sub-content-id'] = $choice['subContentId'];
+                    $entry['relation-sub-content-id'] = $this->getRelationSubContentID($entry['sub-content-id']);
                     $entry['question'] = $choice['question'];
                     $entry['answers'] = $choice['answers'];
                     $meta['children'][] = $entry;

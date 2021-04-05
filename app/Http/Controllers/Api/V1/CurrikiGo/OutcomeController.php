@@ -222,8 +222,8 @@ class OutcomeController extends Controller
                     if ($h5pLib) {
                         $h5pMeta = $h5pLib->buildMeta();
                     }
-                    /*echo '<pre>';
-                    print_r($h5pMeta);
+                   /* echo '<pre>';
+                    echo(json_encode($h5pMeta));
                     exit;*/
                    
                     // UPDATE: We want to accumulate all responses, and each attempt is not a unique attempt anymore.
@@ -260,16 +260,30 @@ class OutcomeController extends Controller
                     $interacted = $service->getInteractedResultStatements($data);
                     print_r(array_keys($interacted));
                     if ($interacted) {
+                        $inconsistentKeys = [];
                         foreach ($interacted as $key => $record) {
-                            if (!in_array($key, $answeredIds)) {
+                            // Find if the key has a hash for description as well.
+                            $position = strpos($key, '::');
+                            if (!in_array($key, $answeredIds) || $position !== FALSE) {
                                 $summary = $service->getNonScoringStatementSummary($record);
                                 $summaryRes = new StudentResultResource($summary); 
                                 $nonScoringResponse[] = $summaryRes;
-                                $answeredIds[] = $key;
+                                $newKey = $key;
+                                if ($position !== FALSE) {
+                                    $key = substr($key, 0, $position);
+                                    $inconsistentKeys[] = $key;
+                                } else {
+                                    $answeredIds[] = $key;
+                                }
                                 recursive_array_search_insert($key, $h5pMeta, $summaryRes);
                             }
                         }
+                        if (!empty($inconsistentKeys)) {
+                            $answeredIds = array_merge($answeredIds, array_unique($inconsistentKeys));
+                        }
                     }
+                    print_r($answeredIds);
+                    
                     // Since we usually do not have ending-point for most non-scoring items, and 
                     // since normally the LRS will return the oldest statements first
                     // we want to reverse the order of the statements to show on the summary page

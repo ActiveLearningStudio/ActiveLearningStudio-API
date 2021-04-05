@@ -3,29 +3,15 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
+use App\CurrikiGo\H5PLibrary\H5PLibraryBase;
 use App\CurrikiGo\H5PLibrary\Helpers\H5PHelper;
 
 /**
  * Questionnaire H5P library
  */
-class Questionnaire implements H5PLibraryInterface
+class Questionnaire extends H5PLibraryBase implements H5PLibraryInterface
 {
-    /**
-     * Library content
-     *
-     */
-    private $content;
     
-    /**
-     * Initialize
-     *
-     * @param array $content
-     */
-    public function __construct(array $content)
-    {
-        $this->content = $content;
-    }
-
     /**
      * Build meta from content
      *
@@ -37,7 +23,7 @@ class Questionnaire implements H5PLibraryInterface
         if (!empty($this->content)) {
             if (isset($this->content['questionnaireElements']) && !empty($this->content['questionnaireElements'])) {
                 foreach ($this->content['questionnaireElements'] as $item) {
-                    $meta[] = H5PHelper::buildElement($item['library']);
+                    $meta[] = H5PHelper::buildElement($item['library'], $this->parent);
                 }
             }
         }

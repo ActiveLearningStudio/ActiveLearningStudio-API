@@ -3,28 +3,14 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
+use App\CurrikiGo\H5PLibrary\H5PLibraryBase;
 
 /**
  * StarRating H5P library
  */
-class StarRating implements H5PLibraryInterface
+class StarRating extends H5PLibraryBase implements H5PLibraryInterface
 {
-    /**
-     * Library content
-     *
-     */
-    private $content;
     
-    /**
-     * Initialize
-     *
-     * @param array $content
-     */
-    public function __construct(array $content)
-    {
-        $this->content = $content;
-    }
-
     /**
      * Build meta from content
      *

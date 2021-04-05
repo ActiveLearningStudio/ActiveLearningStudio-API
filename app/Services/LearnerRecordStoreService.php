@@ -350,7 +350,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     $objectId = $statement->getTarget()->getId();
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    $key = (!empty($parentSubContentId) ? $parentSubContentId . '-' . $h5pSubContentId : $h5pSubContentId);
+                    $key = (!empty($parentSubContentId) ? $parentSubContentId . '|' . $h5pSubContentId : $h5pSubContentId);
                     // If h5p interaction is PersonalityQuiz, then take title into account
                     if ($h5pInteraction === 'H5P.PersonalityQuiz-1.0') {
                         $target = $statement->getTarget();
@@ -363,7 +363,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                             $description = $definition->getDescription()->getNegotiatedLanguageString();
                             $description = strip_tags(html_entity_decode($description));
                             $descriptionMD5 = substr(md5($description), 0, 8);
-                            $key .= '-' . $descriptionMD5;
+                            $key .= '::' . $descriptionMD5;
                         }
                     }
 

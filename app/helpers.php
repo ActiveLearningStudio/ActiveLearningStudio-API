@@ -177,7 +177,7 @@ if (!function_exists('recursive_array_search')) {
 if (!function_exists('recursive_array_search_insert')) {
     function recursive_array_search_insert($value, &$node, $insert = '') {
         if (is_array($node)) {
-            if (isset($node['sub-content-id']) && $value === $node['sub-content-id']) {
+            if (isset($node['relation-sub-content-id']) && $value === $node['relation-sub-content-id']) {
                 if (!isset($node['answer'])) {
                     $node['answer'] = [];
                 }

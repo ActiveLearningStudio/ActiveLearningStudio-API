@@ -3,28 +3,14 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
+use App\CurrikiGo\H5PLibrary\H5PLibraryBase;
 
 /**
  * Summary H5P library
  */
-class Summary implements H5PLibraryInterface
+class Summary extends H5PLibraryBase implements H5PLibraryInterface
 {
-    /**
-     * Library content
-     *
-     */
-    private $content;
     
-    /**
-     * Initialize
-     *
-     * @param array $content
-     */
-    public function __construct(array $content)
-    {
-        $this->content = $content;
-    }
-
     /**
      * Build meta from content
      *
@@ -42,6 +28,8 @@ class Summary implements H5PLibraryInterface
                 foreach ($this->content['summaries'] as $summary) {
                     $entry = [];
                     $entry['sub-content-id'] = $summary['subContentId'];
+                    $entry['relation-sub-content-id'] = $this->getRelationSubContentID($summary['subContentId']);
+
                     if (isset($summary['summary'])) {
                         $entry['question'] = $summary['summary'];
                     }

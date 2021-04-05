@@ -33,12 +33,14 @@ class H5PHelper
      * Prepare element from content meta data
      * 
      * @param array $content The content array
+     * @param string $parent The parent subContentId
      * @return array
      */
-    public static function buildElement($content)
+    public static function buildElement($content, $parent = '')
     {
         $data = [];
         $data['sub-content-id'] = $content['subContentId'];
+        $data['relation-sub-content-id'] = ($parent ? $parent . '|' . $data['sub-content-id'] : $data['sub-content-id']); 
         $data['library'] = $content['library'];
         $data['content-type'] = $content['metadata']['contentType'];
         $data['title'] = (isset($content['metadata']['title']) ? $content['metadata']['title'] : $data['content-type']);

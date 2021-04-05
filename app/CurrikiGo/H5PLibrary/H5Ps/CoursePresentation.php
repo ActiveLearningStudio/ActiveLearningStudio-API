@@ -3,29 +3,15 @@
 namespace App\CurrikiGo\H5PLibrary\H5Ps;
 
 use App\CurrikiGo\H5PLibrary\H5PLibraryInterface;
+use App\CurrikiGo\H5PLibrary\H5PLibraryBase;
 use App\CurrikiGo\H5PLibrary\Helpers\H5PHelper;
 
 /**
  * CoursePresentation H5P library
  */
-class CoursePresentation implements H5PLibraryInterface
+class CoursePresentation extends H5PLibraryBase implements H5PLibraryInterface
 {
-    /**
-     * Library content
-     *
-     */
-    private $content;
     
-    /**
-     * Initialize
-     *
-     * @param array $content
-     */
-    public function __construct(array $content)
-    {
-        $this->content = $content;
-    }
-
     /**
      * Build meta from content
      *
@@ -54,7 +40,7 @@ class CoursePresentation implements H5PLibraryInterface
     {
         $data = [];
         foreach ($elements as $item) {
-            $element = H5PHelper::buildElement($item['action']);
+            $element = H5PHelper::buildElement($item['action'], $this->parent);
             $data[] = $element;
         }
         return $data;
