@@ -280,12 +280,6 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Team'
         ]);
 
-        DB::table('organization_permission_types')->insert([
-            'name' => 'team:request-indexing',
-            'display_name' => 'Request Team Indexing',
-            'feature' => 'Team'
-        ]);
-
         // Groups
         DB::table('organization_permission_types')->insert([
             'name' => 'group:edit',
@@ -350,12 +344,6 @@ class OrganizationPermissionTypeSeeder extends Seeder
         DB::table('organization_permission_types')->insert([
             'name' => 'group:remove-user',
             'display_name' => 'Remove Group User',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insert([
-            'name' => 'group:request-indexing',
-            'display_name' => 'Request Group Indexing',
             'feature' => 'Group'
         ]);
 
