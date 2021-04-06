@@ -54,7 +54,7 @@ class ActivityTypeController extends Controller
     }
 
     /**
-     * Get Activity Type
+     * Get Specified Activity Type
      *
      * Get the specified Activity Type data.
      *
@@ -73,7 +73,7 @@ class ActivityTypeController extends Controller
     }
 
     /**
-     * Create Activity Type
+     * Create New Activity Type
      *
      * Creates the new activity type in database.
      *
@@ -100,7 +100,7 @@ class ActivityTypeController extends Controller
     }
 
     /**
-     * Update Activity Type
+     * Update Specified Activity Type
      *
      * Updates the activity type in database.
      *

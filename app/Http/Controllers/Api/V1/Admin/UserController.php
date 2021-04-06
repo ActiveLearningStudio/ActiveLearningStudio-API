@@ -39,7 +39,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get All Users
+     * Get All Users List
      *
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      *
@@ -57,7 +57,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get User
+     * Get Specified User 
      *
      * Get the specified user data.
      *
@@ -103,7 +103,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update User
+     * Update Specified User
      *
      * Updates the user data in database.
      *
@@ -133,7 +133,7 @@ class UserController extends Controller
     }
 
     /**
-     * Delete User
+     * Delete Specified User
      *
      * Deletes the user record from database.
      *
