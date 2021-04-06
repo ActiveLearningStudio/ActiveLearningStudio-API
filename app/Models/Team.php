@@ -49,6 +49,14 @@ class Team extends Model
     }
 
     /**
+     * Get the organization of the team
+     */
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization', 'organization_id');
+    }
+
+    /**
      * Get the team's owner.
      *
      * @return object

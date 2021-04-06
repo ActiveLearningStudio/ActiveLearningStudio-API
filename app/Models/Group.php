@@ -30,11 +30,19 @@ class Group extends Model
     }
 
     /**
-     * Get the projects for the team
+     * Get the projects for the group
      */
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project', 'group_project')->withTimestamps();
+    }
+
+     /**
+     * Get the organization of the group
+     */
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization', 'organization_id');
     }
 
     /**

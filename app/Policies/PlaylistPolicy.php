@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Organization;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
 use App\Models\Project;
@@ -30,9 +31,9 @@ class PlaylistPolicy
      * @param Playlist $playlist
      * @return mixed
      */
-    public function view(User $user, Playlist $playlist)
+    public function view(User $user, Organization $organization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $playlist->project);
+        return $user->hasPermissionTo('playlist:view', $organization);
     }
 
     /**

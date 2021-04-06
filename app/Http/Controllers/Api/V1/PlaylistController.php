@@ -48,7 +48,7 @@ class PlaylistController extends Controller
         $this->activityRepository = $activityRepository;
 
         // $this->middleware('can:view,project');
-        $this->authorizeResource(Playlist::class, 'playlist');
+        // $this->authorizeResource(Playlist::class, 'playlist');
     }
 
     /**
@@ -136,6 +136,8 @@ class PlaylistController extends Controller
      */
     public function show(Project $project, Playlist $playlist)
     {
+        $this->authorize('view', [Playlist::class, $project->organization]);
+
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
