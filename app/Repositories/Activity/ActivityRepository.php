@@ -146,7 +146,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 ]
             ])
             ->organizationIds(Arr::get($data, 'organizationIds', []))
-            ->organizationVisibilityTypeIds([null, 4])
+            ->organizationVisibilityTypeIds(Arr::get($data, 'organizationVisibilityTypeIds', []))
             ->type(Arr::get($data, 'type', 0))
             ->startDate(Arr::get($data, 'startDate', 0))
             ->endDate(Arr::get($data, 'endDate', 0))

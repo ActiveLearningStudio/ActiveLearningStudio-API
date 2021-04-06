@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Organization;
 
 /**
  * @group 13. Search
@@ -55,7 +56,11 @@ class SearchController extends Controller
      */
     public function search(SearchRequest $searchRequest)
     {
-        $data                    = $searchRequest->validated();
+        $data = $searchRequest->validated();
+
+        $organization = Organization::find($data['organization_id']);
+        $this->authorize('view', $organization);
+
         $data['organizationIds'] = [$data['organization_id']];
 
         $projects = $this->activityRepository->searchForm($data);
@@ -100,9 +105,16 @@ class SearchController extends Controller
     public function advance(SearchRequest $searchRequest)
     {
         $data = $searchRequest->validated();
-        $data['indexing'] = [3];
+
+        $organization = Organization::find($data['organization_id']);
+        $this->authorize('view', $organization);
 
         $data['organizationIds'] = [$data['organization_id']];
+
+        if(!auth()->user()->hasPermissionTo('organization:view', $organization)) {
+            $data['organizationVisibilityTypeIds'] = [null, 4];
+            $data['indexing'] = [3];
+        }
 
         $results = $this->activityRepository->advanceSearchForm($data);
 
@@ -147,6 +159,10 @@ class SearchController extends Controller
     public function dashboard(SearchRequest $searchRequest)
     {
         $data = $searchRequest->validated();
+
+        $organization = Organization::find($data['organization_id']);
+        $this->authorize('view', $organization);
+
         $data['userIds'] = [auth()->user()->id];
 
         $data['organizationIds'] = [$data['organization_id']];
