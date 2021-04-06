@@ -55,7 +55,7 @@ class InviteToTeamNotification extends Notification
      * @return MailMessage
      */
     public function toMail($notifiable)
-    {dd($this->pageUrl . '/org/'.$this->team->organization->domain.'/teams/' . $this->team->id);
+    {
         return (new MailMessage)
             ->subject('Invited to the Team')
             ->line($this->sender->first_name . ' had invited you to in the ' . $this->team->name.' team')
