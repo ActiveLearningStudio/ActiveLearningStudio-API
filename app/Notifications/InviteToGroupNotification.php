@@ -56,16 +56,11 @@ class InviteToGroupNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        // if (static::$toMailCallback) {
-        //     return call_user_func(static::$toMailCallback, $notifiable, $this->token);
-        // }
-
         return (new MailMessage)
             ->subject('Invite to the Group')
             ->line($this->sender->first_name . ' has invited you to join the group ' . $this->group->name)
             ->line($this->note)
-            // ->action('Join the Team', $this->pageUrl . '?token=' . $this->token);
-            ->action('Join the Group', $this->pageUrl . '/groups/' . $this->group->id . '/projects');
+            ->action('Join the Group', $this->pageUrl . '/org/'.$this->group->organization->domain.'/groups/' . $this->group->id );
     }
 
     /**
