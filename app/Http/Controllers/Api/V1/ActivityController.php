@@ -78,7 +78,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * Upload thumbnail
+     * Upload Activity thumbnail
      *
      * Upload thumbnail image for a activity
      *
