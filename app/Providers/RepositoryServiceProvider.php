@@ -16,6 +16,8 @@ use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Repositories\H5pLibrary\H5pLibraryRepository;
 use App\Repositories\H5pLibrary\H5pLibraryRepositoryInterface;
+use App\Repositories\H5pContent\H5pContentRepository;
+use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use App\Repositories\Metrics\MetricsRepository;
 use App\Repositories\Metrics\MetricsRepositoryInterface;
 use App\Repositories\OrganizationType\OrganizationTypeRepository;
@@ -71,6 +73,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LmsSettingRepositoryInterface::class, LmsSettingRepository::class);
         $this->app->bind(H5pElasticsearchFieldRepositoryInterface::class, H5pElasticsearchFieldRepository::class);
         $this->app->bind(H5pLibraryRepositoryInterface::class, H5pLibraryRepository::class);
+        $this->app->bind(H5pContentRepositoryInterface::class, H5pContentRepository::class);
         $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
         $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
         $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
