@@ -86,7 +86,6 @@ class LmsController extends Controller
             'private' => 'integer',
             'userEmail' => 'string|required|max:255',
             'ltiClientId' => 'string|required',
-            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ]);
 
         return response([
