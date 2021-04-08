@@ -66,6 +66,8 @@ class PlaylistController extends Controller
      */
     public function index(Project $project)
     {
+        $this->authorize('view', [Playlist::class, $project->organization]);
+
         return response([
             'playlists' => PlaylistResource::collection($project->playlists()->orderBy('order')->get()),
         ], 200);
@@ -95,6 +97,8 @@ class PlaylistController extends Controller
      */
     public function store(PlaylistRequest $playlistRequest, Project $project)
     {
+        $this->authorize('create', [Playlist::class, $project->organization]);
+
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
 
@@ -264,6 +268,8 @@ class PlaylistController extends Controller
      */
     public function update(PlaylistRequest $playlistRequest, Project $project, Playlist $playlist)
     {
+        $this->authorize('update', [Playlist::class, $project->organization]);
+
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
@@ -317,6 +323,8 @@ class PlaylistController extends Controller
      */
     public function destroy(Project $project, Playlist $playlist)
     {
+        $this->authorize('delete', [Playlist::class, $project->organization]);
+
         if ($playlist->project_id !== $project->id) {
             return response([
                 'errors' => ['Invalid project or playlist id.'],
@@ -361,6 +369,7 @@ class PlaylistController extends Controller
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
+        $this->authorize('clone', [Playlist::class, $project->organization]);
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($playlist->project_id == $project->id);

@@ -58,7 +58,7 @@ class InviteToTeamNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Invited to the Team')
-            ->line($this->sender->first_name . ' had invited you to in the ' . $this->team->name.' team')
+            ->line($this->sender->first_name . ' had invited you in the ' . $this->team->name.' team')
             ->line($this->note)
             ->action('View the Team', $this->pageUrl . '/org/'.$this->team->organization->domain.'/teams/' . $this->team->id);
     }

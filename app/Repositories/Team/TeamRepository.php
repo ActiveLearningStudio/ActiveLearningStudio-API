@@ -356,6 +356,24 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
     /**
+     * Remove Team invited user
+     *
+     * @param $team
+     * @param $email
+     */
+    public function removeInvitedUser($team, $email)
+    {
+        $team = $this->model->find($team->id);
+
+        if ($team) {
+                DB::table('invited_team_users')
+                    ->where('team_id', $team->id)
+                    ->where('invited_email', $email)
+                    ->delete();
+        }
+    }
+
+    /**
      * Remove Team / User / Project relationship
      *
      * @param $team

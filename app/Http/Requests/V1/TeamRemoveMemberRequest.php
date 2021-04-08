@@ -25,6 +25,7 @@ class TeamRemoveMemberRequest extends FormRequest
     {
         return [
             'id' => 'required|exists:users,id',
+            'email' => 'sometimes|exists:invited_team_users,invited_email',
         ];
     }
 }

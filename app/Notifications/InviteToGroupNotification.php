@@ -57,10 +57,10 @@ class InviteToGroupNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Invite to the Group')
-            ->line($this->sender->first_name . ' has invited you to join the group ' . $this->group->name)
+            ->subject('Invited to the Group')
+            ->line($this->sender->first_name . ' has invited you in the group ' . $this->group->name.' group')
             ->line($this->note)
-            ->action('Join the Group', $this->pageUrl . '/org/'.$this->group->organization->domain.'/groups/' . $this->group->id );
+            ->action('View the Group', $this->pageUrl . '/org/'.$this->group->organization->domain.'/groups/' . $this->group->id );
     }
 
     /**

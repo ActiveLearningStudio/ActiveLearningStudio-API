@@ -340,10 +340,17 @@ class TeamController extends Controller
         if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id) {
             $user = $this->userRepository->find($data['id']);
 
+            if (isset ($data['email']) && $data['email'] != '') {
+                // delete invited outside user if not registered
+                $this->teamRepository->removeInvitedUser($team, $data['email']);
+            }
+
             if ($user) {
                 $team->users()->detach($user);
 
                 $this->teamRepository->removeTeamProjectUser($team, $user);
+
+
 
                 // TODO: need to add remove notification
                 // $user->notify(new InviteToTeamNotification($auth_user, $team));
