@@ -63,6 +63,14 @@ interface GroupRepositoryInterface extends EloquentRepositoryInterface
     public function removeGroupProjectUser($group, $user);
 
     /**
+     * Remove invited user
+     *
+     * @param $group
+     * @param $email
+     */
+    public function removeInvitedUser($group, $email);
+
+    /**
      * Remove Group / User / Project relationship
      *
      * @param $group

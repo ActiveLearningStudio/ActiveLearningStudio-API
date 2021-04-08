@@ -21,7 +21,7 @@ class ProjectPolicy
      */
     public function viewAny(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
+        return $user->hasPermissionTo('project:view', $suborganization);
     }
 
     /**
@@ -34,7 +34,7 @@ class ProjectPolicy
      */
     public function view(User $user, Organization $suborganization)
     {
-       return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
+        return $user->hasPermissionTo('project:view', $suborganization);
     }
 
     /**
@@ -46,7 +46,7 @@ class ProjectPolicy
      */
     public function create(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2]);
+        return $user->hasPermissionTo('project:create', $suborganization);
     }
 
     /**
@@ -58,7 +58,7 @@ class ProjectPolicy
      */
     public function update(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2]);
+        return $user->hasPermissionTo('project:edit', $suborganization);
     }
 
     /**
@@ -70,7 +70,7 @@ class ProjectPolicy
      */
     public function share(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2]);
+        return $user->hasPermissionTo('project:share', $suborganization);
     }
 
     /**
@@ -82,7 +82,7 @@ class ProjectPolicy
      */
     public function clone(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+        return $user->hasPermissionTo('project:clone', $suborganization);
     }
 
     /**
@@ -94,7 +94,7 @@ class ProjectPolicy
      */
     public function favorite(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+        return $user->hasPermissionTo('project:favorite', $suborganization);
     }
 
     /**
@@ -106,7 +106,7 @@ class ProjectPolicy
      */
     public function recent(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+        return $user->hasPermissionTo('project:recent', $suborganization);
     }
 
     /**
@@ -118,7 +118,7 @@ class ProjectPolicy
      */
     public function uploadThumb(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+        return $user->hasPermissionTo('project:uploadThumb', $suborganization);
     }
 
     /**
@@ -128,21 +128,21 @@ class ProjectPolicy
      * @param Organization $suborganization
      * @return mixed
      */
-    public function mark_favorite(User $user, Organization $suborganization)
+    public function markFavorite(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+        return $user->hasPermissionTo('project:favorite', $suborganization);
     }
 
     /**
      * Determine whether the user can remove share the project.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function removeShare(User $user, Project $project)
+    public function removeShare(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $project);
+        return $user->hasPermissionTo('project:share', $suborganization);
     }
 
     /**
@@ -154,7 +154,7 @@ class ProjectPolicy
      */
     public function delete(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1]);
+        return $user->hasPermissionTo('project:delete', $suborganization);
     }
 
     /**
@@ -181,50 +181,4 @@ class ProjectPolicy
         return $user->isAdmin();
     }
 
-    private function hasPermission(User $user, Project $project, $role = null)
-    {
-        if (!($project->organization_id == $user->default_organization)) {
-            return false;
-        }
-
-        $project_users = $project->users;
-        foreach ($project_users as $project_user) {
-            if ($user->id === $project_user->id && (!$role || $role === $project_user->pivot->role)) {
-                return true;
-            }
-        }
-
-        $project_teams = $project->teams;
-        foreach ($project_teams as $project_team) {
-            $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
-                ->where('project_id', $project->id)
-                ->where('user_id', $user->id)
-                ->first();
-            if ($team_project_user) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get user default organization role
-     *
-     * @param  User  $user
-     * @param  Organization  $organization
-     * @return mixed
-     */
-    private function getUserDefaultOrganizationRole(User $user, Organization  $organization)
-    {
-        $defaultOrganization = $user->organizations()->wherePivot('organization_id', $organization->id)->first();
-
-        if ($defaultOrganization) {
-            return $defaultOrganization->pivot->organization_role_type_id;
-        } else if ($organization->parent) {
-            return $this->getUserDefaultOrganizationRole($user, $organization->parent);
-        }
-
-        return 0;
-    }
 }

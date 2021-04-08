@@ -30,6 +30,14 @@ class Group extends Model
     }
 
     /**
+     * Get the invited users for the group
+     */
+    public function invitedUsers()
+    {
+        return $this->hasMany('App\Models\InvitedGroupUser', 'group_id');
+    }
+
+    /**
      * Get the projects for the group
      */
     public function projects()

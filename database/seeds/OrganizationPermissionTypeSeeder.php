@@ -133,6 +133,18 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Project'
         ]);
 
+        DB::table('organization_permission_types')->insert([
+            'name' => 'project:uploadThumb',
+            'display_name' => 'Upload Project Thumb',
+            'feature' => 'Project'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'project:recent',
+            'display_name' => 'View Recent project',
+            'feature' => 'Project'
+        ]);
+
         // Playlists
         DB::table('organization_permission_types')->insert([
             'name' => 'playlist:edit',

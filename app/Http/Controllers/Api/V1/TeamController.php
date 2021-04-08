@@ -340,8 +340,8 @@ class TeamController extends Controller
         if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id) {
             $user = $this->userRepository->find($data['id']);
 
-            if (isset ($data['email']) && $data['email'] != '') {
-                // delete invited outside user if not registered
+            // delete invited outside user if not registered
+            if (isset($data['email']) && $data['email'] != '') {
                 $this->teamRepository->removeInvitedUser($team, $data['email']);
             }
 

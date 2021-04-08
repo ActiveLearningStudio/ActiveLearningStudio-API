@@ -355,6 +355,24 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     }
 
     /**
+     * Remove invited user
+     *
+     * @param $group
+     * @param $email
+     */
+    public function removeInvitedUser($group, $email)
+    {
+        $group = $this->model->find($group->id);
+
+        if ($group) {
+                DB::table('invited_group_users')
+                    ->where('group_id', $group->id)
+                    ->where('invited_email', $email)
+                    ->delete();
+        }
+    }
+
+    /**
      * Remove Group / User / Project relationship
      *
      * @param $group

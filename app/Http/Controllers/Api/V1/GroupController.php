@@ -339,6 +339,11 @@ class GroupController extends Controller
         if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id) {
             $user = $this->userRepository->find($data['id']);
 
+            // delete invited outside user if not registered
+            if (isset($data['email']) && $data['email'] != '') {
+                $this->groupRepository->removeInvitedUser($group, $data['email']);
+            }
+
             if ($user) {
                 $result = $group->users()->detach($user);
                 if(!$result)

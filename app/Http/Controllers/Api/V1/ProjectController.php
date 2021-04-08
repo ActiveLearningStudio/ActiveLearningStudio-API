@@ -594,7 +594,7 @@ class ProjectController extends Controller
      */
     public function favorite(Request $request, Organization $suborganization, Project $project)
     {
-        $this->authorize('mark_favorite', [Project::class, $suborganization]);
+        $this->authorize('markFavorite', [Project::class, $suborganization]);
 
         $updateStatus = $this->projectRepository->favoriteUpdate(auth()->user(), $project, $suborganization->id);
 
