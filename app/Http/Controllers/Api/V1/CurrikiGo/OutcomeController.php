@@ -8,7 +8,7 @@ use App\Http\Resources\V1\CurrikiGo\StudentResultResource;
 use Illuminate\Http\Request;
 use App\Services\LearnerRecordStoreService;
 use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
-use Djoudi\LaravelH5p\Eloquents\H5PContent;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
 
 /**
  * @group 15. CurrikiGo Outcome
@@ -205,8 +205,8 @@ class OutcomeController extends Controller
                     // Extract information from object.definition.extensions
                     if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                         $h5pContentId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_LOCAL_CONTENT_ID);
-                        //$h5pContent = H5PContent::findOrFail($h5pContentId);
-                        $h5pContent = H5PContent::findOrFail(19591);//19581);//7);//38074); //19590
+                        $h5pContent = H5pContent::findOrFail($h5pContentId);
+                        //$h5pContent = H5pContent::findOrFail(19591);//19581);//7);//38074); //19590
                         /*var_dump($h5pContent);
                         exit;
                         print_r($h5pContent->parameters);
@@ -258,7 +258,8 @@ class OutcomeController extends Controller
                     // Get Non-scoring Interactions
                     $nonScoringResponse = [];
                     $interacted = $service->getInteractedResultStatements($data);
-                    print_r(array_keys($interacted));
+                    $interactedIds = [];
+                    //print_r(array_keys($interacted));
                     if ($interacted) {
                         $inconsistentKeys = [];
                         foreach ($interacted as $key => $record) {
@@ -273,16 +274,19 @@ class OutcomeController extends Controller
                                     $key = substr($key, 0, $position);
                                     $inconsistentKeys[] = $key;
                                 } else {
-                                    $answeredIds[] = $key;
+                                    $interactedIds[] = $key;
                                 }
                                 recursive_array_search_insert($key, $h5pMeta, $summaryRes);
                             }
                         }
                         if (!empty($inconsistentKeys)) {
-                            $answeredIds = array_merge($answeredIds, array_unique($inconsistentKeys));
+                            $interactedIds = array_merge($interactedIds, array_unique($inconsistentKeys));
+                        }
+                        if (!empty($interactedIds)) {
+                            $answeredIds = array_merge($interactedIds, array_unique($answeredIds));
                         }
                     }
-                    print_r($answeredIds);
+                    //print_r($answeredIds);
                     
                     // Since we usually do not have ending-point for most non-scoring items, and 
                     // since normally the LRS will return the oldest statements first
