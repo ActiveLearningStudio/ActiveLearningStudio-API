@@ -175,7 +175,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function getProjectForPreview(Project $project)
     {
         $project = Project::where(['id' => $project->id])
-            ->with('playlists.activities')
+            ->with(['playlists' => function ($query) {
+                $query->orderBy('order');
+            },
+            'playlists.activities' => function ($query) {
+                $query->orderBy('order');
+            }])
             ->first();
 
         $proj = [];
