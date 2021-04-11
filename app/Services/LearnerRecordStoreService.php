@@ -300,6 +300,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     public function getAttemptedStatements(array $data)
     {
         $attempted = $this->getStatementsByVerb('attempted', $data);
+        // Get all interactions list that are non-scoring.
+        $notAllowedInteractions = $this->allowedInteractionsList();
         $filtered = [];
         if ($attempted) {
             // iterate and find the statements that have results.
@@ -307,7 +309,14 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 // Get Parent context
                 $contextActivities = $statement->getContext()->getContextActivities();
                 $parent = $contextActivities->getParent();
-                
+                $category = $contextActivities->getCategory();
+                $categoryId = '';
+                $h5pInteraction = '';
+                if (!empty($category)) {
+                    $categoryId = end($category)->getId();
+                    $h5pInteraction = explode("/", $categoryId);
+                    $h5pInteraction = end($h5pInteraction);
+                }
                 if (!empty($parent)) {
                     $objectId = $statement->getTarget()->getId();
                     $isAggregateH5P = $this->isAggregateH5P($data, $objectId); 
@@ -315,7 +324,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
                     $parentSubContentId = $this->getParentSubContentId($parent);
                     $key = $this->joinParentChildSubContentIds($parentSubContentId, $h5pSubContentId);
-                    if (!array_key_exists($key, $filtered) && !$isAggregateH5P) {
+                    if (!array_key_exists($key, $filtered) && !in_array($h5pInteraction, $notAllowedInteractions) && !$isAggregateH5P ) {
                         $filtered[$key] = $statement;
                     }
                 }
