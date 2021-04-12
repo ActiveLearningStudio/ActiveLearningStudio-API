@@ -40,8 +40,11 @@ class CoursePresentation extends H5PLibraryBase implements H5PLibraryInterface
     {
         $data = [];
         foreach ($elements as $item) {
-            $element = H5PHelper::buildElement($item['action'], $this->parent);
-            $data[] = $element;
+            // Not all elements have 'action' property, e.g., Go to Slide
+            if (isset($item['action'])) {
+                $element = H5PHelper::buildElement($item['action'], $this->parent);
+                $data[] = $element;
+            }
         }
         return $data;
     }
