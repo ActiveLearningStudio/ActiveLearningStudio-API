@@ -175,9 +175,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::any('h5p/ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
     });
     // Outcome
-    Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultSummary');
-    Route::post('outcome/summary-grouped', 'CurrikiGo\OutcomeController@getStudentResultGroupedSummary');
-    // Outcome
+    Route::post('outcome/summary', 'CurrikiGo\OutcomeController@getStudentResultGroupedSummary');
+    // XAPI extract
     Route::get('xapi-extract', 'CurrikiGo\ExtractXAPIJSONController@runJob');
 
     Route::get('error', 'ErrorController@show')->name('api/error');

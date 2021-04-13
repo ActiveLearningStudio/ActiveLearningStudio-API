@@ -148,6 +148,7 @@ class GoogleClassroomController extends Controller
 	 *
      * @urlParam project required The Id of a project. Example: 9
      * @bodyParam course_id string Id of an existing Google Classroom course. Example: 123
+     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
      *
      * @responseFile responses/google-classroom/google-classroom-project.json
      *

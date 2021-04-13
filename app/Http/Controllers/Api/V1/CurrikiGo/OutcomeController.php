@@ -34,6 +34,7 @@ class OutcomeController extends Controller
      *
      * @param GetStudentResultRequest $studentResultRequest
      * @return Response
+     * @deprecated
      */
     public function getStudentResultSummary(GetStudentResultRequest $studentResultRequest)
     {
@@ -159,7 +160,7 @@ class OutcomeController extends Controller
      *
      * @param GetStudentResultRequest $studentResultRequest
      *
-     * @responseFile responses/outcome/student-result-summary.json
+     * @responseFile responses/outcome/student-result-summary-grouped.json
      *
      * @response 404 {
      *   "errors": [
@@ -206,11 +207,6 @@ class OutcomeController extends Controller
                     if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                         $h5pContentId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_LOCAL_CONTENT_ID);
                         $h5pContent = H5pContent::findOrFail($h5pContentId);
-                        //$h5pContent = H5pContent::findOrFail(19591);//19581);//7);//38074); //19590
-                        /*var_dump($h5pContent);
-                        exit;
-                        print_r($h5pContent->parameters);
-                        exit;*/
                     }
                 }
                 
@@ -222,9 +218,6 @@ class OutcomeController extends Controller
                     if ($h5pLib) {
                         $h5pMeta = $h5pLib->buildMeta();
                     }
-                   /* echo '<pre>';
-                    echo(json_encode($h5pMeta));
-                    exit;*/
                    
                     // UPDATE: We want to accumulate all responses, and each attempt is not a unique attempt anymore.
                     // So, we just check for an attempt, and then keep the search by submission id.
@@ -286,16 +279,7 @@ class OutcomeController extends Controller
                             $answeredIds = array_merge($interactedIds, array_unique($answeredIds));
                         }
                     }
-                    //print_r($answeredIds);
                     
-                    // Since we usually do not have ending-point for most non-scoring items, and 
-                    // since normally the LRS will return the oldest statements first
-                    // we want to reverse the order of the statements to show on the summary page
-                    // so it's first in, first out.
-                    if (!empty($nonScoringResponse)) {
-                        $nonScoringResponse = array_reverse($nonScoringResponse);
-                    }
-
                     // Check for any aggregates completed statements, before finalizing skipped
                     // This happens for Quesionnaire, Interactive Video, Course Presentation
                     $aggregateCompleted = $service->getAggregatesCompletedStatements($data);
@@ -324,15 +308,8 @@ class OutcomeController extends Controller
                         }
                     }
                    
-                    // We'll use the ending-point for ordering the final results.
-                    usort($response, function($a, $b) {
-                        return $a['ending-point'] <=> $b['ending-point'];
-                    });
-
                     return response([
-                        'summary' => $response,
-                        'non-scoring' => $nonScoringResponse,
-                        'h5p' => $h5pMeta
+                        'summary' => $h5pMeta
                     ], 200);
                 } else {
                     return response([
@@ -350,7 +327,4 @@ class OutcomeController extends Controller
             ], 500);
         }
     }
-
-    
-
 }
