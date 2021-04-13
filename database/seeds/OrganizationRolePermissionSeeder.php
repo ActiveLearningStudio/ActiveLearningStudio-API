@@ -28,6 +28,13 @@ class OrganizationRolePermissionSeeder extends Seeder
                     'organization_role_type_id' => $courseCreatorRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
                 ]);
+
+                $selfRegisteredRole = DB::table('organization_role_types')->where('name', 'self_registered')->first();
+
+                DB::table('organization_role_permissions')->insert([
+                    'organization_role_type_id' => $selfRegisteredRole->id,
+                    'organization_permission_type_id' => $organizationPermissionType->id
+                ]);
             }
 
 

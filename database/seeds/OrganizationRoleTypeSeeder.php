@@ -25,5 +25,10 @@ class OrganizationRoleTypeSeeder extends Seeder
             'name' => 'member',
             'display_name' => 'Member'
         ]);
+
+        DB::table('organization_role_types')->insert([
+            'name' => 'self_registered',
+            'display_name' => 'Self Registered'
+        ]);
     }
 }
