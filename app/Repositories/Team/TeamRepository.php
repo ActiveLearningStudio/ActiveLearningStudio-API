@@ -13,8 +13,6 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
-//use Gnello\Mattermost\Laravel\Facades\Mattermost;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -25,7 +23,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     private $userRepository;
     private $projectRepository;
     private $invitedTeamUserRepository;
-    private $matDriver;
     private $organizationRepository;
 
     /**
@@ -51,8 +48,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $this->projectRepository = $projectRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
         $this->organizationRepository = $organizationRepository;
-
-//        $this->matDriver = Mattermost::server('default');
     }
 
     /**

@@ -16,14 +16,11 @@ use App\Http\Resources\V1\TeamResource;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
-use App\Notifications\InviteToTeamNotification;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
-use App\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 
 /**
  * @group 14. Team
@@ -37,8 +34,6 @@ class TeamController extends Controller
     private $teamRepository;
     private $userRepository;
     private $projectRepository;
-    private $invitedTeamUserRepository;
-
     /**
      * TeamController constructor.
      *
@@ -50,16 +45,12 @@ class TeamController extends Controller
     public function __construct(
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
-        ProjectRepositoryInterface $projectRepository,
-        InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+        ProjectRepositoryInterface $projectRepository
     )
     {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
-        $this->invitedTeamUserRepository = $invitedTeamUserRepository;
-
-        // $this->authorizeResource(Team::class, 'teams');
     }
 
     /**

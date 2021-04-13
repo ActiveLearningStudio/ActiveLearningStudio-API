@@ -13,8 +13,6 @@ use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
-//use Gnello\Mattermost\Laravel\Facades\Mattermost;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -25,7 +23,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     private $userRepository;
     private $projectRepository;
     private $invitedGroupUserRepository;
-    private $matDriver;
     private $organizationRepository;
 
     /**
@@ -52,7 +49,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $this->invitedGroupUserRepository = $invitedGroupUserRepository;
         $this->organizationRepository = $organizationRepository;
 
-//        $this->matDriver = Mattermost::server('default');
     }
 
     /**

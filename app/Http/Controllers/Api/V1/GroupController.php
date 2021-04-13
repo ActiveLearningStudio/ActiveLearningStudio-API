@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\GroupCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Group\GroupAddMemberRequest;
 use App\Http\Requests\V1\Group\GroupAddProjectRequest;
@@ -12,21 +11,16 @@ use App\Http\Requests\V1\Group\GroupInviteRequest;
 use App\Http\Requests\V1\Group\GroupRemoveMemberRequest;
 use App\Http\Requests\V1\Group\GroupRemoveProjectRequest;
 use App\Http\Requests\V1\Group\GroupUpdateRequest;
-use App\Http\Requests\V1\Group\InviteRequest;
 use App\Http\Requests\V1\Group\GroupRequest;
 use App\Http\Resources\V1\GroupResource;
 use App\Models\Project;
 use App\Models\Group;
 use App\Models\Organization;
-use App\Notifications\InviteToGroupNotification;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
-use App\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @group 14. Group
@@ -40,7 +34,6 @@ class GroupController extends Controller
     private $groupRepository;
     private $userRepository;
     private $projectRepository;
-    private $invitedGroupUserRepository;
 
     /**
      * GroupController constructor.
@@ -53,16 +46,12 @@ class GroupController extends Controller
     public function __construct(
         GroupRepositoryInterface $groupRepository,
         UserRepositoryInterface $userRepository,
-        ProjectRepositoryInterface $projectRepository,
-        InvitedGroupUserRepositoryInterface $invitedGroupUserRepository
+        ProjectRepositoryInterface $projectRepository
     )
     {
         $this->groupRepository = $groupRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
-        $this->invitedGroupUserRepository = $invitedGroupUserRepository;
-
-        // $this->authorizeResource(Group::class, 'groups');
     }
 
     /**
