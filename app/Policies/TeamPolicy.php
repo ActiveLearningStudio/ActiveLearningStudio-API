@@ -21,7 +21,7 @@ class TeamPolicy
      */
     public function viewAny(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
+        return $user->hasPermissionTo('team:view', $suborganization);
     }
 
     /**
@@ -33,7 +33,7 @@ class TeamPolicy
      */
     public function view(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,2, 3]);
+        return $user->hasPermissionTo('team:view', $suborganization);
     }
 
     /**
@@ -44,7 +44,7 @@ class TeamPolicy
      */
     public function create(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,3]);
+        return $user->hasPermissionTo('team:create', $suborganization);
     }
 
     /**
@@ -56,7 +56,7 @@ class TeamPolicy
      */
     public function update(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,3]);
+        return $user->hasPermissionTo('team:edit', $suborganization);
     }
 
     /**
@@ -68,7 +68,7 @@ class TeamPolicy
      */
     public function share(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1]);
+        return $user->hasPermissionTo('team:share', $suborganization);
     }
 
     /**
@@ -80,7 +80,7 @@ class TeamPolicy
      */
     public function delete(User $user,  Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 3]);
+        return $user->hasPermissionTo('team:delete', $suborganization);
     }
 
     /**

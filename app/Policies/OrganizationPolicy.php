@@ -19,7 +19,7 @@ class OrganizationPolicy
      */
     public function viewAny(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2, 3]);
+        return $user->hasPermissionTo('organization:view', $organization);
     }
 
     /**
@@ -43,7 +43,7 @@ class OrganizationPolicy
      */
     public function create(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
+        return $user->hasPermissionTo('organization:create', $organization);
     }
 
     /**
@@ -55,7 +55,7 @@ class OrganizationPolicy
      */
     public function uploadThumb(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
+        return $user->hasPermissionTo('organization:upload-thumb', $organization);
     }
 
     /**
@@ -67,7 +67,7 @@ class OrganizationPolicy
      */
     public function viewMemberOptions(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
+        return $user->hasPermissionTo('organization:view', $organization);
     }
 
     /**
@@ -79,7 +79,7 @@ class OrganizationPolicy
      */
     public function addUser(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
+        return $user->hasPermissionTo('organization:add-user', $organization);
     }
 
     /**
@@ -91,7 +91,7 @@ class OrganizationPolicy
      */
     public function addRole(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
+        return $user->hasPermissionTo('organization:add-role', $organization);
     }
 
     /**
@@ -103,7 +103,7 @@ class OrganizationPolicy
      */
     public function inviteMembers(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
+        return $user->hasPermissionTo('organization:invite-members', $organization);
     }
 
     /**
@@ -115,7 +115,7 @@ class OrganizationPolicy
      */
     public function updateUser(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
+        return $user->hasPermissionTo('organization:update-user', $organization);
     }
 
     /**
@@ -127,7 +127,7 @@ class OrganizationPolicy
      */
     public function deleteUser(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
+        return $user->hasPermissionTo('organization:delete-user', $organization);
     }
 
     /**
@@ -139,7 +139,7 @@ class OrganizationPolicy
      */
     public function viewAnyUser(User $user, Organization $organization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $organization), [1, 2]);
+        return $user->hasPermissionTo('organization:view-user', $organization);
     }
 
     /**
@@ -151,7 +151,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
+        return $user->hasPermissionTo('organization:update', $organization);
     }
 
     /**
@@ -163,7 +163,7 @@ class OrganizationPolicy
      */
     public function delete(User $user, Organization $organization)
     {
-        return $this->getUserDefaultOrganizationRole($user, $organization) == 1;
+        return $user->hasPermissionTo('organization:delete', $organization);
     }
 
     /**

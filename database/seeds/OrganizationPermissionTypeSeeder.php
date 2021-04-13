@@ -78,6 +78,12 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Organization'
         ]);
 
+        DB::table('organization_permission_types')->insert([
+            'name' => 'organization:upload-thumb',
+            'display_name' => 'upload Thumb',
+            'feature' => 'Organization'
+        ]);
+
         // Projects
         DB::table('organization_permission_types')->insert([
             'name' => 'project:edit',
@@ -134,7 +140,7 @@ class OrganizationPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_permission_types')->insert([
-            'name' => 'project:uploadThumb',
+            'name' => 'project:upload-thumb',
             'display_name' => 'Upload Project Thumb',
             'feature' => 'Project'
         ]);
@@ -292,6 +298,12 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Team'
         ]);
 
+        DB::table('organization_permission_types')->insert([
+            'name' => 'team:share',
+            'display_name' => 'Share Team',
+            'feature' => 'Team'
+        ]);
+
         // Groups
         DB::table('organization_permission_types')->insert([
             'name' => 'group:edit',
@@ -356,6 +368,12 @@ class OrganizationPermissionTypeSeeder extends Seeder
         DB::table('organization_permission_types')->insert([
             'name' => 'group:remove-user',
             'display_name' => 'Remove Group User',
+            'feature' => 'Group'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'group:share',
+            'display_name' => 'Share Group',
             'feature' => 'Group'
         ]);
 

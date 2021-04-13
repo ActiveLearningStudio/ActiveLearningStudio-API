@@ -21,7 +21,7 @@ class GroupPolicy
      */
     public function viewAny(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
+        return $user->hasPermissionTo('group:view', $suborganization);
     }
 
     /**
@@ -33,7 +33,7 @@ class GroupPolicy
      */
     public function view(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1, 2, 3]);
+        return $user->hasPermissionTo('group:view', $suborganization);
     }
 
     /**
@@ -44,7 +44,7 @@ class GroupPolicy
      */
     public function create(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,2]);
+        return $user->hasPermissionTo('group:create', $suborganization);
     }
 
     /**
@@ -56,7 +56,7 @@ class GroupPolicy
      */
     public function update(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1,2]);
+        return $user->hasPermissionTo('group:update', $suborganization);
     }
 
     /**
@@ -68,7 +68,7 @@ class GroupPolicy
      */
     public function share(User $user, Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1]);
+        return $user->hasPermissionTo('group:share', $suborganization);
     }
 
     /**
@@ -80,7 +80,7 @@ class GroupPolicy
      */
     public function delete(User $user,  Organization $suborganization)
     {
-        return in_array($this->getUserDefaultOrganizationRole($user, $suborganization), [1]);
+        return $user->hasPermissionTo('group:delete', $suborganization);
     }
 
     /**
@@ -95,23 +95,4 @@ class GroupPolicy
         return $user->isAdmin();
     }
 
-    /**
-     * Get user default organization role
-     *
-     * @param  User  $user
-     * @param  Organization  $organization
-     * @return mixed
-     */
-    private function getUserDefaultOrganizationRole(User $user, Organization  $organization)
-    {
-        $defaultOrganization = $user->organizations()->wherePivot('organization_id', $organization->id)->first();
-
-        if ($defaultOrganization) {
-            return $defaultOrganization->pivot->organization_role_type_id;
-        } else if ($organization->parent) {
-            return $this->getUserDefaultOrganizationRole($user, $organization->parent);
-        }
-
-        return 0;
-    }
 }

@@ -118,7 +118,7 @@ class ProjectPolicy
      */
     public function uploadThumb(User $user, Organization $suborganization)
     {
-        return $user->hasPermissionTo('project:uploadThumb', $suborganization);
+        return $user->hasPermissionTo('project:upload-thumb', $suborganization);
     }
 
     /**
