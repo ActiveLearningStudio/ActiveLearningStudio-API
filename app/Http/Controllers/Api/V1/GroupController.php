@@ -335,12 +335,6 @@ class GroupController extends Controller
 
             if ($user) {
                 $result = $group->users()->detach($user);
-                if(!$result)
-                {
-                    return response([
-                        'message' => 'You do not have permission to remove user from the group.',
-                    ], 403);
-                }
                 $this->groupRepository->removeGroupProjectUser($group, $user);
 
                 // TODO: need to add remove notification

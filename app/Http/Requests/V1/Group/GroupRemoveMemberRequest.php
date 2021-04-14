@@ -25,7 +25,7 @@ class GroupRemoveMemberRequest extends FormRequest
     {
         return [
             'id' => 'required|exists:users,id',
-            'email' => 'sometimes|exists:invited_group_users,invited_email'
+            'email' => 'sometimes'
         ];
     }
 }
