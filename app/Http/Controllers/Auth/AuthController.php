@@ -319,6 +319,12 @@ class AuthController extends Controller
                                 $this->invitedOrganizationUserRepository->delete($user->email);
                             }
                         }
+                    } else {
+                        $organization = $this->organizationRepository->find(1);
+                        if ($organization) {
+                            $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                            $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                        }
                     }
 
                     $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
