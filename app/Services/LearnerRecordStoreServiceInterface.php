@@ -276,4 +276,14 @@ interface LearnerRecordStoreServiceInterface extends LearnerRecordStoreConstants
      */
     public function getParentSubContentId($parent);
 
+    /**
+     * Join Parent's & Child's sub content ids
+     * 
+     * @param string $parentId
+     * @param string $childId
+     * 
+     * @return string
+     */
+    public function joinParentChildSubContentIds($parentId, $childId);
+
 }

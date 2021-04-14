@@ -139,6 +139,30 @@ abstract class InteractionSummary
     }
 
     /**
+     * Get library name
+     *
+     * @return mixed
+     */
+    public function getLibrary()
+    {
+        $contextActivities = $this->statement->getContext()->getContextActivities();
+        $category = $contextActivities->getCategory();
+        $categoryId = '';
+        $h5pInteraction = '';
+        if (!empty($category)) {
+            $categoryId = end($category)->getId();
+            $h5pInteraction = explode("/", $categoryId);
+            $h5pInteraction = end($h5pInteraction);
+
+            $pattern = "/H5P.(\w+)(-|\s)(.*)/";
+            if (preg_match($pattern, $h5pInteraction, $matches)) {
+                $h5pInteraction = $matches[1];
+            }
+        }
+        return $h5pInteraction;
+    }
+
+    /**
      * Interaction summary
      *
      * @return array
@@ -179,6 +203,7 @@ abstract class InteractionSummary
         }
         // Get Verb
         $summary['verb'] = $this->getVerb();
+        $summary['library'] = $this->getLibrary();
         return $summary;
     }
 
