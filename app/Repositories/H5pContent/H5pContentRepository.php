@@ -29,6 +29,6 @@ class H5pContentRepository extends BaseRepository implements H5pContentRepositor
      */
     public function getBrightcoveVideo($accountId, $videoId)
     {
-        return  $this->model::select('id')->where('parameters', 'like', '%' . "videoId=$videoId" . '%')->first();
+        return  $this->model::select('id')->where('parameters', 'like', '%' . "videoId=$videoId" . '%')->whereHas('activity')->first();
     }
 }
