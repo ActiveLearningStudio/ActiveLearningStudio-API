@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>API Reference</title>
 
-    <link rel="stylesheet" href="{{ asset('/docs/css/style.css') }}" />
-    <script src="{{ asset('/docs/js/all.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('/api/docs/css/style.css') }}" />
+    <script src="{{ asset('/api/docs/js/all.js') }}"></script>
 
 
           <script>
@@ -21,11 +21,11 @@
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="/docs/images/navbar.png" />
+        <img src="/api/docs/images/navbar.png" />
       </span>
     </a>
     <div class="tocify-wrapper">
-        <img src="/docs/images/logo.png" />
+        <img src="/api/docs/images/logo.png" />
                     <div class="lang-selector">
                                   <a href="#" data-language-name="bash">bash</a>
                                   <a href="#" data-language-name="javascript">javascript</a>
@@ -58,13 +58,13 @@
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/register" \
+    "http://localhost:8082/api/register" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"first_name":"John","last_name":"Doe","email":"john.doe@currikistudio.org","password":"Password123","organization_name":"Curriki","job_title":"Developer"}'
+    -d '{"first_name":"John","last_name":"Doe","email":"john.doe@currikistudio.org","password":"Password123","organization_name":"Curriki","organization_type":"Nonprofit","job_title":"Developer","domain":"currikistudio"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/register"
+    "http://localhost:8082/api/register"
 );
 
 let headers = {
@@ -78,7 +78,9 @@ let body = {
     "email": "john.doe@currikistudio.org",
     "password": "Password123",
     "organization_name": "Curriki",
-    "job_title": "Developer"
+    "organization_type": "Nonprofit",
+    "job_title": "Developer",
+    "domain": "currikistudio"
 }
 
 fetch(url, {
@@ -91,7 +93,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/register',
+    'http://localhost:8082/api/register',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -103,7 +105,9 @@ $response = $client-&gt;post(
             'email' =&gt; 'john.doe@currikistudio.org',
             'password' =&gt; 'Password123',
             'organization_name' =&gt; 'Curriki',
+            'organization_type' =&gt; 'Nonprofit',
             'job_title' =&gt; 'Developer',
+            'domain' =&gt; 'currikistudio',
         ],
     ]
 );
@@ -112,14 +116,16 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/register'
+url = 'http://localhost:8082/api/register'
 payload = {
     "first_name": "John",
     "last_name": "Doe",
     "email": "john.doe@currikistudio.org",
     "password": "Password123",
     "organization_name": "Curriki",
-    "job_title": "Developer"
+    "organization_type": "Nonprofit",
+    "job_title": "Developer",
+    "domain": "currikistudio"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -181,14 +187,26 @@ response.json()</code></pre>
 <tr>
 <td><code>organization_name</code></td>
 <td>string</td>
-<td>optional</td>
+<td>required</td>
 <td>Organization name of a user</td>
+</tr>
+<tr>
+<td><code>organization_type</code></td>
+<td>string</td>
+<td>required</td>
+<td>Organization type of a user</td>
 </tr>
 <tr>
 <td><code>job_title</code></td>
 <td>string</td>
-<td>optional</td>
+<td>required</td>
 <td>Job title of a user</td>
+</tr>
+<tr>
+<td><code>domain</code></td>
+<td>string</td>
+<td>required</td>
+<td>Organization domain user is registering for</td>
 </tr>
 </tbody>
 </table>
@@ -199,13 +217,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/login" \
+    "http://localhost:8082/api/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"john.doe@currikistudio.org","password":"Password123","domain":"curriki"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/login"
+    "http://localhost:8082/api/login"
 );
 
 let headers = {
@@ -229,7 +247,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/login',
+    'http://localhost:8082/api/login',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -247,7 +265,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/login'
+url = 'http://localhost:8082/api/login'
 payload = {
     "email": "john.doe@currikistudio.org",
     "password": "Password123",
@@ -342,13 +360,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/admin/login" \
+    "http://localhost:8082/api/admin/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"john.doe@currikistudio.org","password":"Password123"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/admin/login"
+    "http://localhost:8082/api/admin/login"
 );
 
 let headers = {
@@ -371,7 +389,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/admin/login',
+    'http://localhost:8082/api/admin/login',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -388,7 +406,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/admin/login'
+url = 'http://localhost:8082/api/admin/login'
 payload = {
     "email": "john.doe@currikistudio.org",
     "password": "Password123"
@@ -476,13 +494,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/login/google" \
+    "http://localhost:8082/api/login/google" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"tokenId":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...","tokenObj":{"token_type":"Bearer","access_token":"ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...","scope":"email profile ...","login_hint":"AJDLj6JUa8yxXrhHdWRHIV0...","expires_in":3599,"id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6I...","session_state":{"extraQueryParams":{"authuser":"0"}},"first_issued_at":1601535932504,"expires_at":1601539531504,"idpId":"google"}}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/login/google"
+    "http://localhost:8082/api/login/google"
 );
 
 let headers = {
@@ -520,7 +538,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/login/google',
+    'http://localhost:8082/api/login/google',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -552,7 +570,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/login/google'
+url = 'http://localhost:8082/api/login/google'
 payload = {
     "tokenId": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...",
     "tokenObj": {
@@ -710,13 +728,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/forgot-password" \
+    "http://localhost:8082/api/forgot-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"john.doe@currikistudio.org"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/forgot-password"
+    "http://localhost:8082/api/forgot-password"
 );
 
 let headers = {
@@ -738,7 +756,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/forgot-password',
+    'http://localhost:8082/api/forgot-password',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -754,7 +772,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/forgot-password'
+url = 'http://localhost:8082/api/forgot-password'
 payload = {
     "email": "john.doe@currikistudio.org"
 }
@@ -807,13 +825,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/reset-password" \
+    "http://localhost:8082/api/reset-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"token":"ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...","email":"john.doe@currikistudio.org","password":"Password123","password_confirmation":"Password123"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/reset-password"
+    "http://localhost:8082/api/reset-password"
 );
 
 let headers = {
@@ -838,7 +856,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/reset-password',
+    'http://localhost:8082/api/reset-password',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -857,7 +875,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/reset-password'
+url = 'http://localhost:8082/api/reset-password'
 payload = {
     "token": "ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...",
     "email": "john.doe@currikistudio.org",
@@ -929,13 +947,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/verify-email" \
+    "http://localhost:8082/api/verify-email" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1,"hash":"9e0f70124a2a88d5435...","signature":"467fbe9a00e7d367553f...","expires":1599754915}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/verify-email"
+    "http://localhost:8082/api/verify-email"
 );
 
 let headers = {
@@ -960,7 +978,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/verify-email',
+    'http://localhost:8082/api/verify-email',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -979,7 +997,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/verify-email'
+url = 'http://localhost:8082/api/verify-email'
 payload = {
     "id": 1,
     "hash": "9e0f70124a2a88d5435...",
@@ -1042,11 +1060,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/logout" \
+    "http://localhost:8082/api/logout" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/logout"
+    "http://localhost:8082/api/logout"
 );
 
 let headers = {
@@ -1063,7 +1081,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/logout',
+    'http://localhost:8082/api/logout',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1076,7 +1094,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/logout'
+url = 'http://localhost:8082/api/logout'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1101,11 +1119,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/users/organizations" \
+    -G "http://localhost:8082/api/v1/users/organizations" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/organizations"
+    "http://localhost:8082/api/v1/users/organizations"
 );
 
 let headers = {
@@ -1122,7 +1140,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/users/organizations',
+    'http://localhost:8082/api/v1/users/organizations',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1135,7 +1153,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/organizations'
+url = 'http://localhost:8082/api/v1/users/organizations'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1166,13 +1184,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/users/default-organization" \
+    "http://localhost:8082/api/v1/users/default-organization" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"organization_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/default-organization"
+    "http://localhost:8082/api/v1/users/default-organization"
 );
 
 let headers = {
@@ -1194,7 +1212,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/users/default-organization',
+    'http://localhost:8082/api/v1/users/default-organization',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1210,7 +1228,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/default-organization'
+url = 'http://localhost:8082/api/v1/users/default-organization'
 payload = {
     "organization_id": 1
 }
@@ -1271,11 +1289,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/subscribe" \
+    "http://localhost:8082/api/v1/subscribe" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/subscribe"
+    "http://localhost:8082/api/v1/subscribe"
 );
 
 let headers = {
@@ -1292,7 +1310,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/subscribe',
+    'http://localhost:8082/api/v1/subscribe',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1305,7 +1323,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/subscribe'
+url = 'http://localhost:8082/api/v1/subscribe'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1348,11 +1366,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/users/me" \
+    -G "http://localhost:8082/api/v1/users/me" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/me"
+    "http://localhost:8082/api/v1/users/me"
 );
 
 let headers = {
@@ -1369,7 +1387,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/users/me',
+    'http://localhost:8082/api/v1/users/me',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1382,7 +1400,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/me'
+url = 'http://localhost:8082/api/v1/users/me'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1417,11 +1435,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/users/notifications" \
+    -G "http://localhost:8082/api/v1/users/notifications" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/notifications"
+    "http://localhost:8082/api/v1/users/notifications"
 );
 
 let headers = {
@@ -1438,7 +1456,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/users/notifications',
+    'http://localhost:8082/api/v1/users/notifications',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1451,7 +1469,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/notifications'
+url = 'http://localhost:8082/api/v1/users/notifications'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1487,11 +1505,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/users/notifications/read-all" \
+    -G "http://localhost:8082/api/v1/users/notifications/read-all" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/notifications/read-all"
+    "http://localhost:8082/api/v1/users/notifications/read-all"
 );
 
 let headers = {
@@ -1508,7 +1526,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/users/notifications/read-all',
+    'http://localhost:8082/api/v1/users/notifications/read-all',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1521,7 +1539,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/notifications/read-all'
+url = 'http://localhost:8082/api/v1/users/notifications/read-all'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1565,11 +1583,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/users/notifications/1/read" \
+    "http://localhost:8082/api/v1/users/notifications/1/read" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/notifications/1/read"
+    "http://localhost:8082/api/v1/users/notifications/1/read"
 );
 
 let headers = {
@@ -1586,7 +1604,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/users/notifications/1/read',
+    'http://localhost:8082/api/v1/users/notifications/1/read',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1599,7 +1617,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/notifications/1/read'
+url = 'http://localhost:8082/api/v1/users/notifications/1/read'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1660,11 +1678,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/users/notifications/1/delete" \
+    "http://localhost:8082/api/v1/users/notifications/1/delete" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/notifications/1/delete"
+    "http://localhost:8082/api/v1/users/notifications/1/delete"
 );
 
 let headers = {
@@ -1681,7 +1699,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/users/notifications/1/delete',
+    'http://localhost:8082/api/v1/users/notifications/1/delete',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1694,7 +1712,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/notifications/1/delete'
+url = 'http://localhost:8082/api/v1/users/notifications/1/delete'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1742,13 +1760,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/users/search" \
+    "http://localhost:8082/api/v1/users/search" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"search":"Abby"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/search"
+    "http://localhost:8082/api/v1/users/search"
 );
 
 let headers = {
@@ -1770,7 +1788,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/users/search',
+    'http://localhost:8082/api/v1/users/search',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1786,7 +1804,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/search'
+url = 'http://localhost:8082/api/v1/users/search'
 payload = {
     "search": "Abby"
 }
@@ -1842,13 +1860,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/users/update-password" \
+    "http://localhost:8082/api/v1/users/update-password" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"current_password":"Password123","password":"Password321","password_confirmation":"Password321"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/update-password"
+    "http://localhost:8082/api/v1/users/update-password"
 );
 
 let headers = {
@@ -1872,7 +1890,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/users/update-password',
+    'http://localhost:8082/api/v1/users/update-password',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1890,7 +1908,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/update-password'
+url = 'http://localhost:8082/api/v1/users/update-password'
 payload = {
     "current_password": "Password123",
     "password": "Password321",
@@ -1965,11 +1983,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/users" \
+    -G "http://localhost:8082/api/v1/users" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users"
+    "http://localhost:8082/api/v1/users"
 );
 
 let headers = {
@@ -1986,7 +2004,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/users',
+    'http://localhost:8082/api/v1/users',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1999,7 +2017,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users'
+url = 'http://localhost:8082/api/v1/users'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2049,11 +2067,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/users/1" \
+    -G "http://localhost:8082/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/1"
+    "http://localhost:8082/api/v1/users/1"
 );
 
 let headers = {
@@ -2070,7 +2088,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/users/1',
+    'http://localhost:8082/api/v1/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2083,7 +2101,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/1'
+url = 'http://localhost:8082/api/v1/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2135,13 +2153,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/users/1" \
+    "http://localhost:8082/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"first_name":"John","last_name":"Doe","organization_name":"Curriki","website":"www.currikistudio.org","job_title":"Developer","address":"20660 Stevens Creek Blvd #332, Cupertino, CA 95014","phone_number":"+1234567890"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/1"
+    "http://localhost:8082/api/v1/users/1"
 );
 
 let headers = {
@@ -2169,7 +2187,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/users/1',
+    'http://localhost:8082/api/v1/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2191,7 +2209,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/1'
+url = 'http://localhost:8082/api/v1/users/1'
 payload = {
     "first_name": "John",
     "last_name": "Doe",
@@ -2317,11 +2335,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/users/1" \
+    "http://localhost:8082/api/v1/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/users/1"
+    "http://localhost:8082/api/v1/users/1"
 );
 
 let headers = {
@@ -2338,7 +2356,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/users/1',
+    'http://localhost:8082/api/v1/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2351,7 +2369,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/users/1'
+url = 'http://localhost:8082/api/v1/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2399,19 +2417,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-<<<<<<< HEAD
-    "http://localhost:8082/api/api/v1/projects/shared" \
+    "http://localhost:8082/api/v1/projects/shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/shared"
-=======
-    "http://localhost:8000/api/v1/projects/shared" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/projects/shared"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "http://localhost:8082/api/v1/projects/shared"
 );
 
 let headers = {
@@ -2428,11 +2438,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-<<<<<<< HEAD
-    'http://localhost:8082/api/api/v1/projects/shared',
-=======
-    'http://localhost:8000/api/v1/projects/shared',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    'http://localhost:8082/api/v1/projects/shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2445,11 +2451,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/projects/shared'
-=======
-url = 'http://localhost:8000/api/v1/projects/shared'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+url = 'http://localhost:8082/api/v1/projects/shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2497,11 +2499,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/1/load-shared" \
+    -G "http://localhost:8082/api/v1/projects/1/load-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/load-shared"
+    "http://localhost:8082/api/v1/projects/1/load-shared"
 );
 
 let headers = {
@@ -2518,7 +2520,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/1/load-shared',
+    'http://localhost:8082/api/v1/projects/1/load-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2531,7 +2533,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/load-shared'
+url = 'http://localhost:8082/api/v1/projects/1/load-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2552,14 +2554,20 @@ response.json()</code></pre>
 <pre><code class="language-json">{
     "project": {
         "id": 1,
-        "name": "Test Project",
-        "description": "This is a test project.",
-        "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-        "shared": true,
-        "starter_project": null,
-        "is_public": true,
-        "created_at": "2020-09-06T19:21:08.000000Z",
-        "updated_at": "2020-09-06T19:21:08.000000Z"
+        "organization_id": 1,
+        "organization_visibility_type_id": 4,
+        "name": "The Science of Golf",
+        "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+        "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+        "shared": false,
+        "starter_project": false,
+        "order": null,
+        "status": 1,
+        "status_text": "DRAFT",
+        "indexing": null,
+        "indexing_text": "NOT REQUESTED",
+        "created_at": "2020-04-30T20:03:12.000000Z",
+        "updated_at": "2020-09-17T09:44:27.000000Z"
     }
 }</code></pre>
 <h3>HTTP Request</h3>
@@ -2582,20 +2590,20 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_ae3009c60d0ad2f622cd01ffcf702318 -->
-<!-- START_57b4a66cc415c7809e03a83e2dfa7039 -->
+<!-- START_d5a7dc5881d3aaf95ef1c7cc425df357 -->
 <h2>Upload thumbnail</h2>
 <p>Upload thumbnail image for a project</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/upload-thumb" \
+    "http://localhost:8082/api/v1/suborganization/1/projects/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"thumb":"(binary)"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/upload-thumb"
+    "http://localhost:8082/api/v1/suborganization/1/projects/upload-thumb"
 );
 
 let headers = {
@@ -2617,7 +2625,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/upload-thumb',
+    'http://localhost:8082/api/v1/suborganization/1/projects/upload-thumb',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2633,7 +2641,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/upload-thumb'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/upload-thumb'
 payload = {
     "thumb": "(binary)"
 }
@@ -2658,7 +2666,24 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/projects/upload-thumb</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/projects/upload-thumb</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -2678,19 +2703,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_57b4a66cc415c7809e03a83e2dfa7039 -->
-<!-- START_fec72aefe714410a7eb64d4c8d038fe9 -->
+<!-- END_d5a7dc5881d3aaf95ef1c7cc425df357 -->
+<!-- START_084cf1a339c0b22a5e9bc3f228b40e26 -->
 <h2>Get Recent Projects</h2>
 <p>Get a list of the recent projects of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/recent" \
+    -G "http://localhost:8082/api/v1/suborganization/1/projects/recent" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/recent"
+    "http://localhost:8082/api/v1/suborganization/1/projects/recent"
 );
 
 let headers = {
@@ -2707,7 +2732,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/recent',
+    'http://localhost:8082/api/v1/suborganization/1/projects/recent',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2720,7 +2745,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/recent'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/recent'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2789,20 +2814,37 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/projects/recent</code></p>
-<!-- END_fec72aefe714410a7eb64d4c8d038fe9 -->
-<!-- START_a858b706af67460bc8eb2d317433d351 -->
+<p><code>GET api/v1/suborganization/{suborganization}/projects/recent</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_084cf1a339c0b22a5e9bc3f228b40e26 -->
+<!-- START_21d383f6c42b97c035f595c79d6576c0 -->
 <h2>Get Default Projects</h2>
 <p>Get a list of the default projects.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/default" \
+    -G "http://localhost:8082/api/v1/suborganization/1/projects/default" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/default"
+    "http://localhost:8082/api/v1/suborganization/1/projects/default"
 );
 
 let headers = {
@@ -2819,7 +2861,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/default',
+    'http://localhost:8082/api/v1/suborganization/1/projects/default',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2832,7 +2874,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/default'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/default'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2901,20 +2943,37 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/projects/default</code></p>
-<!-- END_a858b706af67460bc8eb2d317433d351 -->
-<!-- START_190e0c258c456cafd32006747d472c60 -->
+<p><code>GET api/v1/suborganization/{suborganization}/projects/default</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_21d383f6c42b97c035f595c79d6576c0 -->
+<!-- START_2f3414d0f60cbae6262adb80497b8cac -->
 <h2>Get All Projects Detail</h2>
 <p>Get a list of the projects of a user with detail.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/detail" \
+    -G "http://localhost:8082/api/v1/suborganization/1/projects/detail" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/detail"
+    "http://localhost:8082/api/v1/suborganization/1/projects/detail"
 );
 
 let headers = {
@@ -2931,7 +2990,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/detail',
+    'http://localhost:8082/api/v1/suborganization/1/projects/detail',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -2944,7 +3003,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/detail'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/detail'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3013,19 +3072,36 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/projects/detail</code></p>
-<!-- END_190e0c258c456cafd32006747d472c60 -->
+<p><code>GET api/v1/suborganization/{suborganization}/projects/detail</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_2f3414d0f60cbae6262adb80497b8cac -->
 <!-- START_3315eb7aceffa27cdbfcaf8109372337 -->
 <h2>api/v1/projects/update-order</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/update-order" \
+    -G "http://localhost:8082/api/v1/projects/update-order" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/update-order"
+    "http://localhost:8082/api/v1/projects/update-order"
 );
 
 let headers = {
@@ -3042,7 +3118,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/update-order',
+    'http://localhost:8082/api/v1/projects/update-order',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3055,7 +3131,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/update-order'
+url = 'http://localhost:8082/api/v1/projects/update-order'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3071,18 +3147,17 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/projects/update-order</code></p>
 <!-- END_3315eb7aceffa27cdbfcaf8109372337 -->
-<!-- START_50e5219d14a201aeb43b506d13123073 -->
+<!-- START_d3ce1e126abc3a3d5405674f1515ff9f -->
 <h2>Get All Favorite Projects</h2>
-<p>Get a list of the favorite projects of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/favorites" \
+    -G "http://localhost:8082/api/v1/suborganization/1/projects/favorites" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/favorites"
+    "http://localhost:8082/api/v1/suborganization/1/projects/favorites"
 );
 
 let headers = {
@@ -3099,7 +3174,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/favorites',
+    'http://localhost:8082/api/v1/suborganization/1/projects/favorites',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3112,7 +3187,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/favorites'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/favorites'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3149,8 +3224,25 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/projects/favorites</code></p>
-<!-- END_50e5219d14a201aeb43b506d13123073 -->
+<p><code>GET api/v1/suborganization/{suborganization}/projects/favorites</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_d3ce1e126abc3a3d5405674f1515ff9f -->
 <!-- START_ac987a56b0975bc75cc619ecf8702ef9 -->
 <h2>Reorder Projects</h2>
 <p>Reorder projects of a user.</p>
@@ -3158,13 +3250,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/reorder" \
+    "http://localhost:8082/api/v1/projects/reorder" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"projects":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/reorder"
+    "http://localhost:8082/api/v1/projects/reorder"
 );
 
 let headers = {
@@ -3186,7 +3278,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/reorder',
+    'http://localhost:8082/api/v1/projects/reorder',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3202,7 +3294,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/reorder'
+url = 'http://localhost:8082/api/v1/projects/reorder'
 payload = {
     "projects": []
 }
@@ -3270,11 +3362,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/1/indexing" \
+    -G "http://localhost:8082/api/v1/projects/1/indexing" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/indexing"
+    "http://localhost:8082/api/v1/projects/1/indexing"
 );
 
 let headers = {
@@ -3291,7 +3383,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/1/indexing',
+    'http://localhost:8082/api/v1/projects/1/indexing',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3304,7 +3396,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/indexing'
+url = 'http://localhost:8082/api/v1/projects/1/indexing'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3366,11 +3458,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/1/status-update" \
+    -G "http://localhost:8082/api/v1/projects/1/status-update" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/status-update"
+    "http://localhost:8082/api/v1/projects/1/status-update"
 );
 
 let headers = {
@@ -3387,7 +3479,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/1/status-update',
+    'http://localhost:8082/api/v1/projects/1/status-update',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3400,7 +3492,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/status-update'
+url = 'http://localhost:8082/api/v1/projects/1/status-update'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3439,18 +3531,18 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_273d6e40a47f75971deedea5c3991219 -->
-<!-- START_e5cecabb4183ab5664a24c70ec39e6db -->
+<!-- START_7d4f3b79ac5e8c5e47f9ced3fe6d653b -->
 <h2>Share Project</h2>
 <p>Share the specified project of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/1/share" \
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/share"
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/share"
 );
 
 let headers = {
@@ -3467,7 +3559,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/1/share',
+    'http://localhost:8082/api/v1/suborganization/1/projects/1/share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3480,7 +3572,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/share'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/1/share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3501,18 +3593,24 @@ response.json()</code></pre>
 <pre><code class="language-json">{
     "project": {
         "id": 1,
-        "name": "Test Project",
-        "description": "This is a test project.",
-        "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-        "shared": true,
-        "starter_project": null,
-        "is_public": true,
-        "created_at": "2020-09-06T19:21:08.000000Z",
-        "updated_at": "2020-09-06T19:21:08.000000Z"
+        "organization_id": 1,
+        "organization_visibility_type_id": 4,
+        "name": "The Science of Golf",
+        "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+        "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+        "shared": false,
+        "starter_project": false,
+        "order": null,
+        "status": 1,
+        "status_text": "DRAFT",
+        "indexing": null,
+        "indexing_text": "NOT REQUESTED",
+        "created_at": "2020-04-30T20:03:12.000000Z",
+        "updated_at": "2020-09-17T09:44:27.000000Z"
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/projects/{project}/share</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/projects/{project}/share</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -3528,21 +3626,26 @@ response.json()</code></pre>
 <td>required</td>
 <td>The Id of a project</td>
 </tr>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
 </tbody>
 </table>
-<!-- END_e5cecabb4183ab5664a24c70ec39e6db -->
-<!-- START_03be4c7ca97b07327faa55daa3813b91 -->
+<!-- END_7d4f3b79ac5e8c5e47f9ced3fe6d653b -->
+<!-- START_ef69a1b8ca738487981f34e81c4041ac -->
 <h2>Clone Project</h2>
 <p>Clone the specified project of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/1/clone" \
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/clone" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/clone"
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/clone"
 );
 
 let headers = {
@@ -3559,7 +3662,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/1/clone',
+    'http://localhost:8082/api/v1/suborganization/1/projects/1/clone',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3572,7 +3675,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/clone'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/1/clone'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3594,7 +3697,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/projects/{project}/clone</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/projects/{project}/clone</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -3606,25 +3709,30 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
 <td><code>project</code></td>
 <td>required</td>
 <td>The Id of a project</td>
 </tr>
 </tbody>
 </table>
-<!-- END_03be4c7ca97b07327faa55daa3813b91 -->
-<!-- START_a52552fb436b8c9f0b70cd65be17699e -->
+<!-- END_ef69a1b8ca738487981f34e81c4041ac -->
+<!-- START_41c527a104e953b5df145ec073902d89 -->
 <h2>Remove Share Project</h2>
 <p>Remove share the specified project of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/1/remove-share" \
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/remove-share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/remove-share"
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/remove-share"
 );
 
 let headers = {
@@ -3641,7 +3749,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/1/remove-share',
+    'http://localhost:8082/api/v1/suborganization/1/projects/1/remove-share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3654,7 +3762,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/remove-share'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/1/remove-share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3686,7 +3794,7 @@ response.json()</code></pre>
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/projects/{project}/remove-share</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/projects/{project}/remove-share</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -3698,25 +3806,30 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
 <td><code>project</code></td>
 <td>required</td>
 <td>The Id of a project</td>
 </tr>
 </tbody>
 </table>
-<!-- END_a52552fb436b8c9f0b70cd65be17699e -->
-<!-- START_4eb44fdf87a0076e678c116a0fcbdf9d -->
+<!-- END_41c527a104e953b5df145ec073902d89 -->
+<!-- START_0ac39715a154d0eaf252b21c4078c028 -->
 <h2>Favorite/Unfavorite Project</h2>
 <p>Favorite/Unfavorite the specified project for a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/1/favorite" \
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/favorite" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/favorite"
+    "http://localhost:8082/api/v1/suborganization/1/projects/1/favorite"
 );
 
 let headers = {
@@ -3733,7 +3846,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/1/favorite',
+    'http://localhost:8082/api/v1/suborganization/1/projects/1/favorite',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3746,7 +3859,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/favorite'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/1/favorite'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3760,7 +3873,7 @@ response.json()</code></pre>
     "message": "This resource will be removed from your Favorites. You will no longer be able to reuse\/remix its contents into your projects."
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/projects/{project}/favorite</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/projects/{project}/favorite</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -3772,25 +3885,30 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
 <td><code>project</code></td>
 <td>required</td>
 <td>The Id of a project</td>
 </tr>
 </tbody>
 </table>
-<!-- END_4eb44fdf87a0076e678c116a0fcbdf9d -->
-<!-- START_d4bb0000cd4525b356d3f4e604741ee1 -->
+<!-- END_0ac39715a154d0eaf252b21c4078c028 -->
+<!-- START_3815bff70aea7b8375bc8464a692ab11 -->
 <h2>Get All Projects</h2>
 <p>Get a list of the projects of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects" \
+    -G "http://localhost:8082/api/v1/suborganization/1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects"
+    "http://localhost:8082/api/v1/suborganization/1/projects"
 );
 
 let headers = {
@@ -3807,7 +3925,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects',
+    'http://localhost:8082/api/v1/suborganization/1/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3820,7 +3938,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -3857,22 +3975,39 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/projects</code></p>
-<!-- END_d4bb0000cd4525b356d3f4e604741ee1 -->
-<!-- START_e832cdeb3d8617c57febfca7405a7263 -->
+<p><code>GET api/v1/suborganization/{suborganization}/projects</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_3815bff70aea7b8375bc8464a692ab11 -->
+<!-- START_1a6873456708b4e90ba1ba41e0b90559 -->
 <h2>Create Project</h2>
 <p>Create a new project in storage for a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects" \
+    "http://localhost:8082/api/v1/suborganization/1/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"Test Project","description":"This is a test project.","thumb_url":"https:\/\/images.pexels.com\/photos\/2832382","organization_visibility_type_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects"
+    "http://localhost:8082/api/v1/suborganization/1/projects"
 );
 
 let headers = {
@@ -3897,7 +4032,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects',
+    'http://localhost:8082/api/v1/suborganization/1/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -3916,7 +4051,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects'
 payload = {
     "name": "Test Project",
     "description": "This is a test project.",
@@ -3943,18 +4078,41 @@ response.json()</code></pre>
 <pre><code class="language-json">{
     "project": {
         "id": 1,
-        "name": "Test Project",
-        "description": "This is a test project.",
-        "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-        "shared": true,
-        "starter_project": null,
-        "is_public": true,
-        "created_at": "2020-09-06T19:21:08.000000Z",
-        "updated_at": "2020-09-06T19:21:08.000000Z"
+        "organization_id": 1,
+        "organization_visibility_type_id": 4,
+        "name": "The Science of Golf",
+        "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+        "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+        "shared": false,
+        "starter_project": false,
+        "order": null,
+        "status": 1,
+        "status_text": "DRAFT",
+        "indexing": null,
+        "indexing_text": "NOT REQUESTED",
+        "created_at": "2020-04-30T20:03:12.000000Z",
+        "updated_at": "2020-09-17T09:44:27.000000Z"
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/projects</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/projects</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -3992,19 +4150,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_e832cdeb3d8617c57febfca7405a7263 -->
-<!-- START_75829dedef8e9515c7f6ed1540f9b2db -->
+<!-- END_1a6873456708b4e90ba1ba41e0b90559 -->
+<!-- START_5e7883a1314c4fd73cac73decc511574 -->
 <h2>Get Project</h2>
 <p>Get the specified project detail.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/1" \
+    -G "http://localhost:8082/api/v1/suborganization/1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1"
+    "http://localhost:8082/api/v1/suborganization/1/projects/1"
 );
 
 let headers = {
@@ -4021,7 +4179,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/1',
+    'http://localhost:8082/api/v1/suborganization/1/projects/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4034,7 +4192,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4047,18 +4205,24 @@ response.json()</code></pre>
 <pre><code class="language-json">{
     "project": {
         "id": 1,
-        "name": "Test Project",
-        "description": "This is a test project.",
-        "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-        "shared": true,
-        "starter_project": null,
-        "is_public": true,
-        "created_at": "2020-09-06T19:21:08.000000Z",
-        "updated_at": "2020-09-06T19:21:08.000000Z"
+        "organization_id": 1,
+        "organization_visibility_type_id": 4,
+        "name": "The Science of Golf",
+        "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+        "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+        "shared": false,
+        "starter_project": false,
+        "order": null,
+        "status": 1,
+        "status_text": "DRAFT",
+        "indexing": null,
+        "indexing_text": "NOT REQUESTED",
+        "created_at": "2020-04-30T20:03:12.000000Z",
+        "updated_at": "2020-09-17T09:44:27.000000Z"
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/projects/{project}</code></p>
+<p><code>GET api/v1/suborganization/{suborganization}/projects/{project}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -4074,23 +4238,28 @@ response.json()</code></pre>
 <td>required</td>
 <td>The Id of a project</td>
 </tr>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
 </tbody>
 </table>
-<!-- END_75829dedef8e9515c7f6ed1540f9b2db -->
-<!-- START_de3e82447d2000a0d706c9d01fad13cb -->
+<!-- END_5e7883a1314c4fd73cac73decc511574 -->
+<!-- START_73f3a157b32bd7f05564fa6c2ba1291a -->
 <h2>Update Project</h2>
 <p>Update the specified project of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/projects/1" \
+    "http://localhost:8082/api/v1/suborganization/1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"Test Project","description":"This is a test project.","thumb_url":"https:\/\/images.pexels.com\/photos\/2832382","organization_visibility_type_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1"
+    "http://localhost:8082/api/v1/suborganization/1/projects/1"
 );
 
 let headers = {
@@ -4115,7 +4284,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/projects/1',
+    'http://localhost:8082/api/v1/suborganization/1/projects/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4134,7 +4303,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/1'
 payload = {
     "name": "Test Project",
     "description": "This is a test project.",
@@ -4161,19 +4330,25 @@ response.json()</code></pre>
 <pre><code class="language-json">{
     "project": {
         "id": 1,
-        "name": "Test Project",
-        "description": "This is a test project.",
-        "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-        "shared": true,
-        "starter_project": null,
-        "is_public": true,
-        "created_at": "2020-09-06T19:21:08.000000Z",
-        "updated_at": "2020-09-06T19:21:08.000000Z"
+        "organization_id": 1,
+        "organization_visibility_type_id": 4,
+        "name": "The Science of Golf",
+        "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+        "thumb_url": "\/storage\/uploads\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+        "shared": false,
+        "starter_project": false,
+        "order": null,
+        "status": 1,
+        "status_text": "DRAFT",
+        "indexing": null,
+        "indexing_text": "NOT REQUESTED",
+        "created_at": "2020-04-30T20:03:12.000000Z",
+        "updated_at": "2020-09-17T09:44:27.000000Z"
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>PUT api/v1/projects/{project}</code></p>
-<p><code>PATCH api/v1/projects/{project}</code></p>
+<p><code>PUT api/v1/suborganization/{suborganization}/projects/{project}</code></p>
+<p><code>PATCH api/v1/suborganization/{suborganization}/projects/{project}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -4188,6 +4363,11 @@ response.json()</code></pre>
 <td><code>project</code></td>
 <td>required</td>
 <td>The Id of a project</td>
+</tr>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
 </tr>
 </tbody>
 </table>
@@ -4228,19 +4408,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_de3e82447d2000a0d706c9d01fad13cb -->
-<!-- START_e4b54f3a75c552f90d5d695795bc8e9f -->
+<!-- END_73f3a157b32bd7f05564fa6c2ba1291a -->
+<!-- START_91f04144a1041e00c6d76c89583590b9 -->
 <h2>Remove Project</h2>
 <p>Remove the specified project of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/projects/1" \
+    "http://localhost:8082/api/v1/suborganization/1/projects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1"
+    "http://localhost:8082/api/v1/suborganization/1/projects/1"
 );
 
 let headers = {
@@ -4257,7 +4437,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/projects/1',
+    'http://localhost:8082/api/v1/suborganization/1/projects/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4270,7 +4450,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1'
+url = 'http://localhost:8082/api/v1/suborganization/1/projects/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4292,7 +4472,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>DELETE api/v1/projects/{project}</code></p>
+<p><code>DELETE api/v1/suborganization/{suborganization}/projects/{project}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -4304,13 +4484,18 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
 <td><code>project</code></td>
 <td>required</td>
 <td>The Id of a project</td>
 </tr>
 </tbody>
 </table>
-<!-- END_e4b54f3a75c552f90d5d695795bc8e9f -->
+<!-- END_91f04144a1041e00c6d76c89583590b9 -->
 <h1>4. Playlist</h1>
 <p>APIs for playlist management</p>
 <!-- START_8986e223ff0f915079f98a531d2d8288 -->
@@ -4320,11 +4505,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/playlists/1/load-shared" \
+    -G "http://localhost:8082/api/v1/playlists/1/load-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/playlists/1/load-shared"
+    "http://localhost:8082/api/v1/playlists/1/load-shared"
 );
 
 let headers = {
@@ -4341,7 +4526,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/playlists/1/load-shared',
+    'http://localhost:8082/api/v1/playlists/1/load-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4354,7 +4539,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/playlists/1/load-shared'
+url = 'http://localhost:8082/api/v1/playlists/1/load-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4430,11 +4615,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/playlists/update-order" \
+    -G "http://localhost:8082/api/v1/playlists/update-order" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/playlists/update-order"
+    "http://localhost:8082/api/v1/playlists/update-order"
 );
 
 let headers = {
@@ -4451,7 +4636,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/playlists/update-order',
+    'http://localhost:8082/api/v1/playlists/update-order',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4464,7 +4649,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/playlists/update-order'
+url = 'http://localhost:8082/api/v1/playlists/update-order'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4487,13 +4672,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/1/playlists/reorder" \
+    "http://localhost:8082/api/v1/projects/1/playlists/reorder" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"playlists":[]}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/playlists/reorder"
+    "http://localhost:8082/api/v1/projects/1/playlists/reorder"
 );
 
 let headers = {
@@ -4515,7 +4700,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/1/playlists/reorder',
+    'http://localhost:8082/api/v1/projects/1/playlists/reorder',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4531,7 +4716,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/playlists/reorder'
+url = 'http://localhost:8082/api/v1/projects/1/playlists/reorder'
 payload = {
     "playlists": []
 }
@@ -4733,11 +4918,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/projects/1/playlists/1/clone" \
+    "http://localhost:8082/api/v1/projects/1/playlists/1/clone" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/playlists/1/clone"
+    "http://localhost:8082/api/v1/projects/1/playlists/1/clone"
 );
 
 let headers = {
@@ -4754,7 +4939,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/projects/1/playlists/1/clone',
+    'http://localhost:8082/api/v1/projects/1/playlists/1/clone',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4767,7 +4952,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/playlists/1/clone'
+url = 'http://localhost:8082/api/v1/projects/1/playlists/1/clone'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -4820,11 +5005,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/1/playlists" \
+    -G "http://localhost:8082/api/v1/projects/1/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/playlists"
+    "http://localhost:8082/api/v1/projects/1/playlists"
 );
 
 let headers = {
@@ -4841,7 +5026,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/1/playlists',
+    'http://localhost:8082/api/v1/projects/1/playlists',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -4854,7 +5039,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/playlists'
+url = 'http://localhost:8082/api/v1/projects/1/playlists'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5034,21 +5219,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-<<<<<<< HEAD
-    "http://localhost:8082/api/api/v1/projects/autem/playlists" \
-=======
-    "http://localhost:8000/api/v1/projects/qui/playlists" \
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "http://localhost:8082/api/v1/projects/est/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-<<<<<<< HEAD
-    "http://localhost:8082/api/api/v1/projects/autem/playlists"
-=======
-    "http://localhost:8000/api/v1/projects/qui/playlists"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "http://localhost:8082/api/v1/projects/est/playlists"
 );
 
 let headers = {
@@ -5071,11 +5248,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-<<<<<<< HEAD
-    'http://localhost:8082/api/api/v1/projects/autem/playlists',
-=======
-    'http://localhost:8000/api/v1/projects/qui/playlists',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    'http://localhost:8082/api/v1/projects/est/playlists',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5092,11 +5265,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/projects/autem/playlists'
-=======
-url = 'http://localhost:8000/api/v1/projects/qui/playlists'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+url = 'http://localhost:8082/api/v1/projects/est/playlists'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -5202,11 +5371,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/projects/1/playlists/1" \
+    -G "http://localhost:8082/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/playlists/1"
+    "http://localhost:8082/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -5223,7 +5392,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/projects/1/playlists/1',
+    'http://localhost:8082/api/v1/projects/1/playlists/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5236,7 +5405,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/playlists/1'
+url = 'http://localhost:8082/api/v1/projects/1/playlists/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5318,13 +5487,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/projects/1/playlists/1" \
+    "http://localhost:8082/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/playlists/1"
+    "http://localhost:8082/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -5347,7 +5516,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/projects/1/playlists/1',
+    'http://localhost:8082/api/v1/projects/1/playlists/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5364,7 +5533,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/playlists/1'
+url = 'http://localhost:8082/api/v1/projects/1/playlists/1'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -5484,11 +5653,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/projects/1/playlists/1" \
+    "http://localhost:8082/api/v1/projects/1/playlists/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/projects/1/playlists/1"
+    "http://localhost:8082/api/v1/projects/1/playlists/1"
 );
 
 let headers = {
@@ -5505,7 +5674,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/projects/1/playlists/1',
+    'http://localhost:8082/api/v1/projects/1/playlists/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5518,7 +5687,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/projects/1/playlists/1'
+url = 'http://localhost:8082/api/v1/projects/1/playlists/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5579,11 +5748,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/playlists/1/lti" \
+    -G "http://localhost:8082/api/v1/playlists/1/lti" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/playlists/1/lti"
+    "http://localhost:8082/api/v1/playlists/1/lti"
 );
 
 let headers = {
@@ -5600,7 +5769,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/playlists/1/lti',
+    'http://localhost:8082/api/v1/playlists/1/lti',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5613,7 +5782,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/playlists/1/lti'
+url = 'http://localhost:8082/api/v1/playlists/1/lti'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5684,11 +5853,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/playlists/1/activities/1/clone" \
+    "http://localhost:8082/api/v1/playlists/1/activities/1/clone" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/playlists/1/activities/1/clone"
+    "http://localhost:8082/api/v1/playlists/1/activities/1/clone"
 );
 
 let headers = {
@@ -5705,7 +5874,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/playlists/1/activities/1/clone',
+    'http://localhost:8082/api/v1/playlists/1/activities/1/clone',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5718,7 +5887,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/playlists/1/activities/1/clone'
+url = 'http://localhost:8082/api/v1/playlists/1/activities/1/clone'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -5779,13 +5948,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/activities/upload-thumb" \
+    "http://localhost:8082/api/v1/activities/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"thumb":"(binary)"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/upload-thumb"
+    "http://localhost:8082/api/v1/activities/upload-thumb"
 );
 
 let headers = {
@@ -5807,7 +5976,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/activities/upload-thumb',
+    'http://localhost:8082/api/v1/activities/upload-thumb',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5823,7 +5992,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/upload-thumb'
+url = 'http://localhost:8082/api/v1/activities/upload-thumb'
 payload = {
     "thumb": "(binary)"
 }
@@ -5876,11 +6045,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/1/share" \
+    -G "http://localhost:8082/api/v1/activities/1/share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1/share"
+    "http://localhost:8082/api/v1/activities/1/share"
 );
 
 let headers = {
@@ -5897,7 +6066,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/1/share',
+    'http://localhost:8082/api/v1/activities/1/share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -5910,7 +6079,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1/share'
+url = 'http://localhost:8082/api/v1/activities/1/share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -6014,11 +6183,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/update-order" \
+    -G "http://localhost:8082/api/v1/activities/update-order" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/update-order"
+    "http://localhost:8082/api/v1/activities/update-order"
 );
 
 let headers = {
@@ -6035,7 +6204,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/update-order',
+    'http://localhost:8082/api/v1/activities/update-order',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -6048,7 +6217,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/update-order'
+url = 'http://localhost:8082/api/v1/activities/update-order'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -6071,11 +6240,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/1/remove-share" \
+    -G "http://localhost:8082/api/v1/activities/1/remove-share" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1/remove-share"
+    "http://localhost:8082/api/v1/activities/1/remove-share"
 );
 
 let headers = {
@@ -6092,7 +6261,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/1/remove-share',
+    'http://localhost:8082/api/v1/activities/1/remove-share',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -6105,7 +6274,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1/remove-share'
+url = 'http://localhost:8082/api/v1/activities/1/remove-share'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -6210,11 +6379,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/1/detail" \
+    -G "http://localhost:8082/api/v1/activities/1/detail" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1/detail"
+    "http://localhost:8082/api/v1/activities/1/detail"
 );
 
 let headers = {
@@ -6231,7 +6400,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/1/detail',
+    'http://localhost:8082/api/v1/activities/1/detail',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -6244,7 +6413,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1/detail'
+url = 'http://localhost:8082/api/v1/activities/1/detail'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -6374,11 +6543,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/1/h5p" \
+    -G "http://localhost:8082/api/v1/activities/1/h5p" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1/h5p"
+    "http://localhost:8082/api/v1/activities/1/h5p"
 );
 
 let headers = {
@@ -6395,7 +6564,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/1/h5p',
+    'http://localhost:8082/api/v1/activities/1/h5p',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -6408,7 +6577,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1/h5p'
+url = 'http://localhost:8082/api/v1/activities/1/h5p'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -7752,11 +7921,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings" \
+    -G "http://localhost:8082/api/v1/activities/1/h5p-resource-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings"
+    "http://localhost:8082/api/v1/activities/1/h5p-resource-settings"
 );
 
 let headers = {
@@ -7773,7 +7942,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings',
+    'http://localhost:8082/api/v1/activities/1/h5p-resource-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -7786,7 +7955,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings'
+url = 'http://localhost:8082/api/v1/activities/1/h5p-resource-settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -8289,11 +8458,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings-open" \
+    -G "http://localhost:8082/api/v1/activities/1/h5p-resource-settings-open" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings-open"
+    "http://localhost:8082/api/v1/activities/1/h5p-resource-settings-open"
 );
 
 let headers = {
@@ -8310,7 +8479,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings-open',
+    'http://localhost:8082/api/v1/activities/1/h5p-resource-settings-open',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -8323,7 +8492,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1/h5p-resource-settings-open'
+url = 'http://localhost:8082/api/v1/activities/1/h5p-resource-settings-open'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -8811,18 +8980,18 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_e027e2d3223cd89db292893085a8d046 -->
-<!-- START_5f86527ae6872d2a9c3c73871e38d78a -->
+<!-- START_c238d6cdfdd62f3aae5a627422fe3427 -->
 <h2>Get Activities</h2>
 <p>Get a list of activities</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities" \
+    -G "http://localhost:8082/api/v1/playlists/1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities"
+    "http://localhost:8082/api/v1/playlists/1/activities"
 );
 
 let headers = {
@@ -8839,7 +9008,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities',
+    'http://localhost:8082/api/v1/playlists/1/activities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -8852,7 +9021,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities'
+url = 'http://localhost:8082/api/v1/playlists/1/activities'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -8983,26 +9152,39 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/activities</code></p>
-<!-- END_5f86527ae6872d2a9c3c73871e38d78a -->
-<!-- START_33aef576e6d971e2ba91dd3d8403d390 -->
+<p><code>GET api/v1/playlists/{playlist}/activities</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>playlist</code></td>
+<td>required</td>
+<td>The Id of a playlist</td>
+</tr>
+</tbody>
+</table>
+<!-- END_c238d6cdfdd62f3aae5a627422fe3427 -->
+<!-- START_2a7a430e931750bac16a4f433def76c7 -->
 <h2>Create Activity</h2>
 <p>Create a new activity.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/activities" \
+    "http://localhost:8082/api/v1/playlists/1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"voluptas","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
-=======
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"nihil","playlist_id":1,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"occaecati","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities"
+    "http://localhost:8082/api/v1/playlists/1/activities"
 );
 
 let headers = {
@@ -9013,12 +9195,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-<<<<<<< HEAD
-    "content": "voluptas",
-=======
-    "content": "nihil",
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
-    "playlist_id": 1,
+    "content": "occaecati",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -9036,7 +9213,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/activities',
+    'http://localhost:8082/api/v1/playlists/1/activities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9045,12 +9222,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-<<<<<<< HEAD
-            'content' =&gt; 'voluptas',
-=======
-            'content' =&gt; 'nihil',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
-            'playlist_id' =&gt; 1,
+            'content' =&gt; 'occaecati',
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
             'thumb_url' =&gt; 'null',
@@ -9064,16 +9236,11 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities'
+url = 'http://localhost:8082/api/v1/playlists/1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-<<<<<<< HEAD
-    "content": "voluptas",
-=======
-    "content": "nihil",
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
-    "playlist_id": 1,
+    "content": "occaecati",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -9158,7 +9325,24 @@ response.json()</code></pre>
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/activities</code></p>
+<p><code>POST api/v1/playlists/{playlist}/activities</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>playlist</code></td>
+<td>required</td>
+<td>The Id of a playlist</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -9187,12 +9371,6 @@ response.json()</code></pre>
 <td>string</td>
 <td>required</td>
 <td>The content of a activity Example:</td>
-</tr>
-<tr>
-<td><code>playlist_id</code></td>
-<td>integer</td>
-<td>optional</td>
-<td>The Id of a playlist</td>
 </tr>
 <tr>
 <td><code>order</code></td>
@@ -9226,19 +9404,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_33aef576e6d971e2ba91dd3d8403d390 -->
-<!-- START_0c0cabe6076f4280d16c2869fadd9387 -->
+<!-- END_2a7a430e931750bac16a4f433def76c7 -->
+<!-- START_33a2e7decc039b04e96d21e0fae0e6b1 -->
 <h2>Get Activity</h2>
 <p>Get the specified activity.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activities/1" \
+    -G "http://localhost:8082/api/v1/playlists/1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1"
+    "http://localhost:8082/api/v1/playlists/1/activities/1"
 );
 
 let headers = {
@@ -9255,7 +9433,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activities/1',
+    'http://localhost:8082/api/v1/playlists/1/activities/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9268,13 +9446,21 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1'
+url = 'http://localhost:8082/api/v1/playlists/1/activities/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
 response = requests.request('GET', url, headers=headers)
 response.json()</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Invalid playlist or activity id."
+    ]
+}</code></pre>
 <blockquote>
 <p>Example response (200):</p>
 </blockquote>
@@ -9339,7 +9525,7 @@ response.json()</code></pre>
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/activities/{activity}</code></p>
+<p><code>GET api/v1/playlists/{playlist}/activities/{activity}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -9351,31 +9537,32 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>playlist</code></td>
+<td>required</td>
+<td>The Id of a playlist</td>
+</tr>
+<tr>
 <td><code>activity</code></td>
 <td>required</td>
 <td>The Id of a activity</td>
 </tr>
 </tbody>
 </table>
-<!-- END_0c0cabe6076f4280d16c2869fadd9387 -->
-<!-- START_66e6c51c201a5a8ca254ce9e8e8a63a9 -->
+<!-- END_33a2e7decc039b04e96d21e0fae0e6b1 -->
+<!-- START_2c284aa499dc018e9876b34be26974fe -->
 <h2>Update Activity</h2>
 <p>Update the specified activity.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/activities/1" \
+    "http://localhost:8082/api/v1/playlists/1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"consequatur","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
-=======
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"qui","playlist_id":1,"shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"ut","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1"
+    "http://localhost:8082/api/v1/playlists/1/activities/1"
 );
 
 let headers = {
@@ -9386,12 +9573,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-<<<<<<< HEAD
-    "content": "consequatur",
-=======
-    "content": "qui",
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
-    "playlist_id": 1,
+    "content": "ut",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -9410,7 +9592,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/activities/1',
+    'http://localhost:8082/api/v1/playlists/1/activities/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9419,12 +9601,7 @@ $response = $client-&gt;put(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-<<<<<<< HEAD
-            'content' =&gt; 'consequatur',
-=======
-            'content' =&gt; 'qui',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
-            'playlist_id' =&gt; 1,
+            'content' =&gt; 'ut',
             'shared' =&gt; false,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -9439,16 +9616,11 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1'
+url = 'http://localhost:8082/api/v1/playlists/1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-<<<<<<< HEAD
-    "content": "consequatur",
-=======
-    "content": "qui",
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
-    "playlist_id": 1,
+    "content": "ut",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -9462,6 +9634,14 @@ headers = {
 }
 response = requests.request('PUT', url, headers=headers, json=payload)
 response.json()</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Invalid playlist or activity id."
+    ]
+}</code></pre>
 <blockquote>
 <p>Example response (500):</p>
 </blockquote>
@@ -9534,8 +9714,8 @@ response.json()</code></pre>
     }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>PUT api/v1/activities/{activity}</code></p>
-<p><code>PATCH api/v1/activities/{activity}</code></p>
+<p><code>PUT api/v1/playlists/{playlist}/activities/{activity}</code></p>
+<p><code>PATCH api/v1/playlists/{playlist}/activities/{activity}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -9546,6 +9726,11 @@ response.json()</code></pre>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>playlist</code></td>
+<td>required</td>
+<td>The Id of a playlist</td>
+</tr>
 <tr>
 <td><code>activity</code></td>
 <td>required</td>
@@ -9583,15 +9768,9 @@ response.json()</code></pre>
 <td>The content of a activity Example:</td>
 </tr>
 <tr>
-<td><code>playlist_id</code></td>
-<td>integer</td>
-<td>optional</td>
-<td>The Id of a playlist</td>
-</tr>
-<tr>
 <td><code>shared</code></td>
 <td>boolean</td>
-<td>required</td>
+<td>optional</td>
 <td>The status of share of a activity</td>
 </tr>
 <tr>
@@ -9626,19 +9805,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_66e6c51c201a5a8ca254ce9e8e8a63a9 -->
-<!-- START_a428814a3c351226a73456c3b41d2a39 -->
+<!-- END_2c284aa499dc018e9876b34be26974fe -->
+<!-- START_4b91bf4495723f1f78bc403ac627bdaf -->
 <h2>Remove Activity</h2>
 <p>Remove the specified activity.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/activities/1" \
+    "http://localhost:8082/api/v1/playlists/1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/1"
+    "http://localhost:8082/api/v1/playlists/1/activities/1"
 );
 
 let headers = {
@@ -9655,7 +9834,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/activities/1',
+    'http://localhost:8082/api/v1/playlists/1/activities/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9668,7 +9847,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activities/1'
+url = 'http://localhost:8082/api/v1/playlists/1/activities/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -9690,7 +9869,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>DELETE api/v1/activities/{activity}</code></p>
+<p><code>DELETE api/v1/playlists/{playlist}/activities/{activity}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -9702,13 +9881,18 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>playlist</code></td>
+<td>required</td>
+<td>The Id of a playlist</td>
+</tr>
+<tr>
 <td><code>activity</code></td>
 <td>required</td>
 <td>The Id of a activity</td>
 </tr>
 </tbody>
 </table>
-<!-- END_a428814a3c351226a73456c3b41d2a39 -->
+<!-- END_4b91bf4495723f1f78bc403ac627bdaf -->
 <!-- START_e284a1f1e8f09a03b553aa9c2ed4f443 -->
 <h2>Get H5P Resource Settings (Shared)</h2>
 <p>Get H5P Resource Settings for a shared activity</p>
@@ -9716,19 +9900,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-<<<<<<< HEAD
-    -G "http://localhost:8082/api/api/v1/activities/magni/h5p-resource-settings-shared" \
+    -G "http://localhost:8082/api/v1/activities/explicabo/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activities/magni/h5p-resource-settings-shared"
-=======
-    -G "http://localhost:8000/api/v1/activities/delectus/h5p-resource-settings-shared" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/activities/delectus/h5p-resource-settings-shared"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "http://localhost:8082/api/v1/activities/explicabo/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -9745,11 +9921,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-<<<<<<< HEAD
-    'http://localhost:8082/api/api/v1/activities/magni/h5p-resource-settings-shared',
-=======
-    'http://localhost:8000/api/v1/activities/delectus/h5p-resource-settings-shared',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    'http://localhost:8082/api/v1/activities/explicabo/h5p-resource-settings-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -9762,11 +9934,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/activities/magni/h5p-resource-settings-shared'
-=======
-url = 'http://localhost:8000/api/v1/activities/delectus/h5p-resource-settings-shared'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+url = 'http://localhost:8082/api/v1/activities/explicabo/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -10271,11 +10439,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activity-types/1/items" \
+    -G "http://localhost:8082/api/v1/activity-types/1/items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-types/1/items"
+    "http://localhost:8082/api/v1/activity-types/1/items"
 );
 
 let headers = {
@@ -10292,7 +10460,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activity-types/1/items',
+    'http://localhost:8082/api/v1/activity-types/1/items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -10305,7 +10473,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-types/1/items'
+url = 'http://localhost:8082/api/v1/activity-types/1/items'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -10391,11 +10559,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activity-types" \
+    -G "http://localhost:8082/api/v1/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-types"
+    "http://localhost:8082/api/v1/activity-types"
 );
 
 let headers = {
@@ -10412,7 +10580,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activity-types',
+    'http://localhost:8082/api/v1/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -10425,7 +10593,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-types'
+url = 'http://localhost:8082/api/v1/activity-types'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11214,13 +11382,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/activity-types" \
+    "http://localhost:8082/api/v1/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio","order":0,"image":"\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-types"
+    "http://localhost:8082/api/v1/activity-types"
 );
 
 let headers = {
@@ -11244,7 +11412,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/activity-types',
+    'http://localhost:8082/api/v1/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11262,7 +11430,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-types'
+url = 'http://localhost:8082/api/v1/activity-types'
 payload = {
     "title": "Audio",
     "order": 0,
@@ -11337,11 +11505,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activity-types/1" \
+    -G "http://localhost:8082/api/v1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-types/1"
+    "http://localhost:8082/api/v1/activity-types/1"
 );
 
 let headers = {
@@ -11358,7 +11526,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activity-types/1',
+    'http://localhost:8082/api/v1/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11371,7 +11539,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-types/1'
+url = 'http://localhost:8082/api/v1/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11463,13 +11631,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/activity-types/1" \
+    "http://localhost:8082/api/v1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio","order":0,"image":"\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-types/1"
+    "http://localhost:8082/api/v1/activity-types/1"
 );
 
 let headers = {
@@ -11493,7 +11661,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/activity-types/1',
+    'http://localhost:8082/api/v1/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11511,7 +11679,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-types/1'
+url = 'http://localhost:8082/api/v1/activity-types/1'
 payload = {
     "title": "Audio",
     "order": 0,
@@ -11648,11 +11816,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/activity-types/1" \
+    "http://localhost:8082/api/v1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-types/1"
+    "http://localhost:8082/api/v1/activity-types/1"
 );
 
 let headers = {
@@ -11669,7 +11837,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/activity-types/1',
+    'http://localhost:8082/api/v1/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11682,7 +11850,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-types/1'
+url = 'http://localhost:8082/api/v1/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11732,11 +11900,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activity-items" \
+    -G "http://localhost:8082/api/v1/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-items"
+    "http://localhost:8082/api/v1/activity-items"
 );
 
 let headers = {
@@ -11753,7 +11921,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activity-items',
+    'http://localhost:8082/api/v1/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11766,7 +11934,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-items'
+url = 'http://localhost:8082/api/v1/activity-items'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -11832,13 +12000,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/activity-items" \
+    "http://localhost:8082/api/v1/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio Recorder","description":"Record your voice and play back or download a .wav file of your recording.","order":1,"activity_type_id":1,"type":"h5p","h5pLib":"H5P.AudioRecorder 1.0","image":"\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-items"
+    "http://localhost:8082/api/v1/activity-items"
 );
 
 let headers = {
@@ -11866,7 +12034,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/activity-items',
+    'http://localhost:8082/api/v1/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -11888,7 +12056,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-items'
+url = 'http://localhost:8082/api/v1/activity-items'
 payload = {
     "title": "Audio Recorder",
     "description": "Record your voice and play back or download a .wav file of your recording.",
@@ -12011,11 +12179,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/activity-items/1" \
+    -G "http://localhost:8082/api/v1/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-items/1"
+    "http://localhost:8082/api/v1/activity-items/1"
 );
 
 let headers = {
@@ -12032,7 +12200,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/activity-items/1',
+    'http://localhost:8082/api/v1/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12045,7 +12213,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-items/1'
+url = 'http://localhost:8082/api/v1/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12105,13 +12273,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/activity-items/1" \
+    "http://localhost:8082/api/v1/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Audio Recorder","description":"Record your voice and play back or download a .wav file of your recording.","order":1,"activity_type_id":1,"type":"h5p","h5pLib":"H5P.AudioRecorder 1.0","image":"\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-items/1"
+    "http://localhost:8082/api/v1/activity-items/1"
 );
 
 let headers = {
@@ -12139,7 +12307,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/activity-items/1',
+    'http://localhost:8082/api/v1/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12161,7 +12329,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-items/1'
+url = 'http://localhost:8082/api/v1/activity-items/1'
 payload = {
     "title": "Audio Recorder",
     "description": "Record your voice and play back or download a .wav file of your recording.",
@@ -12302,11 +12470,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/activity-items/1" \
+    "http://localhost:8082/api/v1/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/activity-items/1"
+    "http://localhost:8082/api/v1/activity-items/1"
 );
 
 let headers = {
@@ -12323,7 +12491,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/activity-items/1',
+    'http://localhost:8082/api/v1/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12336,7 +12504,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/activity-items/1'
+url = 'http://localhost:8082/api/v1/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12386,13 +12554,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/go/canvas/projects/1/playlists/1/publish" \
+    "http://localhost:8082/api/v1/go/canvas/projects/1/playlists/1/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"setting_id":1,"counter":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/go/canvas/projects/1/playlists/1/publish"
+    "http://localhost:8082/api/v1/go/canvas/projects/1/playlists/1/publish"
 );
 
 let headers = {
@@ -12415,7 +12583,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/go/canvas/projects/1/playlists/1/publish',
+    'http://localhost:8082/api/v1/go/canvas/projects/1/playlists/1/publish',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12432,7 +12600,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/go/canvas/projects/1/playlists/1/publish'
+url = 'http://localhost:8082/api/v1/go/canvas/projects/1/playlists/1/publish'
 payload = {
     "setting_id": 1,
     "counter": 1
@@ -12546,13 +12714,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/go/moodle/projects/1/playlists/1/publish" \
+    "http://localhost:8082/api/v1/go/moodle/projects/1/playlists/1/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"setting_id":1,"counter":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/go/moodle/projects/1/playlists/1/publish"
+    "http://localhost:8082/api/v1/go/moodle/projects/1/playlists/1/publish"
 );
 
 let headers = {
@@ -12575,7 +12743,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/go/moodle/projects/1/playlists/1/publish',
+    'http://localhost:8082/api/v1/go/moodle/projects/1/playlists/1/publish',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12592,7 +12760,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/go/moodle/projects/1/playlists/1/publish'
+url = 'http://localhost:8082/api/v1/go/moodle/projects/1/playlists/1/publish'
 payload = {
     "setting_id": 1,
     "counter": 1
@@ -12692,11 +12860,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/go/lms-settings/user/me" \
+    -G "http://localhost:8082/api/v1/go/lms-settings/user/me" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/go/lms-settings/user/me"
+    "http://localhost:8082/api/v1/go/lms-settings/user/me"
 );
 
 let headers = {
@@ -12713,7 +12881,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/go/lms-settings/user/me',
+    'http://localhost:8082/api/v1/go/lms-settings/user/me',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12726,7 +12894,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/go/lms-settings/user/me'
+url = 'http://localhost:8082/api/v1/go/lms-settings/user/me'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12780,13 +12948,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/go/lms/projects" \
+    "http://localhost:8082/api/v1/go/lms/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"lms_url":"quo","lti_client_id":12}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/go/lms/projects"
+    "http://localhost:8082/api/v1/go/lms/projects"
 );
 
 let headers = {
@@ -12809,7 +12977,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/go/lms/projects',
+    'http://localhost:8082/api/v1/go/lms/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12826,7 +12994,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/go/lms/projects'
+url = 'http://localhost:8082/api/v1/go/lms/projects'
 payload = {
     "lms_url": "quo",
     "lti_client_id": 12
@@ -12900,11 +13068,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/go/lms/activities" \
+    "http://localhost:8082/api/v1/go/lms/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/go/lms/activities"
+    "http://localhost:8082/api/v1/go/lms/activities"
 );
 
 let headers = {
@@ -12921,7 +13089,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/go/lms/activities',
+    'http://localhost:8082/api/v1/go/lms/activities',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -12934,7 +13102,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/go/lms/activities'
+url = 'http://localhost:8082/api/v1/go/lms/activities'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -12966,23 +13134,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-<<<<<<< HEAD
-    "http://localhost:8082/api/api/v1/go/canvas/projects/nisi/fetch" \
+    "http://localhost:8082/api/v1/go/canvas/projects/ab/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":9}'
+    -d '{"setting_id":10}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/go/canvas/projects/nisi/fetch"
-=======
-    "http://localhost:8000/api/v1/go/canvas/projects/similique/fetch" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"setting_id":8}'
-</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/similique/fetch"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "http://localhost:8082/api/v1/go/canvas/projects/ab/fetch"
 );
 
 let headers = {
@@ -12991,11 +13149,7 @@ let headers = {
 };
 
 let body = {
-<<<<<<< HEAD
-    "setting_id": 9
-=======
-    "setting_id": 8
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "setting_id": 10
 }
 
 fetch(url, {
@@ -13008,22 +13162,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-<<<<<<< HEAD
-    'http://localhost:8082/api/api/v1/go/canvas/projects/nisi/fetch',
-=======
-    'http://localhost:8000/api/v1/go/canvas/projects/similique/fetch',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    'http://localhost:8082/api/v1/go/canvas/projects/ab/fetch',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-<<<<<<< HEAD
-            'setting_id' =&gt; 9,
-=======
-            'setting_id' =&gt; 8,
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+            'setting_id' =&gt; 10,
         ],
     ]
 );
@@ -13032,15 +13178,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/go/canvas/projects/nisi/fetch'
+url = 'http://localhost:8082/api/v1/go/canvas/projects/ab/fetch'
 payload = {
-    "setting_id": 9
-=======
-url = 'http://localhost:8000/api/v1/go/canvas/projects/similique/fetch'
-payload = {
-    "setting_id": 8
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "setting_id": 10
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13126,17 +13266,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/google-classroom/access-token" \
+    "http://localhost:8082/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
-    -d '{"access_token":"architecto"}'
-=======
-    -d '{"access_token":"ad"}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    -d '{"access_token":"voluptatem"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/google-classroom/access-token"
+    "http://localhost:8082/api/v1/google-classroom/access-token"
 );
 
 let headers = {
@@ -13145,11 +13281,7 @@ let headers = {
 };
 
 let body = {
-<<<<<<< HEAD
-    "access_token": "architecto"
-=======
-    "access_token": "ad"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "voluptatem"
 }
 
 fetch(url, {
@@ -13162,18 +13294,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/google-classroom/access-token',
+    'http://localhost:8082/api/v1/google-classroom/access-token',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-<<<<<<< HEAD
-            'access_token' =&gt; 'architecto',
-=======
-            'access_token' =&gt; 'ad',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+            'access_token' =&gt; 'voluptatem',
         ],
     ]
 );
@@ -13182,13 +13310,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/google-classroom/access-token'
+url = 'http://localhost:8082/api/v1/google-classroom/access-token'
 payload = {
-<<<<<<< HEAD
-    "access_token": "architecto"
-=======
-    "access_token": "ad"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "voluptatem"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13247,11 +13371,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/google-classroom/courses" \
+    -G "http://localhost:8082/api/v1/google-classroom/courses" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/google-classroom/courses"
+    "http://localhost:8082/api/v1/google-classroom/courses"
 );
 
 let headers = {
@@ -13268,7 +13392,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/google-classroom/courses',
+    'http://localhost:8082/api/v1/google-classroom/courses',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -13281,7 +13405,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/google-classroom/courses'
+url = 'http://localhost:8082/api/v1/google-classroom/courses'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -13329,13 +13453,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/google-classroom/projects/9/copy" \
+    "http://localhost:8082/api/v1/google-classroom/projects/9/copy" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"course_id":"123"}'
+    -d '{"course_id":"123","access_token":"porro"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/google-classroom/projects/9/copy"
+    "http://localhost:8082/api/v1/google-classroom/projects/9/copy"
 );
 
 let headers = {
@@ -13344,7 +13468,8 @@ let headers = {
 };
 
 let body = {
-    "course_id": "123"
+    "course_id": "123",
+    "access_token": "porro"
 }
 
 fetch(url, {
@@ -13357,7 +13482,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/google-classroom/projects/9/copy',
+    'http://localhost:8082/api/v1/google-classroom/projects/9/copy',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -13365,6 +13490,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'course_id' =&gt; '123',
+            'access_token' =&gt; 'porro',
         ],
     ]
 );
@@ -13373,9 +13499,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/google-classroom/projects/9/copy'
+url = 'http://localhost:8082/api/v1/google-classroom/projects/9/copy'
 payload = {
-    "course_id": "123"
+    "course_id": "123",
+    "access_token": "porro"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13517,6 +13644,13 @@ response.json()</code></pre>
 <td>optional</td>
 <td>Id of an existing Google Classroom course.</td>
 </tr>
+<tr>
+<td><code>access_token</code></td>
+<td>string</td>
+<td>null</td>
+<td>optional</td>
+<td>The stringified of the GAPI access token JSON object</td>
+</tr>
 </tbody>
 </table>
 <!-- END_3f6177f199294bd05304ded78263e7fc -->
@@ -13528,17 +13662,13 @@ Attaches a summary page link to the assignment, and turns it in.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/google-classroom/turnin/9" \
+    "http://localhost:8082/api/v1/google-classroom/turnin/9" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
-    -d '{"access_token":"rerum","course_id":"possimus"}'
-=======
-    -d '{"access_token":"repudiandae","course_id":"voluptas"}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    -d '{"access_token":"dolore","course_id":"quia"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/google-classroom/turnin/9"
+    "http://localhost:8082/api/v1/google-classroom/turnin/9"
 );
 
 let headers = {
@@ -13547,13 +13677,8 @@ let headers = {
 };
 
 let body = {
-<<<<<<< HEAD
-    "access_token": "rerum",
-    "course_id": "possimus"
-=======
-    "access_token": "repudiandae",
-    "course_id": "voluptas"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "dolore",
+    "course_id": "quia"
 }
 
 fetch(url, {
@@ -13566,20 +13691,15 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/google-classroom/turnin/9',
+    'http://localhost:8082/api/v1/google-classroom/turnin/9',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-<<<<<<< HEAD
-            'access_token' =&gt; 'rerum',
-            'course_id' =&gt; 'possimus',
-=======
-            'access_token' =&gt; 'repudiandae',
-            'course_id' =&gt; 'voluptas',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+            'access_token' =&gt; 'dolore',
+            'course_id' =&gt; 'quia',
         ],
     ]
 );
@@ -13588,15 +13708,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/google-classroom/turnin/9'
+url = 'http://localhost:8082/api/v1/google-classroom/turnin/9'
 payload = {
-<<<<<<< HEAD
-    "access_token": "rerum",
-    "course_id": "possimus"
-=======
-    "access_token": "repudiandae",
-    "course_id": "voluptas"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "dolore",
+    "course_id": "quia"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13679,17 +13794,13 @@ If the user is authenticated and is a student, validate if the submission is his
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/google-classroom/validate-summary-access" \
+    "http://localhost:8082/api/v1/google-classroom/validate-summary-access" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
-    -d '{"access_token":"odit","course_id":"fugiat","gc_classwork_id":"id","gc_submission_id":"ipsa"}'
-=======
-    -d '{"access_token":"aliquid","student_id":"fuga","course_id":"nesciunt","gc_classwork_id":"iste","gc_submission_id":"excepturi"}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    -d '{"access_token":"libero","student_id":"quae","course_id":"dignissimos","gc_classwork_id":"et","gc_submission_id":"non"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/google-classroom/validate-summary-access"
+    "http://localhost:8082/api/v1/google-classroom/validate-summary-access"
 );
 
 let headers = {
@@ -13698,18 +13809,11 @@ let headers = {
 };
 
 let body = {
-<<<<<<< HEAD
-    "access_token": "odit",
-    "course_id": "fugiat",
-    "gc_classwork_id": "id",
-    "gc_submission_id": "ipsa"
-=======
-    "access_token": "aliquid",
-    "student_id": "fuga",
-    "course_id": "nesciunt",
-    "gc_classwork_id": "iste",
-    "gc_submission_id": "excepturi"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "libero",
+    "student_id": "quae",
+    "course_id": "dignissimos",
+    "gc_classwork_id": "et",
+    "gc_submission_id": "non"
 }
 
 fetch(url, {
@@ -13722,25 +13826,18 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/google-classroom/validate-summary-access',
+    'http://localhost:8082/api/v1/google-classroom/validate-summary-access',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-<<<<<<< HEAD
-            'access_token' =&gt; 'odit',
-            'course_id' =&gt; 'fugiat',
-            'gc_classwork_id' =&gt; 'id',
-            'gc_submission_id' =&gt; 'ipsa',
-=======
-            'access_token' =&gt; 'aliquid',
-            'student_id' =&gt; 'fuga',
-            'course_id' =&gt; 'nesciunt',
-            'gc_classwork_id' =&gt; 'iste',
-            'gc_submission_id' =&gt; 'excepturi',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+            'access_token' =&gt; 'libero',
+            'student_id' =&gt; 'quae',
+            'course_id' =&gt; 'dignissimos',
+            'gc_classwork_id' =&gt; 'et',
+            'gc_submission_id' =&gt; 'non',
         ],
     ]
 );
@@ -13749,20 +13846,13 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/google-classroom/validate-summary-access'
+url = 'http://localhost:8082/api/v1/google-classroom/validate-summary-access'
 payload = {
-<<<<<<< HEAD
-    "access_token": "odit",
-    "course_id": "fugiat",
-    "gc_classwork_id": "id",
-    "gc_submission_id": "ipsa"
-=======
-    "access_token": "aliquid",
-    "student_id": "fuga",
-    "course_id": "nesciunt",
-    "gc_classwork_id": "iste",
-    "gc_submission_id": "excepturi"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "libero",
+    "student_id": "quae",
+    "course_id": "dignissimos",
+    "gc_classwork_id": "et",
+    "gc_submission_id": "non"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13840,17 +13930,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/google-classroom/classwork/9/submission" \
+    "http://localhost:8082/api/v1/google-classroom/classwork/9/submission" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
-    -d '{"access_token":"accusantium","course_id":"odio"}'
-=======
-    -d '{"access_token":"ut","course_id":"ipsa"}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    -d '{"access_token":"ratione","course_id":"vitae"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/google-classroom/classwork/9/submission"
+    "http://localhost:8082/api/v1/google-classroom/classwork/9/submission"
 );
 
 let headers = {
@@ -13859,13 +13945,8 @@ let headers = {
 };
 
 let body = {
-<<<<<<< HEAD
-    "access_token": "accusantium",
-    "course_id": "odio"
-=======
-    "access_token": "ut",
-    "course_id": "ipsa"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "ratione",
+    "course_id": "vitae"
 }
 
 fetch(url, {
@@ -13878,20 +13959,15 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/google-classroom/classwork/9/submission',
+    'http://localhost:8082/api/v1/google-classroom/classwork/9/submission',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-<<<<<<< HEAD
-            'access_token' =&gt; 'accusantium',
-            'course_id' =&gt; 'odio',
-=======
-            'access_token' =&gt; 'ut',
-            'course_id' =&gt; 'ipsa',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+            'access_token' =&gt; 'ratione',
+            'course_id' =&gt; 'vitae',
         ],
     ]
 );
@@ -13900,15 +13976,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/google-classroom/classwork/9/submission'
+url = 'http://localhost:8082/api/v1/google-classroom/classwork/9/submission'
 payload = {
-<<<<<<< HEAD
-    "access_token": "accusantium",
-    "course_id": "odio"
-=======
-    "access_token": "ut",
-    "course_id": "ipsa"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "access_token": "ratione",
+    "course_id": "vitae"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13995,19 +14066,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-<<<<<<< HEAD
-    -G "http://localhost:8082/api/api/v1/google-classroom/activities/soluta/h5p-resource-settings" \
+    -G "http://localhost:8082/api/v1/google-classroom/activities/minus/h5p-resource-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/google-classroom/activities/soluta/h5p-resource-settings"
-=======
-    -G "http://localhost:8000/api/v1/google-classroom/activities/rerum/h5p-resource-settings" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/activities/rerum/h5p-resource-settings"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    "http://localhost:8082/api/v1/google-classroom/activities/minus/h5p-resource-settings"
 );
 
 let headers = {
@@ -14024,11 +14087,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-<<<<<<< HEAD
-    'http://localhost:8082/api/api/v1/google-classroom/activities/soluta/h5p-resource-settings',
-=======
-    'http://localhost:8000/api/v1/google-classroom/activities/rerum/h5p-resource-settings',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+    'http://localhost:8082/api/v1/google-classroom/activities/minus/h5p-resource-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -14041,11 +14100,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/google-classroom/activities/soluta/h5p-resource-settings'
-=======
-url = 'http://localhost:8000/api/v1/google-classroom/activities/rerum/h5p-resource-settings'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+url = 'http://localhost:8082/api/v1/google-classroom/activities/minus/h5p-resource-settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -14549,11 +14604,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/h5p/settings" \
+    -G "http://localhost:8082/api/v1/h5p/settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p/settings"
+    "http://localhost:8082/api/v1/h5p/settings"
 );
 
 let headers = {
@@ -14570,7 +14625,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/h5p/settings',
+    'http://localhost:8082/api/v1/h5p/settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -14583,7 +14638,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p/settings'
+url = 'http://localhost:8082/api/v1/h5p/settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -14606,11 +14661,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/h5p" \
+    -G "http://localhost:8082/api/v1/h5p" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p"
+    "http://localhost:8082/api/v1/h5p"
 );
 
 let headers = {
@@ -14627,7 +14682,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/h5p',
+    'http://localhost:8082/api/v1/h5p',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -14640,7 +14695,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p'
+url = 'http://localhost:8082/api/v1/h5p'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -14662,11 +14717,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/h5p" \
+    "http://localhost:8082/api/v1/h5p" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p"
+    "http://localhost:8082/api/v1/h5p"
 );
 
 let headers = {
@@ -14683,7 +14738,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/h5p',
+    'http://localhost:8082/api/v1/h5p',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -14696,7 +14751,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p'
+url = 'http://localhost:8082/api/v1/h5p'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -14719,11 +14774,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/h5p/1" \
+    -G "http://localhost:8082/api/v1/h5p/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p/1"
+    "http://localhost:8082/api/v1/h5p/1"
 );
 
 let headers = {
@@ -14740,7 +14795,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/h5p/1',
+    'http://localhost:8082/api/v1/h5p/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -14753,7 +14808,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p/1'
+url = 'http://localhost:8082/api/v1/h5p/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -15672,11 +15727,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/h5p/1" \
+    "http://localhost:8082/api/v1/h5p/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p/1"
+    "http://localhost:8082/api/v1/h5p/1"
 );
 
 let headers = {
@@ -15693,7 +15748,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/h5p/1',
+    'http://localhost:8082/api/v1/h5p/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15706,7 +15761,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p/1'
+url = 'http://localhost:8082/api/v1/h5p/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -15754,11 +15809,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/h5p/1" \
+    "http://localhost:8082/api/v1/h5p/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p/1"
+    "http://localhost:8082/api/v1/h5p/1"
 );
 
 let headers = {
@@ -15775,7 +15830,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/h5p/1',
+    'http://localhost:8082/api/v1/h5p/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15788,7 +15843,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p/1'
+url = 'http://localhost:8082/api/v1/h5p/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -15828,11 +15883,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/h5p/embed/1" \
+    -G "http://localhost:8082/api/v1/h5p/embed/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p/embed/1"
+    "http://localhost:8082/api/v1/h5p/embed/1"
 );
 
 let headers = {
@@ -15849,7 +15904,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/h5p/embed/1',
+    'http://localhost:8082/api/v1/h5p/embed/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -15862,7 +15917,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p/embed/1'
+url = 'http://localhost:8082/api/v1/h5p/embed/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -16772,11 +16827,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/search?query=test&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://localhost:8082/api/v1/search?query=test&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/search"
+    "http://localhost:8082/api/v1/search"
 );
 
 let params = {
@@ -16803,7 +16858,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/search',
+    'http://localhost:8082/api/v1/search',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16823,7 +16878,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/search'
+url = 'http://localhost:8082/api/v1/search'
 params = {
   'query': 'test',
   'sort': 'created_at',
@@ -16908,7 +16963,7 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>query</code></td>
-<td>required</td>
+<td>optional</td>
 <td>Query to search.</td>
 </tr>
 <tr>
@@ -16941,11 +16996,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/search/advanced?query=test&amp;negativeQuery=badword&amp;userIds=%5B1%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://localhost:8082/api/v1/search/advanced?query=test&amp;negativeQuery=badword&amp;userIds=%5B1%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/search/advanced"
+    "http://localhost:8082/api/v1/search/advanced"
 );
 
 let params = {
@@ -16980,7 +17035,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/search/advanced',
+    'http://localhost:8082/api/v1/search/advanced',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17008,7 +17063,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/search/advanced'
+url = 'http://localhost:8082/api/v1/search/advanced'
 params = {
   'query': 'test',
   'negativeQuery': 'badword',
@@ -17093,7 +17148,7 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>query</code></td>
-<td>required</td>
+<td>optional</td>
 <td>Query to search.</td>
 </tr>
 <tr>
@@ -17166,11 +17221,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/search/dashboard?query=test&amp;negativeQuery=badword&amp;indexing=%5B3%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
+    -G "http://localhost:8082/api/v1/search/dashboard?query=test&amp;negativeQuery=badword&amp;indexing=%5B3%5D&amp;startDate=2020-04-30+00%3A00%3A00&amp;endDate=2020-04-30+23%3A59%3A59&amp;subjectIds=%5B%27ComputerScience%27%5D&amp;educationLevelIds=%5B%27Preschool+%28Ages+0-4%29%27%5D&amp;h5pLibraries=%5B%27H5P.InteractiveVideo+1.21%27%5D&amp;model=activities&amp;sort=created_at&amp;order=desc&amp;from=0&amp;size=10" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/search/dashboard"
+    "http://localhost:8082/api/v1/search/dashboard"
 );
 
 let params = {
@@ -17205,7 +17260,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/search/dashboard',
+    'http://localhost:8082/api/v1/search/dashboard',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17233,7 +17288,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/search/dashboard'
+url = 'http://localhost:8082/api/v1/search/dashboard'
 params = {
   'query': 'test',
   'negativeQuery': 'badword',
@@ -17316,23 +17371,7 @@ response.json()</code></pre>
             "title": "Practice Activity - Image Pairing",
             "content": "",
             "model": "Activity",
-<<<<<<< HEAD
             "user": null,
-=======
-            "user": {
-                "id": 3150,
-                "first_name": "Abby",
-                "last_name": "",
-                "email": "abby@curriki.org",
-                "organization_name": null,
-                "organization_type": null,
-                "job_title": null,
-                "address": null,
-                "phone_number": null,
-                "website": null,
-                "subscribed": true
-            },
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
             "created_at": null
         },
         {
@@ -17342,23 +17381,7 @@ response.json()</code></pre>
             "title": "Practice Activity - Image Pairing",
             "content": "",
             "model": "Activity",
-<<<<<<< HEAD
             "user": null,
-=======
-            "user": {
-                "id": 3150,
-                "first_name": "Abby",
-                "last_name": "",
-                "email": "abby@curriki.org",
-                "organization_name": null,
-                "organization_type": null,
-                "job_title": null,
-                "address": null,
-                "phone_number": null,
-                "website": null,
-                "subscribed": true
-            },
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
             "created_at": null
         }
     ]
@@ -17377,7 +17400,7 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>query</code></td>
-<td>required</td>
+<td>optional</td>
 <td>Query to search.</td>
 </tr>
 <tr>
@@ -17443,30 +17466,22 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_67954e7bd18d69bbd176c2502d0973ba -->
-<<<<<<< HEAD
 <h1>14. Group</h1>
 <p>APIs for group management</p>
 <!-- START_6a97c3f5b0867c49fbe4bdea782e56c5 -->
 <h2>Invite Group Member</h2>
 <p>Invite a group member while creating a group.</p>
-=======
-<h1>14. Team</h1>
-<p>APIs for team management</p>
-<!-- START_27a081279577e3f6f78ba3a9814a7143 -->
-<h2>Invite Team</h2>
-<p>Invite a team member while creating a team.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/invite" \
+    "http://localhost:8082/api/v1/groups/invite" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1,"email":"abby@curriki.org"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/invite"
+    "http://localhost:8082/api/v1/groups/invite"
 );
 
 let headers = {
@@ -17489,7 +17504,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/invite',
+    'http://localhost:8082/api/v1/groups/invite',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17506,7 +17521,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/invite'
+url = 'http://localhost:8082/api/v1/groups/invite'
 payload = {
     "id": 1,
     "email": "abby@curriki.org"
@@ -17564,13 +17579,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/1/invite-member" \
+    "http://localhost:8082/api/v1/groups/1/invite-member" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"email":"abby@curriki.org"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1/invite-member"
+    "http://localhost:8082/api/v1/groups/1/invite-member"
 );
 
 let headers = {
@@ -17592,7 +17607,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/1/invite-member',
+    'http://localhost:8082/api/v1/groups/1/invite-member',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17608,7 +17623,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1/invite-member'
+url = 'http://localhost:8082/api/v1/groups/1/invite-member'
 payload = {
     "email": "abby@curriki.org"
 }
@@ -17662,20 +17677,20 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_9023db9f559ebe4a4f02cbb92760cd11 -->
-<!-- START_f854547133fe27a2553bb0e80ba1a704 -->
+<!-- START_8db5d576beec72ec70c5f15b68b1f891 -->
 <h2>Invite Group Members</h2>
 <p>Invite a bundle of users to the group.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/1/invite-members" \
+    "http://localhost:8082/api/v1/suborganization/1/groups/1/invite-members" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"users":"[{id: 1, first_name: Jean, last_name: Erik, name: \"Jean Erik\"}, {id: \"Kairo@Seed.com\", email: \"Kairo@Seed.com\"}]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1/invite-members"
+    "http://localhost:8082/api/v1/suborganization/1/groups/1/invite-members"
 );
 
 let headers = {
@@ -17697,7 +17712,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/1/invite-members',
+    'http://localhost:8082/api/v1/suborganization/1/groups/1/invite-members',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17713,7 +17728,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1/invite-members'
+url = 'http://localhost:8082/api/v1/suborganization/1/groups/1/invite-members'
 payload = {
     "users": "[{id: 1, first_name: Jean, last_name: Erik, name: \"Jean Erik\"}, {id: \"Kairo@Seed.com\", email: \"Kairo@Seed.com\"}]"
 }
@@ -17746,7 +17761,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/groups/{group}/invite-members</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/groups/{group}/invite-members</code></p>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -17766,7 +17781,7 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_f854547133fe27a2553bb0e80ba1a704 -->
+<!-- END_8db5d576beec72ec70c5f15b68b1f891 -->
 <!-- START_519c405cee161194324885ec13dae4bc -->
 <h2>Remove Group Member</h2>
 <p>remove a group member to the group.</p>
@@ -17774,13 +17789,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/1/remove" \
+    "http://localhost:8082/api/v1/groups/1/remove" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1/remove"
+    "http://localhost:8082/api/v1/groups/1/remove"
 );
 
 let headers = {
@@ -17802,7 +17817,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/1/remove',
+    'http://localhost:8082/api/v1/groups/1/remove',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17818,7 +17833,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1/remove'
+url = 'http://localhost:8082/api/v1/groups/1/remove'
 payload = {
     "id": 1
 }
@@ -17879,13 +17894,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/1/add-projects" \
+    "http://localhost:8082/api/v1/groups/1/add-projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"ids":"[1]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1/add-projects"
+    "http://localhost:8082/api/v1/groups/1/add-projects"
 );
 
 let headers = {
@@ -17907,7 +17922,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/1/add-projects',
+    'http://localhost:8082/api/v1/groups/1/add-projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -17923,7 +17938,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1/add-projects'
+url = 'http://localhost:8082/api/v1/groups/1/add-projects'
 payload = {
     "ids": "[1]"
 }
@@ -17984,13 +17999,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/1/remove-project" \
+    "http://localhost:8082/api/v1/groups/1/remove-project" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1/remove-project"
+    "http://localhost:8082/api/v1/groups/1/remove-project"
 );
 
 let headers = {
@@ -18012,7 +18027,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/1/remove-project',
+    'http://localhost:8082/api/v1/groups/1/remove-project',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18028,7 +18043,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1/remove-project'
+url = 'http://localhost:8082/api/v1/groups/1/remove-project'
 payload = {
     "id": 1
 }
@@ -18089,13 +18104,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/1/projects/1/add-members" \
+    "http://localhost:8082/api/v1/groups/1/projects/1/add-members" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"ids":"[1]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1/projects/1/add-members"
+    "http://localhost:8082/api/v1/groups/1/projects/1/add-members"
 );
 
 let headers = {
@@ -18117,7 +18132,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/1/projects/1/add-members',
+    'http://localhost:8082/api/v1/groups/1/projects/1/add-members',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18133,7 +18148,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1/projects/1/add-members'
+url = 'http://localhost:8082/api/v1/groups/1/projects/1/add-members'
 payload = {
     "ids": "[1]"
 }
@@ -18194,13 +18209,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups/1/projects/1/remove-member" \
+    "http://localhost:8082/api/v1/groups/1/projects/1/remove-member" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1/projects/1/remove-member"
+    "http://localhost:8082/api/v1/groups/1/projects/1/remove-member"
 );
 
 let headers = {
@@ -18222,7 +18237,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups/1/projects/1/remove-member',
+    'http://localhost:8082/api/v1/groups/1/projects/1/remove-member',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18238,7 +18253,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1/projects/1/remove-member'
+url = 'http://localhost:8082/api/v1/groups/1/projects/1/remove-member'
 payload = {
     "id": 1
 }
@@ -18292,18 +18307,17 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_2aef5f49d5aa6b0624102f9ffb26f040 -->
-<!-- START_8466a1a91326cd5b6a11d8856aab869d -->
+<!-- START_e52f89f5a6ccac544f7be16cb023876a -->
 <h2>Get All Groups</h2>
-<p>Get a list of the groups of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/groups" \
+    -G "http://localhost:8082/api/v1/suborganization/1/groups" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups"
+    "http://localhost:8082/api/v1/suborganization/1/groups"
 );
 
 let headers = {
@@ -18320,7 +18334,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/groups',
+    'http://localhost:8082/api/v1/suborganization/1/groups',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18333,7 +18347,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups'
+url = 'http://localhost:8082/api/v1/suborganization/1/groups'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18370,22 +18384,39 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/groups</code></p>
-<!-- END_8466a1a91326cd5b6a11d8856aab869d -->
-<!-- START_922a50d789de16cc2c31d9ae805a7c6b -->
+<p><code>GET api/v1/suborganization/{suborganization}/groups</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e52f89f5a6ccac544f7be16cb023876a -->
+<!-- START_314b01ec7ab1fd0be2eeb46f41fe2ce5 -->
 <h2>Create Group</h2>
 <p>Create a new group in storage for a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/groups" \
+    "http://localhost:8082/api/v1/suborganization/1/groups" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"Test Group","description":"This is a test group."}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups"
+    "http://localhost:8082/api/v1/suborganization/1/groups"
 );
 
 let headers = {
@@ -18408,7 +18439,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/groups',
+    'http://localhost:8082/api/v1/suborganization/1/groups',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18425,7 +18456,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups'
+url = 'http://localhost:8082/api/v1/suborganization/1/groups'
 payload = {
     "name": "Test Group",
     "description": "This is a test group."
@@ -18474,7 +18505,24 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/groups</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/groups</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -18500,19 +18548,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_922a50d789de16cc2c31d9ae805a7c6b -->
-<!-- START_4a7209122ce1cc7f6675a03fcb71cf33 -->
+<!-- END_314b01ec7ab1fd0be2eeb46f41fe2ce5 -->
+<!-- START_4e9886e6eee626fe53c24be2cbfa31c4 -->
 <h2>Get Group</h2>
 <p>Get the specified group detail.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/groups/1" \
+    -G "http://localhost:8082/api/v1/suborganization/1/groups/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1"
+    "http://localhost:8082/api/v1/suborganization/1/groups/1"
 );
 
 let headers = {
@@ -18529,7 +18577,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/groups/1',
+    'http://localhost:8082/api/v1/suborganization/1/groups/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18542,7 +18590,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1'
+url = 'http://localhost:8082/api/v1/suborganization/1/groups/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18579,7 +18627,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/groups/{group}</code></p>
+<p><code>GET api/v1/suborganization/{suborganization}/groups/{group}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -18591,27 +18639,32 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
 <td><code>group</code></td>
 <td>required</td>
 <td>The Id of a group</td>
 </tr>
 </tbody>
 </table>
-<!-- END_4a7209122ce1cc7f6675a03fcb71cf33 -->
-<!-- START_268f56dced39327e32046292bfe28a45 -->
+<!-- END_4e9886e6eee626fe53c24be2cbfa31c4 -->
+<!-- START_eb9ae0d7e31e484c7336e74188a38c54 -->
 <h2>Update Group</h2>
 <p>Update the specified group of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/groups/1" \
+    "http://localhost:8082/api/v1/suborganization/1/groups/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"Test Group","description":"This is a test group."}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1"
+    "http://localhost:8082/api/v1/suborganization/1/groups/1"
 );
 
 let headers = {
@@ -18634,7 +18687,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/groups/1',
+    'http://localhost:8082/api/v1/suborganization/1/groups/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18651,7 +18704,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1'
+url = 'http://localhost:8082/api/v1/suborganization/1/groups/1'
 payload = {
     "name": "Test Group",
     "description": "This is a test group."
@@ -18700,8 +18753,8 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>PUT api/v1/groups/{group}</code></p>
-<p><code>PATCH api/v1/groups/{group}</code></p>
+<p><code>PUT api/v1/suborganization/{suborganization}/groups/{group}</code></p>
+<p><code>PATCH api/v1/suborganization/{suborganization}/groups/{group}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -18712,6 +18765,11 @@ response.json()</code></pre>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
 <tr>
 <td><code>group</code></td>
 <td>required</td>
@@ -18744,19 +18802,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_268f56dced39327e32046292bfe28a45 -->
-<!-- START_7b4ba9cebfa9f61888f45da4d6a03d93 -->
+<!-- END_eb9ae0d7e31e484c7336e74188a38c54 -->
+<!-- START_84265d7681d587be78b856f2adc0389e -->
 <h2>Remove Group</h2>
 <p>Remove the specified group of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/groups/1" \
+    "http://localhost:8082/api/v1/suborganization/1/groups/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/groups/1"
+    "http://localhost:8082/api/v1/suborganization/1/groups/1"
 );
 
 let headers = {
@@ -18773,7 +18831,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/groups/1',
+    'http://localhost:8082/api/v1/suborganization/1/groups/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18786,7 +18844,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/groups/1'
+url = 'http://localhost:8082/api/v1/suborganization/1/groups/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -18808,7 +18866,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>DELETE api/v1/groups/{group}</code></p>
+<p><code>DELETE api/v1/suborganization/{suborganization}/groups/{group}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -18820,29 +18878,34 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
 <td><code>group</code></td>
 <td>required</td>
 <td>The Id of a group</td>
 </tr>
 </tbody>
 </table>
-<!-- END_7b4ba9cebfa9f61888f45da4d6a03d93 -->
+<!-- END_84265d7681d587be78b856f2adc0389e -->
 <h1>14. Team</h1>
 <p>APIs for team management</p>
 <!-- START_27a081279577e3f6f78ba3a9814a7143 -->
-<h2>Invite Team Member</h2>
+<h2>Invite Team</h2>
 <p>Invite a team member while creating a team.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/invite" \
+    "http://localhost:8082/api/v1/teams/invite" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1,"email":"abby@curriki.org"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/invite"
+    "http://localhost:8082/api/v1/teams/invite"
 );
 
 let headers = {
@@ -18865,7 +18928,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/invite',
+    'http://localhost:8082/api/v1/teams/invite',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -18882,7 +18945,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/invite'
+url = 'http://localhost:8082/api/v1/teams/invite'
 payload = {
     "id": 1,
     "email": "abby@curriki.org"
@@ -18940,17 +19003,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/1/invite-member" \
+    "http://localhost:8082/api/v1/teams/1/invite-member" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
     -d '{"email":"abby@curriki.org"}'
-=======
-    -d '{"import_file":"debitis"}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1/invite-member"
+    "http://localhost:8082/api/v1/teams/1/invite-member"
 );
 
 let headers = {
@@ -18959,11 +19018,7 @@ let headers = {
 };
 
 let body = {
-<<<<<<< HEAD
     "email": "abby@curriki.org"
-=======
-    "import_file": "debitis"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 }
 
 fetch(url, {
@@ -18976,18 +19031,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/1/invite-member',
+    'http://localhost:8082/api/v1/teams/1/invite-member',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-<<<<<<< HEAD
             'email' =&gt; 'abby@curriki.org',
-=======
-            'import_file' =&gt; 'debitis',
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
         ],
     ]
 );
@@ -18996,13 +19047,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1/invite-member'
+url = 'http://localhost:8082/api/v1/teams/1/invite-member'
 payload = {
-<<<<<<< HEAD
     "email": "abby@curriki.org"
-=======
-    "import_file": "debitis"
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 }
 headers = {
   'Content-Type': 'application/json',
@@ -19054,20 +19101,20 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_31fa1500bb158b4c7a39b2330e55a7c0 -->
-<!-- START_3029503181b56a0858b7fd589b21256a -->
+<!-- START_a7d023363f32a57f15b20b747d06bf7f -->
 <h2>Invite Team Members</h2>
 <p>Invite a bundle of users to the team.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/1/invite-members" \
+    "http://localhost:8082/api/v1/suborganization/1/teams/1/invite-members" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"users":"[{id: 1, first_name: Jean, last_name: Erik, name: \"Jean Erik\"}, {id: \"Kairo@Seed.com\", email: \"Kairo@Seed.com\"}]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1/invite-members"
+    "http://localhost:8082/api/v1/suborganization/1/teams/1/invite-members"
 );
 
 let headers = {
@@ -19089,7 +19136,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/1/invite-members',
+    'http://localhost:8082/api/v1/suborganization/1/teams/1/invite-members',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19105,7 +19152,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1/invite-members'
+url = 'http://localhost:8082/api/v1/suborganization/1/teams/1/invite-members'
 payload = {
     "users": "[{id: 1, first_name: Jean, last_name: Erik, name: \"Jean Erik\"}, {id: \"Kairo@Seed.com\", email: \"Kairo@Seed.com\"}]"
 }
@@ -19138,7 +19185,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/teams/{team}/invite-members</code></p>
+<p><code>POST api/v1/suborganization/{suborganization}/teams/{team}/invite-members</code></p>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -19158,28 +19205,21 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
-<!-- END_3029503181b56a0858b7fd589b21256a -->
+<!-- END_a7d023363f32a57f15b20b747d06bf7f -->
 <!-- START_32ba803ff8ac2655c4962881dcfd5956 -->
 <h2>Remove Team Member</h2>
 <p>remove a team member to the team.</p>
-=======
-<!-- END_ef52cb1e3190f07a381bee96496d9e42 -->
-<!-- START_ce6b124894a429e5cdb7415c0d8a91fb -->
-<h2>Get All Users List</h2>
-<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/1/remove" \
+    "http://localhost:8082/api/v1/teams/1/remove" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1/remove"
+    "http://localhost:8082/api/v1/teams/1/remove"
 );
 
 let headers = {
@@ -19201,7 +19241,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/1/remove',
+    'http://localhost:8082/api/v1/teams/1/remove',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19217,7 +19257,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1/remove'
+url = 'http://localhost:8082/api/v1/teams/1/remove'
 payload = {
     "id": 1
 }
@@ -19278,13 +19318,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/1/add-projects" \
+    "http://localhost:8082/api/v1/teams/1/add-projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"ids":"[1]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1/add-projects"
+    "http://localhost:8082/api/v1/teams/1/add-projects"
 );
 
 let headers = {
@@ -19306,7 +19346,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/1/add-projects',
+    'http://localhost:8082/api/v1/teams/1/add-projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19322,7 +19362,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1/add-projects'
+url = 'http://localhost:8082/api/v1/teams/1/add-projects'
 payload = {
     "ids": "[1]"
 }
@@ -19375,28 +19415,21 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
 <!-- END_468567280d86e75bf96ad9765932b723 -->
 <!-- START_cda3666edcf2ff11d3a2f2ba2f03e265 -->
 <h2>Remove Project from the Team</h2>
 <p>Remove a project from the team.</p>
-=======
-<!-- END_521e32c7d2ba5e2282925ea8a26584bc -->
-<!-- START_effe89f830caf4daa978f55524698087 -->
-<h2>Get Specified User</h2>
-<p>Get the specified user data.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/1/remove-project" \
+    "http://localhost:8082/api/v1/teams/1/remove-project" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1/remove-project"
+    "http://localhost:8082/api/v1/teams/1/remove-project"
 );
 
 let headers = {
@@ -19418,7 +19451,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/1/remove-project',
+    'http://localhost:8082/api/v1/teams/1/remove-project',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19434,7 +19467,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1/remove-project'
+url = 'http://localhost:8082/api/v1/teams/1/remove-project'
 payload = {
     "id": 1
 }
@@ -19487,28 +19520,21 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
 <!-- END_cda3666edcf2ff11d3a2f2ba2f03e265 -->
 <!-- START_e6c3e7d31143e75a7880693974dd0790 -->
 <h2>Add Members to the Team Project</h2>
 <p>Add members to a specified project of specified team.</p>
-=======
-<!-- END_effe89f830caf4daa978f55524698087 -->
-<!-- START_4bfaf4c2bfaf88b96536e717be6b0e62 -->
-<h2>Update Specified User</h2>
-<p>Updates the user data in database.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/1/projects/1/add-members" \
+    "http://localhost:8082/api/v1/teams/1/projects/1/add-members" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"ids":"[1]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1/projects/1/add-members"
+    "http://localhost:8082/api/v1/teams/1/projects/1/add-members"
 );
 
 let headers = {
@@ -19530,7 +19556,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/1/projects/1/add-members',
+    'http://localhost:8082/api/v1/teams/1/projects/1/add-members',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19546,7 +19572,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1/projects/1/add-members'
+url = 'http://localhost:8082/api/v1/teams/1/projects/1/add-members'
 payload = {
     "ids": "[1]"
 }
@@ -19599,28 +19625,21 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
 <!-- END_e6c3e7d31143e75a7880693974dd0790 -->
 <!-- START_1c3c131ff8f1b33e8af840aea128052f -->
 <h2>Remove Member from the Team Project</h2>
 <p>Remove member from a specified project of specified team.</p>
-=======
-<!-- END_4bfaf4c2bfaf88b96536e717be6b0e62 -->
-<!-- START_ff019bc7db8f5be9ac8699027d67f85c -->
-<h2>Delete Specified User</h2>
-<p>Deletes the user record from database.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/teams/1/projects/1/remove-member" \
+    "http://localhost:8082/api/v1/teams/1/projects/1/remove-member" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1/projects/1/remove-member"
+    "http://localhost:8082/api/v1/teams/1/projects/1/remove-member"
 );
 
 let headers = {
@@ -19642,7 +19661,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/teams/1/projects/1/remove-member',
+    'http://localhost:8082/api/v1/teams/1/projects/1/remove-member',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19658,7 +19677,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1/projects/1/remove-member'
+url = 'http://localhost:8082/api/v1/teams/1/projects/1/remove-member'
 payload = {
     "id": 1
 }
@@ -19712,18 +19731,18 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_1c3c131ff8f1b33e8af840aea128052f -->
-<!-- START_f6de42238cfe6bcbd84ba30779151c10 -->
+<!-- START_c08b362aabc1ace0d37cfe39ab19e13c -->
 <h2>Remove Team</h2>
 <p>Remove the specified team of a user.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/teams/1" \
+    "http://localhost:8082/api/v1/suborganization/1/teams/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/teams/1"
+    "http://localhost:8082/api/v1/suborganization/1/teams/1"
 );
 
 let headers = {
@@ -19740,7 +19759,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/teams/1',
+    'http://localhost:8082/api/v1/suborganization/1/teams/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -19753,7 +19772,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/teams/1'
+url = 'http://localhost:8082/api/v1/suborganization/1/teams/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -19775,7 +19794,7 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>DELETE api/v1/teams/{team}</code></p>
+<p><code>DELETE api/v1/suborganization/{suborganization}/teams/{team}</code></p>
 <h4>URL Parameters</h4>
 <table>
 <thead>
@@ -19787,40 +19806,32 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
 <td><code>team</code></td>
 <td>required</td>
 <td>The Id of a team</td>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
-<!-- END_f6de42238cfe6bcbd84ba30779151c10 -->
+<!-- END_c08b362aabc1ace0d37cfe39ab19e13c -->
 <h1>15. CurrikiGo Outcome</h1>
 <p>APIs for generating outcomes against students' submissions.</p>
 <!-- START_e6ae3b80fa5bac4e60bd0cadeabcd542 -->
-<h2>Get Student Results Summary</h2>
+<h2>Get Student Results Grouped Summary</h2>
 <p>Fetch LRS statements based on parameters, and generate a student result summary</p>
-=======
-<!-- END_197c7d7cd44f76b20d2c1e30e9875bcf -->
-<!-- START_be74407f085cafa8c03238e489fa014d -->
-<h2>Create New Activity Type</h2>
-<p>Creates the new activity type in database.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/outcome/summary" \
+    "http://localhost:8082/api/v1/outcome/summary" \
     -H "Content-Type: application/json" \
-<<<<<<< HEAD
     -H "Accept: application/json"</code></pre>
-=======
-    -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"ipsa","order":1}'
-</code></pre>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/outcome/summary"
+    "http://localhost:8082/api/v1/outcome/summary"
 );
 
 let headers = {
@@ -19828,15 +19839,6 @@ let headers = {
     "Accept": "application/json",
 };
 
-<<<<<<< HEAD
-=======
-let body = {
-    "title": "Audio",
-    "image": "ipsa",
-    "order": 1
-}
-
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 fetch(url, {
     method: "POST",
     headers: headers,
@@ -19846,20 +19848,12 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/outcome/summary',
+    'http://localhost:8082/api/v1/outcome/summary',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
-<<<<<<< HEAD
-=======
-        'json' =&gt; [
-            'title' =&gt; 'Audio',
-            'image' =&gt; 'ipsa',
-            'order' =&gt; 1,
-        ],
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
     ]
 );
 $body = $response-&gt;getBody();
@@ -19867,16 +19861,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/outcome/summary'
-=======
-url = 'http://localhost:8000/api/v1/admin/activity-types'
-payload = {
-    "title": "Audio",
-    "image": "ipsa",
-    "order": 1
-}
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+url = 'http://localhost:8082/api/v1/outcome/summary'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -19896,118 +19881,563 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "summary": [
-        {
-            "name": "Fill in the Blanks",
-            "score": {
-                "raw": 1,
-                "max": 2
+        [
+            {
+                "sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
+                "relation-sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
+                "library": "H5P.TrueFalse 1.6",
+                "content-type": "True\/False Question",
+                "title": "CP - True\/False question",
+                "content": {
+                    "questions": "&lt;p&gt;Is 5 x 100 = 500?&lt;\/p&gt;\n"
+                },
+                "answer": [
+                    {
+                        "name": "CP - True\/False question",
+                        "score": {
+                            "raw": 1,
+                            "max": 1
+                        },
+                        "duration": "00:00",
+                        "ending-point": "00:01",
+                        "verb": "answered"
+                    }
+                ]
             },
-            "duration": "00:13",
-            "ending-point": "00:02",
-            "verb": "answered"
-        },
-        {
-            "name": "Single Choice Set",
-            "score": {
-                "raw": 1,
-                "max": 2
+            {
+                "sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
+                "relation-sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
+                "library": "H5P.MultiChoice 1.14",
+                "content-type": "Multiple Choice",
+                "title": "CP - Multiple Choice Quiz",
+                "content": {
+                    "questions": "&lt;p&gt;Which of the following statements are correct?&lt;\/p&gt;\n"
+                },
+                "answer": [
+                    {
+                        "name": "CP - Multiple Choice Quiz",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:04",
+                        "ending-point": "00:01",
+                        "verb": "answered"
+                    }
+                ]
             },
-            "duration": "00:32",
-            "ending-point": "00:03",
-            "verb": "answered"
-        },
-        {
-            "name": "2nd Single Choice Set",
-            "score": {
-                "raw": 1,
-                "max": 2
+            {
+                "sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
+                "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
+                "library": "H5P.SingleChoiceSet 1.11",
+                "content-type": "Single Choice Set",
+                "title": "CP - Single Choice Set",
+                "content": {
+                    "children": [
+                        {
+                            "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                            "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                            "question": "&lt;p&gt;2 + 2 = ?&lt;\/p&gt;\n",
+                            "answers": [
+                                "&lt;p&gt;4&lt;\/p&gt;\n",
+                                "&lt;p&gt;10&lt;\/p&gt;\n",
+                                "&lt;p&gt;22&lt;\/p&gt;\n"
+                            ]
+                        },
+                        {
+                            "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                            "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                            "question": "&lt;p&gt;5 x 10 = ?&lt;\/p&gt;\n",
+                            "answers": [
+                                "&lt;p&gt;50&lt;\/p&gt;\n",
+                                "&lt;p&gt;510&lt;\/p&gt;\n",
+                                "&lt;p&gt;15&lt;\/p&gt;\n"
+                            ]
+                        }
+                    ]
+                },
+                "answer": [
+                    {
+                        "name": "CP - Single Choice Set",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:09",
+                        "ending-point": "00:01",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ],
+        [
+            {
+                "sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
+                "relation-sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
+                "library": "H5P.Blanks 1.12",
+                "content-type": "Fill in the Blanks",
+                "title": "IB &amp;gt; CP &amp;gt; Fill in the Blanks",
+                "content": {
+                    "text": "&lt;p&gt;CP - Fill in the missing words #1&lt;\/p&gt;\n",
+                    "questions": [
+                        "&lt;p&gt;New Dehli is the capitol of *India*&lt;\/p&gt;\n",
+                        "&lt;p&gt;H5P content may be edited using a *browser\/web-browser:Something you use every day*.&lt;\/p&gt;\n"
+                    ]
+                },
+                "answer": [
+                    {
+                        "name": "IB &amp;gt; CP &amp;gt; Fill in the Blanks",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:14",
+                        "ending-point": "00:02",
+                        "verb": "answered"
+                    }
+                ]
             },
-            "duration": "00:18",
-            "ending-point": "00:03",
-            "verb": "answered"
-        },
-        {
-            "name": "Multiple Choice",
-            "score": {
-                "raw": 2,
-                "max": 2
+            {
+                "sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
+                "relation-sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
+                "library": "H5P.DragQuestion 1.13",
+                "content-type": "Drag and Drop",
+                "title": "CP - Drag and Drop",
+                "content": [],
+                "answer": [
+                    {
+                        "name": "CP - Drag and Drop",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:07",
+                        "ending-point": "00:02",
+                        "verb": "answered"
+                    }
+                ]
             },
-            "duration": "00:11",
-            "ending-point": "00:04",
-            "verb": "answered"
-        },
-        {
-            "name": "True\/False Question",
-            "score": {
-                "raw": 1,
-                "max": 1
+            {
+                "sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
+                "relation-sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
+                "library": "H5P.MarkTheWords 1.9",
+                "content-type": "Mark the Words",
+                "title": "CP - Mark the Words",
+                "content": {
+                    "description": "&lt;p&gt;Mark the articles in the sentences below:&lt;\/p&gt;\n",
+                    "text": "&lt;p&gt;*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&amp;nbsp;&lt;\/p&gt;\n"
+                },
+                "answer": [
+                    {
+                        "name": "CP - Mark the Words",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:04",
+                        "ending-point": "00:02",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ],
+        [
+            {
+                "sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
+                "relation-sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
+                "library": "H5P.DragText 1.8",
+                "content-type": "Drag Text",
+                "title": "CP - Drag Text",
+                "content": {
+                    "description": "Drag the words into the correct boxes"
+                },
+                "answer": [
+                    {
+                        "name": "CP - Drag Text",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "01:37",
+                        "ending-point": "00:03",
+                        "verb": "answered"
+                    }
+                ]
             },
-            "duration": "00:15",
-            "ending-point": "00:05",
-            "verb": "answered"
-        },
-        {
-            "name": "2nd True\/False Question",
-            "score": {
-                "raw": 1,
-                "max": 1
+            {
+                "sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
+                "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
+                "library": "H5P.Summary 1.10",
+                "content-type": "Summary",
+                "title": "CP - Summary",
+                "content": {
+                    "title": "Choose the correct statement.",
+                    "children": [
+                        {
+                            "sub-content-id": "6e003430-0edc-4a54-b8f9-e124b119a92a",
+                            "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719|6e003430-0edc-4a54-b8f9-e124b119a92a",
+                            "question": [
+                                "&lt;p&gt;5 x 5 = 25&lt;\/p&gt;\n",
+                                "&lt;p&gt;5 x 20 = 80&lt;\/p&gt;\n"
+                            ]
+                        }
+                    ]
+                },
+                "answer": [
+                    {
+                        "name": "CP - Summary",
+                        "score": {
+                            "raw": 1,
+                            "max": 1
+                        },
+                        "duration": "01:01:57",
+                        "ending-point": "00:03",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ],
+        [
+            {
+                "sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
+                "relation-sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
+                "library": "H5P.AdvancedText 1.1",
+                "content-type": "Text",
+                "title": "CP Text",
+                "content": []
             },
-            "duration": "00:14",
-            "ending-point": "00:05",
-            "verb": "answered"
-        },
-        {
-            "name": "Summary",
-            "score": {
-                "raw": 1,
-                "max": 1
+            {
+                "sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
+                "relation-sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
+                "library": "H5P.Link 1.3",
+                "content-type": "Link",
+                "title": "Link",
+                "content": {
+                    "title": "Link to google"
+                }
             },
-            "duration": "00:03",
-            "ending-point": "00:06",
-            "verb": "answered"
-        }
-    ],
-    "non-scoring": [
-        {
-            "correct-pattern": null,
-            "interaction": "choice",
-            "name": "",
-            "description": "Were there some dominant emotions amongst the four emotions listed in the above question? (Please select all that apply)",
-            "scorable": false,
-            "choices": [
-                "Introspective",
-                "Encouraged",
-                "Joyful",
-                "Secure",
-                "No dominant components. I felt a combination of these emotions"
-            ],
-            "response": [
-                "Introspective",
-                "Encouraged",
-                "Secure"
-            ],
-            "raw-response": "0[,]1[,]3",
-            "verb": "interacted"
-        },
-        {
-            "correct-pattern": null,
-            "interaction": "choice",
-            "name": "",
-            "description": "How introspective – encouraged – joyful - secure were you while completing the task? (Consider your overall response as a combination of these emotions) *",
-            "scorable": false,
-            "choices": [
-                "Very highly",
-                "Highly",
-                "Moderately",
-                "A little",
-                "Not at all"
-            ],
-            "response": [
-                "Highly"
-            ],
-            "raw-response": "1",
-            "verb": "interacted"
-        }
+            {
+                "sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
+                "relation-sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
+                "library": "H5P.Image 1.1",
+                "content-type": "Image",
+                "title": "CP Image",
+                "content": []
+            },
+            {
+                "sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
+                "relation-sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
+                "library": "H5P.Shape 1.0",
+                "content-type": "Shapes",
+                "title": "Rectangle Shapes",
+                "content": []
+            },
+            {
+                "sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
+                "relation-sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
+                "library": "H5P.Video 1.5",
+                "content-type": "Video",
+                "title": "CP &amp;gt; Video",
+                "content": []
+            },
+            {
+                "sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
+                "relation-sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
+                "library": "H5P.Audio 1.4",
+                "content-type": "Audio",
+                "title": "CP &amp;gt; Test Audio",
+                "content": []
+            }
+        ],
+        [
+            {
+                "sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
+                "relation-sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
+                "library": "H5P.Dialogcards 1.8",
+                "content-type": "Dialog Cards",
+                "title": "CP - Dialog Cards",
+                "content": {
+                    "title": "&lt;p&gt;CP - Dialog Cards&lt;\/p&gt;\n"
+                }
+            },
+            {
+                "sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
+                "relation-sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
+                "library": "H5P.TwitterUserFeed 1.0",
+                "content-type": "Twitter User Feed",
+                "title": "Twitter User Feed",
+                "content": []
+            },
+            {
+                "sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
+                "relation-sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
+                "library": "H5P.Table 1.1",
+                "content-type": "Table",
+                "title": "CP Table",
+                "content": []
+            },
+            {
+                "sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
+                "relation-sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
+                "library": "H5P.ExportableTextArea 1.3",
+                "content-type": "Exportable Text Area",
+                "title": "CP Exportable Text Area",
+                "content": []
+            }
+        ],
+        [
+            {
+                "sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
+                "relation-sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
+                "library": "H5P.ContinuousText 1.2",
+                "content-type": "Continuous Text",
+                "title": "CP &amp;gt; Continuous Text",
+                "content": []
+            }
+        ],
+        [
+            {
+                "sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
+                "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
+                "library": "H5P.InteractiveVideo 1.22",
+                "content-type": "Interactive Video",
+                "title": "CP - Interactive Video",
+                "content": [
+                    {
+                        "sub-content-id": "6824967c-9282-4d12-bcc5-ad0bced64d2f",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|6824967c-9282-4d12-bcc5-ad0bced64d2f",
+                        "library": "H5P.TrueFalse 1.6",
+                        "content-type": "True\/False Question",
+                        "title": "CP &amp;gt; IV&amp;gt; True\/False question",
+                        "content": {
+                            "questions": "&lt;p&gt;Is 5 x 100 = 500?&lt;\/p&gt;\n"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &amp;gt; IV&amp;gt; True\/False question",
+                                "score": {
+                                    "raw": 1,
+                                    "max": 1
+                                },
+                                "duration": "00:02",
+                                "ending-point": "00:00",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "88c60326-825c-4992-80da-b86af8e997a1",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|88c60326-825c-4992-80da-b86af8e997a1",
+                        "library": "H5P.MultiChoice 1.14",
+                        "content-type": "Multiple Choice",
+                        "title": "CP &amp;gt; IV &amp;gt; Multiple Choice Quiz",
+                        "content": {
+                            "questions": "&lt;p&gt;Which of the following statements are correct?&lt;\/p&gt;\n"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &amp;gt; IV &amp;gt; Multiple Choice Quiz",
+                                "score": {
+                                    "raw": 0,
+                                    "max": 2
+                                },
+                                "duration": "00:03",
+                                "ending-point": "00:05",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
+                        "library": "H5P.SingleChoiceSet 1.11",
+                        "content-type": "Single Choice Set",
+                        "title": "CP &amp;gt; IV &amp;gt; Single Choice Set",
+                        "content": {
+                            "children": [
+                                {
+                                    "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                                    "question": "&lt;p&gt;2 + 2 = ?&lt;\/p&gt;\n",
+                                    "answers": [
+                                        "&lt;p&gt;4&lt;\/p&gt;\n",
+                                        "&lt;p&gt;10&lt;\/p&gt;\n",
+                                        "&lt;p&gt;22&lt;\/p&gt;\n"
+                                    ]
+                                },
+                                {
+                                    "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                                    "question": "&lt;p&gt;5 x 10 = ?&lt;\/p&gt;\n",
+                                    "answers": [
+                                        "&lt;p&gt;50&lt;\/p&gt;\n",
+                                        "&lt;p&gt;510&lt;\/p&gt;\n",
+                                        "&lt;p&gt;15&lt;\/p&gt;\n"
+                                    ]
+                                }
+                            ]
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &amp;gt; IV &amp;gt; Single Choice Set",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:10",
+                                "ending-point": "00:09",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
+                        "library": "H5P.Blanks 1.12",
+                        "content-type": "Fill in the Blanks",
+                        "title": "CP &amp;gt; IV &amp;gt; Fill in the Blanks",
+                        "content": {
+                            "text": "&lt;p&gt;CP &amp;gt; IV &amp;gt; Fill in the missing words #1&lt;\/p&gt;\n",
+                            "questions": [
+                                "&lt;p&gt;New Dehli is the capitol of *India*&lt;\/p&gt;\n",
+                                "&lt;p&gt;H5P content may be edited using a *browser\/web-browser:Something you use every day*.&lt;\/p&gt;\n"
+                            ]
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &amp;gt; IV &amp;gt; Fill in the Blanks",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:06",
+                                "ending-point": "00:18",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
+                        "library": "H5P.DragQuestion 1.13",
+                        "content-type": "Drag and Drop",
+                        "title": "CP &amp;gt; IV &amp;gt; Drag and Drop",
+                        "content": [],
+                        "answer": [
+                            {
+                                "name": "CP &amp;gt; IV &amp;gt; Drag and Drop",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:03",
+                                "ending-point": "00:20",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
+                        "library": "H5P.MarkTheWords 1.9",
+                        "content-type": "Mark the Words",
+                        "title": "CP &amp;gt; IV &amp;gt; Mark the Words",
+                        "content": {
+                            "description": "&lt;p&gt;Mark the articles in the sentences below:&lt;\/p&gt;\n",
+                            "text": "&lt;p&gt;*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&amp;nbsp;&lt;\/p&gt;\n"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &amp;gt; IV &amp;gt; Mark the Words",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:04",
+                                "ending-point": "00:23",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
+                        "library": "H5P.DragText 1.8",
+                        "content-type": "Drag Text",
+                        "title": "CP &amp;gt; IV &amp;gt; Drag Text",
+                        "content": {
+                            "description": "Drag the words into the correct boxes"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &amp;gt; IV &amp;gt; Drag Text",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "01:05",
+                                "ending-point": "00:26",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f6839abe-d5d1-41cb-85a4-c19c49a4583e",
+                        "library": "H5P.Summary 1.10",
+                        "content-type": "Summary",
+                        "title": "IB &amp;gt; IV &amp;gt; Summary",
+                        "content": {
+                            "title": "Choose the correct statement.",
+                            "children": [
+                                {
+                                    "sub-content-id": "8146ae19-549a-4f79-8165-30573f8f8769",
+                                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|8146ae19-549a-4f79-8165-30573f8f8769",
+                                    "question": [
+                                        "&lt;p&gt;8+9 = 17&lt;\/p&gt;\n",
+                                        "&lt;p&gt;10 x 2 = 12&lt;\/p&gt;\n",
+                                        "&lt;p&gt;13 x 13 = 149&lt;\/p&gt;\n"
+                                    ]
+                                },
+                                {
+                                    "sub-content-id": "6afe0b3b-9af7-41ab-8506-017ae8b89375",
+                                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|6afe0b3b-9af7-41ab-8506-017ae8b89375",
+                                    "question": [
+                                        "&lt;p&gt;4 x 2 = 8&lt;\/p&gt;\n",
+                                        "&lt;p&gt;5 x 6 = 31&lt;\/p&gt;\n",
+                                        "&lt;p&gt;10 \/ 2 = 4&lt;\/p&gt;\n"
+                                    ]
+                                }
+                            ]
+                        },
+                        "answer": [
+                            {
+                                "name": "IB &amp;gt; IV &amp;gt; Summary",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:05",
+                                "ending-point": "00:27",
+                                "verb": "answered"
+                            }
+                        ]
+                    }
+                ],
+                "answer": [
+                    {
+                        "name": "CP - Interactive Video",
+                        "score": {
+                            "raw": 13,
+                            "max": 15
+                        },
+                        "duration": "01:22",
+                        "ending-point": "00:07",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ]
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
@@ -20023,11 +20453,11 @@ Handles xAPI operations.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/xapi/statements" \
+    "http://localhost:8082/api/v1/xapi/statements" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/xapi/statements"
+    "http://localhost:8082/api/v1/xapi/statements"
 );
 
 let headers = {
@@ -20044,7 +20474,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/xapi/statements',
+    'http://localhost:8082/api/v1/xapi/statements',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20057,7 +20487,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/xapi/statements'
+url = 'http://localhost:8082/api/v1/xapi/statements'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20087,11 +20517,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/xapi-extract" \
+    -G "http://localhost:8082/api/v1/xapi-extract" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/xapi-extract"
+    "http://localhost:8082/api/v1/xapi-extract"
 );
 
 let headers = {
@@ -20108,7 +20538,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/xapi-extract',
+    'http://localhost:8082/api/v1/xapi-extract',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20121,7 +20551,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/xapi-extract'
+url = 'http://localhost:8082/api/v1/xapi-extract'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20146,11 +20576,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/users/report/basic?start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/users/report/basic?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users/report/basic"
+    "http://localhost:8082/api/v1/admin/users/report/basic"
 );
 
 let params = {
@@ -20174,7 +20604,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/users/report/basic',
+    'http://localhost:8082/api/v1/admin/users/report/basic',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20191,7 +20621,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users/report/basic'
+url = 'http://localhost:8082/api/v1/admin/users/report/basic'
 params = {
   'start': '0',
   'length': '25',
@@ -20270,13 +20700,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/users/bulk/import" \
+    "http://localhost:8082/api/v1/admin/users/bulk/import" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"import_file":"ut"}'
+    -d '{"import_file":"et"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users/bulk/import"
+    "http://localhost:8082/api/v1/admin/users/bulk/import"
 );
 
 let headers = {
@@ -20285,7 +20715,7 @@ let headers = {
 };
 
 let body = {
-    "import_file": "ut"
+    "import_file": "et"
 }
 
 fetch(url, {
@@ -20298,14 +20728,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/users/bulk/import',
+    'http://localhost:8082/api/v1/admin/users/bulk/import',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'import_file' =&gt; 'ut',
+            'import_file' =&gt; 'et',
         ],
     ]
 );
@@ -20314,9 +20744,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users/bulk/import'
+url = 'http://localhost:8082/api/v1/admin/users/bulk/import'
 payload = {
-    "import_file": "ut"
+    "import_file": "et"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -20376,11 +20806,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/users/1/roles/1" \
+    -G "http://localhost:8082/api/v1/admin/users/1/roles/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users/1/roles/1"
+    "http://localhost:8082/api/v1/admin/users/1/roles/1"
 );
 
 let headers = {
@@ -20397,7 +20827,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/users/1/roles/1',
+    'http://localhost:8082/api/v1/admin/users/1/roles/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20410,7 +20840,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users/1/roles/1'
+url = 'http://localhost:8082/api/v1/admin/users/1/roles/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20457,17 +20887,17 @@ response.json()</code></pre>
 </table>
 <!-- END_ef52cb1e3190f07a381bee96496d9e42 -->
 <!-- START_ce6b124894a429e5cdb7415c0d8a91fb -->
-<h2>Get All Users</h2>
+<h2>Get All Users List</h2>
 <p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/users?start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/users?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users"
+    "http://localhost:8082/api/v1/admin/users"
 );
 
 let params = {
@@ -20491,7 +20921,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/users',
+    'http://localhost:8082/api/v1/admin/users',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20508,7 +20938,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users'
+url = 'http://localhost:8082/api/v1/admin/users'
 params = {
   'start': '0',
   'length': '25',
@@ -20595,13 +21025,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/users" \
+    "http://localhost:8082/api/v1/admin/users" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users"
+    "http://localhost:8082/api/v1/admin/users"
 );
 
 let headers = {
@@ -20629,7 +21059,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/users',
+    'http://localhost:8082/api/v1/admin/users',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20651,7 +21081,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users'
+url = 'http://localhost:8082/api/v1/admin/users'
 payload = {
     "first_name": "Ahmad",
     "last_name": "Mukhtar",
@@ -20743,17 +21173,17 @@ response.json()</code></pre>
 </table>
 <!-- END_521e32c7d2ba5e2282925ea8a26584bc -->
 <!-- START_effe89f830caf4daa978f55524698087 -->
-<h2>Get User</h2>
+<h2>Get Specified User</h2>
 <p>Get the specified user data.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/users/1" \
+    -G "http://localhost:8082/api/v1/admin/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users/1"
+    "http://localhost:8082/api/v1/admin/users/1"
 );
 
 let headers = {
@@ -20770,7 +21200,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/users/1',
+    'http://localhost:8082/api/v1/admin/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20783,7 +21213,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users/1'
+url = 'http://localhost:8082/api/v1/admin/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20965,19 +21395,19 @@ response.json()</code></pre>
 </table>
 <!-- END_effe89f830caf4daa978f55524698087 -->
 <!-- START_4bfaf4c2bfaf88b96536e717be6b0e62 -->
-<h2>Update User</h2>
+<h2>Update Specified User</h2>
 <p>Updates the user data in database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/admin/users/1" \
+    "http://localhost:8082/api/v1/admin/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users/1"
+    "http://localhost:8082/api/v1/admin/users/1"
 );
 
 let headers = {
@@ -21005,7 +21435,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/admin/users/1',
+    'http://localhost:8082/api/v1/admin/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21027,7 +21457,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users/1'
+url = 'http://localhost:8082/api/v1/admin/users/1'
 payload = {
     "first_name": "Ahmad",
     "last_name": "Mukhtar",
@@ -21137,17 +21567,17 @@ response.json()</code></pre>
 </table>
 <!-- END_4bfaf4c2bfaf88b96536e717be6b0e62 -->
 <!-- START_ff019bc7db8f5be9ac8699027d67f85c -->
-<h2>Delete User</h2>
+<h2>Delete Specified User</h2>
 <p>Deletes the user record from database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/admin/users/1" \
+    "http://localhost:8082/api/v1/admin/users/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users/1"
+    "http://localhost:8082/api/v1/admin/users/1"
 );
 
 let headers = {
@@ -21164,7 +21594,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/admin/users/1',
+    'http://localhost:8082/api/v1/admin/users/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21177,7 +21607,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users/1'
+url = 'http://localhost:8082/api/v1/admin/users/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21231,11 +21661,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/users/import/sample-file" \
+    -G "http://localhost:8082/api/v1/admin/users/import/sample-file" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/users/import/sample-file"
+    "http://localhost:8082/api/v1/admin/users/import/sample-file"
 );
 
 let headers = {
@@ -21252,7 +21682,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/users/import/sample-file',
+    'http://localhost:8082/api/v1/admin/users/import/sample-file',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21265,7 +21695,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/users/import/sample-file'
+url = 'http://localhost:8082/api/v1/admin/users/import/sample-file'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21298,11 +21728,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/activity-types?start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/activity-types?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-types"
+    "http://localhost:8082/api/v1/admin/activity-types"
 );
 
 let params = {
@@ -21326,7 +21756,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/activity-types',
+    'http://localhost:8082/api/v1/admin/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21343,7 +21773,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-types'
+url = 'http://localhost:8082/api/v1/admin/activity-types'
 params = {
   'start': '0',
   'length': '25',
@@ -21466,19 +21896,19 @@ response.json()</code></pre>
 </table>
 <!-- END_197c7d7cd44f76b20d2c1e30e9875bcf -->
 <!-- START_be74407f085cafa8c03238e489fa014d -->
-<h2>Create Activity Type</h2>
+<h2>Create New Activity Type</h2>
 <p>Creates the new activity type in database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/activity-types" \
+    "http://localhost:8082/api/v1/admin/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"enim","order":1}'
+    -d '{"title":"Audio","image":"ullam","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-types"
+    "http://localhost:8082/api/v1/admin/activity-types"
 );
 
 let headers = {
@@ -21488,7 +21918,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "enim",
+    "image": "ullam",
     "order": 1
 }
 
@@ -21502,7 +21932,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/activity-types',
+    'http://localhost:8082/api/v1/admin/activity-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21510,7 +21940,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'enim',
+            'image' =&gt; 'ullam',
             'order' =&gt; 1,
         ],
     ]
@@ -21520,10 +21950,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-types'
+url = 'http://localhost:8082/api/v1/admin/activity-types'
 payload = {
     "title": "Audio",
-    "image": "enim",
+    "image": "ullam",
     "order": 1
 }
 headers = {
@@ -21584,17 +22014,17 @@ response.json()</code></pre>
 </table>
 <!-- END_be74407f085cafa8c03238e489fa014d -->
 <!-- START_1c8c52e2bf26d886997e6d019cc66a99 -->
-<h2>Get Activity Type</h2>
+<h2>Get Specified Activity Type</h2>
 <p>Get the specified Activity Type data.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/activity-types/1" \
+    -G "http://localhost:8082/api/v1/admin/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-types/1"
+    "http://localhost:8082/api/v1/admin/activity-types/1"
 );
 
 let headers = {
@@ -21611,7 +22041,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/activity-types/1',
+    'http://localhost:8082/api/v1/admin/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21624,7 +22054,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-types/1'
+url = 'http://localhost:8082/api/v1/admin/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21712,19 +22142,19 @@ response.json()</code></pre>
 </table>
 <!-- END_1c8c52e2bf26d886997e6d019cc66a99 -->
 <!-- START_6a8b9fca09620ddb62fe64d5ed11234a -->
-<h2>Update Activity Type</h2>
+<h2>Update Specified Activity Type</h2>
 <p>Updates the activity type in database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/admin/activity-types/1" \
+    "http://localhost:8082/api/v1/admin/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"ut","order":1}'
+    -d '{"title":"Audio","image":"voluptatem","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-types/1"
+    "http://localhost:8082/api/v1/admin/activity-types/1"
 );
 
 let headers = {
@@ -21734,7 +22164,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "ut",
+    "image": "voluptatem",
     "order": 1
 }
 
@@ -21748,7 +22178,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/admin/activity-types/1',
+    'http://localhost:8082/api/v1/admin/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21756,7 +22186,7 @@ $response = $client-&gt;put(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'ut',
+            'image' =&gt; 'voluptatem',
             'order' =&gt; 1,
         ],
     ]
@@ -21766,10 +22196,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-types/1'
+url = 'http://localhost:8082/api/v1/admin/activity-types/1'
 payload = {
     "title": "Audio",
-    "image": "ut",
+    "image": "voluptatem",
     "order": 1
 }
 headers = {
@@ -21854,11 +22284,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/admin/activity-types/1" \
+    "http://localhost:8082/api/v1/admin/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-types/1"
+    "http://localhost:8082/api/v1/admin/activity-types/1"
 );
 
 let headers = {
@@ -21875,7 +22305,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/admin/activity-types/1',
+    'http://localhost:8082/api/v1/admin/activity-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21888,7 +22318,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-types/1'
+url = 'http://localhost:8082/api/v1/admin/activity-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21936,11 +22366,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/activity-items?start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/activity-items?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-items"
+    "http://localhost:8082/api/v1/admin/activity-items"
 );
 
 let params = {
@@ -21964,7 +22394,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/activity-items',
+    'http://localhost:8082/api/v1/admin/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -21981,7 +22411,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-items'
+url = 'http://localhost:8082/api/v1/admin/activity-items'
 params = {
   'start': '0',
   'length': '25',
@@ -22082,19 +22512,19 @@ response.json()</code></pre>
 </table>
 <!-- END_df6d8716f17197a140172f39a46dd818 -->
 <!-- START_92bea385086e8c01571b78a10df594c8 -->
-<h2>Create Activity Item</h2>
+<h2>Create New Activity Item</h2>
 <p>Creates the new activity item in database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/activity-items" \
+    "http://localhost:8082/api/v1/admin/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"iure","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"odit","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-items"
+    "http://localhost:8082/api/v1/admin/activity-items"
 );
 
 let headers = {
@@ -22107,7 +22537,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "iure",
+    "image": "odit",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -22124,7 +22554,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/activity-items',
+    'http://localhost:8082/api/v1/admin/activity-items',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22135,7 +22565,7 @@ $response = $client-&gt;post(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'iure',
+            'image' =&gt; 'odit',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -22148,13 +22578,13 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-items'
+url = 'http://localhost:8082/api/v1/admin/activity-items'
 payload = {
     "title": "Math",
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "iure",
+    "image": "odit",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -22254,17 +22684,17 @@ response.json()</code></pre>
 </table>
 <!-- END_92bea385086e8c01571b78a10df594c8 -->
 <!-- START_bb884f911c1bc5348c85017679f2680a -->
-<h2>Get Activity Item</h2>
+<h2>Get Specified Activity Item</h2>
 <p>Get the specified Activity Item data.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/activity-items/1" \
+    -G "http://localhost:8082/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-items/1"
+    "http://localhost:8082/api/v1/admin/activity-items/1"
 );
 
 let headers = {
@@ -22281,7 +22711,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/activity-items/1',
+    'http://localhost:8082/api/v1/admin/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22294,7 +22724,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-items/1'
+url = 'http://localhost:8082/api/v1/admin/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -22348,19 +22778,19 @@ response.json()</code></pre>
 </table>
 <!-- END_bb884f911c1bc5348c85017679f2680a -->
 <!-- START_d5360e88fb9f395c18bb9d6064c1aca3 -->
-<h2>Update Activity Item</h2>
+<h2>Update Specified Activity Item</h2>
 <p>Updates the activity item in database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/admin/activity-items/1" \
+    "http://localhost:8082/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"dicta","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"voluptatem","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-items/1"
+    "http://localhost:8082/api/v1/admin/activity-items/1"
 );
 
 let headers = {
@@ -22373,7 +22803,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "dicta",
+    "image": "voluptatem",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -22390,7 +22820,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/admin/activity-items/1',
+    'http://localhost:8082/api/v1/admin/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22401,7 +22831,7 @@ $response = $client-&gt;put(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'dicta',
+            'image' =&gt; 'voluptatem',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -22414,13 +22844,13 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-items/1'
+url = 'http://localhost:8082/api/v1/admin/activity-items/1'
 payload = {
     "title": "Math",
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "dicta",
+    "image": "voluptatem",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -22544,11 +22974,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/admin/activity-items/1" \
+    "http://localhost:8082/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/activity-items/1"
+    "http://localhost:8082/api/v1/admin/activity-items/1"
 );
 
 let headers = {
@@ -22565,7 +22995,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/admin/activity-items/1',
+    'http://localhost:8082/api/v1/admin/activity-items/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22578,7 +23008,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/activity-items/1'
+url = 'http://localhost:8082/api/v1/admin/activity-items/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -22626,13 +23056,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/projects/indexes" \
+    "http://localhost:8082/api/v1/admin/projects/indexes" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"index_projects":"[1,2,3]","index":3}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/projects/indexes"
+    "http://localhost:8082/api/v1/admin/projects/indexes"
 );
 
 let headers = {
@@ -22655,7 +23085,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/projects/indexes',
+    'http://localhost:8082/api/v1/admin/projects/indexes',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22672,7 +23102,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/projects/indexes'
+url = 'http://localhost:8082/api/v1/admin/projects/indexes'
 payload = {
     "index_projects": "[1,2,3]",
     "index": 3
@@ -22730,13 +23160,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/projects/starter/1" \
+    "http://localhost:8082/api/v1/admin/projects/starter/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"projects":"[1,2,3]","flag":true}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/projects/starter/1"
+    "http://localhost:8082/api/v1/admin/projects/starter/1"
 );
 
 let headers = {
@@ -22759,7 +23189,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/projects/starter/1',
+    'http://localhost:8082/api/v1/admin/projects/starter/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22776,7 +23206,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/projects/starter/1'
+url = 'http://localhost:8082/api/v1/admin/projects/starter/1'
 payload = {
     "projects": "[1,2,3]",
     "flag": true
@@ -22834,11 +23264,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/projects/1/indexes/3" \
+    -G "http://localhost:8082/api/v1/admin/projects/1/indexes/3" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/projects/1/indexes/3"
+    "http://localhost:8082/api/v1/admin/projects/1/indexes/3"
 );
 
 let headers = {
@@ -22855,7 +23285,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/projects/1/indexes/3',
+    'http://localhost:8082/api/v1/admin/projects/1/indexes/3',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22868,7 +23298,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/projects/1/indexes/3'
+url = 'http://localhost:8082/api/v1/admin/projects/1/indexes/3'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -22919,11 +23349,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/projects/1/load-shared" \
+    -G "http://localhost:8082/api/v1/admin/projects/1/load-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/projects/1/load-shared"
+    "http://localhost:8082/api/v1/admin/projects/1/load-shared"
 );
 
 let headers = {
@@ -22940,7 +23370,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/projects/1/load-shared',
+    'http://localhost:8082/api/v1/admin/projects/1/load-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -22953,7 +23383,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/projects/1/load-shared'
+url = 'http://localhost:8082/api/v1/admin/projects/1/load-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -23079,11 +23509,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/projects?mode=1&amp;indexing=1&amp;exclude_starter=0&amp;start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/projects?mode=1&amp;indexing=1&amp;exclude_starter=0&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/projects"
+    "http://localhost:8082/api/v1/admin/projects"
 );
 
 let params = {
@@ -23110,7 +23540,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/projects',
+    'http://localhost:8082/api/v1/admin/projects',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -23130,7 +23560,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/projects'
+url = 'http://localhost:8082/api/v1/admin/projects'
 params = {
   'mode': '1',
   'indexing': '1',
@@ -23251,11 +23681,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/lms-settings?start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/lms-settings?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/lms-settings"
+    "http://localhost:8082/api/v1/admin/lms-settings"
 );
 
 let params = {
@@ -23279,7 +23709,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/lms-settings',
+    'http://localhost:8082/api/v1/admin/lms-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -23296,7 +23726,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/lms-settings'
+url = 'http://localhost:8082/api/v1/admin/lms-settings'
 params = {
   'start': '0',
   'length': '25',
@@ -23441,13 +23871,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/lms-settings" \
+    "http://localhost:8082/api/v1/admin/lms-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"lms_url":"https:\/\/google.com","lms_access_token":"abcafdgd343asgretgdasgadsfsdfdasgdagsadf","site_name":"Moodle Curriki","lti_client_id":"1","lms_login_id":"1","user_id":1,"lms_name":"Moodle","lms_access_key":"fdaskfasdkjghadskljgh54r325","lms_access_secret":"fasdjhjke4wh54354326","description":"Create LMS Setting for providing access to Moodle."}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/lms-settings"
+    "http://localhost:8082/api/v1/admin/lms-settings"
 );
 
 let headers = {
@@ -23478,7 +23908,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/lms-settings',
+    'http://localhost:8082/api/v1/admin/lms-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -23503,7 +23933,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/lms-settings'
+url = 'http://localhost:8082/api/v1/admin/lms-settings'
 payload = {
     "lms_url": "https:\/\/google.com",
     "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
@@ -23622,11 +24052,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/lms-settings/1" \
+    -G "http://localhost:8082/api/v1/admin/lms-settings/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/lms-settings/1"
+    "http://localhost:8082/api/v1/admin/lms-settings/1"
 );
 
 let headers = {
@@ -23643,7 +24073,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/lms-settings/1',
+    'http://localhost:8082/api/v1/admin/lms-settings/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -23656,7 +24086,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/lms-settings/1'
+url = 'http://localhost:8082/api/v1/admin/lms-settings/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -23719,13 +24149,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/admin/lms-settings/1" \
+    "http://localhost:8082/api/v1/admin/lms-settings/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"lms_url":"https:\/\/google.com","lms_access_token":"abcafdgd343asgretgdasgadsfsdfdasgdagsadf","site_name":"Moodle Curriki","lti_client_id":"1","lms_login_id":"1","user_id":1,"lms_name":"Moodle","lms_access_key":"fdaskfasdkjghadskljgh54r325","lms_access_secret":"fasdjhjke4wh54354326","description":"Create LMS Setting for providing access to Moodle."}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/lms-settings/1"
+    "http://localhost:8082/api/v1/admin/lms-settings/1"
 );
 
 let headers = {
@@ -23756,7 +24186,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/admin/lms-settings/1',
+    'http://localhost:8082/api/v1/admin/lms-settings/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -23781,7 +24211,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/lms-settings/1'
+url = 'http://localhost:8082/api/v1/admin/lms-settings/1'
 payload = {
     "lms_url": "https:\/\/google.com",
     "lms_access_token": "abcafdgd343asgretgdasgadsfsdfdasgdagsadf",
@@ -23918,11 +24348,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/admin/lms-settings/1" \
+    "http://localhost:8082/api/v1/admin/lms-settings/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/lms-settings/1"
+    "http://localhost:8082/api/v1/admin/lms-settings/1"
 );
 
 let headers = {
@@ -23939,7 +24369,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/admin/lms-settings/1',
+    'http://localhost:8082/api/v1/admin/lms-settings/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -23952,7 +24382,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/lms-settings/1'
+url = 'http://localhost:8082/api/v1/admin/lms-settings/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -24000,11 +24430,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/organization-types" \
+    -G "http://localhost:8082/api/v1/admin/organization-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organization-types"
+    "http://localhost:8082/api/v1/admin/organization-types"
 );
 
 let headers = {
@@ -24021,7 +24451,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/organization-types',
+    'http://localhost:8082/api/v1/admin/organization-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -24034,7 +24464,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organization-types'
+url = 'http://localhost:8082/api/v1/admin/organization-types'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -24094,13 +24524,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/organization-types" \
+    "http://localhost:8082/api/v1/admin/organization-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organization-types"
+    "http://localhost:8082/api/v1/admin/organization-types"
 );
 
 let headers = {
@@ -24124,7 +24554,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/organization-types',
+    'http://localhost:8082/api/v1/admin/organization-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -24142,7 +24572,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organization-types'
+url = 'http://localhost:8082/api/v1/admin/organization-types'
 payload = {
     "name": "randomzv2tga01uxb6q8ojri5ob6",
     "label": "test",
@@ -24196,26 +24626,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
 <!-- END_499de428ee63cab2620646b3cf7e3971 -->
 <!-- START_ab86f5c63956fa42bcde2ca97b638ca2 -->
 <h2>Get Organization Type</h2>
 <p>Get the specified Organization Type data.</p>
-=======
-<!-- END_be74407f085cafa8c03238e489fa014d -->
-<!-- START_1c8c52e2bf26d886997e6d019cc66a99 -->
-<h2>Get Specified Activity Type</h2>
-<p>Get the specified Activity Type data.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/organization-types/1" \
+    -G "http://localhost:8082/api/v1/admin/organization-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organization-types/1"
+    "http://localhost:8082/api/v1/admin/organization-types/1"
 );
 
 let headers = {
@@ -24232,7 +24655,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/organization-types/1',
+    'http://localhost:8082/api/v1/admin/organization-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -24245,7 +24668,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organization-types/1'
+url = 'http://localhost:8082/api/v1/admin/organization-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -24280,32 +24703,21 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
 <!-- END_ab86f5c63956fa42bcde2ca97b638ca2 -->
 <!-- START_621c794fa4548f3be2ca9856b00bd68d -->
 <h2>Update Organization Type</h2>
 <p>Updates the organization type data in database.</p>
-=======
-<!-- END_1c8c52e2bf26d886997e6d019cc66a99 -->
-<!-- START_6a8b9fca09620ddb62fe64d5ed11234a -->
-<h2>Update Specified Activity Type</h2>
-<p>Updates the activity type in database.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/admin/organization-types/1" \
+    "http://localhost:8082/api/v1/admin/organization-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-<<<<<<< HEAD
     -d '{"name":"randomzv2tga01uxb6q8ojri5ob6","label":"test"}'
-=======
-    -d '{"title":"Audio","image":"omnis","order":1}'
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organization-types/1"
+    "http://localhost:8082/api/v1/admin/organization-types/1"
 );
 
 let headers = {
@@ -24314,14 +24726,8 @@ let headers = {
 };
 
 let body = {
-<<<<<<< HEAD
     "name": "randomzv2tga01uxb6q8ojri5ob6",
     "label": "test"
-=======
-    "title": "Audio",
-    "image": "omnis",
-    "order": 1
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 }
 
 fetch(url, {
@@ -24334,21 +24740,15 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/admin/organization-types/1',
+    'http://localhost:8082/api/v1/admin/organization-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-<<<<<<< HEAD
             'name' =&gt; 'randomzv2tga01uxb6q8ojri5ob6',
             'label' =&gt; 'test',
-=======
-            'title' =&gt; 'Audio',
-            'image' =&gt; 'omnis',
-            'order' =&gt; 1,
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
         ],
     ]
 );
@@ -24357,16 +24757,10 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organization-types/1'
+url = 'http://localhost:8082/api/v1/admin/organization-types/1'
 payload = {
-<<<<<<< HEAD
     "name": "randomzv2tga01uxb6q8ojri5ob6",
     "label": "test"
-=======
-    "title": "Audio",
-    "image": "omnis",
-    "order": 1
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 }
 headers = {
   'Content-Type': 'application/json',
@@ -24436,11 +24830,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/admin/organization-types/1" \
+    "http://localhost:8082/api/v1/admin/organization-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organization-types/1"
+    "http://localhost:8082/api/v1/admin/organization-types/1"
 );
 
 let headers = {
@@ -24457,7 +24851,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/admin/organization-types/1',
+    'http://localhost:8082/api/v1/admin/organization-types/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -24470,7 +24864,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organization-types/1'
+url = 'http://localhost:8082/api/v1/admin/organization-types/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -24518,11 +24912,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs?filter=1&amp;start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/queue-monitor/jobs?filter=1&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs"
+    "http://localhost:8082/api/v1/admin/queue-monitor/jobs"
 );
 
 let params = {
@@ -24547,7 +24941,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs',
+    'http://localhost:8082/api/v1/admin/queue-monitor/jobs',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -24565,7 +24959,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs'
+url = 'http://localhost:8082/api/v1/admin/queue-monitor/jobs'
 params = {
   'filter': '1',
   'start': '0',
@@ -24646,31 +25040,18 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
 <!-- END_19d2e958e5b93e2b59c7c5f9acf6cbcd -->
 <!-- START_974c9a8bc7cc1bbac2ac685ff311333e -->
 <h2>Retry All Failed Jobs</h2>
-=======
-<!-- END_df6d8716f17197a140172f39a46dd818 -->
-<!-- START_92bea385086e8c01571b78a10df594c8 -->
-<h2>Create New Activity Item</h2>
-<p>Creates the new activity item in database.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/all" \
+    -G "http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/all" \
     -H "Content-Type: application/json" \
-<<<<<<< HEAD
     -H "Accept: application/json"</code></pre>
-=======
-    -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"possimus","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
-</code></pre>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/all"
+    "http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/all"
 );
 
 let headers = {
@@ -24678,21 +25059,6 @@ let headers = {
     "Accept": "application/json",
 };
 
-<<<<<<< HEAD
-=======
-let body = {
-    "title": "Math",
-    "description": "Create Math activities.",
-    "demo_activity_id": 1,
-    "demo_video_id": 1,
-    "image": "possimus",
-    "order": 1,
-    "type": "h5p",
-    "activity_type_id": 1,
-    "h5pLib": "H5P.DocumentsUpload 1.0"
-}
-
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 fetch(url, {
     method: "GET",
     headers: headers,
@@ -24702,26 +25068,12 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/all',
+    'http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/all',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
-<<<<<<< HEAD
-=======
-        'json' =&gt; [
-            'title' =&gt; 'Math',
-            'description' =&gt; 'Create Math activities.',
-            'demo_activity_id' =&gt; 1,
-            'demo_video_id' =&gt; 1,
-            'image' =&gt; 'possimus',
-            'order' =&gt; 1,
-            'type' =&gt; 'h5p',
-            'activity_type_id' =&gt; 1,
-            'h5pLib' =&gt; 'H5P.DocumentsUpload 1.0',
-        ],
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
     ]
 );
 $body = $response-&gt;getBody();
@@ -24729,22 +25081,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/all'
-=======
-url = 'http://localhost:8000/api/v1/admin/activity-items'
-payload = {
-    "title": "Math",
-    "description": "Create Math activities.",
-    "demo_activity_id": 1,
-    "demo_video_id": 1,
-    "image": "possimus",
-    "order": 1,
-    "type": "h5p",
-    "activity_type_id": 1,
-    "h5pLib": "H5P.DocumentsUpload 1.0"
-}
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+url = 'http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/all'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -24766,11 +25103,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/all" \
+    -G "http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/all" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/all"
+    "http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/all"
 );
 
 let headers = {
@@ -24787,7 +25124,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/all',
+    'http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/all',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -24800,7 +25137,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/all'
+url = 'http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/all'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -24814,95 +25151,20 @@ response.json()</code></pre>
     "message": "All failed jobs deleted successfully!"
 }</code></pre>
 <h3>HTTP Request</h3>
-<<<<<<< HEAD
 <p><code>GET api/v1/admin/queue-monitor/jobs/forget/all</code></p>
 <!-- END_ba68bb0fa6b0c7c5c6a906f18d8889dd -->
 <!-- START_4d974cc26d982988b65af87d04e9087f -->
 <h2>Retry Specific Failed Job</h2>
 <p>Retry failed job by ID.</p>
-=======
-<p><code>POST api/v1/admin/activity-items</code></p>
-<h4>Body Parameters</h4>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Status</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>title</code></td>
-<td>string</td>
-<td>required</td>
-<td>Activity Item Title.</td>
-</tr>
-<tr>
-<td><code>description</code></td>
-<td>text</td>
-<td>required</td>
-<td>Short description of activity item.</td>
-</tr>
-<tr>
-<td><code>demo_activity_id</code></td>
-<td>integer</td>
-<td>optional</td>
-<td>Demo Activity Id.</td>
-</tr>
-<tr>
-<td><code>demo_video_id</code></td>
-<td>integer</td>
-<td>optional</td>
-<td>Demo Video ID.</td>
-</tr>
-<tr>
-<td><code>image</code></td>
-<td>image</td>
-<td>required</td>
-<td>Valid Image.</td>
-</tr>
-<tr>
-<td><code>order</code></td>
-<td>integer</td>
-<td>required</td>
-<td>At what order it should appear.</td>
-</tr>
-<tr>
-<td><code>type</code></td>
-<td>string</td>
-<td>required</td>
-<td>H5P OR Immersive Reader.</td>
-</tr>
-<tr>
-<td><code>activity_type_id</code></td>
-<td>integer</td>
-<td>required</td>
-<td>Integer ID of parent activity type.</td>
-</tr>
-<tr>
-<td><code>h5pLib</code></td>
-<td>string</td>
-<td>required</td>
-<td>H5P activity name &amp; version.</td>
-</tr>
-</tbody>
-</table>
-<!-- END_92bea385086e8c01571b78a10df594c8 -->
-<!-- START_bb884f911c1bc5348c85017679f2680a -->
-<h2>Get Specified Activity Item</h2>
-<p>Get the specified Activity Item data.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/1" \
+    -G "http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/1"
+    "http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/1"
 );
 
 let headers = {
@@ -24919,7 +25181,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/1',
+    'http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -24932,7 +25194,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/retry/1'
+url = 'http://localhost:8082/api/v1/admin/queue-monitor/jobs/retry/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -24964,32 +25226,19 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<<<<<<< HEAD
 <!-- END_4d974cc26d982988b65af87d04e9087f -->
 <!-- START_82b017fa48d3c6810bbe211c47d6232f -->
 <h2>Delete Specific Failed Job</h2>
 <p>Delete failed job by ID.</p>
-=======
-<!-- END_bb884f911c1bc5348c85017679f2680a -->
-<!-- START_d5360e88fb9f395c18bb9d6064c1aca3 -->
-<h2>Update Specified Activity Item</h2>
-<p>Updates the activity item in database.</p>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/1" \
+    -G "http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/1" \
     -H "Content-Type: application/json" \
-<<<<<<< HEAD
     -H "Accept: application/json"</code></pre>
-=======
-    -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"veritatis","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
-</code></pre>
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/1"
+    "http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/1"
 );
 
 let headers = {
@@ -24997,21 +25246,6 @@ let headers = {
     "Accept": "application/json",
 };
 
-<<<<<<< HEAD
-=======
-let body = {
-    "title": "Math",
-    "description": "Create Math activities.",
-    "demo_activity_id": 1,
-    "demo_video_id": 1,
-    "image": "veritatis",
-    "order": 1,
-    "type": "h5p",
-    "activity_type_id": 1,
-    "h5pLib": "H5P.DocumentsUpload 1.0"
-}
-
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
 fetch(url, {
     method: "GET",
     headers: headers,
@@ -25021,26 +25255,12 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/1',
+    'http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
-<<<<<<< HEAD
-=======
-        'json' =&gt; [
-            'title' =&gt; 'Math',
-            'description' =&gt; 'Create Math activities.',
-            'demo_activity_id' =&gt; 1,
-            'demo_video_id' =&gt; 1,
-            'image' =&gt; 'veritatis',
-            'order' =&gt; 1,
-            'type' =&gt; 'h5p',
-            'activity_type_id' =&gt; 1,
-            'h5pLib' =&gt; 'H5P.DocumentsUpload 1.0',
-        ],
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
     ]
 );
 $body = $response-&gt;getBody();
@@ -25048,22 +25268,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-<<<<<<< HEAD
-url = 'http://localhost:8082/api/api/v1/admin/queue-monitor/jobs/forget/1'
-=======
-url = 'http://localhost:8000/api/v1/admin/activity-items/1'
-payload = {
-    "title": "Math",
-    "description": "Create Math activities.",
-    "demo_activity_id": 1,
-    "demo_video_id": 1,
-    "image": "veritatis",
-    "order": 1,
-    "type": "h5p",
-    "activity_type_id": 1,
-    "h5pLib": "H5P.DocumentsUpload 1.0"
-}
->>>>>>> ad42665ed7bc10f67e4c9d406613e6356feb0597
+url = 'http://localhost:8082/api/v1/admin/queue-monitor/jobs/forget/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -25103,11 +25308,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/queue-monitor?filter=1&amp;start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/queue-monitor?filter=1&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/queue-monitor"
+    "http://localhost:8082/api/v1/admin/queue-monitor"
 );
 
 let params = {
@@ -25132,7 +25337,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/queue-monitor',
+    'http://localhost:8082/api/v1/admin/queue-monitor',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25150,7 +25355,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/queue-monitor'
+url = 'http://localhost:8082/api/v1/admin/queue-monitor'
 params = {
   'filter': '1',
   'start': '0',
@@ -25248,11 +25453,11 @@ Returns the paginated response of the Organization with basic reporting (DataTab
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/organizations/report/basic?start=0&amp;length=25" \
+    -G "http://localhost:8082/api/v1/admin/organizations/report/basic?start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations/report/basic"
+    "http://localhost:8082/api/v1/admin/organizations/report/basic"
 );
 
 let params = {
@@ -25276,7 +25481,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/organizations/report/basic',
+    'http://localhost:8082/api/v1/admin/organizations/report/basic',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25293,7 +25498,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations/report/basic'
+url = 'http://localhost:8082/api/v1/admin/organizations/report/basic'
 params = {
   'start': '0',
   'length': '25',
@@ -25373,11 +25578,11 @@ Get a list of the Organizations.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/organizations" \
+    -G "http://localhost:8082/api/v1/admin/organizations" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations"
+    "http://localhost:8082/api/v1/admin/organizations"
 );
 
 let headers = {
@@ -25394,7 +25599,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/organizations',
+    'http://localhost:8082/api/v1/admin/organizations',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25407,7 +25612,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations'
+url = 'http://localhost:8082/api/v1/admin/organizations'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -25475,13 +25680,13 @@ Create a new organization.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/admin/organizations" \
+    "http://localhost:8082/api/v1/admin/organizations" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"tfa","description":"This is a test organization.","domain":"tfa","image":"(binary)","admin_id":1,"parent_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations"
+    "http://localhost:8082/api/v1/admin/organizations"
 );
 
 let headers = {
@@ -25508,7 +25713,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/admin/organizations',
+    'http://localhost:8082/api/v1/admin/organizations',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25529,7 +25734,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations'
+url = 'http://localhost:8082/api/v1/admin/organizations'
 payload = {
     "name": "tfa",
     "description": "This is a test organization.",
@@ -25617,11 +25822,11 @@ Get the specified organization detail.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/organizations/1" \
+    -G "http://localhost:8082/api/v1/admin/organizations/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations/1"
+    "http://localhost:8082/api/v1/admin/organizations/1"
 );
 
 let headers = {
@@ -25638,7 +25843,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/organizations/1',
+    'http://localhost:8082/api/v1/admin/organizations/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25651,7 +25856,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations/1'
+url = 'http://localhost:8082/api/v1/admin/organizations/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -25740,13 +25945,13 @@ Update the specified organization.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/admin/organizations/1" \
+    "http://localhost:8082/api/v1/admin/organizations/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"name":"tfa","description":"This is a test organization.","domain":"tfa","image":"(binary)","member_id":1,"parent_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations/1"
+    "http://localhost:8082/api/v1/admin/organizations/1"
 );
 
 let headers = {
@@ -25773,7 +25978,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/admin/organizations/1',
+    'http://localhost:8082/api/v1/admin/organizations/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25794,7 +25999,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations/1'
+url = 'http://localhost:8082/api/v1/admin/organizations/1'
 payload = {
     "name": "tfa",
     "description": "This is a test organization.",
@@ -25900,11 +26105,11 @@ Remove the specified organization.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/admin/organizations/1" \
+    "http://localhost:8082/api/v1/admin/organizations/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations/1"
+    "http://localhost:8082/api/v1/admin/organizations/1"
 );
 
 let headers = {
@@ -25921,7 +26126,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/admin/organizations/1',
+    'http://localhost:8082/api/v1/admin/organizations/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25934,7 +26139,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations/1'
+url = 'http://localhost:8082/api/v1/admin/organizations/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -25975,11 +26180,11 @@ Remove the user from the specified organization.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/admin/organizations/1/user/1" \
+    "http://localhost:8082/api/v1/admin/organizations/1/user/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations/1/user/1"
+    "http://localhost:8082/api/v1/admin/organizations/1/user/1"
 );
 
 let headers = {
@@ -25996,7 +26201,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/admin/organizations/1/user/1',
+    'http://localhost:8082/api/v1/admin/organizations/1/user/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26009,7 +26214,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations/1/user/1'
+url = 'http://localhost:8082/api/v1/admin/organizations/1/user/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -26061,11 +26266,11 @@ Display a listing of the parent organizations options, other then itself and its
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/organizations/1/parent-options" \
+    -G "http://localhost:8082/api/v1/admin/organizations/1/parent-options" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations/1/parent-options"
+    "http://localhost:8082/api/v1/admin/organizations/1/parent-options"
 );
 
 let headers = {
@@ -26082,7 +26287,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/organizations/1/parent-options',
+    'http://localhost:8082/api/v1/admin/organizations/1/parent-options',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26095,7 +26300,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations/1/parent-options'
+url = 'http://localhost:8082/api/v1/admin/organizations/1/parent-options'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -26166,11 +26371,11 @@ Display a listing of the user member options, other then the exiting ones.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/admin/organizations/1/member-options" \
+    -G "http://localhost:8082/api/v1/admin/organizations/1/member-options" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/admin/organizations/1/member-options"
+    "http://localhost:8082/api/v1/admin/organizations/1/member-options"
 );
 
 let headers = {
@@ -26187,7 +26392,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/admin/organizations/1/member-options',
+    'http://localhost:8082/api/v1/admin/organizations/1/member-options',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26200,7 +26405,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/admin/organizations/1/member-options'
+url = 'http://localhost:8082/api/v1/admin/organizations/1/member-options'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -26284,13 +26489,13 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/organization/get-by-domain" \
+    -G "http://localhost:8082/api/v1/organization/get-by-domain" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"domain":"curriki"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/organization/get-by-domain"
+    "http://localhost:8082/api/v1/organization/get-by-domain"
 );
 
 let headers = {
@@ -26312,7 +26517,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/organization/get-by-domain',
+    'http://localhost:8082/api/v1/organization/get-by-domain',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26328,7 +26533,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/organization/get-by-domain'
+url = 'http://localhost:8082/api/v1/organization/get-by-domain'
 payload = {
     "domain": "curriki"
 }
@@ -26380,9 +26585,632 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_f5a985d69025164365132a0f650f9365 -->
+<h1>Organization Permission Type API</h1>
+<p>APIs for Organization Permission Types</p>
+<!-- START_bd2777b2132db6c9cf93e928b5b5e44d -->
+<h2>Get All Organization Permission Type</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the organization permission type.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8082/api/v1/permissions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"query":"edit"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/permissions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "query": "edit"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8082/api/v1/permissions',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'query' =&gt; 'edit',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/permissions'
+payload = {
+    "query": "edit"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 25,
+            "name": "activity:edit",
+            "display_name": "Edit Activity",
+            "feature": "Activity"
+        },
+        {
+            "id": 43,
+            "name": "group:edit",
+            "display_name": "Edit Group",
+            "feature": "Group"
+        },
+        {
+            "id": 1,
+            "name": "organization:edit",
+            "display_name": "Edit Organization",
+            "feature": "Organization"
+        },
+        {
+            "id": 19,
+            "name": "playlist:edit",
+            "display_name": "Edit Playlist",
+            "feature": "Playlist"
+        },
+        {
+            "id": 10,
+            "name": "project:edit",
+            "display_name": "Edit Project",
+            "feature": "Project"
+        },
+        {
+            "id": 31,
+            "name": "team:edit",
+            "display_name": "Edit Team",
+            "feature": "Team"
+        },
+        {
+            "id": 57,
+            "name": "user:edit",
+            "display_name": "Edit User",
+            "feature": "User"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/permissions</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>query</code></td>
+<td>string</td>
+<td>required</td>
+<td>Query to search organization permission types against</td>
+</tr>
+</tbody>
+</table>
+<!-- END_bd2777b2132db6c9cf93e928b5b5e44d -->
 <h1>Suborganization API</h1>
 <p>APIs for Suborganization</p>
-<!-- START_341429943fdbb8f1661ed58b3b5808b3 -->
+<!-- START_3726723e608688e3c57352fcbf47c944 -->
+<h2>User has permission</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Check if user has the specified permission in the provided organization.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8082/api/v1/suborganizations/1/user-has-permission" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"permission":"organization:view"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/suborganizations/1/user-has-permission"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "permission": "organization:view"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8082/api/v1/suborganizations/1/user-has-permission',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'permission' =&gt; 'organization:view',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/suborganizations/1/user-has-permission'
+payload = {
+    "permission": "organization:view"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "userHasPermission": true
+}</code></pre>
+<blockquote>
+<p>Example response (400):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "The permission field is required."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/{suborganization}/user-has-permission</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>permission</code></td>
+<td>string</td>
+<td>required</td>
+<td>Permission to check user access</td>
+</tr>
+</tbody>
+</table>
+<!-- END_3726723e608688e3c57352fcbf47c944 -->
+<!-- START_0045c8698c152f6ca7984303a34dd379 -->
+<h2>Get User Permissions</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get the logged-in user's permissions in the suborganization.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8082/api/v1/suborganizations/1/permissions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/suborganizations/1/permissions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8082/api/v1/suborganizations/1/permissions',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/suborganizations/1/permissions'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "permissions": {
+        "activeRole": "non_editing_teacher",
+        "roleId": 4,
+        "Project": [
+            "project:view"
+        ],
+        "Playlist": [
+            "playlist:view"
+        ],
+        "Activity": [
+            "activity:view"
+        ]
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/{suborganization}/permissions</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_0045c8698c152f6ca7984303a34dd379 -->
+<!-- START_ae3e4815d547bcfa4b4ab978d1b689a3 -->
+<h2>Add Suborganization Role</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Add role for the specified suborganization</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8082/api/v1/suborganizations/1/add-role" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"member","display_name":"Member","permissions":"[1, 2]"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/suborganizations/1/add-role"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "member",
+    "display_name": "Member",
+    "permissions": "[1, 2]"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8082/api/v1/suborganizations/1/add-role',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'member',
+            'display_name' =&gt; 'Member',
+            'permissions' =&gt; '[1, 2]',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/suborganizations/1/add-role'
+payload = {
+    "name": "member",
+    "display_name": "Member",
+    "permissions": "[1, 2]"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Role has been added successfully."
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Failed to add role."
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/suborganizations/{suborganization}/add-role</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Name of a suborganization role</td>
+</tr>
+<tr>
+<td><code>display_name</code></td>
+<td>string</td>
+<td>required</td>
+<td>Display name of a suborganization role</td>
+</tr>
+<tr>
+<td><code>permissions</code></td>
+<td>array</td>
+<td>required</td>
+<td>Ids of the permissions to assign the role</td>
+</tr>
+</tbody>
+</table>
+<!-- END_ae3e4815d547bcfa4b4ab978d1b689a3 -->
+<!-- START_0d835883cdae9e0f53be5344cf85ba25 -->
+<h2>Get Visibility Types For Suborganization</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the visibility types for suborganization.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8082/api/v1/suborganizations/visibility-types" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/suborganizations/visibility-types"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8082/api/v1/suborganizations/visibility-types',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/suborganizations/visibility-types'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "name": "private",
+            "display_name": "Private"
+        },
+        {
+            "id": 2,
+            "name": "protected",
+            "display_name": "Protected"
+        },
+        {
+            "id": 3,
+            "name": "global",
+            "display_name": "Global"
+        },
+        {
+            "id": 4,
+            "name": "public",
+            "display_name": "Public"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/visibility-types</code></p>
+<!-- END_0d835883cdae9e0f53be5344cf85ba25 -->
+<!-- START_20fe949bf75b786d11a9bebfefe56c68 -->
+<h2>Get User Roles For Suborganization</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the users roles for suborganization.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8082/api/v1/suborganizations/roles" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/suborganizations/roles"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8082/api/v1/suborganizations/roles',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/suborganizations/roles'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "name": "admin",
+            "display_name": "Administrator"
+        },
+        {
+            "id": 3,
+            "name": "member",
+            "display_name": "Member"
+        },
+        {
+            "id": 2,
+            "name": "course_creator",
+            "display_name": "Course Creator"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/roles</code></p>
+<!-- END_20fe949bf75b786d11a9bebfefe56c68 -->
+<!-- START_418929bc46bc5fb9a5f01f4c3dd9d030 -->
 <h2>Upload thumbnail</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 Upload thumbnail image for a suborganization</p>
@@ -26390,13 +27218,13 @@ Upload thumbnail image for a suborganization</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/suborganizations/upload-thumb" \
+    "http://localhost:8082/api/v1/suborganizations/1/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"thumb":"(binary)"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/upload-thumb"
+    "http://localhost:8082/api/v1/suborganizations/1/upload-thumb"
 );
 
 let headers = {
@@ -26418,7 +27246,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/suborganizations/upload-thumb',
+    'http://localhost:8082/api/v1/suborganizations/1/upload-thumb',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26434,7 +27262,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/upload-thumb'
+url = 'http://localhost:8082/api/v1/suborganizations/1/upload-thumb'
 payload = {
     "thumb": "(binary)"
 }
@@ -26459,7 +27287,24 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/suborganizations/upload-thumb</code></p>
+<p><code>POST api/v1/suborganizations/{suborganization}/upload-thumb</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -26479,22 +27324,22 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_341429943fdbb8f1661ed58b3b5808b3 -->
-<!-- START_cacd323e2989a03ba341c65c78991bdd -->
+<!-- END_418929bc46bc5fb9a5f01f4c3dd9d030 -->
+<!-- START_b0608819de2e29d9ba05ca54db68d914 -->
 <h2>Show Member Options</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Display a listing of the user member options for default suborganization, other then the exiting ones.</p>
+Display a listing of the user member options for suborganization, other then the exiting ones.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/suborganizations/member-options" \
+    -G "http://localhost:8082/api/v1/suborganizations/1/member-options" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"query":"leo"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/member-options"
+    "http://localhost:8082/api/v1/suborganizations/1/member-options"
 );
 
 let headers = {
@@ -26516,7 +27361,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/suborganizations/member-options',
+    'http://localhost:8082/api/v1/suborganizations/1/member-options',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26532,7 +27377,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/member-options'
+url = 'http://localhost:8082/api/v1/suborganizations/1/member-options'
 payload = {
     "query": "leo"
 }
@@ -26584,7 +27429,24 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/suborganizations/member-options</code></p>
+<p><code>GET api/v1/suborganizations/{suborganization}/member-options</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>optional</td>
+<td>int required The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -26604,20 +27466,22 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_cacd323e2989a03ba341c65c78991bdd -->
-<!-- START_29917a560d9d2bcc3a822a531016bd95 -->
-<h2>Get All Users For Default Suborganization</h2>
+<!-- END_b0608819de2e29d9ba05ca54db68d914 -->
+<!-- START_6a093c75ae46f95bc8e0401ac1190533 -->
+<h2>Get All Users For a Suborganization</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get a list of the users for a user's default organization.</p>
+Get a list of the users for a suborganization.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/suborganizations/users" \
+    -G "http://localhost:8082/api/v1/suborganizations/1/users" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"query":"Leo"}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/users"
+    "http://localhost:8082/api/v1/suborganizations/1/users"
 );
 
 let headers = {
@@ -26625,20 +27489,28 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "query": "Leo"
+}
+
 fetch(url, {
     method: "GET",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/suborganizations/users',
+    'http://localhost:8082/api/v1/suborganizations/1/users',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'query' =&gt; 'Leo',
         ],
     ]
 );
@@ -26647,23 +27519,74 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/users'
+url = 'http://localhost:8082/api/v1/suborganizations/1/users'
+payload = {
+    "query": "Leo"
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('GET', url, headers=headers)
+response = requests.request('GET', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "organization-users": [
+    "data": [
         {
-            "id": 1,
-            "first_name": "local",
-            "last_name": "user",
-            "email": "localuser@local.com",
+            "id": 1544,
+            "first_name": "Kari",
+            "last_name": "Lund",
+            "email": "kari.lund@nkcschools.org",
+            "organization_name": "North Kansas City Schools",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1595,
+            "first_name": "Song",
+            "last_name": "Nam",
+            "email": "tpqtrang@songnam.net",
+            "organization_name": "Ms TRANG",
+            "organization_type": "Architecture design",
+            "job_title": "Tư vấn giám sát",
+            "address": null,
+            "phone_number": "84769861168",
+            "website": "http:\/\/www.songnam.net\/Dich-vu-va-Du-an\/Tu-van-giam-sat\/48",
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 4,
+            "first_name": "kochdemo",
+            "last_name": "",
+            "email": "kochdemo@curriki.org",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": false,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 5,
+            "first_name": "jonathanbrusco79",
+            "last_name": "",
+            "email": "jonathanbrusco79@gmail.com",
             "organization_name": "",
             "organization_type": null,
             "job_title": "",
@@ -26671,28 +27594,258 @@ response.json()</code></pre>
             "phone_number": null,
             "website": null,
             "subscribed": true,
-            "organization_role": "Administrator"
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1545,
+            "first_name": "Tara",
+            "last_name": "Miller",
+            "email": "voorhtk@nv.ccsd.net",
+            "organization_name": "CCSD",
+            "organization_type": null,
+            "job_title": "Theme Coordinator",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1596,
+            "first_name": "Georgia",
+            "last_name": "Blacklock",
+            "email": "georgiablacklock7@gmail.com",
+            "organization_name": "Australian Catholic University",
+            "organization_type": null,
+            "job_title": "pre-teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1628,
+            "first_name": "John",
+            "last_name": "Hochstetler",
+            "email": "jhochstetler@hse.k12.in.us",
+            "organization_name": "Riverside Intermediate School",
+            "organization_type": null,
+            "job_title": "Teacher Librarian",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1546,
+            "first_name": "Michelle",
+            "last_name": "Floyd",
+            "email": "michellefloyd@spsk12.net",
+            "organization_name": "Kilby Shores Elementary School",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1597,
+            "first_name": "Madison",
+            "last_name": "Cathey",
+            "email": "madicat94@hotmail.com",
+            "organization_name": "SJSD",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 710,
+            "first_name": "Anthony",
+            "last_name": "Baker",
+            "email": "abaker@digitalpromise.org",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 2
+        },
+        {
+            "id": 1547,
+            "first_name": "John",
+            "last_name": "Lowe",
+            "email": "john_lowe@baylor.edu",
+            "organization_name": "Baylor",
+            "organization_type": null,
+            "job_title": "Instructional Designer",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 7
+        },
+        {
+            "id": 1598,
+            "first_name": "Meredith",
+            "last_name": "Carlton",
+            "email": "meredith@beaconacademync.org",
+            "organization_name": "Beacon Academy Inc",
+            "organization_type": null,
+            "job_title": null,
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1629,
+            "first_name": "Joy",
+            "last_name": "Prescott",
+            "email": "2019fltoy@gmail.com",
+            "organization_name": "Educator",
+            "organization_type": null,
+            "job_title": "Educator",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": false,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 5
+        },
+        {
+            "id": 1548,
+            "first_name": "Mary",
+            "last_name": "Regione",
+            "email": "maryregione@spsk12.net",
+            "organization_name": "KIlby Shores Elementary",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1599,
+            "first_name": "Tionia",
+            "last_name": "Richardson",
+            "email": "richmathteacher@gmail.com",
+            "organization_name": "Rock Hill Schools",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
         }
-    ]
+    ],
+    "links": {
+        "first": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=1",
+        "last": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=109",
+        "prev": null,
+        "next": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 109,
+        "path": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users",
+        "per_page": 15,
+        "to": 15,
+        "total": 1627
+    }
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>GET api/v1/suborganizations/users</code></p>
-<!-- END_29917a560d9d2bcc3a822a531016bd95 -->
-<!-- START_47665b9d3adf2e906bdec4ba14cd3945 -->
+<p><code>GET api/v1/suborganizations/{suborganization}/users</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>optional</td>
+<td>The pagination page no to show</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>query</code></td>
+<td>string</td>
+<td>required</td>
+<td>Query to search suborganization users against</td>
+</tr>
+</tbody>
+</table>
+<!-- END_6a093c75ae46f95bc8e0401ac1190533 -->
+<!-- START_9bbfc9b39a47f5f1aac00c343eb08701 -->
 <h2>Add Suborganization User</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Add user for the specified role in default suborganization</p>
+Add user for the specified role in suborganization</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/suborganizations/add-user" \
+    "http://localhost:8082/api/v1/suborganizations/1/add-user" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"user_id":1,"role_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/add-user"
+    "http://localhost:8082/api/v1/suborganizations/1/add-user"
 );
 
 let headers = {
@@ -26715,7 +27868,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/suborganizations/add-user',
+    'http://localhost:8082/api/v1/suborganizations/1/add-user',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26732,7 +27885,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/add-user'
+url = 'http://localhost:8082/api/v1/suborganizations/1/add-user'
 payload = {
     "user_id": 1,
     "role_id": 1
@@ -26758,7 +27911,24 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/suborganizations/add-user</code></p>
+<p><code>POST api/v1/suborganizations/{suborganization}/add-user</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -26784,22 +27954,22 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_47665b9d3adf2e906bdec4ba14cd3945 -->
-<!-- START_132cfc9491e84a092a7455cd6d0fa79d -->
+<!-- END_9bbfc9b39a47f5f1aac00c343eb08701 -->
+<!-- START_3beb55445b4fa278ba431ff224573fd0 -->
 <h2>Invite Organization Member</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Invite a organization member to the team.</p>
+Invite a member to the organization.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/suborganizations/invite-members" \
+    "http://localhost:8082/api/v1/suborganizations/1/invite-members" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"email":"abby@curriki.org"}'
+    -d '{"email":"abby@curriki.org","role_id":1,"note":"Welcome"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/invite-members"
+    "http://localhost:8082/api/v1/suborganizations/1/invite-members"
 );
 
 let headers = {
@@ -26808,7 +27978,9 @@ let headers = {
 };
 
 let body = {
-    "email": "abby@curriki.org"
+    "email": "abby@curriki.org",
+    "role_id": 1,
+    "note": "Welcome"
 }
 
 fetch(url, {
@@ -26821,7 +27993,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/suborganizations/invite-members',
+    'http://localhost:8082/api/v1/suborganizations/1/invite-members',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26829,6 +28001,8 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'email' =&gt; 'abby@curriki.org',
+            'role_id' =&gt; 1,
+            'note' =&gt; 'Welcome',
         ],
     ]
 );
@@ -26837,9 +28011,11 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/invite-members'
+url = 'http://localhost:8082/api/v1/suborganizations/1/invite-members'
 payload = {
-    "email": "abby@curriki.org"
+    "email": "abby@curriki.org",
+    "role_id": 1,
+    "note": "Welcome"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -26851,26 +28027,35 @@ response.json()</code></pre>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "message": "Users have been invited to the organization successfully."
-}</code></pre>
-<blockquote>
-<p>Example response (403):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "errors": [
-        "You do not have permission to invite users to the organization."
-    ]
+    "message": "User have been invited to the organization successfully."
 }</code></pre>
 <blockquote>
 <p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
     "errors": [
-        "Failed to invite users to the organization."
+        "Failed to invite user to the organization."
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>POST api/v1/suborganizations/invite-members</code></p>
+<p><code>POST api/v1/suborganizations/{suborganization}/invite-members</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -26888,10 +28073,22 @@ response.json()</code></pre>
 <td>required</td>
 <td>The email of the user</td>
 </tr>
+<tr>
+<td><code>role_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Id of the role for invited user</td>
+</tr>
+<tr>
+<td><code>note</code></td>
+<td>string</td>
+<td>optional</td>
+<td>The note for the user</td>
+</tr>
 </tbody>
 </table>
-<!-- END_132cfc9491e84a092a7455cd6d0fa79d -->
-<!-- START_fdb18e6af083b6f3b6493b2b6419504e -->
+<!-- END_3beb55445b4fa278ba431ff224573fd0 -->
+<!-- START_220202f5c856b2376dbe45d796a51ea6 -->
 <h2>Update Suborganization User</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 Update user for the specified role in default suborganization</p>
@@ -26899,13 +28096,13 @@ Update user for the specified role in default suborganization</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/suborganizations/update-user" \
+    "http://localhost:8082/api/v1/suborganizations/1/update-user" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"user_id":1,"role_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/update-user"
+    "http://localhost:8082/api/v1/suborganizations/1/update-user"
 );
 
 let headers = {
@@ -26928,7 +28125,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/suborganizations/update-user',
+    'http://localhost:8082/api/v1/suborganizations/1/update-user',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -26945,7 +28142,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/update-user'
+url = 'http://localhost:8082/api/v1/suborganizations/1/update-user'
 payload = {
     "user_id": 1,
     "role_id": 1
@@ -26971,7 +28168,24 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>PUT api/v1/suborganizations/update-user</code></p>
+<p><code>PUT api/v1/suborganizations/{suborganization}/update-user</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -26997,8 +28211,8 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_fdb18e6af083b6f3b6493b2b6419504e -->
-<!-- START_dcea507f05815ea8a66b46ed352a76b1 -->
+<!-- END_220202f5c856b2376dbe45d796a51ea6 -->
+<!-- START_16f327440cf69cecca0ec2cd55bad11c -->
 <h2>Remove Suborganization User</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 Remove the specified user from default suborganization.</p>
@@ -27006,13 +28220,13 @@ Remove the specified user from default suborganization.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/suborganizations/delete-user" \
+    "http://localhost:8082/api/v1/suborganizations/1/delete-user" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"user_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/delete-user"
+    "http://localhost:8082/api/v1/suborganizations/1/delete-user"
 );
 
 let headers = {
@@ -27034,7 +28248,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/suborganizations/delete-user',
+    'http://localhost:8082/api/v1/suborganizations/1/delete-user',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27050,7 +28264,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/delete-user'
+url = 'http://localhost:8082/api/v1/suborganizations/1/delete-user'
 payload = {
     "user_id": 1
 }
@@ -27083,7 +28297,24 @@ response.json()</code></pre>
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
-<p><code>DELETE api/v1/suborganizations/delete-user</code></p>
+<p><code>DELETE api/v1/suborganizations/{suborganization}/delete-user</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
 <h4>Body Parameters</h4>
 <table>
 <thead>
@@ -27103,73 +28334,7 @@ response.json()</code></pre>
 </tr>
 </tbody>
 </table>
-<!-- END_dcea507f05815ea8a66b46ed352a76b1 -->
-<!-- START_8e46beeb4f2185c7d81da6776789c739 -->
-<h2>Get All Suborganization</h2>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get a list of the suborganizations for a user's default organization.</p>
-<blockquote>
-<p>Example request:</p>
-</blockquote>
-<pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/suborganizations" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
-<pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response =&gt; response.json())
-    .then(json =&gt; console.log(json));</code></pre>
-<pre><code class="language-php">
-$client = new \GuzzleHttp\Client();
-$response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/suborganizations',
-    [
-        'headers' =&gt; [
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre>
-<pre><code class="language-python">import requests
-import json
-
-url = 'http://localhost:8082/api/api/v1/suborganizations'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()</code></pre>
-<blockquote>
-<p>Example response (200):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "suborganization": [
-        {
-            "id": 3,
-            "name": "Suborganization",
-            "description": "Suborganization description",
-            "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-            "domain": "suborganization"
-        }
-    ]
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>GET api/v1/suborganizations</code></p>
-<!-- END_8e46beeb4f2185c7d81da6776789c739 -->
+<!-- END_16f327440cf69cecca0ec2cd55bad11c -->
 <!-- START_634204a9dfb2ca532f64d3bd155194c0 -->
 <h2>Create Suborganization</h2>
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
@@ -27178,13 +28343,13 @@ Create a new suborganization for a user's default organization.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8082/api/api/v1/suborganizations" \
+    "http://localhost:8082/api/v1/suborganizations" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admin_id":1}'
+    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admins":"[1, 2]","users":"[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]","parent_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations"
+    "http://localhost:8082/api/v1/suborganizations"
 );
 
 let headers = {
@@ -27197,7 +28362,9 @@ let body = {
     "description": "This is a test suborganization.",
     "domain": "oldcampus",
     "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admin_id": 1
+    "admins": "[1, 2]",
+    "users": "[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]",
+    "parent_id": 1
 }
 
 fetch(url, {
@@ -27210,7 +28377,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8082/api/api/v1/suborganizations',
+    'http://localhost:8082/api/v1/suborganizations',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27221,7 +28388,9 @@ $response = $client-&gt;post(
             'description' =&gt; 'This is a test suborganization.',
             'domain' =&gt; 'oldcampus',
             'image' =&gt; '/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg',
-            'admin_id' =&gt; 1,
+            'admins' =&gt; '[1, 2]',
+            'users' =&gt; '[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]',
+            'parent_id' =&gt; 1,
         ],
     ]
 );
@@ -27230,13 +28399,15 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations'
+url = 'http://localhost:8082/api/v1/suborganizations'
 payload = {
     "name": "Old Campus",
     "description": "This is a test suborganization.",
     "domain": "oldcampus",
     "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admin_id": 1
+    "admins": "[1, 2]",
+    "users": "[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]",
+    "parent_id": 1
 }
 headers = {
   'Content-Type': 'application/json',
@@ -27302,10 +28473,22 @@ response.json()</code></pre>
 <td>Image path of a suborganization</td>
 </tr>
 <tr>
-<td><code>admin_id</code></td>
+<td><code>admins</code></td>
+<td>array</td>
+<td>required</td>
+<td>Ids of the suborganization admin users</td>
+</tr>
+<tr>
+<td><code>users</code></td>
+<td>array</td>
+<td>required</td>
+<td>Array of the &quot;user_id&quot; and &quot;role_id&quot; for suborganization users</td>
+</tr>
+<tr>
+<td><code>parent_id</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Id of the suborganization admin user</td>
+<td>Id of the parent organization</td>
 </tr>
 </tbody>
 </table>
@@ -27318,11 +28501,11 @@ Get the specified suborganization detail.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/suborganizations/1" \
+    -G "http://localhost:8082/api/v1/suborganizations/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/1"
+    "http://localhost:8082/api/v1/suborganizations/1"
 );
 
 let headers = {
@@ -27339,7 +28522,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/suborganizations/1',
+    'http://localhost:8082/api/v1/suborganizations/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27352,7 +28535,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/1'
+url = 'http://localhost:8082/api/v1/suborganizations/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -27399,13 +28582,13 @@ Update the specified suborganization for a user.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
-    "http://localhost:8082/api/api/v1/suborganizations/1" \
+    "http://localhost:8082/api/v1/suborganizations/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admin_id":1}'
+    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admins":"[1, 2]","users":"[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/1"
+    "http://localhost:8082/api/v1/suborganizations/1"
 );
 
 let headers = {
@@ -27418,7 +28601,8 @@ let body = {
     "description": "This is a test suborganization.",
     "domain": "oldcampus",
     "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admin_id": 1
+    "admins": "[1, 2]",
+    "users": "[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]"
 }
 
 fetch(url, {
@@ -27431,7 +28615,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'http://localhost:8082/api/api/v1/suborganizations/1',
+    'http://localhost:8082/api/v1/suborganizations/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27442,7 +28626,8 @@ $response = $client-&gt;put(
             'description' =&gt; 'This is a test suborganization.',
             'domain' =&gt; 'oldcampus',
             'image' =&gt; '/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg',
-            'admin_id' =&gt; 1,
+            'admins' =&gt; '[1, 2]',
+            'users' =&gt; '[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]',
         ],
     ]
 );
@@ -27451,13 +28636,14 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/1'
+url = 'http://localhost:8082/api/v1/suborganizations/1'
 payload = {
     "name": "Old Campus",
     "description": "This is a test suborganization.",
     "domain": "oldcampus",
     "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admin_id": 1
+    "admins": "[1, 2]",
+    "users": "[[user_id =&gt; 5, 3], [user_id =&gt; 6, 2]]"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -27541,10 +28727,16 @@ response.json()</code></pre>
 <td>Image path of a suborganization</td>
 </tr>
 <tr>
-<td><code>admin_id</code></td>
-<td>integer</td>
+<td><code>admins</code></td>
+<td>array</td>
 <td>required</td>
-<td>Id of the suborganization admin user</td>
+<td>Ids of the suborganization admin users</td>
+</tr>
+<tr>
+<td><code>users</code></td>
+<td>array</td>
+<td>required</td>
+<td>Array of the &quot;user_id&quot; and &quot;role_id&quot; for suborganization users</td>
 </tr>
 </tbody>
 </table>
@@ -27557,11 +28749,11 @@ Remove the specified suborganization.</p>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X DELETE \
-    "http://localhost:8082/api/api/v1/suborganizations/1" \
+    "http://localhost:8082/api/v1/suborganizations/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/suborganizations/1"
+    "http://localhost:8082/api/v1/suborganizations/1"
 );
 
 let headers = {
@@ -27578,7 +28770,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'http://localhost:8082/api/api/v1/suborganizations/1',
+    'http://localhost:8082/api/v1/suborganizations/1',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27591,7 +28783,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/suborganizations/1'
+url = 'http://localhost:8082/api/v1/suborganizations/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -27632,6 +28824,121 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_28d6dce17a37901a5098a615273be724 -->
+<!-- START_5623f6a0709ff5b4205333de28b249d9 -->
+<h2>Get All Suborganization</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the suborganizations for a user's default organization.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8082/api/v1/suborganizations/1/index" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"query":"Vivensity"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/suborganizations/1/index"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "query": "Vivensity"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8082/api/v1/suborganizations/1/index',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'query' =&gt; 'Vivensity',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/suborganizations/1/index'
+payload = {
+    "query": "Vivensity"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "suborganization": [
+        {
+            "id": 3,
+            "name": "Suborganization",
+            "description": "Suborganization description",
+            "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+            "domain": "suborganization"
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/{suborganization}/index</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganization</code></td>
+<td>required</td>
+<td>The Id of a suborganization</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>query</code></td>
+<td>string</td>
+<td>required</td>
+<td>Query to search suborganization against</td>
+</tr>
+</tbody>
+</table>
+<!-- END_5623f6a0709ff5b4205333de28b249d9 -->
 <h1>general</h1>
 <!-- START_6c3256ccb776586b79a2c91cb56e0197 -->
 <h2>Authenticate the request for channel access.</h2>
@@ -27639,11 +28946,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/broadcasting/auth" \
+    -G "http://localhost:8082/api/broadcasting/auth" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/broadcasting/auth"
+    "http://localhost:8082/api/broadcasting/auth"
 );
 
 let headers = {
@@ -27660,7 +28967,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/broadcasting/auth',
+    'http://localhost:8082/api/broadcasting/auth',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27673,7 +28980,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/broadcasting/auth'
+url = 'http://localhost:8082/api/broadcasting/auth'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -27696,11 +29003,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/organization-types" \
+    -G "http://localhost:8082/api/v1/organization-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/organization-types"
+    "http://localhost:8082/api/v1/organization-types"
 );
 
 let headers = {
@@ -27717,7 +29024,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/organization-types',
+    'http://localhost:8082/api/v1/organization-types',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27730,7 +29037,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/organization-types'
+url = 'http://localhost:8082/api/v1/organization-types'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -27789,11 +29096,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/h5p/h5p-result/my" \
+    -G "http://localhost:8082/api/v1/h5p/h5p-result/my" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/h5p/h5p-result/my"
+    "http://localhost:8082/api/v1/h5p/h5p-result/my"
 );
 
 let headers = {
@@ -27810,7 +29117,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/h5p/h5p-result/my',
+    'http://localhost:8082/api/v1/h5p/h5p-result/my',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27823,7 +29130,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/h5p/h5p-result/my'
+url = 'http://localhost:8082/api/v1/h5p/h5p-result/my'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -27850,11 +29157,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8082/api/api/v1/user-lms-settings" \
+    -G "http://localhost:8082/api/v1/user-lms-settings" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8082/api/api/v1/user-lms-settings"
+    "http://localhost:8082/api/v1/user-lms-settings"
 );
 
 let headers = {
@@ -27871,7 +29178,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8082/api/api/v1/user-lms-settings',
+    'http://localhost:8082/api/v1/user-lms-settings',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -27884,7 +29191,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8082/api/api/v1/user-lms-settings'
+url = 'http://localhost:8082/api/v1/user-lms-settings'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -27900,6 +29207,523 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/user-lms-settings</code></p>
 <!-- END_d632df2b6f298dfb891c5da13abff768 -->
+<!-- START_11ed109de5bd6a58e0c35e0a71d61198 -->
+<h2>Get H5P Resource Settings For Brightcove</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8082/api/v1/brightcove/1/1/h5p-resource-settings" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8082/api/v1/brightcove/1/1/h5p-resource-settings"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8082/api/v1/brightcove/1/1/h5p-resource-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8082/api/v1/brightcove/1/1/h5p-resource-settings'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (404):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "h5p": null
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "h5p": {
+        "id": 59,
+        "title": "Science of Golf: Why Balls Have Dimples",
+        "params": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;They reduce wind resistance.&lt;\/p&gt;\\n\",\"&lt;p&gt;They make the ball more visually interesting.&lt;\/p&gt;\\n\",\"&lt;p&gt;They grip the putting green better than a smooth ball.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"&lt;p&gt;A smooth ball will have a detached airflow, which causes what?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;A low pressure zone, which is what causes drag.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball has no spin.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball travels higher, but for a shorter distance.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Smooth Ball&lt;\/p&gt;\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+        "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;They reduce wind resistance.&lt;\/p&gt;\\n\",\"&lt;p&gt;They make the ball more visually interesting.&lt;\/p&gt;\\n\",\"&lt;p&gt;They grip the putting green better than a smooth ball.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"&lt;p&gt;A smooth ball will have a detached airflow, which causes what?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;A low pressure zone, which is what causes drag.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball has no spin.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball travels higher, but for a shorter distance.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Smooth Ball&lt;\/p&gt;\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+        "slug": "science-of-golf-why-balls-have-dimples",
+        "user_id": 1,
+        "embedType": "div",
+        "disable": 9,
+        "libraryMajorVersion": 1,
+        "libraryMinorVersion": 21,
+        "authors": null,
+        "source": null,
+        "yearFrom": null,
+        "yearTo": null,
+        "licenseVersion": null,
+        "licenseExtras": null,
+        "authorComments": null,
+        "changes": null,
+        "defaultLanguage": null,
+        "metadata": {
+            "title": "Science of Golf: Why Balls Have Dimples",
+            "license": "U"
+        },
+        "library": {
+            "id": 40,
+            "name": "H5P.InteractiveVideo",
+            "majorVersion": 1,
+            "minorVersion": 21,
+            "embedTypes": "iframe",
+            "fullscreen": 1
+        },
+        "language": "en",
+        "tags": ""
+    },
+    "activity": {
+        "id": 1,
+        "playlist_id": 1,
+        "title": "Science of Golf: Why Balls Have Dimples",
+        "type": "h5p",
+        "content": "",
+        "shared": false,
+        "order": 2,
+        "thumb_url": null,
+        "subject_id": null,
+        "education_level_id": null,
+        "h5p_content": {
+            "id": 59,
+            "created_at": "2020-04-30T20:24:58.000000Z",
+            "updated_at": "2020-04-30T20:24:58.000000Z",
+            "user_id": 1,
+            "title": "Science of Golf: Why Balls Have Dimples",
+            "library_id": 40,
+            "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;They reduce wind resistance.&lt;\/p&gt;\\n\",\"&lt;p&gt;They make the ball more visually interesting.&lt;\/p&gt;\\n\",\"&lt;p&gt;They grip the putting green better than a smooth ball.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"&lt;p&gt;A smooth ball will have a detached airflow, which causes what?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;A low pressure zone, which is what causes drag.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball has no spin.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball travels higher, but for a shorter distance.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Smooth Ball&lt;\/p&gt;\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;They reduce wind resistance.&lt;\/p&gt;\\n\",\"&lt;p&gt;They make the ball more visually interesting.&lt;\/p&gt;\\n\",\"&lt;p&gt;They grip the putting green better than a smooth ball.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"&lt;p&gt;A smooth ball will have a detached airflow, which causes what?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;A low pressure zone, which is what causes drag.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball has no spin.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball travels higher, but for a shorter distance.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Smooth Ball&lt;\/p&gt;\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "slug": "science-of-golf-why-balls-have-dimples",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": null,
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": null,
+            "default_language": null
+        },
+        "is_public": false,
+        "created_at": null,
+        "updated_at": null
+    },
+    "playlist": {
+        "id": 1,
+        "title": "The Engineering &amp; Design Behind Golf Balls",
+        "order": 0,
+        "is_public": true,
+        "project_id": 1,
+        "project": {
+            "id": 1,
+            "name": "The Science of Golf",
+            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+            "thumb_url": "\/storage\/projects\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+            "shared": false,
+            "starter_project": false,
+            "users": [
+                {
+                    "id": 1,
+                    "email": "john.doe@currikistudio.org",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "role": "owner"
+                }
+            ],
+            "is_public": true,
+            "created_at": "2020-04-30T20:03:12.000000Z",
+            "updated_at": "2020-07-11T12:51:07.000000Z"
+        },
+        "activities": [
+            {
+                "id": 4,
+                "playlist_id": 1,
+                "title": "Labeling Golf Ball - Principles of Physics",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 0,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 65,
+                    "created_at": "2020-04-30T23:40:49.000000Z",
+                    "updated_at": "2020-04-30T23:40:49.000000Z",
+                    "user_id": 1,
+                    "title": "Labeling Golf Ball - Principles of Physics",
+                    "library_id": 19,
+                    "parameters": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images\/background-5eab614083be2.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"&lt;p&gt;Lift&lt;\/p&gt;\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"&lt;p&gt;Drag&lt;\/p&gt;\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"&lt;p&gt;Spin&lt;\/p&gt;\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"&lt;div&gt;Lift&lt;\/div&gt;\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"&lt;div&gt;Drag&lt;\/div&gt;\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"&lt;div&gt;Spin&lt;\/div&gt;\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
+                    "filtered": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images\/background-5eab614083be2.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"&lt;p&gt;Lift&lt;\/p&gt;\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"&lt;p&gt;Drag&lt;\/p&gt;\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"&lt;p&gt;Spin&lt;\/p&gt;\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"&lt;div&gt;Lift&lt;\/div&gt;\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"&lt;div&gt;Drag&lt;\/div&gt;\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"&lt;div&gt;Spin&lt;\/div&gt;\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
+                    "slug": "labeling-golf-ball-principles-of-physics",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 17774,
+                "playlist_id": 1,
+                "title": "Latest",
+                "type": "h5p",
+                "content": "test",
+                "shared": false,
+                "order": null,
+                "thumb_url": "\/storage\/activities\/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
+                "subject_id": "Mathematics",
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 19334,
+                    "created_at": "2020-08-30T20:09:56.000000Z",
+                    "updated_at": "2020-08-30T20:09:56.000000Z",
+                    "user_id": 1,
+                    "title": "Latest",
+                    "library_id": 98,
+                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                    "filtered": "",
+                    "slug": "latest",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": "2020-08-30T20:22:47.000000Z",
+                "updated_at": "2020-08-30T20:22:47.000000Z"
+            },
+            {
+                "id": 17776,
+                "playlist_id": 1,
+                "title": "Latest",
+                "type": "h5p",
+                "content": "test",
+                "shared": false,
+                "order": null,
+                "thumb_url": "\/storage\/activities\/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
+                "subject_id": "Mathematics",
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 19334,
+                    "created_at": "2020-08-30T20:09:56.000000Z",
+                    "updated_at": "2020-08-30T20:09:56.000000Z",
+                    "user_id": 1,
+                    "title": "Latest",
+                    "library_id": 98,
+                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                    "filtered": "",
+                    "slug": "latest",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": "2020-08-30T20:24:29.000000Z",
+                "updated_at": "2020-08-30T20:24:29.000000Z"
+            },
+            {
+                "id": 3,
+                "playlist_id": 1,
+                "title": "Physics Vocabulary Study Guide",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 1,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 61,
+                    "created_at": "2020-04-30T20:35:30.000000Z",
+                    "updated_at": "2020-04-30T20:35:30.000000Z",
+                    "user_id": 1,
+                    "title": "Physics Vocabulary Study Guide",
+                    "library_id": 63,
+                    "parameters": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"&lt;p style=\\\"margin-bottom:10px\\\"&gt;&lt;span style=\\\"font-size:11pt\\\"&gt;&lt;span style=\\\"line-height:107%\\\"&gt;&lt;span style=\\\"font-family:Calibri,sans-serif\\\"&gt;Acceleration is the measurement of the change &lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;span style=\\\"font-size:11.0pt\\\"&gt;&lt;span style=\\\"line-height:107%\\\"&gt;&lt;span style=\\\"font-family:&amp;quot;Calibri&amp;quot;,sans-serif\\\"&gt;in an object\\u2019s velocity. &lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"&lt;p style=\\\"margin-bottom:10px\\\"&gt;&lt;span style=\\\"font-size:11pt\\\"&gt;&lt;span style=\\\"line-height:107%\\\"&gt;&lt;span style=\\\"font-family:Calibri,sans-serif\\\"&gt;The faster the air moves, the less pressure it exerts.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span style=\\\"font-size:10.5pt\\\"&gt;&lt;span style=\\\"line-height:107%\\\"&gt;&lt;span style=\\\"font-family:&amp;quot;Calibri&amp;quot;,sans-serif\\\"&gt;&lt;span style=\\\"color:black\\\"&gt;A vector is a quantity that has both a magnitude and a direction.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span style=\\\"font-size:10.5pt\\\"&gt;&lt;span style=\\\"line-height:107%\\\"&gt;&lt;span style=\\\"font-family:&amp;quot;Calibri&amp;quot;,sans-serif\\\"&gt;&lt;span style=\\\"color:black\\\"&gt;Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"&lt;p style=\\\"margin-bottom:10px\\\"&gt;&lt;span style=\\\"font-size:11pt\\\"&gt;&lt;span style=\\\"line-height:normal\\\"&gt;&lt;span style=\\\"font-family:Calibri,sans-serif\\\"&gt;&lt;span style=\\\"font-size:10.5pt\\\"&gt;&lt;span style=\\\"color:black\\\"&gt;A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"&lt;p style=\\\"margin-bottom:10px\\\"&gt;&lt;span style=\\\"font-size:11pt\\\"&gt;&lt;span style=\\\"line-height:107%\\\"&gt;&lt;span style=\\\"font-family:Calibri,sans-serif\\\"&gt;Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
+                    "filtered": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;Acceleration is the measurement of the change &lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;in an object\\u2019s velocity. &lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;The faster the air moves, the less pressure it exerts.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;A vector is a quantity that has both a magnitude and a direction.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"&lt;p&gt;&lt;span&gt;&lt;span&gt;&lt;span&gt;Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.&lt;\/span&gt;&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
+                    "slug": "physics-vocabulary-study-guide",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 1,
+                "playlist_id": 1,
+                "title": "Science of Golf: Why Balls Have Dimples",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 2,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 59,
+                    "created_at": "2020-04-30T20:24:58.000000Z",
+                    "updated_at": "2020-04-30T20:24:58.000000Z",
+                    "user_id": 1,
+                    "title": "Science of Golf: Why Balls Have Dimples",
+                    "library_id": 40,
+                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;They reduce wind resistance.&lt;\/p&gt;\\n\",\"&lt;p&gt;They make the ball more visually interesting.&lt;\/p&gt;\\n\",\"&lt;p&gt;They grip the putting green better than a smooth ball.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"&lt;p&gt;A smooth ball will have a detached airflow, which causes what?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;A low pressure zone, which is what causes drag.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball has no spin.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball travels higher, but for a shorter distance.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Smooth Ball&lt;\/p&gt;\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;They reduce wind resistance.&lt;\/p&gt;\\n\",\"&lt;p&gt;They make the ball more visually interesting.&lt;\/p&gt;\\n\",\"&lt;p&gt;They grip the putting green better than a smooth ball.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Why do golf balls have dimples?&lt;\/p&gt;\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"&lt;p&gt;A smooth ball will have a detached airflow, which causes what?&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;A low pressure zone, which is what causes drag.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball has no spin.&lt;\/p&gt;\\n\",\"&lt;p&gt;The ball travels higher, but for a shorter distance.&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"&lt;p&gt;Smooth Ball&lt;\/p&gt;\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "slug": "science-of-golf-why-balls-have-dimples",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 2,
+                "playlist_id": 1,
+                "title": "Physics and Golf Balls",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 3,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 60,
+                    "created_at": "2020-04-30T20:31:11.000000Z",
+                    "updated_at": "2020-04-30T20:31:11.000000Z",
+                    "user_id": 1,
+                    "title": "Physics and Golf Balls",
+                    "library_id": 60,
+                    "parameters": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images\/image-5eab35098aaf0.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images\/image-5eab355f7ca78.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images\/image-5eab3589be9e3.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
+                    "filtered": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images\/image-5eab35098aaf0.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images\/image-5eab355f7ca78.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images\/image-5eab3589be9e3.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
+                    "slug": "physics-and-golf-balls",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 6,
+                "playlist_id": 1,
+                "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 4,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 75,
+                    "created_at": "2020-05-01T04:51:11.000000Z",
+                    "updated_at": "2020-05-01T04:51:11.000000Z",
+                    "user_id": 1,
+                    "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                    "library_id": 40,
+                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/www.youtube.com\/watch?v=FdH0JQL5E-U&amp;list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"&lt;p&gt;\\\"Torque\\\"&amp;nbsp;is&amp;nbsp;a property of golf&amp;nbsp;shafts that describes how much the shaft is&amp;nbsp;prone to twisting during the golf&amp;nbsp;swing.&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;True&lt;\/p&gt;\\n\",\"&lt;p&gt;False&lt;\/p&gt;\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"&lt;p&gt;... A shaft with a _____ torque&amp;nbsp;rating means&amp;nbsp;the shaft better resists twisting; a shaft with a ____ torque&amp;nbsp;rating means&amp;nbsp;the shaft is&amp;nbsp;more prone to twisting (all other things being equal).&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;lower,&amp;nbsp;higher&lt;\/p&gt;\\n\",\"&lt;p&gt;higher, lower&lt;\/p&gt;\\n\",\"&lt;p&gt;sharper, duller&lt;\/p&gt;\\n\",\"&lt;p&gt;straigher, curved&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"&lt;p&gt;Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.&lt;\/p&gt;\\n\",\"&lt;p&gt;Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.&lt;\/p&gt;\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"&lt;div&gt;This pushes the ball to the right, causing a fade&amp;nbsp; slice curved flight.&lt;\/div&gt;\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"&lt;div&gt;This pushes the ball to the left, causing a &lt;strong&gt;slice&lt;\/strong&gt; curved flight.&lt;\/div&gt;\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"&lt;p&gt;When a ball is spinning&amp;nbsp;in a clockwise&amp;nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.&lt;\/p&gt;\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/www.youtube.com\/watch?v=FdH0JQL5E-U&amp;amp;list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"&lt;p&gt;\\\"Torque\\\"&amp;nbsp;is&amp;nbsp;a property of golf&amp;nbsp;shafts that describes how much the shaft is&amp;nbsp;prone to twisting during the golf&amp;nbsp;swing.&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;True&lt;\/p&gt;\\n\",\"&lt;p&gt;False&lt;\/p&gt;\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"&lt;p&gt;... A shaft with a _____ torque&amp;nbsp;rating means&amp;nbsp;the shaft better resists twisting; a shaft with a ____ torque&amp;nbsp;rating means&amp;nbsp;the shaft is&amp;nbsp;more prone to twisting (all other things being equal).&lt;\/p&gt;\\n\",\"answers\":[\"&lt;p&gt;lower,&amp;nbsp;higher&lt;\/p&gt;\\n\",\"&lt;p&gt;higher, lower&lt;\/p&gt;\\n\",\"&lt;p&gt;sharper, duller&lt;\/p&gt;\\n\",\"&lt;p&gt;straigher, curved&lt;\/p&gt;\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"&lt;p&gt;Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.&lt;\/p&gt;\\n\",\"&lt;p&gt;Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.&lt;\/p&gt;\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"&lt;div&gt;This pushes the ball to the right, causing a fade&amp;nbsp; slice curved flight.&lt;\/div&gt;\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"&lt;div&gt;This pushes the ball to the left, causing a &lt;strong&gt;slice&lt;\/strong&gt; curved flight.&lt;\/div&gt;\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"&lt;p&gt;When a ball is spinning&amp;nbsp;in a clockwise&amp;nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.&lt;\/p&gt;\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "slug": "understanding-gear-effect-equipment-and-tech-18birdies",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 5,
+                "playlist_id": 1,
+                "title": "The Evolution of the Golf Ball",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 5,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 66,
+                    "created_at": "2020-04-30T23:58:44.000000Z",
+                    "updated_at": "2020-04-30T23:58:44.000000Z",
+                    "user_id": 1,
+                    "title": "The Evolution of the Golf Ball",
+                    "library_id": 61,
+                    "parameters": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab648fb61c9.jpeg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"&lt;p&gt;Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab64e26de00.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"&lt;p&gt;The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab652f19393.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"&lt;p&gt;The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.&lt;br&gt;\\n&amp;nbsp;&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab658fa6bde.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https:\/\/images.app.goo.gl\/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"&lt;p&gt;In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...&lt;br&gt;\\n&amp;nbsp;&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab65cbe1adb.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"&lt;p&gt;It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.&lt;\/p&gt;\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"&lt;p&gt;American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.&lt;\/p&gt;\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"&lt;div&gt;A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!&lt;\/div&gt;\\n\",\"backgroundImage\":{\"path\":\"images\/backgroundImage-5eab633e2e935.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
+                    "filtered": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab648fb61c9.jpeg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"&lt;p&gt;Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab64e26de00.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"&lt;p&gt;The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab652f19393.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"&lt;p&gt;The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.&lt;br&gt;\\n&amp;nbsp;&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab658fa6bde.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https:\/\/images.app.goo.gl\/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"&lt;p&gt;In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...&lt;br&gt;\\n&amp;nbsp;&lt;\/p&gt;\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab65cbe1adb.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"&lt;p&gt;It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&amp;nbsp;&lt;\/p&gt;\\n\\n&lt;p&gt;The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.&lt;\/p&gt;\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"&lt;p&gt;American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.&lt;\/p&gt;\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"&lt;div&gt;A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!&lt;\/div&gt;\\n\",\"backgroundImage\":{\"path\":\"images\/backgroundImage-5eab633e2e935.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
+                    "slug": "the-evolution-of-the-golf-ball",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 7,
+                "playlist_id": 1,
+                "title": "Famous Golf Holes",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 6,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 76,
+                    "created_at": "2020-05-01T05:20:54.000000Z",
+                    "updated_at": "2020-05-01T05:20:54.000000Z",
+                    "user_id": 1,
+                    "title": "Famous Golf Holes",
+                    "library_id": 60,
+                    "parameters": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images\/image-5eabad2e71b62.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"&lt;p&gt;Mickey Mantle&lt;br&gt;\\nAT&amp;amp;T Pro Am&lt;\/p&gt;\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images\/image-5eabae675c197.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images\/image-5eabaec199254.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images\/image-5eabafb2400f7.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images\/image-5eabb0ced23c3.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images\/image-5eabb17c9a715.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
+                    "filtered": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images\/image-5eabad2e71b62.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"&lt;p&gt;Mickey Mantle&lt;br&gt;\\nAT&amp;amp;T Pro Am&lt;\/p&gt;\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images\/image-5eabae675c197.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images\/image-5eabaec199254.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images\/image-5eabafb2400f7.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images\/image-5eabb0ced23c3.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images\/image-5eabb17c9a715.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
+                    "slug": "famous-golf-holes",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            }
+        ],
+        "created_at": null,
+        "updated_at": null
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/brightcove/{accountId}/{videoId}/h5p-resource-settings</code></p>
+<!-- END_11ed109de5bd6a58e0c35e0a71d61198 -->
       </div>
       <div class="dark-box">
                         <div class="lang-selector">
