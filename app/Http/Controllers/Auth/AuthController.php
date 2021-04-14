@@ -128,15 +128,21 @@ class AuthController extends Controller
                 foreach ($invited_users as $invited_user) {
                     $organization = $this->organizationRepository->find($invited_user->organization_id);
                     if ($organization) {
-                        $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                        $exist_user_id = $organization->users()->where('user_id', $user->id)->first();
+                        if (!$exist_user_id) {
+                            $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                        }
                         $this->invitedOrganizationUserRepository->delete($data['email']);
                     }
                 }
             } else {
                 $organization = $this->organizationRepository->find(1);
                 if ($organization) {
-                    $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
-                    $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    $exist_user_id = $organization->users()->where('user_id', $user->id)->first();
+                    if (!$exist_user_id) {
+                        $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    }
                 }
             }
 

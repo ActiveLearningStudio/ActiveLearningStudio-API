@@ -338,13 +338,7 @@ class TeamController extends Controller
 
             if ($user) {
                 $team->users()->detach($user);
-
                 $this->teamRepository->removeTeamProjectUser($team, $user);
-
-
-
-                // TODO: need to add remove notification
-                // $user->notify(new InviteToTeamNotification($auth_user, $team));
 
                 return response([
                     'message' => 'User has been removed from the team successfully.',
