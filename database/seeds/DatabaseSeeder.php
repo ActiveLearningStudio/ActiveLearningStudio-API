@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             OrganizationRoleTypeSeeder::class,
             OrganizationVisibilityTypeSeeder::class,
             OrganizationSeeder::class,
+            OrganizationPermissionTypeSeeder::class,
+            OrganizationRolePermissionSeeder::class,
         ]);
     }
 }
