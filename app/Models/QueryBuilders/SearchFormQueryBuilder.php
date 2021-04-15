@@ -251,7 +251,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                 }
 
                 $globalPublicVisibilityTypeIds = [3,4];
-                $commonVisibilityTypeIds = array_intersect($this->organizationVisibilityTypeIds, $globalPublicVisibilityTypeIds);
+                $commonVisibilityTypeIds = array_values(array_intersect($this->organizationVisibilityTypeIds, $globalPublicVisibilityTypeIds));
 
                 if (!empty($commonVisibilityTypeIds)) {
                     $organizationIdsShouldQueries[] = [
