@@ -38,11 +38,27 @@ class OrganizationRolePermissionSeeder extends Seeder
             }
 
 
-            $memberPermissions = ['12', '14', '15', '17', '18', '21', '23', '24', '27', '29', '30', '33', '45', '55', '56'];
+            $memberPermissions = [
+                'project:view',
+                'project:share',
+                'project:clone',
+                'project:favorite',
+                'project:publish',
+                'playlist:view',
+                'playlist:clone',
+                'playlist:publish',
+                'activity:view',
+                'activity:share',
+                'activity:clone',
+                'team:view',
+                'group:view',
+                'search:advance',
+                'search:dashboard'
+            ];
 
             $memberRole = DB::table('organization_role_types')->where('name', 'member')->first();
 
-            if (in_array($organizationPermissionType->id, $memberPermissions)) {
+            if (in_array($organizationPermissionType->name, $memberPermissions)) {
                 DB::table('organization_role_permissions')->insert([
                     'organization_role_type_id' => $memberRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
