@@ -255,10 +255,8 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
 
                 if (!empty($commonVisibilityTypeIds)) {
                     $organizationIdsShouldQueries[] = [
-                        [
-                            'terms' => [
-                                'organization_visibility_type_id' => $commonVisibilityTypeIds
-                            ]
+                        'terms' => [
+                            'organization_visibility_type_id' => $commonVisibilityTypeIds
                         ]
                     ];
                 }
