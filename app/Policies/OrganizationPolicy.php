@@ -167,6 +167,30 @@ class OrganizationPolicy
     }
 
     /**
+     * Determine whether the user can do advance search in suborganization.
+     *
+     * @param  User  $user
+     * @param  Organization  $organization
+     * @return mixed
+     */
+    public function advanceSearch(User $user, Organization $organization)
+    {
+        return $user->hasPermissionTo('search:advance', $organization);
+    }
+
+    /**
+     * Determine whether the user can do dashboard search in suborganization.
+     *
+     * @param  User  $user
+     * @param  Organization  $organization
+     * @return mixed
+     */
+    public function dashboardSearch(User $user, Organization $organization)
+    {
+        return $user->hasPermissionTo('search:dashboard', $organization);
+    }
+
+    /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user

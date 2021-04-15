@@ -35,6 +35,7 @@ class SearchController extends Controller
      *
      * Search projects, playlists and activities for deep linking
      *
+     * @queryParam organization_id required The Id of a organization Example: 1
      * @queryParam query Query to search. Example: test
      * @queryParam sort Field to sort by. Example: created_at
      * @queryParam order Order to sort by. Example: desc
@@ -75,6 +76,7 @@ class SearchController extends Controller
      *
      * Advance search for projects, playlists and activities having indexing approved
      *
+     * @queryParam organization_id required The Id of a organization Example: 1
      * @queryParam query Query to search. Example: test
      * @queryParam negativeQuery Terms that should not exist. Example: badword
      * @queryParam userIds Array of user ids to match. Example: [1]
@@ -107,7 +109,7 @@ class SearchController extends Controller
         $data = $searchRequest->validated();
 
         $organization = Organization::find($data['organization_id']);
-        $this->authorize('view', $organization);
+        $this->authorize('advanceSearch', $organization);
 
         $data['organizationIds'] = [$data['organization_id']];
 
@@ -129,6 +131,7 @@ class SearchController extends Controller
      *
      * Dashboard search for projects, playlists and activities irrespective of indexing status
      *
+     * @queryParam organization_id required The Id of a organization Example: 1
      * @queryParam  query Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
      * @queryParam  indexing Indexing requested, approved or not approved. Example: [3]
@@ -164,7 +167,7 @@ class SearchController extends Controller
         $data = $searchRequest->validated();
 
         $organization = Organization::find($data['organization_id']);
-        $this->authorize('view', $organization);
+        $this->authorize('dashboardSearch', $organization);
 
         $data['userIds'] = [auth()->user()->id];
 
