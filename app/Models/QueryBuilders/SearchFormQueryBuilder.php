@@ -212,13 +212,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                     ]
                 ];
             }
-        } elseif (empty($this->organizationVisibilityTypeIds) && !empty($this->organizationIds)) {
-            $queries[] = [
-                'terms' => [
-                    'organization_id' => $this->organizationIds
-                ]
-            ];
-        } elseif (!empty($this->organizationIds) && !empty($this->organizationVisibilityTypeIds)) {
+        } elseif (!empty($this->organizationIds)) {
 
             $organizationIdsQueries[] = [
                 'terms' => [
@@ -226,35 +220,49 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                 ]
             ];
 
-            if (in_array(null, $this->organizationVisibilityTypeIds, true)) {
-                $organizationIdsQueries[] = [
-                    'bool' => [
-                        'should' => [
-                            [
-                                'terms' => [
-                                    'organization_visibility_type_id' => array_values(array_filter($this->organizationVisibilityTypeIds))
-                                ]
-                            ],
-                            [
-                                'bool' => [
-                                    'must_not' => [
-                                        'exists' => [
-                                            'field' => 'organization_visibility_type_id'
+            if (!empty($this->organizationVisibilityTypeIds)) {
+                if (in_array(null, $this->organizationVisibilityTypeIds, true)) {
+                    $organizationIdsQueries[] = [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'terms' => [
+                                        'organization_visibility_type_id' => array_values(array_filter($this->organizationVisibilityTypeIds))
+                                    ]
+                                ],
+                                [
+                                    'bool' => [
+                                        'must_not' => [
+                                            'exists' => [
+                                                'field' => 'organization_visibility_type_id'
+                                            ]
                                         ]
                                     ]
                                 ]
                             ]
                         ]
-                    ]
-                ];
-            } else {
-                $organizationIdsQueries[] = [
-                    'terms' => [
-                        'organization_visibility_type_id' => $this->organizationVisibilityTypeIds
-                    ]
-                ];
-            }
+                    ];
+                } else {
+                    $organizationIdsQueries[] = [
+                        'terms' => [
+                            'organization_visibility_type_id' => $this->organizationVisibilityTypeIds
+                        ]
+                    ];
+                }
 
+                $globalPublicVisibilityTypeIds = [3,4];
+                $commonVisibilityTypeIds = array_intersect($this->organizationVisibilityTypeIds, $globalPublicVisibilityTypeIds);
+
+                if (!empty($commonVisibilityTypeIds)) {
+                    $organizationIdsShouldQueries[] = [
+                        [
+                            'terms' => [
+                                'organization_visibility_type_id' => $commonVisibilityTypeIds
+                            ]
+                        ]
+                    ];
+                }
+            }
 
             $organizationIdsShouldQueries[] = [
                 [
@@ -263,19 +271,6 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                     ]
                 ]
             ];
-
-            $globalPublicVisibilityTypeIds = [3,4];
-            $commonVisibilityTypeIds = array_intersect($this->organizationVisibilityTypeIds, $globalPublicVisibilityTypeIds);
-
-            if (!empty($commonVisibilityTypeIds)) {
-                $organizationIdsShouldQueries[] = [
-                    [
-                        'terms' => [
-                            'organization_visibility_type_id' => $commonVisibilityTypeIds
-                        ]
-                    ]
-                ];
-            }
 
             $queries[] = [
                 'bool' => [
