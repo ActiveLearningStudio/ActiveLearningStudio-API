@@ -114,6 +114,9 @@ class SearchController extends Controller
         if(!auth()->user()->hasPermissionTo('organization:view', $organization)) {
             $data['organizationVisibilityTypeIds'] = [null, 4];
             $data['indexing'] = [3];
+        } elseif (isset($data['query'])) {
+            $data['organizationVisibilityTypeIds'] = [null, 4];
+            $data['indexing'] = [3];
         }
 
         $results = $this->activityRepository->advanceSearchForm($data);
