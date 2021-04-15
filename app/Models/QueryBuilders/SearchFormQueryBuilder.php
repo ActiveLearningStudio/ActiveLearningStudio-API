@@ -265,10 +265,8 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             }
 
             $organizationIdsShouldQueries[] = [
-                [
-                    'bool' => [
-                        'must' => $organizationIdsQueries
-                    ]
+                'bool' => [
+                    'must' => $organizationIdsQueries
                 ]
             ];
 
