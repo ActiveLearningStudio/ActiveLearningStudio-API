@@ -37,7 +37,6 @@ class OrganizationRolePermissionSeeder extends Seeder
                 ]);
             }
 
-
             $memberPermissions = [
                 'project:view',
                 'project:share',
