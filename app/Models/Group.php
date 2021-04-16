@@ -22,8 +22,8 @@ class Group extends Model
     ];
 
     /**
-    * Get the users for the group
-    */
+     * Get the users for the group
+     */
     public function users()
     {
         return $this->belongsToMany('App\User', 'user_group')->withPivot('role')->withTimestamps();

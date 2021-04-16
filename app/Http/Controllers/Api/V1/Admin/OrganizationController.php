@@ -153,7 +153,8 @@ class OrganizationController extends Controller
      * @param Request $request
      * @return Application|ResponseFactory|Response
      */
-    public function reportBasic(Request $request){
+    public function reportBasic(Request $request)
+    {
         return response( $this->organizationRepository->reportBasic($request->all()), 200);
     }
 

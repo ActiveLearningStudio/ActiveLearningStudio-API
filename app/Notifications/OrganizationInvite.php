@@ -56,7 +56,7 @@ class OrganizationInvite extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Invite to the Organization')
+            ->subject('Invitation to join the organization')
             ->line($this->sender->first_name . ' has invited you to join the organization ' . $this->organization->name)
             ->line($this->note)
             ->action('Join the Organization', $this->pageUrl . '/' . $this->page . '/' . $this->organization->domain);

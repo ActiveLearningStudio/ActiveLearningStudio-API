@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\SearchRequest;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Organization;
 
 /**
  * @group 13. Search
@@ -19,15 +19,21 @@ use App\Models\Organization;
 class SearchController extends Controller
 {
     private $activityRepository;
+    private $organizationRepository;
 
     /**
      * SearchController constructor.
      *
      * @param ActivityRepositoryInterface $activityRepository
+     * @param OrganizationRepositoryInterface $organizationRepository
      */
-    public function __construct(ActivityRepositoryInterface $activityRepository)
+    public function __construct(
+        ActivityRepositoryInterface $activityRepository,
+        OrganizationRepositoryInterface $organizationRepository
+    )
     {
         $this->activityRepository = $activityRepository;
+        $this->organizationRepository = $organizationRepository;
     }
 
     /**
@@ -59,7 +65,7 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
-        $organization = Organization::find($data['organization_id']);
+        $organization = $this->organizationRepository->find($data['organization_id']);
         $this->authorize('view', $organization);
 
         $data['organizationIds'] = [$data['organization_id']];
@@ -108,7 +114,7 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
-        $organization = Organization::find($data['organization_id']);
+        $organization = $this->organizationRepository->find($data['organization_id']);
         $this->authorize('advanceSearch', $organization);
 
         $data['organizationIds'] = [$data['organization_id']];
@@ -131,7 +137,7 @@ class SearchController extends Controller
      *
      * Dashboard search for projects, playlists and activities irrespective of indexing status
      *
-     * @queryParam organization_id required The Id of a organization Example: 1
+     * @queryParam  organization_id required The Id of a organization Example: 1
      * @queryParam  query Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
      * @queryParam  indexing Indexing requested, approved or not approved. Example: [3]
@@ -166,7 +172,7 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
-        $organization = Organization::find($data['organization_id']);
+        $organization = $this->organizationRepository->find($data['organization_id']);
         $this->authorize('dashboardSearch', $organization);
 
         $data['userIds'] = [auth()->user()->id];
