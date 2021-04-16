@@ -676,7 +676,7 @@ class ActivityController extends Controller
     public function getH5pResourceSettingsShared(Activity $activity)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($activity->shared || ($activity->playlist->project->indexing === 3)) {
+        if ($activity->shared || ($activity->playlist->project->indexing === config('constants.indexing-approved'))) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();

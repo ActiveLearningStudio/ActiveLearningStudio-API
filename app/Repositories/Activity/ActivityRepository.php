@@ -68,9 +68,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $searchedModels = $this->model->searchForm()
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
-            ->indexing([3])
+            ->indexing([config('constants.indexing-approved')])
             ->organizationIds(Arr::get($data, 'organizationIds', []))
-            ->organizationVisibilityTypeIds([4])
+            ->organizationVisibilityTypeIds([config('constants.public-organization-visibility-type-id')])
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))
             ->size(Arr::get($data, 'size', 10))
@@ -327,7 +327,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     public function getPlaylistIsPublicValue($playlistId)
     {
         $playlist = Playlist::where('id', $playlistId)->with('project')->first();
-        return ($playlist->project->indexing === 3) ? $playlist : false;
+        return ($playlist->project->indexing === config('constants.indexing-approved')) ? $playlist : false;
     }
 
     /**

@@ -250,7 +250,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                     ];
                 }
 
-                $globalPublicVisibilityTypeIds = [3,4];
+                $globalPublicVisibilityTypeIds = [config('constants.global-organization-visibility-type-id'), config('constants.public-organization-visibility-type-id')];
                 $commonVisibilityTypeIds = array_values(array_intersect($this->organizationVisibilityTypeIds, $globalPublicVisibilityTypeIds));
 
                 if (!empty($commonVisibilityTypeIds)) {
