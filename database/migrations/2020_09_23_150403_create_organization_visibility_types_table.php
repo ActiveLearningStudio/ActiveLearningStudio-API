@@ -29,6 +29,6 @@ class CreateOrganizationVisibilityTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Organization_visibility_types');
+        Schema::dropIfExists('organization_visibility_types');
     }
 }
