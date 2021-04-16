@@ -11,7 +11,7 @@ class OrganizationRolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        $organizationPermissionTypes = DB::table('organization_permission_types')->select('id', 'feature')->get();
+        $organizationPermissionTypes = DB::table('organization_permission_types')->select('id', 'name', 'feature')->get();
 
         foreach ($organizationPermissionTypes as $organizationPermissionType) {
             $adminRole = DB::table('organization_role_types')->where('name', 'admin')->first();
