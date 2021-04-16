@@ -27,7 +27,7 @@ class UserLmsSettingsController extends Controller
      */
     public function index()
     {
-        if($this->repo->all() == '[null]'){
+        if ($this->repo->all() == '[null]') {
             return response([
                 'errors' => ['LMS settings not found for this user.'],
             ], 200);

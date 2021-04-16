@@ -434,6 +434,21 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         }
     }
 
+     /**
+     * Get Teams data
+     *
+     * @param $suborganization_id
+     * @param $user_id
+     */
+    public function getTeams($suborganization_id, $user_id)
+    {
+        return  Team::whereHas('users', function ($q) use ($user_id) {
+                    $q->where('user_id', $user_id);
+                })
+                ->whereOrganizationId($suborganization_id)
+                ->get();
+    }
+
     /**
      * Get Team detail data
      *

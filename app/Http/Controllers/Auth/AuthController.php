@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\GoogleLoginRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\V1\UserResource;
@@ -157,9 +158,6 @@ class AuthController extends Controller
                 }
             }
 
-//            return response([
-//                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"
-//            ], 201);
             return response([
                 'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
             ], 201);
@@ -274,19 +272,8 @@ class AuthController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function loginWithGoogle(Request $request)
+    public function loginWithGoogle(GoogleLoginRequest $request)
     {
-        $validator = Validator::make($request->all(),
-        [
-            'domain' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => ['domain name is required.'],
-            ], 400);
-        }
-
         $client = new \Google_Client();
         $client->setClientId(config('google.gapi_client_id'));
         $result = $client->verifyIdToken($request->tokenId);
@@ -346,7 +333,7 @@ class AuthController extends Controller
 
                 }
             }
-            else{
+            else {
                 if (!$organization = $user->organizations()->where('domain', $request->domain)->first()) {
                     return response([
                         'errors' => ['Invalid Domain.'],

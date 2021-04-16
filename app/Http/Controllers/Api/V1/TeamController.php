@@ -70,11 +70,7 @@ class TeamController extends Controller
 
         $user_id = auth()->user()->id;
 
-        $teams = Team::whereHas('users', function ($q) use ($user_id) {
-                            $q->where('user_id', $user_id);
-                        })
-                        ->whereOrganizationId($suborganization->id)
-                        ->get();
+        $teams = $this->teamRepository->getTeams($suborganization->id, $user_id);
 
         $teamDetails = [];
         foreach ($teams as $team) {

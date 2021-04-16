@@ -435,6 +435,21 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     }
 
     /**
+     * Get Groups
+     *
+     * @param $suborganization_id
+     * @param $user_id
+     */
+    public function getGroups($suborganization_id, $user_id)
+    {
+        return  Group::whereHas('users', function ($q) use ($user_id) {
+                    $q->where('user_id', $user_id);
+                })
+                ->whereOrganizationId($suborganization_id)
+                ->get();
+    }
+
+    /**
      * Get Group detail data
      *
      * @param $groupId

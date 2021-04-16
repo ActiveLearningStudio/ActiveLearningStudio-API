@@ -95,7 +95,16 @@ interface GroupRepositoryInterface extends EloquentRepositoryInterface
      * @param $user
      */
     public function removeMemberFromGroupProject($group, $project, $user);
-
+    
+    /**
+     * Get Groups data
+     *
+     * @param $suborganization_id
+     * @param $user_id
+     * @return mixed
+     */
+    public function getGroups($suborganization_id, $user_id);
+    
     /**
      * Get Group detail data
      *

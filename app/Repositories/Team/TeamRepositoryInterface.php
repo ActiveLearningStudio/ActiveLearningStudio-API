@@ -99,6 +99,15 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     public function removeMemberFromTeamProject($team, $project, $user);
 
     /**
+     * Get Teams data
+     *
+     * @param $suborganization_id
+     * @param $user_id
+     * @return mixed
+     */
+    public function getTeams($suborganization_id, $user_id);
+    
+    /**
      * Get Team detail data
      *
      * @param $teamId

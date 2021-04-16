@@ -29,7 +29,7 @@ class TeamUpdateRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'users' => 'required|array',
             'projects' => 'array|exists:App\Models\Project,id',
-            'note' => 'string|min:0',
+            'note' => 'string',
         ];
     }
 }
