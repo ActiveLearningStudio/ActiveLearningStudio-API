@@ -33,11 +33,11 @@ class OrganizationResource extends JsonResource
                 return $this->pivot->role->id;
             }),
             'default_organization' => $this->when(auth()->user() && auth()->user()->default_organization == $this->id, true),
-            'projects_count' => $this->when($this->projects_count, $this->projects_count),
-            'suborganization_count' => $this->when($this->children_count, $this->children_count),
-            'users_count' => $this->when($this->users_count, $this->users_count),
-            'groups_count' => $this->groups_count,
-            'teams_count' => $this->teams_count,
+            'projects_count' => isset($this->projects_count) ? $this->projects_count : 0,
+            'suborganization_count' => isset($this->children_count) ? $this->children_count : 0,
+            'users_count' => isset($this->users_count) ? $this->users_count : 0,
+            'groups_count' => isset($this->groups_count) ? $this->groups_count : 0,
+            'teams_count' => isset($this->teams_count) ? $this->teams_count : 0,
         ];
     }
 }

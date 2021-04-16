@@ -38,9 +38,9 @@ class UserResource extends JsonResource
             'organization_role_id' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->id;
             }),
-            'projects_count' => $this->when($this->projects_count, $this->projects_count),
-            'teams_count' => $this->when($this->teams_count, $this->teams_count),
-            'groups_count' => $this->when($this->groups_count, $this->groups_count)
+            'projects_count' => isset($this->projects_count) ? $this->projects_count : 0,
+            'teams_count' => isset($this->teams_count) ? $this->teams_count : 0,
+            'groups_count' => isset($this->groups_count) ? $this->groups_count : 0
         ];
     }
 }
