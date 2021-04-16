@@ -131,7 +131,7 @@ class SearchController extends Controller
      *
      * Dashboard search for projects, playlists and activities irrespective of indexing status
      *
-     * @queryParam organization_id required The Id of a organization Example: 1
+     * @queryParam  organization_id required The Id of a organization Example: 1
      * @queryParam  query Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
      * @queryParam  indexing Indexing requested, approved or not approved. Example: [3]
