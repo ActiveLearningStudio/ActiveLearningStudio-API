@@ -78,8 +78,6 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      */
     public function removeInvitedUser($team, $email);
 
-
-
     /**
      * Assign members to the team project
      *
@@ -105,5 +103,4 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getTeamDetail($teamId);
-
 }

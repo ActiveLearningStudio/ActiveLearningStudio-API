@@ -221,13 +221,13 @@ class OrganizationPolicy
      * @param  Organization  $organization
      * @return mixed
      */
-    private function getUserDefaultOrganizationRole(User $user, Organization  $organization)
+    private function getUserDefaultOrganizationRole(User $user, Organization $organization)
     {
         $defaultOrganization = $user->organizations()->wherePivot('organization_id', $organization->id)->first();
 
         if ($defaultOrganization) {
             return $defaultOrganization->pivot->organization_role_type_id;
-        } else if ($organization->parent) {
+        } elseif ($organization->parent) {
             return $this->getUserDefaultOrganizationRole($user, $organization->parent);
         }
 

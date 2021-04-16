@@ -340,9 +340,7 @@ class SuborganizationController extends Controller
     public function addUser(SuborganizationAddUser $request, Organization $suborganization)
     {
         $this->authorize('addUser', $suborganization);
-
         $data = $request->validated();
-
         $is_added = $this->organizationRepository->addUser($suborganization, $data);
 
         if ($is_added) {

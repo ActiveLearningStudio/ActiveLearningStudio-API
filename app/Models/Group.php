@@ -21,7 +21,7 @@ class Group extends Model
         'deleted_at',
     ];
 
-        /**
+    /**
      * Get the users for the group
      */
     public function users()

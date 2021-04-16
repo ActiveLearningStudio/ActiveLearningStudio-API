@@ -19,6 +19,7 @@ class InvitedGroupUser extends Model
     ];
 
     protected $table = 'invited_group_users';
+
     /**
      * Scope for email search
      *

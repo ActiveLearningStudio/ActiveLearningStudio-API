@@ -233,9 +233,12 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                     'group_id' => $group->id,
                     'token' => $token,
                 );
+
                 $result  = $this->invitedGroupUserRepository->create($invited_user);
-                if(!$result)
+
+                if (!$result) {
                     $invited = false;
+                }
             } else {
                 $invited = false;
             }
@@ -361,10 +364,10 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $group = $this->model->find($group->id);
 
         if ($group) {
-                DB::table('invited_group_users')
-                    ->where('group_id', $group->id)
-                    ->where('invited_email', $email)
-                    ->delete();
+            DB::table('invited_group_users')
+                ->where('group_id', $group->id)
+                ->where('invited_email', $email)
+                ->delete();
         }
     }
 

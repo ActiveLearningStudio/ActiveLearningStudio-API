@@ -387,7 +387,7 @@ class ProjectController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function update(ProjectUpdateRequest $projectUpdateRequest, Organization $suborganization,  Project $project)
+    public function update(ProjectUpdateRequest $projectUpdateRequest, Organization $suborganization, Project $project)
     {
         $this->authorize('update', [Project::class, $suborganization]);
 

@@ -17,7 +17,6 @@ class OrganizationUserRoleResource extends JsonResource
      */
     public function toArray($request)
     {
-        Log::error($this->role);
         return [
             'role' => $this->role,
         ];

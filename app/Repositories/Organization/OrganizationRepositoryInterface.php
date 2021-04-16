@@ -103,4 +103,13 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return bool
      */
     public function inviteMember($authenticatedUser, $organization, $data);
+
+    /**
+     * To fetch organization user permissions
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @return Model
+     */
+    public function fetchOrganizationUserPermissions($authenticatedUser, $organization);
 }

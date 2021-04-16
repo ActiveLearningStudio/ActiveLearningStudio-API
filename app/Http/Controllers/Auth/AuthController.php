@@ -346,7 +346,7 @@ class AuthController extends Controller
 
                 }
             }
-            else{
+            else {
                 if (!$organization = $user->organizations()->where('domain', $request->domain)->first()) {
                     return response([
                         'errors' => ['Invalid Domain.'],
