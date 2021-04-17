@@ -200,6 +200,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     /**
      * Invite members to the team
      *
+     * @param $suborganization
      * @param $team
      * @param $data
      * @return bool
@@ -285,7 +286,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         }
     }
 
-        /**
+    /**
      * Update Team / Project / User relationship
      *
      * @param $team
@@ -361,10 +362,10 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $team = $this->model->find($team->id);
 
         if ($team) {
-                DB::table('invited_team_users')
-                    ->where('team_id', $team->id)
-                    ->where('invited_email', $email)
-                    ->delete();
+            DB::table('invited_team_users')
+                ->where('team_id', $team->id)
+                ->where('invited_email', $email)
+                ->delete();
         }
     }
 
@@ -432,6 +433,21 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 ->where('user_id', $user->id)
                 ->delete();
         }
+    }
+
+     /**
+     * Get Teams data
+     *
+     * @param $suborganization_id
+     * @param $user_id
+     */
+    public function getTeams($suborganization_id, $user_id)
+    {
+        return  Team::whereHas('users', function ($q) use ($user_id) {
+                    $q->where('user_id', $user_id);
+                })
+                ->whereOrganizationId($suborganization_id)
+                ->get();
     }
 
     /**

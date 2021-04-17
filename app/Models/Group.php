@@ -21,7 +21,7 @@ class Group extends Model
         'deleted_at',
     ];
 
-        /**
+    /**
      * Get the users for the group
      */
     public function users()
@@ -38,8 +38,8 @@ class Group extends Model
     }
 
     /**
-     * Get the projects for the group
-     */
+    * Get the projects for the group
+    */
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project', 'group_project')->withTimestamps();

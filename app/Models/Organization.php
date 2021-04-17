@@ -82,16 +82,23 @@ class Organization extends Model
     {
         return $this->hasManyDeep(
             'App\Models\Activity',
-            ['App\Models\Project', 'App\Models\Playlist'], // Intermediate models, beginning at the far parent (Organizations).
+            // Intermediate models, beginning at the far parent (Organizations).
+            ['App\Models\Project', 'App\Models\Playlist'],
             [
-                'organization_id', // Foreign key on the "project" table.
-                'project_id',    // Foreign key on the "playlist" table.
-                'playlist_id'     // Foreign key on the "activity" table.
+                // Foreign key on the "project" table.
+                'organization_id',
+                // Foreign key on the "playlist" table.
+                'project_id',
+                // Foreign key on the "activity" table.
+                'playlist_id'
             ],
             [
-                'id', // Local key on the "organizations" table.
-                'id', // Local key on the "project" table.
-                'id'  // Local key on the "playlist" table.
+                // Local key on the "organizations" table.
+                'id',
+                // Local key on the "project" table.
+                'id',
+                // Local key on the "playlist" table.
+                'id'
             ]
         );
     }

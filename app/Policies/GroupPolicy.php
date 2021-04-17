@@ -78,7 +78,7 @@ class GroupPolicy
      * @param Project $project
      * @return mixed
      */
-    public function delete(User $user,  Organization $suborganization)
+    public function delete(User $user, Organization $suborganization)
     {
         return $user->hasPermissionTo('group:delete', $suborganization);
     }

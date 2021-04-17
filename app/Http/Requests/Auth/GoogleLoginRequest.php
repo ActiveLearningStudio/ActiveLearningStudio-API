@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Group;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GroupInviteMembersRequest extends FormRequest
+class GoogleLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class GroupInviteMembersRequest extends FormRequest
     public function rules()
     {
         return [
-            'users' => 'required|array',
-            'note' => 'string',
+            'domain' => 'required'
         ];
     }
 }

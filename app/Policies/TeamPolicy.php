@@ -13,7 +13,7 @@ class TeamPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any projects.
+     * Determine whether the user can view any teams.
      *
      * @param User $user
      * @param Organization $suborganization
@@ -25,10 +25,10 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can view the project.
+     * Determine whether the user can view the team.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function view(User $user, Organization $suborganization)
@@ -37,9 +37,10 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can create projects.
+     * Determine whether the user can create team.
      *
      * @param User $user
+     * @param Organization $suborganization
      * @return mixed
      */
     public function create(User $user, Organization $suborganization)
@@ -48,10 +49,10 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can update the project.
+     * Determine whether the user can update the team.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function update(User $user, Organization $suborganization)
@@ -60,10 +61,10 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can share the project.
+     * Determine whether the user can share the team.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function share(User $user, Organization $suborganization)
@@ -72,10 +73,10 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can delete the project.
+     * Determine whether the user can delete the team.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function delete(User $user,  Organization $suborganization)
@@ -84,7 +85,7 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can permanently delete the project.
+     * Determine whether the user can permanently delete the team.
      *
      * @param User $user
      * @param Project $project
@@ -102,13 +103,13 @@ class TeamPolicy
      * @param  Organization  $organization
      * @return mixed
      */
-    private function getUserDefaultOrganizationRole(User $user, Organization  $organization)
+    private function getUserDefaultOrganizationRole(User $user, Organization $organization)
     {
         $defaultOrganization = $user->organizations()->wherePivot('organization_id', $organization->id)->first();
 
         if ($defaultOrganization) {
             return $defaultOrganization->pivot->organization_role_type_id;
-        } else if ($organization->parent) {
+        } elseif ($organization->parent) {
             return $this->getUserDefaultOrganizationRole($user, $organization->parent);
         }
 

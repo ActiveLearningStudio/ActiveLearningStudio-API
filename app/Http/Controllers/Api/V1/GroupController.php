@@ -16,7 +16,6 @@ use App\Http\Resources\V1\GroupResource;
 use App\Models\Project;
 use App\Models\Group;
 use App\Models\Organization;
-use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -41,7 +40,6 @@ class GroupController extends Controller
      * @param GroupRepositoryInterface $groupRepository
      * @param UserRepositoryInterface $userRepository
      * @param ProjectRepositoryInterface $projectRepository
-     * @param InvitedGroupUserRepositoryInterface $invitedGroupUserRepository
      */
     public function __construct(
         GroupRepositoryInterface $groupRepository,
@@ -69,10 +67,7 @@ class GroupController extends Controller
         $this->authorize('viewAny', [Group::class, $suborganization]);
 
         $user_id = auth()->user()->id;
-        $groups = Group::whereHas('users', function ($q) use ($user_id) {
-                            $q->where('user_id', $user_id);
-                        })
-                        ->whereOrganizationId($suborganization->id)->get();
+        $groups = $this->groupRepository->getGroups($suborganization->id, $user_id);
 
         $groupDetails = [];
         foreach ($groups as $group) {
