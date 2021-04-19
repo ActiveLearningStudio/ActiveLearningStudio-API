@@ -216,12 +216,6 @@ class AuthController extends Controller
             return response([
                 'errors' => ['Invalid Domain.'],
             ], 400);
-        } else {
-            $is_updated = $this->userRepository->update([
-                'default_organization' => $organization->id,
-            ], $user->id);
-
-            $user = $organization->users()->where('id', $user->id)->first();
         }
 
         if (!$user->email_verified_at) {

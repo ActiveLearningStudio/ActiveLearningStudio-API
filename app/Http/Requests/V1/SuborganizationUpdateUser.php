@@ -24,16 +24,15 @@ class SuborganizationUpdateUser extends FormRequest
      */
     public function rules()
     {
-        $authenticated_user = auth()->user();
-        $default_organization = $authenticated_user->default_organization;
+        $suborganization = $this->route('suborganization');
 
         return [
             'user_id' => [
                 'required',
                 'integer',
                 'exists:App\User,id',
-                Rule::exists('organization_user_roles')->where(function ($query) use ($default_organization) {
-                    return $query->where('organization_id', $default_organization);
+                Rule::exists('organization_user_roles')->where(function ($query) use ($suborganization) {
+                    return $query->where('organization_id', $suborganization->id);
                 })
             ],
             'role_id' => 'required|integer|exists:organization_role_types,id'
