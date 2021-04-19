@@ -26,14 +26,16 @@ class Summary extends H5PLibraryBase implements H5PLibraryInterface
             if (!empty($this->content['summaries'])) {
                 $meta['children'] = [];
                 foreach ($this->content['summaries'] as $summary) {
-                    $entry = [];
-                    $entry['sub-content-id'] = $summary['subContentId'];
-                    $entry['relation-sub-content-id'] = $this->getRelationSubContentID($summary['subContentId']);
+                    if (isset($summary['subContentId'])) {
+                        $entry = [];
+                        $entry['sub-content-id'] = $summary['subContentId'];
+                        $entry['relation-sub-content-id'] = $this->getRelationSubContentID($summary['subContentId']);
 
-                    if (isset($summary['summary'])) {
-                        $entry['question'] = $summary['summary'];
+                        if (isset($summary['summary'])) {
+                            $entry['question'] = $summary['summary'];
+                        }
+                        $meta['children'][] = $entry;
                     }
-                    $meta['children'][] = $entry;
                 }
             }
         }
