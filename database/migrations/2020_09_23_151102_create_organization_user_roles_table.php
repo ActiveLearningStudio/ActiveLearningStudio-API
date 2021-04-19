@@ -19,7 +19,7 @@ class CreateOrganizationUserRolesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unique(['organization_id', 'user_id']);
-            $table->unsignedBigInteger('organization_role_type_id');
+            $table->unsignedInteger('organization_role_type_id');
             $table->foreign('organization_role_type_id')->references('id')->on('organization_role_types');
             $table->timestamps();
             $table->softDeletes();

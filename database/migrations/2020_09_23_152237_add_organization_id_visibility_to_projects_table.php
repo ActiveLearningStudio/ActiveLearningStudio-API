@@ -16,7 +16,7 @@ class AddOrganizationIdVisibilityToProjectsTable extends Migration
         Schema::table('projects', function (Blueprint $table) {
             $table->unsignedBigInteger('organization_id')->nullable()->default(null);
             $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->unsignedBigInteger('organization_visibility_type_id')->nullable()->default(null);
+            $table->unsignedInteger('organization_visibility_type_id')->nullable()->default(null);
             $table->foreign('organization_visibility_type_id')->references('id')->on('organization_visibility_types');
         });
     }
