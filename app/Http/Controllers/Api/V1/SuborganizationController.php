@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Resources\V1\OrganizationRoleResource;
@@ -14,13 +13,17 @@ use App\Http\Requests\V1\SuborganizationAddUser;
 use App\Http\Requests\V1\SuborganizationAddRole;
 use App\Http\Requests\V1\SuborganizationUpdateUser;
 use App\Http\Requests\V1\SuborganizationInviteMember;
+use App\Http\Requests\V1\SuborganizationSearchRequest;
+use App\Http\Requests\V1\SuborganizationUploadThumbRequest;
+use App\Http\Requests\V1\SuborganizationShowMemberOptionsRequest;
+use App\Http\Requests\V1\SuborganizationDeleteUserRequest;
+use App\Http\Requests\V1\SuborganizationGetUsersRequest;
+use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Organization;
 use App\Models\OrganizationRoleType;
 use App\Models\OrganizationVisibilityType;
-use Illuminate\Validation\Rule;
 
 /**
  * @authenticated
@@ -53,26 +56,18 @@ class SuborganizationController extends Controller
      *
      * @responseFile responses/organization/suborganizations.json
      *
-     * @param Request $request
+     * @param SuborganizationSearchRequest $suborganizationSearchRequest
      * @param Organization $suborganization
      * @return Response
      */
-    public function index(Request $request, Organization $suborganization)
+    public function index(SuborganizationSearchRequest $suborganizationSearchRequest, Organization $suborganization)
     {
         $this->authorize('viewAny', $suborganization);
 
-        $validator = Validator::make($request->all(), [
-            'query' => 'string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => $validator->errors()->all()
-            ], 400);
-        }
+        $data = $suborganizationSearchRequest->validated();
 
         return response([
-            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($request->all(), $suborganization)),
+            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($data, $suborganization)),
         ], 200);
     }
 
@@ -94,25 +89,17 @@ class SuborganizationController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param SuborganizationUploadThumbRequest $suborganizationUploadThumbRequest
      * @param Organization $suborganization
      * @return Response
      */
-    public function uploadThumb(Request $request, Organization $suborganization)
+    public function uploadThumb(SuborganizationUploadThumbRequest $suborganizationUploadThumbRequest, Organization $suborganization)
     {
         $this->authorize('uploadThumb', $suborganization);
 
-        $validator = Validator::make($request->all(), [
-            'thumb' => 'required|mimes:jpg,jpeg,png,svg|max:102400',
-        ]);
+        $data = $suborganizationUploadThumbRequest->validated();
 
-        if ($validator->fails()) {
-            return response([
-                'errors' => ['Invalid image.']
-            ], 400);
-        }
-
-        $path = $request->file('thumb')->store('/public/organizations');
+        $path = $suborganizationUploadThumbRequest->file('thumb')->store('/public/organizations');
 
         return response([
             'thumbUrl' => Storage::url($path),
@@ -284,33 +271,27 @@ class SuborganizationController extends Controller
      *
      * @responseFile responses/organization/member-options.json
      *
-     * @response 400 {
-     *   "errors": [
-     *     "The query field is required."
-     *   ]
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "query": [
+     *       "The query field is required."
+     *     ]
+     *   }
      * }
      *
-     * @param Request $request
+     * @param SuborganizationShowMemberOptionsRequest $suborganizationShowMemberOptionsRequest
      * @param Organization $suborganization
      * @return Response
      */
-    public function showMemberOptions(Request $request, Organization $suborganization)
+    public function showMemberOptions(SuborganizationShowMemberOptionsRequest $suborganizationShowMemberOptionsRequest, Organization $suborganization)
     {
         $this->authorize('viewMemberOptions', $suborganization);
 
-        $validator = Validator::make($request->all(), [
-            'query' => 'required|string|max:255',
-            'page' => 'required|in:create,update',
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => $validator->errors()->all()
-            ], 400);
-        }
+        $data = $suborganizationShowMemberOptionsRequest->validated();
 
         return response([
-            'member-options' => UserResource::collection($this->organizationRepository->getMemberOptions($request->all(), $suborganization))
+            'member-options' => UserResource::collection($this->organizationRepository->getMemberOptions($data, $suborganization))
         ], 200);
     }
 
@@ -459,38 +440,26 @@ class SuborganizationController extends Controller
      *   ]
      * }
      *
-     * @response 400 {
-     *   "errors": [
-     *     "The user_id field is required."
-     *   ]
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "user_id": [
+     *       "The user id field is required."
+     *     ]
+     *   }
      * }
      *
-     * @param Request $request
+     * @param SuborganizationDeleteUserRequest $suborganizationDeleteUserRequest
      * @param Organization $suborganization
      * @return Response
      */
-    public function deleteUser(Request $request, Organization $suborganization)
+    public function deleteUser(SuborganizationDeleteUserRequest $suborganizationDeleteUserRequest, Organization $suborganization)
     {
         $this->authorize('deleteUser', $suborganization);
 
-        $validator = Validator::make($request->all(), [
-            'user_id' => [
-                'required',
-                'integer',
-                'exists:App\User,id',
-                Rule::exists('organization_user_roles')->where(function ($query) use ($suborganization) {
-                    return $query->where('organization_id', $suborganization->id);
-                })
-            ]
-        ]);
+        $data = $suborganizationDeleteUserRequest->validated();
 
-        if ($validator->fails()) {
-            return response([
-                'errors' => $validator->errors()->all()
-            ], 400);
-        }
-
-        $is_deleted = $this->organizationRepository->deleteUser($suborganization, $request->all());
+        $is_deleted = $this->organizationRepository->deleteUser($suborganization, $data);
 
         if ($is_deleted) {
             return response([
@@ -514,25 +483,17 @@ class SuborganizationController extends Controller
      *
      * @responseFile responses/organization/organization-users.json
      *
-     * @param Request $request
+     * @param SuborganizationGetUsersRequest $suborganizationGetUsersRequest
      * @param Organization $suborganization
      * @return Response
      */
-    public function getUsers(Request $request, Organization $suborganization)
+    public function getUsers(SuborganizationGetUsersRequest $suborganizationGetUsersRequest, Organization $suborganization)
     {
         $this->authorize('viewAnyUser', $suborganization);
 
-        $validator = Validator::make($request->all(), [
-            'query' => 'string|max:255',
-        ]);
+        $data = $suborganizationGetUsersRequest->validated();
 
-        if ($validator->fails()) {
-            return response([
-                'errors' => $validator->errors()->all()
-            ], 400);
-        }
-
-        return UserResource::collection($this->organizationRepository->fetchOrganizationUsers($request->all(), $suborganization));
+        return UserResource::collection($this->organizationRepository->fetchOrganizationUsers($data, $suborganization));
     }
 
     /**
@@ -639,32 +600,27 @@ class SuborganizationController extends Controller
      *   "userHasPermission": true
      * }
      *
-     * @response 400 {
-     *   "errors": [
-     *     "The permission field is required."
-     *   ]
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "permission": [
+     *       "The permission field is required."
+     *     ]
+     *   }
      * }
      *
-     * @param Request $request
+     * @param SuborganizationUserHasPermissionRequest $suborganizationUserHasPermissionRequest
      * @param Organization $suborganization
      * @return Response
      */
-    public function userHasPermission(Request $request, Organization $suborganization)
+    public function userHasPermission(SuborganizationUserHasPermissionRequest $suborganizationUserHasPermissionRequest, Organization $suborganization)
     {
         $this->authorize('viewAnyUser', $suborganization);
 
-        $validator = Validator::make($request->all(), [
-            'permission' => 'required|string|max:255|exists:organization_permission_types,name',
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => $validator->errors()->all()
-            ], 400);
-        }
+        $data = $suborganizationUserHasPermissionRequest->validated();
 
         return response([
-            'userHasPermission' => auth()->user()->hasPermissionTo($request->permission, $suborganization),
+            'userHasPermission' => auth()->user()->hasPermissionTo($data['permission'], $suborganization),
         ], 200);
     }
 }
