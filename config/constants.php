@@ -11,6 +11,7 @@ return [
     'global-organization-visibility-type-id' => env('GLOBAL_ORGANIZATION_VISIBILITY_TYPE_ID'),
     'indexing-approved' => env('INDEXING_APPROVED'),
     'indexing-options' => env('INDEXING_OPTIONS'),
+    'member-role-id' => 3, // for member role
 
     /*
      |--------------------------------------------------------------------------

@@ -82,7 +82,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $inviteData['role_id'] = 3;
+                $inviteData['role_id'] = config('member-role-id');
                 $inviteData['email'] = $user['email'];
                 $inviteData['note'] = $user['note'];
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
@@ -158,7 +158,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $inviteData['role_id'] = 3;
+                $inviteData['role_id'] = config('member-role-id');
                 $inviteData['email'] = $user['email'];
                 $inviteData['note'] = $note;
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
@@ -223,13 +223,11 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user = new User(['email' => $user['email']]);
 
                 // added org invitation for outside users
-                $data2['role_id'] = 3;
-                $data2['email'] = $user['email'];
-                $data2['note'] = $note;
-                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $data2);
+                $invited_data['role_id'] = config('member-role-id');
+                $invited_data['email'] = $user['email'];
+                $invited_data['note'] = $note;
+                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $invited_data);
                 // ended org invitation for outside users
-
-                // $temp_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
 
                 $invited_user = array(
                     'invited_email' => $user['email'],
