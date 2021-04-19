@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
 use App\Http\Resources\V1\OrganizationPermissionTypeResource;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\V1\OrganizationPermissionTypeRequest;
 
 /**
  * @authenticated
@@ -38,21 +37,13 @@ class OrganizationPermissionTypeController extends Controller
      *
      * @responseFile responses/permission-type/permissions.json
      *
-     * @param Request $request
+     * @param OrganizationPermissionTypeRequest $organizationPermissionTypeRequest
      * @return Response
      */
-    public function index(Request $request)
+    public function index(OrganizationPermissionTypeRequest $organizationPermissionTypeRequest)
     {
-        $validator = Validator::make($request->all(), [
-            'query' => 'string|max:255',
-        ]);
+        $data = $organizationPermissionTypeRequest->validated();
 
-        if ($validator->fails()) {
-            return response([
-                'errors' => $validator->errors()->all()
-            ], 400);
-        }
-
-        return OrganizationPermissionTypeResource::collection($this->organizationPermissionTypeRepository->fetchOrganizationPermissionTypes($request->all()));
+        return OrganizationPermissionTypeResource::collection($this->organizationPermissionTypeRepository->fetchOrganizationPermissionTypes($data));
     }
 }
