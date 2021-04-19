@@ -82,7 +82,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $inviteData['role_id'] = config('member-role-id');
+                $inviteData['role_id'] = config('constants.member-role-id');
                 $inviteData['email'] = $user['email'];
                 $inviteData['note'] = $user['note'];
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
@@ -158,7 +158,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $inviteData['role_id'] = config('member-role-id');
+                $inviteData['role_id'] = config('constants.member-role-id');
                 $inviteData['email'] = $user['email'];
                 $inviteData['note'] = $note;
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
@@ -223,7 +223,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $temp_user = new User(['email' => $user['email']]);
 
                 // added org invitation for outside users
-                $invited_data['role_id'] = config('member-role-id');
+                $invited_data['role_id'] = config('constants.member-role-id');
                 $invited_data['email'] = $user['email'];
                 $invited_data['note'] = $note;
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $invited_data);
