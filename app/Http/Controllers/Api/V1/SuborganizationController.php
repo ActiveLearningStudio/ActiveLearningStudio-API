@@ -25,7 +25,7 @@ use Illuminate\Validation\Rule;
 /**
  * @authenticated
  *
- * @group  Suborganization API
+ * @group 19. Suborganization API
  *
  * APIs for Suborganization
  */

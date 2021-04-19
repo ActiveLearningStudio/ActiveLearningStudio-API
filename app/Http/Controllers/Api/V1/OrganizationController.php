@@ -8,7 +8,7 @@ use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\OrganizationRequest;
 
 /**
- * @group  Organization API
+ * @group 18. Organization API
  *
  * APIs for Organization
  */

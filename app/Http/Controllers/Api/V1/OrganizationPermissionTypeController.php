@@ -10,7 +10,7 @@ use App\Http\Requests\V1\OrganizationPermissionTypeRequest;
 /**
  * @authenticated
  *
- * @group  Organization Permission Type API
+ * @group 17. Organization Permission Type API
  *
  * APIs for Organization Permission Types
  */
