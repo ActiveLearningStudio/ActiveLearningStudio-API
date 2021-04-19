@@ -82,7 +82,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $inviteData['role_id'] = 3;
+                $inviteData['role_id'] = config('constants.member-role-id');
                 $inviteData['email'] = $user['email'];
                 $inviteData['note'] = $user['note'];
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
@@ -156,7 +156,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 $temp_user->token = $token;
 
                 // added org invitation for outside users
-                $inviteData['role_id'] = 3;
+                $inviteData['role_id'] = config('constants.member-role-id');
                 $inviteData['email'] = $user['email'];
                 $inviteData['note'] = $note;
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
@@ -220,7 +220,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 $temp_user = new User(['email' => $user['email']]);
 
                 // added org invitation for outside users
-                $inviteData['role_id'] = 3;
+                $inviteData['role_id'] = config('constants.member-role-id');
                 $inviteData['email'] = $user['email'];
                 $inviteData['note'] = $note;
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
