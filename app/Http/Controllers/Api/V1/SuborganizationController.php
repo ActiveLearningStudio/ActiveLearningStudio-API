@@ -134,7 +134,7 @@ class SuborganizationController extends Controller
     {
         $data = $request->validated();
 
-        $organization = Organization::find($data['parent_id']);
+        $organization = $this->organizationRepository->find($data['parent_id']);
         $this->authorize('create', $organization);
 
         $suborganization = $this->organizationRepository->createSuborganization($organization, $data);
