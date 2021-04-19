@@ -167,14 +167,9 @@ class SuborganizationController extends Controller
         $this->authorize('view', $suborganization);
 
         $authenticatedUser = auth()->user();
-        $userOrganization = $authenticatedUser->organizations()->find($suborganization->id);
-
-        if (!$userOrganization) {
-            $userOrganization = $suborganization;
-        }
 
         return response([
-            'suborganization' => new OrganizationResource($userOrganization->load('parent')->loadCount(['projects', 'children', 'users', 'groups', 'teams'])),
+            'suborganization' => new OrganizationResource($this->organizationRepository->fetchOrganizationData($authenticatedUser, $suborganization)),
         ], 200);
     }
 

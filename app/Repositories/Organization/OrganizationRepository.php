@@ -410,4 +410,22 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         return $response;
     }
+
+    /**
+     * To fetch organization data
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @return Model
+     */
+    public function fetchOrganizationData($authenticatedUser, $organization)
+    {
+        $userOrganization = $authenticatedUser->organizations()->find($organization->id);
+
+        if (!$userOrganization) {
+            $userOrganization = $organization;
+        }
+
+        return $userOrganization->load('parent')->loadCount(['projects', 'children', 'users', 'groups', 'teams']);
+    }
 }
