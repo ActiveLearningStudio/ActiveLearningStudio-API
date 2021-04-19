@@ -6,6 +6,7 @@ use App\Events\ProjectUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectUpdateRequest;
+use App\Http\Requests\V1\ProjectUploadThumbRequest;
 use App\Http\Resources\V1\ProjectDetailResource;
 use App\Http\Resources\V1\ProjectResource;
 use App\Jobs\CloneProject;
@@ -17,7 +18,6 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * @group 3. Project
@@ -152,30 +152,25 @@ class ProjectController extends Controller
      *   "thumbUrl": "/storage/projects/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
      * }
      *
-     * @response 400 {
-     *   "errors": [
-     *     "Invalid image."
-     *   ]
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "thumb": [
+     *       "The thumb must be an image."
+     *     ]
+     *   }
      * }
      *
-     * @param Request $request
+     * @param ProjectUploadThumbRequest $projectUploadThumbRequest
      * @return Response
      */
-    public function uploadThumb(Request $request, Organization $suborganization)
+    public function uploadThumb(ProjectUploadThumbRequest $projectUploadThumbRequest, Organization $suborganization)
     {
         $this->authorize('uploadThumb', [Project::class, $suborganization]);
 
-        $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image|max:102400',
-        ]);
+        $data = $projectUploadThumbRequest->validated();
 
-        if ($validator->fails()) {
-            return response([
-                'errors' => ['Invalid image.']
-            ], 400);
-        }
-
-        $path = $request->file('thumb')->store('/public/projects');
+        $path = $projectUploadThumbRequest->file('thumb')->store('/public/projects');
 
         return response([
             'thumbUrl' => Storage::url($path),
