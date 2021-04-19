@@ -262,14 +262,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the default organization associated with the user.
-     */
-    public function defaultOrganization()
-    {
-        return $this->belongsTo('App\Models\Organization', 'default_organization');
-    }
-
-    /**
      * Check if user has the specified permission in the provided organization
      *
      * @param $permission
