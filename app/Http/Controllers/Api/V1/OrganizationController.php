@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\V1\OrganizationRequest;
 
 /**
  * @group  Organization API
@@ -36,29 +35,24 @@ class OrganizationController extends Controller
      *
      * @responseFile responses/organization/organization.json
      *
-     * @response 400 {
-     *   "errors": [
-     *     "Invalid domain."
-     *   ]
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "domain": [
+     *       "The selected domain is invalid."
+     *     ]
+     *   }
      * }
      *
-     * @param Request $request
+     * @param OrganizationRequest $organizationRequest
      * @return Response
      */
-    public function getByDomain(Request $request)
+    public function getByDomain(OrganizationRequest $organizationRequest)
     {
-        $validator = Validator::make($request->all(), [
-            'domain' => 'required|string|max:255|exists:App\Models\Organization,domain',
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => ['Invalid domain.']
-            ], 400);
-        }
+        $data = $organizationRequest->validated();
 
         return response([
-            'organization' => new OrganizationResource($this->organizationRepository->findByField('domain', $request->domain)),
+            'organization' => new OrganizationResource($this->organizationRepository->findByField('domain', $data['domain'])),
         ], 200);
     }
 }
