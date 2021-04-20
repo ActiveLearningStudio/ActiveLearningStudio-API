@@ -25,6 +25,8 @@ class H5pContentRepository extends BaseRepository implements H5pContentRepositor
      *
      * @param int $accountId for brightcove video
      * @param int $videoId for brightcove video
+     * @param int $dataPlayer for brightcove video
+     * @param int $dataEmbed for brightcove video
      * @return array
      */
     public function getBrightcoveVideo($accountId, $videoId, $dataPlayer, $dataEmbed)
