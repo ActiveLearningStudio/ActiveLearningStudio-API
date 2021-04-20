@@ -41,6 +41,8 @@ class BrightcoveController extends Controller
      *
      * @param int $accountId for brightcove video
      * @param int $videoId for brightcove video
+     * @param int $dataPlayer for brightcove video
+     * @param int $dataEmbed for brightcove video
      *
      * @responseFile responses/h5p/h5p-resource-settings-open.json
      *
@@ -50,9 +52,9 @@ class BrightcoveController extends Controller
      *
      * @return Response
      */
-    public function getH5pResourceSettings($accountId, $videoId)
+    public function getH5pResourceSettings($accountId, $videoId, $dataPlayer, $dataEmbed)
     {
-        $record = $this->h5pContentRepository->getBrightcoveVideo($accountId, $videoId);
+        $record = $this->h5pContentRepository->getBrightcoveVideo($accountId, $videoId, $dataPlayer, $dataEmbed);
         if ($record) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
