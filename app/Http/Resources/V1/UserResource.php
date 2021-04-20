@@ -37,7 +37,7 @@ class UserResource extends JsonResource
                 return $this->pivot->role->id;
             }),
             'organization_joined_at' => $this->whenPivotLoaded('organization_user_roles', function () {
-                return $this->pivot->created_at;
+                return $this->pivot->created_at ? $this->pivot->created_at->format(config('constants.default-date-format')) : $this->pivot->created_at;
             }),
             'projects_count' => isset($this->projects_count) ? $this->projects_count : 0,
             'teams_count' => isset($this->teams_count) ? $this->teams_count : 0,
