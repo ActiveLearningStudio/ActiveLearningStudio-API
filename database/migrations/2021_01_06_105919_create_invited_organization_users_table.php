@@ -18,7 +18,7 @@ class CreateInvitedOrganizationUsersTable extends Migration
             $table->string('invited_email');
             $table->unsignedBigInteger('organization_id');
             $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->unsignedInteger('organization_role_type_id');
+            $table->unsignedBigInteger('organization_role_type_id');
             $table->foreign('organization_role_type_id')->references('id')->on('organization_role_types');
             $table->string('token')->unique()->nullable();
             $table->timestamps();
