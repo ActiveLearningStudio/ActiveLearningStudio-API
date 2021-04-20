@@ -317,6 +317,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchOrganizationUsers($data, $organization)
     {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
         return $organization->users()->withCount([
             'projects' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
@@ -332,7 +334,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $query->where('email', 'like', '%' . $data['query'] . '%');
             return $query;
         })
-        ->paginate();
+        ->paginate($perPage);
     }
 
     /**

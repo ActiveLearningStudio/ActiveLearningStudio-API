@@ -474,7 +474,8 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam page The pagination page no to show  Example: 1
-     * @bodyParam query string required Query to search suborganization users against Example: Leo
+     * @bodyParam query string Query to search suborganization users against Example: Leo
+     * @bodyParam size int Number of items to be displayed "per page" Example: 1
      *
      * @responseFile responses/organization/organization-users.json
      *
