@@ -98,7 +98,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
             if ($organization_id) {
                 $data['organization_id'] = $organization_id;
-                $data['organization_visibility_type_id'] = 1;
+                $data['organization_visibility_type_id'] = config('constants.private-organization-visibility-type-id');
             }
 
             return \DB::transaction(function () use ($authUser, $data, $project, $token) {
@@ -263,7 +263,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function populateOrderNumber()
     {
         $users = User::all();
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $projects = $user->projects()->orderBy('created_at')->get();
             if (!empty($projects)) {
                 $order = 1;

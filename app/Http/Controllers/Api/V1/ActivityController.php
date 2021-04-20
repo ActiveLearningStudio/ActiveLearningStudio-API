@@ -248,7 +248,7 @@ class ActivityController extends Controller
         $is_updated = $this->activityRepository->update($data, $activity->id);
 
         if ($is_updated) {
-            $this->update_h5p($request->get('data'), $activity->h5p_content_id);
+            $this->update_h5p($data, $activity->h5p_content_id);
 
             $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
             $playlist = new PlaylistResource($updated_activity->playlist);

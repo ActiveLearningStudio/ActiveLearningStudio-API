@@ -90,7 +90,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function createSuborganization($organization, $data)
     {
-        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => 1]);
+        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
 
         foreach ($data['users'] as $user) {
             $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
@@ -122,7 +122,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function update($organization, $data)
     {
-        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => 1]);
+        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
 
         foreach ($data['users'] as $user) {
             $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
@@ -175,8 +175,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function getMemberOptions($data, $organization)
     {
-        $organizationUserIds = $organization->users()->wherePivot('organization_role_type_id', '<>', 1)->get()->modelKeys();
-        $organizationAdminUserIds = $organization->users()->wherePivot('organization_role_type_id', 1)->get()->modelKeys();
+        $organizationUserIds = $organization->users()->wherePivot('organization_role_type_id', '<>', config('constants.admin-role-id'))->get()->modelKeys();
+        $organizationAdminUserIds = $organization->users()->wherePivot('organization_role_type_id', config('constants.admin-role-id'))->get()->modelKeys();
         $parentOrganizationUserIds = $this->getParentOrganizationUserIds([], $organization, $organizationAdminUserIds);
 
         if ($data['page'] === 'create') {
@@ -203,9 +203,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function getParentOrganizationUserIds($userIds, $organization, $organizationAdminUserIds)
     {
-        if ($parentOrganization = $organization->parent) {
-            $ids = $parentOrganization->users()->wherePivot('organization_role_type_id', '<>', 1)->get()->modelKeys();
-            $adminIds = $parentOrganization->users()->wherePivot('organization_role_type_id', 1)->get()->modelKeys();
+        $parentOrganization = $organization->parent;
+
+        if ($parentOrganization) {
+            $ids = $parentOrganization->users()->wherePivot('organization_role_type_id', '<>', config('constants.admin-role-id'))->get()->modelKeys();
+            $adminIds = $parentOrganization->users()->wherePivot('organization_role_type_id', config('constants.admin-role-id'))->get()->modelKeys();
             $ids = array_diff($ids, $organizationAdminUserIds);
             $organizationAdminUserIds = array_merge($organizationAdminUserIds, $adminIds);
             $userIds = array_merge($userIds, $ids);
@@ -343,7 +345,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         try {
             if ($organization) {
-                return $organization->users()->wherePivot('organization_role_type_id', 1)->first();
+                return $organization->users()->wherePivot('organization_role_type_id', config('constants.admin-role-id'))->first();
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());

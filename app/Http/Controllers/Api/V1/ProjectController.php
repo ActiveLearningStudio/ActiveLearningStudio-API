@@ -109,7 +109,7 @@ class ProjectController extends Controller
         $this->authorize('recent', [Project::class, $suborganization]);
 
         return response([
-            'projects' => ProjectDetailResource::collection($this->projectRepository->fetchRecentPublic(5, $suborganization->id)),
+            'projects' => ProjectDetailResource::collection($this->projectRepository->fetchRecentPublic(config('constants.default-pagination-limit-recent-projects'), $suborganization->id)),
         ], 200);
     }
 

@@ -7,12 +7,16 @@ return [
     'users' => [
         'sample-file' => 'sample/users-import-sample.csv'
     ],
-    'public-organization-visibility-type-id' => env('PUBLIC_ORGANIZATION_VISIBILITY_TYPE_ID'),
-    'global-organization-visibility-type-id' => env('GLOBAL_ORGANIZATION_VISIBILITY_TYPE_ID'),
-    'indexing-approved' => env('INDEXING_APPROVED'),
-    'indexing-options' => env('INDEXING_OPTIONS'),
+    'public-organization-visibility-type-id' => env('PUBLIC_ORGANIZATION_VISIBILITY_TYPE_ID', 4),
+    'global-organization-visibility-type-id' => env('GLOBAL_ORGANIZATION_VISIBILITY_TYPE_ID', 3),
+    'private-organization-visibility-type-id' => env('PRIVATE_ORGANIZATION_VISIBILITY_TYPE_ID', 1),
+    'indexing-approved' => env('INDEXING_APPROVED', 3),
+    'indexing-options' => env('INDEXING_OPTIONS', 'null,1,2,3'),
     // for member role
     'member-role-id' => 3,
+    'default-pagination-limit-recent-projects' => env('DEFAULT_PAGINATION_LIMIT_RECENT_PROJECTS', 5),
+    // for admin role
+    'admin-role-id' => 1,
 
     /*
      |--------------------------------------------------------------------------
