@@ -234,7 +234,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                     'token' => $token,
                 );
 
-                $result  = $this->invitedGroupUserRepository->create($invited_user);
+                $result = $this->invitedGroupUserRepository->create($invited_user);
 
                 if (!$result) {
                     $invited = false;
@@ -480,7 +480,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
 
                     $project_users = [];
                     foreach ($group_project_users as $group_project_user) {
-                        $user = User::find($group_project_user->user_id);
+                        $user = $this->userRepository->find($group_project_user->user_id);
                         if ($user) {
                             $project_users[] = [
                                 'id' => $user->id,
@@ -506,7 +506,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
 
                 $user_projects = [];
                 foreach ($group_project_users as $group_project_user) {
-                    $project = Project::find($group_project_user->project_id);
+                    $project = $this->projectRepository->find($group_project_user->project_id);
                     if ($project) {
                         $user_projects[] = [
                             'id' => $project->id,

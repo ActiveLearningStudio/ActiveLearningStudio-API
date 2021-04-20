@@ -39,6 +39,7 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     /**
      * Invite members to the team
      *
+     * @param $suborganization
      * @param $team
      * @param $data
      * @return bool

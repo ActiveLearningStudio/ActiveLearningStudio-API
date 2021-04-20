@@ -18,7 +18,13 @@ class InvitedGroupUser extends Model
         'token',
     ];
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'invited_group_users';
+
     /**
      * Scope for email search
      *

@@ -61,7 +61,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
         Route::apiResource('suborganization.teams', 'TeamController');
 
-        //Groups
+        // Groups
         Route::post('groups/invite', 'GroupController@inviteGroupMember');
         Route::post('groups/{group}/invite-member', 'GroupController@inviteMember');
         Route::post('suborganization/{suborganization}/groups/{group}/invite-members', 'GroupController@inviteMembers');

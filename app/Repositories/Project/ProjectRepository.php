@@ -267,7 +267,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $projects = $user->projects()->orderBy('created_at')->get();
             if (!empty($projects)) {
                 $order = 1;
-                foreach($projects as $project) {
+                foreach ($projects as $project) {
                    $project->order = $order;
                    $project->save();
                    $order++;

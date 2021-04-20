@@ -90,8 +90,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
                 $assigned_users[] = [
                     'user' => $temp_user,
-                    'note' => $user['note'],
-                    'user_type' => 'New'
+                    'note' => $user['note']
                 ];
 
                 $invited_users[] = [
@@ -441,7 +440,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      */
     public function getTeams($suborganization_id, $user_id)
     {
-        return  Team::whereHas('users', function ($q) use ($user_id) {
+        return Team::whereHas('users', function ($q) use ($user_id) {
                     $q->where('user_id', $user_id);
                 })
                 ->whereOrganizationId($suborganization_id)
@@ -476,7 +475,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
                     $project_users = [];
                     foreach ($team_project_users as $team_project_user) {
-                        $user = User::find($team_project_user->user_id);
+                        $user = $this->userRepository->find($team_project_user->user_id);
                         if ($user) {
                             $project_users[] = [
                                 'id' => $user->id,
@@ -502,7 +501,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
                 $user_projects = [];
                 foreach ($team_project_users as $team_project_user) {
-                    $project = Project::find($team_project_user->project_id);
+                    $project = $this->projectRepository->find($team_project_user->project_id);
                     if ($project) {
                         $user_projects[] = [
                             'id' => $project->id,
