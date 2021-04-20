@@ -50,9 +50,9 @@ class BrightcoveController extends Controller
      *
      * @return Response
      */
-    public function getH5pResourceSettings($accountId, $videoId)
+    public function getH5pResourceSettings($accountId, $videoId, $dataPlayer, $dataEmbed)
     {
-        $record = $this->h5pContentRepository->getBrightcoveVideo($accountId, $videoId);
+        $record = $this->h5pContentRepository->getBrightcoveVideo($accountId, $videoId, $dataPlayer, $dataEmbed);
         if ($record) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
