@@ -12,6 +12,8 @@ return [
     'indexing-approved' => env('INDEXING_APPROVED'),
     'indexing-options' => env('INDEXING_OPTIONS'),
     'member-role-id' => 3, // for member role
+    'default-pagination-limit-recent-projects' => env('DEFAULT_PAGINATION_LIMIT_RECENT_PROJECTS', 5),
+    'admin-role-id' => 1, // for admin role
 
     /*
      |--------------------------------------------------------------------------
