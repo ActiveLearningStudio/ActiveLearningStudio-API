@@ -40,7 +40,7 @@ class MapPublicToIndexingColumn extends Command
     {
         $indexedProjects = Project::where('is_public', true)->where('elasticsearch', true); // get already indexed projects
         $publicProjects = Project::where('is_public', true); // projects which are public
-        $indexedProjects->update(['indexing' => 3]); // these projects are approved for indexing
+        $indexedProjects->update(['indexing' => config('constants.indexing-approved')]); // these projects are approved for indexing
         $publicProjects->update(['status' => 2]); // these projects are finalized/finished
     }
 }

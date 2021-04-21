@@ -14,6 +14,7 @@ use App\Jobs\CloneActivity;
 use App\Models\Activity;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
+use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
@@ -50,6 +51,8 @@ class ActivityController extends Controller
     {
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
+
+        // $this->authorizeResource(Activity::class, 'activity');
     }
 
     /**
@@ -57,14 +60,20 @@ class ActivityController extends Controller
      *
      * Get a list of activities
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
      * @responseFile responses/activity/activities.json
      *
+     * @param Playlist $playlist
      * @return Response
+     * @throws AuthorizationException
      */
-    public function index()
+    public function index(Playlist $playlist)
     {
+        $this->authorize('viewAny', [Project::class, $playlist->project->organization]);
+
         return response([
-            'activities' => ActivityResource::collection($this->activityRepository->all()),
+            'activities' => ActivityResource::collection($playlist->activities),
         ], 200);
     }
 
@@ -112,10 +121,10 @@ class ActivityController extends Controller
      *
      * Create a new activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
-     * @bodyParam playlist_id int The Id of a playlist Example: 1
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam h5p_content_id int The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
@@ -131,17 +140,21 @@ class ActivityController extends Controller
      * }
      *
      * @param ActivityRequest $request
+     * @param Playlist $playlist
      * @return Response
+     * @throws AuthorizationException
      */
-    public function store(ActivityRequest $request)
+    public function store(ActivityRequest $request, Playlist $playlist)
     {
+        $this->authorize('create', [Project::class, $playlist->project->organization]);
+
         $data = $request->validated();
 
-        $data['order'] = $this->activityRepository->getOrder($data['playlist_id']) + 1;
-        $activity = $this->activityRepository->create($data);
+        $data['order'] = $this->activityRepository->getOrder($playlist->id) + 1;
+        $activity = $playlist->activities()->create($data);
 
         if ($activity) {
-            $updated_playlist = new PlaylistResource($this->playlistRepository->find($data['playlist_id']));
+            $updated_playlist = new PlaylistResource($this->playlistRepository->find($playlist->id));
             event(new PlaylistUpdatedEvent($updated_playlist->project, $updated_playlist));
 
             return response([
@@ -159,15 +172,29 @@ class ActivityController extends Controller
      *
      * Get the specified activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity.json
      *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid playlist or activity id."
+     *   ]
+     * }
+     *
+     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function show(Activity $activity)
+    public function show(Playlist $playlist, Activity $activity)
     {
+        if ($activity->playlist_id !== $playlist->id) {
+            return response([
+                'errors' => ['Invalid playlist or activity id.'],
+            ], 400);
+        }
+
         return response([
             'activity' => new ActivityResource($activity),
         ], 200);
@@ -178,12 +205,12 @@ class ActivityController extends Controller
      *
      * Update the specified activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
-     * @bodyParam playlist_id int The Id of a playlist Example: 1
-     * @bodyParam shared bool required The status of share of a activity Example: false
+     * @bodyParam shared bool The status of share of a activity Example: false
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam h5p_content_id int The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
@@ -192,34 +219,36 @@ class ActivityController extends Controller
      *
      * @responseFile responses/activity/activity.json
      *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid playlist or activity id."
+     *   ]
+     * }
+     *
      * @response 500 {
      *   "errors": [
      *     "Failed to update activity."
      *   ]
      * }
      *
-     * @param Request $request
+     * @param ActivityRequest $request
+     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function update(Request $request, Activity $activity)
+    public function update(ActivityRequest $request, Playlist $playlist, Activity $activity)
     {
-        // TODO: need validation
-        $is_updated = $this->activityRepository->update($request->only([
-            'playlist_id',
-            'title',
-            'type',
-            'content',
-            'shared',
-            'order',
-            'thumb_url',
-            'subject_id',
-            'education_level_id',
-            'h5p_content_id',
-        ]), $activity->id);
+        if ($activity->playlist_id !== $playlist->id) {
+            return response([
+                'errors' => ['Invalid playlist or activity id.'],
+            ], 400);
+        }
+
+        $data = $request->validated();
+        $is_updated = $this->activityRepository->update($data, $activity->id);
 
         if ($is_updated) {
-            $this->update_h5p($request->get('data'), $activity->h5p_content_id);
+            $this->update_h5p($data, $activity->h5p_content_id);
 
             $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
             $playlist = new PlaylistResource($updated_activity->playlist);
@@ -321,6 +350,8 @@ class ActivityController extends Controller
      */
     public function detail(Activity $activity)
     {
+        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
         if ($activity->playlist->project->user) {
@@ -362,6 +393,8 @@ class ActivityController extends Controller
      */
     public function share(Activity $activity)
     {
+        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+
         $is_updated = $this->activityRepository->update([
             'shared' => true,
         ], $activity->id);
@@ -401,6 +434,8 @@ class ActivityController extends Controller
      */
     public function removeShare(Activity $activity)
     {
+        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+
         $is_updated = $this->activityRepository->update([
             'shared' => false,
         ], $activity->id);
@@ -425,6 +460,7 @@ class ActivityController extends Controller
      *
      * Remove the specified activity.
      *
+     * @urlParam playlist required The Id of a playlist Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @response {
@@ -437,11 +473,18 @@ class ActivityController extends Controller
      *   ]
      * }
      *
+     * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function destroy(Activity $activity)
+    public function destroy(Playlist $playlist, Activity $activity)
     {
+        if ($activity->playlist_id !== $playlist->id) {
+            return response([
+                'errors' => ['Invalid playlist or activity id.'],
+            ], 400);
+        }
+
         $is_deleted = $this->activityRepository->delete($activity->id);
 
         if ($is_deleted) {
@@ -486,6 +529,8 @@ class ActivityController extends Controller
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
+        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($activity->playlist_id == $playlist->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
@@ -506,6 +551,8 @@ class ActivityController extends Controller
      */
     public function h5p(Activity $activity)
     {
+        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();
@@ -590,6 +637,8 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsOpen(Activity $activity)
     {
+        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+
         if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
@@ -627,7 +676,7 @@ class ActivityController extends Controller
     public function getH5pResourceSettingsShared(Activity $activity)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($activity->shared || ($activity->playlist->project->indexing === 3)) {
+        if ($activity->shared || ($activity->playlist->project->indexing === config('constants.indexing-approved'))) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();

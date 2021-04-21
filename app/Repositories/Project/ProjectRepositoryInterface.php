@@ -32,9 +32,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * To fetch recent public project
      *
      * @param $limit
+     * @param $organization_id
      * @return Project $projects
      */
-    public function fetchRecentPublic($limit);
+    public function fetchRecentPublic($limit, $organization_id);
 
     /**
      * To fetch recent public projects

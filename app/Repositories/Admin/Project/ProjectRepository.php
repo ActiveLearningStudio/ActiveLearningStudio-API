@@ -80,21 +80,18 @@ class ProjectRepository extends BaseRepository
     /**
      * @param User $user
      * @param $project_id
+     * @param $organization_id
      * @return string
      * @throws GeneralException
      */
-    public function clone(User $user, $project_id): string
+    public function clone(User $user, $project_id, $organization_id = null): string
     {
         $project = $this->model->find($project_id);
-        $pivot_data = $project->users->find($user->id);
-        $linked_user_id = $pivot_data ? $pivot_data->pivot->value('user_id') : 0;
-        if ((int)$user->id === $linked_user_id) {
-            throw new GeneralException('Project already linked to this user.');
-        }
+
         try {
             // resolving this object one-time
             // as it might only needed here - so no dependency injection in constructor
-            CloneProject::dispatch($user, $project, $user->createToken('auth_token')->accessToken)->delay(now()->addSecond());
+            CloneProject::dispatch($user, $project, $user->createToken('auth_token')->accessToken, $organization_id)->delay(now()->addSecond());
             // pushed cloning of project in background
             // resolve(ProjectRepositoryInterface::class)->clone($user, $project, request()->bearerToken());
             return 'User data updated and project is being cloned in background!';
@@ -190,5 +187,20 @@ class ProjectRepository extends BaseRepository
         }
         $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
         return 'Starter Projects status updated successfully!';
+    }
+
+    /**
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateUserStarterFlag(): string
+    {
+        $starterProjects = $this->getStarterProjects(); // get all the starter projects
+        if (!count($starterProjects)) {
+            throw new GeneralException('Please first set at-least 1 starter project!');
+        }
+        // set the user starter flag to true if was cloned from global starter project
+        $this->model->whereIn('cloned_from', $starterProjects->modelKeys())->update(['is_user_starter' => true]);
+        return 'Existing records are updated successfully for user starter project flag.';
     }
 }

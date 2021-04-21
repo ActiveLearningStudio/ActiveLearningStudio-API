@@ -30,6 +30,18 @@ class UserResource extends JsonResource
             'subscribed' => $this->subscribed,
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at,
+            'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->role->display_name;
+            }),
+            'organization_role_id' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->role->id;
+            }),
+            'organization_joined_at' => $this->whenPivotLoaded('organization_user_roles', function () {
+                return $this->pivot->created_at ? $this->pivot->created_at->format(config('constants.default-date-format')) : $this->pivot->created_at;
+            }),
+            'projects_count' => isset($this->projects_count) ? $this->projects_count : 0,
+            'teams_count' => isset($this->teams_count) ? $this->teams_count : 0,
+            'groups_count' => isset($this->groups_count) ? $this->groups_count : 0
         ];
     }
 }

@@ -24,9 +24,10 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'query' => 'required|string|max:255',
+            'query' => 'string|max:255',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
             'negativeQuery' => 'string|max:255',
-            'indexing' => 'array|in:null,1,2,3',
+            'indexing' => 'array|in:' . config('constants.indexing-options'),
             'startDate' => 'date',
             'endDate' => 'date|after_or_equal:startDate',
             'userIds' => 'array|exists:App\User,id',

@@ -1,0 +1,11 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "image": null,
+            "domain": "currikistudio"
+        }
+    ]
+}

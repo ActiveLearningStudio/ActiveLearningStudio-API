@@ -1,0 +1,47 @@
+{
+    "data": [
+        {
+            "id": 3,
+            "name": "Suborganization",
+            "description": "Suborganization description",
+            "parent": {
+                "id": 1,
+                "name": "org name 1",
+                "description": "org description 1",
+                "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+                "domain": "orgdomain1"
+            },
+            "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+            "domain": "suborganization"
+        },
+        {
+            "id": 4,
+            "name": "org name",
+            "description": "org description",
+            "parent": {
+                "id": 1,
+                "name": "org name 1",
+                "description": "org description 1",
+                "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+                "domain": "orgdomain1"
+            },
+            "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+            "domain": "orgdomain"
+        }
+    ],
+    "links": {
+        "first": "http://127.0.0.1:8000/api/v1/admin/organizations?page=1",
+        "last": "http://127.0.0.1:8000/api/v1/admin/organizations?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://127.0.0.1:8000/api/v1/admin/organizations",
+        "per_page": 25,
+        "to": 15,
+        "total": 2
+    }
+}

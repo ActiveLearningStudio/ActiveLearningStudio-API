@@ -1,0 +1,33 @@
+{
+    "data": [
+        {
+            "id": 4,
+            "name": "org name",
+            "description": "org description",
+            "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+            "domain": "orgdomain"
+        },
+        {
+            "id": 6,
+            "name": "org name 6 test2",
+            "description": "org description6",
+            "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+            "domain": "orgdomain6"
+        }
+    ],
+    "links": {
+        "first": "http://127.0.0.1:8000/api/v1/admin/organizations/3/parent-options?page=1",
+        "last": "http://127.0.0.1:8000/api/v1/admin/organizations/3/parent-options?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://127.0.0.1:8000/api/v1/admin/organizations/3/parent-options",
+        "per_page": 15,
+        "to": 12,
+        "total": 2
+    }
+}

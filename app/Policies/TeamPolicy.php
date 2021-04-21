@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\Team;
+use App\Models\Organization;
+use App\Models\Pivots\TeamProjectUser;
+use App\Models\Project;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -11,96 +13,86 @@ class TeamPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view any teams.
      *
      * @param User $user
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Organization $suborganization)
     {
-        return true;
+        return $user->hasPermissionTo('team:view', $suborganization);
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the team.
      *
      * @param User $user
-     * @param Team $team
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function view(User $user, Team $team)
+    public function view(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $team);
+        return $user->hasPermissionTo('team:view', $suborganization);
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can create team.
      *
      * @param User $user
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Organization $suborganization)
     {
-        return true;
+        return $user->hasPermissionTo('team:create', $suborganization);
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update the team.
      *
      * @param User $user
-     * @param Team $team
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function update(User $user, Team $team)
+    public function update(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $team);
+        return $user->hasPermissionTo('team:edit', $suborganization);
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Determine whether the user can share the team.
      *
      * @param User $user
-     * @param Team $team
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function delete(User $user, Team $team)
+    public function share(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $team, 'owner');
+        return $user->hasPermissionTo('team:share', $suborganization);
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can delete the team.
      *
      * @param User $user
-     * @param Team $team
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function restore(User $user, Team $team)
+    public function delete(User $user,  Organization $suborganization)
+    {
+        return $user->hasPermissionTo('team:delete', $suborganization);
+    }
+
+    /**
+     * Determine whether the user can permanently delete the team.
+     *
+     * @param User $user
+     * @param Project $project
+     * @return mixed
+     */
+    public function forceDelete(User $user, Project $project)
     {
         return $user->isAdmin();
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param User $user
-     * @param Team $team
-     * @return mixed
-     */
-    public function forceDelete(User $user, Team $team)
-    {
-        return $user->isAdmin();
-    }
-
-    private function hasPermission(User $user, Team $team, $role = null)
-    {
-        $team_users = $team->users;
-        foreach ($team_users as $team_user) {
-            if ($user->id === $team_user->id && (!$role || $role === $team_user->pivot->role)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

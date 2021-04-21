@@ -1,0 +1,24 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "private",
+            "display_name": "Private"
+        },
+        {
+            "id": 2,
+            "name": "protected",
+            "display_name": "Protected"
+        },
+        {
+            "id": 3,
+            "name": "global",
+            "display_name": "Global"
+        },
+        {
+            "id": 4,
+            "name": "public",
+            "display_name": "Public"
+        }
+    ]
+}
