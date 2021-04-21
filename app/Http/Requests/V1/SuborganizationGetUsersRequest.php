@@ -26,6 +26,7 @@ class SuborganizationGetUsersRequest extends FormRequest
     {
         return [
             'query' => 'string|max:255',
+            'size' => 'integer|max:100',
         ];
     }
 }

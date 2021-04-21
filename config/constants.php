@@ -17,6 +17,8 @@ return [
     'default-pagination-limit-recent-projects' => env('DEFAULT_PAGINATION_LIMIT_RECENT_PROJECTS', 5),
     // for admin role
     'admin-role-id' => 1,
+    'default-pagination-per-page' => env('DEFAULT_PAGINATION_PER_PAGE', 10),
+    'default-date-format' => env('DEFAULT_DATE_FORMAT', 'd-M-Y'),
 
     /*
      |--------------------------------------------------------------------------
