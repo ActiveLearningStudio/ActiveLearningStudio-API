@@ -415,7 +415,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return $response;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-            return $response;
         } 
     }
 
