@@ -413,7 +413,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $response[$permission['feature']][] = $permission['name'];
             }
             return $response;
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             return $response;
         } 
