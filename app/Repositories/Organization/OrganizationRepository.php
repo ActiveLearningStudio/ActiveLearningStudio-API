@@ -400,19 +400,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchOrganizationUserPermissions($authenticatedUser, $organization)
     {
-        $orgUsrPermissions = $organization->userRoles()
-                ->wherePivot('user_id', $authenticatedUser->id)
-                ->with('permissions')
-                ->first();
+        try{
+            $orgUsrPermissions = $organization->userRoles()
+            ->wherePivot('user_id', $authenticatedUser->id)
+            ->with('permissions')
+            ->first();
 
-        $response['activeRole'] = $orgUsrPermissions['name'];
-        $response['roleId'] = $orgUsrPermissions['id'];
+            $response['activeRole'] = $orgUsrPermissions['name'];
+            $response['roleId'] = $orgUsrPermissions['id'];
 
-        foreach ($orgUsrPermissions['permissions'] as $permission) {
-            $response[$permission['feature']][] = $permission['name'];
-        }
-
-        return $response;
+            foreach ($orgUsrPermissions['permissions'] as $permission) {
+                $response[$permission['feature']][] = $permission['name'];
+            }
+            return $response;
+        } catch (\Exception $e){
+            Log::error($e->getMessage());
+            return $response;
+        } 
     }
 
     /**
