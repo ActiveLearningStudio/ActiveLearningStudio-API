@@ -7,25 +7,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\GoogleLoginRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Requests\Auth\SsologinLoginRequest;
+use App\Http\Requests\Auth\SsoLoginRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
-use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
-use App\Repositories\Team\TeamRepositoryInterface;
+use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
-use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * @group 1. Authentication
@@ -64,8 +63,7 @@ class AuthController extends Controller
         TeamRepositoryInterface $teamRepository,
         GroupRepositoryInterface $groupRepository,
         OrganizationRepositoryInterface $organizationRepository
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->userLoginRepository = $userLoginRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
@@ -160,7 +158,7 @@ class AuthController extends Controller
             }
 
             return response([
-                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
+                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!",
             ], 201);
         }
 
@@ -327,8 +325,7 @@ class AuthController extends Controller
                     }
 
                 }
-            }
-            else {
+            } else {
                 if (!$organization = $user->organizations()->where('domain', $request->domain)->first()) {
                     return response([
                         'errors' => ['Invalid Domain.'],
@@ -372,10 +369,10 @@ class AuthController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function Ssologin(SsologinLoginRequest $request)
+    public function Ssologin(SsoLoginRequest $request)
     {
         try {
-            parse_str(base64_decode($request->sso_info),$result);
+                parse_str(base64_decode($request->sso_info), $result);
             if ($result) {
                 $user = $this->userRepository->findByField('email', $result['user_email']);
                 if (!$user) {
@@ -395,7 +392,7 @@ class AuthController extends Controller
                             'uniqueid' => $result['user_key'],
                             'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
                             'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
-                            'custom_school' => ($result['tool_platform']) ? $result['custom_'.$result['tool_platform'].'_school'] : 'Curriki School',
+                            'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
                         ]);
                         $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
                         if ($invited_users) {
@@ -407,7 +404,7 @@ class AuthController extends Controller
                                 }
                             }
                         }
-        
+
                         $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
                         if ($invited_users->isNotEmpty()) {
                             foreach ($invited_users as $invited_user) {
@@ -424,7 +421,7 @@ class AuthController extends Controller
                                 $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                             }
                         }
-        
+
                         $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
                         if ($invited_users->isNotEmpty()) {
                             foreach ($invited_users as $invited_user) {
@@ -435,11 +432,10 @@ class AuthController extends Controller
                                 }
                             }
                         }
-        
+
                     }
-                }
-                else {
-                    $sso_login = $user->ssoLogin()->where(['user_id' => $user->id,'provider' => $result['tool_platform'],'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']])->first();
+                } else {
+                    $sso_login = $user->ssoLogin()->where(['user_id' => $user->id, 'provider' => $result['tool_platform'], 'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']])->first();
                     if (!$sso_login) {
                         $user->ssoLogin()->create([
                             'user_id' => $user->id,
@@ -447,24 +443,23 @@ class AuthController extends Controller
                             'uniqueid' => $result['user_key'],
                             'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
                             'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
-                            'custom_school' => ($result['tool_platform']) ? $result['custom_'.$result['tool_platform'].'_school'] : 'Curriki School',
+                            'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
                         ]);
                     }
                 }
 
                 $accessToken = $user->createToken('auth_token')->accessToken;
-        
+
                 $this->userLoginRepository->create([
                     'user_id' => $user->id,
                     'ip_address' => $request->ip(),
                 ]);
-        
+
                 return response([
                     'user' => new UserResource($user),
                     'access_token' => $accessToken,
                 ], 200);
             }
-
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
