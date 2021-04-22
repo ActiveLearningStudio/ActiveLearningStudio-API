@@ -400,7 +400,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchOrganizationUserPermissions($authenticatedUser, $organization)
     {
-        try{
+        try {
             $orgUsrPermissions = $organization->userRoles()
             ->wherePivot('user_id', $authenticatedUser->id)
             ->with('permissions')
