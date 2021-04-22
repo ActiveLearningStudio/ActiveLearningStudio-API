@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\GoogleLoginRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\SsologinLoginRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
@@ -353,6 +354,139 @@ class AuthController extends Controller
         return response([
             'errors' => ['Unable to login with Google.'],
         ], 400);
+    }
+
+    /**
+     * Login with SafariMontage
+     *
+     * @bodyParam tokenId string required The token Id of google login Example: eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...
+     * @bodyParam tokenObj object required The token object of google login
+     * @bodyParam tokenObj.token_type string required The token type of google login Example: Bearer
+     * @bodyParam tokenObj.access_token string required The access token of google login Example: ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...
+     * @bodyParam tokenObj.scope string required The token scope of google login Example: email profile ...
+     * @bodyParam tokenObj.login_hint string required The token hint of google login Example: AJDLj6JUa8yxXrhHdWRHIV0...
+     * @bodyParam tokenObj.expires_in int required The token expire of google login Example: 3599
+     * @bodyParam tokenObj.id_token string required The token Id of google login Example: eyJhbGciOiJSUzI1NiIsImtpZCI6I...
+     * @bodyParam tokenObj.session_state object required The session state of google login
+     * @bodyParam tokenObj.session_state.extraQueryParams object required
+     * @bodyParam tokenObj.session_state.extraQueryParams.authuser string required Example: 0
+     * @bodyParam tokenObj.first_issued_at int required The first issued time of google login Example: 1601535932504
+     * @bodyParam tokenObj.expires_at int required The expire time of google login Example: 1601539531504
+     * @bodyParam tokenObj.idpId string required The idp Id of google login Example: google
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Unable to login with Google."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function Ssologin(SsologinLoginRequest $request)
+    {
+        try {
+            parse_str(base64_decode($request->sso_info),$result);
+            if ($result) {
+                $user = $this->userRepository->findByField('email', $result['user_email']);
+                if (!$user) {
+                    $password = Str::random(10);
+                    $user = $this->userRepository->create([
+                        'first_name' => $result['first_name'],
+                        'last_name' => $result['last_name'],
+                        'email' => $result['user_email'],
+                        'password' => Hash::make($password),
+                        'remember_token' => Str::random(64),
+                        'email_verified_at' => now(),
+                    ]);
+                    if ($user) {
+                        $user->ssoLogin()->create([
+                            'user_id' => $user->id,
+                            'provider' => $result['tool_platform'],
+                            'uniqueid' => $result['user_key'],
+                            'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                            'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
+                            'custom_school' => ($result['tool_platform']) ? $result['custom_'.$result['tool_platform'].'_school'] : 'Curriki School',
+                        ]);
+                        $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
+                        if ($invited_users) {
+                            foreach ($invited_users as $invited_user) {
+                                $team = $this->teamRepository->find($invited_user->team_id);
+                                if ($team) {
+                                    $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                    $this->invitedTeamUserRepository->delete($user->email);
+                                }
+                            }
+                        }
+        
+                        $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
+                        if ($invited_users->isNotEmpty()) {
+                            foreach ($invited_users as $invited_user) {
+                                $organization = $this->organizationRepository->find($invited_user->organization_id);
+                                if ($organization) {
+                                    $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                                    $this->invitedOrganizationUserRepository->delete($user->email);
+                                }
+                            }
+                        } else {
+                            $organization = $this->organizationRepository->find(1);
+                            if ($organization) {
+                                $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                                $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                            }
+                        }
+        
+                        $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
+                        if ($invited_users->isNotEmpty()) {
+                            foreach ($invited_users as $invited_user) {
+                                $group = $this->groupRepository->find($invited_user->group_id);
+                                if ($group) {
+                                    $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                    $this->invitedGroupUserRepository->delete($user->email);
+                                }
+                            }
+                        }
+        
+                    }
+                }
+                else {
+                    $sso_login = $user->ssoLogin()->where(['user_id' => $user->id,'provider' => $result['tool_platform'],'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']])->first();
+                    if (!$sso_login) {
+                        $user->ssoLogin()->create([
+                            'user_id' => $user->id,
+                            'provider' => $result['tool_platform'],
+                            'uniqueid' => $result['user_key'],
+                            'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                            'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
+                            'custom_school' => ($result['tool_platform']) ? $result['custom_'.$result['tool_platform'].'_school'] : 'Curriki School',
+                        ]);
+                    }
+                }
+
+                $accessToken = $user->createToken('auth_token')->accessToken;
+        
+                $this->userLoginRepository->create([
+                    'user_id' => $user->id,
+                    'ip_address' => $request->ip(),
+                ]);
+        
+                return response([
+                    'user' => new UserResource($user),
+                    'access_token' => $accessToken,
+                ], 200);
+            }
+
+            return response([
+                'errors' => ['Unable to login with SSO.'],
+            ], 400);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return response([
+                'errors' => ['Unable to login with SSO.'],
+            ], 400);
+        }
     }
 
     /**

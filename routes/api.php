@@ -17,6 +17,7 @@ Route::post('register', 'Auth\AuthController@register')->name('register');
 Route::post('login', 'Auth\AuthController@login')->name('login');
 Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
+Route::post('lti-sso-login', 'Auth\AuthController@Ssologin');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
@@ -24,6 +25,7 @@ Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->n
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
+    
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
     Route::get('playlists/update-order', 'PlaylistController@populateOrderNumber');
