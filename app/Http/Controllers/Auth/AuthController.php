@@ -357,28 +357,15 @@ class AuthController extends Controller
     }
 
     /**
-     * Login with SafariMontage
+     * Login with SSO
      *
-     * @bodyParam tokenId string required The token Id of google login Example: eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...
-     * @bodyParam tokenObj object required The token object of google login
-     * @bodyParam tokenObj.token_type string required The token type of google login Example: Bearer
-     * @bodyParam tokenObj.access_token string required The access token of google login Example: ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...
-     * @bodyParam tokenObj.scope string required The token scope of google login Example: email profile ...
-     * @bodyParam tokenObj.login_hint string required The token hint of google login Example: AJDLj6JUa8yxXrhHdWRHIV0...
-     * @bodyParam tokenObj.expires_in int required The token expire of google login Example: 3599
-     * @bodyParam tokenObj.id_token string required The token Id of google login Example: eyJhbGciOiJSUzI1NiIsImtpZCI6I...
-     * @bodyParam tokenObj.session_state object required The session state of google login
-     * @bodyParam tokenObj.session_state.extraQueryParams object required
-     * @bodyParam tokenObj.session_state.extraQueryParams.authuser string required Example: 0
-     * @bodyParam tokenObj.first_issued_at int required The first issued time of google login Example: 1601535932504
-     * @bodyParam tokenObj.expires_at int required The expire time of google login Example: 1601539531504
-     * @bodyParam tokenObj.idpId string required The idp Id of google login Example: google
+     * @bodyParam sso_info string required The base64encode query params Example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
      *
      * @responseFile responses/user/user-with-token.json
      *
      * @response 400 {
      *   "errors": [
-     *     "Unable to login with Google."
+     *     "Unable to login with SSO."
      *   ]
      * }
      *

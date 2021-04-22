@@ -25,7 +25,6 @@ Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->n
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
-    
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
     Route::get('playlists/update-order', 'PlaylistController@populateOrderNumber');
