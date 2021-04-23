@@ -371,7 +371,8 @@ class AuthController extends Controller
     public function ssoLogin(SsoLoginRequest $request)
     {
         try {
-            parse_str(base64_decode($request->sso_info), $result);
+            $data = $request->validated();
+            parse_str(base64_decode($data['sso_info']), $result);
             if ($result) {
                 $user = $this->userRepository->findByField('email', $result['user_email']);
                 if (!$user) {
