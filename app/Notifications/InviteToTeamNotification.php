@@ -56,16 +56,11 @@ class InviteToTeamNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        // if (static::$toMailCallback) {
-        //     return call_user_func(static::$toMailCallback, $notifiable, $this->token);
-        // }
-
         return (new MailMessage)
-            ->subject('Invite to the Team')
-            ->line($this->sender->first_name . ' has invited you to join the team ' . $this->team->name)
+            ->subject('Invited to the Team')
+            ->line($this->sender->first_name . ' has invited you in the ' . $this->team->name . ' team')
             ->line($this->note)
-            // ->action('Join the Team', $this->pageUrl . '?token=' . $this->token);
-            ->action('Join the Team', $this->pageUrl . '/teams/' . $this->team->id . '/projects');
+            ->action('View the Team', $this->pageUrl . '/org/' . $this->team->organization->domain . '/teams/' . $this->team->id);
     }
 
     /**

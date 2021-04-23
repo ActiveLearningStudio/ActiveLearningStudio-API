@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
+use App\Repositories\User\UserRepositoryInterface;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -113,6 +114,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the groups for the user
+     */
+    public function groups()
+    {
+        return $this->belongsToMany('App\Models\Group', 'user_group')->withPivot('role')->withTimestamps();
+    }
+
+    /**
      * Get the projects for the user
      */
     public function projects()
@@ -169,6 +178,22 @@ class User extends Authenticatable implements MustVerifyEmail
     public function membership()
     {
         return $this->belongsTo('App\Models\MembershipType', 'membership_type_id');
+    }
+
+    /**
+     * The organizations that belong to the user.
+     */
+    public function organizations()
+    {
+        return $this->belongsToMany('App\Models\Organization', 'organization_user_roles')->using('App\Models\OrganizationUserRole')->withPivot('organization_role_type_id')->withTimestamps();
+    }
+
+    /**
+     * The SSO Logins that belongs to the user
+     */
+    public function ssoLogin()
+    {
+        return $this->hasMany('App\Models\SsoLogin', 'user_id');
     }
 
     public function isAdmin()
@@ -231,7 +256,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function scopeSearchByEmailAndName($query, $value)
     {
-        return $query->orWhereRaw("email ILIKE '%" . $value . "%'")->orWhereRaw("CONCAT(first_name, ' ', last_name) ILIKE '%" . $value . "%'");
+        return $query->orWhereRaw("first_name ILIKE '" . $value . "%'")
+                     ->orWhereRaw("email ILIKE '" . $value . "%'")
+                     ->orWhereRaw("CONCAT(first_name, ' ', last_name) ILIKE '" . $value . "%'");
     }
 
     /**
@@ -240,5 +267,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function favoriteProjects()
     {
         return $this->belongsToMany('App\Models\Project', 'user_favorite_project')->withTimestamps();
+    }
+
+    /**
+     * Check if user has the specified permission in the provided organization
+     *
+     * @param $permission
+     * @param $organization
+     * @return boolean
+     */
+    public function hasPermissionTo($permission, $organization)
+    {
+        $userRepository = resolve(UserRepositoryInterface::class);
+        return $userRepository->hasPermissionTo($this, $permission, $organization);
     }
 }

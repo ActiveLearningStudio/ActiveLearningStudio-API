@@ -4,18 +4,25 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\GoogleLoginRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\SsoLoginRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
+use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
-use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -29,7 +36,11 @@ class AuthController extends Controller
     private $userRepository;
     private $userLoginRepository;
     private $invitedTeamUserRepository;
+    private $invitedOrganizationUserRepository;
+    private $invitedGroupUserRepository;
     private $teamRepository;
+    private $groupRepository;
+    private $organizationRepository;
 
     /**
      * AuthController constructor.
@@ -37,19 +48,30 @@ class AuthController extends Controller
      * @param UserRepositoryInterface $userRepository
      * @param UserLoginRepositoryInterface $userLoginRepository
      * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+     * @param InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
+     * @param InvitedGroupUserRepositoryInterface $invitedGroupUserRepository
      * @param TeamRepositoryInterface $teamRepository
+     * @param GroupRepositoryInterface $groupRepository
+     * @param OrganizationRepositoryInterface $organizationRepository
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
         UserLoginRepositoryInterface $userLoginRepository,
         InvitedTeamUserRepositoryInterface $invitedTeamUserRepository,
-        TeamRepositoryInterface $teamRepository
-    )
-    {
+        InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
+        InvitedGroupUserRepositoryInterface $invitedGroupUserRepository,
+        TeamRepositoryInterface $teamRepository,
+        GroupRepositoryInterface $groupRepository,
+        OrganizationRepositoryInterface $organizationRepository
+    ) {
         $this->userRepository = $userRepository;
         $this->userLoginRepository = $userLoginRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
+        $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
+        $this->invitedGroupUserRepository = $invitedGroupUserRepository;
         $this->teamRepository = $teamRepository;
+        $this->groupRepository = $groupRepository;
+        $this->organizationRepository = $organizationRepository;
     }
 
     /**
@@ -59,8 +81,10 @@ class AuthController extends Controller
      * @bodyParam last_name string required Last name of a user Example: Doe
      * @bodyParam email string required Email of a user Example: john.doe@currikistudio.org
      * @bodyParam password string required Password Example: Password123
-     * @bodyParam organization_name string Organization name of a user Example: Curriki
-     * @bodyParam job_title string Job title of a user Example: Developer
+     * @bodyParam organization_name string required Organization name of a user Example: Curriki
+     * @bodyParam organization_type string required Organization type of a user Example: Nonprofit
+     * @bodyParam job_title string required Job title of a user Example: Developer
+     * @bodyParam domain string required Organization domain user is registering for Example: currikistudio
      *
      * @response 201 {
      *   "message": "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
@@ -83,7 +107,7 @@ class AuthController extends Controller
         $data['remember_token'] = Str::random(64);
         $data['email_verified_at'] = now();
 
-        $user = $this->userRepository->create($data);
+        $user = $this->userRepository->create(Arr::except($data, ['domain']));
 
         if ($user) {
             $invited_users = $this->invitedTeamUserRepository->searchByEmail($data['email']);
@@ -99,11 +123,42 @@ class AuthController extends Controller
 
             event(new Registered($user));
 
-//            return response([
-//                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!<br>Check your email and follow the instructions to verify your account!"
-//            ], 201);
+            $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($data['email']);
+            if ($invited_users->isNotEmpty()) {
+                foreach ($invited_users as $invited_user) {
+                    $organization = $this->organizationRepository->find($invited_user->organization_id);
+                    if ($organization) {
+                        $exist_user_id = $organization->users()->where('user_id', $user->id)->first();
+                        if (!$exist_user_id) {
+                            $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                        }
+                        $this->invitedOrganizationUserRepository->delete($data['email']);
+                    }
+                }
+            } else {
+                $organization = $this->organizationRepository->find(1);
+                if ($organization) {
+                    $exist_user_id = $organization->users()->where('user_id', $user->id)->first();
+                    if (!$exist_user_id) {
+                        $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    }
+                }
+            }
+
+            $invited_users = $this->invitedGroupUserRepository->searchByEmail($data['email']);
+            if ($invited_users->isNotEmpty()) {
+                foreach ($invited_users as $invited_user) {
+                    $group = $this->groupRepository->find($invited_user->group_id);
+                    if ($group) {
+                        $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                        $this->invitedGroupUserRepository->delete($data['email']);
+                    }
+                }
+            }
+
             return response([
-                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
+                'message' => "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!",
             ], 201);
         }
 
@@ -117,12 +172,19 @@ class AuthController extends Controller
      *
      * @bodyParam email string required The email of a user Example: john.doe@currikistudio.org
      * @bodyParam password string required The password corresponded to the email Example: Password123
+     * @bodyParam domain string required Organization domain to get data for Example: curriki
      *
      * @responseFile responses/user/user-with-token.json
      *
      * @response 400 {
      *   "errors": [
      *     "Invalid Credentials."
+     *   ]
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid Domain."
      *   ]
      * }
      *
@@ -138,6 +200,8 @@ class AuthController extends Controller
     public function login(LoginRequest $loginRequest)
     {
         $data = $loginRequest->validated();
+        $domain = isset($data['domain']) ? $data['domain'] : null;
+        unset($data['domain']);
 
         if (!auth()->attempt($data)) {
             return response([
@@ -146,6 +210,12 @@ class AuthController extends Controller
         }
 
         $user = auth()->user();
+
+        if (!$organization = $user->organizations()->where('domain', $domain)->first()) {
+            return response([
+                'errors' => ['Invalid Domain.'],
+            ], 400);
+        }
 
         if (!$user->email_verified_at) {
             return response([
@@ -195,7 +265,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function loginWithGoogle(Request $request)
+    public function loginWithGoogle(GoogleLoginRequest $request)
     {
         $client = new \Google_Client();
         $client->setClientId(config('google.gapi_client_id'));
@@ -213,6 +283,53 @@ class AuthController extends Controller
                     'remember_token' => Str::random(64),
                     'email_verified_at' => now(),
                 ]);
+
+                if ($user) {
+                    $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
+                    if ($invited_users) {
+                        foreach ($invited_users as $invited_user) {
+                            $team = $this->teamRepository->find($invited_user->team_id);
+                            if ($team) {
+                                $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                $this->invitedTeamUserRepository->delete($user->email);
+                            }
+                        }
+                    }
+
+                    $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
+                    if ($invited_users->isNotEmpty()) {
+                        foreach ($invited_users as $invited_user) {
+                            $organization = $this->organizationRepository->find($invited_user->organization_id);
+                            if ($organization) {
+                                $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                                $this->invitedOrganizationUserRepository->delete($user->email);
+                            }
+                        }
+                    } else {
+                        $organization = $this->organizationRepository->find(1);
+                        if ($organization) {
+                            $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                            $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                        }
+                    }
+
+                    $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
+                    if ($invited_users->isNotEmpty()) {
+                        foreach ($invited_users as $invited_user) {
+                            $group = $this->groupRepository->find($invited_user->group_id);
+                            if ($group) {
+                                $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                $this->invitedGroupUserRepository->delete($user->email);
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (!$organization = $user->organizations()->where('domain', $request->domain)->first()) {
+                    return response([
+                        'errors' => ['Invalid Domain.'],
+                    ], 400);
+                }
             }
             $user->gapi_access_token = $request->tokenObj;
             $user->save();
@@ -233,6 +350,124 @@ class AuthController extends Controller
         return response([
             'errors' => ['Unable to login with Google.'],
         ], 400);
+    }
+
+    /**
+     * Login with SSO
+     *
+     * @bodyParam sso_info string required The base64encode query params Example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Unable to login with SSO."
+     *   ]
+     * }
+     *
+     * @param SsoLoginRequest $request
+     * @return Response
+     */
+    public function ssoLogin(SsoLoginRequest $request)
+    {
+        try {
+            $data = $request->validated();
+            parse_str(base64_decode($data['sso_info']), $result);
+            if ($result) {
+                $user = $this->userRepository->findByField('email', $result['user_email']);
+                if (!$user) {
+                    $password = Str::random(10);
+                    $user = $this->userRepository->create([
+                        'first_name' => $result['first_name'],
+                        'last_name' => $result['last_name'],
+                        'email' => $result['user_email'],
+                        'password' => Hash::make($password),
+                        'remember_token' => Str::random(64),
+                        'email_verified_at' => now(),
+                    ]);
+                    if ($user) {
+                        $user->ssoLogin()->create([
+                            'user_id' => $user->id,
+                            'provider' => $result['tool_platform'],
+                            'uniqueid' => $result['user_key'],
+                            'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                            'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
+                            'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                        ]);
+                        $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
+                        if ($invited_users) {
+                            foreach ($invited_users as $invited_user) {
+                                $team = $this->teamRepository->find($invited_user->team_id);
+                                if ($team) {
+                                    $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                    $this->invitedTeamUserRepository->delete($user->email);
+                                }
+                            }
+                        }
+
+                        $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
+                        if ($invited_users->isNotEmpty()) {
+                            foreach ($invited_users as $invited_user) {
+                                $organization = $this->organizationRepository->find($invited_user->organization_id);
+                                if ($organization) {
+                                    $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                                    $this->invitedOrganizationUserRepository->delete($user->email);
+                                }
+                            }
+                        } else {
+                            $organization = $this->organizationRepository->find(1);
+                            if ($organization) {
+                                $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                                $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                            }
+                        }
+
+                        $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
+                        if ($invited_users->isNotEmpty()) {
+                            foreach ($invited_users as $invited_user) {
+                                $group = $this->groupRepository->find($invited_user->group_id);
+                                if ($group) {
+                                    $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                                    $this->invitedGroupUserRepository->delete($user->email);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $sso_login = $user->ssoLogin()->where(['user_id' => $user->id, 'provider' => $result['tool_platform'], 'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']])->first();
+                    if (!$sso_login) {
+                        $user->ssoLogin()->create([
+                            'user_id' => $user->id,
+                            'provider' => $result['tool_platform'],
+                            'uniqueid' => $result['user_key'],
+                            'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                            'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
+                            'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                        ]);
+                    }
+                }
+
+                $accessToken = $user->createToken('auth_token')->accessToken;
+
+                $this->userLoginRepository->create([
+                    'user_id' => $user->id,
+                    'ip_address' => $request->ip(),
+                ]);
+
+                return response([
+                    'user' => new UserResource($user),
+                    'access_token' => $accessToken,
+                ], 200);
+            }
+            return response([
+                'errors' => ['Unable to login with SSO.'],
+            ], 400);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return response([
+                'errors' => ['Unable to login with SSO.'],
+            ], 400);
+        }
     }
 
     /**
@@ -310,5 +545,6 @@ class AuthController extends Controller
             'access_token' => $user->createToken('auth_token')->accessToken,
         ], 200);
     }
-
 }
+
+

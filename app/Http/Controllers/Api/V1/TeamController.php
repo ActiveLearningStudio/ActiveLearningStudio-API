@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\TeamCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\TeamAddMemberRequest;
 use App\Http\Requests\V1\TeamAddProjectRequest;
@@ -14,17 +13,14 @@ use App\Http\Requests\V1\TeamRemoveProjectRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
+use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
-use App\Notifications\InviteToTeamNotification;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
-use App\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @group 14. Team
@@ -38,8 +34,6 @@ class TeamController extends Controller
     private $teamRepository;
     private $userRepository;
     private $projectRepository;
-    private $invitedTeamUserRepository;
-
     /**
      * TeamController constructor.
      *
@@ -51,20 +45,18 @@ class TeamController extends Controller
     public function __construct(
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
-        ProjectRepositoryInterface $projectRepository,
-        InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+        ProjectRepositoryInterface $projectRepository
     )
     {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
-        $this->invitedTeamUserRepository = $invitedTeamUserRepository;
-
-        // $this->authorizeResource(Team::class, 'teams');
     }
 
     /**
      * Get All Teams
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * Get a list of the teams of a user.
      *
@@ -72,15 +64,13 @@ class TeamController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Organization $suborganization)
     {
-        $authenticated_user = auth()->user();
+        $this->authorize('viewAny', [Team::class, $suborganization]);
 
-        if ($authenticated_user->isAdmin()) {
-            $teams = $this->teamRepository->all();
-        } else {
-            $teams = $authenticated_user->teams;
-        }
+        $user_id = auth()->user()->id;
+
+        $teams = $this->teamRepository->getTeams($suborganization->id, $user_id);
 
         $teamDetails = [];
         foreach ($teams as $team) {
@@ -134,6 +124,8 @@ class TeamController extends Controller
      *
      * Create a new team in storage for a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
      *
@@ -148,15 +140,17 @@ class TeamController extends Controller
      * @param TeamRequest $teamRequest
      * @return Response
      */
-    public function store(TeamRequest $teamRequest)
+    public function store(TeamRequest $teamRequest, Organization $suborganization)
     {
+        $this->authorize('create', [Team::class, $suborganization]);
+
         $data = $teamRequest->validated();
 
         $auth_user = auth()->user();
         $team = $auth_user->teams()->create($data, ['role' => 'owner']);
 
         if ($team) {
-            $this->teamRepository->createTeam($team, $data);
+            $this->teamRepository->createTeam($suborganization, $team, $data);
 
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
@@ -173,6 +167,7 @@ class TeamController extends Controller
      *
      * Get the specified team detail.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
      *
      * @responseFile 201 responses/team/team.json
@@ -180,8 +175,10 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function show(Team $team)
+    public function show(Organization $suborganization, Team $team)
     {
+        $this->authorize('view', [Team::class, $suborganization]);
+
         return response([
             'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
         ], 200);
@@ -264,17 +261,18 @@ class TeamController extends Controller
      * }
      *
      * @param TeamInviteMembersRequest $inviteMembersRequest
+     * @param Organization $suborganization
      * @param Team $team
      * @return Response
      */
-    public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Team $team)
+    public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Organization $suborganization,  Team $team)
     {
         $data = $inviteMembersRequest->validated();
         $auth_user = auth()->user();
         $owner = $team->getUserAttribute();
 
         if ($owner->id === $auth_user->id) {
-            $invited = $this->teamRepository->inviteMembers($team, $data);
+            $invited = $this->teamRepository->inviteMembers($suborganization, $team, $data);
 
             if ($invited) {
                 return response([
@@ -329,13 +327,14 @@ class TeamController extends Controller
         if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id) {
             $user = $this->userRepository->find($data['id']);
 
+            // delete invited outside user if not registered
+            if (isset($data['email']) && $data['email'] != '') {
+                $this->teamRepository->removeInvitedUser($team, $data['email']);
+            }
+
             if ($user) {
                 $team->users()->detach($user);
-
                 $this->teamRepository->removeTeamProjectUser($team, $user);
-
-                // TODO: need to add remove notification
-                // $user->notify(new InviteToTeamNotification($auth_user, $team));
 
                 return response([
                     'message' => 'User has been removed from the team successfully.',
@@ -586,6 +585,7 @@ class TeamController extends Controller
      *
      * Update the specified team of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
@@ -602,13 +602,22 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function update(TeamUpdateRequest $teamUpdateRequest, Team $team)
+    public function update(TeamUpdateRequest $teamUpdateRequest, Organization $suborganization, Team $team)
     {
+        $this->authorize('update', [Team::class, $suborganization]);
+
         $data = $teamUpdateRequest->validated();
 
-        $is_updated = $this->teamRepository->update($data, $team->id);
+        $teamData = [];
+        $teamData['name'] = $data['name'];
+        $teamData['description'] = $data['description'];
+
+        $is_updated = $this->teamRepository->update($teamData, $team->id);
 
         if ($is_updated) {
+
+            $this->teamRepository->updateTeam($suborganization, $team, $data);
+
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
             ], 200);
@@ -624,6 +633,7 @@ class TeamController extends Controller
      *
      * Remove the specified team of a user.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
      *
      * @response {
@@ -639,8 +649,10 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function destroy(Team $team)
+    public function destroy(Organization $suborganization, Team $team)
     {
+        $this->authorize('delete', [Team::class, $suborganization]);
+
         $is_deleted = $this->teamRepository->delete($team->id);
 
         if ($is_deleted) {

@@ -68,7 +68,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $searchedModels = $this->model->searchForm()
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
-            ->indexing([3])
+            ->indexing([config('constants.indexing-approved')])
+            ->organizationIds(Arr::get($data, 'organizationIds', []))
+            ->organizationVisibilityTypeIds([config('constants.public-organization-visibility-type-id')])
             ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
             ->from(Arr::get($data, 'from', 0))
             ->size(Arr::get($data, 'size', 10))
@@ -143,6 +145,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     'field' => '_index',
                 ]
             ])
+            ->organizationIds(Arr::get($data, 'organizationIds', []))
+            ->organizationVisibilityTypeIds(Arr::get($data, 'organizationVisibilityTypeIds', []))
             ->type(Arr::get($data, 'type', 0))
             ->startDate(Arr::get($data, 'startDate', 0))
             ->endDate(Arr::get($data, 'endDate', 0))
@@ -323,7 +327,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     public function getPlaylistIsPublicValue($playlistId)
     {
         $playlist = Playlist::where('id', $playlistId)->with('project')->first();
-        return ($playlist->project->indexing === 3) ? $playlist : false;
+        return ($playlist->project->indexing === config('constants.indexing-approved')) ? $playlist : false;
     }
 
     /**
@@ -373,11 +377,13 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
         ];
 
+        $user = User::where('email', $request->input('userEmail'))->first();
+
         // Check LMS settings for authorization when searching private projects
         if (empty($data['indexing'])) {
             // There can be many LmsSettings for different users sharing the same
             // lti_client_id. Need to find the user first
-            $user = User::where('email', $request->input('userEmail'))->first();
+
             $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))
                 ->where('user_id', $user->id)
                 ->first();

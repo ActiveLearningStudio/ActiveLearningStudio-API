@@ -71,10 +71,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $authUser
      * @param Project $project
      * @param string $token
+     * @param int $organization_id
      * @return Response
      * @throws GeneralException
      */
-    public function clone($authUser, Project $project, $token)
+    public function clone($authUser, Project $project, $token, $organization_id = null)
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
@@ -94,6 +95,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'is_user_starter' => (bool) $project->starter_project, // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
+
+            if ($organization_id) {
+                $data['organization_id'] = $organization_id;
+                $data['organization_visibility_type_id'] = config('constants.private-organization-visibility-type-id');
+            }
 
             return \DB::transaction(function () use ($authUser, $data, $project, $token) {
                 $cloned_project = $authUser->projects()->create($data, ['role' => 'owner']);
@@ -228,12 +234,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * To fetch recent public project
      *
      * @param $limit
+     * @param $organization_id
      * @return Project $projects
      */
-    public function fetchRecentPublic($limit)
+    public function fetchRecentPublic($limit, $organization_id)
     {
+        $authenticated_user = auth()->user();
         // 3 is for indexing approved - see Project Model @indexing property
-        return $this->model->where('indexing', 3)->orderBy('created_at', 'desc')->limit($limit)->get();
+        return $this->model->where('indexing', 3)->where('organization_id', $organization_id)->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 
     /**
@@ -255,11 +263,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function populateOrderNumber()
     {
         $users = User::all();
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $projects = $user->projects()->orderBy('created_at')->get();
-            if(!empty($projects)) {
+            if (!empty($projects)) {
                 $order = 1;
-                foreach($projects as $project) {
+                foreach ($projects as $project) {
                    $project->order = $order;
                    $project->save();
                    $order++;
@@ -335,10 +343,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * @param $authenticated_user
      * @param $project
+     * @param $organization_id
      * @return bool
      */
-    public function favoriteUpdate($authenticated_user, $project)
+    public function favoriteUpdate($authenticated_user, $project, $organization_id)
     {
-        return $authenticated_user->favoriteProjects()->toggle([$project->id]);
+        if ($authenticated_user->favoriteProjects()->where('id', $project->id)->wherePivot('organization_id', $organization_id)->first()) {
+            return $authenticated_user->favoriteProjects()->wherePivot('organization_id', $organization_id)->detach($project->id);
+        } else {
+            return $authenticated_user->favoriteProjects()->attach($project->id, ['organization_id' => $organization_id]);
+        }
     }
 }

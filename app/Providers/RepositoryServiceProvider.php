@@ -28,6 +28,8 @@ use App\Repositories\Project\ProjectRepository;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepository;
 use App\Repositories\Team\TeamRepositoryInterface;
+use App\Repositories\Group\GroupRepository;
+use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UserLmsSettings\UserLmsSettingsRepository;
@@ -38,6 +40,8 @@ use App\Repositories\GcClasswork\GcClassworkRepository;
 use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepository;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
+use App\Repositories\InvitedGroupUser\InvitedGroupUserRepository;
+use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\LRSStatementsData\LRSStatementsDataRepository;
 use App\Repositories\LRSStatementsData\LRSStatementsDataRepositoryInterface;
 use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
@@ -47,6 +51,12 @@ use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepository
 use App\Repositories\CurrikiGo\Outcome\OutcomeRepository;
 use App\Repositories\CurrikiGo\Outcome\OutcomeRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\Organization\OrganizationRepository;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
+use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepository;
+use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
+use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepository;
+use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -71,13 +81,18 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
         $this->app->bind(UserLoginRepositoryInterface::class, UserLoginRepository::class);
         $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
+        $this->app->bind(GroupRepositoryInterface::class, GroupRepository::class);
         $this->app->bind(OrganizationTypeRepositoryInterface::class, OrganizationTypeRepository::class);
         $this->app->bind(UserLmsSettingsRepositoryInterface::class, UserLmsSettingsRepository::class);
         $this->app->bind(GcClassworkRepositoryInterface::class, GcClassworkRepository::class);
         $this->app->bind(InvitedTeamUserRepositoryInterface::class, InvitedTeamUserRepository::class);
+        $this->app->bind(InvitedGroupUserRepositoryInterface::class, InvitedGroupUserRepository::class);
         $this->app->bind(LRSStatementsDataRepositoryInterface::class, LRSStatementsDataRepository::class);
         $this->app->bind(ContentUserDataGoRepositoryInterface::class, ContentUserDataGoRepository::class);
         $this->app->bind(LRSStatementsSummaryDataRepositoryInterface::class, LRSStatementsSummaryDataRepository::class);
+        $this->app->bind(OrganizationRepositoryInterface::class, OrganizationRepository::class);
+        $this->app->bind(InvitedOrganizationUserRepositoryInterface::class, InvitedOrganizationUserRepository::class);
+        $this->app->bind(OrganizationPermissionTypeRepositoryInterface::class, OrganizationPermissionTypeRepository::class);
         $this->app->bind(OutcomeRepositoryInterface::class, OutcomeRepository::class);
     }
 

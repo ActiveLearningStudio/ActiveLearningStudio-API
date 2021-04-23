@@ -1,0 +1,19 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "admin",
+            "display_name": "Administrator"
+        },
+        {
+            "id": 3,
+            "name": "member",
+            "display_name": "Member"
+        },
+        {
+            "id": 2,
+            "name": "course_creator",
+            "display_name": "Course Creator"
+        }
+    ]
+}

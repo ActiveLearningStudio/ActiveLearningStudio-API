@@ -9,6 +9,7 @@ use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\OrganizationResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
 use App\User;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\NotificationListResource;
+use Illuminate\Validation\Rule;
 
 /**
  * @group 2. User
@@ -430,6 +432,76 @@ class UserController extends Controller
 
         return response([
             'errors' => ['Failed to delete notification.'],
+        ], 500);
+    }
+
+    /**
+     * Get All User Organizations
+     *
+     * Get a list of the users organizations
+     *
+     * @responseFile responses/organization/organizations.json
+     *
+     * @return Response
+     */
+    public function getOrganizations()
+    {
+        return OrganizationResource::collection(auth()->user()->organizations()->with('parent')->get());
+    }
+
+    /**
+     * Set Default Organization
+     *
+     * Set default organization for the user.
+     *
+     * @bodyParam organization_id int required The id of the organization to be set as default Example: 1
+     *
+     * @response {
+     *   "message": "Default organization has been set successfully."
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid request."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to set default organization."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function setDefaultOrganization(Request $request)
+    {
+        $authenticated_user = auth()->user();
+
+        $data = $request->validate([
+            'organization_id' => [
+                'required',
+                Rule::exists('organization_user_roles')->where(function ($query) use ($authenticated_user) {
+                    $query->where('user_id', $authenticated_user->id);
+                }),
+            ],
+        ]);
+
+        $authenticated_user = auth()->user();
+
+        $is_updated = $this->userRepository->update([
+            'default_organization' => $data['organization_id'],
+        ], $authenticated_user->id);
+
+        if ($is_updated) {
+            return response([
+                'message' => 'Default organization has been set successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to set default organization.'],
         ], 500);
     }
 
