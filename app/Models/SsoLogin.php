@@ -19,7 +19,7 @@ class SsoLogin extends Model
         'uniqueid',
         'tool_consumer_instance_name',
         'tool_consumer_instance_guid',
-        'custom_school'
+        'custom_school',
     ];
 
     /**

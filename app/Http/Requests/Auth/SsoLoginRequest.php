@@ -24,7 +24,7 @@ class SsoLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'sso_info' => 'required|string'
+            'sso_info' => 'required|string',
         ];
     }
 }

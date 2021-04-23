@@ -15,7 +15,7 @@ class CreateSsoLoginsTable extends Migration
     {
         Schema::create('sso_logins', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable()->default(1);
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('provider');
             $table->string('token')->nullable();
@@ -26,7 +26,7 @@ class CreateSsoLoginsTable extends Migration
             $table->string('custom_school')->nullable();
             $table->timestamps();
 
-            $table->unique(['provider','uniqueid','tool_consumer_instance_guid']);
+            $table->unique(['provider', 'uniqueid', 'tool_consumer_instance_guid']);
         });
     }
 
