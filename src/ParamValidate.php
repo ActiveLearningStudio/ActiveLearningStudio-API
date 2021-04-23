@@ -91,7 +91,7 @@ class ParamValidate
 
     public static function getKeyInCustomFields($session, $key) {
         $custom_fields = self::getCustomFieldsInfo($session);
-        return property_exists($custom_fields, $key) ? $custom_fields->{$key} : null;
+        return ($custom_fields && property_exists($custom_fields, $key)) ? $custom_fields->{$key} : null;
     }
 
 
