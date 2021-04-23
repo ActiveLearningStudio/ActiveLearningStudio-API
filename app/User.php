@@ -188,6 +188,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany('App\Models\Organization', 'organization_user_roles')->using('App\Models\OrganizationUserRole')->withPivot('organization_role_type_id')->withTimestamps();
     }
 
+    /**
+     * The SSO Logins that belongs to the user
+     */
+    public function ssoLogin()
+    {
+        return $this->hasMany('App\Models\SsoLogin', 'user_id');
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin';
