@@ -1,14 +1,19 @@
 <?php
 namespace CurrikiTsugi;
 
+use \Tsugi\Util\LTIConstants;
+
 class ParamValidate
 {
     public static function playlistInCustom($session)
     {
-        $lti_jwt = $session['tsugi_jwt'];
-        $lti_claim_custom_url = "https://purl.imsglobal.org/spec/lti/claim/custom";
-        $lti_claim_custom = $lti_jwt->body->{$lti_claim_custom_url};
-        return property_exists($lti_claim_custom, 'playlist') ? $lti_claim_custom->playlist : null;
+        if (isset($session['tsugi_jwt'])) {
+            $lti_jwt = $session['tsugi_jwt'];
+            $lti_claim_custom_url = "https://purl.imsglobal.org/spec/lti/claim/custom";
+            $lti_claim_custom = $lti_jwt->body->{$lti_claim_custom_url};
+            return property_exists($lti_claim_custom, 'playlist') ? $lti_claim_custom->playlist : null;
+        }
+        return null;
     }
 
     public static function playlistInQueryString($session)
@@ -18,10 +23,13 @@ class ParamValidate
 
     public static function projectInCustom($session)
     {
-        $lti_jwt = $session['tsugi_jwt'];
-        $lti_claim_custom_url = "https://purl.imsglobal.org/spec/lti/claim/custom";
-        $lti_claim_custom = $lti_jwt->body->{$lti_claim_custom_url};
-        return property_exists($lti_claim_custom, 'project') ? $lti_claim_custom->project : null;
+        if (isset($session['tsugi_jwt'])) {
+            $lti_jwt = $session['tsugi_jwt'];
+            $lti_claim_custom_url = "https://purl.imsglobal.org/spec/lti/claim/custom";
+            $lti_claim_custom = $lti_jwt->body->{$lti_claim_custom_url};
+            return property_exists($lti_claim_custom, 'project') ? $lti_claim_custom->project : null;
+        }
+        return null;
     }
 
     public static function projectInQueryString($session)
@@ -31,10 +39,13 @@ class ParamValidate
 
     public static function activityInCustom($session)
     {
-        $lti_jwt = $session['tsugi_jwt'];
-        $lti_claim_custom_url = "https://purl.imsglobal.org/spec/lti/claim/custom";
-        $lti_claim_custom = $lti_jwt->body->{$lti_claim_custom_url};
-        return property_exists($lti_claim_custom, 'activity') ? $lti_claim_custom->activity : null;
+        if (isset($session['tsugi_jwt'])) {
+            $lti_jwt = $session['tsugi_jwt'];
+            $lti_claim_custom_url = "https://purl.imsglobal.org/spec/lti/claim/custom";
+            $lti_claim_custom = $lti_jwt->body->{$lti_claim_custom_url};
+            return property_exists($lti_claim_custom, 'activity') ? $lti_claim_custom->activity : null;
+        }
+        return null;
     }
 
     public static function activityInQueryString($session)
@@ -44,10 +55,18 @@ class ParamValidate
 
     public static function toolPlatformInfo($session)
     {
-        $lti_jwt = $session['tsugi_jwt'];
-        $lti_claim_tool_platform = "https://purl.imsglobal.org/spec/lti/claim/tool_platform";
-        $tool_family_code = $lti_jwt->body->{$lti_claim_tool_platform};
-        return property_exists($tool_family_code, 'product_family_code') ? $tool_family_code->product_family_code : null;
+        if (isset($session['tsugi_jwt'])) {
+            $lti_jwt = $session['tsugi_jwt'];
+            $lti_claim_tool_platform = "https://purl.imsglobal.org/spec/lti/claim/tool_platform";
+            $tool_family_code = $lti_jwt->body->{$lti_claim_tool_platform};
+            return property_exists($tool_family_code, 'product_family_code') ? $tool_family_code->product_family_code : null;
+        } else {
+            // get from LTI post
+            if (isset($session['lti_post'])) {
+                return $session['lti_post'][LTIConstants::TOOL_CONSUMER_INFO_PRODUCT_FAMILY_CODE];
+            }
+        }
+        return null;
     }
 
     public static function isCanvas($session) {
@@ -62,9 +81,12 @@ class ParamValidate
 
     public static function getCustomFieldsInfo($session)
     {
-        $lti_jwt = $session['tsugi_jwt'];
-        $lti_claim_custom = "https://purl.imsglobal.org/spec/lti/claim/custom";
-        return property_exists($lti_jwt->body, $lti_claim_custom) ? $lti_jwt->body->{$lti_claim_custom} : null;
+        if (isset($session['tsugi_jwt'])) {
+            $lti_jwt = $session['tsugi_jwt'];
+            $lti_claim_custom = "https://purl.imsglobal.org/spec/lti/claim/custom";
+            return property_exists($lti_jwt->body, $lti_claim_custom) ? $lti_jwt->body->{$lti_claim_custom} : null;
+        }
+        return null;
     }
 
     public static function getKeyInCustomFields($session, $key) {

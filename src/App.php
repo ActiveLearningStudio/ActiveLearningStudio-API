@@ -3,6 +3,7 @@ namespace CurrikiTsugi;
 use Tsugi\Core\LTIX;
 use \Tsugi\Core\Result;
 use \Tsugi\Util\U;
+use \Tsugi\Util\LTIConstants;
 use \Tsugi\Grades\GradeUtil;
 use CurrikiTsugi\Interfaces\ControllerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,8 +35,7 @@ class App
             $course_id = ParamValidate::getKeyInCustomFields($_SESSION, 'course_id');
             $custom_email_id = ParamValidate::getKeyInCustomFields($_SESSION, 'person_email_primary');
             
-            //    $LTI->var_dump();
-            //    exit;
+            // $LTI->var_dump();
             // Obtain User ID
             $user_id = $LTI->user->id; //TSUGI member ID
             // Obtain User Email
@@ -60,7 +60,7 @@ class App
                 $playlist_studio_link = CURRIKI_STUDIO_HOST . "/playlist/$playlist_id/preview/lti";
                 $redirect_to_studio_url = $playlist_studio_link . "?" . $lti_token_params;
                 header("Location: $redirect_to_studio_url");
-            } elseif ($activity_id) { // && $playlist_id
+            } elseif ($activity_id) { 
                 // Check if the grade is being passedback
                 $is_gradepassback = (int) U::get($_GET, "gpb");
                 if ($is_gradepassback) {
@@ -105,19 +105,6 @@ class App
 
                     $response->send();
                     exit(0);
-/*
-                    echo <<<EOT
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                    <title>TSUGI</title>
-                    </head>
-                    <body>
-                    <h2><center>$output</center></h2>
-                    </body>
-                    </html>
-EOT;
-                    die();*/
                 }
                 // get the result id
                 $submission_id = $LTI->result->id;
@@ -132,23 +119,38 @@ EOT;
                 
                 header("Location: $redirect_to_studio_url");
             } else {
-                /* echo "<h1>Curriki LTI Tool</h1>";
-                echo "<pre>"; 
-                $LTI->var_dump();
-                $lti_data = $_SESSION['lti'];                
-                $grade_params['issuer_client'] = $lti_data['issuer_client'];
-                $grade_params['lti13_privkey'] = $lti_data['lti13_privkey'];
-                $grade_params['lti13_lineitem'] = $lti_data['lti13_lineitem'];
-                $grade_params['lti13_token_url'] = $lti_data['lti13_token_url'];
-                $grade_params['lti13_token_audience'] = $lti_data['lti13_token_audience'];
-                $grade_params['lti13_pubkey'] = $lti_data['lti13_pubkey'];                
-                $grade_params['subject_key'] = $lti_data['subject_key'];                
-                $grade_params['note'] = "Hey You Graded";                
                 
-                //var_dump($LTI->result->gradeSend(0.61, $grade_params));
-                var_dump($LTI->result->gradeSend(0.61));*/
-                // Nothing to show here.
+                // Single Sign On LTI request
+                // we should move this to a new 
+                $lti_data = $LTI->ltiParameterArray();    
+                $request_data = [];
+                foreach (['user_key', 'user_email', 'user_displayname'] as $param) {
+                    $request_data[$param] = $lti_data[$param];
+                }  
                 
+                $first_name = $LTI->ltiRawParameter(LTIConstants::LIS_PERSON_NAME_FAMILY, false);
+                $last_name = $LTI->ltiRawParameter(LTIConstants::LIS_PERSON_NAME_GIVEN, false);
+                $person_sourcedid = $LTI->ltiRawParameter(LTIConstants::LIS_PERSON_SOURCEDID, false);
+                $tool_platform = $LTI->ltiRawParameter(LTIConstants::TOOL_CONSUMER_INFO_PRODUCT_FAMILY_CODE, false);
+                $tool_consumer_instance_name = $LTI->ltiRawParameter(LTIConstants::TOOL_CONSUMER_INSTANCE_NAME, false);
+                $tool_consumer_instance_guid = $LTI->ltiRawParameter(LTIConstants::TOOL_CONSUMER_INSTANCE_GUID, false);
+                $custom_school = $LTI->ltiRawParameter('custom_' . $tool_platform . '_schoolname', false);
+                $request_data['first_name'] = $first_name;
+                $request_data['last_name'] = $last_name;
+                $request_data['tool_platform'] = $tool_platform;
+                $request_data['tool_consumer_instance_name'] = $tool_consumer_instance_name;
+                $request_data['tool_consumer_instance_guid'] = $tool_consumer_instance_guid;
+                $request_data['custom_' . $tool_platform . '_school'] = $custom_school;
+
+                $build_request_data = http_build_query($request_data);
+
+                // encode user information.
+                $lti_user_info = base64_encode($build_request_data);
+                $studio_login_link = CURRIKI_STUDIO_HOST . "/lti-sso?sso_info=$lti_user_info";
+                
+                // Redirect User to the login page.
+                header("Location: $studio_login_link");
+                exit(0);
             }
 
         }
