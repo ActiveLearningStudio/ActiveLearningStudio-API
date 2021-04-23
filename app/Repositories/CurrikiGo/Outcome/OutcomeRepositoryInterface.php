@@ -6,7 +6,9 @@ interface OutcomeRepositoryInterface
 {
     /**
      * Get the outcome summary for a student
-     * @param User $user
+     * @param string $actor
+     * @param string $activity
+     * @return array
      */
     public function getStudentOutcome($actor, $activity);
 }
