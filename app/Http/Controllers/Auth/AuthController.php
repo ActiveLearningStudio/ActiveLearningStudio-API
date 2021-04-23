@@ -365,7 +365,7 @@ class AuthController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param SsoLoginRequest $request
      * @return Response
      */
     public function ssoLogin(SsoLoginRequest $request)
