@@ -323,7 +323,6 @@ class AuthController extends Controller
                             }
                         }
                     }
-
                 }
             } else {
                 if (!$organization = $user->organizations()->where('domain', $request->domain)->first()) {
@@ -369,10 +368,10 @@ class AuthController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function Ssologin(SsoLoginRequest $request)
+    public function ssoLogin(SsoLoginRequest $request)
     {
         try {
-                parse_str(base64_decode($request->sso_info), $result);
+            parse_str(base64_decode($request->sso_info), $result);
             if ($result) {
                 $user = $this->userRepository->findByField('email', $result['user_email']);
                 if (!$user) {
@@ -432,7 +431,6 @@ class AuthController extends Controller
                                 }
                             }
                         }
-
                     }
                 } else {
                     $sso_login = $user->ssoLogin()->where(['user_id' => $user->id, 'provider' => $result['tool_platform'], 'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']])->first();
@@ -546,5 +544,6 @@ class AuthController extends Controller
             'access_token' => $user->createToken('auth_token')->accessToken,
         ], 200);
     }
-
 }
+
+
