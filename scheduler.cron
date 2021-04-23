@@ -1,0 +1,2 @@
+* * * * * curl -s 'http://localhost:8000/api/v1/xapi-extract' >> /var/log/cron.log 2>&1
+* * * * * php /var/www/html/artisan schedule:run >> /dev/null 2>&1
