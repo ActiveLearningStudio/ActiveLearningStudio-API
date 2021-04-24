@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # service apache2 restart &
+chmod 777 -R /var/www/html/storage
 php /var/www/html/artisan config:cache
 php /var/www/html/artisan storage:link
 php /var/www/html/artisan passport:install
