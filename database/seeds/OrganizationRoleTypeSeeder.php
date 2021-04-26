@@ -16,7 +16,7 @@ class OrganizationRoleTypeSeeder extends Seeder
             'display_name' => 'Administrator'
         ]);
 
-        DB::table('organization_role_types')->insert([
+        $courseCreatorId = DB::table('organization_role_types')->insertGetId([
             'name' => 'course_creator',
             'display_name' => 'Course Creator'
         ]);
@@ -30,5 +30,15 @@ class OrganizationRoleTypeSeeder extends Seeder
             'name' => 'self_registered',
             'display_name' => 'Self Registered'
         ]);
+
+        $users = DB::table('users')->select('id')->get();
+
+        foreach ($users as $user) {
+            DB::table('organization_user_roles')->insert([
+                'organization_id' => 1,
+                'user_id' => $user->id,
+                'organization_role_type_id' => $courseCreatorId
+            ]);
+        }
     }
 }

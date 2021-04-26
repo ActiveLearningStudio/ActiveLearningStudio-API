@@ -48,6 +48,8 @@ use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInte
 use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepository;
 use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepository;
 use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepositoryInterface;
+use App\Repositories\CurrikiGo\Outcome\OutcomeRepository;
+use App\Repositories\CurrikiGo\Outcome\OutcomeRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Organization\OrganizationRepository;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
@@ -91,6 +93,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(OrganizationRepositoryInterface::class, OrganizationRepository::class);
         $this->app->bind(InvitedOrganizationUserRepositoryInterface::class, InvitedOrganizationUserRepository::class);
         $this->app->bind(OrganizationPermissionTypeRepositoryInterface::class, OrganizationPermissionTypeRepository::class);
+        $this->app->bind(OutcomeRepositoryInterface::class, OutcomeRepository::class);
     }
 
     /**
