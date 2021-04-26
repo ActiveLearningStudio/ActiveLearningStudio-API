@@ -27,7 +27,7 @@ class GroupCreationListener
     {
         $auth_user = auth()->user();
         foreach ($event->users as $user) {
-            $user['user']->notify(new InviteToGroupNotification($auth_user, $event->group, $user['user']->token, $user['note'], $user['user']->email));
+            $user['user']->notify(new InviteToGroupNotification($auth_user, $event->group, $user['user']->token, $user['note']));
         }
     }
 }

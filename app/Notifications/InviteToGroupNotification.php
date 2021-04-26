@@ -18,7 +18,6 @@ class InviteToGroupNotification extends Notification
     public $group;
     public $token;
     public $note;
-    public $user_email;
 
     /**
      * Create a new notification instance.
@@ -27,15 +26,14 @@ class InviteToGroupNotification extends Notification
      * @param $group
      * @param $token
      * @param string $note
-     * @param string $user_email
      */
-    public function __construct($sender, $group, $token, $note = '', $user_email)
+    public function __construct($sender, $group, $token, $note = '')
     {
         $this->sender = $sender;
         $this->group = $group;
         $this->token = $token;
         $this->note = $note;
-        $this->user_email = $user_email;
+        // $this->pageUrl = config('app.front_end_url') . '/teams/invite';
         $this->pageUrl = config('app.front_end_url');
     }
 

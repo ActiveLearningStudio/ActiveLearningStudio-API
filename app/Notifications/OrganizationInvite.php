@@ -17,6 +17,7 @@ class OrganizationInvite extends Notification
     public $organization;
     public $page;
     public $note;
+    public $user_email;
 
     /**
      * Create a new notification instance.
@@ -25,14 +26,16 @@ class OrganizationInvite extends Notification
      * @param $organization
      * @param $page
      * @param string $note
+     * @param string $user_email
      * @return void
      */
-    public function __construct($sender, $organization, $page, $note = '')
+    public function __construct($sender, $organization, $page, $note = '', $user_email)
     {
         $this->sender = $sender;
         $this->organization = $organization;
         $this->page = $page;
         $this->note = $note;
+        $this->user_email = $user_email;
         $this->pageUrl = config('app.front_end_url');
     }
 
@@ -55,11 +58,21 @@ class OrganizationInvite extends Notification
      */
     public function toMail($notifiable)
     {
+        if ($this->page == 'register') {
+            $url = $this->pageUrl . '/' . $this->page . '/' . $this->organization->domain .'?email='.$this->user_email;
+            $subject = 'Invitation to join the organization';
+            $caption = 'Join the Organization';
+        } else {
+            $url = $this->pageUrl . '/' . $this->page . '/' . $this->organization->domain;
+            $subject = 'Login to organization';
+            $caption = 'Login to view Organization';
+        }
+
         return (new MailMessage)
-            ->subject('Invitation to join the organization')
+            ->subject($subject)
             ->line($this->sender->first_name . ' has invited you to join the organization ' . $this->organization->name)
             ->line($this->note)
-            ->action('Join the Organization', $this->pageUrl . '/' . $this->page . '/' . $this->organization->domain);
+            ->action($caption, $url);
     }
 
     /**

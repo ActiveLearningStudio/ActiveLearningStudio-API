@@ -192,7 +192,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $auth_user = auth()->user();
         $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
         $group->users()->attach($user, ['role' => 'collaborator', 'token' => $token]);
-        $user->notify(new InviteToGroupNotification($auth_user, $group, $token, null, $user->email));
+        $user->notify(new InviteToGroupNotification($auth_user, $group, $token));
     }
 
     /**
@@ -214,7 +214,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
             if ($con_user) {
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                 $group->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
-                $con_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note, $user['email']));
+                $con_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
             } elseif ($user['email']) {
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                 $temp_user = new User(['email' => $user['email']]);
@@ -225,6 +225,8 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 $inviteData['note'] = $note;
                 $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
                 // ended org invitation for outside users
+
+                // $temp_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
 
                 $invited_user = array(
                     'invited_email' => $user['email'],
