@@ -332,9 +332,6 @@ class GroupController extends Controller
                 $result = $group->users()->detach($user);
                 $this->groupRepository->removeGroupProjectUser($group, $user);
 
-                // TODO: need to add remove notification
-                // $user->notify(new InviteToGroupNotification($auth_user, $group));
-
                 return response([
                     'message' => 'User has been removed from the group successfully.',
                 ], 200);
