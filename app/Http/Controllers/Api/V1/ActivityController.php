@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Events\ActivityUpdatedEvent;
 use App\Events\PlaylistUpdatedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\ActivityRequest;
+use App\Http\Requests\V1\ActivityCreateRequest;
+use App\Http\Requests\V1\ActivityEditRequest;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
@@ -139,12 +140,12 @@ class ActivityController extends Controller
      *   ]
      * }
      *
-     * @param ActivityRequest $request
+     * @param ActivityCreateRequest $request
      * @param Playlist $playlist
      * @return Response
      * @throws AuthorizationException
      */
-    public function store(ActivityRequest $request, Playlist $playlist)
+    public function store(ActivityCreateRequest $request, Playlist $playlist)
     {
         $this->authorize('create', [Project::class, $playlist->project->organization]);
 
@@ -231,12 +232,12 @@ class ActivityController extends Controller
      *   ]
      * }
      *
-     * @param ActivityRequest $request
+     * @param ActivityEditRequest $request
      * @param Playlist $playlist
      * @param Activity $activity
      * @return Response
      */
-    public function update(ActivityRequest $request, Playlist $playlist, Activity $activity)
+    public function update(ActivityEditRequest $request, Playlist $playlist, Activity $activity)
     {
         if ($activity->playlist_id !== $playlist->id) {
             return response([
