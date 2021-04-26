@@ -244,11 +244,12 @@ class ActivityController extends Controller
             ], 400);
         }
 
-        $data = $request->validated();
-        $is_updated = $this->activityRepository->update($data, $activity->id);
+        $validated = $request->validated();
+        $is_updated = $this->activityRepository->update($validated, $activity->id);
 
         if ($is_updated) {
-            $this->update_h5p($data, $activity->h5p_content_id);
+            // H5P meta is in 'data' index of the payload.
+            $this->update_h5p($validated['data'], $activity->h5p_content_id);
 
             $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
             $playlist = new PlaylistResource($updated_activity->playlist);
