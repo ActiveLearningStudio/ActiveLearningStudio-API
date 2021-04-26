@@ -94,6 +94,6 @@ RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
 # RUN chmod +x /var/www/html/entrypoint.api.sh
 
 COPY ./entrypoint.api.sh ./
-RUN chmod +x /var/www/html/entrypoint.api.sh
+RUN chmod +x /var/www/html/entrypoint.redis.sh
 
-ENTRYPOINT ["sh", "/var/www/html/entrypoint.api.sh"]
+ENTRYPOINT ["sh", "/var/www/html/entrypoint.redis.sh"]
