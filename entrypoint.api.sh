@@ -4,7 +4,10 @@
 chmod 777 -R /var/www/html/storage
 php /var/www/html/artisan config:cache
 php /var/www/html/artisan storage:link
-php /var/www/html/artisan passport:install
+if [[ ! -e /var/www/html/oauth-private.key || ! -e /var/www/html/oauth-public.key ]]; then php /var/www/html/artisan passport:install; fi
+
+
+
 service cron start &
 redis-server &
 laravel-echo-server start --force &
