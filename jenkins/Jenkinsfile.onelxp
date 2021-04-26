@@ -6,7 +6,7 @@ node('currikionelxp') {
       }     
       stage('Build image') {         
             app = docker.build("quay.io/curriki/api")    
-            redis = docker.build("quay.io/curriki/redis")    
+            redis = docker.build("quay.io/curriki/redis", "-f Dockerfile.redis .")    
        }     
       stage('Test image') {           
             app.inside { 
