@@ -23,7 +23,7 @@ node('currikionelxp') {
             }    
             docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                   redis.push("${env.BUILD_NUMBER}")            
-                  redis.push("develop-redis")        
+                  redis.push("develop")        
             }   
       }
       stage('Deploying Image') {
