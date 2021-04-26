@@ -92,7 +92,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                         'score' => $answer['score'],
                         'response' => $answer['response'],
                     ];
-                } else if (isset($answer['response'])) {
+                } elseif (isset($answer['response'])) {
                     $answers[] = [
                         'score' => $answer['score'],
                         'response' => [$answer['response']],
