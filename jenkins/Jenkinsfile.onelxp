@@ -33,3 +33,4 @@ node('currikionelxp') {
         echo 'Copy completed'
     } 
 }
+ 
