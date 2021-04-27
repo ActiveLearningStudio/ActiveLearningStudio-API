@@ -245,7 +245,8 @@ class ActivityController extends Controller
             ], 400);
         }
         $validated = $request->validated();
-        $is_updated = $this->activityRepository->update(array_except($validated,['data']), $activity->id);
+        $attributes = Arr::except($validated,['data']);
+        $is_updated = $this->activityRepository->update($attributes, $activity->id);
 
         if ($is_updated) {
             // H5P meta is in 'data' index of the payload.
