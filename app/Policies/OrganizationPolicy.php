@@ -151,7 +151,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization)
     {
-        return $user->hasPermissionTo('organization:update', $organization);
+        return $user->hasPermissionTo('organization:edit', $organization);
     }
 
     /**
