@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 use H5pCore;
 
 /**
@@ -244,9 +245,9 @@ class ActivityController extends Controller
                 'errors' => ['Invalid playlist or activity id.'],
             ], 400);
         }
-
         $validated = $request->validated();
-        $is_updated = $this->activityRepository->update($validated, $activity->id);
+        $attributes = Arr::except($validated, ['data']);
+        $is_updated = $this->activityRepository->update($attributes, $activity->id);
 
         if ($is_updated) {
             // H5P meta is in 'data' index of the payload.
