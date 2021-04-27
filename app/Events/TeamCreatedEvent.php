@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Project;
-use App\Models\Team;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
