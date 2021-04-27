@@ -57,6 +57,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 $answers[] = [
                     'score' => $answer['score'],
                     'response' => $res,
+                    'duration' => isset($answer['duration']) ? $answer['duration'] : 'N/A',
                 ];
             }
 
@@ -91,19 +92,24 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             $answers = [];
 
             foreach ($data['answer'] as $answer) {
+                $normalizedAnswer = null;
+
                 if (isset($answer['response']) && is_array($answer['response'])) {
-                    $answers[] = [
+                    $normalizedAnswer = [
                         'score' => $answer['score'],
                         'response' => $answer['response'],
                     ];
                 } elseif (isset($answer['response'])) {
-                    $answers[] = [
+                    $normalizedAnswer = [
                         'score' => $answer['score'],
                         'response' => [$answer['response']],
                     ];
                 } else {
-                    $answers[] = ['score' => $answer['score']];
+                    $normalizedAnswer = ['score' => $answer['score']];
                 }
+                
+                $normalizedAnswer['duration'] = isset($answer['duration']) ? $answer['duration'] : 'N/A';
+                $answers[] = $normalizedAnswer;
             }
 
             return [
@@ -114,13 +120,18 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 'answers' => $answers,
             ];
         }
+
         // Unknown case
         return [
             'type' => 'question',
             'content_type' => $data['content-type'],
             'sub_content_id' => $data['sub-content-id'],
             'title' => $data['title'],
-            'answers' => [['response' => ['N/A'], 'score' => ['max' => 0, 'raw' => 0]]],
+            'answers' => [[
+                'duration' => 'N/A',
+                'response' => ['N/A'],
+                'score' => ['max' => 0, 'raw' => 0]
+            ]],
         ];
     }
 
