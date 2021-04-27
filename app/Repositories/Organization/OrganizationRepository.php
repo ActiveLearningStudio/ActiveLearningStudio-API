@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
@@ -85,11 +86,18 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      *
      * @param Organization $organization
      * @param $data
+     * @param User $authenticatedUser
      * @return Response
      * @throws GeneralException
      */
-    public function createSuborganization($organization, $data)
+    public function createSuborganization($organization, $data, $authenticatedUser)
     {
+        $organizationUserRoles = $organization->userRoles()
+                            ->wherePivot('user_id', $authenticatedUser->id)
+                            ->whereHas('permissions', function (Builder $query) {
+                                $query->where('name', '=', 'organization:create');
+                            })->get();
+
         $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
 
         foreach ($data['users'] as $user) {
@@ -100,6 +108,25 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             DB::beginTransaction();
 
             $suborganization = $organization->children()->create(Arr::except($data, ['admins', 'users']));
+
+            $subOrganizationUserRoles = [];
+
+            foreach ($organizationUserRoles as $organizationUserRole) {
+                if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
+                    $subOrganizationUserRolesData['name'] = $organizationUserRole->name;
+                    $subOrganizationUserRolesData['display_name'] = $organizationUserRole->display_name;
+                    $subOrganizationUserRolesData['permissions'] = $organizationUserRole->permissions->pluck('id')->toArray();
+                    $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
+
+                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+
+                    if ($role) {
+                        foreach ($organizationUserRole->users as $organizationUserRoleUser) {
+                            $userRoles[$organizationUserRoleUser->id] = ['organization_role_type_id' => $role->id];
+                        }
+                    }
+                }
+            }
 
             if ($suborganization) {
                 $suborganization->users()->sync($userRoles);
@@ -259,7 +286,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             DB::commit();
 
-            return true;
+            return $role;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             DB::rollBack();

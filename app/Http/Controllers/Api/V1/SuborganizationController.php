@@ -137,7 +137,9 @@ class SuborganizationController extends Controller
         $organization = $this->organizationRepository->find($data['parent_id']);
         $this->authorize('create', $organization);
 
-        $suborganization = $this->organizationRepository->createSuborganization($organization, $data);
+        $authenticatedUser = auth()->user();
+
+        $suborganization = $this->organizationRepository->createSuborganization($organization, $data, $authenticatedUser);
 
         if ($suborganization) {
             return response([
@@ -550,9 +552,9 @@ class SuborganizationController extends Controller
 
         $data = $request->validated();
 
-        $is_added = $this->organizationRepository->addRole($suborganization, $data);
+        $role = $this->organizationRepository->addRole($suborganization, $data);
 
-        if ($is_added) {
+        if ($role) {
             return response([
                 'message' => 'Role has been added successfully.',
             ], 200);
