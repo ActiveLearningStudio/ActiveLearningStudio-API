@@ -13,7 +13,7 @@ class OrganizationPermissionTypeSeeder extends Seeder
     {
         // Organizations
         DB::table('organization_permission_types')->insert([
-            'name' => 'organization:update',
+            'name' => 'organization:edit',
             'display_name' => 'Edit Organization',
             'feature' => 'Organization'
         ]);
