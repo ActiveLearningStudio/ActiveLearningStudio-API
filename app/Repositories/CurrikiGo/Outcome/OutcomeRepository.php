@@ -36,6 +36,39 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             return $result;
         }
 
+        // Adding exception for H5P.PersonalityQuiz
+        // If more than 3 custom exceptions like this need to be added
+        // we should abstract this to a helper object for each of the
+        // H5Ps in question. That way each one can handle its particular
+        // edge case.
+        if (strpos($data['library'], 'H5P.PersonalityQuiz') !== false) {
+            $answers = [];
+
+            foreach ($data['answer'] as $i => $answer) {
+                if ($i === 0) {
+                    $res = [
+                        (is_array($answer['response'])) ? 'Quiz Result: '.$answer['response'][0] : 'Quiz Result: '.$answer['response']
+                    ];
+                } else {
+                    $res = [
+                        (is_array($answer['response'])) ? 'Response '.$i.': '.$answer['response'][0] : 'Response '.$i.': '.$answer['response']
+                    ];
+                }
+                $answers[] = [
+                    'score' => $answer['score'],
+                    'response' => $res,
+                ];
+            }
+
+            return [
+                'type' => 'question',
+                'content_type' => $data['content-type'],
+                'sub_content_id' => $data['sub-content-id'],
+                'title' => $data['title'],
+                'answers' => $answers,
+            ];
+        }
+
         // This is an activity aggregator like column or questionnaire
         if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content'])) {
             $deeperResult = [];
