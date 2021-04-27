@@ -244,9 +244,8 @@ class ActivityController extends Controller
                 'errors' => ['Invalid playlist or activity id.'],
             ], 400);
         }
-
         $validated = $request->validated();
-        $is_updated = $this->activityRepository->update($validated, $activity->id);
+        $is_updated = $this->activityRepository->update(array_except($validated,['data']), $activity->id);
 
         if ($is_updated) {
             // H5P meta is in 'data' index of the payload.
