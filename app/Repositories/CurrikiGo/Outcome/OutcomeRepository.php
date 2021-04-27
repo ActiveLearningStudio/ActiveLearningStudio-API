@@ -120,7 +120,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             'content_type' => $data['content-type'],
             'sub_content_id' => $data['sub-content-id'],
             'title' => $data['title'],
-            'answers' => [['response' => 'N/A', 'score' => ['max' => 0, 'raw' => 0]]],
+            'answers' => [['response' => ['N/A'], 'score' => ['max' => 0, 'raw' => 0]]],
         ];
     }
 
