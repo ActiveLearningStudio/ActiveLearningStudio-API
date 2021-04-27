@@ -56,7 +56,7 @@ class GroupPolicy
      */
     public function update(User $user, Organization $suborganization)
     {
-        return $user->hasPermissionTo('group:update', $suborganization);
+        return $user->hasPermissionTo('group:edit', $suborganization);
     }
 
     /**

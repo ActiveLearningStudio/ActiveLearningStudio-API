@@ -74,8 +74,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $valid_users[] = $con_user;
                 $assigned_users[] = [
                     'user' => $con_user,
-                    'note' => $user['note'],
-                    'user_type' => 'Member'
+                    'note' => $user['note']
                 ];
             } elseif ($user['email']) {
                 $temp_user = new User(['email' => $user['email']]);
