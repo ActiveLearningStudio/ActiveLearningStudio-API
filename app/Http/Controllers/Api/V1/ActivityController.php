@@ -245,7 +245,7 @@ class ActivityController extends Controller
             ], 400);
         }
         $validated = $request->validated();
-        $attributes = Arr::except($validated,['data']);
+        $attributes = Arr::except($validated, ['data']);
         $is_updated = $this->activityRepository->update($attributes, $activity->id);
 
         if ($is_updated) {
