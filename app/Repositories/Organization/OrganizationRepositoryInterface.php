@@ -31,8 +31,9 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      *
      * @param Organization $organization
      * @param $data
+     * @param User $authenticatedUser
      */
-    public function createSuborganization($organization, $data);
+    public function createSuborganization($organization, $data, $authenticatedUser);
 
     /**
      * To delete a suborganization

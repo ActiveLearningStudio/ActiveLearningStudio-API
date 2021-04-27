@@ -80,7 +80,13 @@ class OrganizationPermissionTypeSeeder extends Seeder
 
         DB::table('organization_permission_types')->insert([
             'name' => 'organization:upload-thumb',
-            'display_name' => 'upload Thumb',
+            'display_name' => 'Upload Thumb',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'organization:add-role',
+            'display_name' => 'Add Organization Role',
             'feature' => 'Organization'
         ]);
 

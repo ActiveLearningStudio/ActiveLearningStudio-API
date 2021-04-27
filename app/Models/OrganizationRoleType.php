@@ -26,4 +26,12 @@ class OrganizationRoleType extends Model
     {
         return $this->belongsToMany('App\Models\OrganizationPermissionType', 'organization_role_permissions', 'organization_role_type_id', 'organization_permission_type_id')->withTimestamps();
     }
+
+    /**
+     * The users that belong to the role.
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\User', 'organization_user_roles')->using('App\Models\OrganizationUserRole')->withPivot('organization_role_type_id')->withTimestamps();
+    }
 }
