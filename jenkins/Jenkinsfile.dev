@@ -1,10 +1,8 @@
-pipeline {
+
     def app     
     def redis
       
-    agent {
-        label "master"
-    }
+    
     stages {
         stage('Clone repository') {               
             checkout scm    
@@ -44,5 +42,5 @@ pipeline {
             echo 'Copy completed'
         }
     }
-}
+
 
