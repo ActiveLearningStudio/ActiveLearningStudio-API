@@ -30,15 +30,16 @@ node {
                 redis.push("develop")        
         }   
     }
-    def nodes = ['currikidev', 'currikionelxp']
+    def labels = ['currikidev', 'currikionelxp']
+    
     for (label in labels) {
-    node(label) {
-        stage('Deploying Image ' + label){
-            echo 'Copy'
-            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-            echo 'Copy completed'
+        node(label) {
+            stage('Deploying Image ' + label){
+                echo 'Copy'
+                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                echo 'Copy completed'
+            }
         }
-    }
     }
     
 }
