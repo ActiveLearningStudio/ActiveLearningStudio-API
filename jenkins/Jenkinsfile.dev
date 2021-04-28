@@ -1,8 +1,10 @@
-
+node {
     def app     
     def redis
       
-    
+    agent {
+        label "master"
+    }
     
     stage('Clone repository') {               
         checkout scm    
@@ -20,27 +22,28 @@
                 sh 'echo "Redis Tests passed"'        
         }   
     } 
-    stage('Push image') {	
-        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                app.push("${env.BUILD_NUMBER}")            
-                app.push("develop")        
-        }    
-        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                redis.push("${env.BUILD_NUMBER}")            
-                redis.push("develop")        
-        }   
-      }
-    stage('Deploying Image') {
-        node('currikidev') {
-            echo 'Copy'
-            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-            echo 'Copy completed'
-        }
-        node('currikionelxp') {
-            echo 'Copy'
-            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-            echo 'Copy completed'
-        }
+    
+}
+
+stage('Push image') {	
+    docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+            app.push("${env.BUILD_NUMBER}")            
+            app.push("develop")        
+    }    
+    docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+            redis.push("${env.BUILD_NUMBER}")            
+            redis.push("develop")        
+    }   
     }
-
-
+stage('Deploying Image') {
+    node('currikidev') {
+        echo 'Copy'
+        sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+        echo 'Copy completed'
+    }
+    node('currikionelxp') {
+        echo 'Copy'
+        sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+        echo 'Copy completed'
+    }
+}
