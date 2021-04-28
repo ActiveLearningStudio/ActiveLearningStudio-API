@@ -2,9 +2,7 @@ node {
     def app     
     def redis
       
-    agent {
-        label "master"
-    }
+    
     
     stage('Clone repository') {               
         checkout scm    
