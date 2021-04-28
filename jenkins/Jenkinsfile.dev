@@ -30,8 +30,8 @@ node {
                 redis.push("develop")        
         }   
     }
-    def labels = ['currikidev', 'currikionelxp']
-    
+    def labels = ['currikidev', 'currikionelxp', 'currikimopse']
+
     for (label in labels) {
         node(label) {
             stage('Deploying Image ' + label){
