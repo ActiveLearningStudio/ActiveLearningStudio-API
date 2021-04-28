@@ -3,11 +3,11 @@
     def redis
       
     
-    stages {
-        stage('Clone repository') {               
-            checkout scm    
-        }  
-    }
+    
+    stage('Clone repository') {               
+        checkout scm    
+    }  
+    
     stage('Build image') {         
         app = docker.build("quay.io/curriki/api")    
         redis = docker.build("quay.io/curriki/redis", "-f Dockerfile.redis .")    
