@@ -9,7 +9,7 @@ if [[ ! -e /var/www/html/oauth-private.key || ! -e /var/www/html/oauth-public.ke
 
 
 # service cron start &
-# redis-server &
+redis-server &
 # laravel-echo-server start --force &
 # php /var/www/html/artisan queue:work --timeout=0 &
 touch /var/www/html/health.ok
