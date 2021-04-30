@@ -145,7 +145,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         try {
             $service = new LearnerRecordStoreService();
             $submitted = $service->getSubmittedCurrikiStatements($data, 1);
-            
+           
             if (count($submitted) > 0) {
                 // Get 'other' activity IRI from the statement
                 // that now has the unique context of the attempt.

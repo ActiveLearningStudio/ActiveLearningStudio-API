@@ -21,6 +21,8 @@ use App\CurrikiGo\H5PLibrary\H5Ps\MarkTheWords;
 use App\CurrikiGo\H5PLibrary\H5Ps\SingleChoiceSet;
 use App\CurrikiGo\H5PLibrary\H5Ps\StarRating;
 use App\CurrikiGo\H5PLibrary\H5Ps\PersonalityQuiz;
+use App\CurrikiGo\H5PLibrary\H5Ps\QuestionSet;
+use App\CurrikiGo\H5PLibrary\H5Ps\Essay;
 
 /**
  * Factory Class for H5P Libraries
@@ -76,6 +78,10 @@ class H5PLibraryFactory
                 return new StarRating($content, $parent);
             case 'PersonalityQuiz':
                 return new PersonalityQuiz($content, $parent);
+            case 'QuestionSet':
+                return new QuestionSet($content, $parent);
+            case 'Essay':
+                return new Essay($content, $parent);
             default:
                 // When there is no interaction type
                 return new Common($content, $parent);
