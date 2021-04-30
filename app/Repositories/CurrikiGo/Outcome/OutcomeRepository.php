@@ -30,7 +30,10 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             $result = [];
 
             foreach($data as $row) {
-                $result[] = $this->normalizeRow($row);
+                $normalizedRow = $this->normalizeRow($row);
+                if ($normalizedRow !== false) {
+                    $result[] = $normalizedRow;
+                }
             }
 
             return $result;
@@ -70,12 +73,20 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             ];
         }
 
+        // Adding a second exception for H5P.Image
+        if (strpos($data['library'], 'H5P.Image') !== false) {
+            return false;
+        }
+
         // This is an activity aggregator like column or questionnaire
         if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content'])) {
             $deeperResult = [];
 
             foreach ($data['content'] as $row) {
-                $deeperResult[] = $this->normalizeRow($row);
+                $normalizedRow = $this->normalizeRow($row);
+                if ($normalizedRow !== false) {
+                    $deeperResult[] = $normalizedRow;
+                }
             }
 
             return [
