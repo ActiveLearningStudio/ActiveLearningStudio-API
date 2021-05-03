@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-print yes | php /var/www/html/artisan elastic:migrate:refresh
+printf yes | php /var/www/html/artisan elastic:migrate:refresh
 php /var/www/html/artisan scout:import "App\Models\Activity"
 php /var/www/html/artisan scout:import "App\Models\Playlist"
 php /var/www/html/artisan scout:import "App\Models\Project"
