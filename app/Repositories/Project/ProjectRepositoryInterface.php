@@ -16,8 +16,9 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @param $authenticated_user
      * @param Project $project
      * @param string $token Authenticated user token
+     * @param int $organization_id
      */
-    public function clone($authenticated_user, Project $project, $token);
+    public function clone($authenticated_user, Project $project, $token, $organization_id = null);
 
     /**
      * To fetch project based on LMS settings
@@ -65,9 +66,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     /**
      * @param $authenticated_user
      * @param $project_id
+     * @param $organization_id
      * @return bool
      */
-    public function checkIsDuplicate($authenticated_user,$project_id);
+    public function checkIsDuplicate($authenticated_user, $project_id, $organization_id);
 
     /**
      * @param $project

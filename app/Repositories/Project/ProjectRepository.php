@@ -79,7 +79,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
-            $isDuplicate = $this->checkIsDuplicate($authUser, $project->id);
+            $isDuplicate = $this->checkIsDuplicate($authUser, $project->id, $organization_id);
 
             if ($isDuplicate) {
                 $authUser->projects()->where('order', '>', $project->order)->increment('order', 1);
@@ -293,11 +293,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * @param $authenticated_user
      * @param $project_id
+     * @param $organization_id
      * @return bool
      */
-    public function checkIsDuplicate($authenticated_user,$project_id)
+    public function checkIsDuplicate($authenticated_user, $project_id, $organization_id)
     {
-        $userProjectIds = $authenticated_user->projects->pluck('id')->toArray();
+        $userProjectIds = $authenticated_user->projects()->where('organization_id', '=', $organization_id)->pluck('id')->toArray();
         return in_array($project_id, $userProjectIds);
     }
 
