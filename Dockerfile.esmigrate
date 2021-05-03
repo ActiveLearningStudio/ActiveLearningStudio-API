@@ -88,12 +88,7 @@ RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
 
-# USER root
-# COPY ./entrypoint.api.sh /var/www/html/
-# RUN chmod 777 /var/www/html/entrypoint.api.sh
-# RUN chmod +x /var/www/html/entrypoint.api.sh
+COPY ./entrypoint.esmigrate.sh ./
+RUN chmod +x /var/www/html/entrypoint.esmigrate.sh
 
-COPY ./entrypoint.redis.sh ./
-RUN chmod +x /var/www/html/entrypoint.redis.sh
-
-ENTRYPOINT ["sh", "/var/www/html/entrypoint.redis.sh"]
+ENTRYPOINT ["sh", "/var/www/html/entrypoint.esmigrate.sh"]
