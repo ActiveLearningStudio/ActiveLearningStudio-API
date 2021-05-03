@@ -35,8 +35,8 @@ node {
                 redis.push("develop")        
         }   
         esmigrate.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                redis.push("${env.BUILD_NUMBER}")            
-                redis.push("develop")        
+                esmigrate.push("${env.BUILD_NUMBER}")            
+                esmigrate.push("develop")        
         }   
     }
     def labels = ['currikidev', 'currikionelxp', 'currikimopse']
