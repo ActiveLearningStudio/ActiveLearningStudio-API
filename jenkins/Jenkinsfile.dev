@@ -34,7 +34,7 @@ node {
                 redis.push("${env.BUILD_NUMBER}")            
                 redis.push("develop")        
         }   
-        esmigrate.withRegistry('https://quay.io', 'docker-private-credentials') {            
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 esmigrate.push("${env.BUILD_NUMBER}")            
                 esmigrate.push("develop")        
         }   
