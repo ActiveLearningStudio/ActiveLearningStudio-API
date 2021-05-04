@@ -23,7 +23,9 @@ use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Organization;
 use App\Models\OrganizationRoleType;
+use App\Models\OrganizationUserRole;
 use App\Models\OrganizationVisibilityType;
+use App\Repositories\User\UserRepositoryInterface;
 
 /**
  * @authenticated
@@ -35,15 +37,18 @@ use App\Models\OrganizationVisibilityType;
 class SuborganizationController extends Controller
 {
     private $organizationRepository;
+    private $userRepository;
 
     /**
      * SuborganizationController constructor.
      *
      * @param OrganizationRepositoryInterface $organizationRepository
+     * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(OrganizationRepositoryInterface $organizationRepository)
+    public function __construct(OrganizationRepositoryInterface $organizationRepository, UserRepositoryInterface $userRepository)
     {
         $this->organizationRepository = $organizationRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -363,6 +368,17 @@ class SuborganizationController extends Controller
         $data = $request->validated();
 
         $authenticatedUser = auth()->user();
+
+        $user = $this->userRepository->findByField('email', $data['email']);
+        if ($user) {
+            $organizationUser = OrganizationUserRole::where("organization_id", $suborganization->id)->where("user_id", $user->id)->first();
+            if ($organizationUser) {
+                return response([
+                    'message' => 'This user is already invited to ' . $suborganization->name,
+                ], 409);
+            }
+        }
+
 
         $invited = $this->organizationRepository->inviteMember($authenticatedUser, $suborganization, $data);
 
