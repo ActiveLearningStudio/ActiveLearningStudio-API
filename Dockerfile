@@ -67,15 +67,15 @@ COPY ./php.ini /usr/local/etc/php/
 # Cron Jobs
 
 # Copy hello-cron file to the cron.d directory
-# COPY ./scheduler.cron /etc/cron.d/root
+COPY ./scheduler.cron /etc/cron.d/root
 
 # Give execution rights on the cron job
-# RUN chmod 0644 /etc/cron.d/root
+RUN chmod 0644 /etc/cron.d/root
 
 # Apply cron job
-# RUN crontab /etc/cron.d/root
+RUN crontab /etc/cron.d/root
 
-# RUN touch /var/log/cron.log
+RUN touch /var/log/cron.log
 
 
 #RUN service apache2 restart
