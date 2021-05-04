@@ -374,7 +374,7 @@ class SuborganizationController extends Controller
             $organizationUser = OrganizationUserRole::where("organization_id", $suborganization->id)->where("user_id", $user->id)->first();
             if ($organizationUser) {
                 return response([
-                    'message' => 'This User already invited to ' . $suborganization->name,
+                    'message' => 'This user is already invited to ' . $suborganization->name,
                 ], 409);
             }
         }
