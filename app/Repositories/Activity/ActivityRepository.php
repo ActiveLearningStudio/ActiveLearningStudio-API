@@ -126,6 +126,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      */
     public function advanceSearchForm($data)
     {
+
         $counts = [];
         $projectIds = [];
 
@@ -156,7 +157,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             ->projectIds($projectIds)
             ->h5pLibraries(Arr::get($data, 'h5pLibraries', []))
             ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
-            // ->sort(Arr::get($data, 'sort', '_id'), Arr::get($data, 'order', 'desc'))
+            ->sort('created_at', "desc")
             ->from(Arr::get($data, 'from', 0))
             ->size(Arr::get($data, 'size', 10));
 
