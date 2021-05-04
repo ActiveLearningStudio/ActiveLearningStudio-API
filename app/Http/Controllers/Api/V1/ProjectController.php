@@ -461,6 +461,7 @@ class ProjectController extends Controller
      * }
      *
      * @param Request $request
+     * @param Organization $suborganization
      * @param Project $project
      * @return Response
      */
@@ -468,10 +469,10 @@ class ProjectController extends Controller
     {
         $this->authorize('clone', [Project::class, $suborganization]);
 
-        $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id);
+        $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id, $suborganization->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         // pushed cloning of project in background
-        CloneProject::dispatch(auth()->user(), $project, $request->bearerToken())->delay(now()->addSecond());
+        CloneProject::dispatch(auth()->user(), $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
             'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);

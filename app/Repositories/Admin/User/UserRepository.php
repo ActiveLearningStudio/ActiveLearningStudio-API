@@ -96,8 +96,11 @@ class UserRepository extends BaseRepository
         try {
             // update the user data
             if ($user->update($data) && $clone_project_id) {
-                // if clone project id provided - clone the project
-                $this->projectRepository->clone($user, $clone_project_id);
+                // loop through user organizations
+                foreach ($user->organizations as $userOrganization) {
+                    // if clone project id provided - clone the project
+                    $this->projectRepository->clone($user, $clone_project_id, $userOrganization->id);
+                }
                 return ['message' => 'User data updated and project is being cloned in background!', 'data' => $this->find($id)];
             }
             return ['message' => 'User data updated successfully!', 'data' => $this->find($id)];
