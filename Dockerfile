@@ -43,11 +43,11 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
 
-RUN pecl install -o -f redis \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable redis
+#RUN pecl install -o -f redis \
+#    &&  rm -rf /tmp/pear \
+#    &&  docker-php-ext-enable redis
 
-RUN npm install -g laravel-echo-server
+#RUN npm install -g laravel-echo-server
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
@@ -67,15 +67,15 @@ COPY ./php.ini /usr/local/etc/php/
 # Cron Jobs
 
 # Copy hello-cron file to the cron.d directory
-COPY ./scheduler.cron /etc/cron.d/root
+#COPY ./scheduler.cron /etc/cron.d/root
 
 # Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/root
+#RUN chmod 0644 /etc/cron.d/root
 
 # Apply cron job
-RUN crontab /etc/cron.d/root
+#RUN crontab /etc/cron.d/root
 
-RUN touch /var/log/cron.log
+#RUN touch /var/log/cron.log
 
 
 #RUN service apache2 restart
@@ -87,13 +87,14 @@ COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
+apache2ctl -D FOREGROUND
 
 # USER root
 # COPY ./entrypoint.api.sh /var/www/html/
 # RUN chmod 777 /var/www/html/entrypoint.api.sh
 # RUN chmod +x /var/www/html/entrypoint.api.sh
 
-COPY ./entrypoint.api.sh ./
-RUN chmod +x /var/www/html/entrypoint.api.sh
+#COPY ./entrypoint.api.sh ./
+#RUN chmod +x /var/www/html/entrypoint.api.sh
 
-ENTRYPOINT ["sh", "/var/www/html/entrypoint.api.sh"]
+#ENTRYPOINT ["sh", "/var/www/html/entrypoint.api.sh"]
