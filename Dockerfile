@@ -87,7 +87,7 @@ COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
-apache2ctl -D FOREGROUND
+RUN apache2ctl -D FOREGROUND
 
 # USER root
 # COPY ./entrypoint.api.sh /var/www/html/
