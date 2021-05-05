@@ -75,6 +75,8 @@ class UserRepository extends BaseRepository
                 if ($user->wasRecentlyCreated !== true) {
                     event(new Registered($user));
                 }
+                $user->created_at = now();
+                $user->save();
                 return ['message' => 'User created successfully!', 'data' => $user];
             }
         } catch (\Exception $e) {
