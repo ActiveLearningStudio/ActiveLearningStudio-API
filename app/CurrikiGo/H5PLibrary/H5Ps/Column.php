@@ -23,6 +23,10 @@ class Column extends H5PLibraryBase implements H5PLibraryInterface
         if (!empty($this->content)) {
             if (isset($this->content['content']) && !empty($this->content['content'])) {
                 foreach ($this->content['content'] as $item) {
+                    if (!isset($item['content'])) {
+                        continue;
+                    }
+                    
                     $meta[] = H5PHelper::buildElement($item['content'], $this->parent);
                 }
             }
