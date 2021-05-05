@@ -30,8 +30,6 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     cron \
-    redis \
-    redis-server \
     nodejs \
     npm \
     && docker-php-ext-install opcache \
