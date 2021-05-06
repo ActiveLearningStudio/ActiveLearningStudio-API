@@ -45,7 +45,7 @@ node {
         node(label) {
             stage('Deploying Image ' + label){
                 echo 'Copy'
-                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-stage.yml currikistack" 
                 echo 'Copy completed'
             }
         }
