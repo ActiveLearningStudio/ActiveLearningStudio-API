@@ -8,11 +8,11 @@ if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage
 
 
 
-service cron start &
+# service cron start &
 redis-server &
-sleep 20
-laravel-echo-server start --force &
-php /var/www/html/artisan queue:work --timeout=0 &
+# sleep 20
+# laravel-echo-server start --force &
+# php /var/www/html/artisan queue:work --timeout=0 &
 touch /var/www/html/health.ok
 
 apache2ctl -D FOREGROUND
