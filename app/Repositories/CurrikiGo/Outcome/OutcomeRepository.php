@@ -113,7 +113,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         }
 
         // This is an activity aggregator like column or questionnaire
-        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content'])) {
+        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content']) && !empty($data['content'])) {
             $deeperResult = [];
 
             foreach ($data['content'] as $row) {
