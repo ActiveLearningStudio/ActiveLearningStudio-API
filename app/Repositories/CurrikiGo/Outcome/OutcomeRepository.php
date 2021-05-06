@@ -78,26 +78,6 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             return false;
         }
 
-        // This is an activity aggregator like column or questionnaire
-        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content'])) {
-            $deeperResult = [];
-
-            foreach ($data['content'] as $row) {
-                $normalizedRow = $this->normalizeRow($row);
-                if ($normalizedRow !== false) {
-                    $deeperResult[] = $normalizedRow;
-                }
-            }
-
-            return [
-                'type' => 'section',
-                'content_type' => $data['content-type'],
-                'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
-                'children' => $deeperResult,
-            ];
-        }
-
         // This is a question
         if (isset($data['answer'])) {
             $answers = [];
@@ -129,6 +109,26 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 'sub_content_id' => $data['sub-content-id'],
                 'title' => $data['title'],
                 'answers' => $answers,
+            ];
+        }
+
+        // This is an activity aggregator like column or questionnaire
+        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content']) && !empty($data['content'])) {
+            $deeperResult = [];
+
+            foreach ($data['content'] as $row) {
+                $normalizedRow = $this->normalizeRow($row);
+                if ($normalizedRow !== false) {
+                    $deeperResult[] = $normalizedRow;
+                }
+            }
+
+            return [
+                'type' => 'section',
+                'content_type' => $data['content-type'],
+                'sub_content_id' => $data['sub-content-id'],
+                'title' => $data['title'],
+                'children' => $deeperResult,
             ];
         }
 
