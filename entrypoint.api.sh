@@ -9,7 +9,7 @@ if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage
 
 #temporary for redis
 service cron start &
-#redis-server &
+redis-server &
 #temporary for redis
 sleep 20
 #temporary for redis
