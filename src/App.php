@@ -77,6 +77,36 @@ class App
                     $grade_params['lti13_subject_key'] = $lti_data['subject_key'];                
                     $grade_params['note'] = "You've been graded.";
                     $grade_params['result_id'] = $lti_data['result_id'];
+
+                    //Submission review link
+                    $review_data = [];
+                    $review_data['result_id'] = $lti_data['result_id'];
+                    $review_data['activity_id'] = $activity_id;
+                    $review_data['user_id'] = $user_id;
+                    
+                    $build_review_data = http_build_query($review_data);
+
+                    // encode user information.
+                    $lti_submission_info = base64_encode($build_review_data);
+
+                    $grade_params['lti13_extra'] = [
+                        'https://canvas.instructure.com/lti/submission' => [
+                            "new_submission" => true,
+                            "submission_type" => "external_tool",
+                            "submission_data" => $CFG->wwwroot . '/mod/curriki/?submission=' . $lti_submission_info,
+                            "submitted_at" => date(DATE_RFC3339_EXTENDED),
+                            /*"submission_type" => "online_url",
+                            "submission_data" => "https://instructure.com",
+                            "submitted_at" => "2017-04-14T18:54:36.736+00:00",
+                            "content_items" =>  [
+                            {
+                                "type": "file",
+                                "url": "https://instructure.com/test_file.txt",
+                                "title": "Submission File"
+                            }
+                            ]*/
+                        ]
+                    ];
                     
                     // Use LTIX to send the grade back to the LMS.
                     // if you don't know the data to send when creating the response
@@ -120,6 +150,15 @@ class App
                 header("Location: $redirect_to_studio_url");
             } else {
                 
+                $is_submission_review = U::get($_GET, "submission");
+                if (!empty($is_submission_review)) {
+                    echo 'in submission review...';
+                    echo '<pre>';
+                    parse_str(base64_decode($is_submission_review), $submission_data);
+                    print_r($submission_data);
+                    exit;
+                    
+                }
                 // Single Sign On LTI request
                 // we should move this to a new 
                 $lti_data = $LTI->ltiParameterArray();    
