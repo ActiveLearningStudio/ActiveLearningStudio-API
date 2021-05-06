@@ -81,6 +81,7 @@ if (!function_exists('get_user_id_by_token')) {
      */
     function get_user_id_by_token($token)
     {
+        error_reporting(0);
         $key_path = Passport::keyPath('oauth-public.key');
         $parseTokenKey = file_get_contents($key_path);
         $token = (new Parser())->parse((string)$token);
