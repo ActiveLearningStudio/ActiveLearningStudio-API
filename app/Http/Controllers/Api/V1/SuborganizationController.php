@@ -123,6 +123,7 @@ class SuborganizationController extends Controller
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
+     * @bodyParam self_registration bool Enable/disable user self registration Example: false
      *
      * @responseFile 201 responses/organization/suborganization.json
      *
@@ -192,6 +193,7 @@ class SuborganizationController extends Controller
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
+     * @bodyParam self_registration bool Enable/disable user self registration Example: false
      *
      * @responseFile responses/organization/suborganization.json
      *

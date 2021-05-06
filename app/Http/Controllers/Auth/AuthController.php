@@ -103,6 +103,17 @@ class AuthController extends Controller
     {
         $data = $registerRequest->validated();
 
+        $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($data['email']);
+
+        if ($invited_users->isEmpty()) {
+            $organization = $this->organizationRepository->getRootOrganization();
+            if($organization && !$organization->self_registration) {
+                return response([
+                    'errors' => ['Could not create user account. Please try again later.'],
+                ], 500);
+            }
+        }
+
         $data['password'] = Hash::make($data['password']);
         $data['remember_token'] = Str::random(64);
         $data['email_verified_at'] = now();

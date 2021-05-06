@@ -122,4 +122,11 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function fetchOrganizationData($authenticatedUser, $organization);
+
+    /**
+     * Get the root organization
+     *
+     * @return mixed
+     */
+    public function getRootOrganization();
 }
