@@ -107,7 +107,7 @@ class AuthController extends Controller
 
         if ($invited_users->isEmpty()) {
             $organization = $this->organizationRepository->getRootOrganization();
-            if($organization && !$organization->self_registration) {
+            if ($organization && !$organization->self_registration) {
                 return response([
                     'errors' => ['Could not create user account. Please try again later.'],
                 ], 500);
