@@ -213,6 +213,9 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $note = array_key_exists('note', $data) ? $data['note'] : '';
 
             if ($con_user) {
+                if (!$suborganization->users->where("id", $con_user->id)->first()) {
+                    $suborganization->users()->attach($con_user, ['organization_role_type_id' => config('constants.member-role-id')]);
+                }
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                 $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
                 $con_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
