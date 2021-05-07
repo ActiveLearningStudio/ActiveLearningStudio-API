@@ -67,15 +67,15 @@ COPY ./php.ini /usr/local/etc/php/
 # Cron Jobs
 
 # Copy hello-cron file to the cron.d directory
-COPY ./scheduler.cron /etc/cron.d/root
+# COPY ./scheduler.cron /etc/cron.d/root
 
 # Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/root
+# RUN chmod 0644 /etc/cron.d/root
 
 # Apply cron job
-RUN crontab /etc/cron.d/root
+# RUN crontab /etc/cron.d/root
 
-RUN touch /var/log/cron.log
+# RUN touch /var/log/cron.log
 
 
 #RUN service apache2 restart
@@ -83,15 +83,17 @@ RUN touch /var/log/cron.log
 #RUN chown -R 1000 /var/www/html
 
 
-COPY ./api ./
+COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
 
 # USER root
-COPY ./api/entrypoint.api.sh /var/www/html/
+# COPY ./entrypoint.api.sh /var/www/html/
 # RUN chmod 777 /var/www/html/entrypoint.api.sh
-RUN chmod +x /var/www/html/entrypoint.api.sh
+# RUN chmod +x /var/www/html/entrypoint.api.sh
 
+COPY ./entrypoint.api.sh ./
+RUN chmod +x /var/www/html/entrypoint.api.sh
 
 ENTRYPOINT ["sh", "/var/www/html/entrypoint.api.sh"]

@@ -1,0 +1,46 @@
+{
+    "data": [
+        {
+            "id": 25,
+            "name": "activity:edit",
+            "display_name": "Edit Activity",
+            "feature": "Activity"
+        },
+        {
+            "id": 43,
+            "name": "group:edit",
+            "display_name": "Edit Group",
+            "feature": "Group"
+        },
+        {
+            "id": 1,
+            "name": "organization:edit",
+            "display_name": "Edit Organization",
+            "feature": "Organization"
+        },
+        {
+            "id": 19,
+            "name": "playlist:edit",
+            "display_name": "Edit Playlist",
+            "feature": "Playlist"
+        },
+        {
+            "id": 10,
+            "name": "project:edit",
+            "display_name": "Edit Project",
+            "feature": "Project"
+        },
+        {
+            "id": 31,
+            "name": "team:edit",
+            "display_name": "Edit Team",
+            "feature": "Team"
+        },
+        {
+            "id": 57,
+            "name": "user:edit",
+            "display_name": "Edit User",
+            "feature": "User"
+        }
+    ]
+}

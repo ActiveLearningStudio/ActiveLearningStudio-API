@@ -38,6 +38,8 @@ class Playlist extends Model
 
         if ($this->project) {
             $searchableArray['indexing'] = $this->project->indexing;
+            $searchableArray['organization_id'] = $this->project->organization_id;
+            $searchableArray['organization_visibility_type_id'] = $this->project->organization_visibility_type_id;
         }
 
         return $searchableArray;

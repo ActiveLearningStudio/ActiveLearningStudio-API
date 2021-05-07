@@ -81,6 +81,7 @@ if (!function_exists('get_user_id_by_token')) {
      */
     function get_user_id_by_token($token)
     {
+        error_reporting(0);
         $key_path = Passport::keyPath('oauth-public.key');
         $parseTokenKey = file_get_contents($key_path);
         $token = (new Parser())->parse((string)$token);
@@ -154,5 +155,38 @@ if (!function_exists('xAPIFormatDuration')) {
             return $formatted;
         }
         return $rawDuration;
+    }
+}
+
+if (!function_exists('recursive_array_search')) {
+    function recursive_array_search($needle, $haystack, $currentKey = '') {
+        foreach($haystack as $key=>$value) {
+            if (is_array($value)) {
+                $nextKey = recursive_array_search($needle,$value, $currentKey . '[' . $key . ']');
+                if ($nextKey) {
+                    return $nextKey;
+                }
+            }
+            else if($value==$needle) {
+                return is_numeric($key) ? $currentKey . '[' .$key . ']' : $currentKey . '["' .$key . '"]';
+            }
+        }
+        return false;
+    }
+}
+
+if (!function_exists('recursive_array_search_insert')) {
+    function recursive_array_search_insert($value, &$node, $insert = '') {
+        if (is_array($node)) {
+            if (isset($node['relation-sub-content-id']) && $value === $node['relation-sub-content-id']) {
+                if (!isset($node['answer'])) {
+                    $node['answer'] = [];
+                }
+                $node['answer'][] = $insert;
+            }
+            foreach ($node as &$childNode) {
+                recursive_array_search_insert($value, $childNode, $insert);
+            }
+        }
     }
 }

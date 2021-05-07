@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\SearchRequest;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -18,15 +19,21 @@ use Illuminate\Support\Facades\Validator;
 class SearchController extends Controller
 {
     private $activityRepository;
+    private $organizationRepository;
 
     /**
      * SearchController constructor.
      *
      * @param ActivityRepositoryInterface $activityRepository
+     * @param OrganizationRepositoryInterface $organizationRepository
      */
-    public function __construct(ActivityRepositoryInterface $activityRepository)
+    public function __construct(
+        ActivityRepositoryInterface $activityRepository,
+        OrganizationRepositoryInterface $organizationRepository
+    )
     {
         $this->activityRepository = $activityRepository;
+        $this->organizationRepository = $organizationRepository;
     }
 
     /**
@@ -34,7 +41,8 @@ class SearchController extends Controller
      *
      * Search projects, playlists and activities for deep linking
      *
-     * @queryParam query required Query to search. Example: test
+     * @queryParam organization_id required The Id of a organization Example: 1
+     * @queryParam query Query to search. Example: test
      * @queryParam sort Field to sort by. Example: created_at
      * @queryParam order Order to sort by. Example: desc
      * @queryParam from Index where the pagination start from. Example: 0
@@ -57,6 +65,11 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
+        $organization = $this->organizationRepository->find($data['organization_id']);
+        $this->authorize('view', $organization);
+
+        $data['organizationIds'] = [$data['organization_id']];
+
         $projects = $this->activityRepository->searchForm($data);
 
         return response([
@@ -69,7 +82,8 @@ class SearchController extends Controller
      *
      * Advance search for projects, playlists and activities having indexing approved
      *
-     * @queryParam query required Query to search. Example: test
+     * @queryParam organization_id required The Id of a organization Example: 1
+     * @queryParam query Query to search. Example: test
      * @queryParam negativeQuery Terms that should not exist. Example: badword
      * @queryParam userIds Array of user ids to match. Example: [1]
      * @queryParam startDate Start date for search by date range. Example: 2020-04-30 00:00:00
@@ -99,7 +113,19 @@ class SearchController extends Controller
     public function advance(SearchRequest $searchRequest)
     {
         $data = $searchRequest->validated();
-        $data['indexing'] = [3];
+
+        $organization = $this->organizationRepository->find($data['organization_id']);
+        $this->authorize('advanceSearch', $organization);
+
+        $data['organizationIds'] = [$data['organization_id']];
+
+        if (!auth()->user()->hasPermissionTo('organization:view', $organization)) {
+            $data['organizationVisibilityTypeIds'] = [null, config('constants.public-organization-visibility-type-id')];
+            $data['indexing'] = [config('constants.indexing-approved')];
+        } elseif (isset($data['query'])) {
+            $data['organizationVisibilityTypeIds'] = [null, config('constants.public-organization-visibility-type-id')];
+            $data['indexing'] = [config('constants.indexing-approved')];
+        }
 
         $results = $this->activityRepository->advanceSearchForm($data);
 
@@ -111,7 +137,8 @@ class SearchController extends Controller
      *
      * Dashboard search for projects, playlists and activities irrespective of indexing status
      *
-     * @queryParam  query required Query to search. Example: test
+     * @queryParam  organization_id required The Id of a organization Example: 1
+     * @queryParam  query Query to search. Example: test
      * @queryParam  negativeQuery Terms that should not exist. Example: badword
      * @queryParam  indexing Indexing requested, approved or not approved. Example: [3]
      * @queryParam  startDate Start date for search by date range. Example: 2020-04-30 00:00:00
@@ -144,7 +171,13 @@ class SearchController extends Controller
     public function dashboard(SearchRequest $searchRequest)
     {
         $data = $searchRequest->validated();
+
+        $organization = $this->organizationRepository->find($data['organization_id']);
+        $this->authorize('dashboardSearch', $organization);
+
         $data['userIds'] = [auth()->user()->id];
+
+        $data['organizationIds'] = [$data['organization_id']];
 
         $results = $this->activityRepository->advanceSearchForm($data);
 

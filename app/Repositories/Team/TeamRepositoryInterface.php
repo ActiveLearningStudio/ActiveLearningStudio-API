@@ -13,10 +13,20 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     /**
      * Create pivots data on team creation
      *
+     * @param $suborganization
      * @param $team
      * @param $data
      */
-    public function createTeam($team, $data);
+    public function createTeam($suborganization, $team, $data);
+
+    /**
+     * Update pivots data on team update
+     *
+     * @param $suborganization
+     * @param $team
+     * @param $data
+     */
+    public function updateTeam($suborganization, $team, $data);
 
     /**
      * Invite user to the team
@@ -29,11 +39,12 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     /**
      * Invite members to the team
      *
+     * @param $suborganization
      * @param $team
      * @param $data
      * @return bool
      */
-    public function inviteMembers($team, $data);
+    public function inviteMembers($suborganization, $team, $data);
 
     /**
      * Set Team / Project / User relationship
@@ -61,6 +72,14 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     public function removeTeamUserProject($team, $project);
 
     /**
+     * Remove invited user
+     *
+     * @param $team
+     * @param $email
+     */
+    public function removeInvitedUser($team, $email);
+
+    /**
      * Assign members to the team project
      *
      * @param $team
@@ -79,11 +98,19 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     public function removeMemberFromTeamProject($team, $project, $user);
 
     /**
+     * Get Teams data
+     *
+     * @param $suborganization_id
+     * @param $user_id
+     * @return mixed
+     */
+    public function getTeams($suborganization_id, $user_id);
+    
+    /**
      * Get Team detail data
      *
      * @param $teamId
      * @return mixed
      */
     public function getTeamDetail($teamId);
-
 }

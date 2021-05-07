@@ -1,0 +1,583 @@
+{
+    "summary": [
+      [
+        {
+          "sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
+          "relation-sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
+          "library": "H5P.TrueFalse 1.6",
+          "content-type": "True\/False Question",
+          "title": "CP - True\/False question",
+          "content": {
+            "questions": "<p>Is 5 x 100 = 500?<\/p>\n"
+          },
+          "answer": [
+            {
+              "name": "CP - True\/False question",
+              "score": {
+                "raw": 1,
+                "max": 1
+              },
+              "duration": "00:00",
+              "ending-point": "00:01",
+              "verb": "answered"
+            }
+          ]
+        },
+        {
+          "sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
+          "relation-sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
+          "library": "H5P.MultiChoice 1.14",
+          "content-type": "Multiple Choice",
+          "title": "CP - Multiple Choice Quiz",
+          "content": {
+            "questions": "<p>Which of the following statements are correct?<\/p>\n"
+          },
+          "answer": [
+            {
+              "name": "CP - Multiple Choice Quiz",
+              "score": {
+                "raw": 2,
+                "max": 2
+              },
+              "duration": "00:04",
+              "ending-point": "00:01",
+              "verb": "answered"
+            }
+          ]
+        },
+        {
+          "sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
+          "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
+          "library": "H5P.SingleChoiceSet 1.11",
+          "content-type": "Single Choice Set",
+          "title": "CP - Single Choice Set",
+          "content": {
+            "children": [
+              {
+                "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                "question": "<p>2 + 2 = ?<\/p>\n",
+                "answers": [
+                  "<p>4<\/p>\n",
+                  "<p>10<\/p>\n",
+                  "<p>22<\/p>\n"
+                ]
+              },
+              {
+                "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                "question": "<p>5 x 10 = ?<\/p>\n",
+                "answers": [
+                  "<p>50<\/p>\n",
+                  "<p>510<\/p>\n",
+                  "<p>15<\/p>\n"
+                ]
+              }
+            ]
+          },
+          "answer": [
+            {
+              "name": "CP - Single Choice Set",
+              "score": {
+                "raw": 2,
+                "max": 2
+              },
+              "duration": "00:09",
+              "ending-point": "00:01",
+              "verb": "answered"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
+          "relation-sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
+          "library": "H5P.Blanks 1.12",
+          "content-type": "Fill in the Blanks",
+          "title": "IB &gt; CP &gt; Fill in the Blanks",
+          "content": {
+            "text": "<p>CP - Fill in the missing words #1<\/p>\n",
+            "questions": [
+              "<p>New Dehli is the capitol of *India*<\/p>\n",
+              "<p>H5P content may be edited using a *browser\/web-browser:Something you use every day*.<\/p>\n"
+            ]
+          },
+          "answer": [
+            {
+              "name": "IB &gt; CP &gt; Fill in the Blanks",
+              "score": {
+                "raw": 2,
+                "max": 2
+              },
+              "duration": "00:14",
+              "ending-point": "00:02",
+              "verb": "answered"
+            }
+          ]
+        },
+        {
+          "sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
+          "relation-sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
+          "library": "H5P.DragQuestion 1.13",
+          "content-type": "Drag and Drop",
+          "title": "CP - Drag and Drop",
+          "content": [
+            
+          ],
+          "answer": [
+            {
+              "name": "CP - Drag and Drop",
+              "score": {
+                "raw": 2,
+                "max": 2
+              },
+              "duration": "00:07",
+              "ending-point": "00:02",
+              "verb": "answered"
+            }
+          ]
+        },
+        {
+          "sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
+          "relation-sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
+          "library": "H5P.MarkTheWords 1.9",
+          "content-type": "Mark the Words",
+          "title": "CP - Mark the Words",
+          "content": {
+            "description": "<p>Mark the articles in the sentences below:<\/p>\n",
+            "text": "<p>*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&nbsp;<\/p>\n"
+          },
+          "answer": [
+            {
+              "name": "CP - Mark the Words",
+              "score": {
+                "raw": 2,
+                "max": 2
+              },
+              "duration": "00:04",
+              "ending-point": "00:02",
+              "verb": "answered"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
+          "relation-sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
+          "library": "H5P.DragText 1.8",
+          "content-type": "Drag Text",
+          "title": "CP\u00a0- Drag Text",
+          "content": {
+            "description": "Drag the words into the correct boxes"
+          },
+          "answer": [
+            {
+              "name": "CP - Drag Text",
+              "score": {
+                "raw": 2,
+                "max": 2
+              },
+              "duration": "01:37",
+              "ending-point": "00:03",
+              "verb": "answered"
+            }
+          ]
+        },
+        {
+          "sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
+          "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
+          "library": "H5P.Summary 1.10",
+          "content-type": "Summary",
+          "title": "CP - Summary",
+          "content": {
+            "title": "Choose the correct statement.",
+            "children": [
+              {
+                "sub-content-id": "6e003430-0edc-4a54-b8f9-e124b119a92a",
+                "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719|6e003430-0edc-4a54-b8f9-e124b119a92a",
+                "question": [
+                  "<p>5 x 5 = 25<\/p>\n",
+                  "<p>5 x 20 = 80<\/p>\n"
+                ]
+              }
+            ]
+          },
+          "answer": [
+            {
+              "name": "CP - Summary",
+              "score": {
+                "raw": 1,
+                "max": 1
+              },
+              "duration": "01:01:57",
+              "ending-point": "00:03",
+              "verb": "answered"
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
+          "relation-sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
+          "library": "H5P.AdvancedText 1.1",
+          "content-type": "Text",
+          "title": "CP Text",
+          "content": [
+            
+          ]
+        },
+        {
+          "sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
+          "relation-sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
+          "library": "H5P.Link 1.3",
+          "content-type": "Link",
+          "title": "Link",
+          "content": {
+            "title": "Link to google"
+          }
+        },
+        {
+          "sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
+          "relation-sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
+          "library": "H5P.Image 1.1",
+          "content-type": "Image",
+          "title": "CP Image",
+          "content": [
+            
+          ]
+        },
+        {
+          "sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
+          "relation-sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
+          "library": "H5P.Shape 1.0",
+          "content-type": "Shapes",
+          "title": "Rectangle Shapes",
+          "content": [
+            
+          ]
+        },
+        {
+          "sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
+          "relation-sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
+          "library": "H5P.Video 1.5",
+          "content-type": "Video",
+          "title": "CP &gt; Video",
+          "content": [
+            
+          ]
+        },
+        {
+          "sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
+          "relation-sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
+          "library": "H5P.Audio 1.4",
+          "content-type": "Audio",
+          "title": "CP &gt; Test Audio",
+          "content": [
+            
+          ]
+        }
+      ],
+      [
+        {
+          "sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
+          "relation-sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
+          "library": "H5P.Dialogcards 1.8",
+          "content-type": "Dialog Cards",
+          "title": "CP - Dialog Cards",
+          "content": {
+            "title": "<p>CP - Dialog Cards<\/p>\n"
+          }
+        },
+        {
+          "sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
+          "relation-sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
+          "library": "H5P.TwitterUserFeed 1.0",
+          "content-type": "Twitter User Feed",
+          "title": "Twitter User Feed",
+          "content": [
+            
+          ]
+        },
+        {
+          "sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
+          "relation-sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
+          "library": "H5P.Table 1.1",
+          "content-type": "Table",
+          "title": "CP Table",
+          "content": [
+            
+          ]
+        },
+        {
+          "sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
+          "relation-sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
+          "library": "H5P.ExportableTextArea 1.3",
+          "content-type": "Exportable Text Area",
+          "title": "CP Exportable Text Area",
+          "content": [
+            
+          ]
+        }
+      ],
+      [
+        {
+          "sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
+          "relation-sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
+          "library": "H5P.ContinuousText 1.2",
+          "content-type": "Continuous Text",
+          "title": "CP &gt; Continuous Text",
+          "content": [
+            
+          ]
+        }
+      ],
+      [
+        {
+          "sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
+          "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
+          "library": "H5P.InteractiveVideo 1.22",
+          "content-type": "Interactive Video",
+          "title": "CP - Interactive Video",
+          "content": [
+            {
+              "sub-content-id": "6824967c-9282-4d12-bcc5-ad0bced64d2f",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|6824967c-9282-4d12-bcc5-ad0bced64d2f",
+              "library": "H5P.TrueFalse 1.6",
+              "content-type": "True\/False Question",
+              "title": "CP &gt; IV&gt; True\/False question",
+              "content": {
+                "questions": "<p>Is 5 x 100 = 500?<\/p>\n"
+              },
+              "answer": [
+                {
+                  "name": "CP &gt; IV&gt; True\/False question",
+                  "score": {
+                    "raw": 1,
+                    "max": 1
+                  },
+                  "duration": "00:02",
+                  "ending-point": "00:00",
+                  "verb": "answered"
+                }
+              ]
+            },
+            {
+              "sub-content-id": "88c60326-825c-4992-80da-b86af8e997a1",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|88c60326-825c-4992-80da-b86af8e997a1",
+              "library": "H5P.MultiChoice 1.14",
+              "content-type": "Multiple Choice",
+              "title": "CP &gt; IV &gt; Multiple Choice Quiz",
+              "content": {
+                "questions": "<p>Which of the following statements are correct?<\/p>\n"
+              },
+              "answer": [
+                {
+                  "name": "CP &gt; IV &gt; Multiple Choice Quiz",
+                  "score": {
+                    "raw": 0,
+                    "max": 2
+                  },
+                  "duration": "00:03",
+                  "ending-point": "00:05",
+                  "verb": "answered"
+                }
+              ]
+            },
+            {
+              "sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
+              "library": "H5P.SingleChoiceSet 1.11",
+              "content-type": "Single Choice Set",
+              "title": "CP &gt; IV &gt; Single Choice Set",
+              "content": {
+                "children": [
+                  {
+                    "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                    "question": "<p>2 + 2 = ?<\/p>\n",
+                    "answers": [
+                      "<p>4<\/p>\n",
+                      "<p>10<\/p>\n",
+                      "<p>22<\/p>\n"
+                    ]
+                  },
+                  {
+                    "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                    "question": "<p>5 x 10 = ?<\/p>\n",
+                    "answers": [
+                      "<p>50<\/p>\n",
+                      "<p>510<\/p>\n",
+                      "<p>15<\/p>\n"
+                    ]
+                  }
+                ]
+              },
+              "answer": [
+                {
+                  "name": "CP &gt; IV &gt; Single Choice Set",
+                  "score": {
+                    "raw": 2,
+                    "max": 2
+                  },
+                  "duration": "00:10",
+                  "ending-point": "00:09",
+                  "verb": "answered"
+                }
+              ]
+            },
+            {
+              "sub-content-id": "03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
+              "library": "H5P.Blanks 1.12",
+              "content-type": "Fill in the Blanks",
+              "title": "CP &gt; IV &gt; Fill in the Blanks",
+              "content": {
+                "text": "<p>CP &gt; IV &gt; Fill in the missing words #1<\/p>\n",
+                "questions": [
+                  "<p>New Dehli is the capitol of *India*<\/p>\n",
+                  "<p>H5P content may be edited using a *browser\/web-browser:Something you use every day*.<\/p>\n"
+                ]
+              },
+              "answer": [
+                {
+                  "name": "CP &gt; IV &gt; Fill in the Blanks",
+                  "score": {
+                    "raw": 2,
+                    "max": 2
+                  },
+                  "duration": "00:06",
+                  "ending-point": "00:18",
+                  "verb": "answered"
+                }
+              ]
+            },
+            {
+              "sub-content-id": "f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
+              "library": "H5P.DragQuestion 1.13",
+              "content-type": "Drag and Drop",
+              "title": "CP &gt; IV &gt; Drag and Drop",
+              "content": [
+                
+              ],
+              "answer": [
+                {
+                  "name": "CP &gt; IV &gt; Drag and Drop",
+                  "score": {
+                    "raw": 2,
+                    "max": 2
+                  },
+                  "duration": "00:03",
+                  "ending-point": "00:20",
+                  "verb": "answered"
+                }
+              ]
+            },
+            {
+              "sub-content-id": "7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
+              "library": "H5P.MarkTheWords 1.9",
+              "content-type": "Mark the Words",
+              "title": "CP &gt; IV &gt; Mark the Words",
+              "content": {
+                "description": "<p>Mark the articles in the sentences below:<\/p>\n",
+                "text": "<p>*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&nbsp;<\/p>\n"
+              },
+              "answer": [
+                {
+                  "name": "CP &gt; IV &gt; Mark the Words",
+                  "score": {
+                    "raw": 2,
+                    "max": 2
+                  },
+                  "duration": "00:04",
+                  "ending-point": "00:23",
+                  "verb": "answered"
+                }
+              ]
+            },
+            {
+              "sub-content-id": "55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
+              "library": "H5P.DragText 1.8",
+              "content-type": "Drag Text",
+              "title": "CP &gt; IV\u00a0&gt; Drag Text",
+              "content": {
+                "description": "Drag the words into the correct boxes"
+              },
+              "answer": [
+                {
+                  "name": "CP &gt; IV &gt; Drag Text",
+                  "score": {
+                    "raw": 2,
+                    "max": 2
+                  },
+                  "duration": "01:05",
+                  "ending-point": "00:26",
+                  "verb": "answered"
+                }
+              ]
+            },
+            {
+              "sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e",
+              "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f6839abe-d5d1-41cb-85a4-c19c49a4583e",
+              "library": "H5P.Summary 1.10",
+              "content-type": "Summary",
+              "title": "IB &gt; IV &gt; Summary",
+              "content": {
+                "title": "Choose the correct statement.",
+                "children": [
+                  {
+                    "sub-content-id": "8146ae19-549a-4f79-8165-30573f8f8769",
+                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|8146ae19-549a-4f79-8165-30573f8f8769",
+                    "question": [
+                      "<p>8+9 = 17<\/p>\n",
+                      "<p>10 x 2 = 12<\/p>\n",
+                      "<p>13 x 13 = 149<\/p>\n"
+                    ]
+                  },
+                  {
+                    "sub-content-id": "6afe0b3b-9af7-41ab-8506-017ae8b89375",
+                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|6afe0b3b-9af7-41ab-8506-017ae8b89375",
+                    "question": [
+                      "<p>4 x 2 = 8<\/p>\n",
+                      "<p>5 x 6 = 31<\/p>\n",
+                      "<p>10 \/ 2 = 4<\/p>\n"
+                    ]
+                  }
+                ]
+              },
+              "answer": [
+                {
+                  "name": "IB &gt; IV &gt; Summary",
+                  "score": {
+                    "raw": 2,
+                    "max": 2
+                  },
+                  "duration": "00:05",
+                  "ending-point": "00:27",
+                  "verb": "answered"
+                }
+              ]
+            }
+          ],
+          "answer": [
+            {
+              "name": "CP - Interactive Video",
+              "score": {
+                "raw": 13,
+                "max": 15
+              },
+              "duration": "01:22",
+              "ending-point": "00:07",
+              "verb": "answered"
+            }
+          ]
+        }
+      ]
+    ]
+  }

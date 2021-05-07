@@ -1,0 +1,33 @@
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 3,
+            "name": "Suborganization",
+            "description": "Suborganization description",
+            "parent_id": 1,
+            "projects_count": 0,
+            "playlists_count": 0,
+            "activities_count": 0
+        },
+        {
+            "id": 4,
+            "name": "org name",
+            "description": "org description",
+            "parent_id": 1,
+            "projects_count": 0,
+            "playlists_count": 0,
+            "activities_count": 0
+        }
+    ],
+    "first_page_url": "http://127.0.0.1:8000/api/v1/admin/organizations/report/basic?page=1",
+    "from": 1,
+    "last_page": 1,
+    "last_page_url": "http://127.0.0.1:8000/api/v1/admin/organizations/report/basic?page=1",
+    "next_page_url": null,
+    "path": "http://127.0.0.1:8000/api/v1/admin/organizations/report/basic",
+    "per_page": 25,
+    "prev_page_url": null,
+    "to": 15,
+    "total": 2
+}

@@ -1,0 +1,36 @@
+node('currikionelxp') {
+      def app     
+      def redis
+      stage('Clone repository') {               
+            checkout scm    
+      }     
+      stage('Build image') {         
+            app = docker.build("quay.io/curriki/api")    
+            redis = docker.build("quay.io/curriki/redis", "-f Dockerfile.redis .")    
+       }     
+      stage('Test image') {           
+            app.inside { 
+                  sh 'echo "Api Tests passed"'        
+            }    
+            redis.inside { 
+                  sh 'echo "Redis Tests passed"'        
+            }   
+        }     
+       stage('Push image') {	
+            docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                  app.push("${env.BUILD_NUMBER}")            
+                  app.push("develop")        
+            }    
+            docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                  redis.push("${env.BUILD_NUMBER}")            
+                  redis.push("develop")        
+            }   
+      }
+      stage('Deploying Image') {
+
+        echo 'Copy'
+        sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+        echo 'Copy completed'
+    } 
+}
+ 

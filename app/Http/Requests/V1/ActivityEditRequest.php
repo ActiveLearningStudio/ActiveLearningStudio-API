@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ActivityRequest extends FormRequest
+class ActivityEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,9 @@ class ActivityRequest extends FormRequest
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'content' => 'required|string|max:255',
-            'playlist_id' => 'integer',
+            'data' => 'required',
             'order' => 'integer',
+            'shared' => 'boolean',
             'h5p_content_id' => 'integer',
             'thumb_url' => 'string',
             'subject_id' => 'nullable|string',

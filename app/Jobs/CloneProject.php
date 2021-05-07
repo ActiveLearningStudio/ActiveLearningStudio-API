@@ -32,17 +32,24 @@ class CloneProject implements ShouldQueue
     protected $token;
 
     /**
+     * @var
+     */
+    protected $organization_id;
+
+    /**
      * Create a new job instance.
      *
      * @param User $user
      * @param Project $project
      * @param $token
+     * @param $organization_id
      */
-    public function __construct(User $user, Project $project, $token)
+    public function __construct(User $user, Project $project, $token, $organization_id = null)
     {
         $this->user = $user;
         $this->project = $project;
         $this->token = $token;
+        $this->organization_id = $organization_id;
     }
 
     /**
@@ -54,8 +61,8 @@ class CloneProject implements ShouldQueue
     public function handle(ProjectRepositoryInterface $projectRepository)
     {
         try {
-            $projectRepository->clone($this->user, $this->project, $this->token);
-            $isDuplicate = $projectRepository->checkIsDuplicate($this->user, $this->project->id);
+            $projectRepository->clone($this->user, $this->project, $this->token, $this->organization_id);
+            $isDuplicate = $projectRepository->checkIsDuplicate($this->user, $this->project->id, $this->organization_id);
             $process = ($isDuplicate) ? "duplicate" : "clone";
             $message = "Your request to $process project [" . $this->project->name . "] has been completed and available";
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');

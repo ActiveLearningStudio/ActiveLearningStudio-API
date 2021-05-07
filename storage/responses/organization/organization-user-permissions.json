@@ -1,0 +1,15 @@
+{
+    "permissions": {
+        "activeRole": "non_editing_teacher",
+        "roleId": 4,
+        "Project": [
+            "project:view"
+        ],
+        "Playlist": [
+            "playlist:view"
+        ],
+        "Activity": [
+            "activity:view"
+        ]
+    }
+}
