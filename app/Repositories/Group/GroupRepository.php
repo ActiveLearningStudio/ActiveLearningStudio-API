@@ -212,6 +212,9 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
             $note = array_key_exists('note', $data) ? $data['note'] : '';
 
             if ($con_user) {
+                if (!$suborganization->users->where("id", $con_user->id)->first()) {
+                    $suborganization->users()->attach($con_user, ['organization_role_type_id' => config('constants.member-role-id')]);
+                }
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                 $group->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
                 $con_user->notify(new InviteToGroupNotification($auth_user, $group, $token, $note));
