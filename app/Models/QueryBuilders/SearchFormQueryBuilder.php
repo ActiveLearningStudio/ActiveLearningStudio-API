@@ -163,6 +163,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
 
         if (!empty($this->endDate)) {
             $carbonEndDate = new Carbon($this->endDate);
+            $carbonEndDate->addUnitNoOverflow('hour', 24, 'day');
             $dateRange['lte'] = $carbonEndDate->toAtomString();
         }
 

@@ -462,4 +462,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         return $userOrganization->load('parent')->loadCount(['projects', 'children', 'users', 'groups', 'teams']);
     }
+
+    /**
+     * Get the root organization
+     *
+     * @return mixed
+     */
+    public function getRootOrganization()
+    {
+        return $this->model->orderBy('id', 'asc')->first();
+    }
 }
