@@ -42,7 +42,7 @@ class App
             $user_email = $LTI->user->email ?: false; //Canvas User email
             if (!$user_email && !empty($custom_email_id)) {
                 // Try to obtain it from the custom fields.
-                $user_email = $person_email_primary;
+                $user_email = $custom_email_id;
             }
             // Obtain User role
             $is_learner = !$LTI->user->instructor;
@@ -78,6 +78,7 @@ class App
                     $grade_params['note'] = "You've been graded.";
                     $grade_params['result_id'] = $lti_data['result_id'];
 
+                    // LTI Submission Review - Canvas' Score API implementation
                     //Submission review link
                     $review_data = [];
                     $review_data['result_id'] = $lti_data['result_id'];
@@ -95,26 +96,6 @@ class App
                             "submission_type" => "basic_lti_launch",
                             "submission_data" => $CFG->wwwroot . '/mod/curriki/?submission=' . $lti_submission_info,
                             "submitted_at" => date(DATE_RFC3339_EXTENDED),
-                            /*"submission_type" = "online_url",
-                            "submission_data": "https://instructure.com",
-                            //"submitted_at": "2017-04-14T18:54:36.736+00:00",
-                            "content_items": [
-                                {
-                                    "type": "file",
-                                    "url": $CFG->wwwroot . '/mod/curriki/?submission=' . $lti_submission_info,
-                                    "title": "Submission File"
-                                }
-                            ]
-                            "submission_type" => "online_url",
-                            "submission_data" => "https://instructure.com",
-                            "submitted_at" => "2017-04-14T18:54:36.736+00:00",
-                            "content_items" =>  [
-                            {
-                                "type": "file",
-                                "url": "https://instructure.com/test_file.txt",
-                                "title": "Submission File"
-                            }
-                            ]*/
                         ]
                     ];
                     
@@ -159,43 +140,21 @@ class App
                 
                 header("Location: $redirect_to_studio_url");
             } else {
-                
+                // LTI Submission Review - Canvas' Score API implementation
                 $is_submission_review = U::get($_GET, "submission");
                 if (!empty($is_submission_review)) {
-                    echo 'in submission review...';
-                    echo '<pre>';
+                    
                     parse_str(base64_decode($is_submission_review), $submission_data);
-                    print_r($submission_data);
+                    $submission_data['referrer'] = $CFG->wwwroot;
+                    $build_submission_request_data = http_build_query($submission_data);
 
-                    $curl = curl_init();
-                    $activity_link = CURRIKI_STUDIO_HOST . "/activity/".$submission_data['activity_id']. "/submission/" .$submission_data['result_id'] ;
-                    curl_setopt_array($curl, array(
-                      CURLOPT_URL => CURRIKI_STUDIO_HOST . '/api/api/v1/outcome/summary',
-                      CURLOPT_RETURNTRANSFER => true,
-                      CURLOPT_ENCODING => '',
-                      CURLOPT_MAXREDIRS => 10,
-                      CURLOPT_TIMEOUT => 0,
-                      CURLOPT_FOLLOWLOCATION => true,
-                      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                      CURLOPT_CUSTOMREQUEST => 'POST',
-                      CURLOPT_POSTFIELDS =>'{
-                        "actor": "{\\"account\\":{\\"homePage\\":\\"'.$CFG->wwwroot.'\\",\\"name\\":\\"'.$submission_data['user_id'].'\\"}}",
-                        "activity": "'.$activity_link.'"
-                    }',
-                      CURLOPT_HTTPHEADER => array(
-                        'Content-Type: application/json'
-                      ),
-                    ));
+                    // encode user information.
+                    $lti_summary_info = base64_encode($build_submission_request_data);
+                    $studio_lti_summary_link = CURRIKI_STUDIO_HOST . "/lti/summary?submission=$lti_summary_info";
                     
-                    $response = curl_exec($curl);
-                    
-                    curl_close($curl);
-                    echo 'RESPONSE:';
-                    print_r($response);
-
-
-                    exit;
-                    
+                    // Redirect User to the login page.
+                    header("Location: $studio_lti_summary_link");
+                    exit(0);
                 }
                 // Single Sign On LTI request
                 // we should move this to a new 
