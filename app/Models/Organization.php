@@ -22,7 +22,8 @@ class Organization extends Model
         'description',
         'domain',
         'image',
-        'parent_id'
+        'parent_id',
+        'self_registration'
     ];
 
     /**

@@ -68,7 +68,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 'type' => 'question',
                 'content_type' => $data['content-type'],
                 'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
+                'title' => html_entity_decode($data['title']),
                 'answers' => $answers,
             ];
         }
@@ -76,26 +76,6 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         // Adding a second exception for H5P.Image
         if (strpos($data['library'], 'H5P.Image') !== false) {
             return false;
-        }
-
-        // This is an activity aggregator like column or questionnaire
-        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content'])) {
-            $deeperResult = [];
-
-            foreach ($data['content'] as $row) {
-                $normalizedRow = $this->normalizeRow($row);
-                if ($normalizedRow !== false) {
-                    $deeperResult[] = $normalizedRow;
-                }
-            }
-
-            return [
-                'type' => 'section',
-                'content_type' => $data['content-type'],
-                'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
-                'children' => $deeperResult,
-            ];
         }
 
         // This is a question
@@ -127,8 +107,28 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 'type' => 'question',
                 'content_type' => $data['content-type'],
                 'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
+                'title' => html_entity_decode($data['title']),
                 'answers' => $answers,
+            ];
+        }
+
+        // This is an activity aggregator like column or questionnaire
+        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content']) && !empty($data['content'])) {
+            $deeperResult = [];
+
+            foreach ($data['content'] as $row) {
+                $normalizedRow = $this->normalizeRow($row);
+                if ($normalizedRow !== false) {
+                    $deeperResult[] = $normalizedRow;
+                }
+            }
+
+            return [
+                'type' => 'section',
+                'content_type' => $data['content-type'],
+                'sub_content_id' => $data['sub-content-id'],
+                'title' => html_entity_decode($data['title']),
+                'children' => $deeperResult,
             ];
         }
 
@@ -137,7 +137,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             'type' => 'question',
             'content_type' => $data['content-type'],
             'sub_content_id' => $data['sub-content-id'],
-            'title' => $data['title'],
+            'title' => html_entity_decode($data['title']),
             'answers' => [[
                 'duration' => 'N/A',
                 'response' => ['N/A'],
