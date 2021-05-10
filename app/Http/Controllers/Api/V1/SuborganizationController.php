@@ -18,6 +18,7 @@ use App\Http\Requests\V1\SuborganizationUploadThumbRequest;
 use App\Http\Requests\V1\SuborganizationShowMemberOptionsRequest;
 use App\Http\Requests\V1\SuborganizationDeleteUserRequest;
 use App\Http\Requests\V1\SuborganizationGetUsersRequest;
+use App\Http\Requests\V1\SuborganizationUpdateRole;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
@@ -527,6 +528,29 @@ class SuborganizationController extends Controller
     }
 
     /**
+     * Get User Role detail For Suborganization
+     *
+     * Get detail of the user role for suborganization.
+     *
+     * @param Organization $suborganization
+     * @param integer $roleId
+     * @responseFile responses/organization/organization-roles.json
+     *
+     * @return Response
+     */
+    public function getRoleDetail(Organization $suborganization, $roleId)
+    {
+        $role = $suborganization->roles->where("id", $roleId);
+        if ($role->first()) {
+            return OrganizationRoleResource::collection($role);
+        }
+
+        return response([
+            'errors' => ['Role detail not found.'],
+        ], 404);
+    }
+
+    /**
      * Get Visibility Types For Suborganization
      *
      * Get a list of the visibility types for suborganization.
@@ -580,6 +604,55 @@ class SuborganizationController extends Controller
 
         return response([
             'errors' => ['Failed to add role.'],
+        ], 500);
+    }
+
+    /**
+     * Update Suborganization Role
+     *
+     * Update role for the specified suborganization
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam role_id integer required Id of a suborganization role Example: 1
+     * @bodyParam permissions array required Ids of the permissions to assign the role Example: [1, 2]
+     *
+     * @response {
+     *   "message": "Role has been updated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update role."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateRole $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function updateRole(SuborganizationUpdateRole $request, Organization $suborganization)
+    {
+        $this->authorize('addRole', $suborganization);
+
+        $data = $request->validated();
+
+        $role = $suborganization->roles->where("id", $data['role_id']);
+        if (!$role->first()) {
+            return response([
+                'errors' => ['Role detail not found.'],
+            ], 404);
+        }
+
+        $role = $this->organizationRepository->updateRole($data);
+
+        if ($role) {
+            return response([
+                'message' => 'Role has been updated successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update role.'],
         ], 500);
     }
 
