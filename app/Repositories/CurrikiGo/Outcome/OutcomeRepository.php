@@ -68,7 +68,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 'type' => 'question',
                 'content_type' => $data['content-type'],
                 'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
+                'title' => html_entity_decode($data['title']),
                 'answers' => $answers,
             ];
         }
@@ -107,7 +107,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 'type' => 'question',
                 'content_type' => $data['content-type'],
                 'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
+                'title' => html_entity_decode($data['title']),
                 'answers' => $answers,
             ];
         }
@@ -127,7 +127,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 'type' => 'section',
                 'content_type' => $data['content-type'],
                 'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
+                'title' => html_entity_decode($data['title']),
                 'children' => $deeperResult,
             ];
         }
@@ -137,7 +137,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             'type' => 'question',
             'content_type' => $data['content-type'],
             'sub_content_id' => $data['sub-content-id'],
-            'title' => $data['title'],
+            'title' => html_entity_decode($data['title']),
             'answers' => [[
                 'duration' => 'N/A',
                 'response' => ['N/A'],

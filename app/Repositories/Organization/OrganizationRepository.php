@@ -3,6 +3,7 @@
 namespace App\Repositories\Organization;
 
 use App\Models\Organization;
+use App\Models\OrganizationRoleType;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
@@ -293,6 +294,18 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         }
 
         return false;
+    }
+
+    /**
+     * Update role for particular organization
+     *
+     * @param array $data
+     * @return Model
+     */
+    public function updateRole($data)
+    {
+        $role = OrganizationRoleType::find($data['role_id']);
+        return $role->permissions()->sync($data['permissions']);
     }
 
     /**
