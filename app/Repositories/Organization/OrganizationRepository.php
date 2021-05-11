@@ -3,6 +3,7 @@
 namespace App\Repositories\Organization;
 
 use App\Models\Organization;
+use App\Models\OrganizationPermissionType;
 use App\Models\OrganizationRoleType;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\BaseRepository;
@@ -453,6 +454,20 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $response[$permission['feature']][] = $permission['name'];
             }
             return $response;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        } 
+    }
+
+        /**
+     * To fetch organization default permissions
+     *
+     * @return Model
+     */
+    public function fetchOrganizationDefaultPermissions()
+    {
+        try {
+            return OrganizationPermissionType::all()->groupBy('feature');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         } 

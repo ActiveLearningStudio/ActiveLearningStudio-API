@@ -132,6 +132,13 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     public function fetchOrganizationUserPermissions($authenticatedUser, $organization);
 
     /**
+     * To fetch organization default permissions
+     *
+     * @return Model
+     */
+    public function fetchOrganizationDefaultPermissions();
+
+    /**
      * To fetch organization data
      *
      * @param User $authenticatedUser

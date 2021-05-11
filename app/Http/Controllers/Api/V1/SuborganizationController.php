@@ -677,6 +677,25 @@ class SuborganizationController extends Controller
         ], 200);
     }
 
+        /**
+     * Get Default Permissions
+     *
+     * Get the all default permissions in the suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/organization/organization-user-permissions.json
+     *
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function getDefaultPermissions(Organization $suborganization)
+    {
+        return response([
+            'permissions' => $this->organizationRepository->fetchOrganizationDefaultPermissions(),
+        ], 200);
+    }
+
     /**
      * User has permission
      *
