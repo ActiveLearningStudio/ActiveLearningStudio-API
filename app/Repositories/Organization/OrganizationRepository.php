@@ -373,7 +373,13 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return $organization->users()->withCount([
+        $organizationUsers = $organization->users();
+
+        if (isset($data['role'])) {
+            $organizationUsers = $organizationUsers->wherePivot('organization_role_type_id', $data['role']);
+        }
+
+        return $organizationUsers->withCount([
             'projects' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
             },
