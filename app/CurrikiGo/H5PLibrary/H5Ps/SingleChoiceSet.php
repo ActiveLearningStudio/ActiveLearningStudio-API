@@ -24,8 +24,11 @@ class SingleChoiceSet extends H5PLibraryBase implements H5PLibraryInterface
                 $meta['children'] = [];
                 foreach ($this->content['choices'] as $choice) {
                     $entry = [];
-                    $entry['sub-content-id'] = $choice['subContentId'];
-                    $entry['relation-sub-content-id'] = $this->getRelationSubContentID($entry['sub-content-id']);
+                    if (isset($choice['subContentId'])) {
+                        $entry['sub-content-id'] = $choice['subContentId'];
+                        $entry['relation-sub-content-id'] = $this->getRelationSubContentID($entry['sub-content-id']);
+                    }
+                    
                     $entry['question'] = $choice['question'];
                     $entry['answers'] = $choice['answers'];
                     $meta['children'][] = $entry;
