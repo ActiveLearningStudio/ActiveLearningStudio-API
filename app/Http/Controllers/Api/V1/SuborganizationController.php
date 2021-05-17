@@ -508,7 +508,9 @@ class SuborganizationController extends Controller
     public function getUsers(SuborganizationGetUsersRequest $suborganizationGetUsersRequest, Organization $suborganization)
     {
         $this->authorize('viewAnyUser', $suborganization);
+
         $data = $suborganizationGetUsersRequest->validated();
+
         return UserResource::collection($this->organizationRepository->fetchOrganizationUsers($data, $suborganization));
     }
 
