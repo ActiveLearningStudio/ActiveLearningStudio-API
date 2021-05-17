@@ -497,6 +497,7 @@ class SuborganizationController extends Controller
      * @urlParam page The pagination page no to show  Example: 1
      * @bodyParam query string Query to search suborganization users against Example: Leo
      * @bodyParam size int Number of items to be displayed "per page" Example: 1
+     * @bodyParam role int Organization role type id to filter by Example: 1
      *
      * @responseFile responses/organization/organization-users.json
      *
@@ -674,6 +675,25 @@ class SuborganizationController extends Controller
 
         return response([
             'permissions' => $this->organizationRepository->fetchOrganizationUserPermissions($authenticatedUser, $suborganization),
+        ], 200);
+    }
+
+    /**
+     * Get Default Permissions
+     *
+     * Get the all default permissions in the suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/organization/organization-user-permissions.json
+     *
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function getDefaultPermissions(Organization $suborganization)
+    {
+        return response([
+            'permissions' => $this->organizationRepository->fetchOrganizationDefaultPermissions(),
         ], 200);
     }
 
