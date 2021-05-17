@@ -109,8 +109,8 @@ class AuthController extends Controller
             $organization = $this->organizationRepository->getRootOrganization();
             if ($organization && !$organization->self_registration) {
                 return response([
-                    'errors' => ['Could not create user account. Please try again later.'],
-                ], 500);
+                    'errors' => ['Self registration is not allowed on this domain.'],
+                ], 400);
             }
         }
 
@@ -285,6 +285,17 @@ class AuthController extends Controller
         if ($result) {
             $user = $this->userRepository->findByField('email', $result['email']);
             if (!$user) {
+                $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($result['email']);
+
+                if ($invited_users->isEmpty()) {
+                    $organization = $this->organizationRepository->getRootOrganization();
+                    if ($organization && !$organization->self_registration) {
+                        return response([
+                            'errors' => ['Self registration is not allowed on this domain.'],
+                        ], 400);
+                    }
+                }
+
                 $password = Str::random(10);
                 $user = $this->userRepository->create([
                     'first_name' => $result['name'],
