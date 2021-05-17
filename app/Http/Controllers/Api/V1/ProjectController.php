@@ -496,14 +496,14 @@ class ProjectController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function reorder(Request $request)
+    public function reorder(Request $request, Organization $suborganization)
     {
         $authenticated_user = auth()->user();
 
         $this->projectRepository->saveList($request->projects);
 
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->projects),
+            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $suborganization->id)->get()),
         ], 200);
     }
 
