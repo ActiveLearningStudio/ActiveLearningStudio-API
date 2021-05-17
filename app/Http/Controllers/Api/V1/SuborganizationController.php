@@ -497,6 +497,7 @@ class SuborganizationController extends Controller
      * @urlParam page The pagination page no to show  Example: 1
      * @bodyParam query string Query to search suborganization users against Example: Leo
      * @bodyParam size int Number of items to be displayed "per page" Example: 1
+     * @bodyParam role int Organization role type id to filter by Example: 1
      *
      * @responseFile responses/organization/organization-users.json
      *
