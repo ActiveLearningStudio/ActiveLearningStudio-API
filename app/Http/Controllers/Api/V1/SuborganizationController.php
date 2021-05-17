@@ -497,21 +497,16 @@ class SuborganizationController extends Controller
      * @urlParam page The pagination page no to show  Example: 1
      * @bodyParam query string Query to search suborganization users against Example: Leo
      * @bodyParam size int Number of items to be displayed "per page" Example: 1
+ role type id to filter by Example: 1
+     * @bodyParam role int Organization role type id to filter by Example: 1     * @bodyParam role int Organization role type id to filter by Example: 1     * @bodyParam role int Organization role type id to filter by Example: 1     * @bodyParam role int Organization role type id to filter by Example: 1
+
      * @bodyParam role int Organization role type id to filter by Example: 1
-     *
-     * @responseFile responses/organization/organization-users.json
-     *
-     * @param SuborganizationGetUsersRequest $suborganizationGetUsersRequest
-     * @param Organization $suborganization
-     * @return Response
-     */
-    public function getUsers(SuborganizationGetUsersRequest $suborganizationGetUsersRequest, Organization $suborganization)
-    {
-        $this->authorize('viewAnyUser', $suborganization);
+     * @bodyParam role int Organization role type id to filter by Example: 1
 
-        $data = $suborganizationGetUsersRequest->validated();
 
-        return UserResource::collection($this->organizationRepository->fetchOrganizationUsers($data, $suborganization));
+1
+
+urn UserResource::collection($this->organizationRepository->fetchOrganizationUsers($data, $suborganization));
     }
 
     /**

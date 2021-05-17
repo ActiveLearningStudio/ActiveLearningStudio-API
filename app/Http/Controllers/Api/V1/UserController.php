@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\SharedProjectRequest;
+use App\Http\Requests\V1\SuborganizationAddNewUser;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
@@ -17,7 +18,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\NotificationListResource;
+use App\Models\Organization;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 /**
  * @group 2. User
@@ -33,7 +37,7 @@ class UserController extends Controller
      *
      * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository, Organization $suborganization)
     {
         $this->userRepository = $userRepository;
 
@@ -90,6 +94,40 @@ class UserController extends Controller
         return response([
             'errors' => ['Forbidden. Please use register to create new user.'],
         ], 403);
+    }
+
+    /**
+     * Create New Organization User
+     *
+     * Create a new user in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function AddNewUser(SuborganizationAddNewUser $addNewUserrequest, Organization $suborganization)
+    {
+        $this->authorize('addUser', $suborganization);
+        $data = $addNewUserrequest->validated();
+
+        $data['password'] = Hash::make($data['password']);
+        $data['remember_token'] = Str::random(64);
+        $data['email_verified_at'] = now();
+
+        return \DB::transaction(function () use ($suborganization, $data) {
+        
+            $user = $this->userRepository->create(Arr::except($data, ['role_id']));
+            $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
+
+            return response([
+                'user' => new UserResource($this->userRepository->find($user->id)),
+                'message' => 'User has been created successfully.',
+            ], 200);
+
+        });
+
+        return response([
+            'errors' => ['Failed to create user.'],
+        ], 500);
     }
 
     /**
