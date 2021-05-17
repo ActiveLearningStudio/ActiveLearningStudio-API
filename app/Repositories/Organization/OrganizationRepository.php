@@ -3,6 +3,8 @@
 namespace App\Repositories\Organization;
 
 use App\Models\Organization;
+use App\Models\OrganizationPermissionType;
+use App\Models\OrganizationRoleType;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
@@ -98,10 +100,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                                 $query->where('name', '=', 'organization:create');
                             })->get();
 
-        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
+        if (isset($data['admins'])) {
+            $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
+        }
 
-        foreach ($data['users'] as $user) {
-            $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
+        if (isset($data['users'])) {
+            foreach ($data['users'] as $user) {
+                $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
+            }
         }
 
         try {
@@ -129,7 +135,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             }
 
             if ($suborganization) {
-                $suborganization->users()->sync($userRoles);
+                if (isset($userRoles)) {
+                    $suborganization->users()->sync($userRoles);
+                }
                 DB::commit();
             }
 
@@ -149,10 +157,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function update($organization, $data)
     {
-        $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
+        if (isset($data['admins'])) {
+            $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
+        }
 
-        foreach ($data['users'] as $user) {
-            $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
+        if (isset($data['users'])) {
+            foreach ($data['users'] as $user) {
+                $userRoles[$user['user_id']] = ['organization_role_type_id' => $user['role_id']];
+            }
         }
 
         try {
@@ -161,7 +173,10 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $is_updated = $organization->update(Arr::except($data, ['admins', 'users']));
             // update the organization data
             if ($is_updated) {
-                $organization->users()->sync($userRoles);
+                if (isset($userRoles)) {
+                    $organization->users()->sync($userRoles);
+                }
+
                 DB::commit();
             }
 
@@ -296,6 +311,18 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Update role for particular organization
+     *
+     * @param array $data
+     * @return Model
+     */
+    public function updateRole($data)
+    {
+        $role = OrganizationRoleType::find($data['role_id']);
+        return $role->permissions()->sync($data['permissions']);
+    }
+
+    /**
      * Update user for the specified role in particular suborganization
      *
      * @param Organization $organization
@@ -346,7 +373,13 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return $organization->users()->withCount([
+        $organizationUsers = $organization->users();
+
+        if (isset($data['role'])) {
+            $organizationUsers = $organizationUsers->wherePivot('organization_role_type_id', $data['role']);
+        }
+
+        return $organizationUsers->withCount([
             'projects' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
             },
@@ -440,6 +473,20 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $response[$permission['feature']][] = $permission['name'];
             }
             return $response;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        } 
+    }
+
+        /**
+     * To fetch organization default permissions
+     *
+     * @return Model
+     */
+    public function fetchOrganizationDefaultPermissions()
+    {
+        try {
+            return OrganizationPermissionType::all()->groupBy('feature');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         } 

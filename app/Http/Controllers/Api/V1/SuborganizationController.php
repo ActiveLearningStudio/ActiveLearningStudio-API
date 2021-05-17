@@ -18,6 +18,7 @@ use App\Http\Requests\V1\SuborganizationUploadThumbRequest;
 use App\Http\Requests\V1\SuborganizationShowMemberOptionsRequest;
 use App\Http\Requests\V1\SuborganizationDeleteUserRequest;
 use App\Http\Requests\V1\SuborganizationGetUsersRequest;
+use App\Http\Requests\V1\SuborganizationUpdateRole;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
@@ -496,6 +497,7 @@ class SuborganizationController extends Controller
      * @urlParam page The pagination page no to show  Example: 1
      * @bodyParam query string Query to search suborganization users against Example: Leo
      * @bodyParam size int Number of items to be displayed "per page" Example: 1
+     * @bodyParam role int Organization role type id to filter by Example: 1
      *
      * @responseFile responses/organization/organization-users.json
      *
@@ -524,6 +526,29 @@ class SuborganizationController extends Controller
     public function getRoles()
     {
         return OrganizationRoleResource::collection(OrganizationRoleType::all());
+    }
+
+    /**
+     * Get User Role detail For Suborganization
+     *
+     * Get detail of the user role for suborganization.
+     *
+     * @param Organization $suborganization
+     * @param integer $roleId
+     * @responseFile responses/organization/organization-roles.json
+     *
+     * @return Response
+     */
+    public function getRoleDetail(Organization $suborganization, $roleId)
+    {
+        $role = $suborganization->roles->where("id", $roleId);
+        if ($role->first()) {
+            return OrganizationRoleResource::collection($role);
+        }
+
+        return response([
+            'errors' => ['Role detail not found.'],
+        ], 404);
     }
 
     /**
@@ -584,6 +609,55 @@ class SuborganizationController extends Controller
     }
 
     /**
+     * Update Suborganization Role
+     *
+     * Update role for the specified suborganization
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam role_id integer required Id of a suborganization role Example: 1
+     * @bodyParam permissions array required Ids of the permissions to assign the role Example: [1, 2]
+     *
+     * @response {
+     *   "message": "Role has been updated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update role."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateRole $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function updateRole(SuborganizationUpdateRole $request, Organization $suborganization)
+    {
+        $this->authorize('addRole', $suborganization);
+
+        $data = $request->validated();
+
+        $role = $suborganization->roles->where("id", $data['role_id']);
+        if (!$role->first()) {
+            return response([
+                'errors' => ['Role detail not found.'],
+            ], 404);
+        }
+
+        $role = $this->organizationRepository->updateRole($data);
+
+        if ($role) {
+            return response([
+                'message' => 'Role has been updated successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update role.'],
+        ], 500);
+    }
+
+    /**
      * Get User Permissions
      *
      * Get the logged-in user's permissions in the suborganization.
@@ -601,6 +675,25 @@ class SuborganizationController extends Controller
 
         return response([
             'permissions' => $this->organizationRepository->fetchOrganizationUserPermissions($authenticatedUser, $suborganization),
+        ], 200);
+    }
+
+    /**
+     * Get Default Permissions
+     *
+     * Get the all default permissions in the suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/organization/organization-user-permissions.json
+     *
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function getDefaultPermissions(Organization $suborganization)
+    {
+        return response([
+            'permissions' => $this->organizationRepository->fetchOrganizationDefaultPermissions(),
         ], 200);
     }
 
