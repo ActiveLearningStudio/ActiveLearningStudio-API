@@ -677,7 +677,7 @@ class SuborganizationController extends Controller
         ], 200);
     }
 
-        /**
+    /**
      * Get Default Permissions
      *
      * Get the all default permissions in the suborganization.
