@@ -43,20 +43,12 @@ node {
 
     
     parallel {
-        stage ('currikidev') {
-                echo 'Copy'
-                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                echo 'Copy completed'
-        }
-        stage ('currikionelxp') {
-                echo 'Copy'
-                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                echo 'Copy completed'
-        }
-        stage ('currikimopse') {
-                echo 'Copy'
-                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                echo 'Copy completed'
+        node('currikidev') {
+            stage ('currikidev') {
+                    echo 'Copy'
+                    sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                    echo 'Copy completed'
+            }
         }
     }
     
