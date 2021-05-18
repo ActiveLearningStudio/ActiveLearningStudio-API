@@ -55,8 +55,10 @@ node {
                         }
                     }
                 } else {
-                    echo "currikidev is offline"
-                    exit 1
+                    stage ('currikidev') {
+                        echo "currikidev is offline"
+                        exit 1
+                    }
                 }
                 
             },
@@ -70,8 +72,10 @@ node {
                         }
                     }
                 } else {
-                    echo "currikionelxp is offline"
-                    exit 1
+                    stage ('currikionelxp') {
+                        echo "currikionelxp is offline"
+                        exit 1
+                    }
                 }
             },
             "StageC": {
@@ -84,8 +88,10 @@ node {
                         }
                     }
                 } else {
-                    echo "currikimopse is offline"
-                    exit 1
+                    stage ('currikimopse') {
+                        echo "currikimopse is offline"
+                        exit 1
+                    }
                 }
             }
     )
