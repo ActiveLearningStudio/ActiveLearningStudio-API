@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\SharedProjectRequest;
 use App\Http\Requests\V1\SuborganizationAddNewUser;
+use App\Http\Requests\V1\SuborganizationUpdateUserDetail;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
@@ -104,7 +105,7 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function AddNewUser(SuborganizationAddNewUser $addNewUserrequest, Organization $suborganization)
+    public function addNewUser(SuborganizationAddNewUser $addNewUserrequest, Organization $suborganization)
     {
         $this->authorize('addUser', $suborganization);
         $data = $addNewUserrequest->validated();
@@ -127,6 +128,39 @@ class UserController extends Controller
 
         return response([
             'errors' => ['Failed to create user.'],
+        ], 500);
+    }
+
+    /**
+     * Update Organization User Detail
+     *
+     * Update user detail in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function updateUserDetail(SuborganizationUpdateUserDetail $addNewUserrequest, Organization $suborganization)
+    {
+        $this->authorize('updateUser', $suborganization);
+        $data = $addNewUserrequest->validated();
+
+        return \DB::transaction(function () use ($suborganization, $data) {
+            
+            if (isset($data['password']) && $data['password'] !== '') {
+                $data['password'] = Hash::make($data['password']);
+            }
+            $user = $this->userRepository->update(Arr::except($data, ['user_id', 'role_id']), $data['user_id']);
+            $suborganization->users()->updateExistingPivot($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
+
+            return response([
+                'user' => new UserResource($this->userRepository->find($data['user_id'])),
+                'message' => 'User has been updated successfully.',
+            ], 200);
+
+        });
+
+        return response([
+            'errors' => ['Failed to update user.'],
         ], 500);
     }
 

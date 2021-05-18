@@ -148,9 +148,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganizations/{suborganization}/member-options', 'SuborganizationController@showMemberOptions')->name('suborganizations.member-options');
         Route::get('suborganizations/{suborganization}/users', 'SuborganizationController@getUsers')->name('suborganizations.get-users');
         Route::post('suborganizations/{suborganization}/add-user', 'SuborganizationController@addUser')->name('suborganizations.add-user');
-        Route::post('suborganizations/{suborganization}/add-new-user', 'UserController@AddNewUser')->name('suborganizations.add-new-user');
+        Route::post('suborganizations/{suborganization}/add-new-user', 'UserController@addNewUser')->name('suborganizations.add-new-user');
         Route::post('suborganizations/{suborganization}/invite-members', 'SuborganizationController@inviteMembers')->name('suborganizations.invite-members');
         Route::put('suborganizations/{suborganization}/update-user', 'SuborganizationController@updateUser')->name('suborganizations.update-user');
+        Route::put('suborganizations/{suborganization}/update-user-detail', 'UserController@updateUserDetail')->name('suborganizations.update-user-detail');
         Route::delete('suborganizations/{suborganization}/delete-user', 'SuborganizationController@deleteUser')->name('suborganizations.delete-user');
         Route::apiResource('suborganizations', 'SuborganizationController')->except([
             'index'
