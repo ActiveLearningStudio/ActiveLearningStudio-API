@@ -55,8 +55,21 @@ node {
                 }
             },
             "StageB": {
-                stage("stage B") {
-                    echo "This is branch b"
+                node('currikionelxp') {
+                    stage ('currikionelxp') {
+                            echo 'Copy'
+                            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                            echo 'Copy completed'
+                    }
+                }
+            },
+            "StageC": {
+                node('currikimopse') {
+                    stage ('currikimopse') {
+                            echo 'Copy'
+                            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                            echo 'Copy completed'
+                    }
                 }
             }
     )
