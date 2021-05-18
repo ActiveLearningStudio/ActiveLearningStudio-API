@@ -70,6 +70,24 @@ class ProjectController extends Controller
     }
 
     /**
+     * Get All Organization Projects
+     *
+     * Get a list of the projects of an organization.
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/project/projects.json
+     *
+     * @return Response
+     */
+    public function getOrgProjects(Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Project::class, $suborganization]);
+
+        return response([
+            'projects' => ProjectResource::collection(Project::where('organization_id', $suborganization->id)->get()),
+        ], 200);
+    }
+
+    /**
      * Get All Projects Detail
      *
      * Get a list of the projects of a user with detail.
