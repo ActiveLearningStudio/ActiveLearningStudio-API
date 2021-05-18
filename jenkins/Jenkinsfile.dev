@@ -40,18 +40,34 @@ node {
         }   
     }
     
-    parallel {
-        def labels = ['currikidev', 'currikionelxp', 'currikimopse']
-        for (label in labels) {
-            node(label) {
-                stage('Deploying Image ' + label){
+    
+    
+    
+    
+    def labels = ['currikidev', 'currikionelxp', 'currikimopse']
+
+    def parallelStagesMap = labels.collectEntries {
+        ["${it}" : generateStage(it)]
+    }
+
+    def generateStage(job) {
+        return {
+            stage("stage: ${job}") {
+                    echo "This is ${job}."
                     echo 'Copy'
                     sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
                     echo 'Copy completed'
-                }
             }
         }
     }
+    
+    stage('parallel stage') {
+            steps {
+                script {
+                    parallel parallelStagesMap
+                }
+            }
+        }
     
 }
 
