@@ -80,7 +80,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/projects/detail', 'ProjectController@detail');
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::get('suborganization/{suborganization}/projects/favorites', 'ProjectController@getFavorite');
-        Route::post('projects/reorder', 'ProjectController@reorder');
+        Route::post('suborganization/{suborganization}/projects/reorder', 'ProjectController@reorder');
         Route::get('projects/{project}/indexing', 'ProjectController@indexing');
         Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
