@@ -1,4 +1,4 @@
-node("master") {
+node("currikidev") {
     def app     
     def redis
     def esmigrate
