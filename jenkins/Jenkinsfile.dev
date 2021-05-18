@@ -42,15 +42,24 @@ node {
     
 
     
-    parallel {
-        node('currikidev') {
-            stage ('currikidev') {
-                    echo 'Copy'
-                    sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                    echo 'Copy completed'
+    
+    
+     parallel(
+            "StageA": {
+                node('currikidev') {
+                    stage ('currikidev') {
+                            echo 'Copy'
+                            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                            echo 'Copy completed'
+                    }
+                }
+            },
+            "StageB": {
+                stage("stage B") {
+                    echo "This is branch b"
+                }
             }
-        }
-    }
+    )
     
 }
 
