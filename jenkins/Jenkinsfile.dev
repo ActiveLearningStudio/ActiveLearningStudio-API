@@ -39,8 +39,9 @@ node {
                 esmigrate.push("develop")        
         }   
     }
-    def labels = ['currikidev', 'currikionelxp', 'currikimopse']
+    
     parallel {
+        def labels = ['currikidev', 'currikionelxp', 'currikimopse']
         for (label in labels) {
             node(label) {
                 stage('Deploying Image ' + label){
