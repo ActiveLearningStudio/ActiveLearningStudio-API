@@ -53,9 +53,7 @@ node {
     
     stage('parallel stage') {
             steps {
-                script {
-                    parallel parallelStagesMap
-                }
+                parallel parallelStagesMap
             }
         }
     
