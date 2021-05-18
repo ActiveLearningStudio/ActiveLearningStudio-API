@@ -1,3 +1,5 @@
+import hudson.model.*
+
 node {
     def app     
     def redis
@@ -46,47 +48,23 @@ node {
     
      parallel(
             "StageA": {
-                if(Jenkins.instance.getNode('currikidev').toComputer().isOnline()){
-                    node('currikidev') {
-                        stage ('currikidev') {
-                                echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                                echo 'Copy completed'
+                slave = Hudson.instance.slaves.find({it.name == 'currikidev'});
+                if (slave != null) {
+                    computer = slave.getComputer();
+                    if (computer.isOffline()) {
+                        echo "currikidev is offline"
+                        exit 1
+                    } else {
+                        node('currikidev') {
+                            stage ('currikidev') {
+                                    echo 'Copy'
+                                    sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                                    echo 'Copy completed'
+                            }
                         }
                     }
-                } else {
-                    echo "currikidev is offline"
-                    exit 1
                 }
                 
-            },
-            "StageB": {
-                if(Jenkins.instance.getNode('currikionelxp').toComputer().isOnline()){
-                    node('currikionelxp') {
-                        stage ('currikionelxp') {
-                                echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                                echo 'Copy completed'
-                        }
-                    }
-                } else {
-                    echo "currikionelxp is offline"
-                    exit 1
-                }
-            },
-            "StageC": {
-                if(Jenkins.instance.getNode('currikimopse').toComputer().isOnline()){
-                    node('currikimopse') {
-                        stage ('currikimopse') {
-                                echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                                echo 'Copy completed'
-                        }
-                    }
-                } else {
-                    echo "currikimopse is offline"
-                    exit 1
-                }
             }
     )
     
