@@ -46,30 +46,46 @@ node {
     
      parallel(
             "StageA": {
-                node('currikidev') {
-                    stage ('currikidev') {
-                            echo 'Copy'
-                            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                            echo 'Copy completed'
+                if(Jenkins.instance.getNode('currikidev').toComputer().isOnline()){
+                    node('currikidev') {
+                        stage ('currikidev') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                                echo 'Copy completed'
+                        }
                     }
+                } else {
+                    echo "currikidev is offline"
+                    exit 1
                 }
+                
             },
             "StageB": {
-                node('currikionelxp') {
-                    stage ('currikionelxp') {
-                            echo 'Copy'
-                            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                            echo 'Copy completed'
+                if(Jenkins.instance.getNode('currikionelxp').toComputer().isOnline()){
+                    node('currikionelxp') {
+                        stage ('currikionelxp') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                                echo 'Copy completed'
+                        }
                     }
+                } else {
+                    echo "currikionelxp is offline"
+                    exit 1
                 }
             },
             "StageC": {
-                node('currikimopse') {
-                    stage ('currikimopse') {
-                            echo 'Copy'
-                            sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                            echo 'Copy completed'
+                if(Jenkins.instance.getNode('currikimopse').toComputer().isOnline()){
+                    node('currikimopse') {
+                        stage ('currikimopse') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                                echo 'Copy completed'
+                        }
                     }
+                } else {
+                    echo "currikimopse is offline"
+                    exit 1
                 }
             }
     )
