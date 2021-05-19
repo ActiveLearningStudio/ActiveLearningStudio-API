@@ -50,7 +50,7 @@ node("currikidev") {
                     node('currikidev') {
                         stage ('currikidev') {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
                                 echo 'Copy completed'
                         }
                     }
@@ -67,7 +67,7 @@ node("currikidev") {
                     node('currikionelxp') {
                         stage ('currikionelxp') {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
                                 echo 'Copy completed'
                         }
                     }
@@ -83,7 +83,7 @@ node("currikidev") {
                     node('currikimopse') {
                         stage ('currikimopse') {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
                                 echo 'Copy completed'
                         }
                     }
