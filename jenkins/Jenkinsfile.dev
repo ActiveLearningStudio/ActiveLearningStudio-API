@@ -1,4 +1,4 @@
-node {
+node("currikidev") {
     def app     
     def redis
     def esmigrate
@@ -39,17 +39,63 @@ node {
                 esmigrate.push("develop")        
         }   
     }
-    def labels = ['currikidev', 'currikionelxp', 'currikimopse']
+    
 
-    for (label in labels) {
-        node(label) {
-            stage('Deploying Image ' + label){
-                echo 'Copy'
-                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                echo 'Copy completed'
+    
+    
+    
+     parallel(
+            "StageA": {
+                if(Jenkins.instance.getNode('currikidev').toComputer().isOnline()){
+                    node('currikidev') {
+                        stage ('currikidev') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikidev') {
+                        echo "currikidev is offline"
+                        exit 1
+                    }
+                }
+                
+            },
+            "StageB": {
+                if(Jenkins.instance.getNode('currikionelxp').toComputer().isOnline()){
+                    node('currikionelxp') {
+                        stage ('currikionelxp') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikionelxp') {
+                        echo "currikionelxp is offline"
+                        exit 1
+                    }
+                }
+            },
+            "StageC": {
+                if(Jenkins.instance.getNode('currikimopse').toComputer().isOnline()){
+                    node('currikimopse') {
+                        stage ('currikimopse') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikimopse') {
+                        echo "currikimopse is offline"
+                        exit 1
+                    }
+                }
             }
-        }
-    }
+    )
     
 }
+
 
