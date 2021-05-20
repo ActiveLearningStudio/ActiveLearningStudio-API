@@ -14,7 +14,6 @@ class OutcomeRepository implements OutcomeRepositoryInterface
     // Returns several project metrics for the specified user
     public function getStudentOutcome($actor, $activity) {
         $result = $this->getStudentOutcomeData(compact('actor', 'activity'));
-\Log::info($result);
         if (isset($result['errors'])) {
             return $result;
         }
