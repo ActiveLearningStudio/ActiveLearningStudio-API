@@ -50,11 +50,11 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 foreach ($data['answer'] as $i => $answer) {
                     if ($i === 0) {
                         $res = [
-                            (is_array($answer['response'])) ? 'Quiz Result: '.$answer['response'][0] : 'Quiz Result: '.$answer['response']
+                            (is_array($answer['response'])) ? 'Quiz Result: '. $answer['response'][0] : 'Quiz Result: '. $answer['response']
                         ];
                     } else {
                         $res = [
-                            (is_array($answer['response'])) ? 'Response '.$i.': '.$answer['response'][0] : 'Response '.$i.': '.$answer['response']
+                            (is_array($answer['response'])) ? 'Response '. $i .': '. $answer['response'][0] : 'Response '. $i .': '. $answer['response']
                         ];
                     }
                     $answers[] = [
