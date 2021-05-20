@@ -14,7 +14,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
     // Returns several project metrics for the specified user
     public function getStudentOutcome($actor, $activity) {
         $result = $this->getStudentOutcomeData(compact('actor', 'activity'));
-
+\Log::info($result);
         if (isset($result['errors'])) {
             return $result;
         }
@@ -47,23 +47,24 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         if (strpos($data['library'], 'H5P.PersonalityQuiz') !== false) {
             $answers = [];
 
-            foreach ($data['answer'] as $i => $answer) {
-                if ($i === 0) {
-                    $res = [
-                        (is_array($answer['response'])) ? 'Quiz Result: '.$answer['response'][0] : 'Quiz Result: '.$answer['response']
-                    ];
-                } else {
-                    $res = [
-                        (is_array($answer['response'])) ? 'Response '.$i.': '.$answer['response'][0] : 'Response '.$i.': '.$answer['response']
+            if (isset($data['answer'])) {
+                foreach ($data['answer'] as $i => $answer) {
+                    if ($i === 0) {
+                        $res = [
+                            (is_array($answer['response'])) ? 'Quiz Result: '.$answer['response'][0] : 'Quiz Result: '.$answer['response']
+                        ];
+                    } else {
+                        $res = [
+                            (is_array($answer['response'])) ? 'Response '.$i.': '.$answer['response'][0] : 'Response '.$i.': '.$answer['response']
+                        ];
+                    }
+                    $answers[] = [
+                        'score' => $answer['score'],
+                        'response' => $res,
+                        'duration' => isset($answer['duration']) ? $answer['duration'] : 'N/A',
                     ];
                 }
-                $answers[] = [
-                    'score' => $answer['score'],
-                    'response' => $res,
-                    'duration' => isset($answer['duration']) ? $answer['duration'] : 'N/A',
-                ];
             }
-
             return [
                 'type' => 'question',
                 'content_type' => $data['content-type'],
