@@ -301,25 +301,9 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     public function updateGroupProjectUser($group, $projects, $users)
     {
         $group = $this->model->find($group->id);
-        $auth_user = auth()->user();
 
         if ($group) {
-            DB::table('group_project_user')
-                ->where('group_id', $group->id)
-                ->delete();
-
             foreach ($projects as $projectId) {
-                DB::table('group_project_user')
-                    ->insertOrIgnore([
-                        [
-                            'group_id' => $group->id,
-                            'project_id' => $projectId,
-                            'user_id' => $auth_user->id,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ],
-                    ]);
-
                 foreach ($users as $user) {
                     DB::table('group_project_user')
                         ->insertOrIgnore([
