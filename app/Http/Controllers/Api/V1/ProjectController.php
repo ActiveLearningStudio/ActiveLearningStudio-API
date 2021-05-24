@@ -9,6 +9,7 @@ use App\Http\Requests\V1\ProjectUpdateRequest;
 use App\Http\Requests\V1\ProjectUploadThumbRequest;
 use App\Http\Resources\V1\ProjectDetailResource;
 use App\Http\Resources\V1\ProjectResource;
+use App\Http\Resources\V1\UserProjectResource;
 use App\Jobs\CloneProject;
 use App\Models\Organization;
 use App\Models\Project;
@@ -84,6 +85,21 @@ class ProjectController extends Controller
 
         return response([
             'projects' => ProjectResource::collection(Project::where('organization_id', $suborganization->id)->get()),
+        ], 200);
+    }
+
+    /**
+     * Get All Projects by admin.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/project/projects.json
+     *
+     * @return Response
+     */
+    public function getUserProjects(Request $request, Organization $suborganization)
+    {
+        return response([
+            'projects' => UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization)),
         ], 200);
     }
 
