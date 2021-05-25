@@ -367,4 +367,38 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             return $authenticated_user->favoriteProjects()->attach($project->id, ['organization_id' => $organization_id]);
         }
     }
+
+    /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getAll($data, $suborganization)
+    {
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+        $query = $query->whereHas('users');
+
+        // if simple request for getting project listing with search
+        if ($q) {
+            $query = $query->where(function($qry) use ($q){
+                $qry->where('name', 'LIKE', '%'.$q.'%')
+                    ->orWhereHas('users', function ($qry) use ($q) {
+                        $qry->where('email', 'LIKE', '%'.$q.'%');
+                    });
+            });
+        }
+
+        // exclude users those projects which were clone from global starter project
+        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+            $query = $query->where('is_user_starter', false);
+        }
+
+        // if specific index projects requested
+        if (isset($data['indexing']) && $data['indexing']){
+            $query = $query->where('indexing', $data['indexing']);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->get();
+    }
 }

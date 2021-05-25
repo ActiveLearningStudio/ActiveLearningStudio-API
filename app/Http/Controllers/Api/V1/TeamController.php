@@ -615,7 +615,6 @@ class TeamController extends Controller
         $is_updated = $this->teamRepository->update($teamData, $team->id);
 
         if ($is_updated) {
-
             $this->teamRepository->updateTeam($suborganization, $team, $data);
 
             return response([
