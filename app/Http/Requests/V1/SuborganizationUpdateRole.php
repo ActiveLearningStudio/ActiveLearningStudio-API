@@ -3,9 +3,8 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class SuborganizationGetUsersRequest extends FormRequest
+class SuborganizationUpdateRole extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +23,9 @@ class SuborganizationGetUsersRequest extends FormRequest
      */
     public function rules()
     {
-        $suborganization = $this->route('suborganization');
-
         return [
-            'query' => 'string|max:255',
-            'size' => 'integer|max:100',
-            'role' => 'integer|exists:organization_role_types,id,organization_id,' . $suborganization->id,
+            'role_id' => 'required|exists:organization_role_types,id',
+            'permissions' => 'required|array|exists:organization_permission_types,id'
         ];
     }
 }

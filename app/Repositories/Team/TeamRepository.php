@@ -295,25 +295,9 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     public function updateTeamProjectUser($team, $projects, $users)
     {
         $team = $this->model->find($team->id);
-        $auth_user = auth()->user();
 
         if ($team) {
-            DB::table('team_project_user')
-                ->where('team_id', $team->id)
-                ->delete();
-
             foreach ($projects as $projectId) {
-                DB::table('team_project_user')
-                    ->insertOrIgnore([
-                        [
-                            'team_id' => $team->id,
-                            'project_id' => $projectId,
-                            'user_id' => $auth_user->id,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ],
-                    ]);
-
                 foreach ($users as $user) {
                     DB::table('team_project_user')
                         ->insertOrIgnore([

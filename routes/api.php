@@ -80,7 +80,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/projects/detail', 'ProjectController@detail');
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::get('suborganization/{suborganization}/projects/favorites', 'ProjectController@getFavorite');
-        Route::post('projects/reorder', 'ProjectController@reorder');
+        Route::post('suborganization/{suborganization}/projects/reorder', 'ProjectController@reorder');
         Route::get('projects/{project}/indexing', 'ProjectController@indexing');
         Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
@@ -138,9 +138,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // Suborganizations
         Route::get('suborganizations/{suborganization}/user-has-permission', 'SuborganizationController@userHasPermission')->name('suborganizations.user-has-permission');
         Route::get('suborganizations/{suborganization}/permissions', 'SuborganizationController@getUserPermissions')->name('suborganizations.get-user-permissions');
+        Route::get('suborganizations/{suborganization}/default-permissions', 'SuborganizationController@getDefaultPermissions')->name('suborganizations.get-default-permissions');
         Route::post('suborganizations/{suborganization}/add-role', 'SuborganizationController@addRole')->name('suborganizations.add-role');
+        Route::put('suborganizations/{suborganization}/update-role', 'SuborganizationController@updateRole')->name('suborganizations.update-role');
         Route::get('suborganizations/visibility-types', 'SuborganizationController@getVisibilityTypes')->name('suborganizations.get-visibility-types');
         Route::get('suborganizations/roles', 'SuborganizationController@getRoles')->name('suborganizations.get-roles');
+        Route::get('suborganizations/{suborganization}/role/{roleId}', 'SuborganizationController@getRoleDetail')->name('suborganizations.get-role-detail');
         Route::post('suborganizations/{suborganization}/upload-thumb', 'SuborganizationController@uploadThumb');
         Route::get('suborganizations/{suborganization}/member-options', 'SuborganizationController@showMemberOptions')->name('suborganizations.member-options');
         Route::get('suborganizations/{suborganization}/users', 'SuborganizationController@getUsers')->name('suborganizations.get-users');
