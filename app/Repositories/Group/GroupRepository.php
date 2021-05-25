@@ -483,8 +483,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 }
             }
 
-            $group->projects = $group_projects;
-
             foreach ($group->users as $group_user) {
                 $group_project_users = DB::table('group_project_user')
                     ->where('group_id', $group->id)

@@ -174,7 +174,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $this->invitedTeamUserRepository->create($invited_user);
         }
 
-        $team->projects()->syncWithoutDetaching($data['projects']);
+        $team->projects()->sync($data['projects']);
 
         event(new TeamCreatedEvent($team, $data['projects'], $assigned_users));
 
@@ -476,8 +476,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                     $team_projects[] = $team_project;
                 }
             }
-
-            $team->projects = $team_projects;
 
             foreach ($team->users as $team_user) {
                 $team_project_users = DB::table('team_project_user')
