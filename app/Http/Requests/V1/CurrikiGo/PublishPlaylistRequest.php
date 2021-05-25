@@ -24,7 +24,7 @@ class PublishPlaylistRequest extends FormRequest
     public function rules()
     {
         return [
-            'setting_id' => 'required',
+            'setting_id' => 'required|exists:lms_settings,id',
             'counter' => 'sometimes|integer'
         ];
     }
