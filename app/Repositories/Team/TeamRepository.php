@@ -174,7 +174,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $this->invitedTeamUserRepository->create($invited_user);
         }
 
-        $team->projects()->sync($data['projects']);
+        $team->projects()->syncWithoutDetaching($data['projects']);
 
         event(new TeamCreatedEvent($team, $data['projects'], $assigned_users));
 
