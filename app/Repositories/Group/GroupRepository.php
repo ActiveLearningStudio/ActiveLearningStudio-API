@@ -451,7 +451,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $group = $this->model->find($groupId);
 
         if ($group) {
-            $group_projects = [];
             foreach ($group->projects as $group_project) {
                 $tpu = DB::table('group_project_user')
                     ->where('group_id', $group->id)
@@ -479,11 +478,8 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                     }
 
                     $group_project->users = $project_users;
-                    $group_projects[] = $group_project;
                 }
             }
-
-            $group->projects = $group_projects;
 
             foreach ($group->users as $group_user) {
                 $group_project_users = DB::table('group_project_user')

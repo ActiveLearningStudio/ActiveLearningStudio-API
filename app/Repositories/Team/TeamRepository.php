@@ -445,7 +445,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $team = $this->model->find($teamId);
 
         if ($team) {
-            $team_projects = [];
             foreach ($team->projects as $team_project) {
                 $tpu = DB::table('team_project_user')
                     ->where('team_id', $team->id)
@@ -473,11 +472,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                     }
 
                     $team_project->users = $project_users;
-                    $team_projects[] = $team_project;
                 }
             }
-
-            $team->projects = $team_projects;
 
             foreach ($team->users as $team_user) {
                 $team_project_users = DB::table('team_project_user')
