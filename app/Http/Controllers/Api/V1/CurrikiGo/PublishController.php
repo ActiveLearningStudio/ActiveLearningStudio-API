@@ -11,10 +11,12 @@ use App\CurrikiGo\Canvas\Playlist as CanvasPlaylist;
 use App\CurrikiGo\Moodle\Playlist as MoodlePlaylist;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CurrikiGo\PublishPlaylistRequest;
+use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
+use App\Services\CurrikiGo\LMSIntegrationServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
@@ -36,9 +38,10 @@ class PublishController extends Controller
      *
      * @param LmsSettingRepositoryInterface $lmsSettingRepository
      */
-    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository)
+    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, LMSIntegrationServiceInterface $lms)
     {
         $this->lmsSettingRepository = $lmsSettingRepository;
+        $this->lms = $lms;
     }
 
     /**
@@ -177,5 +180,12 @@ class PublishController extends Controller
         return response([
             'errors' => ['You are not authorized to perform this action.'],
         ], 403);
+    }
+
+    // The idea of this function is to publish to any LMS
+    // The actual publishing will be handled by a plugin in the app/CurrikiGo/LMS folder
+    public function playlistToGeneric($lms, Project $project, Playlist $playlist, PublishPlaylistRequest $publishRequest)
+    {
+        return $this->lms->publishProject($lms, $project, LmsSetting::find($publishRequest->setting_id));
     }
 }
