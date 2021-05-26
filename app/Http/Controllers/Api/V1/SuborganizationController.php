@@ -489,6 +489,58 @@ class SuborganizationController extends Controller
     }
 
     /**
+     * Remove Suborganization User
+     *
+     * Remove the specified user from a particular organization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam user_id int required Id of the user to be removed Example: 1
+     *
+     * @response {
+     *   "message": "User has been removed successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to remove user."
+     *   ]
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "user_id": [
+     *       "The user id field is required."
+     *     ]
+     *   }
+     * }
+     *
+     * @param SuborganizationDeleteUserRequest $suborganizationDeleteUserRequest
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function removeUser(SuborganizationDeleteUserRequest $suborganizationDeleteUserRequest, Organization $suborganization)
+    {
+        $this->authorize('removeUser', $suborganization);
+
+        $data = $suborganizationDeleteUserRequest->validated();
+
+        $authenticatedUser = auth()->user();
+
+        $isRemoved = $this->organizationRepository->removeUser($authenticatedUser, $suborganization, $data);
+
+        if ($isRemoved) {
+            return response([
+                'message' => 'User has been removed successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to remove user.'],
+        ], 500);
+    }
+
+    /**
      * Get All Users For a Suborganization
      *
      * Get a list of the users for a suborganization.

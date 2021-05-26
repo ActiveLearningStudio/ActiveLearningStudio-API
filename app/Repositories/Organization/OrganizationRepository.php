@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
@@ -357,6 +358,60 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return true;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove the specified user from a particular organization
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function removeUser($authenticatedUser, $organization, $data)
+    {
+        $organizationProjects = $organization->projects()->whereHas('users', function (Builder $query) use ($data) {
+            $query->where('id', '=', $data['user_id']);
+        })->get();
+
+        $organizationTeams = $organization->teams()->whereHas('users', function (Builder $query) use ($data) {
+            $query->where('id', '=', $data['user_id']);
+        })->get();
+
+        $organizationGroups = $organization->groups()->whereHas('users', function (Builder $query) use ($data) {
+            $query->where('id', '=', $data['user_id']);
+        })->get();
+
+        try {
+            DB::beginTransaction();
+
+            $organization->users()->detach($data['user_id']);
+
+            foreach ($organizationProjects as $organizationProject) {
+                $organizationProject->users()->detach($data['user_id']);
+                $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+            }
+
+            foreach ($organizationTeams as $organizationTeam) {
+                $organizationTeam->users()->detach($data['user_id']);
+                $organizationTeam->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+            }
+
+            foreach ($organizationGroups as $organizationGroup) {
+                $organizationGroup->users()->detach($data['user_id']);
+                $organizationGroup->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+            }
+
+            DB::commit();
+
+            return true;
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            Log::error($e->getMessage());
+            DB::rollBack();
         }
 
         return false;
