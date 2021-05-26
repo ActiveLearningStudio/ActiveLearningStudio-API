@@ -135,6 +135,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToMoodle');
                 Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromMoodle');
             });
+
+            Route::post('{lms}/projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToGeneric');
+            Route::post('{lms}/projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromGeneric');
+            Route::post('{lms}/login', 'CurrikiGo\LmsServicesController@login');
         });
 
         // Google Share
