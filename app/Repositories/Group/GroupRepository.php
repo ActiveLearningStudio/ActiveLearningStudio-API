@@ -137,6 +137,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
             $con_user = $this->userRepository->find($user['id']);
             $userRow = $group->users()->find($user['id']);
             if ($userRow) {
+                $valid_users[] = $con_user;
                 continue;
             }
 
@@ -303,6 +304,8 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $group = $this->model->find($group->id);
 
         if ($group) {
+            DB::table('group_project_user')->where('group_id', $group->id)->delete();
+                    
             foreach ($projects as $projectId) {
                 foreach ($users as $user) {
                     DB::table('group_project_user')
@@ -310,7 +313,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                             [
                                 'group_id' => $group->id,
                                 'project_id' => $projectId,
-                                'user_id' => $user->id,
+                                'user_id' => $user['id'],
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ],
@@ -451,7 +454,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $group = $this->model->find($groupId);
 
         if ($group) {
-            $group_projects = [];
             foreach ($group->projects as $group_project) {
                 $tpu = DB::table('group_project_user')
                     ->where('group_id', $group->id)
@@ -479,7 +481,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                     }
 
                     $group_project->users = $project_users;
-                    $group_projects[] = $group_project;
                 }
             }
 

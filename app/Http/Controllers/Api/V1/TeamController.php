@@ -607,7 +607,7 @@ class TeamController extends Controller
         $this->authorize('update', [Team::class, $suborganization]);
 
         $data = $teamUpdateRequest->validated();
-
+   
         $teamData = [];
         $teamData['name'] = $data['name'];
         $teamData['description'] = $data['description'];

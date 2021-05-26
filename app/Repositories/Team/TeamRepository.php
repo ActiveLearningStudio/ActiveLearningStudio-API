@@ -137,6 +137,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $userRow = $team->users()->find($user['id']);
 
             if ($userRow) {
+                $valid_users[] = $con_user;
                 continue;
             }
 
@@ -297,6 +298,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $team = $this->model->find($team->id);
 
         if ($team) {
+            DB::table('team_project_user')->where('team_id', $team->id)->delete();
+
             foreach ($projects as $projectId) {
                 foreach ($users as $user) {
                     DB::table('team_project_user')
@@ -304,7 +307,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             [
                                 'team_id' => $team->id,
                                 'project_id' => $projectId,
-                                'user_id' => $user->id,
+                                'user_id' => $user['id'],
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ],
@@ -445,7 +448,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $team = $this->model->find($teamId);
 
         if ($team) {
-            $team_projects = [];
             foreach ($team->projects as $team_project) {
                 $tpu = DB::table('team_project_user')
                     ->where('team_id', $team->id)
@@ -473,7 +475,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                     }
 
                     $team_project->users = $project_users;
-                    $team_projects[] = $team_project;
                 }
             }
 
