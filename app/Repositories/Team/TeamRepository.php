@@ -477,8 +477,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 }
             }
 
-            $team->projects = $team_projects;
-
             foreach ($team->users as $team_user) {
                 $team_project_users = DB::table('team_project_user')
                     ->where('team_id', $team->id)
