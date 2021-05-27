@@ -82,10 +82,9 @@ class ProjectController extends Controller
     public function getOrgProjects(Organization $suborganization)
     {
         $this->authorize('viewAny', [Project::class, $suborganization]);
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return response([
-            'projects' => ProjectResource::collection(Project::where('organization_id', $suborganization->id)->get()),
-        ], 200);
+        return  ProjectResource::collection(Project::where('organization_id', $suborganization->id)->paginate($perPage));
     }
 
     /**
@@ -97,10 +96,8 @@ class ProjectController extends Controller
      * @return Response
      */
     public function getUserProjects(Request $request, Organization $suborganization)
-    {
-        return response([
-            'projects' => UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization)),
-        ], 200);
+    { 
+        return UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization));
     }
 
     /**

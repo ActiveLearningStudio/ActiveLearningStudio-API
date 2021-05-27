@@ -375,6 +375,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function getAll($data, $suborganization)
     {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        
         $query = $this->model;
         $q = $data['query'] ?? null;
         $query = $query->whereHas('users');
@@ -399,6 +401,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->where('indexing', $data['indexing']);
         }
 
-        return $query->where('organization_id', $suborganization->id)->get();
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage);
     }
 }
