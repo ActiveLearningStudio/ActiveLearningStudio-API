@@ -95,4 +95,16 @@ class TeamPolicy
     {
         return $user->isAdmin();
     }
+
+    /**
+     * Determine whether the user can add project in the team.
+     *
+     * @param User $user
+     * @param Organization $suborganization
+     * @return mixed
+     */
+    public function addProjects(User $user, Organization $suborganization)
+    {
+        return $user->hasPermissionTo('team:add-projects', $suborganization);
+    }
 }

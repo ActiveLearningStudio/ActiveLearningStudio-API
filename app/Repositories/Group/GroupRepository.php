@@ -303,24 +303,27 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     {
         $group = $this->model->find($group->id);
 
-        if ($group) {
-            DB::table('group_project_user')->where('group_id', $group->id)->delete();
-                    
-            foreach ($projects as $projectId) {
-                foreach ($users as $user) {
-                    DB::table('group_project_user')
-                        ->insertOrIgnore([
-                            [
-                                'group_id' => $group->id,
-                                'project_id' => $projectId,
-                                'user_id' => $user['id'],
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ],
-                        ]);
+        return \DB::transaction(function () use ($group, $projects, $users) {
+        
+            if ($group) {
+                DB::table('group_project_user')->where('group_id', $group->id)->delete();
+                        
+                foreach ($projects as $projectId) {
+                    foreach ($users as $user) {
+                        DB::table('group_project_user')
+                            ->insertOrIgnore([
+                                [
+                                    'group_id' => $group->id,
+                                    'project_id' => $projectId,
+                                    'user_id' => $user['id'],
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ],
+                            ]);
+                    }
                 }
             }
-        }
+        });
     }
 
     /**

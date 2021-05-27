@@ -174,7 +174,7 @@ class SuborganizationController extends Controller
     public function show(Organization $suborganization)
     {
         $this->authorize('view', $suborganization);
-
+        
         $authenticatedUser = auth()->user();
 
         return response([
