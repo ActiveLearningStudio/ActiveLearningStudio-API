@@ -88,18 +88,33 @@ class ProjectController extends Controller
     }
 
     /**
-     * Get All Projects by admin.
+     * Project Indexing
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/project/projects.json
+     * Modify the index value of a project.
      *
-     * @return Response
+     * @urlParam  project required Project Id. Example: 1
+     * @urlParam  index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
+     *
+     * @response {
+     *   "message": "Index status changed successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Invalid index value provided."
+     *   ]
+     * }
+     *
+     * @param Project $project
+     * @param $index
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
      */
-    public function getUserProjects(Request $request, Organization $suborganization)
-    { 
-        return UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization));
+    public function updateIndex(Project $project, $index)
+    {
+        return response(['message' => $this->projectRepository->updateIndex($project, $index)], 200);
     }
-
+        
     /**
      * Get All Projects Detail
      *

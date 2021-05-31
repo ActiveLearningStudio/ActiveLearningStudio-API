@@ -26,7 +26,7 @@ class OrganizationProjectRequest extends FormRequest
         return [
             'query' => 'string',
             'indexing' => 'in:1,2,3',
-            'exclude_starter' => 'in:true,false',
+            'exclude_starter' => 'in:true',
             'starter_project' => 'in:true,false',
         ];
     }
@@ -35,7 +35,7 @@ class OrganizationProjectRequest extends FormRequest
     {
         return [
             'indexing.in' => 'Indexing should be 1,2 or 3',
-            'exclude_starter.in' => 'Indexing should be true or false',
+            'exclude_starter.in' => 'Indexing should be true',
             'starter_project.in' => 'Indexing should be true or false',
         ];
     }

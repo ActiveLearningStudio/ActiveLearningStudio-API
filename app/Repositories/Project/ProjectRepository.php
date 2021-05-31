@@ -3,7 +3,9 @@
 namespace App\Repositories\Project;
 
 use App\Exceptions\GeneralException;
+use App\Models\Activity;
 use App\Models\CurrikiGo\LmsSetting;
+use App\Models\Playlist;
 use App\Models\Project;
 use App\User;
 use App\Repositories\BaseRepository;
@@ -408,4 +410,47 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         return $query->where('organization_id', $suborganization->id)->paginate($perPage);
     }
+
+    /**
+     * Update Indexes for projects and related models
+     * @param $project
+     * @param $index
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateIndex($project, $index): string
+    {
+        if (! isset($this->model::$indexing[$index])){
+            throw new GeneralException('Invalid index value provided.');
+        }
+        $project->update(['indexing' => $index]);
+        $this->indexProjects([$project->id]);
+        return 'Index status changed successfully!';
+    }
+
+    /**
+     * @param $projects
+     * Indexing of the projects
+     */
+    public function indexProjects($projects): void
+    {
+        if (empty($projects)) {
+            return;
+        }
+        // first get the collection of playlists - needed in activities update
+        $playlists = Playlist::whereIn('project_id', $projects)->get('id');
+
+        // search-able is needed as on collections update observer will not get fired
+        // so searchable will updated the elastic search index via scout package
+        // update directly on query builder
+        $this->model->whereIn('id', $projects)->searchable();
+
+        // to fire observer update should be done on each single instance of models
+        // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
+        // prepare the query builder from collections and perform update
+        Playlist::whereIn('project_id', $projects)->searchable();
+
+        // update related activities by getting keys of parent playlists
+        Activity::whereIn('playlist_id', $playlists->modelKeys())->searchable();
+    }    
 }
