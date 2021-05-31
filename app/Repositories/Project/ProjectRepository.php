@@ -379,8 +379,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         
         $query = $this->model;
         $q = $data['query'] ?? null;
-        $query = $query->whereHas('users');
-
+        
         // if simple request for getting project listing with search
         if ($q) {
             $query = $query->where(function($qry) use ($q){
@@ -393,12 +392,18 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // exclude users those projects which were clone from global starter project
         if (isset($data['exclude_starter']) && $data['exclude_starter']){
+            $query = $query->whereHas('users');
             $query = $query->where('is_user_starter', false);
         }
 
         // if specific index projects requested
         if (isset($data['indexing']) && $data['indexing']){
             $query = $query->where('indexing', $data['indexing']);
+        }
+
+        // if starter projects requested
+        if (isset($data['starter_project'])){
+            $query = $query->where('starter_project', $data['starter_project']);
         }
 
         return $query->where('organization_id', $suborganization->id)->paginate($perPage);

@@ -162,6 +162,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
         Route::get('suborganizations/{suborganization}/user-projects', 'ProjectController@getUserProjects')->name('suborganizations.get-user-projects');
+        // activity-types
+        //Route::apiResource('activity-types', 'ActivityTypeController');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

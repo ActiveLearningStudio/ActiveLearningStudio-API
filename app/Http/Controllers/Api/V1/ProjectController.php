@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\ProjectUpdatedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\OrganizationProjectRequest;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectUpdateRequest;
 use App\Http\Requests\V1\ProjectUploadThumbRequest;
@@ -79,12 +80,11 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function getOrgProjects(Organization $suborganization)
+    public function getOrgProjects(OrganizationProjectRequest $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [Project::class, $suborganization]);
-        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return  ProjectResource::collection(Project::where('organization_id', $suborganization->id)->paginate($perPage));
+        return  UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization));
     }
 
     /**
