@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StoreActivityType;
+use App\Http\Requests\V1\UpdateActivityType;
 use App\Http\Resources\V1\ActivityTypeItemResource;
 use App\Http\Resources\V1\ActivityTypeResource;
 use App\Models\ActivityType;
@@ -192,15 +193,10 @@ class ActivityTypeController extends Controller
      * @param ActivityType $activityType
      * @return Response
      */
-    public function update(Request $request, ActivityType $activityType)
+    public function update(UpdateActivityType $request, ActivityType $activityType)
     {
-        // TODO: need to add validation
-
-        $is_updated = $this->activityTypeRepository->update($request->only([
-            'title',
-            'order',
-            'image',
-        ]), $activityType->id);
+        $data = $request->validated();
+        $is_updated = $this->activityTypeRepository->update($activityType->id, $data);
 
         if ($is_updated) {
             return response([

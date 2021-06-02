@@ -35,7 +35,7 @@ class ActivityItemController extends Controller
         $this->activityItemRepository = $activityItemRepository;
         $this->activityTypeRepository = $activityTypeRepository;
 
-        $this->authorizeResource(ActivityItem::class, 'activityItem');
+        // $this->authorizeResource(ActivityItem::class, 'activityItem');
     }
 
     /**

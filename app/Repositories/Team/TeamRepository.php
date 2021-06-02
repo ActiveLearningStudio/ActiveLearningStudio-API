@@ -297,24 +297,21 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     {
         $team = $this->model->find($team->id);
 
-        return \DB::transaction(function () use ($team, $projects, $users) {
-        
-            if ($team) {
-                DB::table('team_project_user')->where('team_id', $team->id)->delete();
-    
-                foreach ($projects as $projectId) {
-                    foreach ($users as $user) {
-                        DB::table('team_project_user')
-                            ->insertOrIgnore([
-                                [
-                                    'team_id' => $team->id,
-                                    'project_id' => $projectId,
-                                    'user_id' => $user['id'],
-                                    'created_at' => now(),
-                                    'updated_at' => now(),
-                                ],
-                            ]);
-                    }
+        if ($team) {
+            DB::table('team_project_user')->where('team_id', $team->id)->delete();
+            
+            foreach ($projects as $projectId) {
+                foreach ($users as $user) {
+                    DB::table('team_project_user')
+                        ->insertOrIgnore([
+                            [
+                                'team_id' => $team->id,
+                                'project_id' => $projectId,
+                                'user_id' => $user->id,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ],
+                        ]);
                 }
             }
 
