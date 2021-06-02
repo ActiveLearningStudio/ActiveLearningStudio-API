@@ -97,5 +97,13 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function updateIndex($project, $index);
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($project, $index);
     
 }

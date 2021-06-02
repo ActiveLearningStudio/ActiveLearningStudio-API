@@ -378,13 +378,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-        
+
         $query = $this->model;
         $q = $data['query'] ?? null;
-        
+
         // if simple request for getting project listing with search
         if ($q) {
-            $query = $query->where(function($qry) use ($q){
+            $query = $query->where(function($qry) use ($q) {
                 $qry->where('name', 'LIKE', '%'.$q.'%')
                     ->orWhereHas('users', function ($qry) use ($q) {
                         $qry->where('email', 'LIKE', '%'.$q.'%');
@@ -393,18 +393,18 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
 
         // exclude users those projects which were clone from global starter project
-        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+        if (isset($data['exclude_starter']) && $data['exclude_starter']) {
             $query = $query->whereHas('users');
             $query = $query->where('is_user_starter', false);
         }
 
         // if specific index projects requested
-        if (isset($data['indexing']) && $data['indexing']){
+        if (isset($data['indexing']) && $data['indexing']) {
             $query = $query->where('indexing', $data['indexing']);
         }
 
         // if starter projects requested
-        if (isset($data['starter_project'])){
+        if (isset($data['starter_project'])) {
             $query = $query->where('starter_project', $data['starter_project']);
         }
 
@@ -452,5 +452,20 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // update related activities by getting keys of parent playlists
         Activity::whereIn('playlist_id', $playlists->modelKeys())->searchable();
-    }    
+    }
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($projects, $flag): string
+    {
+        if (empty($projects)) {
+            throw new GeneralException('Choose at-least one project.');
+        }
+        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
+        return 'Starter Projects status updated successfully!';
+    }
 }

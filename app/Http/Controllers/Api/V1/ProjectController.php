@@ -114,7 +114,35 @@ class ProjectController extends Controller
     {
         return response(['message' => $this->projectRepository->updateIndex($project, $index)], 200);
     }
-        
+    
+    /**
+     * Starter Project Toggle
+     *
+     * Toggle the starter flag of any project
+     *
+     * @bodyParam projects array required Projects Ids array. Example: [1,2,3]
+     * @bodyParam flag bool required Selected projects remove or make starter. Example: 1
+     *
+     * @response {
+     *   "message": "Starter Projects status updated successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Choose at-least one project."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param $flag
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function toggleStarter(Request $request, $flag)
+    {
+        return response(['message' => $this->projectRepository->toggleStarter($request->projects, $flag)], 200);
+    }
+    
     /**
      * Get All Projects Detail
      *
