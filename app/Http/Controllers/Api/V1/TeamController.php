@@ -385,7 +385,7 @@ class TeamController extends Controller
         $owner = $team->getUserAttribute();
         $assigned_projects = [];
 
-        if ($owner->id === $auth_user->id  || $this->authorize('addProjects', [Team::class, $team->organization])) {
+        if ($owner->id === $auth_user->id || $this->authorize('addProjects', [Team::class, $team->organization])) {
             foreach ($data['ids'] as $project_id) {
                 $project = $this->projectRepository->find($project_id);
                 if ($project) {

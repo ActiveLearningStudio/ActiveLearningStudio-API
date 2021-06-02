@@ -103,8 +103,8 @@ class TeamPolicy
      * @param Organization $suborganization
      * @return mixed
      */
-    public function addProjects(User $user, Organization $suborganization)
-    {
-        return $user->hasPermissionTo('team:add-projects', $suborganization);
-    }
+     public function addProjects(User $user, Organization $suborganization)
+     {
+         return $user->hasPermissionTo('team:add-projects', $suborganization);
+     }
 }

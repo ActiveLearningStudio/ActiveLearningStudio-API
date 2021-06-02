@@ -161,7 +161,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
-        Route::get('suborganizations/{suborganization}/user-projects', 'ProjectController@getUserProjects')->name('suborganizations.get-user-projects');
+        Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
+        Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions
