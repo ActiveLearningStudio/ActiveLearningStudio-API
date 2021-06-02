@@ -34,7 +34,8 @@ class SuborganizationDeleteUserRequest extends FormRequest
                 Rule::exists('organization_user_roles')->where(function ($query) use ($suborganization) {
                     return $query->where('organization_id', $suborganization->id);
                 })
-            ]
+            ],
+            'preserve_data' => 'boolean'
         ];
     }
 }

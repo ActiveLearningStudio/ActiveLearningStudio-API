@@ -495,6 +495,7 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam user_id int required Id of the user to be removed Example: 1
+     * @bodyParam preserve_data bool Whether to assign user data to admin or delete it Example: false
      *
      * @response {
      *   "message": "User has been removed successfully."
@@ -571,13 +572,16 @@ class SuborganizationController extends Controller
      *
      * Get a list of the users roles for suborganization.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @responseFile responses/organization/organization-roles.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
-    public function getRoles()
+    public function getRoles(Organization $suborganization)
     {
-        return OrganizationRoleResource::collection(OrganizationRoleType::all());
+        return OrganizationRoleResource::collection($suborganization->roles()->get());
     }
 
     /**
