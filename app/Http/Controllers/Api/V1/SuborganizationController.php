@@ -572,13 +572,16 @@ class SuborganizationController extends Controller
      *
      * Get a list of the users roles for suborganization.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @responseFile responses/organization/organization-roles.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
-    public function getRoles()
+    public function getRoles(Organization $suborganization)
     {
-        return OrganizationRoleResource::collection(OrganizationRoleType::all());
+        return OrganizationRoleResource::collection($suborganization->roles()->get());
     }
 
     /**
