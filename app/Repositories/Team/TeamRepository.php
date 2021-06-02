@@ -137,6 +137,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $userRow = $team->users()->find($user['id']);
 
             if ($userRow) {
+                $valid_users[] = $con_user;
                 continue;
             }
 
@@ -297,6 +298,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $team = $this->model->find($team->id);
 
         if ($team) {
+            DB::table('team_project_user')->where('team_id', $team->id)->delete();
+            
             foreach ($projects as $projectId) {
                 foreach ($users as $user) {
                     DB::table('team_project_user')
