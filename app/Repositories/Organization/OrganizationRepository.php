@@ -17,11 +17,15 @@ use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\Team\TeamRepositoryInterface;
+use App\Repositories\Group\GroupRepositoryInterface;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
     private $userRepository;
     private $invitedOrganizationUserRepository;
+    private $projectRepository;
 
     /**
      * Organization Repository constructor.
@@ -29,16 +33,19 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      * @param Organization $model
      * @param UserRepositoryInterface $userRepository
      * @param InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
+     * @param ProjectRepositoryInterface $projectRepository
      */
     public function __construct(
         Organization $model,
         UserRepositoryInterface $userRepository,
-        InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
+        InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
+        ProjectRepositoryInterface $projectRepository
     )
     {
         $this->userRepository = $userRepository;
         parent::__construct($model);
         $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
+        $this->projectRepository = $projectRepository;
     }
 
     /**
@@ -391,18 +398,36 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $organization->users()->detach($data['user_id']);
 
             foreach ($organizationProjects as $organizationProject) {
-                $organizationProject->users()->detach($data['user_id']);
-                $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                    $organizationProject->original_user = $data['user_id'];
+                    $organizationProject->save();
+                    $organizationProject->users()->detach($data['user_id']);
+                    $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                } else {
+                    $this->projectRepository->delete($organizationProject->id);
+                }
             }
 
             foreach ($organizationTeams as $organizationTeam) {
-                $organizationTeam->users()->detach($data['user_id']);
-                $organizationTeam->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                    $organizationTeam->original_user = $data['user_id'];
+                    $organizationTeam->save();
+                    $organizationTeam->users()->detach($data['user_id']);
+                    $organizationTeam->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                } else {
+                    resolve(TeamRepositoryInterface::class)->delete($organizationTeam->id);
+                }
             }
 
             foreach ($organizationGroups as $organizationGroup) {
-                $organizationGroup->users()->detach($data['user_id']);
-                $organizationGroup->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                    $organizationGroup->original_user = $data['user_id'];
+                    $organizationGroup->save();
+                    $organizationGroup->users()->detach($data['user_id']);
+                    $organizationGroup->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                } else {
+                    resolve(GroupRepositoryInterface::class)->delete($organizationGroup->id);
+                }
             }
 
             DB::commit();
