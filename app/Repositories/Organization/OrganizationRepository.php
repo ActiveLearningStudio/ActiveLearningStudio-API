@@ -359,12 +359,79 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function deleteUser($organization, $data)
     {
+        $userOrganizations = $organization->whereHas('users', function (Builder $query) use ($data) {
+            $query->where('id', '=', $data['user_id']);
+        })->get();
+
         try {
-            $organization->users()->detach($data['user_id']);
+            DB::beginTransaction();
+
+            foreach ($userOrganizations as $userOrganization) {
+                $organizationUserRole = $userOrganization->userRoles()
+                            ->withPivot('user_id')
+                            ->whereHas('permissions', function (Builder $query) {
+                                $query->where('name', '=', 'organization:delete-user');
+                            })->first();
+
+                $organizationAdminUserId = $organizationUserRole->pivot->user_id;
+
+                $organizationProjects = $userOrganization->projects()->whereHas('users', function (Builder $query) use ($data) {
+                    $query->where('id', '=', $data['user_id']);
+                })->get();
+
+                $organizationTeams = $userOrganization->teams()->whereHas('users', function (Builder $query) use ($data) {
+                    $query->where('id', '=', $data['user_id']);
+                })->get();
+
+                $organizationGroups = $userOrganization->groups()->whereHas('users', function (Builder $query) use ($data) {
+                    $query->where('id', '=', $data['user_id']);
+                })->get();
+
+                $userOrganization->users()->detach($data['user_id']);
+
+                foreach ($organizationProjects as $organizationProject) {
+                    if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                        $organizationProject->original_user = $data['user_id'];
+                        $organizationProject->save();
+                        $organizationProject->users()->detach($data['user_id']);
+                        $organizationProject->users()->attach($organizationAdminUserId, ['role' => 'owner']);
+                    } else {
+                        $this->projectRepository->delete($organizationProject->id);
+                    }
+                }
+
+                foreach ($organizationTeams as $organizationTeam) {
+                    if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                        $organizationTeam->original_user = $data['user_id'];
+                        $organizationTeam->save();
+                        $organizationTeam->users()->detach($data['user_id']);
+                        $organizationTeam->users()->attach($organizationAdminUserId, ['role' => 'owner']);
+                    } else {
+                        resolve(TeamRepositoryInterface::class)->delete($organizationTeam->id);
+                    }
+                }
+
+                foreach ($organizationGroups as $organizationGroup) {
+                    if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                        $organizationGroup->original_user = $data['user_id'];
+                        $organizationGroup->save();
+                        $organizationGroup->users()->detach($data['user_id']);
+                        $organizationGroup->users()->attach($organizationAdminUserId, ['role' => 'owner']);
+                    } else {
+                        resolve(GroupRepositoryInterface::class)->delete($organizationGroup->id);
+                    }
+                }
+            }
+
+            $this->userRepository->delete($data['user_id']);
+
+            DB::commit();
 
             return true;
         } catch (\Exception $e) {
+            dd($e->getMessage());
             Log::error($e->getMessage());
+            DB::rollBack();
         }
 
         return false;
