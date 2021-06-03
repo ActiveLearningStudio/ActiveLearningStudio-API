@@ -320,7 +320,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                         ]);
                 }
             }
-        });
+        }
     }
 
     /**

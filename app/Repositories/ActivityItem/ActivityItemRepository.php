@@ -23,6 +23,23 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
     /**
      * @param $data
      * @return mixed
+     */
+    public function getAll($data)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = $this->model;
+
+        // if specific index projects requested
+        if (isset($data['query']) && $data['query'] !== '') {
+            $query = $query->where('title', 'iLIKE', '%'.$data['query'].'%');
+        }
+
+        return $query->paginate($perPage);
+    }
+
+    /**
+     * @param $data
+     * @return mixed
      * @throws GeneralException
      */
     public function create($data)
@@ -54,11 +71,11 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
                 $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
             }
             if ($this->find($id)->update($data)) {
-                return ['message' => 'Activity Item data updated!', 'data' => $this->find($id)];
+                return $this->find($id);
             }
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to update activity Item, please try again later!');
-    }    
+    }
 }

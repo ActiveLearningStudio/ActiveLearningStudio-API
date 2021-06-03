@@ -314,8 +314,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                         ]);
                 }
             }
-
-        });
+        }
     }
 
     /**
