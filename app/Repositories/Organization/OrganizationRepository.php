@@ -135,7 +135,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
 
                     if ($role) {
-                        foreach ($organizationUserRole->users as $organizationUserRoleUser) {
+                        $organizationUserRoleUsers = $organizationUserRole->users()
+                            ->wherePivot('organization_id', $organization->id)
+                            ->get();
+
+                        foreach ($organizationUserRoleUsers as $organizationUserRoleUser) {
                             $userRoles[$organizationUserRoleUser->id] = ['organization_role_type_id' => $role->id];
                         }
                     }
