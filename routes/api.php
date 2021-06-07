@@ -153,6 +153,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::put('suborganizations/{suborganization}/update-user', 'SuborganizationController@updateUser')->name('suborganizations.update-user');
         Route::put('suborganizations/{suborganization}/update-user-detail', 'UserController@updateUserDetail')->name('suborganizations.update-user-detail');
         Route::delete('suborganizations/{suborganization}/delete-user', 'SuborganizationController@deleteUser')->name('suborganizations.delete-user');
+        Route::delete('suborganizations/{suborganization}/remove-user', 'SuborganizationController@removeUser')->name('suborganizations.remove-user');
         Route::apiResource('suborganizations', 'SuborganizationController')->except([
             'index'
         ]);
