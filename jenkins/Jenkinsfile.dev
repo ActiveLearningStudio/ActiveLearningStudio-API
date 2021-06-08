@@ -93,23 +93,6 @@ node("currikidev") {
                         exit 1
                     }
                 }
-            },
-            "StageD": {
-                if(Jenkins.instance.getNode('artificialchat').toComputer().isOnline()){
-                    node('artificialchat') {
-                        stage ('artificialchat') {
-                                echo 'Copy'
-                                sh "yes | sudo docker stack deploy --compose-file /home/ubuntu/curriki/docker-compose.yml currikistack" 
-                                echo 'Copy completed'
-                        }
-                    }
-                } else {
-                    stage ('artificialchat') {
-                        echo "currikistage is offline"
-                        exit 1
-                    }
-                }
-                
             }
     )
     
