@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StoreLmsSetting;
+use App\Http\Requests\V1\UpdateLmsSetting;
 use App\Http\Resources\V1\LmsSettingCollection;
 use App\Http\Resources\V1\LmsSettingResource;
 use App\Repositories\LmsSetting\LmsSettingRepository;
@@ -121,7 +122,7 @@ class LmsSettingsController extends Controller
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function update(StoreLmsSetting $request, $id)
+    public function update(UpdateLmsSetting $request, $id)
     {
         $validated = $request->validated();
         $response = $this->lmsSettingRepository->update($id, $validated);

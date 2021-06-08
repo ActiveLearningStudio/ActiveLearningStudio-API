@@ -16,7 +16,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @bodyParam lms_access_secret string required Secret key is required if Access Key is provided. Example: fasdjhjke4wh54354326
  * @bodyParam description text required Brief description. Example: Create LMS Setting for providing access to Moodle.
  */
-class StoreLmsSetting extends FormRequest
+class UpdateLmsSetting extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -35,13 +35,15 @@ class StoreLmsSetting extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('lms_setting');
+
         return [
             'lms_url' => 'required|url|max:255',
             'lms_access_token' => 'required|min:20|max:255',
             'site_name' => 'required|string|max:255',
             'lti_client_id' => 'nullable|string|max:255',
             'lms_login_id' => 'nullable|string|max:255',
-            'user_id' => 'required|exists:users,id|unique:lms_settings,user_id',
+            'user_id' => 'required|exists:users,id|unique:lms_settings,user_id,'.$id,
             'lms_name' => 'nullable|string|max:255',
             'lms_access_key' => 'nullable|string|max:255',
             'lms_access_secret' => 'required_with:lms_access_key|max:255',
