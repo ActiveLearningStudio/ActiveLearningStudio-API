@@ -597,4 +597,23 @@ class UserController extends Controller
             'projects' => ProjectResource::collection($user->projects),
         ], 200);
     }
+
+    /**
+     * Users Basic Report
+     *
+     * Returns the paginated response of the users with basic reporting.
+     *
+     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @queryParam query for getting the search records by name and email. Example: Test
+     *
+     * @responseFile responses/admin/user/users_report.json
+     *
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function reportBasic(Request $request)
+    {
+        return response($this->userRepository->reportBasic($request->all()), 200);
+    }
+
 }

@@ -166,6 +166,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
         // lms-settings
         Route::apiResource('lms-settings', 'LmsSettingsController');
+        Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

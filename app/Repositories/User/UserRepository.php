@@ -127,4 +127,32 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         return false;
     }
+
+    /**
+     * Users basic report, projects, playlists and activities count
+     * @param $data
+     * @return mixed
+     */
+    public function reportBasic($data)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $q = $data['query'] ?? null;
+
+        $this->query = $this->model->select(['id', 'first_name', 'last_name', 'email'])->withCount(['projects', 'playlists', 'activities'])
+            ->when($data['mode'] === 'subscribed', function ($query) {
+                return $query->where(function ($query) {
+                    return $query->where('subscribed', true);
+                });
+            });
+
+        if ($q) {
+             $this->query->where(function($qry) use ($q) {
+                $qry->orWhere('first_name', 'iLIKE', '%'.$q.'%');
+                $qry->orWhere('last_name', 'iLIKE', '%'.$q.'%');
+                $qry->orWhere('email', 'iLIKE', '%'.$q.'%');
+            });
+        }
+
+        return $this->query = $this->query->paginate($perPage);
+    }    
 }
