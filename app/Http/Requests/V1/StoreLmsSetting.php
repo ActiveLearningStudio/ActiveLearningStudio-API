@@ -35,13 +35,15 @@ class StoreLmsSetting extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('lms_setting');
+
         return [
             'lms_url' => 'required|url|max:255',
             'lms_access_token' => 'required|min:20|max:255',
             'site_name' => 'required|string|max:255',
             'lti_client_id' => 'nullable|string|max:255',
             'lms_login_id' => 'nullable|string|max:255',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id|unique:lms_settings,user_id,'.$id,
             'lms_name' => 'nullable|string|max:255',
             'lms_access_key' => 'nullable|string|max:255',
             'lms_access_secret' => 'required_with:lms_access_key|max:255',
