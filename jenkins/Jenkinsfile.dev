@@ -61,38 +61,6 @@ node("currikidev") {
                     }
                 }
                 
-            },
-            "StageB": {
-                if(Jenkins.instance.getNode('currikionelxp').toComputer().isOnline()){
-                    node('currikionelxp') {
-                        stage ('currikionelxp') {
-                                echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
-                                echo 'Copy completed'
-                        }
-                    }
-                } else {
-                    stage ('currikionelxp') {
-                        echo "currikionelxp is offline"
-                        exit 1
-                    }
-                }
-            },
-            "StageC": {
-                if(Jenkins.instance.getNode('currikimopse').toComputer().isOnline()){
-                    node('currikimopse') {
-                        stage ('currikimopse') {
-                                echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
-                                echo 'Copy completed'
-                        }
-                    }
-                } else {
-                    stage ('currikimopse') {
-                        echo "currikimopse is offline"
-                        exit 1
-                    }
-                }
             }
     )
     
