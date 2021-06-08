@@ -82,7 +82,7 @@ node("currikistage") {
                     node('currikimopse') {
                         stage ('currikimopse') {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
+                                sh "yes | docker stack deploy --compose-file /curriki/docker-compose-dev.yml currikistack" 
                                 echo 'Copy completed'
                         }
                     }
