@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\NotificationListResource;
+use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -613,7 +614,7 @@ class UserController extends Controller
      */
     public function reportBasic(Request $request)
     {
-        return response($this->userRepository->reportBasic($request->all()), 200);
+        return UserStatsResource::collection($this->userRepository->reportBasic($request->all()), 200);
     }
 
 }
