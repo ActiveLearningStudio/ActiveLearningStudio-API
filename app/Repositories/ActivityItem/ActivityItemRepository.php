@@ -34,7 +34,7 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
             $query = $query->where('title', 'iLIKE', '%'.$data['query'].'%');
         }
 
-        return $query->paginate($perPage);
+        return $query->paginate($perPage)->appends(request()->query());
     }
 
     /**

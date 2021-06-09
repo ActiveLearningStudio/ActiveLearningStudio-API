@@ -33,7 +33,7 @@ class ActivityTypeRepository extends BaseRepository implements ActivityTypeRepos
             $query = $query->where('title', 'iLIKE', '%'.$data['query'].'%');
         }
 
-        return $query->paginate($perPage);
+        return $query->paginate($perPage)->appends(request()->query());
     }
 
     /**

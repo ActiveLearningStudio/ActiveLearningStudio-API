@@ -146,13 +146,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             });
 
         if ($q) {
-             $this->query->where(function($qry) use ($q) {
+            $this->query->where(function($qry) use ($q) {
                 $qry->orWhere('first_name', 'iLIKE', '%'.$q.'%');
                 $qry->orWhere('last_name', 'iLIKE', '%'.$q.'%');
                 $qry->orWhere('email', 'iLIKE', '%'.$q.'%');
             });
         }
 
-        return $this->query = $this->query->paginate($perPage);
+        return $this->query->paginate($perPage)->appends(request()->query());
     }    
 }

@@ -408,7 +408,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->where('starter_project', $data['starter_project']);
         }
 
-        return $query->where('organization_id', $suborganization->id)->paginate($perPage);
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
     }
 
     /**
