@@ -166,6 +166,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // lms-settings
         Route::apiResource('lms-settings', 'LmsSettingsController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        // queue-monitor
+        Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
+        Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
+        Route::get('queue-monitor/jobs/forget/all', 'QueueMonitorController@forgetAll');
+        Route::get('queue-monitor/jobs/retry/{job}', 'QueueMonitorController@retryJob');
+        Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
+        Route::apiResource('queue-monitor', 'QueueMonitorController');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

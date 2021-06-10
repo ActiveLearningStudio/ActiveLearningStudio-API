@@ -101,8 +101,10 @@ if (!function_exists('get_job_from_payload')) {
      */
     function get_job_from_payload($payload)
     {
-        $payload = json_decode($payload, true);
-        return get_base_name($payload['displayName']);
+        if ($payload) {
+            $payload = json_decode($payload, true);
+            return get_base_name($payload['displayName']);
+        }
     }
 }
 
