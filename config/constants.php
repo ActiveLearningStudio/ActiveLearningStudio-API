@@ -20,6 +20,16 @@ return [
     'default-pagination-per-page' => env('DEFAULT_PAGINATION_PER_PAGE', 10),
     'default-date-format' => env('DEFAULT_DATE_FORMAT', 'd-M-Y'),
 
+    // Safari Montage
+    'sm-publisher-icon' => env('SAFARIMONTAGE_PUBLISHER_ICON', 'favicon-apple.png'),
+    'sm-publisher-name' => env('SAFARIMONTAGE_PUBLISHER_NAME', 'Curriki School'),
+    // LTI Tool Consumer
+    'tool-consumer-email' => env('LTI_TOOL_CONSUMER_EMAIL'),
+    "tool-consumer-guid" => env('LTI_TOOL_CONSUMER_GUID', 'currikistudio.org'),
+    "tool-consumer-description" => env('LTI_TOOL_CONSUMER_DESCRIPTION', 'curriki studio'),
+    'tool-consumer-family-code' => env('LTI_TOOL_CONSUMER_FAMILY', 'currkistudio'),
+    'tool-consumer-version' => env('LTI_TOOL_CONSUMER_VERSION', '1.0.0'),
+    
     /*
      |--------------------------------------------------------------------------
      | SERVER PROXY
