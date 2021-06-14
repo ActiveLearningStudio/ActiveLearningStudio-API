@@ -36,8 +36,8 @@ class QueueMonitorController extends Controller
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      *
      * @queryParam filter 1 for running jobs, 2 for failed, 3 for completed. Default all. Example: 1
-     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
-     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     * @queryParam page Offset for getting the paginated response, Default 1. Example: 1
+     * @queryParam size Limit for getting the paginated records, Default 10. Example: 10
      *
      * @responseFile responses/admin/queue/queues.json
      *
@@ -56,8 +56,8 @@ class QueueMonitorController extends Controller
      * Returns the pending or failed jobs paginated response with pagination links (DataTables are fully supported - All Params).
      *
      * @queryParam filter 1 for pending jobs, 2 for failed. Default 1. Example: 1
-     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
-     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     * @queryParam page Offset for getting the paginated response, Default 1. Example: 1
+     * @queryParam size Limit for getting the paginated records, Default 10. Example: 10
      *
      * @responseFile responses/admin/queue/jobs.json
      *
