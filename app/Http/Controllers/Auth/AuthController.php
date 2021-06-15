@@ -25,7 +25,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use GuzzleHttp\Client;
 /**
  * @group 1. Authentication
  *
@@ -489,6 +489,54 @@ class AuthController extends Controller
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
+        }
+    }
+
+    
+    public function oauthRedirect(Request $request)
+    {
+        try {
+            return redirect()->away(''.config("services.stemuli.basic_url").'?response_type='.config("services.stemuli.response_type").'&client_id='.config("services.stemuli.client").'&redirect_uri='.config("services.stemuli.redirect_uri").'&scope='.config("services.stemuli.scope").'');
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return redirect()->back()->with('errors', 'Unable to redirect. Please try again later.');;
+        }
+    }
+
+    public function oauthCallBack(Request $request)
+    {
+        try {
+
+            $data = array(
+                "grant_type" => "authorization_code",
+                "client_id" => "".config('services.stemuli.client')."",
+                "redirect_uri" => "".config('services.stemuli.redirect_uri')."",
+                "code" => "".$request->code."",
+                "client_secret"=> "".config('services.stemuli.secret').""
+            );
+
+            $client = new Client();
+            $url = "https://apidev.stemuli.net/api/v1/auth0/token";
+            $request = $client->post($url,  array(
+                'form_params' => $data,
+                'Content-Type' => 'application/json',
+            ));
+            $response = json_decode($request->getBody(), true);
+            if ($request->getStatusCode() == 200 && !isset($response['error']))
+            {
+                $response = $response;
+                // $this->ssoLogin();
+            } else{
+                $response = $response['error'];
+                \Log::error($response);
+                return redirect()->back()->with('errors', $response);
+            }
+            return response([
+                'response' => [$response],
+            ], 200);
+        } catch (\Exception $e) {
+            
+            return redirect()->back()->with('errors', 'Unable to login. Please try again later.');
         }
     }
 

@@ -18,6 +18,8 @@ Route::post('login', 'Auth\AuthController@login')->name('login');
 Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('login/sso', 'Auth\AuthController@ssoLogin');
+Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
+Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
