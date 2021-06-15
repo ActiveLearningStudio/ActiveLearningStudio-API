@@ -147,9 +147,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         if ($q) {
             $this->query->where(function($qry) use ($q) {
-                $qry->orWhere('first_name', 'iLIKE', '%'.$q.'%');
-                $qry->orWhere('last_name', 'iLIKE', '%'.$q.'%');
-                $qry->orWhere('email', 'iLIKE', '%'.$q.'%');
+                $qry->orWhere('first_name', 'iLIKE', '%' .$q. '%');
+                $qry->orWhere('last_name', 'iLIKE', '%' .$q. '%');
+                $qry->orWhere('email', 'iLIKE', '%' .$q. '%');
             });
         }
 
