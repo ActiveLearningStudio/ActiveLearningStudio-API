@@ -213,7 +213,8 @@ if (!function_exists('getEducationalLevel')) {
 }
 
 if (!function_exists('getFrontURL')) {
-    function getFrontURL() {
+    function getFrontURL()
+    {
         $front_url = config('constants.front-url');
         if (strpos($front_url,'://') === false) {
             // If not an absolute path, then get the origin.
@@ -237,18 +238,18 @@ if (!function_exists('html_escape')) {
 	 */
 	function html_escape($var, $double_encode = true)
 	{
-		if (empty($var)) {
-			return $var;
-		}
+        if (empty($var)) {
+            return $var;
+        }
 
-		if (is_array($var))	{
-			foreach (array_keys($var) as $key) {
-				$var[$key] = html_escape($var[$key], $double_encode);
-			}
+        if (is_array($var))	{
+            foreach (array_keys($var) as $key) {
+                $var[$key] = html_escape($var[$key], $double_encode);
+            }
 
-			return $var;
-		}
+            return $var;
+        }
 
-		return htmlspecialchars($var, ENT_QUOTES, 'UTF-8', $double_encode);
-	}
+        return htmlspecialchars($var, ENT_QUOTES, 'UTF-8', $double_encode);
+    }
 }

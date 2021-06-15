@@ -49,7 +49,7 @@ class EasyUpload
         // Prepare LTI request parameters.
         $key = $this->lmsSetting->lms_access_key;
         $secret = $this->lmsSetting->lms_access_secret;
-        $launchUrl = $this->lmsSetting->lms_url . '' . self::UPLOAD_API_ENDPOINT;
+        $launchUrl = $this->lmsSetting->lms_url . self::UPLOAD_API_ENDPOINT;
 
         $providerKey = $this->lmsSetting->lti_client_id;
         $user_id = $this->lmsSetting->lms_login_id;
@@ -92,7 +92,7 @@ class EasyUpload
                 'description' => $activity->title,
                 'fromgrade' => $grades[0],
                 'tograde' => (isset($grades[1]) ? $grades[1] : $grades[0]),
-                'thumbnailurl' => getFrontURL() . '' . $activity->thumb_url,
+                'thumbnailurl' => getFrontURL() . $activity->thumb_url,
                 'mediatype' => 'web_link_interactive',
                 'ltilink' => 'true',
                 'ltiproviderkey' => $providerKey,
