@@ -146,6 +146,10 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['assignment_id'] = $activityId;
                 $insertData['assignment_name'] = $activityName;
 
+                ///added submitted and attempt column for new summary page 
+                $insertData['submission_id'] = $groupingInfo['submission'];
+                $insertData['attempt_id'] = $groupingInfo['attempt'];
+
                 // Extract information from object.definition.extensions
                 if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
