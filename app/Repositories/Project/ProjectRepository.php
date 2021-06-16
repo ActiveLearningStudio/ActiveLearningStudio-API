@@ -3,7 +3,9 @@
 namespace App\Repositories\Project;
 
 use App\Exceptions\GeneralException;
+use App\Models\Activity;
 use App\Models\CurrikiGo\LmsSetting;
+use App\Models\Playlist;
 use App\Models\Project;
 use App\User;
 use App\Repositories\BaseRepository;
@@ -375,30 +377,95 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function getAll($data, $suborganization)
     {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
         $query = $this->model;
         $q = $data['query'] ?? null;
-        $query = $query->whereHas('users');
 
         // if simple request for getting project listing with search
         if ($q) {
-            $query = $query->where(function($qry) use ($q){
-                $qry->where('name', 'LIKE', '%'.$q.'%')
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('name', 'iLIKE', '%' .$q. '%')
                     ->orWhereHas('users', function ($qry) use ($q) {
-                        $qry->where('email', 'LIKE', '%'.$q.'%');
+                        $qry->where('email', 'iLIKE', '%' .$q. '%');
                     });
             });
         }
 
         // exclude users those projects which were clone from global starter project
-        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+        if (isset($data['exclude_starter']) && $data['exclude_starter']) {
+            $query = $query->whereHas('users');
             $query = $query->where('is_user_starter', false);
         }
 
         // if specific index projects requested
-        if (isset($data['indexing']) && $data['indexing']){
+        if (isset($data['indexing']) && $data['indexing']) {
             $query = $query->where('indexing', $data['indexing']);
         }
 
-        return $query->where('organization_id', $suborganization->id)->get();
+        // if starter projects requested
+        if (isset($data['starter_project'])) {
+            $query = $query->where('starter_project', $data['starter_project']);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
+    }
+
+    /**
+     * Update Indexes for projects and related models
+     * @param $project
+     * @param $index
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateIndex($project, $index): string
+    {
+        if (! isset($this->model::$indexing[$index])){
+            throw new GeneralException('Invalid index value provided.');
+        }
+        $project->update(['indexing' => $index]);
+        $this->indexProjects([$project->id]);
+        return 'Index status changed successfully!';
+    }
+
+    /**
+     * @param $projects
+     * Indexing of the projects
+     */
+    public function indexProjects($projects): void
+    {
+        if (empty($projects)) {
+            return;
+        }
+        // first get the collection of playlists - needed in activities update
+        $playlists = Playlist::whereIn('project_id', $projects)->get('id');
+
+        // search-able is needed as on collections update observer will not get fired
+        // so searchable will updated the elastic search index via scout package
+        // update directly on query builder
+        $this->model->whereIn('id', $projects)->searchable();
+
+        // to fire observer update should be done on each single instance of models
+        // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
+        // prepare the query builder from collections and perform update
+        Playlist::whereIn('project_id', $projects)->searchable();
+
+        // update related activities by getting keys of parent playlists
+        Activity::whereIn('playlist_id', $playlists->modelKeys())->searchable();
+    }
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($projects, $flag): string
+    {
+        if (empty($projects)) {
+            throw new GeneralException('Choose at-least one project.');
+        }
+        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
+        return 'Starter Projects status updated successfully!';
     }
 }
