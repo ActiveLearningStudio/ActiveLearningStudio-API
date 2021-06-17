@@ -22,6 +22,7 @@ class EasyUpload
     private $lmsSetting;
 
     const UPLOAD_API_ENDPOINT = '/SAFARI/api/imslti.php';
+    const EASY_UPLOAD_ENDPOINT = '/SAFARI/api/imsltieasyupload.php';
     const PROVIDER_NAME = 'safarimontage';
     const CONTEXT_TITLE = 'Easy Upload';
     
@@ -85,7 +86,7 @@ class EasyUpload
             // custom parameters
             'custom_safarimontage_username' => $user_id,
             'custom_safarimontage_school' => config('constants.sm-publisher-name'),
-            'custom_safarimontage_url' => self::UPLOAD_API_ENDPOINT,
+            'custom_safarimontage_url' => self::EASY_UPLOAD_ENDPOINT,
             'custom_safarimontage_upload_metadata' => json_encode([
                 'url' => config('constants.curriki-tsugi-host') . "?activity=" . $activity->id,
                 'title' => $activity->title,
