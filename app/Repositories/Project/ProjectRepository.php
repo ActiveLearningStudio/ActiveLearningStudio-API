@@ -420,11 +420,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function updateIndex($project, $index): string
     {
-        if (! isset($this->model::$indexing[$index])){
+        if (!isset($this->model::$indexing[$index])) {
             throw new GeneralException('Invalid index value provided.');
         }
         $project->update(['indexing' => $index]);
         $this->indexProjects([$project->id]);
+        
         return 'Index status changed successfully!';
     }
 
