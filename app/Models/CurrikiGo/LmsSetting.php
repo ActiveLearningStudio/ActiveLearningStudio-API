@@ -26,7 +26,8 @@ class LmsSetting extends Model
         'description',
         'lti_client_id',
         'lms_login_id',
-        'user_id'
+        'user_id',
+        'published'
     ];
 
     /**

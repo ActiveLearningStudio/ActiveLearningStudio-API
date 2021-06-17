@@ -61,6 +61,12 @@ class OrganizationPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_permission_types')->insert([
+            'name' => 'organization:remove-user',
+            'display_name' => 'Remove Organization User',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
             'name' => 'organization:view-user',
             'display_name' => 'View Organization User',
             'feature' => 'Organization'

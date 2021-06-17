@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Activity;
+use App\Models\Organization;
 use App\Models\Project;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -15,60 +16,85 @@ class ActivityPolicy
      * Determine whether the user can view any models.
      *
      * @param User $user
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Organization $suborganization)
     {
-        return true;
+        return $user->hasPermissionTo('activity:view', $suborganization);
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Activity $activity
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function view(User $user, Activity $activity)
+    public function view(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $activity->playlist->project);
+        return $user->hasPermissionTo('activity:view', $suborganization);
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param User $user
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Organization $suborganization)
     {
-        // TODO: need to update
-        return true;
+        return $user->hasPermissionTo('activity:create', $suborganization);
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param Activity $activity
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function update(User $user, Activity $activity)
+    public function update(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $activity->playlist->project);
+        return $user->hasPermissionTo('activity:edit', $suborganization);
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param Activity $activity
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function delete(User $user, Activity $activity)
+    public function delete(User $user, Organization $suborganization)
     {
-        return $user->isAdmin() || $this->hasPermission($user, $activity->playlist->project);
+        return $user->hasPermissionTo('activity:delete', $suborganization);
     }
+
+    /**
+     * Determine whether the user can share the model.
+     *
+     * @param User $user
+     * @param Organization $suborganization
+     * @return mixed
+     */
+    public function share(User $user, Organization $suborganization)
+    {
+        return $user->hasPermissionTo('activity:share', $suborganization);
+    }    
+
+    /**
+     * Determine whether the user can clone the model.
+     *
+     * @param User $user
+     * @param Organization $suborganization
+     * @return mixed
+     */
+    public function clone(User $user, Organization $suborganization)
+    {
+        return $user->hasPermissionTo('activity:clone', $suborganization);
+    }   
 
     /**
      * Determine whether the user can restore the model.

@@ -82,4 +82,28 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function statusUpdate($project);
+
+    /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getAll($data, $suborganization);
+
+    /**
+     * @param $project
+     * @param $index
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function updateIndex($project, $index);
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($project, $index);
+    
 }
