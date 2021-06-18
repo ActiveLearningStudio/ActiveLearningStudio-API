@@ -15,6 +15,7 @@ use App\Jobs\CloneProject;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -523,6 +524,7 @@ class ProjectController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam project required The Id of a project Example: 1
+     * @bodyParam user_id optional The Id of a user Example: 1
      *
      * @response {
      *   "message": "Project is being cloned|duplicated in background!"
@@ -543,10 +545,21 @@ class ProjectController extends Controller
     {
         $this->authorize('clone', [Project::class, $suborganization]);
 
-        $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id, $suborganization->id);
+        if ($request->user_id) {
+            $user = User::find($request->user_id);
+            if (!$user) {
+                return response([
+                    'message' =>  "Given user id is invalid.",
+                ], 400);
+            }
+        } else {
+            $user = auth()->user();
+        }
+
+        $isDuplicate = $this->projectRepository->checkIsDuplicate($user, $project->id, $suborganization->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         // pushed cloning of project in background
-        CloneProject::dispatch(auth()->user(), $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
+        CloneProject::dispatch($user, $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
             'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
