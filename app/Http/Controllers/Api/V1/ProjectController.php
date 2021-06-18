@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectUpdateRequest;
 use App\Http\Requests\V1\ProjectUploadThumbRequest;
+use App\Http\Requests\V1\ProjectUploadImportRequest;
 use App\Http\Resources\V1\ProjectDetailResource;
 use App\Http\Resources\V1\ProjectResource;
 use App\Http\Resources\V1\UserProjectResource;
@@ -19,6 +20,8 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use App\Jobs\ExportProject;
+use App\Jobs\ImportProject;
 
 /**
  * @group 3. Project
@@ -665,6 +668,66 @@ class ProjectController extends Controller
 
         return response([
             'projects' => ProjectResource::collection($favoriteProjects),
+        ], 200);
+    }
+
+    /**
+     * Export Project
+     *
+     * Export the specified project of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @response {
+     *   "message": "Project is being cloned|duplicated in background!"
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
+     */
+    public function exportProject(Request $request, Organization $suborganization, Project $project)
+    {
+        $this->authorize('export', [Project::class, $suborganization]);
+        // pushed cloning of project in background
+        ExportProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
+        ], 200);
+    }
+
+    /**
+     * Import Project
+     *
+     * Import the specified project of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @response {
+     *   "message": "Project is being cloned|duplicated in background!"
+     * }
+     *
+     * @param ProjectUploadImportRequest $projectUploadImportRequest
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
+     */
+
+    public function importProject(ProjectUploadImportRequest $projectUploadImportRequest, Organization $suborganization)
+    {
+        $this->authorize('import', [Project::class, $suborganization]);
+
+        $projectUploadImportRequest->validated();
+        $path = $projectUploadImportRequest->file('project')->store('public/imports');
+        
+        ImportProject::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
+        
+        return response([
+            'message' =>  "Your request to import project has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 }

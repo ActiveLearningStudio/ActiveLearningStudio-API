@@ -85,6 +85,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
+        Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
+        Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
+                
+        
         Route::post('suborganization/{suborganization}/projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::apiResource('suborganization.projects', 'ProjectController');
@@ -161,6 +165,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
         Route::get('suborganizations/{suborganization}/user-projects', 'ProjectController@getUserProjects')->name('suborganizations.get-user-projects');
+        
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

@@ -82,4 +82,23 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function statusUpdate($project);
+
+    /**
+     * To export project and associated playlists
+     *
+     * @param $authUser
+     * @param Project $project
+     * @throws GeneralException
+     */
+    public function exportProject($authUser, Project $project);
+
+    /**
+     * To import project and associated playlists
+     *
+     * @param $authUser
+     * @param Project $path
+     * @param int $suborganization_id
+     * @throws GeneralException
+     */
+    public function importProject($authUser, $path, $suborganization_id);
 }

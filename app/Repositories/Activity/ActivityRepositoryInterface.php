@@ -66,4 +66,15 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * To Populate missing order number, One time script
      */
     public function populateOrderNumber();
+
+     /**
+     * To clone Activity
+     * @param Playlist $playlist
+     * @param Activity $authUser
+     * @param string $playlist_dir
+     * @param string $activity_dir
+     * @param string $extracted_folder
+     * 
+     */
+    public function importActivity(Playlist $playlist, $authUser, $playlist_dir, $activity_dir, $extracted_folder);
 }
