@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Events\ProjectUpdatedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\OrganizationProjectRequest;
 use App\Http\Requests\V1\ProjectRequest;
 use App\Http\Requests\V1\ProjectUpdateRequest;
 use App\Http\Requests\V1\ProjectUploadThumbRequest;
@@ -15,6 +16,7 @@ use App\Jobs\CloneProject;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -82,30 +84,69 @@ class ProjectController extends Controller
      *
      * @return Response
      */
-    public function getOrgProjects(Organization $suborganization)
+    public function getOrgProjects(OrganizationProjectRequest $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [Project::class, $suborganization]);
 
-        return response([
-            'projects' => ProjectResource::collection(Project::where('organization_id', $suborganization->id)->get()),
-        ], 200);
+        return  UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization));
     }
 
     /**
-     * Get All Projects by admin.
+     * Project Indexing
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/project/projects.json
+     * Modify the index value of a project.
      *
-     * @return Response
+     * @urlParam  project required Project Id. Example: 1
+     * @urlParam  index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
+     *
+     * @response {
+     *   "message": "Index status changed successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Invalid index value provided."
+     *   ]
+     * }
+     *
+     * @param Project $project
+     * @param $index
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
      */
-    public function getUserProjects(Request $request, Organization $suborganization)
+    public function updateIndex(Project $project, $index)
     {
-        return response([
-            'projects' => UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization)),
-        ], 200);
+        return response(['message' => $this->projectRepository->updateIndex($project, $index)], 200);
     }
-
+    
+    /**
+     * Starter Project Toggle
+     *
+     * Toggle the starter flag of any project
+     *
+     * @bodyParam projects array required Projects Ids array. Example: [1,2,3]
+     * @bodyParam flag bool required Selected projects remove or make starter. Example: 1
+     *
+     * @response {
+     *   "message": "Starter Projects status updated successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Choose at-least one project."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param $flag
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function toggleStarter(Request $request, $flag)
+    {
+        return response(['message' => $this->projectRepository->toggleStarter($request->projects, $flag)], 200);
+    }
+    
     /**
      * Get All Projects Detail
      *
@@ -486,6 +527,7 @@ class ProjectController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam project required The Id of a project Example: 1
+     * @bodyParam user_id optional The Id of a user Example: 1
      *
      * @response {
      *   "message": "Project is being cloned|duplicated in background!"
@@ -506,10 +548,21 @@ class ProjectController extends Controller
     {
         $this->authorize('clone', [Project::class, $suborganization]);
 
-        $isDuplicate = $this->projectRepository->checkIsDuplicate(auth()->user(), $project->id, $suborganization->id);
+        if ($request->user_id) {
+            $user = User::find($request->user_id);
+            if (!$user) {
+                return response([
+                    'message' =>  "Given user id is invalid.",
+                ], 400);
+            }
+        } else {
+            $user = auth()->user();
+        }
+
+        $isDuplicate = $this->projectRepository->checkIsDuplicate($user, $project->id, $suborganization->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         // pushed cloning of project in background
-        CloneProject::dispatch(auth()->user(), $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
+        CloneProject::dispatch($user, $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
             'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);

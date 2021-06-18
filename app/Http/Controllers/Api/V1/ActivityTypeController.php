@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreActivityType;
+use App\Http\Requests\V1\UpdateActivityType;
 use App\Http\Resources\V1\ActivityTypeItemResource;
 use App\Http\Resources\V1\ActivityTypeResource;
 use App\Models\ActivityType;
@@ -29,8 +31,7 @@ class ActivityTypeController extends Controller
     public function __construct(ActivityTypeRepositoryInterface $activityTypeRepository)
     {
         $this->activityTypeRepository = $activityTypeRepository;
-
-        $this->authorizeResource(ActivityType::class, 'activityType');
+        // $this->authorizeResource(ActivityType::class, 'activityType');
     }
 
     /**
@@ -42,11 +43,9 @@ class ActivityTypeController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response([
-            'activityTypes' => ActivityTypeResource::collection($this->activityTypeRepository->all()),
-        ], 200);
+        return  ActivityTypeResource::collection($this->activityTypeRepository->getAll($request));
     }
 
     /**
@@ -118,15 +117,9 @@ class ActivityTypeController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreActivityType $request)
     {
-        // TODO: need to update validation
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'order' => 'integer',
-            'image' => 'string|max:255',
-        ]);
-
+        $data = $request->validated();
         $activityType = $this->activityTypeRepository->create($data);
 
         if ($activityType) {
@@ -200,15 +193,10 @@ class ActivityTypeController extends Controller
      * @param ActivityType $activityType
      * @return Response
      */
-    public function update(Request $request, ActivityType $activityType)
+    public function update(UpdateActivityType $request, ActivityType $activityType)
     {
-        // TODO: need to add validation
-
-        $is_updated = $this->activityTypeRepository->update($request->only([
-            'title',
-            'order',
-            'image',
-        ]), $activityType->id);
+        $data = $request->validated();
+        $is_updated = $this->activityTypeRepository->update($activityType->id, $data);
 
         if ($is_updated) {
             return response([

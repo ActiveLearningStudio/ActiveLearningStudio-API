@@ -138,6 +138,22 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             })->pluck('id')->toArray();
         }
 
+        if (isset($data['author']) && !empty($data['author'])) {
+            $author = $data['author'];
+
+            $authorProjectIds = Project::whereHas('users', function (Builder $query) use ($author) {
+                $query->where('first_name', 'like', '%' . $author . '%');
+            })->pluck('id')->toArray();
+
+            if (empty($authorProjectIds)) {
+                if (empty($projectIds)) {
+                    $projectIds = [0];
+                }
+            } else {
+                $projectIds = array_merge($projectIds, $authorProjectIds);
+            }
+        }
+
         $searchResultQuery = $this->model->searchForm()
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)

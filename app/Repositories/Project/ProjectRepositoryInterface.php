@@ -84,8 +84,31 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function statusUpdate($project);
 
     /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getAll($data, $suborganization);
+
+    /**
+     * @param $project
+     * @param $index
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function updateIndex($project, $index);
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($project, $index);
+
+    /** 
      * To export project and associated playlists
-     *
+     * 
      * @param $authUser
      * @param Project $project
      * @throws GeneralException
@@ -101,4 +124,5 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function importProject($authUser, $path, $suborganization_id);
+    
 }

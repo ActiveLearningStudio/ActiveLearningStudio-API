@@ -52,7 +52,9 @@ class LRSStatement extends Model
         'course_name',
         'chapter_name',
         'chapter_index',
-        'referrer'
+        'referrer',
+        'submission_id',
+        'attempt_id'
     ];
 
     /**
