@@ -102,13 +102,7 @@ class LTIConsumerService implements LTIConsumerServiceInterface
 </form>
 <script type="text/javascript"> 
 //<![CDATA[ 
-    // document.getElementById("ltiLaunchForm").style.display = "none";
-    nei = document.createElement('input');
-    nei.setAttribute('type', 'hidden');
-    nei.setAttribute('name', 'ext_submit');
-    nei.setAttribute('value', 'ok');
-    document.getElementById("ltiLaunchForm").appendChild(nei);
-    document.ltiLaunchForm.submit(); 
+    document.getElementById("ltiLaunchForm").submit();
 //]]> 
 </script>
 HTML;
