@@ -17,14 +17,6 @@ class LTIConsumerService implements LTIConsumerServiceInterface
     const LTI_VERSION = 'LTI-1p0';
     const LTI_MESSAGE_TYPE = 'basic-lti-launch-request';
 
-    /**
-     * Initialize
-     * 
-     * @param string $key
-     * @param string $secret
-     * @param string $launchUrl
-     * @return void
-     */
     public function __construct($key, $secret, $launchUrl)
     {
         $this->key = $key;
@@ -38,9 +30,10 @@ class LTIConsumerService implements LTIConsumerServiceInterface
      * @param array $launchData
      * @return string
      */
-    public function launch($launchData)
-    {
-    	// ------------------------------
+	public function launch($launchData)
+	{
+
+		// ------------------------------
         // START CONFIGURATION SECTION
         //
 
@@ -96,23 +89,21 @@ class LTIConsumerService implements LTIConsumerServiceInterface
         foreach ($launchData as $k => $v ) { 
             $output .= '<input type="hidden" name="' . $k .'" value="' . ($k === 'custom_safarimontage_upload_metadata' ? html_escape($v) : $v) .'">';
         }
-        $output .= <<<HTML
-<input type="hidden" name="oauth_signature" value="{$signature}">
-<input type="submit" name="ext_submit" value="ok">
+        $output .= '<input type="hidden" name="oauth_signature" value="' . $signature .'">
+    <button type="ext_submit" value="ok">ok</button>
 </form>
 <script type="text/javascript"> 
 //<![CDATA[ 
-    document.getElementById("ltiLaunchForm").style.display = "none";
-    nei = document.createElement('input');
-    nei.setAttribute('type', 'hidden');
-    nei.setAttribute('name', 'ext_submit');
-    nei.setAttribute('value', 'ok');
+    //document.getElementById("ltiLaunchForm").style.display = "none";
+    nei = document.createElement(\'input\');
+    nei.setAttribute(\'type\', \'hidden\');
+    nei.setAttribute(\'name\', \'ext_submit\');
+    nei.setAttribute(\'value\', \'ok\');
     document.getElementById("ltiLaunchForm").appendChild(nei);
     document.ltiLaunchForm.submit(); 
 //]]> 
-</script>
-HTML;
-        return $output;
+</script>';
+return $output;
     }
     
 }
