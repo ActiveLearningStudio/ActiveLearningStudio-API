@@ -55,7 +55,7 @@ class LTIConsumerService implements LTIConsumerServiceInterface
             "tool_consumer_instance_description" => config('constants.tool-consumer-description'),
             'tool_consumer_info_product_family_code' => config('constants.tool-consumer-family-code'),
             'tool_consumer_info_version' => config('constants.tool-consumer-version'),
-            'ext_submit' => 'ok'
+            'ext_submit' => 'Loading...'
         ];
         $launchData = array_merge($launchData, $params);
         
