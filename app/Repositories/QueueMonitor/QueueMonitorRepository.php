@@ -40,6 +40,9 @@ class QueueMonitorRepository extends BaseRepository
             return $query->succeeded();
         });
 
+        if (isset($data['query']) && $data['query'] !== '') {
+            $this->query = $this->model->where('name', 'iLIKE', '%' . $data['query'] . '%');
+        }
         return $this->query->paginate($perPage)->appends(request()->query());
     }
 
