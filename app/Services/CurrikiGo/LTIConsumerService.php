@@ -55,7 +55,7 @@ class LTIConsumerService implements LTIConsumerServiceInterface
             "tool_consumer_instance_description" => config('constants.tool-consumer-description'),
             'tool_consumer_info_product_family_code' => config('constants.tool-consumer-family-code'),
             'tool_consumer_info_version' => config('constants.tool-consumer-version'),
-            'ext_submit' => 'ok'
+            'ext_submit' => 'Loading...'
         ];
         $launchData = array_merge($launchData, $params);
         
@@ -98,17 +98,11 @@ class LTIConsumerService implements LTIConsumerServiceInterface
         }
         $output .= <<<HTML
 <input type="hidden" name="oauth_signature" value="{$signature}">
-<input type="submit" name="ext_submit" value="ok">
+<input type="submit" name="ext_submit" value="Loading..." style="border:0; background-color: inherit;">
 </form>
 <script type="text/javascript"> 
 //<![CDATA[ 
-    document.getElementById("ltiLaunchForm").style.display = "none";
-    nei = document.createElement('input');
-    nei.setAttribute('type', 'hidden');
-    nei.setAttribute('name', 'ext_submit');
-    nei.setAttribute('value', 'ok');
-    document.getElementById("ltiLaunchForm").appendChild(nei);
-    document.ltiLaunchForm.submit(); 
+    document.getElementById("ltiLaunchForm").submit();
 //]]> 
 </script>
 HTML;
