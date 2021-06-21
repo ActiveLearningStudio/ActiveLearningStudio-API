@@ -49,9 +49,11 @@ class ActivityItemController extends Controller
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        return  ActivityItemResource::collection($this->activityItemRepository->getAll($request->all()));
+        return response([
+            'activityItems' => ActivityItemResource::collection($this->activityItemRepository->all()),
+        ], 200);
     }
 
     /**
