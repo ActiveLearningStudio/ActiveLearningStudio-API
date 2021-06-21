@@ -163,6 +163,19 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Project'
         ]);
 
+        // Project Import Export
+        DB::table('organization_permission_types')->insert([
+            'name' => 'project:export',
+            'display_name' => 'Project Export',
+            'feature' => 'Export'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'project:import',
+            'display_name' => 'Project Import',
+            'feature' => 'Import'
+        ]);
+
         // Playlists
         DB::table('organization_permission_types')->insert([
             'name' => 'playlist:edit',
