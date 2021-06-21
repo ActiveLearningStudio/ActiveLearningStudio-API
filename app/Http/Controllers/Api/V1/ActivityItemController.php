@@ -57,6 +57,20 @@ class ActivityItemController extends Controller
     }
 
     /**
+     * Get Activity Items with pagination and search
+     *
+     * Get a list of the activity items.
+     *
+     * @responseFile responses/activity-item/activity-items.json
+     *
+     * @return Response
+     */
+    public function getItems(Request $request)
+    {
+        return  ActivityItemResource::collection($this->activityItemRepository->getAll($request->all()));
+    }    
+
+    /**
      * Upload Thumbnail
      *
      * Upload thumbnail image for a activity item
