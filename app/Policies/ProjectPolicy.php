@@ -181,4 +181,28 @@ class ProjectPolicy
         return $user->isAdmin();
     }
 
+    /**
+     * Determine whether the user can export the project.
+     *
+     * @param User $user
+     * @param Project $project
+     * @return mixed
+     */
+    public function export(User $user, Organization $suborganization)
+    {
+        return $user->hasPermissionTo('project:export', $suborganization);
+    }
+
+    /**
+     * Determine whether the user can import the project.
+     *
+     * @param User $user
+     * @param Project $project
+     * @return mixed
+     */
+    public function import(User $user, Organization $suborganization)
+    {
+        return $user->hasPermissionTo('project:import', $suborganization);
+    }
+
 }

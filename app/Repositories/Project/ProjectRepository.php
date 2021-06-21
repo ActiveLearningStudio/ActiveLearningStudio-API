@@ -591,8 +591,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $project = json_decode($project_json,true);
                     unset($project['id'], $project['organization_id'], $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
                     
-                    $project['organiziation_id'] = $suborganization_id;
-                    
+                    $project['organization_id'] = $suborganization_id;
+                    $project['organization_visibility_type_id'] = 1;
                     if (filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
                         
                         if(file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {

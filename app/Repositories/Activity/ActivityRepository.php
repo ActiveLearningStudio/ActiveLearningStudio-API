@@ -489,10 +489,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $activity_json = file_get_contents(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$activity_dir.'.json'));
         $activity = json_decode($activity_json,true);
             
-        $activity['playlist_id'] = $playlist->id;
         $old_content_id = $activity['h5p_content_id'];
             
         unset($activity["id"], $activity["playlist_id"], $activity["created_at"], $activity["updated_at"], $activity["h5p_content_id"]);
+        
+        $activity['playlist_id'] = $playlist->id; //assign playlist to activities
             
         $content_json = file_get_contents(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$old_content_id.'.json'));
         $h5p_content = json_decode($content_json,true);
