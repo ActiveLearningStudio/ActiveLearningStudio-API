@@ -43,9 +43,11 @@ class ActivityTypeController extends Controller
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        return  ActivityTypeResource::collection($this->activityTypeRepository->getAll($request));
+        return response([
+            'activityTypes' => ActivityTypeResource::collection($this->activityTypeRepository->all()),
+        ], 200);
     }
 
     /**
