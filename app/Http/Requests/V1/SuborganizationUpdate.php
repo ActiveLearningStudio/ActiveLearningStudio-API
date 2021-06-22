@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Lowercase;
 
 class SuborganizationUpdate extends FormRequest
 {
@@ -23,9 +24,12 @@ class SuborganizationUpdate extends FormRequest
      */
     public function rules()
     {
+        $suborganization = $this->route('suborganization');
+
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'domain' => ['required', 'alpha_dash', 'min:2', 'max:255', 'unique:organizations,domain,' . $suborganization->id, new Lowercase],
             'image' => 'required',
             'admins' => 'array|exists:App\User,id',
             'users' => 'array',

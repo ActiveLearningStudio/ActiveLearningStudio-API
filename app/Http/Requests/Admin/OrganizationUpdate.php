@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Lowercase;
 
 class OrganizationUpdate extends FormRequest
 {
@@ -28,7 +29,7 @@ class OrganizationUpdate extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|min:3|max:255|unique:organizations,domain,' . $id,
+            'domain' => ['required', 'alpha_dash', 'min:2', 'max:255', 'unique:organizations,domain,' . $id, new Lowercase],
             'image' => 'image|max:1000',
             'member_id' => 'integer|exists:App\User,id',
             'parent_id' => 'integer|exists:App\Models\Organization,id'
