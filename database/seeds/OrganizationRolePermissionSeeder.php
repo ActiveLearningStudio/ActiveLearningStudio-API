@@ -12,6 +12,8 @@ class OrganizationRolePermissionSeeder extends Seeder
     public function run()
     {
         $organizationPermissionTypes = DB::table('organization_permission_types')->select('id', 'name', 'feature')->get();
+        $courseCreatorRole = DB::table('organization_role_types')->where('name', 'course_creator')->first();
+        $selfRegisteredRole = DB::table('organization_role_types')->where('name', 'self_registered')->first();
 
         foreach ($organizationPermissionTypes as $organizationPermissionType) {
             $adminRole = DB::table('organization_role_types')->where('name', 'admin')->first();
@@ -21,15 +23,27 @@ class OrganizationRolePermissionSeeder extends Seeder
                 'organization_permission_type_id' => $organizationPermissionType->id
             ]);
 
-            $courseCreatorRole = DB::table('organization_role_types')->where('name', 'course_creator')->first();
-
-            if (in_array($organizationPermissionType->feature, ['Project', 'Playlist', 'Activity', 'Team', 'Group', 'Search'])) {
+            if (in_array($organizationPermissionType->feature, ['Project', 'Playlist', 'Activity', 'Group', 'Search'])) {
                 DB::table('organization_role_permissions')->insert([
                     'organization_role_type_id' => $courseCreatorRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
                 ]);
 
-                $selfRegisteredRole = DB::table('organization_role_types')->where('name', 'self_registered')->first();
+                DB::table('organization_role_permissions')->insert([
+                    'organization_role_type_id' => $selfRegisteredRole->id,
+                    'organization_permission_type_id' => $organizationPermissionType->id
+                ]);
+            }
+
+            $courseCreatorPermissions = [
+                'team:view',
+            ];
+
+            if (in_array($organizationPermissionType->name, $courseCreatorPermissions)) {
+                DB::table('organization_role_permissions')->insert([
+                    'organization_role_type_id' => $courseCreatorRole->id,
+                    'organization_permission_type_id' => $organizationPermissionType->id
+                ]);
 
                 DB::table('organization_role_permissions')->insert([
                     'organization_role_type_id' => $selfRegisteredRole->id,

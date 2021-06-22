@@ -31,6 +31,7 @@ class SearchRequest extends FormRequest
             'startDate' => 'date',
             'endDate' => 'date|after_or_equal:startDate',
             'userIds' => 'array|exists:App\User,id',
+            'author' => 'string|max:255',
             'h5pLibraries' => 'array|exists:App\Models\ActivityItem,h5pLib',
             'subjectIds' => 'array',
             'educationLevelIds' => 'array',

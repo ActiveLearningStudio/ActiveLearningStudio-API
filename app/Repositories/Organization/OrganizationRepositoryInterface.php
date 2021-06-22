@@ -89,11 +89,21 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     /**
      * Delete the specified user in a particular suborganization
      *
-     * @param $id
+     * @param Organization $organization
      * @param array $data
      * @return Model
      */
-    public function deleteUser($id, $data);
+    public function deleteUser($organization, $data);
+
+    /**
+     * Remove the specified user from a particular organization
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function removeUser($authenticatedUser, $organization, $data);
 
     /**
      * To fetch organization users
