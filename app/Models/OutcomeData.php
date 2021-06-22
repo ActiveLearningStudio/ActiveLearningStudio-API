@@ -15,7 +15,7 @@ class OutcomeData extends Model
      * 
      */
     public static function isSubmitted($actor_id, $activity_id, $submission_id) {
-        $result = DB::select("select * from outcome_data where user_id = '".$actor_id."' AND submission_id = '".$submission_id."' AND assignment_id = '".$activity_id."' AND verb='submitted-curriki' order by page_order desc");
+        $result = DB::select("select * from outcome_data where user_id = ? AND submission_id = ? AND assignment_id = ? AND verb= ? order by page_order desc", [$actor_id, $submission_id, $activity_id,'submitted-curriki']);
         if(count($result) > 0)
             return true;
         else
