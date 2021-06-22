@@ -20,6 +20,7 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
-<FilesMatch ".(eot|otf|ttf|woff|woff2)">
-    Header always set Access-Control-Allow-Origin "*"
-</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
