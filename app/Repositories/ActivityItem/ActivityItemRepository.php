@@ -45,10 +45,6 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
     public function create($data)
     {
         try {
-            // choosing this store path because old data is being read from this path
-            if (isset($data['image'])) {
-                $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
-            }
             if ($item = $this->model->create($data)) {
                 return $item;
             }
@@ -66,10 +62,6 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
     public function update($id, $data)
     {
         try {
-            // choosing this store path because old data is being read from this path
-            if (isset($data['image'])) {
-                $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
-            }
             if ($this->find($id)->update($data)) {
                 return $this->find($id);
             }

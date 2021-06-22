@@ -44,10 +44,6 @@ class ActivityTypeRepository extends BaseRepository implements ActivityTypeRepos
     public function create($data)
     {
         try {
-            // choosing this store path because old data is being read from this path
-            if (isset($data['image'])) {
-                $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
-            }
             if ($type = $this->model->create($data)) {
                 return $type;
             }
@@ -65,10 +61,6 @@ class ActivityTypeRepository extends BaseRepository implements ActivityTypeRepos
     public function update($id, $data)
     {
         try {
-            // choosing this store path because old data is being read from this path
-            if (isset($data['image'])) {
-                $data['image'] = \Storage::url($data['image']->store('/public/uploads'));
-            }
             if ($this->find($id)->update($data)) {
                 return $this->find($id);
             }
