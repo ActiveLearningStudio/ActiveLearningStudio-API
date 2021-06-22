@@ -35,7 +35,7 @@ class UpdateActivityItem extends FormRequest
             'activity_type_id' => 'integer|exists:activity_types,id',
             'type' => 'sometimes',
             'h5pLib' => 'sometimes',
-            'image' => 'sometimes|image|max:2000',
+            'image' => 'sometimes',
         ];
     }
 }

@@ -179,6 +179,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('queue-monitor', 'QueueMonitorController');
         // activity items
         Route::get('get-activity-items', 'ActivityItemController@getItems');
+        Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
+        Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions
