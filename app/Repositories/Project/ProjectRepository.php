@@ -3,7 +3,9 @@
 namespace App\Repositories\Project;
 
 use App\Exceptions\GeneralException;
+use App\Models\Activity;
 use App\Models\CurrikiGo\LmsSetting;
+use App\Models\Playlist;
 use App\Models\Project;
 use App\User;
 use App\Repositories\BaseRepository;
@@ -15,6 +17,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -375,30 +380,249 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function getAll($data, $suborganization)
     {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
         $query = $this->model;
         $q = $data['query'] ?? null;
-        $query = $query->whereHas('users');
 
         // if simple request for getting project listing with search
         if ($q) {
-            $query = $query->where(function($qry) use ($q){
-                $qry->where('name', 'LIKE', '%'.$q.'%')
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('name', 'iLIKE', '%' .$q. '%')
                     ->orWhereHas('users', function ($qry) use ($q) {
-                        $qry->where('email', 'LIKE', '%'.$q.'%');
+                        $qry->where('email', 'iLIKE', '%' .$q. '%');
                     });
             });
         }
 
         // exclude users those projects which were clone from global starter project
-        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+        if (isset($data['exclude_starter']) && $data['exclude_starter']) {
+            $query = $query->whereHas('users');
             $query = $query->where('is_user_starter', false);
         }
 
         // if specific index projects requested
-        if (isset($data['indexing']) && $data['indexing']){
+        if (isset($data['indexing']) && $data['indexing']) {
             $query = $query->where('indexing', $data['indexing']);
         }
 
-        return $query->where('organization_id', $suborganization->id)->get();
+        // if starter projects requested
+        if (isset($data['starter_project'])) {
+            $query = $query->where('starter_project', $data['starter_project']);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
     }
+
+    /**
+     * Update Indexes for projects and related models
+     * @param $project
+     * @param $index
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateIndex($project, $index): string
+    {
+        if (! isset($this->model::$indexing[$index])){
+            throw new GeneralException('Invalid index value provided.');
+        }
+        $project->update(['indexing' => $index]);
+        $this->indexProjects([$project->id]);
+        return 'Index status changed successfully!';
+    }
+
+    /**
+     * @param $projects
+     * Indexing of the projects
+     */
+    public function indexProjects($projects): void
+    {
+        if (empty($projects)) {
+            return;
+        }
+        // first get the collection of playlists - needed in activities update
+        $playlists = Playlist::whereIn('project_id', $projects)->get('id');
+
+        // search-able is needed as on collections update observer will not get fired
+        // so searchable will updated the elastic search index via scout package
+        // update directly on query builder
+        $this->model->whereIn('id', $projects)->searchable();
+
+        // to fire observer update should be done on each single instance of models
+        // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
+        // prepare the query builder from collections and perform update
+        Playlist::whereIn('project_id', $projects)->searchable();
+
+        // update related activities by getting keys of parent playlists
+        Activity::whereIn('playlist_id', $playlists->modelKeys())->searchable();
+    }
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($projects, $flag): string
+    {
+        if (empty($projects)) {
+            throw new GeneralException('Choose at-least one project.');
+        }
+        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
+        return 'Starter Projects status updated successfully!';
+    }
+
+    /**
+     * To export project and associated playlists
+     *
+     * @param $authUser
+     * @param Project $project
+     * @param int $suborganization_id
+     * @throws GeneralException
+     */
+    public function exportProject($authUser, Project $project)
+    {
+        $zip = new ZipArchive;
+        
+        $project_dir_name = 'projects-'.uniqid();
+        Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
+        
+        $project_thumbanil = "";
+        if (filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
+            $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
+            $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION); 
+            if(file_exists($project_thumbanil)) {
+                Storage::disk('public')->put('/exports/'.$project_dir_name.'/'.basename($project_thumbanil),file_get_contents($project_thumbanil));
+            }
+        }
+       
+        $playlists = $project->playlists;
+        
+        foreach ($playlists as $playlist) {
+            
+            $title = $playlist->title;
+            Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/'.$title.'.json', $playlist);
+            $activites = $playlist->activities;
+            ;
+            foreach($activites as $activity) {
+                Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->title.'.json', $activity);
+                //dd(json_decode($activity->h5p_content,true));
+                $decoded_content = json_decode($activity->h5p_content,true);
+
+                $decoded_content['library_title'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('name');
+                $decoded_content['library_major_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('major_version');
+                $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('minor_version');
+                Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id.'.json', json_encode($decoded_content));
+                
+                if (filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
+                    $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
+                    $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION); 
+                    if(file_exists($activity_thumbanil)) {
+                        Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.basename($activity_thumbanil),file_get_contents($activity_thumbanil));
+                    }
+                }
+
+                \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), storage_path('app/public/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id) );
+            } 
+        }
+        
+        // Get real path for our folder
+        $rootPath = storage_path('app/public/exports/'.$project_dir_name);
+        
+        // Initialize archive object
+        $zip = new ZipArchive();
+        $fileName = $project_dir_name.'.zip';
+        $zip->open(storage_path('app/public/exports/'.$fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        
+        // Create recursive directory iterator
+        /** @var SplFileInfo[] $files */
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+        
+        foreach ($files as $name => $file)
+        {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir())
+            {
+                // Get real and relative path for current file
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
+        
+                // Add current file to archive
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+        
+        // Zip archive will be created only after closing object
+        $zip->close();
+
+        return storage_path('app/public/exports/'.$fileName);
+    }
+
+
+    /**
+     * To import project and associated playlists
+     *
+     * @param $authUser
+     * @param Project $path
+     * @param int $suborganization_id
+     * @throws GeneralException
+     */
+    public function importProject($authUser, $path, $suborganization_id)
+    {
+        try {
+
+            $zip = new ZipArchive;
+            $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
+            
+            if ($zip->open($source_file) === TRUE) {
+                $extracted_folder_name = "app/public/imports/project-".uniqid();
+                $zip->extractTo(storage_path($extracted_folder_name.'/'));
+                $zip->close();
+            }else {
+                return "Unable to import Project";
+            }
+            return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser) {
+                if(file_exists(storage_path($extracted_folder_name.'/project.json'))) {
+                    $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
+                    
+                    $project = json_decode($project_json,true);
+                    unset($project['id'], $project['organization_id'], $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
+                    
+                    $project['organization_id'] = $suborganization_id;
+                    $project['organization_visibility_type_id'] = 1;
+                    if (filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
+                        
+                        if(file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
+                            
+                            $ext = pathinfo(basename($project['thumb_url']), PATHINFO_EXTENSION);
+                            $new_image_name = uniqid() . '.' . $ext;
+                            $destination_file = storage_path('app/public/projects/'.$new_image_name);
+                            
+                            \File::copy(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])), $destination_file);
+                            $project['thumb_url'] = "/storage/projects/" . $new_image_name;;
+                        }
+                    }
+    
+                    $cloned_project = $authUser->projects()->create($project, ['role' => 'owner']);
+                
+                    $playlist_directories = scandir(storage_path($extracted_folder_name.'/playlists'));
+                    
+                    for($i=0;$i<count($playlist_directories);$i++) { // loop through all playlists
+                        if($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..') continue;
+                        $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
+                    }
+                }
+            });
+            
+            
+        }catch (\Exception $e) {
+            \DB::rollBack();
+            Log::error($e->getMessage());
+            throw new GeneralException('Unable to import the project, please try again later!');
+        }
+    }
+
 }

@@ -46,4 +46,11 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @return boolean
      */
     public function hasPermissionTo($user, $permission, $organization);
+
+    /**
+     * Users basic report, projects, playlists and activities count
+     * @param $data
+     * @return mixed
+     */
+    public function reportBasic($data);
 }

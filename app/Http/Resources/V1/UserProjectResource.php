@@ -28,6 +28,7 @@ class UserProjectResource extends JsonResource
             'status' => $this->status,
             'status_text' => $this->status_text,
             'indexing' => $this->indexing,
+            'is_user_starter' => $this->is_user_starter,
             'indexing_text' => $this->indexing_text,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
