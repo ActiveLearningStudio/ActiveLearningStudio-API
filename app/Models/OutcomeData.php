@@ -19,8 +19,7 @@ class OutcomeData extends Model
         $result = DB::select("select * from outcome_data where user_id = ? AND submission_id = ? AND assignment_id = ? AND verb= ? order by page_order desc", [$actor_id, $submission_id, $activity_id,'submitted-curriki']);
         if(count($result) > 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -41,8 +40,7 @@ class OutcomeData extends Model
                 return $value->chapter_name;
             }, $result);
             return $result;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -60,8 +58,7 @@ class OutcomeData extends Model
         $result = DB::select("select * from outcome_data where user_id = ? AND submission_id = ?  AND assignment_id = ?  AND verb IN(?,?) order by page_order,datetime asc", [$actor_id, $submission_id, $activity_id,'interacted','answered']);
         if (count($result) > 0) {
             return $result;
-        }
-        else {
+        } else {
             return false;
         }
     }
