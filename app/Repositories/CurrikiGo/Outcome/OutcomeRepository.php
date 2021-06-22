@@ -308,7 +308,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         }
     }
 
-    private function getOutcomeData(array $data){
+    private function getOutcomeData(array $data) {
         $response = [];
         try {
             if (isset($data['actor'])) {
@@ -330,8 +330,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                     foreach ($chapters_list as $chapter) {
                         $result = $collection->where('chapter_name', $chapter);
                         if ($result->count() > 0) {
-                            $result_array = array(
-                                'title' => ($chapter) ? $chapter : 'Summary');
+                            $result_array = array('title' => ($chapter) ? $chapter : 'Summary');
                             foreach ($result as $data) {
                                 $result_array['children'][] = array(
                                         'title' => $data->question,
@@ -352,14 +351,13 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                     }
                 }
             }
-             return [
-                     'summary' => $response,
-                ];
+            return [
+                'summary' => $response,
+            ];
         } catch (Exception $e) {
             return [
                 'errors' => ["The outcome could not be retrived: " . $e->getMessage()],
             ];
         }
-
     }
 }

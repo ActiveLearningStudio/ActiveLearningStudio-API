@@ -14,12 +14,15 @@ class OutcomeData extends Model
      * @var string
      * 
      */
-    public static function isSubmitted($actor_id, $activity_id, $submission_id) {
+    public static function isSubmitted($actor_id, $activity_id, $submission_id) 
+    {
         $result = DB::select("select * from outcome_data where user_id = ? AND submission_id = ? AND assignment_id = ? AND verb= ? order by page_order desc", [$actor_id, $submission_id, $activity_id,'submitted-curriki']);
-        if(count($result) > 0)
+        if(count($result) > 0) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
     /**
@@ -30,16 +33,18 @@ class OutcomeData extends Model
      * @var string
      * 
      */
-    public static function getUniqueChapters($actor_id, $activity_id, $submission_id) {
+    public static function getUniqueChapters($actor_id, $activity_id, $submission_id) 
+    {
         $result = DB::select("select distinct chapter_name , page_order from outcome_data where user_id = ? AND submission_id = ?  AND assignment_id = ?  AND verb IN(?,?) order by page_order", [$actor_id, $submission_id, $activity_id,'interacted','answered']);
         if (count($result) > 0) {
-            $result = array_map (function ($value) {
+            $result = array_map(function($value) {
                 return $value->chapter_name;
             }, $result);
             return $result;
         }
-        else
+        else {
             return false;
+        }
     }
 
     /**
@@ -50,11 +55,14 @@ class OutcomeData extends Model
      * @var string
      * 
      */
-    public static function getOutcomeResults($actor_id, $activity_id, $submission_id) {
+    public static function getOutcomeResults($actor_id, $activity_id, $submission_id) 
+    {
         $result = DB::select("select * from outcome_data where user_id = ? AND submission_id = ?  AND assignment_id = ?  AND verb IN(?,?) order by page_order,datetime asc", [$actor_id, $submission_id, $activity_id,'interacted','answered']);
-        if (count($result) > 0)
+        if (count($result) > 0) {
             return $result;
-        else
+        }
+        else {
             return false;
+        }
     }
 }
