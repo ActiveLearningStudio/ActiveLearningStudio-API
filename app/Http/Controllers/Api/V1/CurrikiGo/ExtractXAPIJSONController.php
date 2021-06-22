@@ -95,7 +95,7 @@ class ExtractXAPIJSONController extends Controller
                     $groupingInfo = $service->findGroupingInfo($other);
                     $platform = $context->getPlatform();
                 }
-
+                
                 // Skip if we don't have the activity.
                 if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
                     // It maybe an old format statement. Just save verb, object and actor, and move on.
@@ -149,7 +149,6 @@ class ExtractXAPIJSONController extends Controller
                 //added submitted_id and attempt_id column for new summary page 
                 $insertData['submission_id'] = $groupingInfo['submission'];
                 $insertData['attempt_id'] = $groupingInfo['attempt'];
-
                 // Extract information from object.definition.extensions
                 if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
