@@ -1,0 +1,136 @@
+node("currikidev") {
+    def app     
+    def redis
+    def esmigrate
+      
+    
+    
+    stage('Clone repository') {               
+        checkout scm    
+    }  
+    
+    stage('Build image') {         
+        app = docker.build("quay.io/curriki/api")    
+        redis = docker.build("quay.io/curriki/redis", "-f Dockerfile.redis .")    
+        esmigrate = docker.build("quay.io/curriki/es-migrate", "-f Dockerfile.esmigrate .")    
+    } 
+    stage('Test image') {           
+        app.inside { 
+                sh 'echo "Api Tests passed"'        
+        }    
+        redis.inside { 
+                sh 'echo "Rnode("currikidev") {
+    def app     
+    def redis
+    def esmigrate
+      
+    
+    
+    stage('Clone repository') {               
+        checkout scm    
+    }  
+    
+    stage('Build image') {         
+        app = docker.build("quay.io/curriki/api")    
+        redis = docker.build("quay.io/curriki/redis", "-f Dockerfile.redis .")    
+        esmigrate = docker.build("quay.io/curriki/es-migrate", "-f Dockerfile.esmigrate .")    
+    } 
+    stage('Test image') {           
+        app.inside { 
+                sh 'echo "Api Tests passed"'        
+        }    
+        redis.inside { 
+                sh 'echo "Redis Tests passed"'        
+        }   
+        esmigrate.inside { 
+                sh 'echo "ES Migrate Tests passed"'        
+        }   
+    } 
+    stage('Push image') {	
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                app.push("${env.BUILD_NUMBER}")            
+                app.push("vivensity")        
+        }    
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                redis.push("${env.BUILD_NUMBER}")            
+                redis.push("vivensity")        
+        }   
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                esmigrate.push("${env.BUILD_NUMBER}")            
+                esmigrate.push("vivensity")        
+        }   
+    }
+    
+
+    
+    
+    
+     parallel(
+            "StageA": {
+                if(Jenkins.instance.getNode('currikivivensity').toComputer().isOnline()){
+                    node('currikivivensity') {
+                        stage ('currikivivensity') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file /curriki/docker-compose-vivensity.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikivivensity') {
+                        echo "currikivivensity is offline"
+                        exit 1
+                    }
+                }
+                
+            }
+    )
+    
+}
+
+edis Tests passed"'        
+        }   
+        esmigrate.inside { 
+                sh 'echo "ES Migrate Tests passed"'        
+        }   
+    } 
+    stage('Push image') {	
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                app.push("${env.BUILD_NUMBER}")            
+                app.push("develop")        
+        }    
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                redis.push("${env.BUILD_NUMBER}")            
+                redis.push("develop")        
+        }   
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                esmigrate.push("${env.BUILD_NUMBER}")            
+                esmigrate.push("develop")        
+        }   
+    }
+    
+
+    
+    
+    
+     parallel(
+            "StageA": {
+                if(Jenkins.instance.getNode('currikidev').toComputer().isOnline()){
+                    node('currikidev') {
+                        stage ('currikidev') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikidev') {
+                        echo "currikidev is offline"
+                        exit 1
+                    }
+                }
+                
+            }
+    )
+    
+}
+
