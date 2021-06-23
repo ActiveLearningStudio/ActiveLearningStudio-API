@@ -46,7 +46,7 @@ class ExtractXAPIJSONController extends Controller
         try {
             $service = new LearnerRecordStoreService();
             foreach ($xapiStatements as $row) {
-                \Log::info(date('Y-m-d h:i:s') . ' - Processing XAPI statement with id: ' . $row->id);
+                \Log::info(date('Y-m-d h:i:s') . ' - Processing XAPI statement with id: ' . print_r($row, true));
                 $insertData = [];
                 $statement = $service->buildStatementfromJSON($row->data);
                 $actor = $statement->getActor();
@@ -88,11 +88,12 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['datetime'] = $row->created_at;
                 $insertData['object_id'] = $target->getId();
                 $insertData['verb'] = $verb;
-
+                \Log::info(date('Y-m-d h:i:s') . ' - context of: ' . $row->id . ' - '. print_r($context, true));
                 if (!empty($context)) {
                     $contextActivities = $context->getContextActivities();
                     $other = $contextActivities->getOther();
                     $groupingInfo = $service->findGroupingInfo($other);
+                    \Log::info(date('Y-m-d h:i:s') . ' - grouping info of : ' . $row->id . ' - '. print_r($groupingInfo, true));
                     $platform = $context->getPlatform();
                 }
                 
@@ -101,7 +102,7 @@ class ExtractXAPIJSONController extends Controller
                     // It maybe an old format statement. Just save verb, object and actor, and move on.
                     $inserted = $lrsStatementsRepository->create($insertData);
                     if ($inserted) {
-                        \Log::info(date('Y-m-d h:i:s') . ' - XAPI statement with id: ' . $row->id . ' processed');
+                        \Log::info(date('Y-m-d h:i:s') . ' - OLD XAPI statement with id: ' . $row->id . ' processed');
                     }
                     continue;
                 }
@@ -199,7 +200,7 @@ class ExtractXAPIJSONController extends Controller
                 $inserted = $lrsStatementsRepository->create($insertData);
                
                 if ($inserted) {
-                    \Log::info(date('Y-m-d h:i:s') . ' - XAPI statement with id: ' . $row->id . ' processed');
+                    \Log::info(date('Y-m-d h:i:s') . ' - NEW XAPI statement with id: ' . $row->id . ' processed');
                     //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
                     if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
                         if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {
