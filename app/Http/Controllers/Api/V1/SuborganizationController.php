@@ -480,7 +480,7 @@ class SuborganizationController extends Controller
 
         $userObj = $this->userRepository->find($data['user_id']);
 
-        if ($userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
+        if ($suborganization->parent && $userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
             return response([
                 'errors' => ['Can not delete user inherited from a parent org.'],
             ], 500);
@@ -539,7 +539,7 @@ class SuborganizationController extends Controller
 
         $userObj = $this->userRepository->find($data['user_id']);
 
-        if ($userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
+        if ($suborganization->parent && $userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
             return response([
                 'errors' => ['Can not remove user inherited from a parent org.'],
             ], 500);
