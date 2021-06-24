@@ -31,6 +31,10 @@ class SuborganizationAddNewUser extends FormRequest
             'job_title' => 'nullable|string|max:255',
             'password' => ['required', 'string', new StrongPassword],
             'role_id' => 'required|integer|exists:organization_role_types,id',
+            'organization_name' => 'string',
+            'organization_type' => 'string',
+            'website' => 'string',
+            'address' => 'string',
         ];
     }
 }
