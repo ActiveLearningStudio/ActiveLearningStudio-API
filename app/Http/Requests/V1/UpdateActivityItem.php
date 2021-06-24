@@ -32,7 +32,7 @@ class UpdateActivityItem extends FormRequest
             'title' => 'string|max:255',
             'description' => 'string',
             'order' => 'integer',
-            'activity_type_id' => 'integer|exists:activity_types,id',
+            'activity_type_id' => 'required|integer|exists:activity_types,id',
             'type' => 'sometimes',
             'h5pLib' => 'sometimes',
             'image' => 'sometimes',

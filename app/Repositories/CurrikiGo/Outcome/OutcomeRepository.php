@@ -7,20 +7,22 @@ use App\Http\Resources\V1\CurrikiGo\StudentResultResource;
 use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use App\Services\LearnerRecordStoreService;
+use App\Models\OutcomeData;
 
 class OutcomeRepository implements OutcomeRepositoryInterface
 {
 
     // Returns several project metrics for the specified user
     public function getStudentOutcome($actor, $activity) {
-        $result = $this->getStudentOutcomeData(compact('actor', 'activity'));
+        //$result = $this->getStudentOutcomeData(compact('actor', 'activity'));
+        $result = $this->getOutcomeData(compact('actor', 'activity'));
         if (isset($result['errors'])) {
             return $result;
         }
 
         // Normalize responses for frontend consumption
-        $normalizedResult = $this->normalizeRow($result['summary']);
-        return ['summary' => $normalizedResult];
+        // $normalizedResult = $this->normalizeRow($result['summary']);
+        return ['summary' => $result['summary']];
     }
 
     private function normalizeRow($data) {
@@ -151,7 +153,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         return count(array_filter(array_keys($array), 'is_string')) === 0;
     }
 
-    private function getStudentOutcomeData($data) {
+    private function getStudentOutcomeData(array $data) {
         $response = [];
         try {
             $service = new LearnerRecordStoreService();
@@ -299,6 +301,59 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                     'errors' => ["No results found."],
                 ];
             }
+        } catch (Exception $e) {
+            return [
+                'errors' => ["The outcome could not be retrived: " . $e->getMessage()],
+            ];
+        }
+    }
+
+    private function getOutcomeData(array $data) {
+        $response = [];
+        try {
+            if (isset($data['actor'])) {
+                preg_match_all('!\d+!', $data['actor'], $matches);
+                if (is_array($matches)) 
+                    $actor_id = $matches[0][0];
+            }
+            if (isset($data['activity'])) {
+                $activity_explode = explode('/', $data['activity']);
+                $activity_id = $activity_explode[4];
+                $submission_id = $activity_explode[6];
+            }
+            $check_submitted = OutcomeData::isSubmitted($actor_id, $activity_id, $submission_id);
+            if ($check_submitted) {
+                $result_array = [];
+                $chapters_list = OutcomeData::getUniqueChapters($actor_id, $activity_id, $submission_id);
+                $collection = collect(OutcomeData::getOutcomeResults($actor_id, $activity_id, $submission_id));
+                if (count($chapters_list) > 0 ) {
+                    foreach ($chapters_list as $chapter) {
+                        $result = $collection->where('chapter_name', $chapter);
+                        if ($result->count() > 0) {
+                            $result_array = array('title' => ($chapter) ? $chapter : 'Summary');
+                            foreach ($result as $data) {
+                                $result_array['children'][] = array(
+                                        'title' => $data->question,
+                                        'answer' => array(
+                                            'score' => array(
+                                                'raw' => $data->score_raw,
+                                                'min' => $data->score_min,
+                                                'max' => $data->score_max,
+                                                'scaled' => $data->score_scaled,
+                                            ),
+                                            'responses' => array($data->answer),
+                                            'duration' => $data->duration
+                                        )
+                                    );
+                            }
+                            array_push($response, $result_array);
+                        }
+                    }
+                }
+            }
+            return [
+                'summary' => $response,
+            ];
         } catch (Exception $e) {
             return [
                 'errors' => ["The outcome could not be retrived: " . $e->getMessage()],
