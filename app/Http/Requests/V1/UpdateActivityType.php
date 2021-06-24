@@ -30,7 +30,7 @@ class UpdateActivityType extends FormRequest
     {
         return [
             'title' => 'sometimes',
-            'image' => 'image|max:1000',
+            'image' => 'sometimes',
             'order' => 'sometimes|integer'
         ];
     }

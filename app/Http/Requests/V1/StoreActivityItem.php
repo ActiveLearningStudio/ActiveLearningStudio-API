@@ -35,7 +35,7 @@ class StoreActivityItem extends FormRequest
             'activity_type_id' => 'integer|exists:activity_types,id',
             'type' => 'required',
             'h5pLib' => 'required',
-            'image' => 'required|image|max:2000',
+            'image' => 'required',
         ];
     }
 }

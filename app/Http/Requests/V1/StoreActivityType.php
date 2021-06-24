@@ -30,7 +30,7 @@ class StoreActivityType extends FormRequest
     {
         return [
             'title' => 'required',
-            'image' => 'image|max:1000',
+            'image' => 'required',
             'order' => 'required|integer'
         ];
     }

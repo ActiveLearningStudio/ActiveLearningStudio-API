@@ -177,6 +177,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('queue-monitor/jobs/retry/{job}', 'QueueMonitorController@retryJob');
         Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
         Route::apiResource('queue-monitor', 'QueueMonitorController');
+        // activity items
+        Route::get('get-activity-items', 'ActivityItemController@getItems');
+        Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
+        Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions
