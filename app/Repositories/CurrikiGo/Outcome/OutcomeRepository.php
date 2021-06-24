@@ -326,7 +326,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 $result_array = [];
                 $chapters_list = OutcomeData::getUniqueChapters($actor_id, $activity_id, $submission_id);
                 $collection = collect(OutcomeData::getOutcomeResults($actor_id, $activity_id, $submission_id));
-                if (count($chapters_list) > 0 ) {
+                if ($chapters_list) {
                     foreach ($chapters_list as $chapter) {
                         $result = $collection->where('chapter_name', $chapter);
                         if ($result->count() > 0) {
