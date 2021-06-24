@@ -32,10 +32,12 @@ class StoreActivityItem extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'required',
             'order' => 'integer',
-            'activity_type_id' => 'integer|exists:activity_types,id',
+            'activity_type_id' => 'required|integer|exists:activity_types,id',
             'type' => 'required',
             'h5pLib' => 'required',
             'image' => 'required',
+            'demo_activity_id' => 'required|string',
+            'demo_video_id' => 'required|string',
         ];
     }
 }
