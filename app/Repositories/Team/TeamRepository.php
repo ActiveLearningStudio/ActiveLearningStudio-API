@@ -426,6 +426,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      *
      * @param $suborganization_id
      * @param $user_id
+     * @return mixed
      */
     public function getTeams($suborganization_id, $user_id)
     {
@@ -437,9 +438,21 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
     /**
+     * Get Organization Teams data
+     *
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getOrgTeams($suborganization_id)
+    {
+        return Team::whereOrganizationId($suborganization_id)->get();
+    }
+
+    /**
      * Get Team detail data
      *
      * @param $teamId
+     * 
      * @return mixed
      */
     public function getTeamDetail($teamId)

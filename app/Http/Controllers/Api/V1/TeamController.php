@@ -56,10 +56,9 @@ class TeamController extends Controller
     /**
      * Get All Teams
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     *
      * Get a list of the teams of a user.
-     *
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/team/teams.json
      *
      * @return Response
@@ -71,6 +70,33 @@ class TeamController extends Controller
         $user_id = auth()->user()->id;
 
         $teams = $this->teamRepository->getTeams($suborganization->id, $user_id);
+
+        $teamDetails = [];
+        foreach ($teams as $team) {
+            $team = $this->teamRepository->getTeamDetail($team->id);
+            $teamDetails[] = $team;
+        }
+
+        return response([
+            'teams' => TeamResource::collection($teamDetails),
+        ], 200);
+    }
+
+    /**
+     * Get All Organization Teams
+     *
+     * Get a list of the teams of an Organization.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/team/teams.json
+     *
+     * @return Response
+     */
+    public function getOrgTeams(Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Team::class, $suborganization]);
+
+        $teams = $this->teamRepository->getOrgTeams($suborganization->id);
 
         $teamDetails = [];
         foreach ($teams as $team) {
