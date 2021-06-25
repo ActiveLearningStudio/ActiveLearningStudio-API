@@ -51,9 +51,9 @@ class ImportProject implements ShouldQueue
     public function handle(ProjectRepositoryInterface $projectRepository)
     {
         try {
-            $projectRepository->importProject($this->user, $this->path, $this->organization_id);
+            $projectName = $projectRepository->importProject($this->user, $this->path, $this->organization_id);
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
-            $this->user->notify(new ProjectImportNotification($userName));
+            $this->user->notify(new ProjectImportNotification($userName, $projectName));
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }

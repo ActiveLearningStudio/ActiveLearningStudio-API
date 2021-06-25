@@ -16,13 +16,19 @@ class ProjectImportNotification extends Notification
     public $userName;
 
     /**
+     * @var string
+     */
+    public $projectName;
+
+    /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($userName)
+    public function __construct($userName, $projectName)
     {
         $this->userName = $userName;
+        $this->projectName = $projectName;
     }
 
     /**
@@ -46,7 +52,8 @@ class ProjectImportNotification extends Notification
     {
         return (new MailMessage)
                     ->greeting('Hello '. $this->userName . '!')
-                    ->line('The Import has been done.')
+                    ->line('Your import of Project ['.$this->projectName.'] has been completed. Please log back into <a href="'.url('/').'">CurrikiStudio</a> and navigate to My Projects to access your shiny new project!')
+                    
                     ->line('Thank you for using our application!');
     }
 

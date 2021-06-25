@@ -614,6 +614,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                         if($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..') continue;
                         $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                     }
+                    return $project['name'];
                 }
             });
             
