@@ -56,10 +56,9 @@ class TeamController extends Controller
     /**
      * Get All Teams
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     *
      * Get a list of the teams of a user.
-     *
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/team/teams.json
      *
      * @return Response
@@ -86,10 +85,9 @@ class TeamController extends Controller
     /**
      * Get All Organization Teams
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     *
      * Get a list of the teams of an Organization.
-     *
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/team/teams.json
      *
      * @return Response

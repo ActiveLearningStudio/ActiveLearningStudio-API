@@ -55,9 +55,9 @@ class GroupController extends Controller
     /**
      * Get All Groups
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
      * Get a list of the groups of a user.
-     *
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/group/group.json
      *
      * @return Response
@@ -83,9 +83,9 @@ class GroupController extends Controller
     /**
      * Get All Organization Groups
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
      * Get a list of the groups of an organization.
-     *
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/group/group.json
      *
      * @return Response
