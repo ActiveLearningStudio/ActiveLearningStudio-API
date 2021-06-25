@@ -68,7 +68,7 @@ class EasyUpload
             throw new Exception('Safari Montage Easy Upload needs provider key and user id');
         }
 
-        $activityThumb = (strpos($activity->thumb_url, '://') === false ? getFrontURL() . $activity->thumb_url : $activity->thumb_url);
+        $activityThumb = (strpos($activity->thumb_url, '://') === false ? url($activity->thumb_url) : $activity->thumb_url);
         $grades = getEducationalLevel($activity->education_level_id);
         $launchData = [
             "user_id" => $user_id,
