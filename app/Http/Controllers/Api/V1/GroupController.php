@@ -81,6 +81,33 @@ class GroupController extends Controller
     }
 
     /**
+     * Get All Organization Groups
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * Get a list of the groups of an organization.
+     *
+     * @responseFile responses/group/group.json
+     *
+     * @return Response
+     */
+    public function getOrgGroups(Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Group::class, $suborganization]);
+
+        $groups = $this->groupRepository->getOrgGroups($suborganization->id);
+
+        $groupDetails = [];
+        foreach ($groups as $group) {
+            $group = $this->groupRepository->getGroupDetail($group->id);
+            $groupDetails[] = $group;
+        }
+
+        return response([
+            'groups' => GroupResource::collection($groupDetails),
+        ], 200);
+    }
+
+    /**
      * Invite Group Member
      *
      * Invite a group member while creating a group.

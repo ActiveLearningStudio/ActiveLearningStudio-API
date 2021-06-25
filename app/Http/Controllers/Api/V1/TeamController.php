@@ -84,6 +84,34 @@ class TeamController extends Controller
     }
 
     /**
+     * Get All Organization Teams
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * Get a list of the teams of an Organization.
+     *
+     * @responseFile responses/team/teams.json
+     *
+     * @return Response
+     */
+    public function getOrgTeams(Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Team::class, $suborganization]);
+
+        $teams = $this->teamRepository->getOrgTeams($suborganization->id);
+
+        $teamDetails = [];
+        foreach ($teams as $team) {
+            $team = $this->teamRepository->getTeamDetail($team->id);
+            $teamDetails[] = $team;
+        }
+
+        return response([
+            'teams' => TeamResource::collection($teamDetails),
+        ], 200);
+    }
+
+    /**
      * Invite Team
      *
      * Invite a team member while creating a team.

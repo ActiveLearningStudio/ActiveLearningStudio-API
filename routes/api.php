@@ -60,6 +60,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/remove-project', 'TeamController@removeProject');
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
+        Route::get('suborganization/{suborganization}/get-teams', 'TeamController@getOrgTeams');
         Route::apiResource('suborganization.teams', 'TeamController');
 
         // Groups
@@ -71,6 +72,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('groups/{group}/remove-project', 'GroupController@removeProject');
         Route::post('groups/{group}/projects/{project}/add-members', 'GroupController@addMembersToProject');
         Route::post('groups/{group}/projects/{project}/remove-member', 'GroupController@removeMemberFromProject');
+        Route::get('suborganization/{suborganization}/get-groups', 'GroupController@getOrgGroups');
         Route::apiResource('suborganization.groups', 'GroupController');
 
 
@@ -87,8 +89,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
-                
-        
+
+
         Route::post('suborganization/{suborganization}/projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::apiResource('suborganization.projects', 'ProjectController');
@@ -205,7 +207,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
             // Specific routes for Safari Montage.
             Route::group(['prefix' => 'safarimontage'], function () {
-                Route::post('projects/{project}/playlists/{playlist}/activities/{activity}/publish', 
+                Route::post('projects/{project}/playlists/{playlist}/activities/{activity}/publish',
                 'CurrikiGo\PublishController@activityToSafariMontage');
             });
 

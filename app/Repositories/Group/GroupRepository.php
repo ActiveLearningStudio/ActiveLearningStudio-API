@@ -443,6 +443,16 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     }
 
     /**
+     * Get Organization Groups
+     *
+     * @param $suborganization_id
+     */
+    public function getOrgGroups($suborganization_id)
+    {
+        return  Group::whereOrganizationId($suborganization_id)->get();
+    }
+
+    /**
      * Get Group detail data
      *
      * @param $groupId

@@ -437,6 +437,16 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
     /**
+     * Get Organization Teams data
+     *
+     * @param $suborganization_id
+     */
+    public function getOrgTeams($suborganization_id)
+    {
+        return Team::whereOrganizationId($suborganization_id)->get();
+    }
+
+    /**
      * Get Team detail data
      *
      * @param $teamId
