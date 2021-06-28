@@ -333,15 +333,14 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                         if ($result->count() > 0) {
                             $result_array = array('title' => ($chapter) ? $chapter : 'Summary');
                             foreach ($result as $data) {
-                                $insertData = false;
+                                $insertData = true;
                                 $title = $data->question;
                                 $answer = $data->answer;
                                if ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
                                     $title = $data->object_name;
                                     $answer = "Quiz Result";
-                                    $insertData = true;
-                                } elseif ($data->verb != 'interacted' && $data->question && $data->answer) {
-                                    $insertData = true;
+                                } elseif ($data->verb == 'interacted' && empty($data->question) && empty($data->answer)) {
+                                    $insertData = false;
                                 }
 
                                 if ($insertData) {
