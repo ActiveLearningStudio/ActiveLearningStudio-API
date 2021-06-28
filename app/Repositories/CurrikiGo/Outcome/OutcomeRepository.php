@@ -333,9 +333,20 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                         if ($result->count() > 0) {
                             $result_array = array('title' => ($chapter) ? $chapter : 'Summary');
                             foreach ($result as $data) {
-                                if ($data->verb == 'interacted' && $data->question && $data->answer) {
+                                $insertData = false;
+                                $title = $data->question;
+                                $answer = $data->answer;
+                               if ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
+                                    $title = $data->object_name;
+                                    $answer = "Quiz Result";
+                                    $insertData = true;
+                                } elseif ($data->verb != 'interacted' && $data->question && $data->answer) {
+                                    $insertData = true;
+                                }
+
+                                if ($insertData) {
                                     $result_array['children'][] = array(
-                                        'title' => $data->question,
+                                        'title' => $title,
                                         'answer' => array(
                                             'score' => array(
                                                 'raw' => $data->score_raw,
@@ -343,40 +354,11 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                                                 'max' => $data->score_max,
                                                 'scaled' => $data->score_scaled,
                                             ),
-                                            'responses' => array($data->answer),
-                                            'duration' => $data->duration
-                                        )
-                                    );
-                                } elseif ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
-                                    $result_array['children'][] = array(
-                                        'title' => $data->object_name,
-                                        'answer' => array(
-                                            'score' => array(
-                                                'raw' => $data->score_raw,
-                                                'min' => $data->score_min,
-                                                'max' => $data->score_max,
-                                                'scaled' => $data->score_scaled,
-                                            ),
-                                            'responses' => array("Quiz Result"),
-                                            'duration' => $data->duration
-                                        )
-                                    );
-                                } elseif ($data->question && $data->answer) {
-                                    $result_array['children'][] = array(
-                                        'title' => $data->question,
-                                        'answer' => array(
-                                            'score' => array(
-                                                'raw' => $data->score_raw,
-                                                'min' => $data->score_min,
-                                                'max' => $data->score_max,
-                                                'scaled' => $data->score_scaled,
-                                            ),
-                                            'responses' => array($data->answer),
+                                            'responses' => array($answer),
                                             'duration' => $data->duration
                                         )
                                     );
                                 }
-
                             }
                             array_push($response, $result_array);
                         }
