@@ -174,7 +174,7 @@ class SuborganizationController extends Controller
     public function show(Organization $suborganization)
     {
         $this->authorize('view', $suborganization);
-        
+
         $authenticatedUser = auth()->user();
 
         return response([
@@ -379,7 +379,7 @@ class SuborganizationController extends Controller
             if ($organizationUser) {
                 return response([
                     'message' => 'The given data was invalid',
-                    'errors' => ['email' => [0 => 'This user is already invited to ' . $suborganization->name]] 
+                    'errors' => ['email' => [0 => 'This user is already invited to ' . $suborganization->name]]
                 ], 422);
             }
         }
@@ -600,6 +600,8 @@ class SuborganizationController extends Controller
      */
     public function getRoles(Organization $suborganization)
     {
+        $this->authorize('viewRole', $suborganization);
+
         return OrganizationRoleResource::collection($suborganization->roles()->get());
     }
 
@@ -616,6 +618,8 @@ class SuborganizationController extends Controller
      */
     public function getRoleDetail(Organization $suborganization, $roleId)
     {
+        $this->authorize('viewRole', $suborganization);
+
         $role = $suborganization->roles->where("id", $roleId);
         if ($role->first()) {
             return OrganizationRoleResource::collection($role);
@@ -708,7 +712,7 @@ class SuborganizationController extends Controller
      */
     public function updateRole(SuborganizationUpdateRole $request, Organization $suborganization)
     {
-        $this->authorize('addRole', $suborganization);
+        $this->authorize('updateRole', $suborganization);
 
         $data = $request->validated();
 
