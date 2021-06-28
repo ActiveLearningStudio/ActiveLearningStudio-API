@@ -194,6 +194,7 @@ class SuborganizationController extends Controller
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
+     * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
      *
      * @responseFile responses/organization/suborganization.json
@@ -377,8 +378,9 @@ class SuborganizationController extends Controller
             $organizationUser = OrganizationUserRole::where("organization_id", $suborganization->id)->where("user_id", $user->id)->first();
             if ($organizationUser) {
                 return response([
-                    'message' => 'This user is already invited to ' . $suborganization->name,
-                ], 409);
+                    'message' => 'The given data was invalid',
+                    'errors' => ['email' => [0 => 'This user is already invited to ' . $suborganization->name]]
+                ], 422);
             }
         }
 
@@ -445,6 +447,7 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam user_id int required Id of the user to be deleted Example: 1
+     * @bodyParam preserve_data bool Whether to assign user data to admin or delete it Example: false
      *
      * @response {
      *   "message": "User has been deleted successfully."
@@ -475,6 +478,14 @@ class SuborganizationController extends Controller
 
         $data = $suborganizationDeleteUserRequest->validated();
 
+        $userObj = $this->userRepository->find($data['user_id']);
+
+        if ($suborganization->parent && $userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
+            return response([
+                'errors' => ['Can not delete user inherited from a parent org.'],
+            ], 500);
+        }
+
         $is_deleted = $this->organizationRepository->deleteUser($suborganization, $data);
 
         if ($is_deleted) {
@@ -485,6 +496,67 @@ class SuborganizationController extends Controller
 
         return response([
             'errors' => ['Failed to delete user.'],
+        ], 500);
+    }
+
+    /**
+     * Remove Suborganization User
+     *
+     * Remove the specified user from a particular organization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam user_id int required Id of the user to be removed Example: 1
+     * @bodyParam preserve_data bool Whether to assign user data to admin or delete it Example: false
+     *
+     * @response {
+     *   "message": "User has been removed successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to remove user."
+     *   ]
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "user_id": [
+     *       "The user id field is required."
+     *     ]
+     *   }
+     * }
+     *
+     * @param SuborganizationDeleteUserRequest $suborganizationDeleteUserRequest
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function removeUser(SuborganizationDeleteUserRequest $suborganizationDeleteUserRequest, Organization $suborganization)
+    {
+        $this->authorize('removeUser', $suborganization);
+
+        $data = $suborganizationDeleteUserRequest->validated();
+
+        $userObj = $this->userRepository->find($data['user_id']);
+
+        if ($suborganization->parent && $userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
+            return response([
+                'errors' => ['Can not remove user inherited from a parent org.'],
+            ], 500);
+        }
+
+        $authenticatedUser = auth()->user();
+
+        $isRemoved = $this->organizationRepository->removeUser($authenticatedUser, $suborganization, $data);
+
+        if ($isRemoved) {
+            return response([
+                'message' => 'User has been removed successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to remove user.'],
         ], 500);
     }
 
@@ -519,13 +591,18 @@ class SuborganizationController extends Controller
      *
      * Get a list of the users roles for suborganization.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @responseFile responses/organization/organization-roles.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
-    public function getRoles()
+    public function getRoles(Organization $suborganization)
     {
-        return OrganizationRoleResource::collection(OrganizationRoleType::all());
+        $this->authorize('viewRole', $suborganization);
+
+        return OrganizationRoleResource::collection($suborganization->roles()->get());
     }
 
     /**
@@ -541,6 +618,8 @@ class SuborganizationController extends Controller
      */
     public function getRoleDetail(Organization $suborganization, $roleId)
     {
+        $this->authorize('viewRole', $suborganization);
+
         $role = $suborganization->roles->where("id", $roleId);
         if ($role->first()) {
             return OrganizationRoleResource::collection($role);
@@ -633,7 +712,7 @@ class SuborganizationController extends Controller
      */
     public function updateRole(SuborganizationUpdateRole $request, Organization $suborganization)
     {
-        $this->authorize('addRole', $suborganization);
+        $this->authorize('updateRole', $suborganization);
 
         $data = $request->validated();
 

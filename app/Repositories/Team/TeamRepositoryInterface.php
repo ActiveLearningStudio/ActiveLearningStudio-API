@@ -107,6 +107,14 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     public function getTeams($suborganization_id, $user_id);
     
     /**
+     * Get Organization Teams data
+     *
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getOrgTeams($suborganization_id);
+
+    /**
      * Get Team detail data
      *
      * @param $teamId

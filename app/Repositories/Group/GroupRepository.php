@@ -137,6 +137,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
             $con_user = $this->userRepository->find($user['id']);
             $userRow = $group->users()->find($user['id']);
             if ($userRow) {
+                $valid_users[] = $con_user;
                 continue;
             }
 
@@ -301,25 +302,11 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     public function updateGroupProjectUser($group, $projects, $users)
     {
         $group = $this->model->find($group->id);
-        $auth_user = auth()->user();
 
         if ($group) {
-            DB::table('group_project_user')
-                ->where('group_id', $group->id)
-                ->delete();
+            DB::table('group_project_user')->where('group_id', $group->id)->delete();
 
             foreach ($projects as $projectId) {
-                DB::table('group_project_user')
-                    ->insertOrIgnore([
-                        [
-                            'group_id' => $group->id,
-                            'project_id' => $projectId,
-                            'user_id' => $auth_user->id,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ],
-                    ]);
-
                 foreach ($users as $user) {
                     DB::table('group_project_user')
                         ->insertOrIgnore([
@@ -445,6 +432,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
      *
      * @param $suborganization_id
      * @param $user_id
+     * @return mixed
      */
     public function getGroups($suborganization_id, $user_id)
     {
@@ -453,6 +441,17 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 })
                 ->whereOrganizationId($suborganization_id)
                 ->get();
+    }
+
+    /**
+     * Get Organization Groups
+     *
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getOrgGroups($suborganization_id)
+    {
+        return  Group::whereOrganizationId($suborganization_id)->get();
     }
 
     /**
@@ -467,7 +466,6 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
         $group = $this->model->find($groupId);
 
         if ($group) {
-            $group_projects = [];
             foreach ($group->projects as $group_project) {
                 $tpu = DB::table('group_project_user')
                     ->where('group_id', $group->id)
@@ -495,11 +493,8 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                     }
 
                     $group_project->users = $project_users;
-                    $group_projects[] = $group_project;
                 }
             }
-
-            $group->projects = $group_projects;
 
             foreach ($group->users as $group_user) {
                 $group_project_users = DB::table('group_project_user')

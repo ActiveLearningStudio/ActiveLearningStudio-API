@@ -46,7 +46,6 @@ class ExtractXAPIJSONController extends Controller
         try {
             $service = new LearnerRecordStoreService();
             foreach ($xapiStatements as $row) {
-                \Log::info(date('Y-m-d h:i:s') . ' - Processing XAPI statement with id: ' . $row->id);
                 $insertData = [];
                 $statement = $service->buildStatementfromJSON($row->data);
                 $actor = $statement->getActor();
@@ -88,20 +87,19 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['datetime'] = $row->created_at;
                 $insertData['object_id'] = $target->getId();
                 $insertData['verb'] = $verb;
-
                 if (!empty($context)) {
                     $contextActivities = $context->getContextActivities();
                     $other = $contextActivities->getOther();
                     $groupingInfo = $service->findGroupingInfo($other);
                     $platform = $context->getPlatform();
                 }
-
+                
                 // Skip if we don't have the activity.
                 if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
                     // It maybe an old format statement. Just save verb, object and actor, and move on.
                     $inserted = $lrsStatementsRepository->create($insertData);
                     if ($inserted) {
-                        \Log::info(date('Y-m-d h:i:s') . ' - XAPI statement with id: ' . $row->id . ' processed');
+                        \Log::info(date('Y-m-d h:i:s') . ' - OLD XAPI statement with id: ' . $row->id . ' processed');
                     }
                     continue;
                 }
@@ -146,6 +144,9 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['assignment_id'] = $activityId;
                 $insertData['assignment_name'] = $activityName;
 
+                //added submitted_id and attempt_id column for new summary page 
+                $insertData['submission_id'] = $groupingInfo['submission'];
+                $insertData['attempt_id'] = $groupingInfo['attempt'];
                 // Extract information from object.definition.extensions
                 if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
@@ -196,7 +197,7 @@ class ExtractXAPIJSONController extends Controller
                 $inserted = $lrsStatementsRepository->create($insertData);
                
                 if ($inserted) {
-                    \Log::info(date('Y-m-d h:i:s') . ' - XAPI statement with id: ' . $row->id . ' processed');
+                    \Log::info(date('Y-m-d h:i:s') . ' - NEW XAPI statement with id: ' . $row->id . ' processed');
                     //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
                     if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
                         if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {
