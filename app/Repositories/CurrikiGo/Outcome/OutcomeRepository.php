@@ -333,7 +333,8 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                         if ($result->count() > 0) {
                             $result_array = array('title' => ($chapter) ? $chapter : 'Summary');
                             foreach ($result as $data) {
-                                $result_array['children'][] = array(
+                                if ($data->verb == 'interacted' && $data->question && $data->answer) {
+                                    $result_array['children'][] = array(
                                         'title' => $data->question,
                                         'answer' => array(
                                             'score' => array(
@@ -346,6 +347,36 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                                             'duration' => $data->duration
                                         )
                                     );
+                                } elseif ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
+                                    $result_array['children'][] = array(
+                                        'title' => $data->object_name,
+                                        'answer' => array(
+                                            'score' => array(
+                                                'raw' => $data->score_raw,
+                                                'min' => $data->score_min,
+                                                'max' => $data->score_max,
+                                                'scaled' => $data->score_scaled,
+                                            ),
+                                            'responses' => array("Quiz Result"),
+                                            'duration' => $data->duration
+                                        )
+                                    );
+                                } elseif ($data->question && $data->answer) {
+                                    $result_array['children'][] = array(
+                                        'title' => $data->question,
+                                        'answer' => array(
+                                            'score' => array(
+                                                'raw' => $data->score_raw,
+                                                'min' => $data->score_min,
+                                                'max' => $data->score_max,
+                                                'scaled' => $data->score_scaled,
+                                            ),
+                                            'responses' => array($data->answer),
+                                            'duration' => $data->duration
+                                        )
+                                    );
+                                }
+
                             }
                             array_push($response, $result_array);
                         }
