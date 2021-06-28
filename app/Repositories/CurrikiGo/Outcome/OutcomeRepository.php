@@ -332,8 +332,18 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                         if ($result->count() > 0) {
                             $result_array = array('title' => ($chapter) ? html_entity_decode($chapter) : 'Summary');
                             foreach ($result as $data) {
-                                $result_array['children'][] = array(
-                                        'title' => html_entity_decode($data->question),
+                                $insertData = true;
+                                $title = $data->question;
+                                $answer = $data->answer;
+                               if ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
+                                    $title = $data->object_name;
+                                    $answer = "Quiz Result";
+                                } elseif ($data->verb == 'interacted' && empty($data->question) && empty($data->answer)) {
+                                    $insertData = false;
+                                }
+                                if ($insertData) {
+                                    $result_array['children'][] = array(
+                                        'title' => html_entity_decode($title),
                                         'answer' => array(
                                             'score' => array(
                                                 'raw' => $data->score_raw,
@@ -341,10 +351,11 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                                                 'max' => $data->score_max,
                                                 'scaled' => $data->score_scaled,
                                             ),
-                                            'responses' => array($data->answer),
+                                            'responses' => array($answer),
                                             'duration' => $data->duration
                                         )
                                     );
+                                }
                             }
                             array_push($response, $result_array);
                         }
