@@ -26,6 +26,7 @@ class OrganizationResource extends JsonResource
             'admins' =>  UserResource::collection($this->whenLoaded('admins')),
             'image' => $this->image,
             'domain' => $this->domain,
+            'self_registration' => $this->self_registration,
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->display_name;
             }),

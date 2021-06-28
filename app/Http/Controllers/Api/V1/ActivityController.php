@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 use H5pCore;
 
 /**
@@ -71,7 +72,7 @@ class ActivityController extends Controller
      */
     public function index(Playlist $playlist)
     {
-        $this->authorize('viewAny', [Project::class, $playlist->project->organization]);
+        $this->authorize('viewAny', [Activity::class, $playlist->project->organization]);
 
         return response([
             'activities' => ActivityResource::collection($playlist->activities),
@@ -147,7 +148,7 @@ class ActivityController extends Controller
      */
     public function store(ActivityCreateRequest $request, Playlist $playlist)
     {
-        $this->authorize('create', [Project::class, $playlist->project->organization]);
+        $this->authorize('create', [Activity::class, $playlist->project->organization]);
 
         $data = $request->validated();
 
@@ -244,9 +245,9 @@ class ActivityController extends Controller
                 'errors' => ['Invalid playlist or activity id.'],
             ], 400);
         }
-
         $validated = $request->validated();
-        $is_updated = $this->activityRepository->update($validated, $activity->id);
+        $attributes = Arr::except($validated, ['data']);
+        $is_updated = $this->activityRepository->update($attributes, $activity->id);
 
         if ($is_updated) {
             // H5P meta is in 'data' index of the payload.
@@ -352,7 +353,7 @@ class ActivityController extends Controller
      */
     public function detail(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('view', [Activity::class, $activity->playlist->project->organization]);
 
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
@@ -395,7 +396,7 @@ class ActivityController extends Controller
      */
     public function share(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('share', [Activity::class, $activity->playlist->project->organization]);
 
         $is_updated = $this->activityRepository->update([
             'shared' => true,
@@ -436,7 +437,7 @@ class ActivityController extends Controller
      */
     public function removeShare(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('share', [Activity::class, $activity->playlist->project->organization]);
 
         $is_updated = $this->activityRepository->update([
             'shared' => false,
@@ -481,6 +482,8 @@ class ActivityController extends Controller
      */
     public function destroy(Playlist $playlist, Activity $activity)
     {
+        $this->authorize('delete', [Activity::class, $activity->playlist->project->organization]);
+
         if ($activity->playlist_id !== $playlist->id) {
             return response([
                 'errors' => ['Invalid playlist or activity id.'],
@@ -531,7 +534,7 @@ class ActivityController extends Controller
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('clone', [Activity::class, $activity->playlist->project->organization]);
 
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($activity->playlist_id == $playlist->id);

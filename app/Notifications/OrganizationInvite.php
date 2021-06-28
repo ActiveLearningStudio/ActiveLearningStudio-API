@@ -58,8 +58,8 @@ class OrganizationInvite extends Notification
      */
     public function toMail($notifiable)
     {
-        if ($this->page == 'register') {
-            $url = $this->pageUrl . '/' . $this->page . '/' . $this->organization->domain .'?email='.$this->user_email;
+        if ($this->page === 'register') {
+            $url = $this->pageUrl . '/' . $this->page . '/' . $this->organization->domain . '?email=' . $this->user_email;
             $subject = 'Invitation to join the organization';
             $caption = 'Join the Organization';
         } else {

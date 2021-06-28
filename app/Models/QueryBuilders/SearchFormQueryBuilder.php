@@ -163,6 +163,7 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
 
         if (!empty($this->endDate)) {
             $carbonEndDate = new Carbon($this->endDate);
+            $carbonEndDate->addUnitNoOverflow('hour', 24, 'day');
             $dateRange['lte'] = $carbonEndDate->toAtomString();
         }
 
@@ -355,21 +356,8 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                                 'query' => $this->query,
                                 'fields' => ['title^5', 'name^5', 'description^3']
                             ]
-                        ],
-                        [
-                            'multi_match' => [
-                                'query' => $this->query
-                            ]
                         ]
                     ]
-                ]
-            ];
-        }
-
-        if (!empty($this->h5pLibraries)) {
-            $queries[] = [
-                'terms' => [
-                    'h5p_library' => $this->h5pLibraries
                 ]
             ];
         }

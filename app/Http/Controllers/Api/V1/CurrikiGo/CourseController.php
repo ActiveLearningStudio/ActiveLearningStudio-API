@@ -124,4 +124,15 @@ class CourseController extends Controller
             'errors' => ['You are not authorized to perform this action.'],
         ], 403);
     }
+
+    /**
+     * Fetch a Course from Generic
+     *
+     */
+    public function fetchFromGeneric($lms, FetchCourseRequest $fetchRequest, Project $project)
+    {
+        return response([
+            'project' => ['course' => null, 'playlists' => []],
+        ], 200);
+    }
 }

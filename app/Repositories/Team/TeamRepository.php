@@ -137,6 +137,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $userRow = $team->users()->find($user['id']);
 
             if ($userRow) {
+                $valid_users[] = $con_user;
                 continue;
             }
 
@@ -213,6 +214,9 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $note = array_key_exists('note', $data) ? $data['note'] : '';
 
             if ($con_user) {
+                if (!$suborganization->users->where("id", $con_user->id)->first()) {
+                    $suborganization->users()->attach($con_user, ['organization_role_type_id' => config('constants.member-role-id')]);
+                }
                 $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
                 $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
                 $con_user->notify(new InviteToTeamNotification($auth_user, $team, $token, $note));
@@ -292,25 +296,11 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     public function updateTeamProjectUser($team, $projects, $users)
     {
         $team = $this->model->find($team->id);
-        $auth_user = auth()->user();
 
         if ($team) {
-            DB::table('team_project_user')
-                ->where('team_id', $team->id)
-                ->delete();
-
+            DB::table('team_project_user')->where('team_id', $team->id)->delete();
+            
             foreach ($projects as $projectId) {
-                DB::table('team_project_user')
-                    ->insertOrIgnore([
-                        [
-                            'team_id' => $team->id,
-                            'project_id' => $projectId,
-                            'user_id' => $auth_user->id,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ],
-                    ]);
-
                 foreach ($users as $user) {
                     DB::table('team_project_user')
                         ->insertOrIgnore([
@@ -436,6 +426,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      *
      * @param $suborganization_id
      * @param $user_id
+     * @return mixed
      */
     public function getTeams($suborganization_id, $user_id)
     {
@@ -447,9 +438,21 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
     /**
+     * Get Organization Teams data
+     *
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getOrgTeams($suborganization_id)
+    {
+        return Team::whereOrganizationId($suborganization_id)->get();
+    }
+
+    /**
      * Get Team detail data
      *
      * @param $teamId
+     * 
      * @return mixed
      */
     public function getTeamDetail($teamId)
@@ -458,7 +461,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $team = $this->model->find($teamId);
 
         if ($team) {
-            $team_projects = [];
             foreach ($team->projects as $team_project) {
                 $tpu = DB::table('team_project_user')
                     ->where('team_id', $team->id)
@@ -486,11 +488,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                     }
 
                     $team_project->users = $project_users;
-                    $team_projects[] = $team_project;
                 }
             }
-
-            $team->projects = $team_projects;
 
             foreach ($team->users as $team_user) {
                 $team_project_users = DB::table('team_project_user')

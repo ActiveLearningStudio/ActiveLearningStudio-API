@@ -83,15 +83,12 @@ RUN touch /var/log/cron.log
 #RUN chown -R 1000 /var/www/html
 
 
-COPY ./api ./
+COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
 
-# USER root
-COPY ./api/entrypoint.api.sh /var/www/html/
-# RUN chmod 777 /var/www/html/entrypoint.api.sh
-RUN chmod +x /var/www/html/entrypoint.api.sh
+COPY ./entrypoint.esmigrate.sh ./
+RUN chmod +x /var/www/html/entrypoint.esmigrate.sh
 
-
-ENTRYPOINT ["sh", "/var/www/html/entrypoint.api.sh"]
+ENTRYPOINT ["sh", "/var/www/html/entrypoint.esmigrate.sh"]

@@ -104,6 +104,14 @@ interface GroupRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getGroups($suborganization_id, $user_id);
+
+    /**
+     * Get Organization Groups data
+     *
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getOrgGroups($suborganization_id);
     
     /**
      * Get Group detail data

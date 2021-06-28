@@ -63,7 +63,8 @@
         ],
         "classmap": [
             "database/seeds",
-            "database/factories"
+            "database/factories",
+            "app/Services/CurrikiGo"
         ]
     },
     "autoload-dev": {

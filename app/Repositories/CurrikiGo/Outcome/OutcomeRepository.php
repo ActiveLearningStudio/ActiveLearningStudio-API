@@ -7,21 +7,22 @@ use App\Http\Resources\V1\CurrikiGo\StudentResultResource;
 use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use App\Services\LearnerRecordStoreService;
+use App\Models\OutcomeData;
 
 class OutcomeRepository implements OutcomeRepositoryInterface
 {
 
     // Returns several project metrics for the specified user
     public function getStudentOutcome($actor, $activity) {
-        $result = $this->getStudentOutcomeData(compact('actor', 'activity'));
-
+        //$result = $this->getStudentOutcomeData(compact('actor', 'activity'));
+        $result = $this->getOutcomeData(compact('actor', 'activity'));
         if (isset($result['errors'])) {
             return $result;
         }
 
         // Normalize responses for frontend consumption
-        $normalizedResult = $this->normalizeRow($result['summary']);
-        return ['summary' => $normalizedResult];
+        // $normalizedResult = $this->normalizeRow($result['summary']);
+        return ['summary' => $result['summary']];
     }
 
     private function normalizeRow($data) {
@@ -30,7 +31,10 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             $result = [];
 
             foreach($data as $row) {
-                $result[] = $this->normalizeRow($row);
+                $normalizedRow = $this->normalizeRow($row);
+                if ($normalizedRow !== false) {
+                    $result[] = $normalizedRow;
+                }
             }
 
             return $result;
@@ -44,46 +48,36 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         if (strpos($data['library'], 'H5P.PersonalityQuiz') !== false) {
             $answers = [];
 
-            foreach ($data['answer'] as $i => $answer) {
-                if ($i === 0) {
-                    $res = [
-                        (is_array($answer['response'])) ? 'Quiz Result: '.$answer['response'][0] : 'Quiz Result: '.$answer['response']
-                    ];
-                } else {
-                    $res = [
-                        (is_array($answer['response'])) ? 'Response '.$i.': '.$answer['response'][0] : 'Response '.$i.': '.$answer['response']
+            if (isset($data['answer'])) {
+                foreach ($data['answer'] as $i => $answer) {
+                    if ($i === 0) {
+                        $res = [
+                            (is_array($answer['response'])) ? 'Quiz Result: '. $answer['response'][0] : 'Quiz Result: '. $answer['response']
+                        ];
+                    } else {
+                        $res = [
+                            (is_array($answer['response'])) ? 'Response '. $i .': '. $answer['response'][0] : 'Response '. $i .': '. $answer['response']
+                        ];
+                    }
+                    $answers[] = [
+                        'score' => $answer['score'],
+                        'response' => $res,
+                        'duration' => isset($answer['duration']) ? $answer['duration'] : 'N/A',
                     ];
                 }
-                $answers[] = [
-                    'score' => $answer['score'],
-                    'response' => $res,
-                ];
             }
-
             return [
                 'type' => 'question',
                 'content_type' => $data['content-type'],
                 'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
+                'title' => html_entity_decode($data['title']),
                 'answers' => $answers,
             ];
         }
 
-        // This is an activity aggregator like column or questionnaire
-        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content'])) {
-            $deeperResult = [];
-
-            foreach ($data['content'] as $row) {
-                $deeperResult[] = $this->normalizeRow($row);
-            }
-
-            return [
-                'type' => 'section',
-                'content_type' => $data['content-type'],
-                'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
-                'children' => $deeperResult,
-            ];
+        // Adding a second exception for H5P.Image
+        if (strpos($data['library'], 'H5P.Image') !== false) {
+            return false;
         }
 
         // This is a question
@@ -91,36 +85,66 @@ class OutcomeRepository implements OutcomeRepositoryInterface
             $answers = [];
 
             foreach ($data['answer'] as $answer) {
+                $normalizedAnswer = null;
+
                 if (isset($answer['response']) && is_array($answer['response'])) {
-                    $answers[] = [
+                    $normalizedAnswer = [
                         'score' => $answer['score'],
                         'response' => $answer['response'],
                     ];
                 } elseif (isset($answer['response'])) {
-                    $answers[] = [
+                    $normalizedAnswer = [
                         'score' => $answer['score'],
                         'response' => [$answer['response']],
                     ];
                 } else {
-                    $answers[] = ['score' => $answer['score']];
+                    $normalizedAnswer = ['score' => $answer['score']];
                 }
+                
+                $normalizedAnswer['duration'] = isset($answer['duration']) ? $answer['duration'] : 'N/A';
+                $answers[] = $normalizedAnswer;
             }
 
             return [
                 'type' => 'question',
                 'content_type' => $data['content-type'],
                 'sub_content_id' => $data['sub-content-id'],
-                'title' => $data['title'],
+                'title' => html_entity_decode($data['title']),
                 'answers' => $answers,
             ];
         }
+
+        // This is an activity aggregator like column or questionnaire
+        if (isset($data['title']) && isset($data['content']) && $this->checkArr($data['content']) && !empty($data['content'])) {
+            $deeperResult = [];
+
+            foreach ($data['content'] as $row) {
+                $normalizedRow = $this->normalizeRow($row);
+                if ($normalizedRow !== false) {
+                    $deeperResult[] = $normalizedRow;
+                }
+            }
+
+            return [
+                'type' => 'section',
+                'content_type' => $data['content-type'],
+                'sub_content_id' => $data['sub-content-id'],
+                'title' => html_entity_decode($data['title']),
+                'children' => $deeperResult,
+            ];
+        }
+
         // Unknown case
         return [
             'type' => 'question',
             'content_type' => $data['content-type'],
             'sub_content_id' => $data['sub-content-id'],
-            'title' => $data['title'],
-            'answers' => [['response' => 'N/A', 'score' => ['max' => 0, 'raw' => 0]]],
+            'title' => html_entity_decode($data['title']),
+            'answers' => [[
+                'duration' => 'N/A',
+                'response' => ['N/A'],
+                'score' => ['max' => 0, 'raw' => 0]
+            ]],
         ];
     }
 
@@ -129,12 +153,12 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         return count(array_filter(array_keys($array), 'is_string')) === 0;
     }
 
-    private function getStudentOutcomeData($data) {
+    private function getStudentOutcomeData(array $data) {
         $response = [];
         try {
             $service = new LearnerRecordStoreService();
             $submitted = $service->getSubmittedCurrikiStatements($data, 1);
-            
+           
             if (count($submitted) > 0) {
                 // Get 'other' activity IRI from the statement
                 // that now has the unique context of the attempt.
@@ -277,6 +301,60 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                     'errors' => ["No results found."],
                 ];
             }
+        } catch (Exception $e) {
+            return [
+                'errors' => ["The outcome could not be retrived: " . $e->getMessage()],
+            ];
+        }
+    }
+
+    private function getOutcomeData(array $data) {
+        $response = [];
+        try {
+            if (isset($data['actor'])) {
+                preg_match_all('!\d+!', $data['actor'], $matches);
+                if (is_array($matches)) 
+                    $actor_id = $matches[0][0];
+            }
+            if (isset($data['activity'])) {
+                $activity_explode = explode('/', $data['activity']);
+                $activity_id = $activity_explode[4];
+                $submission_id = $activity_explode[6];
+            }
+           
+            $check_submitted = OutcomeData::isSubmitted($actor_id, $activity_id, $submission_id);
+            if ($check_submitted) {
+                $result_array = [];
+                $chapters_list = OutcomeData::getUniqueChapters($actor_id, $activity_id, $submission_id);
+                $collection = collect(OutcomeData::getOutcomeResults($actor_id, $activity_id, $submission_id));
+                if ($chapters_list) {
+                    foreach ($chapters_list as $chapter) {
+                        $result = $collection->where('chapter_name', $chapter);
+                        if ($result->count() > 0) {
+                            $result_array = array('title' => ($chapter) ? $chapter : 'Summary');
+                            foreach ($result as $data) {
+                                $result_array['children'][] = array(
+                                        'title' => $data->question,
+                                        'answer' => array(
+                                            'score' => array(
+                                                'raw' => $data->score_raw,
+                                                'min' => $data->score_min,
+                                                'max' => $data->score_max,
+                                                'scaled' => $data->score_scaled,
+                                            ),
+                                            'responses' => array($data->answer),
+                                            'duration' => $data->duration
+                                        )
+                                    );
+                            }
+                            array_push($response, $result_array);
+                        }
+                    }
+                }
+            }
+            return [
+                'summary' => $response,
+            ];
         } catch (Exception $e) {
             return [
                 'errors' => ["The outcome could not be retrived: " . $e->getMessage()],

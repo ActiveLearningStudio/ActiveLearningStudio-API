@@ -31,8 +31,18 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      *
      * @param Organization $organization
      * @param $data
+     * @param User $authenticatedUser
      */
-    public function createSuborganization($organization, $data);
+    public function createSuborganization($organization, $data, $authenticatedUser);
+
+    /**
+     * Update suborganization
+     *
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function update($organization, $data);
 
     /**
      * To delete a suborganization
@@ -69,13 +79,40 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     public function updateUser($organization, $data);
 
     /**
-     * Delete the specified user in a particular suborganization
+     * Add role for the specified suborganization
      *
-     * @param $id
+     * @param Organization $organization
      * @param array $data
      * @return Model
      */
-    public function deleteUser($id, $data);
+    public function addRole($organization, $data);
+
+     /**
+     * Update permissions for the specified role in particular suborganization
+     *
+     * @param array $data
+     * @return Model
+     */
+    public function updateRole($data);
+
+    /**
+     * Delete the specified user in a particular suborganization
+     *
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function deleteUser($organization, $data);
+
+    /**
+     * Remove the specified user from a particular organization
+     *
+     * @param User $authenticatedUser
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function removeUser($authenticatedUser, $organization, $data);
 
     /**
      * To fetch organization users
@@ -114,6 +151,13 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     public function fetchOrganizationUserPermissions($authenticatedUser, $organization);
 
     /**
+     * To fetch organization default permissions
+     *
+     * @return Model
+     */
+    public function fetchOrganizationDefaultPermissions();
+
+    /**
      * To fetch organization data
      *
      * @param User $authenticatedUser
@@ -121,4 +165,11 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function fetchOrganizationData($authenticatedUser, $organization);
+
+    /**
+     * Get the root organization
+     *
+     * @return mixed
+     */
+    public function getRootOrganization();
 }

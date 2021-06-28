@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Lowercase;
 
 class OrganizationCreate extends FormRequest
 {
@@ -26,7 +27,7 @@ class OrganizationCreate extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|string|min:3|max:255|unique:organizations',
+            'domain' => ['required', 'alpha_dash', 'min:2', 'max:255', 'unique:organizations,domain', new Lowercase],
             'image' => 'required|image|max:1000',
             'admin_id' => 'required|integer|exists:App\User,id',
             'parent_id' => 'integer|exists:App\Models\Organization,id'

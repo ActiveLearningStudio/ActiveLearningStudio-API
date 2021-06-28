@@ -61,6 +61,12 @@ class OrganizationPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_permission_types')->insert([
+            'name' => 'organization:remove-user',
+            'display_name' => 'Remove Organization User',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
             'name' => 'organization:view-user',
             'display_name' => 'View Organization User',
             'feature' => 'Organization'
@@ -80,7 +86,13 @@ class OrganizationPermissionTypeSeeder extends Seeder
 
         DB::table('organization_permission_types')->insert([
             'name' => 'organization:upload-thumb',
-            'display_name' => 'upload Thumb',
+            'display_name' => 'Upload Thumb',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'organization:add-role',
+            'display_name' => 'Add Organization Role',
             'feature' => 'Organization'
         ]);
 
@@ -149,6 +161,19 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'name' => 'project:recent',
             'display_name' => 'View Recent project',
             'feature' => 'Project'
+        ]);
+
+        // Project Import Export
+        DB::table('organization_permission_types')->insert([
+            'name' => 'project:export',
+            'display_name' => 'Project Export',
+            'feature' => 'Export'
+        ]);
+
+        DB::table('organization_permission_types')->insert([
+            'name' => 'project:import',
+            'display_name' => 'Project Import',
+            'feature' => 'Import'
         ]);
 
         // Playlists

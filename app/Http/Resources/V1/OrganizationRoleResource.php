@@ -19,7 +19,7 @@ class OrganizationRoleResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'display_name' => $this->display_name,
-            'permissions' =>  PermissionResource::collection($this->whenLoaded('permissions')),
+            'permissions' =>  PermissionResource::collection($this->when('permissions', $this->permissions)),
         ];
     }
 }

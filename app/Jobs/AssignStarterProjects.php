@@ -59,9 +59,12 @@ class AssignStarterProjects implements ShouldQueue
                 $inProgress[$userID] = $userID; // append the user ID to in progress array
                 \Cache::store('database')->put('in_progress_users', $inProgress); // update the in progress users IDs
 
-                // assign all starter projects one by one
-                foreach ($starterProjects as $project) {
-                    $projectRepository->clone($this->user, $project, $this->token);
+                // loop through user organizations
+                foreach ($user->organizations as $userOrganization) {
+                    // assign all starter projects one by one
+                    foreach ($starterProjects as $project) {
+                        $projectRepository->clone($this->user, $project, $this->token, $userOrganization->id);
+                    }
                 }
             } catch
             (\Exception $e) {

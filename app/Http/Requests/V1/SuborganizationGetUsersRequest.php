@@ -24,9 +24,12 @@ class SuborganizationGetUsersRequest extends FormRequest
      */
     public function rules()
     {
+        $suborganization = $this->route('suborganization');
+
         return [
             'query' => 'string|max:255',
             'size' => 'integer|max:100',
+            'role' => 'integer|exists:organization_role_types,id,organization_id,' . $suborganization->id,
         ];
     }
 }

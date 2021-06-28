@@ -16,8 +16,9 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @param $authenticated_user
      * @param Project $project
      * @param string $token Authenticated user token
+     * @param int $organization_id
      */
-    public function clone($authenticated_user, Project $project, $token);
+    public function clone($authenticated_user, Project $project, $token, $organization_id = null);
 
     /**
      * To fetch project based on LMS settings
@@ -65,9 +66,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     /**
      * @param $authenticated_user
      * @param $project_id
+     * @param $organization_id
      * @return bool
      */
-    public function checkIsDuplicate($authenticated_user,$project_id);
+    public function checkIsDuplicate($authenticated_user, $project_id, $organization_id);
 
     /**
      * @param $project
@@ -80,4 +82,47 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function statusUpdate($project);
+
+    /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getAll($data, $suborganization);
+
+    /**
+     * @param $project
+     * @param $index
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function updateIndex($project, $index);
+
+    /**
+     * @param $projects
+     * @param $flag
+     * @return string
+     * @throws GeneralException
+     */
+    public function toggleStarter($project, $index);
+
+    /** 
+     * To export project and associated playlists
+     * 
+     * @param $authUser
+     * @param Project $project
+     * @throws GeneralException
+     */
+    public function exportProject($authUser, Project $project);
+
+    /**
+     * To import project and associated playlists
+     *
+     * @param $authUser
+     * @param Project $path
+     * @param int $suborganization_id
+     * @throws GeneralException
+     */
+    public function importProject($authUser, $path, $suborganization_id);
+    
 }
