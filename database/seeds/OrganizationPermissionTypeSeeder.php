@@ -96,6 +96,18 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Organization'
         ]);
 
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:edit-role',
+            'display_name' => 'Edit Organization Role',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:view-role',
+            'display_name' => 'View Organization Role',
+            'feature' => 'Organization'
+        ]);
+
         // Projects
         DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'project:edit',
