@@ -90,7 +90,7 @@ class LRSStatement extends Model
         'glass_alternate_course_id' => null,
         'glass_enrollment_code' => null,
         'course_name' => null,
-        'chapter_name' => null,
+        'chapter_name' => 0,
         'chapter_index' => null,
         'referrer' => null,
         'submission_id' => null,

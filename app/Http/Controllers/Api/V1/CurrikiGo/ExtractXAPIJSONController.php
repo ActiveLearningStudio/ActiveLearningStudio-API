@@ -158,7 +158,7 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['glass_alternate_course_id'] = $glassAltCourseId;
                     $insertData['glass_enrollment_code'] = $glassEnrollmentCode;
                     $insertData['course_name'] = $courseName;
-                    $insertData['chapter_name'] = $chapterName;
+                    $insertData['chapter_name'] = (!empty($chapterName) ? $chapterName : 0);
                     $insertData['chapter_index'] = $chapterIndex;
                     $insertData['referrer'] = $referrer;
                 }
