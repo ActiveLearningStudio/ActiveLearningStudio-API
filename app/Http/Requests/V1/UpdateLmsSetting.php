@@ -48,7 +48,7 @@ class UpdateLmsSetting extends FormRequest
             'lms_access_key' => 'nullable|string|max:255',
             'lms_access_secret' => 'required_with:lms_access_key|max:255',
             'description' => 'nullable|max:255',
-            'published' => 'nullable|in:true,false',
+            'published' => 'nullable|boolean',
         ];
     }
 }
