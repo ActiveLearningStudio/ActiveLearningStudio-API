@@ -600,8 +600,6 @@ class SuborganizationController extends Controller
      */
     public function getRoles(Organization $suborganization)
     {
-        $this->authorize('viewRole', $suborganization);
-
         return OrganizationRoleResource::collection($suborganization->roles()->get());
     }
 
@@ -618,8 +616,6 @@ class SuborganizationController extends Controller
      */
     public function getRoleDetail(Organization $suborganization, $roleId)
     {
-        $this->authorize('viewRole', $suborganization);
-
         $role = $suborganization->roles->where("id", $roleId);
         if ($role->first()) {
             return OrganizationRoleResource::collection($role);
