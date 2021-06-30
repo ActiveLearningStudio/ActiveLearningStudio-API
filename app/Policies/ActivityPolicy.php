@@ -82,7 +82,7 @@ class ActivityPolicy
     public function share(User $user, Organization $suborganization)
     {
         return $user->hasPermissionTo('activity:share', $suborganization);
-    }    
+    }
 
     /**
      * Determine whether the user can clone the model.
@@ -93,8 +93,8 @@ class ActivityPolicy
      */
     public function clone(User $user, Organization $suborganization)
     {
-        return $user->hasPermissionTo('activity:clone', $suborganization);
-    }   
+        return $user->hasPermissionTo('activity:duplicate', $suborganization);
+    }
 
     /**
      * Determine whether the user can restore the model.
