@@ -101,6 +101,6 @@ UNION ALL
      */
     public function down()
     {
-        Schema::dropIfExists('DROP VIEW outcome_data');
+        DB::statement("DROP VIEW outcome_data");
     }
 }

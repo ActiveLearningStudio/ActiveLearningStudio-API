@@ -30,5 +30,11 @@ class UpdateLrsStateDataTable extends Migration
     public function down()
     {
         //
+        Schema::table(
+            'lrs_statements_data',
+            function (Blueprint $table) {
+                $table->string('chapter_name')->default(null)->change();
+            }
+        );
     }
 }
