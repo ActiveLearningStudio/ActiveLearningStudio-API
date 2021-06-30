@@ -81,7 +81,7 @@ class PlaylistPolicy
      */
     public function clone(User $user, Organization $organization)
     {
-        return $user->hasPermissionTo('playlist:clone', $organization);
+        return $user->hasPermissionTo('playlist:duplicate', $organization);
     }
 
     /**
