@@ -13,11 +13,16 @@ class CreateLrsMetadata extends Migration
      */
     public function up()
     {
-        Schema::create('lrs_metadata', function (Blueprint $table) {
-            $table->string('activity_id', 50);
-            $table->string('chapter_name', 150);
-            $table->integer('page_order');
-        });
+        if (!Schema::hasTable('lrs_metadata')) {
+            Schema::create(
+                'lrs_metadata',
+                function (Blueprint $table) {
+                    $table->string('activity_id', 50);
+                    $table->string('chapter_name', 150);
+                    $table->integer('page_order');
+                }
+            );
+        }
     }
 
     /**

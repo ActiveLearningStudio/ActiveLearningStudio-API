@@ -14,9 +14,14 @@ class TestAssignment extends Migration
     public function up()
     {
         //
-        Schema::create('test_assignment', function (Blueprint $table) {
-            $table->string('assignment_name', 500);
-        });
+        if (!Schema::hasTable('test_assignment')) {
+            Schema::create(
+                'test_assignment',
+                function (Blueprint $table) {
+                    $table->string('assignment_name', 500);
+                }
+            );
+        }
     }
 
     /**
