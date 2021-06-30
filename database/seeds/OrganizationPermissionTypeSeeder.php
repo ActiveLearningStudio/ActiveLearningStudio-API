@@ -208,8 +208,8 @@ class OrganizationPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'playlist:clone',
-            'display_name' => 'Clone Playlist',
+            'name' => 'playlist:duplicate',
+            'display_name' => 'Duplicate Playlist',
             'feature' => 'Playlist'
         ]);
 
@@ -257,8 +257,8 @@ class OrganizationPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'activity:clone',
-            'display_name' => 'Clone Activity',
+            'name' => 'activity:duplicate',
+            'display_name' => 'Duplicate Activity',
             'feature' => 'Activity'
         ]);
 
