@@ -182,10 +182,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function fetchByLtiClientAndEmail($lti_client_id, $user_email)
     {
         return $this->model->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
-            $query_user->where('email', $user_email)
-                ->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id) {
-                    $query_lmssetting->where('lti_client_id', $lti_client_id);
-                });
+            $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
+                $query_lmssetting->where('lti_client_id', $lti_client_id);
+                $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
+            });
         })->get();
     }
 
