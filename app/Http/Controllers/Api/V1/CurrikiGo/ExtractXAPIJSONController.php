@@ -46,7 +46,6 @@ class ExtractXAPIJSONController extends Controller
         try {
             $service = new LearnerRecordStoreService();
             foreach ($xapiStatements as $row) {
-                \Log::info(date('Y-m-d h:i:s') . ' - Processing XAPI statement with id: ' . print_r($row, true));
                 $insertData = [];
                 $statement = $service->buildStatementfromJSON($row->data);
                 $actor = $statement->getActor();
@@ -88,12 +87,10 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['datetime'] = $row->created_at;
                 $insertData['object_id'] = $target->getId();
                 $insertData['verb'] = $verb;
-                \Log::info(date('Y-m-d h:i:s') . ' - context of: ' . $row->id . ' - '. print_r($context, true));
                 if (!empty($context)) {
                     $contextActivities = $context->getContextActivities();
                     $other = $contextActivities->getOther();
                     $groupingInfo = $service->findGroupingInfo($other);
-                    \Log::info(date('Y-m-d h:i:s') . ' - grouping info of : ' . $row->id . ' - '. print_r($groupingInfo, true));
                     $platform = $context->getPlatform();
                 }
                 
@@ -161,7 +158,7 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['glass_alternate_course_id'] = $glassAltCourseId;
                     $insertData['glass_enrollment_code'] = $glassEnrollmentCode;
                     $insertData['course_name'] = $courseName;
-                    $insertData['chapter_name'] = $chapterName;
+                    $insertData['chapter_name'] = (!empty($chapterName) ? $chapterName : 0);
                     $insertData['chapter_index'] = $chapterIndex;
                     $insertData['referrer'] = $referrer;
                 }

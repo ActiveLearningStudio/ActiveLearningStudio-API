@@ -95,6 +95,18 @@ class OrganizationPolicy
     }
 
     /**
+     * Determine whether the user can update role.
+     *
+     * @param User $user
+     * @param Organization $organization
+     * @return mixed
+     */
+    public function updateRole(User $user, Organization $organization)
+    {
+        return $user->hasPermissionTo('organization:edit-role', $organization);
+    }
+
+    /**
      * Determine whether the user can invite members.
      *
      * @param User $user
