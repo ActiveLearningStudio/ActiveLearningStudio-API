@@ -403,7 +403,7 @@ class AuthController extends Controller
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
         } catch (\Exception $e) {
-            \Log::error($e->getLine()."/".$e->getMessage());
+            \Log::error($e->getLine(). "/" .$e->getMessage());
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
@@ -416,7 +416,7 @@ class AuthController extends Controller
         try {
             return redirect()->away(''.config("services.stemuli.basic_url").'?response_type='.config("services.stemuli.response_type").'&client_id='.config("services.stemuli.client").'&redirect_uri='.config("services.stemuli.redirect_uri").'&scope='.config("services.stemuli.scope").'');
         } catch (\Exception $e) {
-            \Log::error($e->getLine()."/".$e->getMessage());
+            \Log::error($e->getLine() ."/". $e->getMessage());
             return redirect()->back()->with('errors', 'Unable to redirect. Please try again later.');;
         }
     }
@@ -451,9 +451,9 @@ class AuthController extends Controller
                 return redirect()->back()->with('errors', $response);
             }
         } catch (\Exception $e) {
-            \Log::error($e->getLine()."/".$e->getMessage());
+            \Log::error($e->getLine() ."/". $e->getMessage());
             return response([
-                'errors' => ['Unable to login with SSO.'.$e->getMessage()],
+                'errors' => ['Unable to login with SSO.'. $e->getMessage()],
             ], 400);
         }
     }
@@ -493,7 +493,7 @@ class AuthController extends Controller
                 'errors' => ['Unable to login with SSO. Info is empty'],
             ], 400);
         } catch (\Exception $e) {
-            \Log::error($e->getLine()."/".$e->getMessage());
+            \Log::error($e->getLine() ."/". $e->getMessage());
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
