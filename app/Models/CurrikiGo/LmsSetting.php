@@ -31,7 +31,7 @@ class LmsSetting extends Model
     ];
 
     /**
-     * Get the user that owns the activity
+     * Get the user that owns the LMS setting
      */
     public function user()
     {

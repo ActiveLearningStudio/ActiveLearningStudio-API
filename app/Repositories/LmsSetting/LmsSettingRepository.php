@@ -32,9 +32,13 @@ class LmsSettingRepository extends BaseRepository
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
 
-        // if specific index projects requested
         if (isset($data['query']) && $data['query'] !== '') {
-            $query = $query->where('lms_url', 'iLIKE', '%'.$data['query'].'%');
+            $query = $query->whereHas('user', function ($qry) use ($data) {
+                $qry->where('first_name', 'iLIKE', '%' .$data['query']. '%');
+                $qry->orWhere('last_name', 'iLIKE', '%' .$data['query']. '%');
+                $qry->orWhere('email', 'iLIKE', '%' .$data['query']. '%');
+            });
+            $query = $query->orwhere('lms_url', 'iLIKE', '%'.$data['query'].'%');
             $query = $query->orWhere('site_name', 'iLIKE', '%'.$data['query'].'%');
         }
 

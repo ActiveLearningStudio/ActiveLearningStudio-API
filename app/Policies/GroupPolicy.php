@@ -3,8 +3,6 @@
 namespace App\Policies;
 
 use App\Models\Organization;
-use App\Models\Pivots\TeamProjectUser;
-use App\Models\Project;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,7 +11,7 @@ class GroupPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any projects.
+     * Determine whether the user can view any groups.
      *
      * @param User $user
      * @param Organization $suborganization
@@ -25,10 +23,10 @@ class GroupPolicy
     }
 
     /**
-     * Determine whether the user can view the project.
+     * Determine whether the user can view the group.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function view(User $user, Organization $suborganization)
@@ -37,9 +35,10 @@ class GroupPolicy
     }
 
     /**
-     * Determine whether the user can create projects.
+     * Determine whether the user can create group.
      *
      * @param User $user
+     * @param Organization $suborganization
      * @return mixed
      */
     public function create(User $user, Organization $suborganization)
@@ -48,10 +47,10 @@ class GroupPolicy
     }
 
     /**
-     * Determine whether the user can update the project.
+     * Determine whether the user can update the group.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function update(User $user, Organization $suborganization)
@@ -60,10 +59,10 @@ class GroupPolicy
     }
 
     /**
-     * Determine whether the user can share the project.
+     * Determine whether the user can share the group.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function share(User $user, Organization $suborganization)
@@ -72,10 +71,10 @@ class GroupPolicy
     }
 
     /**
-     * Determine whether the user can delete the project.
+     * Determine whether the user can delete the group.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
     public function delete(User $user, Organization $suborganization)
@@ -84,13 +83,13 @@ class GroupPolicy
     }
 
     /**
-     * Determine whether the user can permanently delete the project.
+     * Determine whether the user can permanently delete the group.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function forceDelete(User $user, Project $project)
+    public function forceDelete(User $user, Organization $suborganization)
     {
         return $user->isAdmin();
     }
