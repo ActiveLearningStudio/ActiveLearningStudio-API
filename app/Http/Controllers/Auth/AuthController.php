@@ -427,14 +427,14 @@ class AuthController extends Controller
 
             $data = array(
                 "grant_type" => "authorization_code",
-                "client_id" => "".config('services.stemuli.client')."",
-                "redirect_uri" => "".config('services.stemuli.redirect_uri')."",
-                "code" => "".$request->code."",
-                "client_secret"=> "".config('services.stemuli.secret').""
+                "client_id" => config('services.stemuli.client'),
+                "redirect_uri" => config('services.stemuli.redirect_uri'),
+                "code" => $request->code,
+                "client_secret"=> config('services.stemuli.secret')
             );
 
             $client = new Client();
-            $url = "https://apidev.stemuli.net/api/v1/auth0/token";
+            $url = config('services.stemuli.token_url');
             $curl_request = $client->post($url,  array(
                 'form_params' => $data,
                 'Content-Type' => 'application/json',
