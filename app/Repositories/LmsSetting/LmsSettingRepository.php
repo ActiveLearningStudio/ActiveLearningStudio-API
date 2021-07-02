@@ -34,12 +34,12 @@ class LmsSettingRepository extends BaseRepository
 
         if (isset($data['query']) && $data['query'] !== '') {
             $query = $query->whereHas('user', function ($qry) use ($data) {
-                $qry->where('first_name', 'iLIKE', '%' .$data['query']. '%');
-                $qry->orWhere('last_name', 'iLIKE', '%' .$data['query']. '%');
-                $qry->orWhere('email', 'iLIKE', '%' .$data['query']. '%');
+                $qry->where('first_name', 'iLIKE', '%' . $data['query'] . '%');
+                $qry->orWhere('last_name', 'iLIKE', '%' . $data['query'] . '%');
+                $qry->orWhere('email', 'iLIKE', '%' . $data['query'] . '%');
             });
-            $query = $query->orwhere('lms_url', 'iLIKE', '%'.$data['query'].'%');
-            $query = $query->orWhere('site_name', 'iLIKE', '%'.$data['query'].'%');
+            $query = $query->orwhere('lms_url', 'iLIKE', '%' . $data['query'] . '%');
+            $query = $query->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
         }
 
         return $query->with('user')->paginate($perPage);
