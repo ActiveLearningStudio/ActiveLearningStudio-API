@@ -3,8 +3,6 @@
 namespace App\Policies;
 
 use App\Models\Organization;
-use App\Models\Pivots\TeamProjectUser;
-use App\Models\Project;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -88,10 +86,10 @@ class TeamPolicy
      * Determine whether the user can permanently delete the team.
      *
      * @param User $user
-     * @param Project $project
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function forceDelete(User $user, Project $project)
+    public function forceDelete(User $user, Organization $suborganization)
     {
         return $user->isAdmin();
     }

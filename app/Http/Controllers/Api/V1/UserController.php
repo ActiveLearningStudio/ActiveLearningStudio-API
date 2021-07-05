@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\NotificationListResource;
+use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -597,4 +598,23 @@ class UserController extends Controller
             'projects' => ProjectResource::collection($user->projects),
         ], 200);
     }
+
+    /**
+     * Users Basic Report
+     *
+     * Returns the paginated response of the users with basic reporting.
+     *
+     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @queryParam query for getting the search records by name and email. Example: Test
+     *
+     * @responseFile responses/admin/user/users_report.json
+     *
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function reportBasic(Request $request)
+    {
+        return UserStatsResource::collection($this->userRepository->reportBasic($request->all()), 200);
+    }
+
 }

@@ -52,7 +52,9 @@ class LRSStatement extends Model
         'course_name',
         'chapter_name',
         'chapter_index',
-        'referrer'
+        'referrer',
+        'submission_id',
+        'attempt_id'
     ];
 
     /**
@@ -88,8 +90,10 @@ class LRSStatement extends Model
         'glass_alternate_course_id' => null,
         'glass_enrollment_code' => null,
         'course_name' => null,
-        'chapter_name' => null,
+        'chapter_name' => 0,
         'chapter_index' => null,
-        'referrer' => null
+        'referrer' => null,
+        'submission_id' => null,
+        'attempt_id' => null
     ];
 }

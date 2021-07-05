@@ -432,6 +432,7 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
      *
      * @param $suborganization_id
      * @param $user_id
+     * @return mixed
      */
     public function getGroups($suborganization_id, $user_id)
     {
@@ -440,6 +441,17 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
                 })
                 ->whereOrganizationId($suborganization_id)
                 ->get();
+    }
+
+    /**
+     * Get Organization Groups
+     *
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getOrgGroups($suborganization_id)
+    {
+        return  Group::whereOrganizationId($suborganization_id)->get();
     }
 
     /**

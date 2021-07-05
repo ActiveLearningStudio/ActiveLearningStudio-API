@@ -27,11 +27,15 @@ class SuborganizationUpdateUserDetail extends FormRequest
         return [
             'user_id' => 'required|integer|exists:users,id',
             'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'last_name' => 'string|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.request('user_id'),
             'job_title' => 'nullable|string|max:255',
             'role_id' => 'required|integer|exists:organization_role_types,id',
-            'password' => ['sometimes', 'string', new StrongPassword]
+            'password' => ['sometimes', 'string', new StrongPassword],
+            'organization_name' => 'string',
+            'organization_type' => 'string',
+            'website' => 'string',
+            'address' => 'string',
         ];
     }
 }
