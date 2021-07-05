@@ -1,10 +1,10 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 # Add apache and php config for Laravel
 COPY ./site.conf /etc/apache2/sites-available/site.conf
 RUN ln -s /etc/apache2/sites-available/site.conf /etc/apache2/sites-enabled/
 RUN sed -i 's/Listen 80/Listen 8000/g' /etc/apache2/ports.conf
-RUN a2dissite 000-default.conf && a2ensite site.conf && a2enmod rewrite
+RUN a2dissite 000-default.conf && a2ensite site.conf && a2enmod rewrite && a2enmod headers
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -14,33 +14,37 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Set working directory
 WORKDIR /var/www
 # Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    mariadb-client \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
-    git \
-    curl \
-    libzip-dev \
-    libpq-dev \
-    cron \
-    redis \
-    redis-server \
-    nodejs \
-    npm \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-configure pgsql \
-    && docker-php-ext-install pdo pdo_pgsql \
-    && pecl install apcu && docker-php-ext-enable apcu opcache
+RUN apt-get update && apt-get install -y
+RUN apt-get install -y build-essential
+RUN apt-get install -y mariadb-client
+RUN apt-get install -y libpng-dev
+RUN apt-get install -y libjpeg62-turbo-dev
+RUN apt-get install -y libfreetype6-dev
+RUN apt-get install -y locales
+RUN apt-get install -y zip
+RUN apt-get install -y jpegoptim optipng pngquant gifsicle
+RUN apt-get install -y vim
+RUN apt-get install -y unzip
+RUN apt-get install -y git
+RUN apt-get install -y curl
+RUN apt-get install -y libzip-dev
+RUN apt-get install -y libpq-dev
+RUN apt-get install -y cron
+RUN apt-get install -y redis
+RUN apt-get install -y redis-server
+RUN apt-get install -y nodejs
+RUN apt-get install -y npm
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-configure pgsql
+RUN docker-php-ext-install pdo pdo_pgsql
+RUN pecl install apcu && docker-php-ext-enable apcu opcache
+RUN apt-get install -y libicu-dev
 
-RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install pdo_mysql
+RUN apt-get install -y libonig-dev
+RUN docker-php-ext-install mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype  
 RUN docker-php-ext-install gd
 
 RUN pecl install -o -f redis \
