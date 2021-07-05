@@ -38,9 +38,13 @@ RUN docker-php-ext-install opcache
 RUN docker-php-ext-configure pgsql
 RUN docker-php-ext-install pdo pdo_pgsql
 RUN pecl install apcu && docker-php-ext-enable apcu opcache
+RUN apt-get install -y libicu-dev
 
-RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
+RUN docker-php-ext-install pdo
+RUN docker-php-ext-install pdo_mysql
+RUN apt-get install -y libonig-dev
+RUN docker-php-ext-install mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype  
 RUN docker-php-ext-install gd
 
 RUN pecl install -o -f redis \
