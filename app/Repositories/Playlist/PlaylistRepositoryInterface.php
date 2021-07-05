@@ -46,4 +46,14 @@ interface PlaylistRepositoryInterface extends EloquentRepositoryInterface
      * @return array
      */
     public function getPlaylistWithProject(Playlist $playlist);
+
+    /**
+     * To Import Playlist and associated activities
+     *
+     * @param Project $project
+     * @param string $authUser
+     * @param string $extracted_folder
+     * @param string $playlist_dir
+     */
+    public function playlistImport(Project $project, $authUser, $extracted_folder, $playlist_dir="");
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Lowercase;
 
 class SuborganizationSave extends FormRequest
 {
@@ -26,7 +27,7 @@ class SuborganizationSave extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'domain' => 'required|alpha_dash|min:2|max:255|unique:organizations,domain',
+            'domain' => ['required', 'alpha_dash', 'min:2', 'max:255', 'unique:organizations,domain', new Lowercase],
             'image' => 'required',
             'admins' => 'array|exists:App\User,id',
             'users' => 'array',

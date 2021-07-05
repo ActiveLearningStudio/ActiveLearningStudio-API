@@ -55,9 +55,9 @@ class GroupController extends Controller
     /**
      * Get All Groups
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
      * Get a list of the groups of a user.
-     *
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/group/group.json
      *
      * @return Response
@@ -68,6 +68,33 @@ class GroupController extends Controller
 
         $user_id = auth()->user()->id;
         $groups = $this->groupRepository->getGroups($suborganization->id, $user_id);
+
+        $groupDetails = [];
+        foreach ($groups as $group) {
+            $group = $this->groupRepository->getGroupDetail($group->id);
+            $groupDetails[] = $group;
+        }
+
+        return response([
+            'groups' => GroupResource::collection($groupDetails),
+        ], 200);
+    }
+
+    /**
+     * Get All Organization Groups
+     *
+     * Get a list of the groups of an organization.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/group/group.json
+     *
+     * @return Response
+     */
+    public function getOrgGroups(Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Group::class, $suborganization]);
+
+        $groups = $this->groupRepository->getOrgGroups($suborganization->id);
 
         $groupDetails = [];
         foreach ($groups as $group) {

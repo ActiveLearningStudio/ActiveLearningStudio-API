@@ -26,7 +26,6 @@ class SearchResource extends JsonResource
             'content' => $this->when(isset($this->content), $this->content),
             'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->modelType,
-            'user' => new UserResource($this->user),
             'created_at' => $this->created_at
         ];
     }

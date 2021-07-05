@@ -95,6 +95,18 @@ class OrganizationPolicy
     }
 
     /**
+     * Determine whether the user can update role.
+     *
+     * @param User $user
+     * @param Organization $organization
+     * @return mixed
+     */
+    public function updateRole(User $user, Organization $organization)
+    {
+        return $user->hasPermissionTo('organization:edit-role', $organization);
+    }
+
+    /**
      * Determine whether the user can invite members.
      *
      * @param User $user
@@ -119,7 +131,7 @@ class OrganizationPolicy
     }
 
     /**
-     * Determine whether the user can delete user.
+     * Determine whether the user can delete a user for all organizations.
      *
      * @param User $user
      * @param Organization $organization
@@ -128,6 +140,18 @@ class OrganizationPolicy
     public function deleteUser(User $user, Organization $organization)
     {
         return $user->hasPermissionTo('organization:delete-user', $organization);
+    }
+
+    /**
+     * Determine whether the user can remove a user from a particular organization.
+     *
+     * @param User $user
+     * @param Organization $organization
+     * @return mixed
+     */
+    public function removeUser(User $user, Organization $organization)
+    {
+        return $user->hasPermissionTo('organization:remove-user', $organization);
     }
 
     /**

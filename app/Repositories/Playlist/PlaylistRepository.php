@@ -195,4 +195,31 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             }
         }
     }
+
+    /**
+     * To Import Playlist and associated activities
+     *
+     * @param Project $project
+     * @param string $authUser
+     * @param string $extracted_folder
+     * @param string $playlist_dir
+     */
+    public function playlistImport(Project $project, $authUser, $extracted_folder, $playlist_dir="")
+    {
+        $playlist_json = file_get_contents(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/'.$playlist_dir.'.json'));
+        
+        $playlist = json_decode($playlist_json,true);
+
+        unset($playlist['id'], $playlist['project_id']);
+        
+        $cloned_playlist = $project->playlists()->create($playlist); // create playlist
+
+        $activitity_directories = scandir(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'));
+        
+        for($j=0;$j<count($activitity_directories);$j++) { // loop through all activities
+            if($activitity_directories[$j] == '.' || $activitity_directories[$j] == '..') continue;
+            $cloned_activity = $this->activityRepository->importActivity($cloned_playlist, $authUser, $playlist_dir, $activitity_directories[$j], $extracted_folder);
+        }
+
+    }
 }

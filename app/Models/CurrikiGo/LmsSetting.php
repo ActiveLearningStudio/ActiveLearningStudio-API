@@ -26,11 +26,12 @@ class LmsSetting extends Model
         'description',
         'lti_client_id',
         'lms_login_id',
-        'user_id'
+        'user_id',
+        'published'
     ];
 
     /**
-     * Get the user that owns the activity
+     * Get the user that owns the LMS setting
      */
     public function user()
     {

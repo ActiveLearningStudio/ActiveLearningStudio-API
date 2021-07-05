@@ -108,9 +108,7 @@ class AuthController extends Controller
         if ($invited_users->isEmpty()) {
             $organization = $this->organizationRepository->getRootOrganization();
             if ($organization && !$organization->self_registration) {
-                return response([
-                    'errors' => ['Self registration is not allowed on this domain.'],
-                ], 400);
+                return response()->error(['Self registration is not allowed on this domain.', 400]);
             }
         }
 
@@ -290,9 +288,7 @@ class AuthController extends Controller
                 if ($invited_users->isEmpty()) {
                     $organization = $this->organizationRepository->getRootOrganization();
                     if ($organization && !$organization->self_registration) {
-                        return response([
-                            'errors' => ['Self registration is not allowed on this domain.'],
-                        ], 400);
+                        return response()->error(['Self registration is not allowed on this domain.', 400]);
                     }
                 }
 
@@ -501,7 +497,6 @@ class AuthController extends Controller
             ], 400);
         }
     }
-    
     private function createUpdateSsoUser($ip, $result, $provider)
     {
         $user = $this->userRepository->findByField('email', $result['user_email']);
