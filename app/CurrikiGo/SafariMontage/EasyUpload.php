@@ -100,7 +100,7 @@ class EasyUpload
                 'ltiproviderkey' => $providerKey,
                 'publisher_name' => config('constants.sm-publisher-name'),
                 'publisher_icon_url' => getFrontURL() . '/' . config('constants.sm-publisher-icon'),
-                'learningresourcetype'=>'interactive'
+                'learningresourcetype' => 'interactive'
             ])
         ];
 
