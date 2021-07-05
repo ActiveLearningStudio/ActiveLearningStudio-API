@@ -34,10 +34,10 @@ RUN apt-get install -y redis
 RUN apt-get install -y redis-server
 RUN apt-get install -y nodejs
 RUN apt-get install -y npm
-RUN apt-get install -y && docker-php-ext-install opcache
-RUN apt-get install -y && docker-php-ext-configure pgsql
-RUN apt-get install -y && docker-php-ext-install pdo pdo_pgsql
-RUN apt-get install -y && pecl install apcu && docker-php-ext-enable apcu opcache
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-configure pgsql
+RUN docker-php-ext-install pdo pdo_pgsql
+RUN pecl install apcu && docker-php-ext-enable apcu opcache
 
 RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
