@@ -16,7 +16,7 @@ class EasyUpload
 {
     /**
      * LMS Settings modal object
-     * 
+     *
      * @var \App\Models\CurrikiGo\LmsSetting
      */
     private $lmsSetting;
@@ -25,10 +25,10 @@ class EasyUpload
     const EASY_UPLOAD_ENDPOINT = '/SAFARI/api/imsltieasyupload.php';
     const PROVIDER_NAME = 'safarimontage';
     const CONTEXT_TITLE = 'Easy Upload';
-    
+
     /**
      * Make an instance of the class
-     * 
+     *
      * @param \App\Models\CurrikiGo\LmsSetting $lmsSetting
      */
     public function __construct(LmsSetting $lmsSetting)
@@ -38,9 +38,9 @@ class EasyUpload
 
     /**
      * Send a playlist to Safarmi Montage
-     * 
+     *
      * @param \App\Models\Activity $activity
-     * @param array $data 
+     * @param array $data
      * @return array
      */
     public function uploadActivity(ActivityModel $activity, $data)
@@ -63,7 +63,7 @@ class EasyUpload
                 $user_id = $sso->uniqueid;
             }
         }
-        
+
         if (!$providerKey || !$user_id) {
             throw new Exception('Safari Montage Easy Upload needs provider key and user id');
         }
@@ -99,10 +99,11 @@ class EasyUpload
                 'ltilink' => 'true',
                 'ltiproviderkey' => $providerKey,
                 'publisher_name' => config('constants.sm-publisher-name'),
-                'publisher_icon_url' => getFrontURL() . '/' . config('constants.sm-publisher-icon')
+                'publisher_icon_url' => getFrontURL() . '/' . config('constants.sm-publisher-icon'),
+                'learningresourcetype'=>'interactive'
             ])
         ];
-        
+
         return $LTI->launch($launchData);
     }
 
