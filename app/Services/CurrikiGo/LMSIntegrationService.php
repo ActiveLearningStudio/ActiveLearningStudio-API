@@ -59,7 +59,7 @@ class LMSIntegrationService implements LMSIntegrationServiceInterface
 	public function getXAPIFile(Activity $activity)
 	{
 		$filename = 'storage/xapifiles/' . Str::slug($activity->title, '-') . '.zip';
-		$url = config('app.front_end_url').'/activity/'.$activity->id.'/shared';
+		$url = config('app.front_end_url') . '/activity/'.$activity->id . '/shared';
 		$html = view('api.xapihtml', ['url' => $url, 'title' => $activity->title])->render();
 		$xml = view('api.xapixml', ['id' => $url, 'title' => $activity->title, 'description' => $activity->content])->render();
 		$zipper = new \Madnest\Madzipper\Madzipper;
