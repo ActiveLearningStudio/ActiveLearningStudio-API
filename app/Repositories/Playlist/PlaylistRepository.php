@@ -213,13 +213,13 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         unset($playlist['id'], $playlist['project_id']);
         
         $cloned_playlist = $project->playlists()->create($playlist); // create playlist
-
-        $activitity_directories = scandir(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'));
+        if(file_exists(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'))) {
+            $activitity_directories = scandir(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'));
         
-        for($j=0;$j<count($activitity_directories);$j++) { // loop through all activities
-            if($activitity_directories[$j] == '.' || $activitity_directories[$j] == '..') continue;
-            $cloned_activity = $this->activityRepository->importActivity($cloned_playlist, $authUser, $playlist_dir, $activitity_directories[$j], $extracted_folder);
+            for($j=0;$j<count($activitity_directories);$j++) { // loop through all activities
+                if($activitity_directories[$j] == '.' || $activitity_directories[$j] == '..') continue;
+                $cloned_activity = $this->activityRepository->importActivity($cloned_playlist, $authUser, $playlist_dir, $activitity_directories[$j], $extracted_folder);
+            }
         }
-
     }
 }
