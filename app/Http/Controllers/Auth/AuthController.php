@@ -420,7 +420,6 @@ class AuthController extends Controller
     public function oauthCallBack(Request $request)
     {
         try {
-
             $data = array(
                 "grant_type" => "authorization_code",
                 "client_id" => config('services.stemuli.client'),
@@ -428,7 +427,6 @@ class AuthController extends Controller
                 "code" => $request->code,
                 "client_secret"=> config('services.stemuli.secret')
             );
-
             $client = new Client();
             $url = config('services.stemuli.token_url');
             $curl_request = $client->post($url,  array(
@@ -436,7 +434,6 @@ class AuthController extends Controller
                 'Content-Type' => 'application/json',
             ));
             $response = json_decode($curl_request->getBody(), true);
-            
             if ($curl_request->getStatusCode() == 200 && !isset($response['error']))
             {
                 $response = $response;
@@ -581,7 +578,9 @@ class AuthController extends Controller
             'access_token' => $accessToken,
         ];
         if ($provider == 'stemuli') {
-            $build_request_data = http_build_query($response);
+            $data['user'] = $user->toArray();
+            $data['access_token'] = $accessToken;
+            $build_request_data = http_build_query($data);
             $user_info = base64_encode($build_request_data);
             return redirect()->away('login/sso/'.$user_info);
         } else {
