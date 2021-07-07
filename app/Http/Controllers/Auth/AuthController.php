@@ -406,17 +406,36 @@ class AuthController extends Controller
         }
     }
 
-    
+    /**
+     * Oaut Redirect
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 404 - Redirect
+     *
+     * @param oauthRedirect $request
+     * @return Redirect
+     */
     public function oauthRedirect(Request $request)
     {
         try {
-            return redirect()->away(''.config("services.stemuli.basic_url").'?response_type='.config("services.stemuli.response_type").'&client_id='.config("services.stemuli.client").'&redirect_uri='.config("services.stemuli.redirect_uri").'&scope='.config("services.stemuli.scope").'');
+            die(config("services.stemuli.redirect_uri"));
+            return redirect()->away(config("services.stemuli.basic_url") . '?response_type=' . config("services.stemuli.response_type") . '&client_id=' . config("services.stemuli.client") . '&redirect_uri=' . config("services.stemuli.redirect_uri") . '&scope=' . config("services.stemuli.scope"));
         } catch (\Exception $e) {
             \Log::error($e->getLine() ."/". $e->getMessage());
             return redirect()->back()->with('errors', 'Unable to redirect. Please try again later.');;
         }
     }
-
+    /**
+     * Oaut oauthCallBack
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 404 - Redirect back
+     *
+     * @param oauthCallBack $request
+     * @return Redirect
+     */
     public function oauthCallBack(Request $request)
     {
         try {
@@ -537,7 +556,11 @@ class AuthController extends Controller
                 }
             }
         } else {
-            $sso_login = $user->ssoLogin()->where(['user_id' => $user->id, 'provider' => $result['tool_platform'], 'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']])->first();
+            $sso_login = $user->ssoLogin()->where([
+                'user_id' => $user->id, 
+                'provider' => $result['tool_platform'], 
+                'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'
+                ]])->first();
             if (!$sso_login) {
                 $user->ssoLogin()->create([
                     'user_id' => $user->id,
