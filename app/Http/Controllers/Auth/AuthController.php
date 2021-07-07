@@ -419,7 +419,6 @@ class AuthController extends Controller
     public function oauthRedirect(Request $request)
     {
         try {
-            die(config("services.stemuli.redirect_uri"));
             return redirect()->away(config("services.stemuli.basic_url") . '?response_type=' . config("services.stemuli.response_type") . '&client_id=' . config("services.stemuli.client") . '&redirect_uri=' . config("services.stemuli.redirect_uri") . '&scope=' . config("services.stemuli.scope"));
         } catch (\Exception $e) {
             \Log::error($e->getLine() ."/". $e->getMessage());
