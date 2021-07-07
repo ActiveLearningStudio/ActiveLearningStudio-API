@@ -35,7 +35,7 @@ return [
         'secret' => env('STEMULI_SECRET_KEY'),
         'basic_url' => env('STEMULI_BASIC_URI', 'https://apidev.stemuli.net/api/v1/auth0/authorize'),
         'response_type' => env('STEMULI_RESPONSE_TYPE', 'code'),
-        'redirect_uri' => env('STEMULI_REDIRECT_URI', 'https://curriki.stemuli.net/api/oauth/stemuli/callback'),
+        'redirect_uri' => env('STEMULI_REDIRECT_URI', config('app.url').'/api/oauth/stemuli/callback'),
         'scope' => env('STEMULI_SCOPE', 'openid'),
         'token_url' => env('STEMULI_TOKEN_URL', 'https://apidev.stemuli.net/api/v1/auth0/token'),
     ],
