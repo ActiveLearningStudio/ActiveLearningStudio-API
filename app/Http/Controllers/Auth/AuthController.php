@@ -419,9 +419,7 @@ class AuthController extends Controller
     public function oauthRedirect(Request $request)
     {
         try {
-            return redirect()->away('' .config("services.stemuli.basic_url"). '?response_type=' .config("services.stemuli.response_type"). '
-            &client_id=' .config("services.stemuli.client"). '&redirect_uri=' .config("services.stemuli.redirect_uri"). '
-            &scope=' .config("services.stemuli.scope"). '');
+            return redirect()->away(config("services.stemuli.basic_url") . '?response_type=' . config("services.stemuli.response_type") . '&client_id=' . config("services.stemuli.client") . '&redirect_uri=' . config("services.stemuli.redirect_uri") . '&scope=' . config("services.stemuli.scope"));
         } catch (\Exception $e) {
             \Log::error($e->getLine() ."/". $e->getMessage());
             return redirect()->back()->with('errors', 'Unable to redirect. Please try again later.');;
@@ -440,7 +438,6 @@ class AuthController extends Controller
     public function oauthCallBack(Request $request)
     {
         try {
-
             $data = array(
                 "grant_type" => "authorization_code",
                 "client_id" => config('services.stemuli.client'),
@@ -448,7 +445,6 @@ class AuthController extends Controller
                 "code" => $request->code,
                 "client_secret"=> config('services.stemuli.secret')
             );
-
             $client = new Client();
             $url = config('services.stemuli.token_url');
             $curl_request = $client->post($url,  array(
@@ -456,7 +452,6 @@ class AuthController extends Controller
                 'Content-Type' => 'application/json',
             ));
             $response = json_decode($curl_request->getBody(), true);
-            
             if ($curl_request->getStatusCode() === 200 && !isset($response['error'])) {
                 $response = $response;
                 return $this->stemuliSsoLogin($request->ip(), $response['info']);
@@ -497,6 +492,7 @@ class AuthController extends Controller
             ], 400);
         }
     }
+
     private function createUpdateSsoUser($ip, $result, $provider)
     {
         $user = $this->userRepository->findByField('email', $result['user_email']);
@@ -562,8 +558,8 @@ class AuthController extends Controller
             $sso_login = $user->ssoLogin()->where([
                 'user_id' => $user->id, 
                 'provider' => $result['tool_platform'], 
-                'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']
-                ])->first();
+                'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'
+                ]])->first();
             if (!$sso_login) {
                 $user->ssoLogin()->create([
                     'user_id' => $user->id,
@@ -587,7 +583,9 @@ class AuthController extends Controller
             'access_token' => $accessToken,
         ];
         if ($provider === 'stemuli') {
-            $build_request_data = http_build_query($response);
+            $data['user'] = $user->toArray();
+            $data['access_token'] = $accessToken;
+            $build_request_data = http_build_query($data);
             $user_info = base64_encode($build_request_data);
             return redirect()->away('login/sso/'.$user_info);
         } else {

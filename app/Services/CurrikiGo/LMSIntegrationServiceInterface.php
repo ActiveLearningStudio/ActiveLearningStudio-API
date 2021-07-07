@@ -4,6 +4,7 @@ namespace App\Services\CurrikiGo;
 
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
+use App\Models\Activity;
 
 /**
  * Interface for the Generic LMS Integration Service
@@ -38,4 +39,11 @@ interface LMSIntegrationServiceInterface
      * @return bool
      */
     public function publishProject($targetLms, Project $project, LmsSetting $setting);
+
+    /**
+     * Get XAPI file contents
+     * 
+     * @return string
+     */
+    public function getXAPIFile(Activity $activity);
 }

@@ -8,6 +8,8 @@ use App\Services\CurrikiGo\LMSIntegrationServiceInterface;
 use App\Models\CurrikiGo\LmsSetting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Activity;
 use Validator;
 
 class LmsServicesController extends Controller
@@ -41,5 +43,9 @@ class LmsServicesController extends Controller
             LmsSetting::where('lms_url', urldecode($request->lmsUrl))->where('lti_client_id', $request->lmsClientId)->first(),
             ['username' => $request->username, 'password' => $request->password]
         );
+    }
+
+    public function getXAPIFile(Request $request, Activity $activity) {
+        return Storage::download($this->lms->getXAPIFile($activity));
     }
 }
