@@ -434,11 +434,10 @@ class AuthController extends Controller
                 'Content-Type' => 'application/json',
             ));
             $response = json_decode($curl_request->getBody(), true);
-            if ($curl_request->getStatusCode() == 200 && !isset($response['error']))
-            {
+            if ($curl_request->getStatusCode() === 200 && !isset($response['error'])) {
                 $response = $response;
                 return $this->stemuliSsoLogin($request->ip(), $response['info']);
-            } else{
+            } else {
                 $response = $response['error'];
                 \Log::error($response);
                 return redirect()->back()->with('errors', $response);
@@ -446,32 +445,15 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             \Log::error($e->getLine() ."/". $e->getMessage());
             return response([
-                'errors' => ['Unable to login with SSO.'. $e->getMessage()],
+                'errors' => ['Unable to login with SSO.' . $e->getMessage()],
             ], 400);
         }
     }
 
-    /**
-     * Login with SSO - Stemuli
-     *
-     * @bodyParam sso_info string required The base64encode query params Example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
-     *
-     * @responseFile responses/user/user-with-token.json
-     *
-     * @response 400 {
-     *   "errors": [
-     *     "Unable to login with SSO."
-     *   ]
-     * }
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function stemuliSsoLogin($ip, $info)
+    private function stemuliSsoLogin($ip, $info)
     {
         try {
-            if($info)
-            {
+            if($info) {
                 $result['user_email'] = $info['email'];
                 $result['first_name'] = $info['firstName'];
                 $result['last_name'] = $info['lastName'];
@@ -493,7 +475,8 @@ class AuthController extends Controller
         }
     }
 
-    private function createUpdateSsoUser($ip, $result, $provider){
+    private function createUpdateSsoUser($ip, $result, $provider)
+    {
         $user = $this->userRepository->findByField('email', $result['user_email']);
         if (!$user) {
             $password = Str::random(10);
@@ -577,7 +560,7 @@ class AuthController extends Controller
             'user' => new UserResource($user),
             'access_token' => $accessToken,
         ];
-        if ($provider == 'stemuli') {
+        if ($provider === 'stemuli') {
             $data['user'] = $user->toArray();
             $data['access_token'] = $accessToken;
             $build_request_data = http_build_query($data);
