@@ -29,7 +29,7 @@ class UpdateActivityType extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'sometimes',
+            'title' => 'sometimes|max:255',
             'image' => 'sometimes',
             'order' => 'sometimes|integer'
         ];
