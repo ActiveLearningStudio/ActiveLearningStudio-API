@@ -607,13 +607,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     }
     
                     $cloned_project = $authUser->projects()->create($project, ['role' => 'owner']);
-                
-                    $playlist_directories = scandir(storage_path($extracted_folder_name.'/playlists'));
+                    if (file_exists(storage_path($extracted_folder_name . '/playlists'))) {
+                        $playlist_directories = scandir(storage_path($extracted_folder_name . '/playlists'));
                     
-                    for($i=0;$i<count($playlist_directories);$i++) { // loop through all playlists
-                        if($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..') continue;
-                        $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
+                        for ($i=0; $i<count($playlist_directories); $i++) { // loop through all playlists
+                            if ($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..') continue;
+                            $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
+                        }
                     }
+                    
                     return $project['name'];
                 }
             });
