@@ -14,22 +14,22 @@ class OrganizationRolePermissionSeeder extends Seeder
         $organizationPermissionTypes = DB::table('organization_permission_types')->select('id', 'name', 'feature')->get();
         $courseCreatorRole = DB::table('organization_role_types')->where('name', 'course_creator')->first();
         $selfRegisteredRole = DB::table('organization_role_types')->where('name', 'self_registered')->first();
+        $adminRole = DB::table('organization_role_types')->where('name', 'admin')->first();
+        $memberRole = DB::table('organization_role_types')->where('name', 'member')->first();
 
         foreach ($organizationPermissionTypes as $organizationPermissionType) {
-            $adminRole = DB::table('organization_role_types')->where('name', 'admin')->first();
-
-            DB::table('organization_role_permissions')->insert([
+            DB::table('organization_role_permissions')->insertOrIgnore([
                 'organization_role_type_id' => $adminRole->id,
                 'organization_permission_type_id' => $organizationPermissionType->id
             ]);
 
             if (in_array($organizationPermissionType->feature, ['Project', 'Playlist', 'Activity', 'Group', 'Search'])) {
-                DB::table('organization_role_permissions')->insert([
+                DB::table('organization_role_permissions')->insertOrIgnore([
                     'organization_role_type_id' => $courseCreatorRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
                 ]);
 
-                DB::table('organization_role_permissions')->insert([
+                DB::table('organization_role_permissions')->insertOrIgnore([
                     'organization_role_type_id' => $selfRegisteredRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
                 ]);
@@ -40,12 +40,12 @@ class OrganizationRolePermissionSeeder extends Seeder
             ];
 
             if (in_array($organizationPermissionType->name, $courseCreatorPermissions)) {
-                DB::table('organization_role_permissions')->insert([
+                DB::table('organization_role_permissions')->insertOrIgnore([
                     'organization_role_type_id' => $courseCreatorRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
                 ]);
 
-                DB::table('organization_role_permissions')->insert([
+                DB::table('organization_role_permissions')->insertOrIgnore([
                     'organization_role_type_id' => $selfRegisteredRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
                 ]);
@@ -69,10 +69,8 @@ class OrganizationRolePermissionSeeder extends Seeder
                 'search:dashboard'
             ];
 
-            $memberRole = DB::table('organization_role_types')->where('name', 'member')->first();
-
             if (in_array($organizationPermissionType->name, $memberPermissions)) {
-                DB::table('organization_role_permissions')->insert([
+                DB::table('organization_role_permissions')->insertOrIgnore([
                     'organization_role_type_id' => $memberRole->id,
                     'organization_permission_type_id' => $organizationPermissionType->id
                 ]);

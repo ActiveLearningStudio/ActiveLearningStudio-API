@@ -25,7 +25,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
+use GuzzleHttp\Client;
 /**
  * @group 1. Authentication
  *
@@ -392,99 +392,204 @@ class AuthController extends Controller
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
             if ($result) {
-                $user = $this->userRepository->findByField('email', $result['user_email']);
-                if (!$user) {
-                    $password = Str::random(10);
-                    $user = $this->userRepository->create([
-                        'first_name' => $result['first_name'],
-                        'last_name' => $result['last_name'],
-                        'email' => $result['user_email'],
-                        'password' => Hash::make($password),
-                        'remember_token' => Str::random(64),
-                        'email_verified_at' => now(),
-                    ]);
-                    if ($user) {
-                        $user->ssoLogin()->create([
-                            'user_id' => $user->id,
-                            'provider' => $result['tool_platform'],
-                            'uniqueid' => $result['user_key'],
-                            'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
-                            'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
-                            'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
-                        ]);
-                        $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
-                        if ($invited_users) {
-                            foreach ($invited_users as $invited_user) {
-                                $team = $this->teamRepository->find($invited_user->team_id);
-                                if ($team) {
-                                    $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
-                                    $this->invitedTeamUserRepository->delete($user->email);
-                                }
-                            }
-                        }
-
-                        $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
-                        if ($invited_users->isNotEmpty()) {
-                            foreach ($invited_users as $invited_user) {
-                                $organization = $this->organizationRepository->find($invited_user->organization_id);
-                                if ($organization) {
-                                    $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
-                                    $this->invitedOrganizationUserRepository->delete($user->email);
-                                }
-                            }
-                        } else {
-                            $organization = $this->organizationRepository->find(1);
-                            if ($organization) {
-                                $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
-                                $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
-                            }
-                        }
-
-                        $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
-                        if ($invited_users->isNotEmpty()) {
-                            foreach ($invited_users as $invited_user) {
-                                $group = $this->groupRepository->find($invited_user->group_id);
-                                if ($group) {
-                                    $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
-                                    $this->invitedGroupUserRepository->delete($user->email);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    $sso_login = $user->ssoLogin()->where(['user_id' => $user->id, 'provider' => $result['tool_platform'], 'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']])->first();
-                    if (!$sso_login) {
-                        $user->ssoLogin()->create([
-                            'user_id' => $user->id,
-                            'provider' => $result['tool_platform'],
-                            'uniqueid' => $result['user_key'],
-                            'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
-                            'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
-                            'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
-                        ]);
-                    }
-                }
-
-                $accessToken = $user->createToken('auth_token')->accessToken;
-
-                $this->userLoginRepository->create([
-                    'user_id' => $user->id,
-                    'ip_address' => $request->ip(),
-                ]);
-
-                return response([
-                    'user' => new UserResource($user),
-                    'access_token' => $accessToken,
-                ], 200);
+                $response = $this->createUpdateSsoUser($request->ip(), $result, null);
+                return response($response, 200);
             }
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            \Log::error($e->getLine(). "/" .$e->getMessage());
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
+        }
+    }
+
+    /**
+     * Oaut Redirect
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 404 - Redirect
+     *
+     * @param oauthRedirect $request
+     * @return Redirect
+     */
+    public function oauthRedirect(Request $request)
+    {
+        try {
+            return redirect()->away(config("services.stemuli.basic_url") . '?response_type=' . config("services.stemuli.response_type") . '&client_id=' . config("services.stemuli.client") . '&redirect_uri=' . config("services.stemuli.redirect_uri") . '&scope=' . config("services.stemuli.scope"));
+        } catch (\Exception $e) {
+            \Log::error($e->getLine() ."/". $e->getMessage());
+            return redirect()->back()->with('errors', 'Unable to redirect. Please try again later.');;
+        }
+    }
+    /**
+     * Oaut oauthCallBack
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 404 - Redirect back
+     *
+     * @param oauthCallBack $request
+     * @return Redirect
+     */
+    public function oauthCallBack(Request $request)
+    {
+        try {
+            $data = array(
+                "grant_type" => "authorization_code",
+                "client_id" => config('services.stemuli.client'),
+                "redirect_uri" => config('services.stemuli.redirect_uri'),
+                "code" => $request->code,
+                "client_secret"=> config('services.stemuli.secret')
+            );
+            $client = new Client();
+            $url = config('services.stemuli.token_url');
+            $curl_request = $client->post($url,  array(
+                'form_params' => $data,
+                'Content-Type' => 'application/json',
+            ));
+            $response = json_decode($curl_request->getBody(), true);
+            if ($curl_request->getStatusCode() === 200 && !isset($response['error'])) {
+                $response = $response;
+                return $this->stemuliSsoLogin($request->ip(), $response['info']);
+            } else {
+                $response = $response['error'];
+                \Log::error($response);
+                return redirect()->back()->with('errors', $response);
+            }
+        } catch (\Exception $e) {
+            \Log::error($e->getLine() ."/". $e->getMessage());
+            return response([
+                'errors' => ['Unable to login with SSO.' . $e->getMessage()],
+            ], 400);
+        }
+    }
+
+    private function stemuliSsoLogin($ip, $info)
+    {
+        try {
+            if($info) {
+                $result['user_email'] = $info['email'];
+                $result['first_name'] = $info['firstName'];
+                $result['last_name'] = $info['lastName'];
+                $result['tool_platform'] = 'stemuli';
+                $result['user_key'] = $info['email'];
+                $result['tool_consumer_instance_name'] = '';
+                $result['tool_consumer_instance_guid'] = '';
+                $result['custom_stemuli_school'] = '';
+                return $this->createUpdateSsoUser($ip, $result, 'stemuli');
+            }
+            return response([
+                'errors' => ['Unable to login with SSO. Info is empty'],
+            ], 400);
+        } catch (\Exception $e) {
+            \Log::error($e->getLine() ."/". $e->getMessage());
+            return response([
+                'errors' => ['Unable to login with SSO.'],
+            ], 400);
+        }
+    }
+
+    private function createUpdateSsoUser($ip, $result, $provider)
+    {
+        $user = $this->userRepository->findByField('email', $result['user_email']);
+        if (!$user) {
+            $password = Str::random(10);
+            $user = $this->userRepository->create([
+                'first_name' => $result['first_name'],
+                'last_name' => $result['last_name'],
+                'email' => $result['user_email'],
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(64),
+                'email_verified_at' => now(),
+            ]);
+            if ($user) {
+                $user->ssoLogin()->create([
+                    'user_id' => $user->id,
+                    'provider' => $result['tool_platform'],
+                    'uniqueid' => $result['user_key'],
+                    'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                    'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
+                    'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                ]);
+                $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
+                if ($invited_users) {
+                    foreach ($invited_users as $invited_user) {
+                        $team = $this->teamRepository->find($invited_user->team_id);
+                        if ($team) {
+                            $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                            $this->invitedTeamUserRepository->delete($user->email);
+                        }
+                    }
+                }
+
+                $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
+                if ($invited_users->isNotEmpty()) {
+                    foreach ($invited_users as $invited_user) {
+                        $organization = $this->organizationRepository->find($invited_user->organization_id);
+                        if ($organization) {
+                            $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                            $this->invitedOrganizationUserRepository->delete($user->email);
+                        }
+                    }
+                } else {
+                    $organization = $this->organizationRepository->find(1);
+                    if ($organization) {
+                        $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    }
+                }
+
+                $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
+                if ($invited_users->isNotEmpty()) {
+                    foreach ($invited_users as $invited_user) {
+                        $group = $this->groupRepository->find($invited_user->group_id);
+                        if ($group) {
+                            $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                            $this->invitedGroupUserRepository->delete($user->email);
+                        }
+                    }
+                }
+            }
+        } else {
+            $sso_login = $user->ssoLogin()->where([
+                'user_id' => $user->id, 
+                'provider' => $result['tool_platform'], 
+                'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'
+                ]])->first();
+            if (!$sso_login) {
+                $user->ssoLogin()->create([
+                    'user_id' => $user->id,
+                    'provider' => $result['tool_platform'],
+                    'uniqueid' => $result['user_key'],
+                    'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                    'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
+                    'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                ]);
+            }
+        }
+
+        $accessToken = $user->createToken('auth_token')->accessToken;
+
+        $this->userLoginRepository->create([
+            'user_id' => $user->id,
+            'ip_address' => $ip,
+        ]);
+        $response = [
+            'user' => new UserResource($user),
+            'access_token' => $accessToken,
+        ];
+        if ($provider === 'stemuli') {
+            $data['user'] = $user->toArray();
+            $data['access_token'] = $accessToken;
+            $build_request_data = json_encode($data);
+            $user_info = base64_encode($build_request_data);
+            return redirect()->away(config('app.front_end_url').'/sso/dologin/'.$user_info);
+        } else {
+            return $response;
         }
     }
 

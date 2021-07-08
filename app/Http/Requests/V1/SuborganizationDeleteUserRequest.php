@@ -30,7 +30,7 @@ class SuborganizationDeleteUserRequest extends FormRequest
             'user_id' => [
                 'required',
                 'integer',
-                'exists:App\User,id',
+                'exists:App\User,id,id,!' . $this->user()->id,
                 Rule::exists('organization_user_roles')->where(function ($query) use ($suborganization) {
                     return $query->where('organization_id', $suborganization->id);
                 })

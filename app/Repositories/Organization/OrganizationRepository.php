@@ -229,9 +229,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function getMemberOptions($data, $organization)
     {
-        $organizationUserIds = $organization->users()->wherePivot('organization_role_type_id', '<>', config('constants.admin-role-id'))->get()->modelKeys();
-        $organizationAdminUserIds = $organization->users()->wherePivot('organization_role_type_id', config('constants.admin-role-id'))->get()->modelKeys();
-        $parentOrganizationUserIds = $this->getParentOrganizationUserIds([], $organization, $organizationAdminUserIds);
+        $organizationUserIds = $organization->users()->get()->modelKeys();
+        $parentOrganizationUserIds = $this->getParentOrganizationUserIds([], $organization);
 
         if ($data['page'] === 'create') {
             $userInIds = array_merge($organizationUserIds, $parentOrganizationUserIds);
@@ -252,21 +251,16 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      *
      * @param $userIds
      * @param $organization
-     * @param $organizationAdminUserIds
      * @return array
      */
-    public function getParentOrganizationUserIds($userIds, $organization, $organizationAdminUserIds)
+    public function getParentOrganizationUserIds($userIds, $organization)
     {
         $parentOrganization = $organization->parent;
 
         if ($parentOrganization) {
-            $ids = $parentOrganization->users()->wherePivot('organization_role_type_id', '<>', config('constants.admin-role-id'))->get()->modelKeys();
-            $adminIds = $parentOrganization->users()->wherePivot('organization_role_type_id', config('constants.admin-role-id'))->get()->modelKeys();
-            $ids = array_diff($ids, $organizationAdminUserIds);
-            $organizationAdminUserIds = array_merge($organizationAdminUserIds, $adminIds);
+            $ids = $parentOrganization->users()->get()->modelKeys();
             $userIds = array_merge($userIds, $ids);
-
-            $userIds = $this->getParentOrganizationUserIds($userIds, $parentOrganization, $organizationAdminUserIds);
+            $userIds = $this->getParentOrganizationUserIds($userIds, $parentOrganization);
         }
 
         return $userIds;

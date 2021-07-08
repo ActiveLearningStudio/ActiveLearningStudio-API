@@ -18,6 +18,8 @@ Route::post('login', 'Auth\AuthController@login')->name('login');
 Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('login/sso', 'Auth\AuthController@ssoLogin');
+Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
+Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
@@ -225,7 +227,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
     });
-
+    Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
     // public route for get user's shared projects
     Route::post('projects/shared', 'UserController@sharedProjects');
 
