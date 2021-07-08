@@ -331,7 +331,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                     foreach ($chapters_list as $chapter) {
                         $result = $collection->where('chapter_name', $chapter);
                         if ($result->count() > 0) {
-                            $result_array = array('title' => ($chapter) ? $chapter : 'Summary');
+                            $result_array = array('title' => ($chapter) ? html_entity_decode($chapter) : 'Summary');
                             foreach ($result as $data) {
                                 $insertData = true;
                                 $title = $data->question;
@@ -341,11 +341,11 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                                     $answer = "Quiz Result";
                                 } elseif ($data->verb == 'interacted' && empty($data->question) && empty($data->answer)) {
                                     $insertData = false;
-                                }
-
+                                } 
                                 if ($insertData) {
+                                    $answer = preg_replace('/,\s(?=[,])|,$/', '', $answer);
                                     $result_array['children'][] = array(
-                                        'title' => $title,
+                                        'title' => html_entity_decode($title),
                                         'answer' => array(
                                             'score' => array(
                                                 'raw' => $data->score_raw,
