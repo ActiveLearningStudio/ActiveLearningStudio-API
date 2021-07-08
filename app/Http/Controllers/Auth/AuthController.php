@@ -585,9 +585,9 @@ class AuthController extends Controller
         if ($provider === 'stemuli') {
             $data['user'] = $user->toArray();
             $data['access_token'] = $accessToken;
-            $build_request_data = http_build_query($data);
+            $build_request_data = json_encode($data);
             $user_info = base64_encode($build_request_data);
-            return redirect()->away('login/sso/'.$user_info);
+            return redirect()->away(config('app.front_end_url').'/sso/dologin/'.$user_info);
         } else {
             return $response;
         }
