@@ -369,7 +369,7 @@ class PlaylistController extends Controller
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
-        $this->authorize('clone', [Playlist::class, $project->organization]);
+        $this->authorize('clone', [Playlist::class, $project]);
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($playlist->project_id == $project->id);
