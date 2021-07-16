@@ -16,6 +16,7 @@ use App\Http\Resources\V1\TeamResource;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
+use App\Models\TeamRoleType;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
@@ -57,9 +58,9 @@ class TeamController extends Controller
      * Get All Teams
      *
      * Get a list of the teams of a user.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/team/teams.json
+     * @responseFile responses/team/team.json
      *
      * @return Response
      */
@@ -86,9 +87,9 @@ class TeamController extends Controller
      * Get All Organization Teams
      *
      * Get a list of the teams of an Organization.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/team/teams.json
+     * @responseFile responses/team/team.json
      *
      * @return Response
      */
@@ -106,6 +107,60 @@ class TeamController extends Controller
 
         return response([
             'teams' => TeamResource::collection($teamDetails),
+        ], 200);
+    }
+
+    /**
+     * Team Roles Types
+     *
+     * Get a list of team role types.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/team/team-roles-types.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Something went wrong. Please try again later."
+     *   ]
+     * }
+     *
+     * @return Response
+     */
+    public function teamRoleTypes(Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Team::class, $suborganization]);
+
+        if ($teamRoleTypes = TeamRoleType::all()) {
+            return response([
+                'teamRoleTypes' => $teamRoleTypes,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Something went wrong. Please try again later.'],
+        ], 500);
+    }
+
+    /**
+     * Get User Team Permissions
+     *
+     * Get the logged-in user's team permissions in the suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
+     *
+     * @responseFile responses/team/team-user-permissions.json
+     *
+     * @param Organization $suborganization
+     * @param Team $team
+     * @return Response
+     */
+    public function getUserTeamPermissions(Organization $suborganization, Team $team)
+    {
+        $authenticatedUser = auth()->user();
+
+        return response([
+            'teamPermissions' => $this->teamRepository->fetchTeamUserPermissions($authenticatedUser, $team),
         ], 200);
     }
 
@@ -411,7 +466,7 @@ class TeamController extends Controller
         $owner = $team->getUserAttribute();
         $assigned_projects = [];
 
-        if ($owner->id === $auth_user->id || $this->authorize('addProjects', [Team::class, $team->organization])) {
+        if ($owner->id === $auth_user->id || $this->authorize('addProjects', [Team::class, $team])) {
             foreach ($data['ids'] as $project_id) {
                 $project = $this->projectRepository->find($project_id);
                 if ($project) {

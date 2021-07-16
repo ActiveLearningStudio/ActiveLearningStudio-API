@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Organization;
+use App\Models\Team;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -98,11 +99,11 @@ class TeamPolicy
      * Determine whether the user can add project in the team.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Team $team
      * @return mixed
      */
-     public function addProjects(User $user, Organization $suborganization)
+     public function addProjects(User $user, Team $team)
      {
-         return $user->hasPermissionTo('team:add-projects', $suborganization);
+         return $user->hasTeamPermissionTo('team:add-project', $team);
      }
 }

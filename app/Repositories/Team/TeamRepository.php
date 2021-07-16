@@ -15,6 +15,7 @@ use App\Repositories\User\UserRepositoryInterface;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class TeamRepository extends BaseRepository implements TeamRepositoryInterface
@@ -299,7 +300,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
         if ($team) {
             DB::table('team_project_user')->where('team_id', $team->id)->delete();
-            
+
             foreach ($projects as $projectId) {
                 foreach ($users as $user) {
                     DB::table('team_project_user')
@@ -452,7 +453,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      * Get Team detail data
      *
      * @param $teamId
-     * 
+     *
      * @return mixed
      */
     public function getTeamDetail($teamId)
@@ -514,5 +515,32 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         }
 
         return $team;
+    }
+
+    /**
+     * To fetch team user permissions
+     *
+     * @param User $authenticatedUser
+     * @param Team $team
+     * @return Model
+     */
+    public function fetchTeamUserPermissions($authenticatedUser, $team)
+    {
+        try {
+            $teamUserPermissions = $team->userRoles()
+            ->wherePivot('user_id', $authenticatedUser->id)
+            ->with('permissions')
+            ->first();
+
+            $response['activeRole'] = $teamUserPermissions['name'];
+            $response['roleId'] = $teamUserPermissions['id'];
+
+            foreach ($teamUserPermissions['permissions'] as $permission) {
+                $response[$permission['feature']][] = $permission['name'];
+            }
+            return $response;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 }

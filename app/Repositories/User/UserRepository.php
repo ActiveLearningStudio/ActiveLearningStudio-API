@@ -62,7 +62,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function searchByEmailAndName($key)
     {
-        return $this->model->searchByEmailAndName($key)->get();
+        return $this->model->searchByEmailAndName($key)->paginate();
     }
 
     /**
@@ -129,6 +129,29 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
+     * Check if user has the specified permission in the provided team role
+     *
+     * @param $user
+     * @param $permission
+     * @param $team
+     * @return boolean
+     */
+    public function hasTeamPermissionTo($user, $permission, $team)
+    {
+        $hasTeamPermissionTo =  $team->userRoles()
+                            ->wherePivot('user_id', $user->id)
+                            ->whereHas('permissions', function (Builder $query) use ($permission) {
+                                $query->where('name', '=', $permission);
+                            })->get();
+
+        if ($hasTeamPermissionTo->count()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Users basic report, projects, playlists and activities count
      * @param $data
      * @return mixed
@@ -154,5 +177,5 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
 
         return $this->query->paginate($perPage)->appends(request()->query());
-    }    
+    }
 }

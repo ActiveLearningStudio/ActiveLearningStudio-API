@@ -104,4 +104,12 @@ class Team extends Model
     {
         return 'Team';
     }
+
+    /**
+     * The user roles that belong to the team.
+     */
+    public function userRoles()
+    {
+        return $this->belongsToMany('App\Models\TeamRoleType', 'team_user_roles');
+    }
 }
