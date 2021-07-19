@@ -54,12 +54,30 @@ class AuthServiceProvider extends ServiceProvider
 
         // Adding Gates for Publishing
         Gate::define('publish-to-lms', function ($user, $project) {
-            // If the project is either shared, or the user is admin, or if user is the owner, then allow to publish
-            return $project->shared === true || $user->isAdmin() || $this->hasPermission($user, $project);
+            // If the project is either a) indexed-approved, and its visibility is public, or  
+            // b) if user is the owner, then allow to publish
+            if (
+                $project->indexing === config('constants.indexing-approved')
+                && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id')
+            ) {
+                return true;
+            }
+    
+            return $user->hasPermissionTo('project:publish', $project->organization);
+
         });
 
         Gate::define('fetch-lms-course', function ($user, $project) {
-            return $user->isAdmin() || $this->hasPermission($user, $project);
+            // If the project is either a) indexed-approved, and its visibility is public, or  
+            // b) if user is the owner, then allow to publish
+            if (
+                $project->indexing === config('constants.indexing-approved')
+                && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id')
+            ) {
+                return true;
+            }
+    
+            return $user->hasPermissionTo('project:publish', $project->organization);
         });
 
         Passport::routes();
@@ -70,24 +88,4 @@ class AuthServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Determine whether the user has the permission to the project.
-     *
-     * @param User $user
-     * @param Project $project
-     * @param $role
-     * @return boolean
-     * @access private
-     */
-    private function hasPermission(User $user, Project $project, $role = null)
-    {
-        $projectUsers = $project->users;
-        foreach ($projectUsers as $projectUser) {
-            if ($user->id === $projectUser->id && (!$role || $role === $projectUser->pivot->role)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
