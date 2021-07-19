@@ -57,16 +57,19 @@ class StarterProjects extends Command
             Log::info('Starter Projects: ' . $starterProjects->count() . ' & Users found: ' . $users->count());
 
             foreach ($users as $user) {
-                // loop through starter projects
-                foreach ($starterProjects as $project) {
-                    // if current starter project is already assigned then skip and move to the next starter project
-                    if (in_array($project->id, $user->projects->pluck('cloned_from')->toArray())) {
-                        continue;
-                    }
-                    try {
-                        $projectRepository->clone($user, $project, $user->createToken('auth_token')->accessToken);
-                    } catch (\Exception $e) {
-                        Log::Error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
+                // loop through user organizations
+                foreach ($user->organizations as $userOrganization) {
+                    // loop through starter projects
+                    foreach ($starterProjects as $project) {
+                        // if current starter project is already assigned then skip and move to the next starter project
+                        if (in_array($project->id, $user->projects()->where('organization_id', '=', $userOrganization->id)->pluck('cloned_from')->toArray())) {
+                            continue;
+                        }
+                        try {
+                            $projectRepository->clone($user, $project, $user->createToken('auth_token')->accessToken, $userOrganization->id);
+                        } catch (\Exception $e) {
+                            Log::Error('Starter Projects Assigning failed: ' . $user->email . ' ' . $e->getMessage());
+                        }
                     }
                 }
                 $releaseProgress[$user->id] = $user->id;

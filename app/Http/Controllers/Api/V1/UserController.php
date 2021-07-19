@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\SharedProjectRequest;
+use App\Http\Requests\V1\SuborganizationAddNewUser;
+use App\Http\Requests\V1\SuborganizationUpdateUserDetail;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\OrganizationResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
 use App\User;
@@ -16,6 +19,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\NotificationListResource;
+use App\Http\Resources\V1\UserStatsResource;
+use App\Models\Organization;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 /**
  * @group 2. User
@@ -31,7 +39,7 @@ class UserController extends Controller
      *
      * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository, Organization $suborganization)
     {
         $this->userRepository = $userRepository;
 
@@ -88,6 +96,73 @@ class UserController extends Controller
         return response([
             'errors' => ['Forbidden. Please use register to create new user.'],
         ], 403);
+    }
+
+    /**
+     * Create New Organization User
+     *
+     * Create a new user in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function addNewUser(SuborganizationAddNewUser $addNewUserrequest, Organization $suborganization)
+    {
+        $this->authorize('addUser', $suborganization);
+        $data = $addNewUserrequest->validated();
+
+        $data['password'] = Hash::make($data['password']);
+        $data['remember_token'] = Str::random(64);
+        $data['email_verified_at'] = now();
+
+        return \DB::transaction(function () use ($suborganization, $data) {
+        
+            $user = $this->userRepository->create(Arr::except($data, ['role_id']));
+            $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
+
+            return response([
+                'user' => new UserResource($this->userRepository->find($user->id)),
+                'message' => 'User has been created successfully.',
+            ], 200);
+
+        });
+
+        return response([
+            'errors' => ['Failed to create user.'],
+        ], 500);
+    }
+
+    /**
+     * Update Organization User Detail
+     *
+     * Update user detail in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function updateUserDetail(SuborganizationUpdateUserDetail $addNewUserrequest, Organization $suborganization)
+    {
+        $this->authorize('updateUser', $suborganization);
+        $data = $addNewUserrequest->validated();
+
+        return \DB::transaction(function () use ($suborganization, $data) {
+            
+            if (isset($data['password']) && $data['password'] !== '') {
+                $data['password'] = Hash::make($data['password']);
+            }
+            $user = $this->userRepository->update(Arr::except($data, ['user_id', 'role_id']), $data['user_id']);
+            $suborganization->users()->updateExistingPivot($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
+
+            return response([
+                'user' => new UserResource($this->userRepository->find($data['user_id'])),
+                'message' => 'User has been updated successfully.',
+            ], 200);
+
+        });
+
+        return response([
+            'errors' => ['Failed to update user.'],
+        ], 500);
     }
 
     /**
@@ -434,6 +509,76 @@ class UserController extends Controller
     }
 
     /**
+     * Get All User Organizations
+     *
+     * Get a list of the users organizations
+     *
+     * @responseFile responses/organization/organizations.json
+     *
+     * @return Response
+     */
+    public function getOrganizations()
+    {
+        return OrganizationResource::collection(auth()->user()->organizations()->with('parent')->get());
+    }
+
+    /**
+     * Set Default Organization
+     *
+     * Set default organization for the user.
+     *
+     * @bodyParam organization_id int required The id of the organization to be set as default Example: 1
+     *
+     * @response {
+     *   "message": "Default organization has been set successfully."
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid request."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to set default organization."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function setDefaultOrganization(Request $request)
+    {
+        $authenticated_user = auth()->user();
+
+        $data = $request->validate([
+            'organization_id' => [
+                'required',
+                Rule::exists('organization_user_roles')->where(function ($query) use ($authenticated_user) {
+                    $query->where('user_id', $authenticated_user->id);
+                }),
+            ],
+        ]);
+
+        $authenticated_user = auth()->user();
+
+        $is_updated = $this->userRepository->update([
+            'default_organization' => $data['organization_id'],
+        ], $authenticated_user->id);
+
+        if ($is_updated) {
+            return response([
+                'message' => 'Default organization has been set successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to set default organization.'],
+        ], 500);
+    }
+
+    /**
      * Get All Shared Projects
      *
      * Get a list of the shared projects of a user.
@@ -453,4 +598,23 @@ class UserController extends Controller
             'projects' => ProjectResource::collection($user->projects),
         ], 200);
     }
+
+    /**
+     * Users Basic Report
+     *
+     * Returns the paginated response of the users with basic reporting.
+     *
+     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @queryParam query for getting the search records by name and email. Example: Test
+     *
+     * @responseFile responses/admin/user/users_report.json
+     *
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function reportBasic(Request $request)
+    {
+        return UserStatsResource::collection($this->userRepository->reportBasic($request->all()), 200);
+    }
+
 }

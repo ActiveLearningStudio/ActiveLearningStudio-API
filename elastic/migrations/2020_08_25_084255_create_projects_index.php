@@ -15,6 +15,8 @@ final class CreateProjectsIndex implements MigrationInterface
     public function up(): void
     {
         Index::create('projects', function (Mapping $mapping, Settings $settings) {
+            $mapping->keyword('organization_id');
+            $mapping->keyword('organization_visibility_type_id');
             $mapping->keyword('project_id');
             $mapping->text('name');
             $mapping->text('description');

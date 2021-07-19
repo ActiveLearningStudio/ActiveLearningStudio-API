@@ -235,6 +235,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 // Get Category context
                 $contextActivities = $statement->getContext()->getContextActivities();
                 $category = $contextActivities->getCategory();
+                $parent = $contextActivities->getParent();
+                $parentSubContentId = $this->getParentSubContentId($parent);
                 if (!empty($category) && !empty($result)) {
                     // Each quiz within the activity is identified by a unique GUID.
                     // We only need to take the most recent submission on an activity into account.
@@ -247,8 +249,9 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     $isAggregateH5P = ($this->isAllowedAggregateH5P($h5pInteraction) ? $this->isAggregateH5P($data, $objectId) : false); 
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered) && !$isAggregateH5P) {
-                        $filtered[$h5pSubContentId] = $statement;
+                    $key = $this->joinParentChildSubContentIds($parentSubContentId, $h5pSubContentId);
+                    if (!array_key_exists($key, $filtered) && !$isAggregateH5P) {
+                        $filtered[$key] = $statement;
                     }
                 }
             }
@@ -275,8 +278,12 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 // We only need to take the most recent submission on an activity into account.
                 // We've sorted statements in descending order, so the first entry for a subId is the latest
                 $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                if (!array_key_exists($h5pSubContentId, $filtered)) {
-                    $filtered[$h5pSubContentId] = $statement;
+                $contextActivities = $statement->getContext()->getContextActivities();
+                $parent = $contextActivities->getParent();
+                $parentSubContentId = $this->getParentSubContentId($parent);
+                $key = $this->joinParentChildSubContentIds($parentSubContentId, $h5pSubContentId);
+                if (!array_key_exists($key, $filtered)) {
+                    $filtered[$key] = $statement;
                 }
             }
         }
@@ -293,6 +300,8 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
     public function getAttemptedStatements(array $data)
     {
         $attempted = $this->getStatementsByVerb('attempted', $data);
+        // Get all interactions list that are non-scoring.
+        $notAllowedInteractions = $this->allowedInteractionsList();
         $filtered = [];
         if ($attempted) {
             // iterate and find the statements that have results.
@@ -300,14 +309,23 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                 // Get Parent context
                 $contextActivities = $statement->getContext()->getContextActivities();
                 $parent = $contextActivities->getParent();
-                
+                $category = $contextActivities->getCategory();
+                $categoryId = '';
+                $h5pInteraction = '';
+                if (!empty($category)) {
+                    $categoryId = end($category)->getId();
+                    $h5pInteraction = explode("/", $categoryId);
+                    $h5pInteraction = end($h5pInteraction);
+                }
                 if (!empty($parent)) {
                     $objectId = $statement->getTarget()->getId();
                     $isAggregateH5P = $this->isAggregateH5P($data, $objectId); 
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered) && !$isAggregateH5P) {
-                        $filtered[$h5pSubContentId] = $statement;
+                    $parentSubContentId = $this->getParentSubContentId($parent);
+                    $key = $this->joinParentChildSubContentIds($parentSubContentId, $h5pSubContentId);
+                    if (!array_key_exists($key, $filtered) && !in_array($h5pInteraction, $notAllowedInteractions) && !$isAggregateH5P ) {
+                        $filtered[$key] = $statement;
                     }
                 }
             }
@@ -350,7 +368,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     $objectId = $statement->getTarget()->getId();
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    $key = (!empty($parentSubContentId) ? $parentSubContentId . '-' . $h5pSubContentId : $h5pSubContentId);
+                    $key = $this->joinParentChildSubContentIds($parentSubContentId, $h5pSubContentId);
                     // If h5p interaction is PersonalityQuiz, then take title into account
                     if ($h5pInteraction === 'H5P.PersonalityQuiz-1.0') {
                         $target = $statement->getTarget();
@@ -363,7 +381,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                             $description = $definition->getDescription()->getNegotiatedLanguageString();
                             $description = strip_tags(html_entity_decode($description));
                             $descriptionMD5 = substr(md5($description), 0, 8);
-                            $key .= '-' . $descriptionMD5;
+                            $key .= '::' . $descriptionMD5;
                         }
                     }
 
@@ -400,13 +418,17 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
                     $h5pInteraction = explode("/", $categoryId);
                     $h5pInteraction = end($h5pInteraction);
                 }
+
+                $parent = $contextActivities->getParent();
+                $parentSubContentId = $this->getParentSubContentId($parent);
                 
                 if (!empty($category) && $this->isAllowedAggregateH5P($h5pInteraction)) {
                     $objectId = $statement->getTarget()->getId();
                     // Get activity subID for this statement.
                     $h5pSubContentId = $this->getH5PSubContenIdFromStatement($statement);
-                    if (!array_key_exists($h5pSubContentId, $filtered)) {
-                        $filtered[$h5pSubContentId] = $statement;
+                    $key = $this->joinParentChildSubContentIds($parentSubContentId, $h5pSubContentId);
+                    if (!array_key_exists($key, $filtered)) {
+                        $filtered[$key] = $statement;
                     }
                 }
             }
@@ -753,6 +775,20 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
             }
         }
         return $parentSubContentId;
+    }
+
+    /**
+     * Join Parent's & Child's sub content ids
+     * 
+     * @param string $parentId
+     * @param string $childId
+     * @param string $join The character joining the two ids Defaults to '|'
+     * 
+     * @return string
+     */
+    public function joinParentChildSubContentIds($parentId, $childId, $join = '|')
+    {
+        return (!empty($parentId) ? $parentId . $join . $childId : $childId);
     }
 
     /**

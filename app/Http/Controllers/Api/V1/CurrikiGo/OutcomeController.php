@@ -7,6 +7,10 @@ use App\Http\Requests\V1\CurrikiGo\GetStudentResultRequest;
 use App\Http\Resources\V1\CurrikiGo\StudentResultResource;
 use Illuminate\Http\Request;
 use App\Services\LearnerRecordStoreService;
+use App\CurrikiGo\H5PLibrary\H5PLibraryFactory;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
+
+use App\Repositories\CurrikiGo\Outcome\OutcomeRepositoryInterface;
 
 /**
  * @group 15. CurrikiGo Outcome
@@ -15,6 +19,13 @@ use App\Services\LearnerRecordStoreService;
  */
 class OutcomeController extends Controller
 {
+    private $outcomeRepository;
+
+    public function __construct(OutcomeRepositoryInterface $outcomeRepository)
+    {
+        $this->outcomeRepository = $outcomeRepository;
+    }
+
     /**
      * Get Student Results Summary
      *
@@ -32,6 +43,7 @@ class OutcomeController extends Controller
      *
      * @param GetStudentResultRequest $studentResultRequest
      * @return Response
+     * @deprecated
      */
     public function getStudentResultSummary(GetStudentResultRequest $studentResultRequest)
     {
@@ -150,4 +162,33 @@ class OutcomeController extends Controller
         }
     }
 
+    /**
+     * Get Student Results Grouped Summary 
+     *
+     * Fetch LRS statements based on parameters, and generate a student result summary
+     *
+     * @param GetStudentResultRequest $studentResultRequest
+     *
+     * @responseFile responses/outcome/student-result-summary-grouped.json
+     *
+     * @response 404 {
+     *   "errors": [
+     *     "No results found."
+     *   ]
+     * }
+     *
+     * @param GetStudentResultRequest $studentResultRequest
+     * @return Response
+     */
+    public function getStudentResultGroupedSummary(GetStudentResultRequest $studentResultRequest)
+    {
+        $data = $studentResultRequest->validated();
+        $response = $this->outcomeRepository->getStudentOutcome($data['actor'], $data['activity']);
+
+        if (isset($response['errors'])) {
+            return response($response, 404);
+        }
+
+        return response($response, 200);
+    }
 }

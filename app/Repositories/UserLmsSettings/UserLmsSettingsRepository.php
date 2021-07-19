@@ -13,6 +13,6 @@ class UserLmsSettingsRepository implements UserLmsSettingsRepositoryInterface
      * @return Collection
      */
     public function all(){
-        return collect([Auth::user()->lmssetting]);
+        return Auth::user()->lmssetting;
     }
 }

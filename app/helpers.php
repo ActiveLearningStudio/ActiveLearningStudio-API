@@ -101,8 +101,10 @@ if (!function_exists('get_job_from_payload')) {
      */
     function get_job_from_payload($payload)
     {
-        $payload = json_decode($payload, true);
-        return get_base_name($payload['displayName']);
+        if ($payload) {
+            $payload = json_decode($payload, true);
+            return get_base_name($payload['displayName']);
+        }
     }
 }
 
@@ -155,5 +157,101 @@ if (!function_exists('xAPIFormatDuration')) {
             return $formatted;
         }
         return $rawDuration;
+    }
+}
+
+if (!function_exists('recursive_array_search')) {
+    function recursive_array_search($needle, $haystack, $currentKey = '')
+    {
+        foreach($haystack as $key=>$value) {
+            if (is_array($value)) {
+                $nextKey = recursive_array_search($needle,$value, $currentKey . '[' . $key . ']');
+                if ($nextKey) {
+                    return $nextKey;
+                }
+            }
+            else if($value==$needle) {
+                return is_numeric($key) ? $currentKey . '[' .$key . ']' : $currentKey . '["' .$key . '"]';
+            }
+        }
+        return false;
+    }
+}
+
+if (!function_exists('recursive_array_search_insert')) {
+    function recursive_array_search_insert($value, &$node, $insert = '')
+    {
+        if (is_array($node)) {
+            if (isset($node['relation-sub-content-id']) && $value === $node['relation-sub-content-id']) {
+                if (!isset($node['answer'])) {
+                    $node['answer'] = [];
+                }
+                $node['answer'][] = $insert;
+            }
+            foreach ($node as &$childNode) {
+                recursive_array_search_insert($value, $childNode, $insert);
+            }
+        }
+    }
+}
+
+if (!function_exists('getEducationalLevel')) {
+    function getEducationalLevel($grade)
+    {
+        // Range: -1 to 13 
+        // Note: Pre-K = -1, Kindergarten = 0, Adult = 13 
+        $grades = [
+            'Kindergarten-Grade 2 (Ages 5-7)' => [0, 2],
+            'Grades 3-5 (Ages 8-10)' => [3, 5],
+            'Grades 6-8 (Ages 11-13)' => [6, 8],
+            'Grades 9-10 (Ages 14-16)' => [9, 10],
+            'Grades 11-12 (Ages 16-18)' => [11, 12],
+            'College & Beyond' => [13],
+            'Professional Development' => [13],
+            'Special Education' => [13]
+        ];
+        return array_key_exists($grade, $grades) ? $grades[$grade] : [0, 2]; 
+    }
+}
+
+if (!function_exists('getFrontURL')) {
+    function getFrontURL()
+    {
+        $front_url = config('constants.front-url');
+        if (strpos($front_url,'://') === false) {
+            // If not an absolute path, then get the origin.
+            $front_url = request()->headers->get('origin');
+            if (!$front_url) {
+                // If nothing works, take the http host
+                $front_url = request()->getSchemeAndHttpHost();
+            }
+        }
+        return $front_url;
+    }
+}
+
+if (!function_exists('html_escape')) {
+	/**
+	 * Returns HTML escaped variable.
+	 *
+	 * @param	mixed	$var		The input string or array of strings to be escaped.
+	 * @param	bool	$double_encode	$double_encode set to FALSE prevents escaping twice.
+	 * @return	mixed			The escaped string or array of strings as a result.
+	 */
+	function html_escape($var, $double_encode = true)
+	{
+        if (empty($var)) {
+            return $var;
+        }
+
+        if (is_array($var))	{
+            foreach (array_keys($var) as $key) {
+                $var[$key] = html_escape($var[$key], $double_encode);
+            }
+
+            return $var;
+        }
+
+        return htmlspecialchars($var, ENT_QUOTES, 'UTF-8', $double_encode);
     }
 }

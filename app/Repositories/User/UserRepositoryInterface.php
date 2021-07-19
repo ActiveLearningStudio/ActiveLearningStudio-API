@@ -36,4 +36,21 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function fetchListing($notifications);
+
+    /**
+     * Check if user has the specified permission in the provided organization
+     *
+     * @param $user
+     * @param $permission
+     * @param $organization
+     * @return boolean
+     */
+    public function hasPermissionTo($user, $permission, $organization);
+
+    /**
+     * Users basic report, projects, playlists and activities count
+     * @param $data
+     * @return mixed
+     */
+    public function reportBasic($data);
 }

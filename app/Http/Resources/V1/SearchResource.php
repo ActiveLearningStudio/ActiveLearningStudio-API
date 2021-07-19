@@ -18,6 +18,7 @@ class SearchResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'project_id' => isset($this->playlist_id) ? $this->playlist->project_id : (isset($this->project_id) ? $this->project_id : $this->id),
             'playlist_id' => $this->when(isset($this->playlist_id), $this->playlist_id),
             'thumb_url' => (isset($this->thumb_url) ? $this->thumb_url : $this->thumbUrl),
             'title' => (isset($this->title) ? $this->title : $this->name),
@@ -25,7 +26,6 @@ class SearchResource extends JsonResource
             'content' => $this->when(isset($this->content), $this->content),
             'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->modelType,
-            'user' => new UserResource($this->user),
             'created_at' => $this->created_at
         ];
     }

@@ -15,6 +15,11 @@ class DatabaseSeeder extends Seeder
             ActivityTypeSeeder::class,
             H5pElasticsearchFieldsTableSeeder::class,
             MembershipTypeSeeder::class,
+            OrganizationSeeder::class,
+            OrganizationRoleTypeSeeder::class,
+            OrganizationVisibilityTypeSeeder::class,
+            OrganizationPermissionTypeSeeder::class,
+            OrganizationRolePermissionSeeder::class,
         ]);
     }
 }

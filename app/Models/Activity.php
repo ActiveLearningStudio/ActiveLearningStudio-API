@@ -56,6 +56,8 @@ class Activity extends Model
 
             if ($this->playlist->project) {
                 $searchableArray['indexing'] = $this->playlist->project->indexing;
+                $searchableArray['organization_id'] = $this->playlist->project->organization_id;
+                $searchableArray['organization_visibility_type_id'] = $this->playlist->project->organization_visibility_type_id;
             }
         }
 

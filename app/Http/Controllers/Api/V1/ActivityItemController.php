@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreActivityItem;
+use App\Http\Requests\V1\UpdateActivityItem;
 use App\Http\Resources\V1\ActivityItemResource;
 use App\Models\ActivityItem;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
@@ -35,7 +37,7 @@ class ActivityItemController extends Controller
         $this->activityItemRepository = $activityItemRepository;
         $this->activityTypeRepository = $activityTypeRepository;
 
-        $this->authorizeResource(ActivityItem::class, 'activityItem');
+        // $this->authorizeResource(ActivityItem::class, 'activityItem');
     }
 
     /**
@@ -53,6 +55,20 @@ class ActivityItemController extends Controller
             'activityItems' => ActivityItemResource::collection($this->activityItemRepository->all()),
         ], 200);
     }
+
+    /**
+     * Get Activity Items with pagination and search
+     *
+     * Get a list of the activity items.
+     *
+     * @responseFile responses/activity-item/activity-items.json
+     *
+     * @return Response
+     */
+    public function getItems(Request $request)
+    {
+        return  ActivityItemResource::collection($this->activityItemRepository->getAll($request->all()));
+    }    
 
     /**
      * Upload Thumbnail
@@ -123,26 +139,9 @@ class ActivityItemController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreActivityItem $request)
     {
-        // TODO: need to update validation
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
-            'order' => 'integer',
-            'activity_type_id' => 'integer',
-            'type' => 'required',
-            'h5pLib' => 'required',
-            'image' => 'string|max:255',
-        ]);
-
-        $activityType = $this->activityTypeRepository->find($data['activity_type_id']);
-        if (!$activityType) {
-            return response([
-                'errors' => ['Invalid activity type id.'],
-            ], 400);
-        }
-
+        $data = $request->validated();
         $activityItem = $this->activityItemRepository->create($data);
 
         if ($activityItem) {
@@ -207,27 +206,10 @@ class ActivityItemController extends Controller
      * @param ActivityItem $activityItem
      * @return Response
      */
-    public function update(Request $request, ActivityItem $activityItem)
+    public function update(UpdateActivityItem $request, ActivityItem $activityItem)
     {
-        if ($request->activity_type_id) {
-            $activityType = $this->activityTypeRepository->find($request->activity_type_id);
-            if (!$activityType) {
-                return response([
-                    'errors' => ['Invalid activity type id.'],
-                ], 400);
-            }
-        }
-
-        // TODO: need to add validation
-        $is_updated = $this->activityItemRepository->update($request->only([
-            'title',
-            'description',
-            'order',
-            'activity_type_id',
-            'type',
-            'h5pLib',
-            'image',
-        ]), $activityItem->id);
+        $data = $request->validated();
+        $is_updated = $this->activityItemRepository->update($activityItem->id, $data);
 
         if ($is_updated) {
             return response([

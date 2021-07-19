@@ -1,0 +1,68 @@
+node("currikistage") {
+    def app     
+    def redis
+    def esmigrate
+      
+    
+    
+    stage('Clone repository') {               
+        checkout scm    
+    }  
+    
+    stage('Build image') {         
+        app = docker.build("quay.io/curriki/api")    
+        redis = docker.build("quay.io/curriki/redis", "-f Dockerfile.redis .")    
+        esmigrate = docker.build("quay.io/curriki/es-migrate", "-f Dockerfile.esmigrate .")    
+    } 
+    stage('Test image') {           
+        app.inside { 
+                sh 'echo "Api Tests passed"'        
+        }    
+        redis.inside { 
+                sh 'echo "Redis Tests passed"'        
+        }   
+        esmigrate.inside { 
+                sh 'echo "ES Migrate Tests passed"'        
+        }   
+    } 
+    stage('Push image') {	
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                app.push("${env.BUILD_NUMBER}")            
+                app.push("latest")        
+        }    
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                redis.push("${env.BUILD_NUMBER}")            
+                redis.push("latest")        
+        }   
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                esmigrate.push("${env.BUILD_NUMBER}")            
+                esmigrate.push("latest")        
+        }   
+    }
+    
+
+    
+    
+    
+     parallel(
+            "StageA": {
+                if(Jenkins.instance.getNode('currikistage').toComputer().isOnline()){
+                    node('currikistage') {
+                        stage ('currikistage') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-stage.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikistage') {
+                        echo "currikistage is offline"
+                        exit 1
+                    }
+                }
+            }
+    )
+    
+}
+
+

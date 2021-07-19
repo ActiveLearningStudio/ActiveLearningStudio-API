@@ -1,0 +1,30 @@
+{
+    "member-options": [
+        {
+            "id": 3,
+            "first_name": "Abby",
+            "last_name": "_",
+            "email": "abby@curriki.org",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true
+        },
+        {
+            "id": 1494,
+            "first_name": "Gabriella",
+            "last_name": "Tennant-Nicholas",
+            "email": "gabbytennant05@gmail.com",
+            "organization_name": "Arizona State University",
+            "organization_type": null,
+            "job_title": "Student",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true
+        }
+    ]
+}

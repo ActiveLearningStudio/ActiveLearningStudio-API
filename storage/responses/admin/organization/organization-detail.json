@@ -1,0 +1,51 @@
+{
+    "data": {
+        "id": 25,
+        "name": "Level 2 Org",
+        "description": "Level 2 Org",
+        "parent": {
+            "id": 24,
+            "name": "Level 1 Org",
+            "description": "Level 1 Org",
+            "image": "/storage/organizations/qlz5YienwWryZAhoWSfJxJPzYp5JU2Vp8FQeiCzW.jpeg",
+            "domain": "level1org"
+        },
+        "projects": [
+            {
+                "id": 2456,
+                "name": "name",
+                "description": "description",
+                "thumb_url": "/storage/projects/T4gQGR692EgWCUw9Kw8JeujIlPnJ7najoX8D5L8F.jpeg",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": 3,
+                "indexing_text": "APPROVED",
+                "created_at": "13-Jan-2021",
+                "updated_at": "13-Jan-2021"
+            }
+        ],
+        "users": [
+            {
+                "id": 1,
+                "name": "local user",
+                "email": "localuser@local.com",
+                "first_name": "local",
+                "last_name": "user",
+                "job_title": "",
+                "organization_type": null,
+                "is_admin": false,
+                "organization_name": "",
+                "organization_role": "Administrator",
+                "created_at": "06-Apr-2020",
+                "updated_at": "13-Jan-2021"
+            }
+        ],
+        "image": "/storage/organizations/Yuxzr7NOMLj7O5eJba6FmSoxFpt126EDYnkmg5r2.jpeg",
+        "domain": "level2org"
+    }
+}
