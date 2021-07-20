@@ -246,6 +246,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('h5p/embed/{id}', 'H5pController@embed');
     // Public route used for LTI previews
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
+    Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
