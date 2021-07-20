@@ -5,6 +5,7 @@ namespace App\Repositories\Team;
 use App\Events\TeamCreatedEvent;
 use App\Models\Project;
 use App\Models\Team;
+use App\Models\TeamRoleType;
 use App\Notifications\InviteToTeamNotification;
 use App\Repositories\BaseRepository;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
@@ -55,68 +56,46 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      * Create pivots data on team creation
      *
      * @param $suborganization
-     * @param $team
      * @param $data
      */
-    public function createTeam($suborganization, $team, $data)
+    public function createTeam($suborganization, $data)
     {
-        $assigned_users = [];
-        $valid_users = [];
-        $invited_users = [];
-        $auth_user = auth()->user();
+        return \DB::transaction(function () use ($suborganization, $data) {
 
-        foreach ($data['users'] as $user) {
-            $con_user = $this->userRepository->find($user['id']);
+            $auth_user = auth()->user();
+            $admin_role = TeamRoleType::whereName('admin')->first();
+            $team = $auth_user->teams()->create($data, ['team_role_type_id' => $admin_role->id]);
 
-            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
-            if ($con_user) {
-                $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
-                $con_user->token = $token;
-                $valid_users[] = $con_user;
-                $assigned_users[] = [
-                    'user' => $con_user,
-                    'note' => $user['note']
-                ];
-            } elseif ($user['email']) {
-                $temp_user = new User(['email' => $user['email']]);
-                $temp_user->token = $token;
+            $assigned_users = [];
+            $valid_users = [];
 
-                // added org invitation for outside users
-                $inviteData['role_id'] = config('constants.member-role-id');
-                $inviteData['email'] = $user['email'];
-                $inviteData['note'] = $user['note'];
-                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
-                // ended org invitation for outside users
-
-                $assigned_users[] = [
-                    'user' => $temp_user,
-                    'note' => $user['note']
-                ];
-
-                $invited_users[] = [
-                    'invited_email' => $user['email'],
-                    'team_id' => $team->id,
-                    'token' => $token
-                ];
+            foreach ($data['users'] as $user) {
+                $con_user = $this->userRepository->find($user['id']);
+                $note = array_key_exists('note', $user) ? $user['note'] : '';
+                if ($con_user) {
+                    $team->users()->attach($con_user, ['team_role_type_id' => $user['role_id']]);
+                    $valid_users[] = $con_user;
+                    $assigned_users[] = [
+                        'user' => $con_user,
+                        'note' => $note
+                    ];
+                }
             }
-        }
 
-        foreach ($invited_users as $invited_user) {
-            $this->invitedTeamUserRepository->create($invited_user);
-        }
-
-        $assigned_projects = [];
-        foreach ($data['projects'] as $project_id) {
-            $project = $this->projectRepository->find($project_id);
-            if ($project) {
-                $team->projects()->attach($project);
-                $assigned_projects[] = $project;
+            $assigned_projects = [];
+            foreach ($data['projects'] as $project_id) {
+                $project = $this->projectRepository->find($project_id);
+                if ($project) {
+                    $team->projects()->attach($project);
+                    $assigned_projects[] = $project;
+                }
             }
-        }
 
-        event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
+            event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
+            $this->setTeamProjectUser($team, $assigned_projects, $valid_users);
 
-        $this->setTeamProjectUser($team, $assigned_projects, $valid_users);
+            return $team;
+        });
     }
 
     /**

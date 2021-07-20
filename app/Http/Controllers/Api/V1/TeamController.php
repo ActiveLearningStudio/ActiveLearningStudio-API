@@ -224,15 +224,19 @@ class TeamController extends Controller
     public function store(TeamRequest $teamRequest, Organization $suborganization)
     {
         $this->authorize('create', [Team::class, $suborganization]);
-
         $data = $teamRequest->validated();
 
-        $auth_user = auth()->user();
-        $team = $auth_user->teams()->create($data, ['role' => 'owner']);
+        foreach ($data['users'] as $user) {
+            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+            if (!$exist_user_id) {
+                return response([
+                    'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+                ], 500);
+            }
+        }
 
+        $team = $this->teamRepository->createTeam($suborganization, $data);
         if ($team) {
-            $this->teamRepository->createTeam($suborganization, $team, $data);
-
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
             ], 201);

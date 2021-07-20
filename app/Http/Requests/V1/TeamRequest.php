@@ -25,11 +25,26 @@ class TeamRequest extends FormRequest
     {
         return [
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
-            'name' => 'required|string|max:80',
+            'name' => 'required|string|max:80|unique:teams,name',
             'description' => 'required|string|max:1000',
             'users' => 'required|array',
-            'projects' => 'array|exists:App\Models\Project,id',
+            "users.*.id"  => "required|exists:App\User,id",
+            "users.*.role_id"  => "required|exists:App\Models\TeamRoleType,id",
+            "users.*.email"  => "required|email",
+            'projects' => 'required|array|exists:App\Models\Project,id',
             'note' => 'string|min:0',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'name' => 'team name',
         ];
     }
 }
