@@ -4,6 +4,7 @@
         "roleId": 1,
         "Team": [
             "team:add-team-user",
+            "team:remove-team-user",
             "team:add-project",
             "team:remove-project",
             "team:add-member-project",

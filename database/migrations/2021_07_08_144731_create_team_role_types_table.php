@@ -28,6 +28,6 @@ class CreateTeamRoleTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('team_roles');
+        Schema::dropIfExists('team_role_types');
     }
 }

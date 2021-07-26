@@ -7,6 +7,7 @@ use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\SharedProjectRequest;
 use App\Http\Requests\V1\SuborganizationAddNewUser;
 use App\Http\Requests\V1\SuborganizationUpdateUserDetail;
+use App\Http\Requests\V1\UserCheckRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
@@ -94,7 +95,7 @@ class UserController extends Controller
      *
      * Get a list of the organization users.
      *
-     * @urlParam  Organization $organization
+     * @urlParam  Organization $suborganization
      * @bodyParam search string required Search string for User Example: Abby
      *
      * @responseFile responses/user/users-for-team.json
@@ -108,6 +109,46 @@ class UserController extends Controller
 
         return response([
             'users' => UserForTeamResource::collection($this->organizationRepository->getOrgUsers($data, $suborganization)),
+        ], 200);
+    }
+
+    /**
+     * Check Organization User
+     *
+     * Check if organization user exist in specific organization or not.
+     *
+     * @urlParam  Organization $suborganization
+     * @bodyParam user_id inetger required user Id Example: 1
+     * @bodyParam organization_id inetger required organization Id Example: 1
+     *
+     * @response {
+     *   "invited": true,
+     *   "message": "Success"
+     * }
+     *
+     * @response 400 {
+     *   "invited": false,
+     *   "message": "error"
+     * }
+     *
+     * @param UserCheckRequest $userCheckRequest
+     * @return Response
+     */
+    public function checkOrgUser(UserCheckRequest $userCheckRequest, Organization $suborganization)
+    {
+        $data = $userCheckRequest->validated();
+        $exist_user_id = $suborganization->users()->where('user_id', $data['user_id'])->first();
+
+        if (!$exist_user_id) {
+            return response([
+                'message' => 'This user must be added in ' . $suborganization->name . ' organization first.',
+                'invited' => false,
+            ], 400);
+        }
+
+        return response([
+            'message' => 'Success',
+            'invited' => true,
         ], 200);
     }
 

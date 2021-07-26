@@ -352,27 +352,20 @@ class TeamController extends Controller
      */
     public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Organization $suborganization,  Team $team)
     {
+        $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $inviteMembersRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
 
-        if ($owner->id === $auth_user->id) {
-            $invited = $this->teamRepository->inviteMembers($suborganization, $team, $data);
+        $invited = $this->teamRepository->inviteMembers($suborganization, $team, $data);
 
-            if ($invited) {
-                return response([
-                    'message' => 'Users have been invited to the team successfully.',
-                ], 200);
-            }
-
+        if ($invited) {
             return response([
-                'errors' => ['Failed to invite users to the team.'],
-            ], 500);
+                'message' => 'Users have been invited to the team successfully.',
+            ], 200);
         }
 
         return response([
-            'message' => 'You do not have permission to invite users to the team.',
-        ], 403);
+            'errors' => ['Failed to invite users to the team.'],
+        ], 500);
     }
 
     /**
@@ -404,12 +397,13 @@ class TeamController extends Controller
      */
     public function removeMember(TeamRemoveMemberRequest $removeMemberRequest, Team $team)
     {
+        $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $removeMemberRequest->validated();
         $auth_user = auth()->user();
         $owner = $team->getUserAttribute();
 
         // TODO: need to add leave team functionality
-        if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id) {
+        if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id || $this->authorize('removeTeamUsers', [Team::class, $team])) {
             $user = $this->userRepository->find($data['id']);
 
             // delete invited outside user if not registered
@@ -528,7 +522,7 @@ class TeamController extends Controller
         $auth_user = auth()->user();
         $owner = $team->getUserAttribute();
 
-        if ($owner->id === $auth_user->id) {
+        if ($owner->id === $auth_user->id || $this->authorize('removeProject', [Team::class, $team])) {
             $project = $this->projectRepository->find($data['id']);
 
             if ($project) {
