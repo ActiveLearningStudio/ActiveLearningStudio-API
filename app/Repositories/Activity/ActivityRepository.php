@@ -142,7 +142,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $author = $data['author'];
 
             $authorProjectIds = Project::whereHas('users', function (Builder $query) use ($author) {
-                $query->where('first_name', 'like', '%' . $author . '%');
+                $query->orWhere(function($query) use ($author) {
+                    $query->where('first_name', 'like', '%' . $author . '%')
+                          ->where('last_name', 'like', '%' . $author . '%')
+                          ->where('email', 'like', '%' . $author . '%');
+                });
             })->pluck('id')->toArray();
 
             if (empty($authorProjectIds)) {
