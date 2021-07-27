@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TeamAddProjectRequest extends FormRequest
+class UserCheckRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +24,8 @@ class TeamAddProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'ids' => 'required|array|exists:App\Models\Project,id,deleted_at,NULL',
-        ];
-    }
-
-    /**
-     * Get the validation message that apply to the rules.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'ids.exists' => 'Some of given project Ids are invalid or deleted.',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
+            'user_id'  => 'required|integer|exists:App\User,id',
         ];
     }
 }

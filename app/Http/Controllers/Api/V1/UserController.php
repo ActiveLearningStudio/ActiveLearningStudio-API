@@ -7,6 +7,7 @@ use App\Http\Requests\V1\ProfileUpdateRequest;
 use App\Http\Requests\V1\SharedProjectRequest;
 use App\Http\Requests\V1\SuborganizationAddNewUser;
 use App\Http\Requests\V1\SuborganizationUpdateUserDetail;
+use App\Http\Requests\V1\UserCheckRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\NotificationListResource;
 use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -33,15 +35,20 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     private $userRepository;
+    private $organizationRepository;
 
     /**
      * UserController constructor.
      *
      * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository, Organization $suborganization)
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        OrganizationRepositoryInterface $organizationRepository
+    )
     {
         $this->userRepository = $userRepository;
+        $this->organizationRepository = $organizationRepository;
 
         $this->authorizeResource(User::class, 'user');
     }
@@ -74,12 +81,74 @@ class UserController extends Controller
      * @param UserSearchRequest $userSearchRequest
      * @return Response
      */
-    public function getUsersForTeam(UserSearchRequest $userSearchRequest)
+    public function getAllUsers(UserSearchRequest $userSearchRequest)
     {
         $data = $userSearchRequest->validated();
 
         return response([
             'users' => UserForTeamResource::collection($this->userRepository->searchByEmailAndName($data['search'])),
+        ], 200);
+    }
+
+    /**
+     * Get All Organization Users
+     *
+     * Get a list of the organization users.
+     *
+     * @urlParam  Organization $suborganization
+     * @bodyParam search string required Search string for User Example: Abby
+     *
+     * @responseFile responses/user/users-for-team.json
+     *
+     * @param UserSearchRequest $userSearchRequest
+     * @return Response
+     */
+    public function getOrgUsers(UserSearchRequest $userSearchRequest, Organization $suborganization)
+    {
+        $data = $userSearchRequest->validated();
+
+        return response([
+            'users' => UserForTeamResource::collection($this->organizationRepository->getOrgUsers($data, $suborganization)),
+        ], 200);
+    }
+
+    /**
+     * Check Organization User
+     *
+     * Check if organization user exist in specific organization or not.
+     *
+     * @urlParam  Organization $suborganization
+     * @bodyParam user_id inetger required user Id Example: 1
+     * @bodyParam organization_id inetger required organization Id Example: 1
+     *
+     * @response {
+     *   "invited": true,
+     *   "message": "Success"
+     * }
+     *
+     * @response 400 {
+     *   "invited": false,
+     *   "message": "error"
+     * }
+     *
+     * @param UserCheckRequest $userCheckRequest
+     * @return Response
+     */
+    public function checkOrgUser(UserCheckRequest $userCheckRequest, Organization $suborganization)
+    {
+        $data = $userCheckRequest->validated();
+        $exist_user_id = $suborganization->users()->where('user_id', $data['user_id'])->first();
+
+        if (!$exist_user_id) {
+            return response([
+                'message' => 'This user must be added in ' . $suborganization->name . ' organization first.',
+                'invited' => false,
+            ], 400);
+        }
+
+        return response([
+            'message' => 'Success',
+            'invited' => true,
         ], 200);
     }
 
@@ -116,7 +185,7 @@ class UserController extends Controller
         $data['email_verified_at'] = now();
 
         return \DB::transaction(function () use ($suborganization, $data) {
-        
+
             $user = $this->userRepository->create(Arr::except($data, ['role_id']));
             $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
 
@@ -146,7 +215,7 @@ class UserController extends Controller
         $data = $addNewUserrequest->validated();
 
         return \DB::transaction(function () use ($suborganization, $data) {
-            
+
             if (isset($data['password']) && $data['password'] !== '') {
                 $data['password'] = Hash::make($data['password']);
             }
