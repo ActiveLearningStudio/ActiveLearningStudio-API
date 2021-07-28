@@ -20,8 +20,8 @@ class SearchResource extends JsonResource
             $user = $this->playlist->project->users()->first();
         } elseif ($this->project) {
             $user = $this->project->users()->first();
-        } else {
-            $user = $this->users()->first();
+        } elseif ($this->users) {
+            $user = $this->users->first();
         }
 
         return [
@@ -35,7 +35,7 @@ class SearchResource extends JsonResource
             'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->modelType,
             'created_at' => $this->created_at,
-            'user' => new SearchUserResource($user)
+            'user' => isset($user) ? new SearchUserResource($user) : null
         ];
     }
 }
