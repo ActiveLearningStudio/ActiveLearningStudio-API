@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
-use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\SearchUserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +16,14 @@ class SearchResource extends JsonResource
      */
     public function toArray($request)
     {
+        if ($this->playlist && $this->playlist->project) {
+            $user = $this->playlist->project->users()->first();
+        } elseif ($this->project) {
+            $user = $this->project->users()->first();
+        } else {
+            $user = $this->users()->first();
+        }
+
         return [
             'id' => $this->id,
             'project_id' => isset($this->playlist) ? $this->playlist->project_id : (isset($this->project_id) ? $this->project_id : $this->id),
@@ -26,7 +34,8 @@ class SearchResource extends JsonResource
             'content' => $this->when(isset($this->content), $this->content),
             'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->modelType,
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+            'user' => new SearchUserResource($user)
         ];
     }
 }
