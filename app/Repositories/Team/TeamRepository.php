@@ -107,59 +107,44 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      */
     public function updateTeam($suborganization, $team, $data)
     {
-        $assigned_users = [];
-        $valid_users = [];
-        $invited_users = [];
-        $auth_user = auth()->user();
+        return \DB::transaction(function () use ($suborganization, $team, $data) {
 
-        foreach ($data['users'] as $user) {
-            $con_user = $this->userRepository->find($user['id']);
-            $userRow = $team->users()->find($user['id']);
+            $teamData = [];
+            $teamData['name'] = $data['name'];
+            $teamData['description'] = $data['description'];
 
-            if ($userRow) {
-                $valid_users[] = $con_user;
-                continue;
+            $this->update($teamData, $team->id);
+
+            $assigned_users = [];
+            $valid_users = [];
+
+            foreach ($data['users'] as $user) {
+                $con_user = $this->userRepository->find($user['id']);
+                $userRow = $team->users()->find($user['id']);
+                if ($userRow) {
+                    $valid_users[] = $con_user;
+                    continue;
+                }
+
+                $note = array_key_exists('note', $user) ? $user['note'] : '';
+
+                if ($con_user) {
+                    $team->users()->attach($con_user, ['team_role_type_id' => $user['role_id']]);
+                    $valid_users[] = $con_user;
+                    $assigned_users[] = [
+                        'user' => $con_user,
+                        'note' => $note
+                    ];
+                }
             }
 
-            $note = array_key_exists('note', $user) ? $user['note'] : '';
-            $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
+            $team->projects()->sync($data['projects']);
 
-            if ($con_user) {
-                $team->users()->attach($con_user, ['role' => 'collaborator', 'token' => $token]);
-                $con_user->token = $token;
-                $valid_users[] = $con_user;
-                $assigned_users[] = [
-                    'user' => $con_user,
-                    'note' => $note
-                ];
-            } elseif ($user['email']) {
-                $temp_user = new User(['email' => $user['email']]);
-                $temp_user->token = $token;
+            event(new TeamCreatedEvent($team, $data['projects'], $assigned_users));
+            $this->updateTeamProjectUser($team, $data['projects'], $valid_users);
 
-                // added org invitation for outside users
-                $inviteData['role_id'] = config('constants.member-role-id');
-                $inviteData['email'] = $user['email'];
-                $inviteData['note'] = $note;
-                $invited = $this->organizationRepository->inviteMember($auth_user, $suborganization, $inviteData);
-                // ended org invitation for outside users
-
-                $invited_users[] = [
-                    'invited_email' => $user['email'],
-                    'team_id' => $team->id,
-                    'token' => $token
-                ];
-            }
-        }
-
-        foreach ($invited_users as $invited_user) {
-            $this->invitedTeamUserRepository->create($invited_user);
-        }
-
-        $team->projects()->sync($data['projects']);
-
-        event(new TeamCreatedEvent($team, $data['projects'], $assigned_users));
-
-        $this->updateTeamProjectUser($team, $data['projects'], $valid_users);
+            return $team;
+        });
     }
 
     /**

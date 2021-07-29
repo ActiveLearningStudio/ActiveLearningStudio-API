@@ -31,8 +31,8 @@ class TeamRequest extends FormRequest
             'users.*.id'  => 'required|exists:App\User,id',
             'users.*.role_id'  => 'required|exists:App\Models\TeamRoleType,id',
             'users.*.email'  => 'required|email',
-            'projects' => 'required|array|exists:App\Models\Project,id',
-            'note' => 'string|min:0',
+            'projects' => 'required|array|exists:App\Models\Project,id,deleted_at,NULL',
+            'note' => 'string|max:200',
         ];
     }
 

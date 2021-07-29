@@ -687,15 +687,17 @@ class TeamController extends Controller
 
         $data = $teamUpdateRequest->validated();
 
-        $teamData = [];
-        $teamData['name'] = $data['name'];
-        $teamData['description'] = $data['description'];
+        foreach ($data['users'] as $user) {
+            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+            if (!$exist_user_id) {
+                return response([
+                    'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+                ], 500);
+            }
+        }
 
-        $is_updated = $this->teamRepository->update($teamData, $team->id);
-
-        if ($is_updated) {
-            $this->teamRepository->updateTeam($suborganization, $team, $data);
-
+        $team = $this->teamRepository->updateTeam($suborganization, $team, $data);
+        if ($team) {
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
             ], 200);
