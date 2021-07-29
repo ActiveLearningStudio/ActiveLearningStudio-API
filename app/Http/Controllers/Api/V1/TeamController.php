@@ -299,27 +299,25 @@ class TeamController extends Controller
     public function inviteMember(TeamInviteMemberRequest $inviteMemberRequest, Team $team)
     {
         $data = $inviteMemberRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
+        $user = $this->userRepository->findByField('email', $data['email']);
 
-        if ($owner->id === $auth_user->id) {
-            $user = $this->userRepository->findByField('email', $data['email']);
-            if ($user) {
-                $this->teamRepository->inviteToTeam($team, $user);
-
+        if ($user) {
+            $exist_user_id = $team->organization->users()->where('user_id', $user['id'])->first();
+            if (!$exist_user_id) {
                 return response([
-                    'message' => 'User has been invited to the team successfully.',
-                ], 200);
+                    'errors' => ['This user must be added in ' . $team->organization->name . ' organization first.'],
+                ], 500);
             }
+            $this->teamRepository->inviteToTeam($team, $user, $data['role_id']);
 
             return response([
-                'errors' => ['Failed to invite user to the team.'],
-            ], 500);
+                'message' => 'User has been invited to the team successfully.',
+            ], 200);
         }
 
         return response([
-            'message' => 'You do not have permission to invite user to the team.',
-        ], 403);
+            'errors' => ['Failed to invite user to the team.'],
+        ], 500);
     }
 
     /**
@@ -354,6 +352,15 @@ class TeamController extends Controller
     {
         $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $inviteMembersRequest->validated();
+
+        foreach ($data['users'] as $user) {
+            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+            if (!$exist_user_id) {
+                return response([
+                    'errors' => [$user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+                ], 500);
+            }
+        }
 
         $invited = $this->teamRepository->inviteMembers($suborganization, $team, $data);
 
