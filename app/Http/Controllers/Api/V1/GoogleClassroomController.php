@@ -29,6 +29,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\App;
 use App\Http\Resources\V1\ActivityResource;
+use App\Http\Resources\V1\H5pOrganizationResource;
 use App\Http\Resources\V1\PlaylistResource;
 
 /**
@@ -203,7 +204,7 @@ class GoogleClassroomController extends Controller
      * Get student's submission against a classwork
      *
      * Identifies student's submission on a classwork assignment.
-     * 
+     *
      * @urlParam classwork required The Id of a classwork. Example: 9
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
      * @bodyParam course_id string required The Google Classroom course id
@@ -274,13 +275,13 @@ class GoogleClassroomController extends Controller
             ], 500);
         }
     }
-    
+
     /**
      * TurnIn a student's submission
      *
      * Identifies student's submission on a classwork assignment.
      * Attaches a summary page link to the assignment, and turns it in.
-     * 
+     *
      * @urlParam classwork required The Id of a classwork. Example: 9
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
      * @bodyParam course_id string required The Google Classroom course id
@@ -330,7 +331,7 @@ class GoogleClassroomController extends Controller
 
                         // Turn in
                         $updatedSubmission = $service->turnIn($courseId, $classwork->classwork_id, $firstSubmissionId);
-                        
+
                         return response([
                             'message' => "The assignment has been turned in successfully.",
                         ], 200);
@@ -349,7 +350,7 @@ class GoogleClassroomController extends Controller
                     return response([
                         'errors' => ['Could not retrieve submission for this assignment id=' . $studentRes->id],
                     ], 500);
-                } 
+                }
             } else {
                 $response = json_decode($studentRes);
                 return response([
@@ -375,13 +376,13 @@ class GoogleClassroomController extends Controller
      *
      * If the user is a teacher, validate if he's one of the teachers in the class
      * If the user is authenticated and is a student, validate if the submission is his.
-     * 
+     *
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
      * @bodyParam student_id the google user id for the student
      * @bodyParam course_id string required The Google Classroom course id
      * @bodyParam gc_classwork_id string required The Id of the classwork
      * @bodyParam gc_submission_id string required The Id of the student's submission
-     * 
+     *
      * @responseFile responses/google-classroom/google-classroom-student.json
      *
      * @response  404 {
@@ -389,7 +390,7 @@ class GoogleClassroomController extends Controller
      *     "Either the entity was not found or you do not have permission to view it."
      *   ]
      * }
-     * 
+     *
      *
      * @param GCSummaryPageAccessRequest $summaryPageRequest
      * @return Response
@@ -499,6 +500,7 @@ class GoogleClassroomController extends Controller
             'h5p' => $h5p_data,
             'activity' => new ActivityResource($activity),
             'playlist' => new PlaylistResource($activity->playlist),
+            'organization' => new H5pOrganizationResource($activity->playlist->project->organization)
         ], 200);
     }
 }
