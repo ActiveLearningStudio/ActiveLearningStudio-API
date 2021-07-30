@@ -34,7 +34,10 @@ class SuborganizationSave extends FormRequest
             'users.*.user_id' => 'required_with:users.*.role_id|integer|exists:App\User,id',
             'users.*.role_id' => 'required_with:users.*.user_id|integer|exists:App\Models\OrganizationRoleType,id',
             'parent_id' => 'required|integer|exists:App\Models\Organization,id',
-            'self_registration' => 'boolean'
+            'self_registration' => 'boolean',
+            'account_id' => 'string|max:255',
+            'api_key' => 'string|max:255',
+            'unit_path' => 'string|max:255'
         ];
     }
 }
