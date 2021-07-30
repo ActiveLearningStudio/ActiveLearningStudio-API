@@ -23,7 +23,10 @@ class Organization extends Model
         'domain',
         'image',
         'parent_id',
-        'self_registration'
+        'self_registration',
+        'account_id',
+        'api_key',
+        'unit_path'
     ];
 
     /**

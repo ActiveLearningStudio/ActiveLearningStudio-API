@@ -54,12 +54,32 @@ class AuthServiceProvider extends ServiceProvider
 
         // Adding Gates for Publishing
         Gate::define('publish-to-lms', function ($user, $project) {
-            // If the project is either shared, or the user is admin, or if user is the owner, then allow to publish
-            return $project->shared === true || $user->isAdmin() || $this->hasPermission($user, $project);
+            // If the project is either a) indexed-approved, and its visibility is public, or  
+            // b) if user is the owner, then allow to publish
+            if (
+                ($project->indexing === config('constants.indexing-approved')
+                && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id'))
+                || $this->hasPermission($user, $project)
+                || $user->hasPermissionTo('project:publish', $project->organization)
+            ) {
+                return true;
+            }
+
+            return false;
+
         });
 
         Gate::define('fetch-lms-course', function ($user, $project) {
-            return $user->isAdmin() || $this->hasPermission($user, $project);
+            if (
+                ($project->indexing === config('constants.indexing-approved')
+                && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id'))
+                || $this->hasPermission($user, $project)
+                || $user->hasPermissionTo('project:publish', $project->organization)
+            ) {
+                return true;
+            }
+
+            return false;
         });
 
         Passport::routes();
@@ -75,15 +95,14 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @param User $user
      * @param Project $project
-     * @param $role
      * @return boolean
      * @access private
      */
-    private function hasPermission(User $user, Project $project, $role = null)
+    private function hasPermission(User $user, Project $project)
     {
-        $projectUsers = $project->users;
-        foreach ($projectUsers as $projectUser) {
-            if ($user->id === $projectUser->id && (!$role || $role === $projectUser->pivot->role)) {
+        $project_users = $project->users;
+        foreach ($project_users as $project_user) {
+            if ($user->id === $project_user->id) {
                 return true;
             }
         }

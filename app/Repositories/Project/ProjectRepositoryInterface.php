@@ -84,6 +84,14 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function statusUpdate($project);
 
     /**
+     * @param $authenticated_user
+     * @param $project
+     * @param $organization_id
+     * @return bool
+     */
+    public function favoriteUpdate($authenticated_user, $project, $organization_id);
+
+    /**
      * @param $data
      * @param $suborganization
      * @return mixed

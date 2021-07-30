@@ -192,7 +192,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             ]
         ]);
         $courseWork->setMaxpoints(100);
-        $courseWork->setState(self::COURSEWORK_STATE_PUBLISHED);
+        $courseWork->setState(self::COURSEWORK_STATE_DRAFT);
 
         return $this->service->courses_courseWork->create($data['course_id'], $courseWork);
     }
