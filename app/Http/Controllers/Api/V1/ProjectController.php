@@ -546,7 +546,7 @@ class ProjectController extends Controller
      */
     public function clone(Request $request, Organization $suborganization, Project $project)
     {
-        $this->authorize('clone', [Project::class, $suborganization]);
+        $this->authorize('clone', [Project::class, $project]);
 
         if ($request->user_id) {
             $user = User::find($request->user_id);

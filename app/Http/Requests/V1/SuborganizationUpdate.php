@@ -43,7 +43,10 @@ class SuborganizationUpdate extends FormRequest
                     $query->where('id', '<>', $suborganization->id);
                 }),
             ],
-            'self_registration' => 'boolean'
+            'self_registration' => 'boolean',
+            'account_id' => 'string|max:255',
+            'api_key' => 'string|max:255',
+            'unit_path' => 'string|max:255'
         ];
     }
 }

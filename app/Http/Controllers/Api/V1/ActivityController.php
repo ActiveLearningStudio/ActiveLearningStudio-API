@@ -534,7 +534,7 @@ class ActivityController extends Controller
      */
     public function clone(Request $request, Playlist $playlist, Activity $activity)
     {
-        $this->authorize('clone', [Activity::class, $activity->playlist->project->organization]);
+        $this->authorize('clone', [Activity::class, $activity->playlist->project]);
 
         CloneActivity::dispatch($playlist, $activity, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($activity->playlist_id == $playlist->id);
