@@ -29,6 +29,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\App;
 use App\Http\Resources\V1\ActivityResource;
+use App\Http\Resources\V1\H5pOrganizationResource;
 use App\Http\Resources\V1\PlaylistResource;
 
 /**
@@ -499,6 +500,7 @@ class GoogleClassroomController extends Controller
             'h5p' => $h5p_data,
             'activity' => new ActivityResource($activity),
             'playlist' => new PlaylistResource($activity->playlist),
+            'organization' => new H5pOrganizationResource($activity->playlist->project->organization),
         ], 200);
     }
 }
