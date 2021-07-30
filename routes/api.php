@@ -47,16 +47,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
-        Route::post('users/search', 'UserController@getAllUsers');
-        Route::post('suborganization/{suborganization}/users/search', 'UserController@getOrgUsers');
-        Route::post('suborganization/{suborganization}/users/check', 'UserController@checkOrgUser');
+        Route::post('users/search', 'UserController@getUsersForTeam');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
         ]);
 
-        // Teams
         Route::post('teams/invite', 'TeamController@inviteTeamMember');
         Route::post('teams/{team}/invite-member', 'TeamController@inviteMember');
         Route::post('suborganization/{suborganization}/teams/{team}/invite-members', 'TeamController@inviteMembers');
@@ -66,8 +63,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
         Route::get('suborganization/{suborganization}/get-teams', 'TeamController@getOrgTeams');
-        Route::get('suborganization/{suborganization}/team-role-types', 'TeamController@teamRoleTypes');
-        Route::get('suborganization/{suborganization}/team/{team}/team-permissions', 'TeamController@getUserTeamPermissions');
         Route::apiResource('suborganization.teams', 'TeamController');
 
         // Groups

@@ -247,28 +247,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
-     * Get a list of the organization users.
-     *
-     * @param $data
-     * @param Organization $organization
-     * @return mixed
-     */
-    public function getOrgUsers($data, $organization)
-    {
-        $organizationUserIds = $organization->users()->get()->modelKeys();
-        $childOrganizationUserIds = $this->getChildrenOrganizationUserIds($organization);
-
-        $userInIds = array_merge($organizationUserIds, $childOrganizationUserIds);
-
-        $this->query = $this->userRepository->model->when($data['search'] ?? null, function ($query) use ($data) {
-            $query->search(['email'], $data['search']);
-            return $query;
-        });
-
-        return $this->query->whereIn('id', $userInIds)->orderBy('email', 'asc')->paginate();
-    }
-
-    /**
      * Get the parent organizations user ids
      *
      * @param $userIds
@@ -286,25 +264,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         }
 
         return $userIds;
-    }
-
-    /**
-     * Get the children organizations user ids
-     *
-     * @param $organization
-     * @return array
-     */
-    public function getChildrenOrganizationUserIds($organization)
-    {
-        $ids = [];
-        $childOrganizations = $organization->children;
-
-        if ($childOrganizations) {
-            foreach ($childOrganizations as $childOrganization) {
-                $ids = $childOrganization->users()->get()->modelKeys();
-            }
-        }
-        return $ids;
     }
 
     /**
@@ -661,7 +620,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return $response;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-        }
+        } 
     }
 
         /**
@@ -675,7 +634,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return OrganizationPermissionType::all()->groupBy('feature');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-        }
+        } 
     }
 
     /**

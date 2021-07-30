@@ -24,10 +24,8 @@ class TeamInviteMembersRequest extends FormRequest
     public function rules()
     {
         return [
+            // 'users' => 'required|array|exists:users,id',
             'users' => 'required|array',
-            'users.*.id'  => 'required|exists:App\User,id',
-            'users.*.role_id'  => 'required|exists:App\Models\TeamRoleType,id',
-            'users.*.email'  => 'required|email',
             'note' => 'string',
         ];
     }

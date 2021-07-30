@@ -16,6 +16,7 @@ class InviteToTeamNotification extends Notification
 
     public $sender;
     public $team;
+    public $token;
     public $note;
 
     /**
@@ -23,13 +24,16 @@ class InviteToTeamNotification extends Notification
      *
      * @param $sender
      * @param $team
+     * @param $token
      * @param string $note
      */
-    public function __construct($sender, $team, $note = '')
+    public function __construct($sender, $team, $token, $note = '')
     {
         $this->sender = $sender;
         $this->team = $team;
+        $this->token = $token;
         $this->note = $note;
+        // $this->pageUrl = config('app.front_end_url') . '/teams/invite';
         $this->pageUrl = config('app.front_end_url');
     }
 
