@@ -68,6 +68,7 @@ class Content implements ControllerInterface
         $redirect_url = U::add_url_parm($redirect_url, 'PHPSESSID', session_id());
 
         if ( isset($_SESSION['lti_post']['lti_version']) && $_SESSION['lti_post']['lti_version'] === 'LTI-1p0' ) {
+            $custom_email_id = ParamValidate::getKeyInCustomFields($_SESSION, 'person_email_primary');
             // handle LTI 1.0
             $oauth_consumer_key = $_SESSION['lti_post']['oauth_consumer_key'];
             $content_item_return_url = isset($_SESSION['lti_post']['content_item_return_url']) ? $_SESSION['lti_post']['content_item_return_url'] : $_SESSION['lti_post']['tool_consumer_instance_url'];
@@ -76,6 +77,11 @@ class Content implements ControllerInterface
                         .'://'.parse_url($content_item_return_url, PHP_URL_HOST).$port;
             
             $studio_url = CURRIKI_STUDIO_HOST.'/lti/content/'.urlencode($lms_url).'/'.$oauth_consumer_key.'/'.urlencode($redirect_url);
+            if (!empty($custom_email_id)) {
+                $studio_url .= '?user_email=' . urlencode($custom_email_id);
+            } else{
+                die("You need to set 'person_email_primary' key in external tool settings!");
+            }
             $response = new RedirectResponse($studio_url);
             $response->send();
         }elseif ( isset($_SESSION['lti']['issuer_client']) ) {

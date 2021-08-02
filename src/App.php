@@ -67,16 +67,23 @@ class App
                     $gradetosend = U::get($_GET, 'final_grade') * 1.0;
                     $scorestr = "Your score of " . sprintf("%.2f%%", $gradetosend * 100) . " has been saved.";
                    
-                    $lti_data = $LTI->ltiParameterArray();       
-                    $grade_params['issuer_client'] = $lti_data['issuer_client'];
-                    $grade_params['lti13_privkey'] = $lti_data['lti13_privkey'];
-                    $grade_params['lti13_lineitem'] = $lti_data['lti13_lineitem'];
-                    $grade_params['lti13_token_url'] = $lti_data['lti13_token_url'];
-                    $grade_params['lti13_token_audience'] = $lti_data['lti13_token_audience'];
-                    $grade_params['lti13_pubkey'] = $lti_data['lti13_pubkey'];                
-                    $grade_params['lti13_subject_key'] = $lti_data['subject_key'];                
-                    $grade_params['note'] = "You've been graded.";
-                    $grade_params['result_id'] = $lti_data['result_id'];
+                    $lti_data = $LTI->ltiParameterArray();
+                    if ($_SESSION['lti_post']['lti_version'] == "LTI-1p0") {
+                        $grade_params = $lti_data;
+                        $grade_params['note'] = "You've been graded.";
+                        $grade_params['result_id'] = $lti_data['result_id'];
+                    }
+                    else {
+                        $grade_params['issuer_client'] = $lti_data['issuer_client'];
+                        $grade_params['lti13_privkey'] = $lti_data['lti13_privkey'];
+                        $grade_params['lti13_lineitem'] = $lti_data['lti13_lineitem'];
+                        $grade_params['lti13_token_url'] = $lti_data['lti13_token_url'];
+                        $grade_params['lti13_token_audience'] = $lti_data['lti13_token_audience'];
+                        $grade_params['lti13_pubkey'] = $lti_data['lti13_pubkey'];
+                        $grade_params['lti13_subject_key'] = $lti_data['subject_key'];
+                        $grade_params['note'] = "You've been graded.";
+                        $grade_params['result_id'] = $lti_data['result_id'];
+                    }
 
                     // LTI Submission Review - Canvas' Score API implementation
                     //Submission review link
@@ -90,14 +97,16 @@ class App
                     // encode user information.
                     $lti_submission_info = base64_encode($build_review_data);
 
-                    $grade_params['lti13_extra'] = [
-                        'https://canvas.instructure.com/lti/submission' => [
-                            "new_submission" => true,
-                            "submission_type" => "basic_lti_launch",
-                            "submission_data" => $CFG->wwwroot . '/mod/curriki/?submission=' . $lti_submission_info,
-                            "submitted_at" => date(DATE_RFC3339_EXTENDED),
-                        ]
-                    ];
+                    if ($_SESSION['lti_post']['lti_version'] != "LTI-1p0") {
+                        $grade_params['lti13_extra'] = [
+                            'https://canvas.instructure.com/lti/submission' => [
+                                "new_submission" => true,
+                                "submission_type" => "basic_lti_launch",
+                                "submission_data" => $CFG->wwwroot . '/mod/curriki/?submission=' . $lti_submission_info,
+                                "submitted_at" => date(DATE_RFC3339_EXTENDED),
+                            ]
+                        ];
+                    }
                     
                     // Use LTIX to send the grade back to the LMS.
                     // if you don't know the data to send when creating the response
