@@ -354,7 +354,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                                                 'scaled' => $data->score_scaled,
                                             ),
                                             'responses' => array($answer),
-                                            'duration' => ($data->duration) ? formatDuration($data->duration) : "00:00"
+                                            'duration' => $data->duration
                                         )
                                     );
                                 }

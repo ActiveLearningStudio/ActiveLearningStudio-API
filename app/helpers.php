@@ -255,25 +255,3 @@ if (!function_exists('html_escape')) {
         return htmlspecialchars($var, ENT_QUOTES, 'UTF-8', $double_encode);
     }
 }
-
-if (!function_exists('formatDuration')) {
-    /**
-     * Format 'duration' value in seconds to hh:mm:ss format
-     * e.g., PT24S to 0:24
-     * 
-     * @param string $duration
-     * @return string
-     */
-    function formatDuration($duration)
-    {
-        $raw_duration = str_replace(array('PT', 'S'), '', $duration);
-        $seconds = round($raw_duration);
-     
-        $formatted = sprintf('%02d:%02d', ($seconds / 60 % 60), $seconds % 60);
-        if (($seconds / 3600) >= 1) {
-            $formatted = sprintf('%02d:%02d:%02d', ($seconds / 3600), ($seconds / 60 % 60), $seconds % 60);
-        }
-
-        return $formatted;
-    }
-}
