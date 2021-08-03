@@ -138,6 +138,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function hasTeamPermissionTo($user, $permission, $team)
     {
+        if (is_null($team)) {
+            return true;
+        }
         $hasTeamPermissionTo =  $team->userRoles()
                             ->wherePivot('user_id', $user->id)
                             ->whereHas('permissions', function (Builder $query) use ($permission) {
