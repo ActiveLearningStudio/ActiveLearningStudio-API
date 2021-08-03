@@ -92,6 +92,41 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentOrganizationIds($organization, $organizationIds = [])
+    {
+        $organizationIds[] = $organization->id;
+        foreach ($organization->parent as $parent) {
+            $organizationIds = $this->getParentOrganizationIds($parent, $organizationIds);
+        }
+
+        return $organizationIds;
+    }
+
+    /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentChildrenOrganizationIds($organization)
+    {
+        dd($organization);
+        $parentIds = $this->getParentOrganizationIds($organization);
+        $childrenIds = $this->getSuborganizationIds($organization);
+
+        $parentChildrenOrganizationIds = $parentIds + $childrenIds;
+
+        return $parentChildrenOrganizationIds;
+    }
+
+    /**
      * To create a suborganization
      *
      * @param Organization $organization

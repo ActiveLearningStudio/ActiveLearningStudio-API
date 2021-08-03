@@ -10,6 +10,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     /**
      * @var string
      */
+    private $searchType;
+
+    /**
+     * @var string
+     */
     private $query;
 
     /**
@@ -71,6 +76,12 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
      * @var array
      */
     private $indexing;
+
+    public function searchType(string $searchType): self
+    {
+        $this->searchType = $searchType;
+        return $this;
+    }
 
     public function query(string $query): self
     {
@@ -183,6 +194,23 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
             ];
         }
 
+        if (!empty($this->searchType)) {
+            if ($this->searchType === 'dashboard') {
+                if (!empty($this->organizationIds)) {
+                    $queries[] = [
+                        'terms' => [
+                            'organization_id' => $this->organizationIds
+                        ]
+                    ];
+                }
+            } elseif ($this->searchType === 'advance-showcase') {
+                $organizationIdsShouldQueries[] = [
+                    'terms' => [
+                        'organization_visibility_type_id' => [config('constants.public-organization-visibility-type-id')]
+                    ]
+                ];
+            }
+        }
 
         if (empty($this->organizationIds) && !empty($this->organizationVisibilityTypeIds)) {
             if (in_array(null, $this->organizationVisibilityTypeIds, true)) {

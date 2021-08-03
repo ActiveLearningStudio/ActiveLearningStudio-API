@@ -18,23 +18,31 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
     private $h5pElasticsearchFieldRepository;
     private $client;
+    private $organizationRepository;
 
     /**
      * ActivityRepository constructor.
      *
      * @param Activity $model
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
+     * @param organizationRepositoryInterface $organizationRepository
      */
-    public function __construct(Activity $model, H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository)
+    public function __construct(
+        Activity $model,
+        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
+        OrganizationRepositoryInterface $organizationRepository
+    )
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
+        $this->organizationRepository = $organizationRepository;
     }
 
     /**
@@ -129,6 +137,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $counts = [];
         $projectIds = [];
+
+        // if (isset($data['searchType']) && $data['searchType'] === 'advance-showcase') {
+            $organization = $data['orgObj'];
+            dd($organization);
+            dd($this->organizationRepository->getParentChildrenOrganizationIds($organization));
+            dd($organization->children->pluck('id')->toArray());
+
+        // }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $userIds = $data['userIds'];

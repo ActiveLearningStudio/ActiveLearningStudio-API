@@ -22,7 +22,7 @@ class SearchRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
+    { dd('assad');
         return [
             'query' => 'string|max:255',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
