@@ -101,8 +101,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     public function getParentOrganizationIds($organization, $organizationIds = [])
     {
         $organizationIds[] = $organization->id;
-        foreach ($organization->parent as $parent) {
-            $organizationIds = $this->getParentOrganizationIds($parent, $organizationIds);
+
+        if ($organization->parent) {
+            foreach ($organization->parent as $parent) {
+                $organizationIds = $this->getParentOrganizationIds($parent, $organizationIds);
+            }
         }
 
         return $organizationIds;
@@ -117,7 +120,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function getParentChildrenOrganizationIds($organization)
     {
-        dd($organization);
         $parentIds = $this->getParentOrganizationIds($organization);
         $childrenIds = $this->getSuborganizationIds($organization);
 

@@ -24,25 +24,18 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 {
     private $h5pElasticsearchFieldRepository;
     private $client;
-    private $organizationRepository;
 
     /**
      * ActivityRepository constructor.
      *
      * @param Activity $model
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
-     * @param organizationRepositoryInterface $organizationRepository
      */
-    public function __construct(
-        Activity $model,
-        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
-        OrganizationRepositoryInterface $organizationRepository
-    )
+    public function __construct(Activity $model, H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository)
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
-        $this->organizationRepository = $organizationRepository;
     }
 
     /**
@@ -137,14 +130,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $counts = [];
         $projectIds = [];
+        $organizationParentChildrenIds = [];
 
-        // if (isset($data['searchType']) && $data['searchType'] === 'advance-showcase') {
+        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
             $organization = $data['orgObj'];
-            dd($organization);
-            dd($this->organizationRepository->getParentChildrenOrganizationIds($organization));
-            dd($organization->children->pluck('id')->toArray());
-
-        // }
+            $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
+        }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $userIds = $data['userIds'];
@@ -175,6 +166,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $searchResultQuery = $this->model->searchForm()
+            ->searchType(Arr::get($data, 'searchType', 0))
+            ->organizationParentChildrenIds($organizationParentChildrenIds)
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
             ->aggregate('count_by_index', [

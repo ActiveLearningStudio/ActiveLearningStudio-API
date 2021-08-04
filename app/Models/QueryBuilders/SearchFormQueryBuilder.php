@@ -10,6 +10,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
     /**
      * @var string
      */
+    private $organizationParentChildrenIds;
+
+    /**
+     * @var string
+     */
     private $searchType;
 
     /**
@@ -76,6 +81,12 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
      * @var array
      */
     private $indexing;
+
+    public function organizationParentChildrenIds(array $organizationParentChildrenIds): self
+    {
+        $this->organizationParentChildrenIds = $organizationParentChildrenIds;
+        return $this;
+    }
 
     public function searchType(string $searchType): self
     {
@@ -195,7 +206,11 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
         }
 
         if (!empty($this->searchType)) {
-            if ($this->searchType === 'dashboard') {
+            if (
+                $this->searchType === 'my_projects'
+                || $this->searchType === 'org_projects_admin'
+                || $this->searchType === 'org_projects_non_admin'
+            ) {
                 if (!empty($this->organizationIds)) {
                     $queries[] = [
                         'terms' => [
@@ -203,55 +218,76 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                         ]
                     ];
                 }
-            } elseif ($this->searchType === 'advance-showcase') {
+
+                if ($this->searchType === 'org_projects_non_admin') {
+                    $queries[] = [
+                        'bool' => [
+                            'must_not' => [
+                                [
+                                    'terms' => [
+                                        'organization_visibility_type_id' => [config('constants.private-organization-visibility-type-id')]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ];
+                }
+            } elseif ($this->searchType === 'showcase_projects') {
+                // Get all public items
                 $organizationIdsShouldQueries[] = [
                     'terms' => [
                         'organization_visibility_type_id' => [config('constants.public-organization-visibility-type-id')]
                     ]
                 ];
-            }
-        }
 
-        if (empty($this->organizationIds) && !empty($this->organizationVisibilityTypeIds)) {
-            if (in_array(null, $this->organizationVisibilityTypeIds, true)) {
+                // Get all global items
+                $globalOrganizationIdsQueries[] = [
+                    'terms' => [
+                        'organization_id' => $this->organizationParentChildrenIds
+                    ]
+                ];
+
+                $globalOrganizationIdsQueries[] = [
+                    'terms' => [
+                        'organization_visibility_type_id' => [config('constants.global-organization-visibility-type-id')]
+                    ]
+                ];
+
+                $organizationIdsShouldQueries[] = [
+                    'bool' => [
+                        'must' => $globalOrganizationIdsQueries
+                    ]
+                ];
+
+                // Get all protected items
+                $protectedOrganizationIdsQueries[] = [
+                    'terms' => [
+                        'organization_id' => $this->organizationIds
+                    ]
+                ];
+
+                $protectedOrganizationIdsQueries[] = [
+                    'terms' => [
+                        'organization_visibility_type_id' => [config('constants.protected-organization-visibility-type-id')]
+                    ]
+                ];
+
+                $organizationIdsShouldQueries[] = [
+                    'bool' => [
+                        'must' => $protectedOrganizationIdsQueries
+                    ]
+                ];
+
                 $queries[] = [
                     'bool' => [
-                        'should' => [
-                            [
-                                'terms' => [
-                                    'organization_visibility_type_id' => array_values(array_filter($this->organizationVisibilityTypeIds))
-                                ]
-                            ],
-                            [
-                                'bool' => [
-                                    'must_not' => [
-                                        'exists' => [
-                                            'field' => 'organization_visibility_type_id'
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ];
-            } else {
-                $queries[] = [
-                    'terms' => [
-                        'organization_visibility_type_id' => $this->organizationVisibilityTypeIds
+                        'should' => $organizationIdsShouldQueries
                     ]
                 ];
             }
-        } elseif (!empty($this->organizationIds)) {
-
-            $organizationIdsQueries[] = [
-                'terms' => [
-                    'organization_id' => $this->organizationIds
-                ]
-            ];
-
+        } else {
             if (!empty($this->organizationVisibilityTypeIds)) {
                 if (in_array(null, $this->organizationVisibilityTypeIds, true)) {
-                    $organizationIdsQueries[] = [
+                    $queries[] = [
                         'bool' => [
                             'should' => [
                                 [
@@ -272,36 +308,13 @@ final class SearchFormQueryBuilder implements QueryBuilderInterface
                         ]
                     ];
                 } else {
-                    $organizationIdsQueries[] = [
+                    $queries[] = [
                         'terms' => [
                             'organization_visibility_type_id' => $this->organizationVisibilityTypeIds
                         ]
                     ];
                 }
-
-                $globalPublicVisibilityTypeIds = [config('constants.global-organization-visibility-type-id'), config('constants.public-organization-visibility-type-id')];
-                $commonVisibilityTypeIds = array_values(array_intersect($this->organizationVisibilityTypeIds, $globalPublicVisibilityTypeIds));
-
-                if (!empty($commonVisibilityTypeIds)) {
-                    $organizationIdsShouldQueries[] = [
-                        'terms' => [
-                            'organization_visibility_type_id' => $commonVisibilityTypeIds
-                        ]
-                    ];
-                }
             }
-
-            $organizationIdsShouldQueries[] = [
-                'bool' => [
-                    'must' => $organizationIdsQueries
-                ]
-            ];
-
-            $queries[] = [
-                'bool' => [
-                    'should' => $organizationIdsShouldQueries
-                ]
-            ];
         }
 
         if (!empty($this->subjectIds)) {

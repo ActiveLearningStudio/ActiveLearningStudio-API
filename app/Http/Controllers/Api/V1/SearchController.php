@@ -113,21 +113,21 @@ class SearchController extends Controller
     public function advance(SearchRequest $searchRequest)
     {
         $data = $searchRequest->validated();
-dd($data);
+
         $organization = $this->organizationRepository->find($data['organization_id']);
         $this->authorize('advanceSearch', $organization);
-dd($organization);
+
         $data['organizationIds'] = [$data['organization_id']];
         $data['orgObj'] = $organization;
 
-        if (!auth()->user()->hasPermissionTo('organization:view', $organization)) {
-            $data['organizationVisibilityTypeIds'] = [null, config('constants.public-organization-visibility-type-id')];
+        if ($data['searchType'] === 'showcase_projects') {
             $data['indexing'] = [config('constants.indexing-approved')];
-            $data['searchType'] = 'advance-showcase';
-        } elseif (isset($data['query'])) {
-            $data['organizationVisibilityTypeIds'] = [null, config('constants.public-organization-visibility-type-id')];
-            $data['indexing'] = [config('constants.indexing-approved')];
-            $data['searchType'] = 'advance-showcase';
+        } elseif ($data['searchType'] === 'org_projects') {
+            if (!auth()->user()->hasPermissionTo('organization:view', $organization)) {
+                $data['searchType'] = 'org_projects_non_admin';
+            } else {
+                $data['searchType'] = 'org_projects_admin';
+            }
         }
 
         $results = $this->activityRepository->advanceSearchForm($data);
