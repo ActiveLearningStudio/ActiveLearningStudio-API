@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -129,6 +130,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $counts = [];
         $projectIds = [];
+        $organizationParentChildrenIds = [];
+
+        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
+            $organization = $data['orgObj'];
+            $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
+        }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $userIds = $data['userIds'];
@@ -159,6 +166,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $searchResultQuery = $this->model->searchForm()
+            ->searchType(Arr::get($data, 'searchType', 0))
+            ->organizationParentChildrenIds($organizationParentChildrenIds)
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
             ->aggregate('count_by_index', [
