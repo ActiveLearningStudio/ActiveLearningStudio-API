@@ -34,7 +34,9 @@ class App
            
             $course_id = ParamValidate::getKeyInCustomFields($_SESSION, 'course_id');
             $custom_email_id = ParamValidate::getKeyInCustomFields($_SESSION, 'person_email_primary');
-            
+            $custom_course_sis_id = ParamValidate::getKeyInCustomFields($_SESSION, 'course_sis_id');
+            $custom_course_code = ParamValidate::getKeyInCustomFields($_SESSION, 'course_code');
+
             // $LTI->var_dump();
             // Obtain User ID
             $user_id = $LTI->user->id; //TSUGI member ID
@@ -141,7 +143,7 @@ class App
                 $lti_token_params = http_build_query($_SESSION['lti_post']);
                 $activity_studio_link = CURRIKI_STUDIO_HOST . "/lti-tools/activity/$activity_id";
                 $redirect_to_studio_url = $activity_studio_link . "?" . $lti_token_params;
-                foreach(['user_id', 'tool_platform', 'is_learner', 'submission_id', 'course_id'] as $extra_param) {
+                foreach(['user_id', 'tool_platform', 'is_learner', 'submission_id', 'course_id', 'custom_course_sis_id', 'custom_course_code'] as $extra_param) {
                     $redirect_to_studio_url .= '&' . $extra_param . '=' . urlencode($$extra_param);
                 }
                 $redirect_to_studio_url .= '&homepage=' . urlencode($CFG->wwwroot);
