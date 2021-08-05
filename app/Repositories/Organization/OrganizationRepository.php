@@ -612,7 +612,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             }
         ])
         ->when($data['query'] ?? null, function ($query) use ($data) {
-            $query->where('email', 'like', '%' . $data['query'] . '%');
+            $query->where('email', 'like', '%' . str_replace("_","\_", $data['query']) . '%');
             return $query;
         })
         ->paginate($perPage);
