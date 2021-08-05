@@ -103,9 +103,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         $organizationIds[] = $organization->id;
 
         if ($organization->parent) {
-            foreach ($organization->parent as $parent) {
-                $organizationIds = $this->getParentOrganizationIds($parent, $organizationIds);
-            }
+            $organizationIds = $this->getParentOrganizationIds($organization->parent, $organizationIds);
         }
 
         return $organizationIds;
