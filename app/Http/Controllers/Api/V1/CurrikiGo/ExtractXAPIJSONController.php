@@ -151,6 +151,12 @@ class ExtractXAPIJSONController extends Controller
                 if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
                     $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
+
+                    if(empty($glassAltCourseId)) {
+                        $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_ID);
+                        $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_CODE);
+                    }
+
                     $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
                     $chapterName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_NAME);
                     $chapterIndex = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_INDEX);
