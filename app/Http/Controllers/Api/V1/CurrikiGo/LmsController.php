@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api\V1\CurrikiGo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ProjectPublicResource;
+use App\Http\Resources\V1\SearchResource;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
+use App\Models\Project;
 
 /**
  * @group 9. LMS Settings
@@ -52,25 +54,51 @@ class LmsController extends Controller
     // TODO: need to update
     public function projects(Request $request)
     {
-        // TODO: need to update validation
-        $validator = Validator::make($request->all(), [
-            'lti_client_id' => 'required',
-            'user_email' => 'required|email',
-        ]);
+        if ($request->mode === 'browse') {
+            $validator = Validator::make($request->all(), [
+                'lti_client_id' => 'required',
+                'user_email' => 'required|email',
+            ]);
 
-        if ($validator->fails()) {
-            $messages = $validator->messages();
-            return response(['error' => $messages], 400);
+            if ($validator->fails()) {
+                $messages = $validator->messages();
+                return response(['error' => $messages], 400);
+            }
+
+            $projects = $this->projectRepository->fetchByLtiClientAndEmail(
+                $request->input('lti_client_id'),
+                $request->input('user_email')
+            );
+
+            return response([
+                'projects' => SearchResource::collection($projects),
+            ], 200);
         }
 
-        $projects = $this->projectRepository->fetchByLtiClientAndEmail(
-            $request->input('lti_client_id'),
-            $request->input('user_email')
-        );
+        if ($request->mode === 'search') {
+            $request->validate([
+                'query' => 'string|max:255',
+                'from' => 'integer',
+                'subject' => 'string|max:255',
+                'level' => 'string|max:255',
+                'start' => 'string|max:255',
+                'end' => 'string|max:255',
+                'author' => 'string|max:255',
+                'private' => 'integer',
+                'userEmail' => 'string|required|max:255',
+                'ltiClientId' => 'string|required',
+            ]);
 
-        return response([
-            'projects' => ProjectPublicResource::collection($projects),
-        ], 200);
+            return response([
+                'projects' => $this->activityRepository->ltiSearchForm($request),
+            ], 200);            
+        }
+    }
+
+    public function project(Project $project) {
+            return response([
+                'project' => new ProjectPublicResource($project),
+            ], 200);
     }
 
     public function activities(Request $request)

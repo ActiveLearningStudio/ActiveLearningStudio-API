@@ -24,7 +24,7 @@ class SuborganizationInviteMember extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|unique:invited_organization_users,invited_email',
+            'email' => 'required|email|max:255',
             'note' => 'string',
             'role_id' => 'required|integer|exists:organization_role_types,id'
         ];

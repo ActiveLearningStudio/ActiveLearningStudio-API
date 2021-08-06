@@ -88,12 +88,19 @@ class ActivityPolicy
      * Determine whether the user can clone the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function clone(User $user, Organization $suborganization)
+    public function clone(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:duplicate', $suborganization);
+        if (
+            $project->indexing === config('constants.indexing-approved')
+            && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id')
+        ) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('activity:duplicate', $project->organization);
     }
 
     /**
