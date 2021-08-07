@@ -1,4 +1,4 @@
-node("currikistage") {
+node("currikidev") {
     def app     
     def redis
     def esmigrate
@@ -46,17 +46,17 @@ node("currikistage") {
     
      parallel(
             "StageA": {
-                if(Jenkins.instance.getNode('currikistage').toComputer().isOnline()){
-                    node('currikistage') {
-                        stage ('currikistage') {
+                if(Jenkins.instance.getNode('currikiprod').toComputer().isOnline()){
+                    node('currikiprod') {
+                        stage ('currikiprod') {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-stage.yml currikistack" 
+                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
                                 echo 'Copy completed'
                         }
                     }
                 } else {
-                    stage ('currikistage') {
-                        echo "currikistage is offline"
+                    stage ('currikiprod') {
+                        echo "currikiprod is offline"
                         exit 1
                     }
                 }
