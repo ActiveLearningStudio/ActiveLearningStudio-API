@@ -99,11 +99,11 @@ interface LearnerRecordStoreConstantsInterface
     const EXTENSION_GCLASS_ENROLLMENT_CODE = 'http://currikistudio.org/x-api/gclass-enrollment-code';
 
     /**
-     * LMS Course ID
+     * LMS Api Domain URL
      *
      * @var string
      */
-    const EXTENSION_LMS_COURSE_ID = 'http://currikistudio.org/x-api/lms-course-id';
+    const EXTENSION_LMS_DOMAIN_URL = 'http://currikistudio.org/x-api/lms-domain-url';
 
     /**
      * LMS Course Code
