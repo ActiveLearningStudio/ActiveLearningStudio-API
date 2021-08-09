@@ -47,7 +47,7 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
             $data['guardians_enabled'] = $course->guardiansEnabled;
             $data['calendar_id'] = $course->calendarId;
 
-            if ($item = GoogleClassroom::create($data)) {
+            if ($item = $this->model->create($data)) {
                 return $item;
             }
         } catch (\Exception $e) {
