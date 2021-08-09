@@ -274,9 +274,9 @@ class GoogleClassroom implements GoogleClassroomInterface
                 'courseState' => self::COURSE_CREATE_STATE
             ];
             $course = $this->createCourse($courseData);
-            $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         }
 
+        $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         $return = GCCourseResource::make($course)->resolve();
 
         // inserting playlists/topics to Classroom

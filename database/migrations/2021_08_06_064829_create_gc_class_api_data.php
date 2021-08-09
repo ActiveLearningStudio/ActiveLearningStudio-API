@@ -17,7 +17,7 @@ class CreateGcClassApiData extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->text('course_id');
+            $table->string('course_id');
             $table->string('name')->nullable();
             $table->string('section')->nullable();
             $table->text('description_heading')->nullable();
