@@ -172,7 +172,8 @@ class GoogleClassroomController extends Controller
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
      * @return Response
 	 */
-    public function copyProject(Project $project, GCCopyProjectRequest $copyProjectRequest, GcClassworkRepositoryInterface $gcClassworkRepository, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    public function copyProject(Project $project, GCCopyProjectRequest $copyProjectRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
+        GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {

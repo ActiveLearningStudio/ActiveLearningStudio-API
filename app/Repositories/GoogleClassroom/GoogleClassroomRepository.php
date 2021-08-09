@@ -21,7 +21,7 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
     }
 
     /**
-     * save course share to Google classroom
+     * Save course share to Google classroom
      *
      * @param $course
      * @return Response

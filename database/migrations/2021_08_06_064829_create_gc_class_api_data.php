@@ -25,7 +25,8 @@ class CreateGcClassApiData extends Migration
             $table->string('room')->nullable();
             $table->string('owner_id')->nullable();
             $table->string('enrollment_code')->nullable();
-            $table->enum('course_state', ['COURSE_STATE_UNSPECIFIED', 'ACTIVE', 'ARCHIVED', 'PROVISIONED', 'DECLINED', 'SUSPENDED'])->default('COURSE_STATE_UNSPECIFIED');
+            $table->enum('course_state', ['COURSE_STATE_UNSPECIFIED', 'ACTIVE', 'ARCHIVED', 'PROVISIONED', 'DECLINED', 'SUSPENDED'])
+                ->default('COURSE_STATE_UNSPECIFIED');
             $table->string('alternate_link')->nullable();
             $table->string('teacher_group_email')->nullable();
             $table->string('course_group_email')->nullable();
