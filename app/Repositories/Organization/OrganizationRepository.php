@@ -92,6 +92,41 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentOrganizationIds($organization, $organizationIds = [])
+    {
+        $organizationIds[] = $organization->id;
+
+        if ($organization->parent) {
+            $organizationIds = $this->getParentOrganizationIds($organization->parent, $organizationIds);
+        }
+
+        return $organizationIds;
+    }
+
+    /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentChildrenOrganizationIds($organization)
+    {
+        $parentIds = $this->getParentOrganizationIds($organization);
+        $childrenIds = $this->getSuborganizationIds($organization);
+
+        $parentChildrenOrganizationIds = $parentIds + $childrenIds;
+
+        return $parentChildrenOrganizationIds;
+    }
+
+    /**
      * To create a suborganization
      *
      * @param Organization $organization
@@ -577,7 +612,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             }
         ])
         ->when($data['query'] ?? null, function ($query) use ($data) {
-            $query->where('email', 'like', '%' . $data['query'] . '%');
+            $query->where('email', 'like', '%' . str_replace("_","\_", $data['query']) . '%');
             return $query;
         })
         ->paginate($perPage);
