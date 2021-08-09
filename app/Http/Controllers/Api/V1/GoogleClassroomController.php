@@ -20,6 +20,7 @@ use App\Http\Resources\V1\GCSubmissionResource;
 use App\Models\Project;
 use App\Models\Activity;
 use App\Models\GcClasswork;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Services\GoogleClassroom;
@@ -167,9 +168,12 @@ class GoogleClassroomController extends Controller
      *
      * @param Project $project
      * @param GCCopyProjectRequest $copyProjectRequest
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
      * @return Response
 	 */
-    public function copyProject(Project $project, GCCopyProjectRequest $copyProjectRequest, GcClassworkRepositoryInterface $gcClassworkRepository)
+    public function copyProject(Project $project, GCCopyProjectRequest $copyProjectRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
+        GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         $authUser = auth()->user();
         if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {
@@ -184,7 +188,7 @@ class GoogleClassroomController extends Controller
             $courseId = $data['course_id'] ?? 0;
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $course = $service->createProjectAsCourse($project, $courseId);
+            $course = $service->createProjectAsCourse($project, $courseId, $googleClassroomRepository);
 
             return response([
                 'course' => $course,
