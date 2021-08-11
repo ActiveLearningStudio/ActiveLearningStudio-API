@@ -298,6 +298,8 @@ class TeamController extends Controller
      */
     public function inviteMember(TeamInviteMemberRequest $inviteMemberRequest, Team $team)
     {
+        $this->authorize('addTeamUsers', [Team::class, $team]);
+
         $data = $inviteMemberRequest->validated();
         $user = $this->userRepository->findByField('email', $data['email']);
 
@@ -404,7 +406,7 @@ class TeamController extends Controller
      */
     public function removeMember(TeamRemoveMemberRequest $removeMemberRequest, Team $team)
     {
-        $this->authorize('addTeamUsers', [Team::class, $team]);
+        $this->authorize('removeTeamUsers', [Team::class, $team]);
         $data = $removeMemberRequest->validated();
         $auth_user = auth()->user();
         $owner = $team->getUserAttribute();
@@ -466,34 +468,22 @@ class TeamController extends Controller
      */
     public function addProjects(TeamAddProjectRequest $addProjectRequest, Team $team)
     {
+        $this->authorize('addProjects', [Team::class, $team]);
         $data = $addProjectRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
         $assigned_projects = [];
 
-        if ($owner->id === $auth_user->id || $this->authorize('addProjects', [Team::class, $team])) {
-            foreach ($data['ids'] as $project_id) {
-                $project = $this->projectRepository->find($project_id);
-                if ($project) {
-                    $team->projects()->attach($project);
-                    $assigned_projects[] = $project;
-                }
+        foreach ($data['ids'] as $project_id) {
+            $project = $this->projectRepository->find($project_id);
+            if ($project) {
+                $team->projects()->attach($project);
+                $assigned_projects[] = $project;
             }
-
-            $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
-
-            return response([
-                'message' => 'Projects have been added to the team successfully.',
-            ], 200);
-        } elseif ($owner->id !== $auth_user->id) {
-            return response([
-                'message' => 'You do not have permission to add projects to the team.',
-            ], 403);
         }
+        $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
 
         return response([
-            'errors' => ['Failed to add projects to the team.'],
-        ], 500);
+            'message' => 'Projects have been added to the team successfully.',
+        ], 200);
     }
 
     /**
@@ -525,26 +515,18 @@ class TeamController extends Controller
      */
     public function removeProject(TeamRemoveProjectRequest $removeProjectRequest, Team $team)
     {
+        $this->authorize('removeProject', [Team::class, $team]);
         $data = $removeProjectRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
+        $project = $this->projectRepository->find($data['id']);
 
-        if ($owner->id === $auth_user->id || $this->authorize('removeProject', [Team::class, $team])) {
-            $project = $this->projectRepository->find($data['id']);
+        if ($project) {
+            $team->projects()->detach($project);
 
-            if ($project) {
-                $team->projects()->detach($project);
+            $this->teamRepository->removeTeamUserProject($team, $project);
 
-                $this->teamRepository->removeTeamUserProject($team, $project);
-
-                return response([
-                    'message' => 'Project has been removed from the team successfully.',
-                ], 200);
-            }
-        } else {
             return response([
-                'message' => 'You do not have permission to remove project from the team.',
-            ], 403);
+                'message' => 'Project has been removed from the team successfully.',
+            ], 200);
         }
 
         return response([
@@ -582,33 +564,21 @@ class TeamController extends Controller
      */
     public function addMembersToProject(TeamAddMemberRequest $addMemberRequest, Team $team, Project $project)
     {
+        $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $addMemberRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
         $assigned_members = [];
 
-        if ($owner->id === $auth_user->id) {
-            foreach ($data['ids'] as $member_id) {
-                $member = $this->userRepository->find($member_id);
-                if ($member) {
-                    $assigned_members[] = $member;
-                }
+        foreach ($data['ids'] as $member_id) {
+            $member = $this->userRepository->find($member_id);
+            if ($member) {
+                $assigned_members[] = $member;
             }
-
-            $this->teamRepository->assignMembersToTeamProject($team, $project, $assigned_members);
-
-            return response([
-                'message' => 'Members have been added to the team project successfully.',
-            ], 200);
-        } elseif ($owner->id !== $auth_user->id) {
-            return response([
-                'message' => 'You do not have permission to add members to the team project.',
-            ], 403);
         }
+        $this->teamRepository->assignMembersToTeamProject($team, $project, $assigned_members);
 
         return response([
-            'errors' => ['Failed to add members to the team project.'],
-        ], 500);
+            'message' => 'Members have been added to the team project successfully.',
+        ], 200);
     }
 
     /**
@@ -641,24 +611,15 @@ class TeamController extends Controller
      */
     public function removeMemberFromProject(TeamRemoveMemberRequest $removeMemberRequest, Team $team, Project $project)
     {
+        $this->authorize('removeTeamUsers', [Team::class, $team]);
         $data = $removeMemberRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
+        $user = $this->userRepository->find($data['id']);
 
-        if ($owner->id === $auth_user->id) {
-            $user = $this->userRepository->find($data['id']);
-
-            if ($user) {
-                $this->teamRepository->removeMemberFromTeamProject($team, $project, $user);
-
-                return response([
-                    'message' => 'Member has been removed from the team project successfully.',
-                ], 200);
-            }
-        } else {
+        if ($user) {
+            $this->teamRepository->removeMemberFromTeamProject($team, $project, $user);
             return response([
-                'message' => 'You do not have permission to remove member from the team project.',
-            ], 403);
+                'message' => 'Member has been removed from the team project successfully.',
+            ], 200);
         }
 
         return response([
