@@ -143,6 +143,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                                 $query->where('name', '=', 'organization:create');
                             })->get();
 
+        $organizationUserAdminRolesids = $organizationUserRoles->pluck('id')->toArray();
+
+        $organizationUserRolesNonAdmin = $organization->roles()
+                            ->whereNotIn('id', $organizationUserAdminRolesids)
+                            ->get();
+
         if (isset($data['admins'])) {
             $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
         }
@@ -178,6 +184,17 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                             $userRoles[$organizationUserRoleUser->id] = ['organization_role_type_id' => $role->id];
                         }
                     }
+                }
+            }
+
+            foreach ($organizationUserRolesNonAdmin as $organizationUserRole) {
+                if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
+                    $subOrganizationUserRolesData['name'] = $organizationUserRole->name;
+                    $subOrganizationUserRolesData['display_name'] = $organizationUserRole->display_name;
+                    $subOrganizationUserRolesData['permissions'] = $organizationUserRole->permissions->pluck('id')->toArray();
+                    $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
+
+                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
                 }
             }
 
