@@ -41,11 +41,12 @@ class ActivityPolicy
      *
      * @param User $user
      * @param Organization $suborganization
+     * @param $team
      * @return mixed
      */
-    public function create(User $user, Organization $suborganization)
+    public function create(User $user, Organization $suborganization, $team)
     {
-        return $user->hasPermissionTo('activity:create', $suborganization);
+        return $user->hasPermissionTo('activity:create', $suborganization) || $user->hasTeamPermissionTo('team:add-activity', $team);
     }
 
     /**
@@ -53,11 +54,12 @@ class ActivityPolicy
      *
      * @param User $user
      * @param Organization $suborganization
+     * @param $team
      * @return mixed
      */
-    public function update(User $user, Organization $suborganization)
+    public function update(User $user, Organization $suborganization, $team)
     {
-        return $user->hasPermissionTo('activity:edit', $suborganization);
+        return $user->hasPermissionTo('activity:edit', $suborganization) || $user->hasTeamPermissionTo('team:edit-activity', $team);
     }
 
     /**
@@ -65,11 +67,12 @@ class ActivityPolicy
      *
      * @param User $user
      * @param Organization $suborganization
+     * @param $team
      * @return mixed
      */
-    public function delete(User $user, Organization $suborganization)
+    public function delete(User $user, Organization $suborganization, $team)
     {
-        return $user->hasPermissionTo('activity:delete', $suborganization);
+        return $user->hasPermissionTo('activity:delete', $suborganization) || $user->hasTeamPermissionTo('team:delete-activity', $team);
     }
 
     /**

@@ -27,7 +27,9 @@ class ProjectUpdateRequest extends FormRequest
             'name' => 'required|string|max:80',
             'description' => 'required|string|max:1000',
             'thumb_url' => 'required',
-            'organization_visibility_type_id' => 'required|exists:organization_visibility_types,id'
+            'organization_visibility_type_id' => 'required|exists:organization_visibility_types,id',
+            'user_id' => 'integer|exists:users,id',
+            'shared' => 'boolean'
         ];
     }
 }
