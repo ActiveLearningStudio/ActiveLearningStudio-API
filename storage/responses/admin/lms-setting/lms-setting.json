@@ -21,6 +21,21 @@
             "organization_type": null,
             "is_admin": false,
             "organization_name": ""
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": false,
+            "account_id": "test123",
+            "api_key": "test",
+            "unit_path": "path"
         }
     }
 }

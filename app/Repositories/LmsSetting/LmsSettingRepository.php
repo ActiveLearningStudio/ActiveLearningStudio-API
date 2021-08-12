@@ -27,7 +27,7 @@ class LmsSettingRepository extends BaseRepository
      * @param $data
      * @return mixed
      */
-    public function getAll($data)
+    public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
@@ -42,7 +42,7 @@ class LmsSettingRepository extends BaseRepository
             $query = $query->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
         }
 
-        return $query->with('user')->paginate($perPage);
+        return $query->with(['user', 'organization'])->where('organization_id', $suborganization->id)->paginate($perPage);
     }
 
     /**
