@@ -8,6 +8,7 @@ use App\Http\Requests\V1\StoreLmsSetting;
 use App\Http\Requests\V1\UpdateLmsSetting;
 use App\Http\Resources\V1\LmsSettingCollection;
 use App\Http\Resources\V1\LmsSettingResource;
+use App\Models\Organization;
 use App\Repositories\LmsSetting\LmsSettingRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -39,6 +40,7 @@ class LmsSettingsController extends Controller
      *
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      *
+     * @queryParam Organization $suborganization
      * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
      * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
      *
@@ -47,9 +49,9 @@ class LmsSettingsController extends Controller
      * @param Request $request
      * @return LmsSettingCollection
      */
-    public function index(Request $request)
+    public function index(Request $request, Organization $suborganization)
     {
-        $collections = $this->lmsSettingRepository->getAll($request->all());
+        $collections = $this->lmsSettingRepository->getAll($request->all(), $suborganization);
         return new LmsSettingCollection($collections);
     }
 
@@ -59,17 +61,18 @@ class LmsSettingsController extends Controller
      * Get the specified lms setting data.
      *
      * @urlParam lms_setting required The Id of a lms setting Example: 1
+     * @urlParam Organization $suborganization
      *
      * @responseFile responses/admin/lms-setting/lms-setting.json
      *
-     * @param $id
      * @return LmsSettingResource
+     * @param $id
      * @throws GeneralException
      */
-    public function show($id)
+    public function show(Organization $suborganization, $id)
     {
         $setting = $this->lmsSettingRepository->find($id);
-        return new LmsSettingResource($setting->load('user'));
+        return new LmsSettingResource($setting->load('user', 'organization'));
     }
 
     /**
@@ -89,14 +92,15 @@ class LmsSettingsController extends Controller
      * }
      *
      * @param StoreLmsSetting $request
+     * @param Organization $suborganization
      * @return LmsSettingResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function store(StoreLmsSetting $request)
+    public function store(StoreLmsSetting $request, Organization $suborganization)
     {
         $validated = $request->validated();
         $response = $this->lmsSettingRepository->create($validated);
-        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user'))], 200);
+        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user', 'organization'))], 200);
     }
 
     /**
@@ -118,15 +122,16 @@ class LmsSettingsController extends Controller
      * }
      *
      * @param StoreLmsSetting $request
+     * @param Organization $suborganization
      * @param $id
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function update(UpdateLmsSetting $request, $id)
+    public function update(UpdateLmsSetting $request, Organization $suborganization, $id)
     {
         $validated = $request->validated();
         $response = $this->lmsSettingRepository->update($id, $validated);
-        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user'))], 200);
+        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user', 'organization'))], 200);
     }
 
     /**
@@ -146,11 +151,12 @@ class LmsSettingsController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param $id
      * @return Application|Factory|View
      * @throws GeneralException
      */
-    public function destroy($id)
+    public function destroy(Organization $suborganization, $id)
     {
         return response(['message' => $this->lmsSettingRepository->destroy($id)], 200);
     }
