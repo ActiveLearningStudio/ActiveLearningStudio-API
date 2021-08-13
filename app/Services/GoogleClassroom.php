@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Repositories\GoogleClassroom\GoogleClassroomRepository;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 use App\Services\GoogleClassroomInterface;
 use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCTopicResource;
@@ -247,10 +249,11 @@ class GoogleClassroom implements GoogleClassroomInterface
      *
      * @param Project $project
      * @param int|null $courseId The id of the course
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
      * @return array
      * @throws GeneralException
      */
-    public function createProjectAsCourse(Project $project, $courseId = null)
+    public function createProjectAsCourse(Project $project, $courseId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         if (!$this->gc_classwork) {
             throw new GeneralException("GcClasswork repository object is required");
@@ -273,6 +276,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             $course = $this->createCourse($courseData);
         }
 
+        $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         $return = GCCourseResource::make($course)->resolve();
 
         // inserting playlists/topics to Classroom
