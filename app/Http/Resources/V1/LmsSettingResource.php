@@ -28,6 +28,7 @@ class LmsSettingResource extends JsonResource
             'published' => $this->published,
             'user_id' => $this->user_id,
             'user' =>  new UserResource($this->user),
+            'organization' =>  $this->organization,
         ];
     }
 }

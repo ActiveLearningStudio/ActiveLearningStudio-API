@@ -383,7 +383,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         $query = $this->model;
-        $q = $data['query'] ?? null;
+        $q = urlencode($data['query']) ?? null;
 
         // if simple request for getting project listing with search
         if ($q) {
@@ -401,8 +401,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->where('is_user_starter', false);
         }
 
+        // if all indexed projects requested
+        if (isset($data['indexing']) && $data['indexing'] === '0') {
+            $query = $query->whereIn('indexing', [1, 2, 3]);
+        }
+
         // if specific index projects requested
-        if (isset($data['indexing']) && $data['indexing']) {
+        if (isset($data['indexing']) && $data['indexing'] !== '0') {
             $query = $query->where('indexing', $data['indexing']);
         }
 

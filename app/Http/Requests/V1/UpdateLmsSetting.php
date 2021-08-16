@@ -49,6 +49,7 @@ class UpdateLmsSetting extends FormRequest
             'lms_access_secret' => 'required_with:lms_access_key|max:255',
             'description' => 'nullable|max:255',
             'published' => 'nullable|boolean',
+            'organization_id' => 'required|exists:organizations,id',
         ];
     }
 }
