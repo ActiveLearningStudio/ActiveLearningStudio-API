@@ -83,13 +83,17 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             }
 
             $assigned_projects = [];
-            foreach ($data['projects'] as $project_id) {
-                $project = $this->projectRepository->find($project_id);
-                if ($project) {
-                    $team->projects()->attach($project);
-                    $assigned_projects[] = $project;
+
+            if (isset($data['projects'])) {
+                foreach ($data['projects'] as $project_id) {
+                    $project = $this->projectRepository->find($project_id);
+                    if ($project) {
+                        $team->projects()->attach($project);
+                        $assigned_projects[] = $project;
+                    }
                 }
             }
+
 
             event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
             $this->setTeamProjectUser($team, $assigned_projects, $valid_users);
