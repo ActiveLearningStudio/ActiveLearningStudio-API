@@ -348,7 +348,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     public function getPlaylistIsPublicValue($playlistId)
     {
         $playlist = Playlist::where('id', $playlistId)->with('project')->first();
-        return ($playlist->project->indexing === config('constants.indexing-approved')) ? $playlist : false;
+        return ($playlist->project->indexing === (int)config('constants.indexing-approved')) ? $playlist : false;
     }
 
     /**
