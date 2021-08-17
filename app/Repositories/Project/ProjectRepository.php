@@ -389,10 +389,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         $query = $this->model;
-        $q = urlencode($data['query']) ?? null;
+        $q = $data['query'] ?? null;
 
         // if simple request for getting project listing with search
         if ($q) {
+            $q = urlencode($data['query']);
             $query = $query->where(function($qry) use ($q) {
                 $qry->where('name', 'iLIKE', '%' .$q. '%')
                     ->orWhereHas('users', function ($qry) use ($q) {
