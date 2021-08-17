@@ -224,7 +224,9 @@ class TeamController extends Controller
     public function store(TeamRequest $teamRequest, Organization $suborganization)
     {
         $this->authorize('create', [Team::class, $suborganization]);
+        $bearerToken = $teamRequest->bearerToken();
         $data = $teamRequest->validated();
+        $data['bearerToken'] = $bearerToken;
 
         foreach ($data['users'] as $user) {
             $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();

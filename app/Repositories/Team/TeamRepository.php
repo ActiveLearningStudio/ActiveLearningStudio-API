@@ -3,6 +3,7 @@
 namespace App\Repositories\Team;
 
 use App\Events\TeamCreatedEvent;
+use App\Jobs\CloneProject;
 use App\Models\Project;
 use App\Models\Team;
 use App\Models\TeamRoleType;
@@ -88,15 +89,16 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 foreach ($data['projects'] as $project_id) {
                     $project = $this->projectRepository->find($project_id);
                     if ($project) {
-                        $team->projects()->attach($project);
-                        $assigned_projects[] = $project;
+                        // pushed cloning of project in background
+                        CloneProject::dispatch($auth_user, $project, $data['bearerToken'], $suborganization->id, $team)->delay(now()->addSecond());
+                        // $team->projects()->attach($project);
+                        // $assigned_projects[] = $project;
                     }
                 }
             }
 
-
             event(new TeamCreatedEvent($team, $assigned_projects, $assigned_users));
-            $this->setTeamProjectUser($team, $assigned_projects, $valid_users);
+            // $this->setTeamProjectUser($team, $assigned_projects, $valid_users);
 
             return $team;
         });

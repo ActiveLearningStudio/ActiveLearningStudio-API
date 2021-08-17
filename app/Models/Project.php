@@ -80,9 +80,10 @@ class Project extends Model
     /**
      * Get the teams for the project
      */
-    public function teams()
+    public function team()
     {
-        return $this->belongsToMany('App\Models\Team', 'team_project')->withTimestamps();
+        // return $this->belongsToMany('App\Models\Team', 'team_project')->withTimestamps();
+        return $this->belongsTo('App\Models\Team');
     }
 
     /**
