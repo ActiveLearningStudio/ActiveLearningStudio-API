@@ -57,8 +57,8 @@ class AuthServiceProvider extends ServiceProvider
             // If the project is either a) indexed-approved, and its visibility is public, or  
             // b) if user is the owner, then allow to publish
             if (
-                ($project->indexing === config('constants.indexing-approved')
-                && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id'))
+                ($project->indexing === (int)config('constants.indexing-approved')
+                && $project->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id'))
                 || $this->hasPermission($user, $project)
                 || $user->hasPermissionTo('project:publish', $project->organization)
             ) {
@@ -71,8 +71,8 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('fetch-lms-course', function ($user, $project) {
             if (
-                ($project->indexing === config('constants.indexing-approved')
-                && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id'))
+                ($project->indexing === (int)config('constants.indexing-approved')
+                && $project->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id'))
                 || $this->hasPermission($user, $project)
                 || $user->hasPermissionTo('project:publish', $project->organization)
             ) {
