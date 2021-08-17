@@ -85,8 +85,8 @@ class PlaylistPolicy
     public function clone(User $user, Project $project)
     {
         if (
-            $project->indexing === config('constants.indexing-approved')
-            && $project->organization_visibility_type_id === config('constants.public-organization-visibility-type-id')
+            $project->indexing === (int)config('constants.indexing-approved')
+            && $project->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id')
         ) {
             return true;
         }
