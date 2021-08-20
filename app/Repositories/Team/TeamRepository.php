@@ -121,33 +121,33 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 
             $this->update($teamData, $team->id);
 
-            $assigned_users = [];
-            $valid_users = [];
+            // $assigned_users = [];
+            // $valid_users = [];
 
-            foreach ($data['users'] as $user) {
-                $con_user = $this->userRepository->find($user['id']);
-                $userRow = $team->users()->find($user['id']);
-                if ($userRow) {
-                    $valid_users[] = $con_user;
-                    continue;
-                }
+            // foreach ($data['users'] as $user) {
+            //     $con_user = $this->userRepository->find($user['id']);
+            //     $userRow = $team->users()->find($user['id']);
+            //     if ($userRow) {
+            //         $valid_users[] = $con_user;
+            //         continue;
+            //     }
 
-                $note = array_key_exists('note', $user) ? $user['note'] : '';
+            //     $note = array_key_exists('note', $user) ? $user['note'] : '';
 
-                if ($con_user) {
-                    $team->users()->attach($con_user, ['team_role_type_id' => $user['role_id']]);
-                    $valid_users[] = $con_user;
-                    $assigned_users[] = [
-                        'user' => $con_user,
-                        'note' => $note
-                    ];
-                }
-            }
+            //     if ($con_user) {
+            //         $team->users()->attach($con_user, ['team_role_type_id' => $user['role_id']]);
+            //         $valid_users[] = $con_user;
+            //         $assigned_users[] = [
+            //             'user' => $con_user,
+            //             'note' => $note
+            //         ];
+            //     }
+            // }
 
-            $team->projects()->sync($data['projects']);
+            // $team->projects()->sync($data['projects']);
 
-            event(new TeamCreatedEvent($team, $data['projects'], $assigned_users));
-            $this->updateTeamProjectUser($team, $data['projects'], $valid_users);
+            // event(new TeamCreatedEvent($team, $data['projects'], $assigned_users));
+            // $this->updateTeamProjectUser($team, $data['projects'], $valid_users);
 
             return $team;
         });

@@ -13,6 +13,7 @@ use App\Http\Requests\V1\TeamRemoveProjectRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
+use App\Jobs\CloneProject;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
@@ -471,17 +472,23 @@ class TeamController extends Controller
     public function addProjects(TeamAddProjectRequest $addProjectRequest, Team $team)
     {
         $this->authorize('addProjects', [Team::class, $team]);
+        $bearerToken = $addProjectRequest->bearerToken();
         $data = $addProjectRequest->validated();
+        $data['bearerToken'] = $bearerToken;
+
+        $auth_user = auth()->user();
         $assigned_projects = [];
 
         foreach ($data['ids'] as $project_id) {
             $project = $this->projectRepository->find($project_id);
             if ($project) {
-                $team->projects()->attach($project);
-                $assigned_projects[] = $project;
+                // $team->projects()->attach($project);
+                // $assigned_projects[] = $project;
+                // pushed cloning of project in background
+                CloneProject::dispatch($auth_user, $project, $data['bearerToken'], null, $team)->delay(now()->addSecond());
             }
         }
-        $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
+        // $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
 
         return response([
             'message' => 'Projects have been added to the team successfully.',
@@ -569,6 +576,16 @@ class TeamController extends Controller
         $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $addMemberRequest->validated();
         $assigned_members = [];
+
+        $suborganization = Organization::find($data['organization_id']);
+        foreach ($data['ids'] as $member_id) {
+            $exist_user_id = $suborganization->users()->where('user_id', $member_id)->first();
+            if (!$exist_user_id) {
+                return response([
+                    'errors' => ['All selected members must be added in ' . $suborganization->name . ' organization first.'],
+                ], 500);
+            }
+        }
 
         foreach ($data['ids'] as $member_id) {
             $member = $this->userRepository->find($member_id);

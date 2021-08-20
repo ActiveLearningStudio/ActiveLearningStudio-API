@@ -434,40 +434,27 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function getTeamProjects($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $auth_user = auth()->user();
 
         $query = $this->model;
-        $q = urlencode($data['query']) ?? null;
+        $q = $data['query'] ?? null;
 
         // if simple request for getting project listing with search
         if ($q) {
+            $q = urlencode($data['query']);
             $query = $query->where(function($qry) use ($q) {
                 $qry->where('name', 'iLIKE', '%' .$q. '%')
                     ->orWhereHas('users', function ($qry) use ($q) {
                         $qry->where('email', 'iLIKE', '%' .$q. '%');
-                    });
+                });
             });
         }
 
-        // exclude users those projects which were clone from global starter project
-        if (isset($data['exclude_starter']) && $data['exclude_starter']) {
-            $query = $query->whereHas('users');
-            $query = $query->where('is_user_starter', false);
-        }
+        $query = $query->whereHas('users', function ($qry) use ($auth_user) {
+                    $qry->where('user_id', $auth_user->id);
+                 });
 
-        // if all indexed projects requested
-        if (isset($data['indexing']) && $data['indexing'] === '0') {
-            $query = $query->whereIn('indexing', [1, 2, 3]);
-        }
-
-        // if specific index projects requested
-        if (isset($data['indexing']) && $data['indexing'] !== '0') {
-            $query = $query->where('indexing', $data['indexing']);
-        }
-
-        // if starter projects requested
-        if (isset($data['starter_project'])) {
-            $query = $query->where('starter_project', $data['starter_project']);
-        }
+        $query = $query->whereNotNull('team_id');
 
         return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
     }
