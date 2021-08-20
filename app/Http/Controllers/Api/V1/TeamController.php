@@ -472,10 +472,7 @@ class TeamController extends Controller
     public function addProjects(TeamAddProjectRequest $addProjectRequest, Team $team)
     {
         $this->authorize('addProjects', [Team::class, $team]);
-        $bearerToken = $addProjectRequest->bearerToken();
         $data = $addProjectRequest->validated();
-        $data['bearerToken'] = $bearerToken;
-
         $auth_user = auth()->user();
         $assigned_projects = [];
 
@@ -485,7 +482,7 @@ class TeamController extends Controller
                 // $team->projects()->attach($project);
                 // $assigned_projects[] = $project;
                 // pushed cloning of project in background
-                CloneProject::dispatch($auth_user, $project, $data['bearerToken'], null, $team)->delay(now()->addSecond());
+                CloneProject::dispatch($auth_user, $project,  $addProjectRequest->bearerToken(), null, $team)->delay(now()->addSecond());
             }
         }
         // $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
