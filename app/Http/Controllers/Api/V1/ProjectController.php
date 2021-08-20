@@ -93,6 +93,22 @@ class ProjectController extends Controller
     }
 
     /**
+     * Get All Organization Team's Projects
+     *
+     * Get a list of the team's projects of an organization.
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/project/projects.json
+     *
+     * @return Response
+     */
+    public function getTeamProjects(Request $request, Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Project::class, $suborganization]);
+
+        return  UserProjectResource::collection($this->projectRepository->getTeamProjects($request->all(), $suborganization));
+    }
+
+    /**
      * Project Indexing
      *
      * Modify the index value of a project.

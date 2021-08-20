@@ -89,10 +89,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param Project $project
      * @param string $token
      * @param int $organization_id
+     * @param $team
      * @return Response
      * @throws GeneralException
      */
-    public function clone($authUser, Project $project, $token, $organization_id = null)
+    public function clone($authUser, Project $project, $token, $organization_id = null, $team = null)
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
@@ -112,13 +113,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'is_user_starter' => (bool) $project->starter_project, // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
-
+            
             if ($organization_id) {
                 $data['organization_id'] = $organization_id;
                 $data['organization_visibility_type_id'] = config('constants.private-organization-visibility-type-id');
             }
 
-            return \DB::transaction(function () use ($authUser, $data, $project, $token) {
+            return \DB::transaction(function () use ($authUser, $data, $project, $team, $token) {
                 $cloned_project = $authUser->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
@@ -129,6 +130,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $this->playlistRepository->clone($cloned_project, $playlist, $token);
                 }
 
+                if ($team) {
+                    $team->projects()->attach($cloned_project);
+                    $cloned_project->team_id = $team->id;
+                    $cloned_project->save();
+                }
                 $project->clone_ctr = $project->clone_ctr + 1;
                 $project->save();
 
@@ -416,6 +422,39 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         if (isset($data['starter_project'])) {
             $query = $query->where('starter_project', $data['starter_project']);
         }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
+    }
+
+    /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getTeamProjects($data, $suborganization)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $auth_user = auth()->user();
+
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting project listing with search
+        if ($q) {
+            $q = urlencode($data['query']);
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('name', 'iLIKE', '%' .$q. '%')
+                    ->orWhereHas('users', function ($qry) use ($q) {
+                        $qry->where('email', 'iLIKE', '%' .$q. '%');
+                });
+            });
+        }
+
+        $query = $query->whereHas('users', function ($qry) use ($auth_user) {
+                    $qry->where('user_id', $auth_user->id);
+                 });
+
+        $query = $query->whereNotNull('team_id');
 
         return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
     }

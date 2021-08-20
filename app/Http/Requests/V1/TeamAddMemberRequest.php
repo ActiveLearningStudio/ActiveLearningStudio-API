@@ -25,6 +25,7 @@ class TeamAddMemberRequest extends FormRequest
     {
         return [
             'ids' => 'required|array|exists:users,id',
+            'organization_id' => 'required|exists:organizations,id',
         ];
     }
 }
