@@ -474,7 +474,7 @@ class TeamController extends Controller
         $this->authorize('addProjects', [Team::class, $team]);
         $data = $addProjectRequest->validated();
         $auth_user = auth()->user();
-        $assigned_projects = [];
+        // $assigned_projects = [];
 
         foreach ($data['ids'] as $project_id) {
             $project = $this->projectRepository->find($project_id);
@@ -482,13 +482,13 @@ class TeamController extends Controller
                 // $team->projects()->attach($project);
                 // $assigned_projects[] = $project;
                 // pushed cloning of project in background
-                CloneProject::dispatch($auth_user, $project,  $addProjectRequest->bearerToken(), null, $team)->delay(now()->addSecond());
+                CloneProject::dispatch($auth_user, $project,  $addProjectRequest->bearerToken(), $team->organization->id, $team)->delay(now()->addSecond());
             }
         }
         // $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
 
         return response([
-            'message' => 'Projects have been added to the team successfully.',
+            'message' => "Your request to add [$project->name] project in team has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 
