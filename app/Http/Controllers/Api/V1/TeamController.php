@@ -671,14 +671,14 @@ class TeamController extends Controller
 
         $data = $teamUpdateRequest->validated();
 
-        foreach ($data['users'] as $user) {
-            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
-            if (!$exist_user_id) {
-                return response([
-                    'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
-                ], 500);
-            }
-        }
+        // foreach ($data['users'] as $user) {
+        //     $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+        //     if (!$exist_user_id) {
+        //         return response([
+        //             'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+        //         ], 500);
+        //     }
+        // }
 
         $team = $this->teamRepository->updateTeam($suborganization, $team, $data);
         if ($team) {
