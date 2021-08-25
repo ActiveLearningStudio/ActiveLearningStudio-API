@@ -46,7 +46,6 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
             $data['course_group_email'] = $course->courseGroupEmail;
             $data['guardians_enabled'] = $course->guardiansEnabled;
             $data['calendar_id'] = $course->calendarId;
-            $data['gclass_teacher_email'] = $course->gclass_teacher_email;
             $data['curriki_teacher_email'] = auth()->user()->email;
 
             if ($item = $this->model->create($data)) {
