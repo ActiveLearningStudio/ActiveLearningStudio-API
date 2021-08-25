@@ -573,8 +573,8 @@ class TeamController extends Controller
         $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $addMemberRequest->validated();
         $assigned_members = [];
-
-        $suborganization = Organization::find($data['organization_id']);
+        $suborganization = $team->organization;
+       
         foreach ($data['ids'] as $member_id) {
             $exist_user_id = $suborganization->users()->where('user_id', $member_id)->first();
             if (!$exist_user_id) {

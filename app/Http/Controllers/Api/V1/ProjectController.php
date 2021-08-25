@@ -97,7 +97,7 @@ class ProjectController extends Controller
      *
      * Get a list of the team's projects of an organization.
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/project/projects.json
+     * @responseFile responses/project/team-projects.json
      *
      * @return Response
      */
