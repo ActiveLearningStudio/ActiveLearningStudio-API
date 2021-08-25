@@ -286,10 +286,6 @@ class GoogleClassroom implements GoogleClassroomInterface
             $course = $this->createCourse($courseData);
         }
 
-        //get teacher's object by course id
-        $teacherData = $this->getCourseTeacher($course->id);
-        $course->gclass_teacher_email = isset($teacherData->profile->emailAddress) ? $teacherData->profile->emailAddress : null;
-
         $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         $return = GCCourseResource::make($course)->resolve();
 
