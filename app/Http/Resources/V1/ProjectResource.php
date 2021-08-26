@@ -32,6 +32,7 @@ class ProjectResource extends JsonResource
             'indexing_text' => $this->indexing_text,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'team' => $this->team,
         ];
     }
 }
