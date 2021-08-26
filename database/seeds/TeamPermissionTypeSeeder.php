@@ -36,14 +36,14 @@ class TeamPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('team_permission_types')->insertOrIgnore([
-            'name' => 'team:add-member-project',
-            'display_name' => 'Add Member Project',
+            'name' => 'team:add-project-user',
+            'display_name' => 'Add Project User',
             'feature' => 'Team'
         ]);
 
         DB::table('team_permission_types')->insertOrIgnore([
-            'name' => 'team:remove-member-project',
-            'display_name' => 'Remove Member Project',
+            'name' => 'team:remove-project-user',
+            'display_name' => 'Remove Project User',
             'feature' => 'Team'
         ]);
 
