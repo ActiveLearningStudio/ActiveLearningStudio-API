@@ -26,6 +26,7 @@ class ProjectDetailResource extends JsonResource
             'indexing' => $this->indexing,
             'indexing_text' => $this->indexing_text,
             'playlists' => ProjectPlaylistOnlyResource::collection($this->playlists),
+            'team' => $this->team,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

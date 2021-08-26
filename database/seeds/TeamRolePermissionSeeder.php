@@ -26,7 +26,6 @@ class TeamRolePermissionSeeder extends Seeder
 
             $contributorPermissions = [
                 'team:add-project',
-                'team:remove-project',
                 'team:add-playlist',
                 'team:edit-playlist',
                 'team:delete-playlist',
@@ -36,6 +35,8 @@ class TeamRolePermissionSeeder extends Seeder
                 'team:share-project',
                 'team:share-playlist',
                 'team:share-activity',
+                'team:add-project-user',
+                'team:remove-project-user',
             ];
 
             if (in_array($teamPermissionType->name, $contributorPermissions)) {
