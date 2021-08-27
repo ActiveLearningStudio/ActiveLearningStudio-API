@@ -78,7 +78,7 @@ class Project extends Model
     }
 
     /**
-     * Get the teams for the project
+     * Get the team of the project
      */
     public function team()
     {
