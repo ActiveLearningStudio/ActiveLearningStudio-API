@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Activity;
 use App\Models\Organization;
+use App\Models\Pivots\TeamProjectUser;
 use App\Models\Project;
 use App\Models\Team;
 use App\User;
@@ -140,12 +141,12 @@ class ActivityPolicy
             }
         }
 
-        $project_teams = $project->teams;
-        foreach ($project_teams as $project_team) {
+        $project_team = $project->team;
+        if ($project_team) {
             $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
-                ->where('project_id', $project->id)
-                ->where('user_id', $user->id)
-                ->first();
+            ->where('project_id', $project->id)
+            ->where('user_id', $user->id)
+            ->first();
             if ($team_project_user) {
                 return true;
             }
