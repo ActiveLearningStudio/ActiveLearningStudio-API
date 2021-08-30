@@ -90,7 +90,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                     $project = $this->projectRepository->find($project_id);
                     if ($project) {
                         // pushed cloning of project in background
-                        CloneProject::dispatch($auth_user, $project, $data['bearerToken'], $suborganization->id, $team)->delay(now()->addSecond());
+                        CloneProject::dispatch($auth_user, $project, $data['bearerToken'], $suborganization->id, $team)
+                                    ->delay(now()->addSecond());
                         // $team->projects()->attach($project);
                         // $assigned_projects[] = $project;
                     }
