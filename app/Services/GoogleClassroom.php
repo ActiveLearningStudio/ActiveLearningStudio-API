@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Repositories\GoogleClassroom\GoogleClassroomRepository;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 use App\Services\GoogleClassroomInterface;
 use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCTopicResource;
@@ -41,7 +43,17 @@ class GoogleClassroom implements GoogleClassroomInterface
     {
         $client = new \Google_Client();
         $client->setApplicationName(config('google.gapi_application_name'));
-        $client->setScopes([\Google_Service_Classroom::CLASSROOM_COURSES_READONLY, \Google_Service_Classroom::CLASSROOM_COURSES, \Google_Service_Classroom::CLASSROOM_TOPICS, \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME, \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS, \Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY]);
+        $client->setScopes(
+            [
+                \Google_Service_Classroom::CLASSROOM_COURSES_READONLY,
+                \Google_Service_Classroom::CLASSROOM_COURSES,
+                \Google_Service_Classroom::CLASSROOM_TOPICS,
+                \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME,
+                \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS,
+                \Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY,
+                \Google_Service_Classroom::CLASSROOM_PROFILE_EMAILS,
+            ]
+        );
         $credentials = config('google.gapi_class_credentials');
 
         $client->setAuthConfig(json_decode($credentials, true));
@@ -247,10 +259,11 @@ class GoogleClassroom implements GoogleClassroomInterface
      *
      * @param Project $project
      * @param int|null $courseId The id of the course
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
      * @return array
      * @throws GeneralException
      */
-    public function createProjectAsCourse(Project $project, $courseId = null)
+    public function createProjectAsCourse(Project $project, $courseId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         if (!$this->gc_classwork) {
             throw new GeneralException("GcClasswork repository object is required");
@@ -273,6 +286,11 @@ class GoogleClassroom implements GoogleClassroomInterface
             $course = $this->createCourse($courseData);
         }
 
+        //get teacher's object by course id
+        $teacherData = $this->getCourseTeacher($course->id);
+        $course->gclass_teacher_email = isset($teacherData->profile->emailAddress) ? $teacherData->profile->emailAddress : null;
+
+        $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         $return = GCCourseResource::make($course)->resolve();
 
         // inserting playlists/topics to Classroom

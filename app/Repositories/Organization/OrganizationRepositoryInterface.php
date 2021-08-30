@@ -27,6 +27,24 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
     public function getSuborganizationIds($organization, $organizationIds = []);
 
     /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentOrganizationIds($organization, $organizationIds = []);
+
+    /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentChildrenOrganizationIds($organization);
+
+    /**
      * To create a suborganization
      *
      * @param Organization $organization

@@ -3,7 +3,7 @@ FROM php:7.3-apache
 # Add apache and php config for Laravel
 COPY ./site.conf /etc/apache2/sites-available/site.conf
 RUN ln -s /etc/apache2/sites-available/site.conf /etc/apache2/sites-enabled/
-RUN sed -i 's/Listen 80/Listen 8000/g' /etc/apache2/ports.conf
+#RUN sed -i 's/Listen 80/Listen 8000/g' /etc/apache2/ports.conf
 RUN a2dissite 000-default.conf && a2ensite site.conf && a2enmod rewrite && a2enmod headers
 
 # Install composer

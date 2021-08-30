@@ -13,6 +13,7 @@ use App\Http\Requests\V1\TeamRemoveProjectRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
+use App\Jobs\CloneProject;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
@@ -224,7 +225,9 @@ class TeamController extends Controller
     public function store(TeamRequest $teamRequest, Organization $suborganization)
     {
         $this->authorize('create', [Team::class, $suborganization]);
+        $bearerToken = $teamRequest->bearerToken();
         $data = $teamRequest->validated();
+        $data['bearerToken'] = $bearerToken;
 
         foreach ($data['users'] as $user) {
             $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
@@ -470,19 +473,22 @@ class TeamController extends Controller
     {
         $this->authorize('addProjects', [Team::class, $team]);
         $data = $addProjectRequest->validated();
-        $assigned_projects = [];
+        $auth_user = auth()->user();
+        // $assigned_projects = [];
 
         foreach ($data['ids'] as $project_id) {
             $project = $this->projectRepository->find($project_id);
             if ($project) {
-                $team->projects()->attach($project);
-                $assigned_projects[] = $project;
+                // $team->projects()->attach($project);
+                // $assigned_projects[] = $project;
+                // pushed cloning of project in background
+                CloneProject::dispatch($auth_user, $project,  $addProjectRequest->bearerToken(), $team->organization->id, $team)->delay(now()->addSecond());
             }
         }
-        $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
+        // $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
 
         return response([
-            'message' => 'Projects have been added to the team successfully.',
+            'message' => "Your request to add [$project->name] project in team has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 
@@ -567,12 +573,31 @@ class TeamController extends Controller
         $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $addMemberRequest->validated();
         $assigned_members = [];
+<<<<<<< HEAD
 
         foreach ($data['ids'] as $member_id) {
             $member = $this->userRepository->find($member_id);
             if ($member) {
                 $assigned_members[] = $member;
             }
+=======
+        $suborganization = $team->organization;
+
+        foreach ($data['ids'] as $member_id) {
+            $exist_user_id = $suborganization->users()->where('user_id', $member_id)->first();
+            if (!$exist_user_id) {
+                return response([
+                    'errors' => ['All selected members must be added in ' . $suborganization->name . ' organization first.'],
+                ], 500);
+            }
+        }
+
+        foreach ($data['ids'] as $member_id) {
+            $member = $this->userRepository->find($member_id);
+            if ($member) {
+                $assigned_members[] = $member;
+            }
+>>>>>>> ed974449db9a9eb3359033bbc5fcbf79f24aa341
         }
         $this->teamRepository->assignMembersToTeamProject($team, $project, $assigned_members);
 
@@ -655,14 +680,14 @@ class TeamController extends Controller
 
         $data = $teamUpdateRequest->validated();
 
-        foreach ($data['users'] as $user) {
-            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
-            if (!$exist_user_id) {
-                return response([
-                    'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
-                ], 500);
-            }
-        }
+        // foreach ($data['users'] as $user) {
+        //     $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+        //     if (!$exist_user_id) {
+        //         return response([
+        //             'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+        //         ], 500);
+        //     }
+        // }
 
         $team = $this->teamRepository->updateTeam($suborganization, $team, $data);
         if ($team) {

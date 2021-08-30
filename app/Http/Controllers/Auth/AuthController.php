@@ -119,16 +119,16 @@ class AuthController extends Controller
         $user = $this->userRepository->create(Arr::except($data, ['domain']));
 
         if ($user) {
-            $invited_users = $this->invitedTeamUserRepository->searchByEmail($data['email']);
-            if ($invited_users) {
-                foreach ($invited_users as $invited_user) {
-                    $team = $this->teamRepository->find($invited_user->team_id);
-                    if ($team) {
-                        $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
-                        $this->invitedTeamUserRepository->delete($data['email']);
-                    }
-                }
-            }
+            // $invited_users = $this->invitedTeamUserRepository->searchByEmail($data['email']);
+            // if ($invited_users) {
+            //     foreach ($invited_users as $invited_user) {
+            //         $team = $this->teamRepository->find($invited_user->team_id);
+            //         if ($team) {
+            //             $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+            //             $this->invitedTeamUserRepository->delete($data['email']);
+            //         }
+            //     }
+            // }
 
             event(new Registered($user));
 
@@ -303,16 +303,16 @@ class AuthController extends Controller
                 ]);
 
                 if ($user) {
-                    $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
-                    if ($invited_users) {
-                        foreach ($invited_users as $invited_user) {
-                            $team = $this->teamRepository->find($invited_user->team_id);
-                            if ($team) {
-                                $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
-                                $this->invitedTeamUserRepository->delete($user->email);
-                            }
-                        }
-                    }
+                    // $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
+                    // if ($invited_users) {
+                    //     foreach ($invited_users as $invited_user) {
+                    //         $team = $this->teamRepository->find($invited_user->team_id);
+                    //         if ($team) {
+                    //             $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                    //             $this->invitedTeamUserRepository->delete($user->email);
+                    //         }
+                    //     }
+                    // }
 
                     $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
                     if ($invited_users->isNotEmpty()) {
@@ -515,16 +515,16 @@ class AuthController extends Controller
                     'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
                     'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
                 ]);
-                $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
-                if ($invited_users) {
-                    foreach ($invited_users as $invited_user) {
-                        $team = $this->teamRepository->find($invited_user->team_id);
-                        if ($team) {
-                            $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
-                            $this->invitedTeamUserRepository->delete($user->email);
-                        }
-                    }
-                }
+                // $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
+                // if ($invited_users) {
+                //     foreach ($invited_users as $invited_user) {
+                //         $team = $this->teamRepository->find($invited_user->team_id);
+                //         if ($team) {
+                //             $team->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                //             $this->invitedTeamUserRepository->delete($user->email);
+                //         }
+                //     }
+                // }
 
                 $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
                 if ($invited_users->isNotEmpty()) {
