@@ -8,6 +8,7 @@ use App\Http\Requests\V1\TeamAddProjectRequest;
 use App\Http\Requests\V1\TeamInviteMemberRequest;
 use App\Http\Requests\V1\TeamInviteMembersRequest;
 use App\Http\Requests\V1\TeamInviteRequest;
+use App\Http\Requests\V1\TeamMemberRoleUpdateRequest;
 use App\Http\Requests\V1\TeamRemoveMemberRequest;
 use App\Http\Requests\V1\TeamRemoveProjectRequest;
 use App\Http\Requests\V1\TeamRequest;
@@ -233,7 +234,10 @@ class TeamController extends Controller
             $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
             if (!$exist_user_id) {
                 return response([
-                    'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+                    'errors' =>
+                    ['Team not created,
+                    ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
+                    ],
                 ], 500);
             }
         }
@@ -330,7 +334,8 @@ class TeamController extends Controller
      *
      * Invite a bundle of users to the team.
      *
-     * @bodyParam users array required The array of the users Example: [{id: 1, first_name: Jean, last_name: Erik, name: "Jean Erik"}, {id: "Kairo@Seed.com", email: "Kairo@Seed.com"}]
+     * @bodyParam users array required The array of the users Example:
+     * [{id: 1, first_name: Jean, last_name: Erik, name: "Jean Erik"}, {id: "Kairo@Seed.com", email: "Kairo@Seed.com"}]
      *
      * @response {
      *   "message": "Users have been invited to the team successfully."
@@ -353,7 +358,11 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Organization $suborganization,  Team $team)
+    public function inviteMembers(
+        TeamInviteMembersRequest $inviteMembersRequest,
+        Organization $suborganization,
+        Team $team
+    )
     {
         $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $inviteMembersRequest->validated();
@@ -415,7 +424,10 @@ class TeamController extends Controller
         $owner = $team->getUserAttribute();
 
         // TODO: need to add leave team functionality
-        if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id || $this->authorize('removeTeamUsers', [Team::class, $team])) {
+        if ($owner->id === $auth_user->id
+            || $data['id'] === $auth_user->id
+            || $this->authorize('removeTeamUsers', [Team::class, $team])
+           ) {
             $user = $this->userRepository->find($data['id']);
 
             // delete invited outside user if not registered
@@ -482,13 +494,20 @@ class TeamController extends Controller
                 // $team->projects()->attach($project);
                 // $assigned_projects[] = $project;
                 // pushed cloning of project in background
-                CloneProject::dispatch($auth_user, $project,  $addProjectRequest->bearerToken(), $team->organization->id, $team)->delay(now()->addSecond());
+                CloneProject::dispatch($auth_user,
+                                       $project,
+                                       $addProjectRequest->bearerToken(),
+                                       $team->organization->id, $team
+                                       )
+                            ->delay(now()->addSecond());
             }
         }
         // $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
 
         return response([
-            'message' => "Your request to add [$project->name] project in team has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>
+            "Your request to add [$project->name] project in team has been received and is being processed.
+            You will receive an email notice as soon as it is available.",
         ], 200);
     }
 
@@ -579,7 +598,8 @@ class TeamController extends Controller
             $exist_user_id = $suborganization->users()->where('user_id', $member_id)->first();
             if (!$exist_user_id) {
                 return response([
-                    'errors' => ['All selected members must be added in ' . $suborganization->name . ' organization first.'],
+                    'errors' =>
+                    ['All selected members must be added in ' . $suborganization->name . ' organization first.'],
                 ], 500);
             }
         }
@@ -625,7 +645,11 @@ class TeamController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function removeMemberFromProject(TeamRemoveMemberRequest $removeMemberRequest, Team $team, Project $project)
+    public function removeMemberFromProject(
+        TeamRemoveMemberRequest $removeMemberRequest,
+        Team $team,
+        Project $project
+        )
     {
         $this->authorize('removeTeamUsers', [Team::class, $team]);
         $data = $removeMemberRequest->validated();
@@ -675,7 +699,10 @@ class TeamController extends Controller
         //     $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
         //     if (!$exist_user_id) {
         //         return response([
-        //             'errors' => ['Team not created, ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+        //             'errors' =>
+        //                ['Team not created,
+        //                  ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
+        //                ],
         //         ], 500);
         //     }
         // }
@@ -689,6 +716,47 @@ class TeamController extends Controller
 
         return response([
             'errors' => ['Failed to update team.'],
+        ], 500);
+    }
+
+    /**
+     * Update Team Member Role
+     *
+     * Update the specified user role of a team.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
+     * @bodyParam role_id inetger required id of a team role Example: 1
+     * @bodyParam user_id inetger required id of a user Example: 12
+     *
+     * @responseFile responses/team/team.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update team member role."
+     *   ]
+     * }
+     *
+     * @param TeamUpdateRequest $teamUpdateRequest
+     * @param Team $team
+     * @return Response
+     */
+    public function updateTeamMemberRole(TeamMemberRoleUpdateRequest $request, Organization $suborganization, Team $team)
+    {
+        $this->authorize('update', [Team::class, $suborganization]);
+
+        $data = $request->validated();
+
+        $is_updated = $team->users()->syncWithoutDetaching([$data['user_id'] => ['team_role_type_id' => $data['role_id']]]);
+        if ($is_updated) {
+            $user = $this->userRepository->find($data['user_id']);
+            return response([
+                'teamPermissions' => $this->teamRepository->fetchTeamUserPermissions($user, $team),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update team member role.'],
         ], 500);
     }
 
