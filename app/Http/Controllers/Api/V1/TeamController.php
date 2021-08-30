@@ -573,14 +573,6 @@ class TeamController extends Controller
         $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $addMemberRequest->validated();
         $assigned_members = [];
-<<<<<<< HEAD
-
-        foreach ($data['ids'] as $member_id) {
-            $member = $this->userRepository->find($member_id);
-            if ($member) {
-                $assigned_members[] = $member;
-            }
-=======
         $suborganization = $team->organization;
 
         foreach ($data['ids'] as $member_id) {
@@ -597,7 +589,6 @@ class TeamController extends Controller
             if ($member) {
                 $assigned_members[] = $member;
             }
->>>>>>> ed974449db9a9eb3359033bbc5fcbf79f24aa341
         }
         $this->teamRepository->assignMembersToTeamProject($team, $project, $assigned_members);
 
