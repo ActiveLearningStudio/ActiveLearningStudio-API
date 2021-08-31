@@ -23,9 +23,10 @@ class PlaylistProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'shared' => $this->shared,
             'starter_project' => $this->starter_project,
-            'users' => ProjectUserResource::collection($this->users),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'users' => ProjectUserResource::collection($this->users),
+            'team' => $this->team,
         ];
     }
 }

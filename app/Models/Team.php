@@ -42,6 +42,20 @@ class Team extends Model
     }
 
     /**
+     * Cascade on delete the team
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function (Team $team) {
+            foreach ($team->projects as $project) {
+                $project->delete();
+            }
+        });
+    }
+
+    /**
      * Get the projects for the team
      */
     public function projects()
