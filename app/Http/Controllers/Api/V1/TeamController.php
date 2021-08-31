@@ -743,7 +743,7 @@ class TeamController extends Controller
      */
     public function updateTeamMemberRole(TeamMemberRoleUpdateRequest $request, Organization $suborganization, Team $team)
     {
-        $this->authorize('update', [Team::class, $suborganization]);
+        $this->authorize('updateMemberRole', [Team::class, $suborganization, $team]);
 
         $data = $request->validated();
 

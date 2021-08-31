@@ -72,7 +72,12 @@ class ProjectController extends Controller
         }
 */
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $suborganization->id)->get()),
+            'projects' => ProjectResource::collection(
+                                        $authenticated_user->projects()
+                                        ->where('organization_id', $suborganization->id)
+                                        ->whereNull('team_id')
+                                        ->get()
+                                    ),
         ], 200);
     }
 
@@ -490,11 +495,11 @@ class ProjectController extends Controller
                 Arr::forget($data, ['user_id']);
             }
             $is_updated = $this->projectRepository->update($data, $project->id);
-    
+
             if ($is_updated) {
                 $updated_project = new ProjectResource($this->projectRepository->find($project->id));
                 event(new ProjectUpdatedEvent($updated_project));
-    
+
                 return response([
                     'project' => $updated_project,
                 ], 200);
