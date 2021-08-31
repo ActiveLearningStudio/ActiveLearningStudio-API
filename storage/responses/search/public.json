@@ -1,0 +1,56 @@
+{
+    "data": [
+        {
+            "id": 9689,
+            "project_id": 62462,
+            "thumb_url": "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+            "title": "Test Playlist",
+            "model": "Playlist",
+            "created_at": "2021-08-06T11:11:19.000000Z",
+            "user": {
+                "id": 3,
+                "first_name": "Abby",
+                "last_name": "_",
+                "email": "abby@curriki.org"
+            }
+        },
+        {
+            "id": 62462,
+            "project_id": 62462,
+            "thumb_url": "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+            "title": "Test Proj",
+            "description": "Test Proj",
+            "favored": false,
+            "model": "Project",
+            "created_at": "2021-08-06T11:10:59.000000Z",
+            "user": {
+                "id": 3,
+                "first_name": "Abby",
+                "last_name": "_",
+                "email": "abby@curriki.org"
+            }
+        },
+        {
+            "id": 45062,
+            "project_id": 2471,
+            "playlist_id": 9688,
+            "thumb_url": "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+            "title": "title",
+            "content": "create",
+            "model": "Activity",
+            "created_at": "2021-07-14T16:03:43.000000Z",
+            "user": {
+                "id": 751,
+                "first_name": "lbk",
+                "last_name": "lbk",
+                "email": "qwelove7749@gmail.com"
+            }
+        }
+    ],
+    "meta": {
+        "activities": 44646,
+        "playlists": 9548,
+        "projects": 4551,
+        "total": 58745
+    }
+}

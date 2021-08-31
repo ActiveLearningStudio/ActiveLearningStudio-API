@@ -39,6 +39,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
     Route::get('organization/get-by-domain', 'OrganizationController@getByDomain')->name('organization.get-by-domain');
 
+    Route::get('search/public', 'SearchController@public');
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::get('users/organizations', 'UserController@getOrganizations');
         Route::post('subscribe', 'UserController@subscribe');
