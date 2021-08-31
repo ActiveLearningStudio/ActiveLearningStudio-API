@@ -19,7 +19,14 @@ class UserLmsSettingResource extends JsonResource
             'id' => $this->id,
             'lms_url' => $this->lms_url,
             'site_name' => $this->site_name,
-            'description' => $this->description
+            'description' => $this->description,
+            'lti_client_id' => $this->lti_client_id,
+            'lms_login_id' => $this->lms_login_id,
+            'lms_name' => $this->lms_name,
+            'lms_access_key' => $this->lms_access_key,
+            'lms_access_secret' => $this->lms_access_secret,
+            'description' => $this->description,
+            'published' => $this->published,
         ];
     }
 }

@@ -31,6 +31,13 @@ interface GoogleClassroomInterface
     const COURSEWORK_STATE_PUBLISHED = 'PUBLISHED';
 
     /**
+     * Course work state when draft
+     * 
+     * @var string
+     */
+    const COURSEWORK_STATE_DRAFT = 'DRAFT';
+
+    /**
      * Active state for a course
      * 
      * @var string

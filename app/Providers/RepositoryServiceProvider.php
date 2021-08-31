@@ -12,6 +12,8 @@ use App\Repositories\BaseRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\EloquentRepositoryInterface;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepository;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Repositories\H5pLibrary\H5pLibraryRepository;
@@ -94,6 +96,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(InvitedOrganizationUserRepositoryInterface::class, InvitedOrganizationUserRepository::class);
         $this->app->bind(OrganizationPermissionTypeRepositoryInterface::class, OrganizationPermissionTypeRepository::class);
         $this->app->bind(OutcomeRepositoryInterface::class, OutcomeRepository::class);
+        $this->app->bind(GoogleClassroomRepositoryInterface::class, GoogleClassroomRepository::class);
     }
 
     /**

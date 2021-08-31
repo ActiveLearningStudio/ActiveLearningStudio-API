@@ -8,14 +8,17 @@ use App\Http\Requests\V1\TeamAddProjectRequest;
 use App\Http\Requests\V1\TeamInviteMemberRequest;
 use App\Http\Requests\V1\TeamInviteMembersRequest;
 use App\Http\Requests\V1\TeamInviteRequest;
+use App\Http\Requests\V1\TeamMemberRoleUpdateRequest;
 use App\Http\Requests\V1\TeamRemoveMemberRequest;
 use App\Http\Requests\V1\TeamRemoveProjectRequest;
 use App\Http\Requests\V1\TeamRequest;
 use App\Http\Requests\V1\TeamUpdateRequest;
 use App\Http\Resources\V1\TeamResource;
+use App\Jobs\CloneProject;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
+use App\Models\TeamRoleType;
 use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
@@ -57,9 +60,9 @@ class TeamController extends Controller
      * Get All Teams
      *
      * Get a list of the teams of a user.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/team/teams.json
+     * @responseFile responses/team/team.json
      *
      * @return Response
      */
@@ -86,9 +89,9 @@ class TeamController extends Controller
      * Get All Organization Teams
      *
      * Get a list of the teams of an Organization.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/team/teams.json
+     * @responseFile responses/team/team.json
      *
      * @return Response
      */
@@ -106,6 +109,60 @@ class TeamController extends Controller
 
         return response([
             'teams' => TeamResource::collection($teamDetails),
+        ], 200);
+    }
+
+    /**
+     * Team Roles Types
+     *
+     * Get a list of team role types.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/team/team-roles-types.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Something went wrong. Please try again later."
+     *   ]
+     * }
+     *
+     * @return Response
+     */
+    public function teamRoleTypes(Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Team::class, $suborganization]);
+
+        if ($teamRoleTypes = TeamRoleType::all()) {
+            return response([
+                'teamRoleTypes' => $teamRoleTypes,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Something went wrong. Please try again later.'],
+        ], 500);
+    }
+
+    /**
+     * Get User Team Permissions
+     *
+     * Get the logged-in user's team permissions in the suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
+     *
+     * @responseFile responses/team/team-user-permissions.json
+     *
+     * @param Organization $suborganization
+     * @param Team $team
+     * @return Response
+     */
+    public function getUserTeamPermissions(Organization $suborganization, Team $team)
+    {
+        $authenticatedUser = auth()->user();
+
+        return response([
+            'teamPermissions' => $this->teamRepository->fetchTeamUserPermissions($authenticatedUser, $team),
         ], 200);
     }
 
@@ -169,15 +226,24 @@ class TeamController extends Controller
     public function store(TeamRequest $teamRequest, Organization $suborganization)
     {
         $this->authorize('create', [Team::class, $suborganization]);
-
+        $bearerToken = $teamRequest->bearerToken();
         $data = $teamRequest->validated();
+        $data['bearerToken'] = $bearerToken;
 
-        $auth_user = auth()->user();
-        $team = $auth_user->teams()->create($data, ['role' => 'owner']);
+        foreach ($data['users'] as $user) {
+            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+            if (!$exist_user_id) {
+                return response([
+                    'errors' =>
+                    ['Team not created,
+                    ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
+                    ],
+                ], 500);
+            }
+        }
 
+        $team = $this->teamRepository->createTeam($suborganization, $data);
         if ($team) {
-            $this->teamRepository->createTeam($suborganization, $team, $data);
-
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
             ], 201);
@@ -239,28 +305,28 @@ class TeamController extends Controller
      */
     public function inviteMember(TeamInviteMemberRequest $inviteMemberRequest, Team $team)
     {
+        $this->authorize('addTeamUsers', [Team::class, $team]);
+
         $data = $inviteMemberRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
+        $user = $this->userRepository->findByField('email', $data['email']);
 
-        if ($owner->id === $auth_user->id) {
-            $user = $this->userRepository->findByField('email', $data['email']);
-            if ($user) {
-                $this->teamRepository->inviteToTeam($team, $user);
-
+        if ($user) {
+            $exist_user_id = $team->organization->users()->where('user_id', $user['id'])->first();
+            if (!$exist_user_id) {
                 return response([
-                    'message' => 'User has been invited to the team successfully.',
-                ], 200);
+                    'errors' => ['This user must be added in ' . $team->organization->name . ' organization first.'],
+                ], 500);
             }
+            $this->teamRepository->inviteToTeam($team, $user, $data['role_id']);
 
             return response([
-                'errors' => ['Failed to invite user to the team.'],
-            ], 500);
+                'message' => 'User has been invited to the team successfully.',
+            ], 200);
         }
 
         return response([
-            'message' => 'You do not have permission to invite user to the team.',
-        ], 403);
+            'errors' => ['Failed to invite user to the team.'],
+        ], 500);
     }
 
     /**
@@ -268,7 +334,8 @@ class TeamController extends Controller
      *
      * Invite a bundle of users to the team.
      *
-     * @bodyParam users array required The array of the users Example: [{id: 1, first_name: Jean, last_name: Erik, name: "Jean Erik"}, {id: "Kairo@Seed.com", email: "Kairo@Seed.com"}]
+     * @bodyParam users array required The array of the users Example:
+     * [{id: 1, first_name: Jean, last_name: Erik, name: "Jean Erik"}, {id: "Kairo@Seed.com", email: "Kairo@Seed.com"}]
      *
      * @response {
      *   "message": "Users have been invited to the team successfully."
@@ -291,29 +358,35 @@ class TeamController extends Controller
      * @param Team $team
      * @return Response
      */
-    public function inviteMembers(TeamInviteMembersRequest $inviteMembersRequest, Organization $suborganization,  Team $team)
+    public function inviteMembers(
+        TeamInviteMembersRequest $inviteMembersRequest,
+        Organization $suborganization,
+        Team $team
+    )
     {
+        $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $inviteMembersRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
 
-        if ($owner->id === $auth_user->id) {
-            $invited = $this->teamRepository->inviteMembers($suborganization, $team, $data);
-
-            if ($invited) {
+        foreach ($data['users'] as $user) {
+            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+            if (!$exist_user_id) {
                 return response([
-                    'message' => 'Users have been invited to the team successfully.',
-                ], 200);
+                    'errors' => [$user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'],
+                ], 500);
             }
+        }
 
+        $invited = $this->teamRepository->inviteMembers($suborganization, $team, $data);
+
+        if ($invited) {
             return response([
-                'errors' => ['Failed to invite users to the team.'],
-            ], 500);
+                'message' => 'Users have been invited to the team successfully.',
+            ], 200);
         }
 
         return response([
-            'message' => 'You do not have permission to invite users to the team.',
-        ], 403);
+            'errors' => ['Failed to invite users to the team.'],
+        ], 500);
     }
 
     /**
@@ -345,31 +418,22 @@ class TeamController extends Controller
      */
     public function removeMember(TeamRemoveMemberRequest $removeMemberRequest, Team $team)
     {
+        $this->authorize('removeTeamUsers', [Team::class, $team]);
         $data = $removeMemberRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
 
-        // TODO: need to add leave team functionality
-        if ($owner->id === $auth_user->id || $data['id'] === $auth_user->id) {
-            $user = $this->userRepository->find($data['id']);
+        $user = $this->userRepository->find($data['id']);
+        // delete invited outside user if not registered
+        if (isset($data['email']) && $data['email'] != '') {
+            $this->teamRepository->removeInvitedUser($team, $data['email']);
+        }
 
-            // delete invited outside user if not registered
-            if (isset($data['email']) && $data['email'] != '') {
-                $this->teamRepository->removeInvitedUser($team, $data['email']);
-            }
+        if ($user) {
+            $team->users()->detach($user);
+            $this->teamRepository->removeTeamProjectUser($team, $user);
 
-            if ($user) {
-                $team->users()->detach($user);
-                $this->teamRepository->removeTeamProjectUser($team, $user);
-
-                return response([
-                    'message' => 'User has been removed from the team successfully.',
-                ], 200);
-            }
-        } else {
             return response([
-                'message' => 'You do not have permission to remove user from the team.',
-            ], 403);
+                'message' => 'User has been removed from the team successfully.',
+            ], 200);
         }
 
         return response([
@@ -406,34 +470,32 @@ class TeamController extends Controller
      */
     public function addProjects(TeamAddProjectRequest $addProjectRequest, Team $team)
     {
+        $this->authorize('addProjects', [Team::class, $team]);
         $data = $addProjectRequest->validated();
         $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
-        $assigned_projects = [];
+        // $assigned_projects = [];
 
-        if ($owner->id === $auth_user->id || $this->authorize('addProjects', [Team::class, $team->organization])) {
-            foreach ($data['ids'] as $project_id) {
-                $project = $this->projectRepository->find($project_id);
-                if ($project) {
-                    $team->projects()->attach($project);
-                    $assigned_projects[] = $project;
-                }
+        foreach ($data['ids'] as $project_id) {
+            $project = $this->projectRepository->find($project_id);
+            if ($project) {
+                // $team->projects()->attach($project);
+                // $assigned_projects[] = $project;
+                // pushed cloning of project in background
+                CloneProject::dispatch($auth_user,
+                                       $project,
+                                       $addProjectRequest->bearerToken(),
+                                       $team->organization->id, $team
+                                       )
+                            ->delay(now()->addSecond());
             }
-
-            $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
-
-            return response([
-                'message' => 'Projects have been added to the team successfully.',
-            ], 200);
-        } elseif ($owner->id !== $auth_user->id) {
-            return response([
-                'message' => 'You do not have permission to add projects to the team.',
-            ], 403);
         }
+        // $this->teamRepository->setTeamProjectUser($team, $assigned_projects, []);
 
         return response([
-            'errors' => ['Failed to add projects to the team.'],
-        ], 500);
+            'message' =>
+            "Your request to add [$project->name] project in team has been received and is being processed.
+            You will receive an email notice as soon as it is available.",
+        ], 200);
     }
 
     /**
@@ -465,26 +527,18 @@ class TeamController extends Controller
      */
     public function removeProject(TeamRemoveProjectRequest $removeProjectRequest, Team $team)
     {
+        $this->authorize('removeProject', [Team::class, $team]);
         $data = $removeProjectRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
+        $project = $this->projectRepository->find($data['id']);
 
-        if ($owner->id === $auth_user->id) {
-            $project = $this->projectRepository->find($data['id']);
+        if ($project) {
+            $team->projects()->detach($project);
 
-            if ($project) {
-                $team->projects()->detach($project);
+            $this->teamRepository->removeTeamUserProject($team, $project);
 
-                $this->teamRepository->removeTeamUserProject($team, $project);
-
-                return response([
-                    'message' => 'Project has been removed from the team successfully.',
-                ], 200);
-            }
-        } else {
             return response([
-                'message' => 'You do not have permission to remove project from the team.',
-            ], 403);
+                'message' => 'Project has been removed from the team successfully.',
+            ], 200);
         }
 
         return response([
@@ -522,33 +576,32 @@ class TeamController extends Controller
      */
     public function addMembersToProject(TeamAddMemberRequest $addMemberRequest, Team $team, Project $project)
     {
+        $this->authorize('addTeamUsers', [Team::class, $team]);
         $data = $addMemberRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
         $assigned_members = [];
+        $suborganization = $team->organization;
 
-        if ($owner->id === $auth_user->id) {
-            foreach ($data['ids'] as $member_id) {
-                $member = $this->userRepository->find($member_id);
-                if ($member) {
-                    $assigned_members[] = $member;
-                }
+        foreach ($data['ids'] as $member_id) {
+            $exist_user_id = $suborganization->users()->where('user_id', $member_id)->first();
+            if (!$exist_user_id) {
+                return response([
+                    'errors' =>
+                    ['All selected members must be added in ' . $suborganization->name . ' organization first.'],
+                ], 500);
             }
-
-            $this->teamRepository->assignMembersToTeamProject($team, $project, $assigned_members);
-
-            return response([
-                'message' => 'Members have been added to the team project successfully.',
-            ], 200);
-        } elseif ($owner->id !== $auth_user->id) {
-            return response([
-                'message' => 'You do not have permission to add members to the team project.',
-            ], 403);
         }
 
+        foreach ($data['ids'] as $member_id) {
+            $member = $this->userRepository->find($member_id);
+            if ($member) {
+                $assigned_members[] = $member;
+            }
+        }
+        $this->teamRepository->assignMembersToTeamProject($team, $project, $assigned_members);
+
         return response([
-            'errors' => ['Failed to add members to the team project.'],
-        ], 500);
+            'message' => 'Members have been added to the team project successfully.',
+        ], 200);
     }
 
     /**
@@ -579,26 +632,21 @@ class TeamController extends Controller
      * @param Project $project
      * @return Response
      */
-    public function removeMemberFromProject(TeamRemoveMemberRequest $removeMemberRequest, Team $team, Project $project)
+    public function removeMemberFromProject(
+        TeamRemoveMemberRequest $removeMemberRequest,
+        Team $team,
+        Project $project
+        )
     {
+        $this->authorize('removeTeamUsers', [Team::class, $team]);
         $data = $removeMemberRequest->validated();
-        $auth_user = auth()->user();
-        $owner = $team->getUserAttribute();
+        $user = $this->userRepository->find($data['id']);
 
-        if ($owner->id === $auth_user->id) {
-            $user = $this->userRepository->find($data['id']);
-
-            if ($user) {
-                $this->teamRepository->removeMemberFromTeamProject($team, $project, $user);
-
-                return response([
-                    'message' => 'Member has been removed from the team project successfully.',
-                ], 200);
-            }
-        } else {
+        if ($user) {
+            $this->teamRepository->removeMemberFromTeamProject($team, $project, $user);
             return response([
-                'message' => 'You do not have permission to remove member from the team project.',
-            ], 403);
+                'message' => 'Member has been removed from the team project successfully.',
+            ], 200);
         }
 
         return response([
@@ -634,15 +682,20 @@ class TeamController extends Controller
 
         $data = $teamUpdateRequest->validated();
 
-        $teamData = [];
-        $teamData['name'] = $data['name'];
-        $teamData['description'] = $data['description'];
+        // foreach ($data['users'] as $user) {
+        //     $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+        //     if (!$exist_user_id) {
+        //         return response([
+        //             'errors' =>
+        //                ['Team not created,
+        //                  ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
+        //                ],
+        //         ], 500);
+        //     }
+        // }
 
-        $is_updated = $this->teamRepository->update($teamData, $team->id);
-
-        if ($is_updated) {
-            $this->teamRepository->updateTeam($suborganization, $team, $data);
-
+        $team = $this->teamRepository->updateTeam($suborganization, $team, $data);
+        if ($team) {
             return response([
                 'team' => new TeamResource($this->teamRepository->getTeamDetail($team->id)),
             ], 200);
@@ -650,6 +703,47 @@ class TeamController extends Controller
 
         return response([
             'errors' => ['Failed to update team.'],
+        ], 500);
+    }
+
+    /**
+     * Update Team Member Role
+     *
+     * Update the specified user role of a team.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
+     * @bodyParam role_id inetger required id of a team role Example: 1
+     * @bodyParam user_id inetger required id of a user Example: 12
+     *
+     * @responseFile responses/team/team.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update team member role."
+     *   ]
+     * }
+     *
+     * @param TeamUpdateRequest $teamUpdateRequest
+     * @param Team $team
+     * @return Response
+     */
+    public function updateTeamMemberRole(TeamMemberRoleUpdateRequest $request, Organization $suborganization, Team $team)
+    {
+        $this->authorize('updateMemberRole', [Team::class, $suborganization, $team]);
+
+        $data = $request->validated();
+
+        $is_updated = $team->users()->syncWithoutDetaching([$data['user_id'] => ['team_role_type_id' => $data['role_id']]]);
+        if ($is_updated) {
+            $user = $this->userRepository->find($data['user_id']);
+            return response([
+                'teamPermissions' => $this->teamRepository->fetchTeamUserPermissions($user, $team),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update team member role.'],
         ], 500);
     }
 

@@ -1,0 +1,141 @@
+{
+    "data": [
+        {
+            "id": 10,
+            "organization_id": 1,
+            "organization_visibility_type_id": 1,
+            "name": "project 1",
+            "description": "test  fffff  rrrr",
+            "thumb_url": "",
+            "shared": true,
+            "starter_project": false,
+            "order": 2,
+            "status": 1,
+            "status_text": "DRAFT",
+            "indexing": null,
+            "is_user_starter": false,
+            "indexing_text": "NOT REQUESTED",
+            "created_at": "2021-08-17T11:15:58.000000Z",
+            "updated_at": "2021-08-17T11:15:58.000000Z",
+            "users": [
+                {
+                    "id": 1,
+                    "name": "Test User",
+                    "email": "test@test.com",
+                    "email_verified_at": "2021-03-05T15:53:34.000000Z",
+                    "created_at": null,
+                    "updated_at": null,
+                    "first_name": "Test",
+                    "last_name": "User",
+                    "organization_name": null,
+                    "job_title": null,
+                    "address": null,
+                    "phone_number": null,
+                    "organization_type": null,
+                    "website": null,
+                    "deleted_at": null,
+                    "role": null,
+                    "gapi_access_token": null,
+                    "hubspot": false,
+                    "subscribed": false,
+                    "subscribed_ip": null,
+                    "membership_type_id": 2,
+                    "pivot": {
+                        "project_id": 10,
+                        "user_id": 1,
+                        "role": "owner",
+                        "created_at": "2021-08-17T11:15:58.000000Z",
+                        "updated_at": "2021-08-17T11:15:58.000000Z"
+                    }
+                }
+            ],
+            "team": {
+                "id": 63,
+                "name": "Team Test One",
+                "created_at": "2021-08-17T11:15:57.000000Z",
+                "updated_at": "2021-08-17T11:15:57.000000Z",
+                "deleted_at": null,
+                "description": "desc",
+                "indexing": null,
+                "organization_id": 1,
+                "original_user": null
+            }
+        },
+        {
+            "id": 11,
+            "organization_id": 1,
+            "organization_visibility_type_id": 1,
+            "name": "The Science of Golf",
+            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+            "thumb_url": "",
+            "shared": true,
+            "starter_project": false,
+            "order": 2,
+            "status": 1,
+            "status_text": "DRAFT",
+            "indexing": null,
+            "is_user_starter": false,
+            "indexing_text": "NOT REQUESTED",
+            "created_at": "2021-08-17T11:21:09.000000Z",
+            "updated_at": "2021-08-23T17:17:46.000000Z",
+            "users": [
+                {
+                    "id": 1,
+                    "name": "Test User 2",
+                    "email": "test2@test.com",
+                    "email_verified_at": "2021-03-05T15:53:34.000000Z",
+                    "created_at": null,
+                    "updated_at": null,
+                    "first_name": "Test",
+                    "last_name": "User 2",
+                    "organization_name": null,
+                    "job_title": null,
+                    "address": null,
+                    "phone_number": null,
+                    "organization_type": null,
+                    "website": null,
+                    "deleted_at": null,
+                    "role": null,
+                    "gapi_access_token": null,
+                    "hubspot": false,
+                    "subscribed": false,
+                    "subscribed_ip": null,
+                    "membership_type_id": 2,
+                    "pivot": {
+                        "project_id": 11,
+                        "user_id": 1,
+                        "role": "owner",
+                        "created_at": "2021-08-17T11:21:09.000000Z",
+                        "updated_at": "2021-08-17T11:21:09.000000Z"
+                    }
+                }
+            ],
+            "team": {
+                "id": 64,
+                "name": "Team 2 Test",
+                "created_at": "2021-08-17T11:21:08.000000Z",
+                "updated_at": "2021-08-17T11:21:08.000000Z",
+                "deleted_at": null,
+                "description": "desc",
+                "indexing": null,
+                "organization_id": 2,
+                "original_user": null
+            }
+        }
+    ],
+    "links": {
+        "first": "http://localhost:8000/api/v1/suborganization/1/team-projects?page=1",
+        "last": "http://localhost:8000/api/v1/suborganization/1/team-projects?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost:8000/api/v1/suborganization/1/team-projects",
+        "per_page": 10,
+        "to": 2,
+        "total": 2
+    }
+}

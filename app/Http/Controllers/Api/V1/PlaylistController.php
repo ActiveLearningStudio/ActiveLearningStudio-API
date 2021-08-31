@@ -11,6 +11,7 @@ use App\Http\Resources\V1\ProjectResource;
 use App\Jobs\ClonePlayList;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Models\Team;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
@@ -97,7 +98,8 @@ class PlaylistController extends Controller
      */
     public function store(PlaylistRequest $playlistRequest, Project $project)
     {
-        $this->authorize('create', [Playlist::class, $project->organization]);
+        $team = ($playlistRequest->team_id) ? Team::find($playlistRequest->team_id) : null;
+        $this->authorize('create', [Playlist::class, $project->organization, $team]);
 
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
@@ -268,7 +270,8 @@ class PlaylistController extends Controller
      */
     public function update(PlaylistRequest $playlistRequest, Project $project, Playlist $playlist)
     {
-        $this->authorize('update', [Playlist::class, $project->organization]);
+        $team = ($playlistRequest->team_id) ? Team::find($playlistRequest->team_id) : null;
+        $this->authorize('update', [Playlist::class, $project->organization, $team]);
 
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -319,11 +322,13 @@ class PlaylistController extends Controller
      *
      * @param Project $project
      * @param Playlist $playlist
+     * @param $team_id
      * @return Response
      */
-    public function destroy(Project $project, Playlist $playlist)
+    public function destroy(Project $project, Playlist $playlist, $team_id = null)
     {
-        $this->authorize('delete', [Playlist::class, $project->organization]);
+        $team = (!is_null($team_id)) ? Team::find($team_id) : null;
+        $this->authorize('delete', [Playlist::class, $project->organization, $team]);
 
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -369,7 +374,7 @@ class PlaylistController extends Controller
      */
     public function clone(Request $request, Project $project, Playlist $playlist)
     {
-        $this->authorize('clone', [Playlist::class, $project->organization]);
+        $this->authorize('clone', [Playlist::class, $project]);
         // pushed cloning of project in background
         ClonePlayList::dispatch($project, $playlist, $request->bearerToken())->delay(now()->addSecond());
         $isDuplicate = ($playlist->project_id == $project->id);

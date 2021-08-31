@@ -41,11 +41,12 @@ class PlaylistPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $team
      * @return mixed
      */
-    public function create(User $user, Organization $organization)
+    public function create(User $user, Organization $organization, $team)
     {
-        return $user->hasPermissionTo('playlist:create', $organization);
+        return $user->hasPermissionTo('playlist:create', $organization) || $user->hasTeamPermissionTo('team:add-playlist', $team);
     }
 
     /**
@@ -53,11 +54,12 @@ class PlaylistPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $team
      * @return mixed
      */
-    public function update(User $user, Organization $organization)
+    public function update(User $user, Organization $organization, $team)
     {
-        return $user->hasPermissionTo('playlist:edit', $organization);
+        return $user->hasPermissionTo('playlist:edit', $organization) || $user->hasTeamPermissionTo('team:edit-playlist', $team);
     }
 
     /**
@@ -65,23 +67,31 @@ class PlaylistPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $team
      * @return mixed
      */
-    public function delete(User $user, Organization $organization)
+    public function delete(User $user, Organization $organization, $team)
     {
-        return $user->hasPermissionTo('playlist:delete', $organization);
+        return $user->hasPermissionTo('playlist:delete', $organization) || $user->hasTeamPermissionTo('team:delete-playlist', $team);
     }
 
     /**
      * Determine whether the user can clone the model.
      *
      * @param User $user
-     * @param Organization $organization
+     * @param Project $project
      * @return mixed
      */
-    public function clone(User $user, Organization $organization)
+    public function clone(User $user, Project $project)
     {
-        return $user->hasPermissionTo('playlist:duplicate', $organization);
+        if (
+            $project->indexing === (int)config('constants.indexing-approved')
+            && $project->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id')
+        ) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('playlist:duplicate', $project->organization);
     }
 
     /**

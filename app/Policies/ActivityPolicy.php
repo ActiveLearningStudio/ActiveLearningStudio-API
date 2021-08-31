@@ -4,7 +4,9 @@ namespace App\Policies;
 
 use App\Models\Activity;
 use App\Models\Organization;
+use App\Models\Pivots\TeamProjectUser;
 use App\Models\Project;
+use App\Models\Team;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -41,11 +43,12 @@ class ActivityPolicy
      *
      * @param User $user
      * @param Organization $suborganization
+     * @param $team
      * @return mixed
      */
-    public function create(User $user, Organization $suborganization)
+    public function create(User $user, Organization $suborganization, $team)
     {
-        return $user->hasPermissionTo('activity:create', $suborganization);
+        return $user->hasPermissionTo('activity:create', $suborganization) || $user->hasTeamPermissionTo('team:add-activity', $team);
     }
 
     /**
@@ -53,11 +56,12 @@ class ActivityPolicy
      *
      * @param User $user
      * @param Organization $suborganization
+     * @param $team
      * @return mixed
      */
-    public function update(User $user, Organization $suborganization)
+    public function update(User $user, Organization $suborganization, $team)
     {
-        return $user->hasPermissionTo('activity:edit', $suborganization);
+        return $user->hasPermissionTo('activity:edit', $suborganization) || $user->hasTeamPermissionTo('team:edit-activity', $team);
     }
 
     /**
@@ -65,11 +69,12 @@ class ActivityPolicy
      *
      * @param User $user
      * @param Organization $suborganization
+     * @param $team
      * @return mixed
      */
-    public function delete(User $user, Organization $suborganization)
+    public function delete(User $user, Organization $suborganization, $team)
     {
-        return $user->hasPermissionTo('activity:delete', $suborganization);
+        return $user->hasPermissionTo('activity:delete', $suborganization) || $user->hasTeamPermissionTo('team:delete-activity', $team);
     }
 
     /**
@@ -88,12 +93,19 @@ class ActivityPolicy
      * Determine whether the user can clone the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function clone(User $user, Organization $suborganization)
+    public function clone(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:duplicate', $suborganization);
+        if (
+            $project->indexing === (int)config('constants.indexing-approved')
+            && $project->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id')
+        ) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('activity:duplicate', $project->organization);
     }
 
     /**
@@ -129,12 +141,12 @@ class ActivityPolicy
             }
         }
 
-        $project_teams = $project->teams;
-        foreach ($project_teams as $project_team) {
+        $project_team = $project->team;
+        if ($project_team) {
             $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
-                ->where('project_id', $project->id)
-                ->where('user_id', $user->id)
-                ->first();
+            ->where('project_id', $project->id)
+            ->where('user_id', $user->id)
+            ->first();
             if ($team_project_user) {
                 return true;
             }

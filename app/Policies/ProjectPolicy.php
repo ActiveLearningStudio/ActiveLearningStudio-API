@@ -77,12 +77,19 @@ class ProjectPolicy
      * Determine whether the user can clone the project.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function clone(User $user, Organization $suborganization)
+    public function clone(User $user, Project $project)
     {
-        return $user->hasPermissionTo('project:clone', $suborganization);
+        if (
+            $project->indexing === (int)config('constants.indexing-approved')
+            && $project->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id')
+        ) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('project:clone', $project->organization);
     }
 
     /**

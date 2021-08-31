@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -129,6 +130,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $counts = [];
         $projectIds = [];
+        $organizationParentChildrenIds = [];
+
+        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
+            $organization = $data['orgObj'];
+            $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
+        }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $userIds = $data['userIds'];
@@ -142,7 +149,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $author = $data['author'];
 
             $authorProjectIds = Project::whereHas('users', function (Builder $query) use ($author) {
-                $query->where('first_name', 'like', '%' . $author . '%');
+                $query->where('first_name', 'like', '%' . $author . '%')
+                        ->orWhere('last_name', 'like', '%' . $author . '%')
+                        ->orWhere('email', 'like', '%' . $author . '%');
             })->pluck('id')->toArray();
 
             if (empty($authorProjectIds)) {
@@ -155,6 +164,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $searchResultQuery = $this->model->searchForm()
+            ->searchType(Arr::get($data, 'searchType', 0))
+            ->organizationParentChildrenIds($organizationParentChildrenIds)
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
             ->aggregate('count_by_index', [
@@ -344,7 +355,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     public function getPlaylistIsPublicValue($playlistId)
     {
         $playlist = Playlist::where('id', $playlistId)->with('project')->first();
-        return ($playlist->project->indexing === config('constants.indexing-approved')) ? $playlist : false;
+        return ($playlist->project->indexing === (int)config('constants.indexing-approved')) ? $playlist : false;
     }
 
     /**
@@ -390,7 +401,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'query' => $request->input('query', ''),
             'from' => $request->input('from', 0),
             'size' => 11,
-            'model' => 'activities',
+            'model' => 'projects',
             'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
         ];
 
