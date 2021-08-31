@@ -28,15 +28,15 @@ node("currikidev") {
     stage('Push image') {	
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 app.push("${env.BUILD_NUMBER}")            
-                app.push("open")        
+                app.push("cc")        
         }    
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 redis.push("${env.BUILD_NUMBER}")            
-                redis.push("open")        
+                redis.push("cc")        
         }   
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 esmigrate.push("${env.BUILD_NUMBER}")            
-                esmigrate.push("open")        
+                esmigrate.push("cc")        
         }   
     }
     
