@@ -534,8 +534,7 @@ class TeamController extends Controller
         if ($project) {
             return \DB::transaction(function () use ($team, $project) {
                 $team->projects()->detach($project);
-                $project->team_id = null;
-                $project->save();
+                $project->delete();
                 // $this->teamRepository->removeTeamUserProject($team, $project);
 
                 return response([
