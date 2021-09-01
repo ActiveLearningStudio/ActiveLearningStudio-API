@@ -532,13 +532,15 @@ class TeamController extends Controller
         $project = $this->projectRepository->find($data['id']);
 
         if ($project) {
-            $team->projects()->detach($project);
+            return \DB::transaction(function () use ($team, $project) {
+                $team->projects()->detach($project);
+                $project->delete();
+                // $this->teamRepository->removeTeamUserProject($team, $project);
 
-            $this->teamRepository->removeTeamUserProject($team, $project);
-
-            return response([
-                'message' => 'Project has been removed from the team successfully.',
-            ], 200);
+                return response([
+                    'message' => 'Project has been removed from the team successfully.',
+                ], 200);
+            });
         }
 
         return response([
@@ -730,7 +732,7 @@ class TeamController extends Controller
      */
     public function updateTeamMemberRole(TeamMemberRoleUpdateRequest $request, Organization $suborganization, Team $team)
     {
-        $this->authorize('updateMemberRole', [Team::class, $suborganization, $team]);
+        $this->authorize('updateMemberRole', [Team::class, $team]);
 
         $data = $request->validated();
 
