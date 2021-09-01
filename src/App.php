@@ -100,7 +100,7 @@ class App
                     // encode user information.
                     $lti_submission_info = base64_encode($build_review_data);
 
-                    if (!isset($_SESSION['lti_post']['lti_version']) && $_SESSION['lti_post']['lti_version'] != "LTI-1p0") {
+                    if ($_SESSION['lti_post']['lti_version'] != "LTI-1p0") {
                         $grade_params['lti13_extra'] = [
                             'https://canvas.instructure.com/lti/submission' => [
                                 "new_submission" => true,
