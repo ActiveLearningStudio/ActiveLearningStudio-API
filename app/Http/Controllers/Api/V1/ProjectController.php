@@ -375,7 +375,7 @@ class ProjectController extends Controller
      */
     public function share(Organization $suborganization, Project $project)
     {
-        $this->authorize('share', [Project::class, $suborganization]);
+        $this->authorize('share', [$project, $suborganization]);
 
         $is_updated = $this->projectRepository->update([
             'shared' => true,

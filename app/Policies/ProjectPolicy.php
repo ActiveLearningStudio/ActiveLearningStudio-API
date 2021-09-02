@@ -68,8 +68,12 @@ class ProjectPolicy
      * @param Organization $suborganization
      * @return mixed
      */
-    public function share(User $user, Organization $suborganization)
+    public function share(User $user, Project $project, Organization $suborganization)
     {
+        if ($project->indexing !== (int)config('constants.indexing-approved')) {
+            return false;
+        }
+
         return $user->hasPermissionTo('project:share', $suborganization);
     }
 
