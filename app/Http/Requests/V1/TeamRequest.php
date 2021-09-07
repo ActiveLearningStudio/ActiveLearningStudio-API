@@ -25,7 +25,7 @@ class TeamRequest extends FormRequest
     {
         return [
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
-            'name' => 'required|string|max:80|unique:teams,name',
+            'name' => 'required|string|max:80|unique:teams,name,NULL,id,deleted_at,NULL',
             'description' => 'required|string|max:1000',
             'users' => 'required|array',
             'users.*.id'  => 'required|exists:App\User,id',
