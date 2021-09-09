@@ -28,7 +28,8 @@
         "maatwebsite/excel": "^3.1",
         "madnest/madzipper": "^1.1",
         "predis/predis": "^1.1",
-        "rusticisoftware/tincan": "@stable"
+        "rusticisoftware/tincan": "@stable",
+        "superbalist/laravel-prometheus-exporter": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.4.2",
