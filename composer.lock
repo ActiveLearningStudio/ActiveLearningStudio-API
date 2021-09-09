@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "563b144188a9cf4195e06c33147eb5e4",
+    "content-hash": "82238f4576dbe571b340b8ffa3cc4fa3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1941,6 +1941,54 @@
                 "quiz"
             ],
             "time": "2021-06-13T17:44:27+00:00"
+        },
+        {
+            "name": "kaltura/api-client-library",
+            "version": "v17.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kaltura/KalturaGeneratedAPIClientsPHP53.git",
+                "reference": "a708d7603553bc0fd60c6ff0fa897f342abe0d69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kaltura/KalturaGeneratedAPIClientsPHP53/zipball/a708d7603553bc0fd60c6ff0fa897f342abe0d69",
+                "reference": "a708d7603553bc0fd60c6ff0fa897f342abe0d69",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Kaltura": "library"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Kaltura",
+                    "homepage": "http://www.kaltura.org/"
+                }
+            ],
+            "description": "An auto generated Composer package for the Kaltura API client library",
+            "keywords": [
+                "api",
+                "client library",
+                "kaltura",
+                "open source video",
+                "video",
+                "video platform"
+            ],
+            "support": {
+                "issues": "https://github.com/kaltura/KalturaGeneratedAPIClientsPHP53/issues",
+                "source": "https://github.com/kaltura/KalturaGeneratedAPIClientsPHP53/tree/v17.5.0"
+            },
+            "time": "2021-07-08T19:13:49+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -9465,5 +9513,6 @@
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }
