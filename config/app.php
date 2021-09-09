@@ -189,7 +189,6 @@ return [
          * Custom Service Providers
          */
         App\Providers\QueueMonitorProvider::class,
-        Superbalist\LaravelPrometheusExporter\PrometheusServiceProvider::class
     ],
 
     /*
@@ -242,7 +241,6 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Prometheus' => Superbalist\LaravelPrometheusExporter\PrometheusFacade::class
 
     ],
 
