@@ -11,7 +11,10 @@ class OrganizationRolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        $organizationPermissionTypes = DB::table('organization_permission_types')->select('id', 'name', 'feature')->get();
+        $organizationPermissionTypes = DB::table('organization_permission_types')
+                                                ->select('id', 'name', 'feature')
+                                                ->where('feature', '<>', 'Group')
+                                                ->get();
         $courseCreatorRole = DB::table('organization_role_types')->where('name', 'course_creator')->first();
         $selfRegisteredRole = DB::table('organization_role_types')->where('name', 'self_registered')->first();
         $adminRole = DB::table('organization_role_types')->where('name', 'admin')->first();
