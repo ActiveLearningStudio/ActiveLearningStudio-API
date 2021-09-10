@@ -15,7 +15,7 @@ class ActivityResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'playlist_id' => $this->playlist_id,
             'title' => $this->title,
@@ -26,9 +26,15 @@ class ActivityResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
-            'h5p_content' => $this->h5p_content,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+
+        if($request->skipContent === "true") {    // Feature added after the fact for optimization
+            return $data;            
+        }
+
+        $data['h5p_content'] = $this->h5p_content;
+        return $data;
     }
 }
