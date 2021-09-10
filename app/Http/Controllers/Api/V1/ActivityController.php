@@ -16,6 +16,7 @@ use App\Models\Activity;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Models\Team;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
@@ -148,7 +149,8 @@ class ActivityController extends Controller
      */
     public function store(ActivityCreateRequest $request, Playlist $playlist)
     {
-        $this->authorize('create', [Activity::class, $playlist->project->organization]);
+        $team = ($request->team_id) ? Team::find($request->team_id) : null;
+        $this->authorize('create', [Activity::class, $playlist->project->organization, $team]);
 
         $data = $request->validated();
 
@@ -240,6 +242,9 @@ class ActivityController extends Controller
      */
     public function update(ActivityEditRequest $request, Playlist $playlist, Activity $activity)
     {
+        $team = ($request->team_id) ? Team::find($request->team_id) : null;
+        $this->authorize('update', [Activity::class, $playlist->project->organization, $team]);
+
         if ($activity->playlist_id !== $playlist->id) {
             return response([
                 'errors' => ['Invalid playlist or activity id.'],
@@ -478,11 +483,13 @@ class ActivityController extends Controller
      *
      * @param Playlist $playlist
      * @param Activity $activity
+     * @param $team_id
      * @return Response
      */
-    public function destroy(Playlist $playlist, Activity $activity)
+    public function destroy(Playlist $playlist, Activity $activity, $team_id = null)
     {
-        $this->authorize('delete', [Activity::class, $activity->playlist->project->organization]);
+        $team = (!is_null($team_id)) ? Team::find($team_id) : null;
+        $this->authorize('delete', [Activity::class, $activity->playlist->project->organization, $team]);
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
@@ -722,12 +729,13 @@ class ActivityController extends Controller
             }
         }
 
-        $project_teams = $project->teams;
-        foreach ($project_teams as $project_team) {
+        $project_team = $project->team;
+        if ($project_team) {
             $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
-                ->where('project_id', $project->id)
-                ->where('user_id', $authenticated_user->id)
-                ->exists();
+            ->where('project_id', $project->id)
+            ->where('user_id', $authenticated_user->id)
+            ->exists();
+
             if ($team_project_user) {
                 return true;
             }

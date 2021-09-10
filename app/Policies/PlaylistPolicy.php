@@ -41,11 +41,12 @@ class PlaylistPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $team
      * @return mixed
      */
-    public function create(User $user, Organization $organization)
+    public function create(User $user, Organization $organization, $team)
     {
-        return $user->hasPermissionTo('playlist:create', $organization);
+        return $user->hasPermissionTo('playlist:create', $organization) || $user->hasTeamPermissionTo('team:add-playlist', $team);
     }
 
     /**
@@ -53,11 +54,12 @@ class PlaylistPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $team
      * @return mixed
      */
-    public function update(User $user, Organization $organization)
+    public function update(User $user, Organization $organization, $team)
     {
-        return $user->hasPermissionTo('playlist:edit', $organization);
+        return $user->hasPermissionTo('playlist:edit', $organization) || $user->hasTeamPermissionTo('team:edit-playlist', $team);
     }
 
     /**
@@ -65,11 +67,12 @@ class PlaylistPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $team
      * @return mixed
      */
-    public function delete(User $user, Organization $organization)
+    public function delete(User $user, Organization $organization, $team)
     {
-        return $user->hasPermissionTo('playlist:delete', $organization);
+        return $user->hasPermissionTo('playlist:delete', $organization) || $user->hasTeamPermissionTo('team:delete-playlist', $team);
     }
 
     /**

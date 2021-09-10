@@ -24,6 +24,7 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
+            'searchType' => 'required|in:my_projects,showcase_projects,org_projects',
             'query' => 'string|max:255',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
             'negativeQuery' => 'string|max:255',

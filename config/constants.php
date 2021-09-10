@@ -9,6 +9,7 @@ return [
     ],
     'public-organization-visibility-type-id' => env('PUBLIC_ORGANIZATION_VISIBILITY_TYPE_ID', 4),
     'global-organization-visibility-type-id' => env('GLOBAL_ORGANIZATION_VISIBILITY_TYPE_ID', 3),
+    'protected-organization-visibility-type-id' => env('PROTECTED_ORGANIZATION_VISIBILITY_TYPE_ID', 2),
     'private-organization-visibility-type-id' => env('PRIVATE_ORGANIZATION_VISIBILITY_TYPE_ID', 1),
     'indexing-approved' => env('INDEXING_APPROVED', 3),
     'indexing-options' => env('INDEXING_OPTIONS', 'null,1,2,3'),

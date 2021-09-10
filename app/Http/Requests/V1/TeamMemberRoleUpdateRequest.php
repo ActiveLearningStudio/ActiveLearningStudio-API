@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PlaylistRequest extends FormRequest
+class TeamMemberRoleUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,10 @@ class PlaylistRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
-            'title' => 'required|string|max:255',
-            'team_id' => 'integer|exists:teams,id',
-            'order' => 'integer',
+            'user_id' => 'required|integer|exists:App\Models\TeamUserRole,user_id',
+            'role_id' => 'required|integer|exists:App\Models\TeamRoleType,id',
         ];
     }
 }
