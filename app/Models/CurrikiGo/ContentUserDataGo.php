@@ -29,7 +29,8 @@ class ContentUserDataGo extends Model
         'preload',
         'invalidate',
         'updated_at',
-        'go_integration'
+        'go_integration',
+        'submission_id'
     ];
 
 }
