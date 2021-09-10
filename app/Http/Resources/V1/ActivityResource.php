@@ -30,8 +30,9 @@ class ActivityResource extends JsonResource
             'updated_at' => $this->updated_at,
         ];
 
-        if($request->skipContent === "true") {    // Feature added after the fact for optimization
-            return $data;            
+        // Feature added after the fact for optimization
+        if ($request->skipContent === "true") {
+            return $data;
         }
 
         $data['h5p_content'] = $this->h5p_content;
