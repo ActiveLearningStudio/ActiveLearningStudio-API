@@ -52,6 +52,8 @@ node("currikidev") {
                                 echo 'Copy'
                                 sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-dev.yml currikistack" 
                                 echo 'Copy completed'
+                                mail bcc: '', body: '''Hi,
+                                API  deployment is succeeded''', cc: '', from: '', replyTo: '', subject: 'Api deployment is succeeded', to: 'ali@curriki.org'
                         }
                     }
                 } else {

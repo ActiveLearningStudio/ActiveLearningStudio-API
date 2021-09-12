@@ -59,6 +59,18 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can update the team member role.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function updateMemberRole(User $user, Team $team)
+    {
+        return $user->hasTeamPermissionTo('team:add-team-user', $team);
+    }
+
+    /**
      * Determine whether the user can share the team.
      *
      * @param User $user

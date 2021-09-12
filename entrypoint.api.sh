@@ -6,7 +6,7 @@ php /var/www/html/artisan config:cache
 php /var/www/html/artisan storage:link
 if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage/oauth-public.key ]]; then php /var/www/html/artisan passport:install; fi
 
-
+php /var/www/html/artisan migrate --force
 
 # service cron start &
 redis-server &

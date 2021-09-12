@@ -47,13 +47,16 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
-        Route::post('users/search', 'UserController@getUsersForTeam');
+        Route::post('users/search', 'UserController@getAllUsers');
+        Route::post('suborganization/{suborganization}/users/search', 'UserController@getOrgUsers');
+        Route::post('suborganization/{suborganization}/users/check', 'UserController@checkOrgUser');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
         ]);
 
+        // Teams
         Route::post('teams/invite', 'TeamController@inviteTeamMember');
         Route::post('teams/{team}/invite-member', 'TeamController@inviteMember');
         Route::post('suborganization/{suborganization}/teams/{team}/invite-members', 'TeamController@inviteMembers');
@@ -63,6 +66,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
         Route::get('suborganization/{suborganization}/get-teams', 'TeamController@getOrgTeams');
+        Route::get('suborganization/{suborganization}/team-role-types', 'TeamController@teamRoleTypes');
+        Route::get('suborganization/{suborganization}/team/{team}/team-permissions', 'TeamController@getUserTeamPermissions');
+        Route::put('suborganization/{suborganization}/team/{team}/update-team-member-role', 'TeamController@updateTeamMemberRole');
         Route::apiResource('suborganization.teams', 'TeamController');
 
         // Groups
@@ -95,11 +101,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('suborganization/{suborganization}/projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
+        Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
         Route::apiResource('suborganization.projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
-        Route::apiResource('projects.playlists', 'PlaylistController');
+        Route::apiResource('projects.playlists', 'PlaylistController')->except(['destroy']);
+        Route::delete('projects/{project}/playlists/{playlist}/{team_id?}', 'PlaylistController@destroy');
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
@@ -110,7 +118,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
-        Route::apiResource('playlists.activities', 'ActivityController');
+        Route::apiResource('playlists.activities', 'ActivityController')->except(['destroy']);
+        Route::delete('playlists/{playlist}/activities/{activity}/{team_id?}', 'ActivityController@destroy');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
@@ -172,7 +181,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
         // lms-settings
-        Route::apiResource('lms-settings', 'LmsSettingsController');
+        Route::apiResource('suborganizations/{suborganization}/lms-settings', 'LmsSettingsController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
