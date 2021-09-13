@@ -20,6 +20,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "h5p/h5p-core": "^1.24",
         "h5p/h5p-editor": "^1.24",
+        "kaltura/api-client-library": "^17.5",
         "laravel/framework": "^7.0",
         "laravel/passport": "^9.3",
         "laravel/scout": "^8.2",
@@ -28,7 +29,8 @@
         "maatwebsite/excel": "^3.1",
         "madnest/madzipper": "^1.1",
         "predis/predis": "^1.1",
-        "rusticisoftware/tincan": "@stable"
+        "rusticisoftware/tincan": "@stable",
+        "superbalist/laravel-prometheus-exporter": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.4.2",
