@@ -9,6 +9,8 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\SsoLoginRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Models\CurrikiGo\DefaultLmsSettings;
+use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
@@ -17,6 +19,7 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -556,8 +559,8 @@ class AuthController extends Controller
             }
         } else {
             $sso_login = $user->ssoLogin()->where([
-                'user_id' => $user->id, 
-                'provider' => $result['tool_platform'], 
+                'user_id' => $user->id,
+                'provider' => $result['tool_platform'],
                 'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'
                 ]])->first();
             if (!$sso_login) {
@@ -593,6 +596,106 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Login with LTI SSO
+     *
+     * @bodyParam sso_info string required The base64encode query params Example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Unable to login with LTI SSO."
+     *   ]
+     * }
+     *
+     * @param SsoLoginRequest $request
+     * @return Response
+     */
+    public function ltiSsoLogin(Request $request){
+        $user = User::with(['lmssetting' => function($query) use ($request){
+            $query->where('lti_client_id', $request['lti_client_id']);
+        }])->where('email', $request['person_email_primary'])->first();
+
+        if (!$user) {
+            $password = Str::random(10);
+            $user = $this->userRepository->create([
+                'first_name' => $request['first_name'],
+                'last_name' => $request['last_name'],
+                'email' => $request['person_email_primary'],
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(64),
+                'email_verified_at' => now(),
+            ]);
+            if ($user) {
+                $default_lms_setting = DefaultLmsSettings::where('lti_client_id', $request['lti_client_id'])->first();
+                //if default LMS setting not exist!
+                if(!$default_lms_setting)
+                {
+                    return response([
+                        'errors' => ['Unable to find default LMS setting with your client id.'],
+                    ]);
+                }
+                $default_lms_setting = $default_lms_setting->lmssetting->toArray();
+                $default_lms_setting['lms_login_id'] = $user['email'];
+                $user->lmssetting()->create($default_lms_setting);
+
+                $user->ssoLogin()->create([
+                    'user_id' => $user->id,
+                    'provider' => $request['tool_platform'],
+                    'uniqueid' => $request['user_key'],
+                    //'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                    'tool_consumer_instance_guid' => $request['guid'],
+                    //'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                ]);
+                $user['user_organization'] = $user->lmssetting[0]->organization;
+            }
+        } else {
+            if (sizeof($user->lmssetting) > 0)
+            {
+                $user['user_organization'] = $user->lmssetting[0]->organization;
+            } else {
+                $default_lms_setting = DefaultLmsSettings::where('lti_client_id', $request['lti_client_id'])->first();
+                //if default LMS setting not exist!
+                if(!$default_lms_setting)
+                {
+                    return response([
+                        'errors' => ['Unable to find default LMS setting with your client id.'],
+                    ]);
+                }
+                $default_lms_setting = $default_lms_setting->lmssetting->toArray();
+                $default_lms_setting['lms_login_id'] = $user['email'];
+                $user->lmssetting()->create($default_lms_setting);
+            }
+            $sso_login = $user->ssoLogin()->where([
+                'user_id' => $user->id,
+                'provider' => $request['tool_platform'],
+                'tool_consumer_instance_guid' => $request['guid'
+                ]])->first();
+            if (!$sso_login) {
+                $user->ssoLogin()->create([
+                    'user_id' => $user->id,
+                    'provider' => $request['tool_platform'],
+                    'uniqueid' => $request['user_key'],
+                    //'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                    'tool_consumer_instance_guid' => $request['guid'],
+                    //'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                ]);
+            }
+        }
+
+        $accessToken = $user->createToken('auth_token')->accessToken;
+
+        $this->userLoginRepository->create([
+            'user_id' => $user->id,
+            'ip_address' => $request->ip(),
+        ]);
+        $response = [
+            'user' => $user,
+            'access_token' => $accessToken,
+        ];
+        return $response;
+    }
     /**
      * Logout
      *
