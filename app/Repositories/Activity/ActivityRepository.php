@@ -521,7 +521,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                
                 $destination_file = storage_path('app/public/activities/'.$new_image_name);
                 \File::copy(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])), $destination_file);
-                $activity['thumb_url'] = "/storage/activities/" . $destination_file; 
+                $activity['thumb_url'] = "/storage/activities/" . $new_image_name; 
             }
         }
         
