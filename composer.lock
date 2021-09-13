@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "563b144188a9cf4195e06c33147eb5e4",
+    "content-hash": "e959d17fa07149ad08ec361f5e8eb1ad",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1941,6 +1941,106 @@
                 "quiz"
             ],
             "time": "2021-06-13T17:44:27+00:00"
+        },
+        {
+            "name": "jimdo/prometheus_client_php",
+            "version": "v0.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Jimdo/prometheus_client_php.git",
+                "reference": "cf3ea93197400a97464ff9bee78cf2169f035327"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Jimdo/prometheus_client_php/zipball/cf3ea93197400a97464ff9bee78cf2169f035327",
+                "reference": "cf3ea93197400a97464ff9bee78cf2169f035327",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "php": ">=5.6.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.0"
+            },
+            "suggest": {
+                "ext-apc": "Required if using APCu.",
+                "ext-redis": "Required if using Redis."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Prometheus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joscha",
+                    "email": "joscha@schnipseljagd.org"
+                },
+                {
+                    "name": "Jan Brauer",
+                    "email": "jan.brauer@jimdo.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/Jimdo/prometheus_client_php/issues",
+                "source": "https://github.com/Jimdo/prometheus_client_php/tree/master"
+            },
+            "abandoned": true,
+            "time": "2017-11-06T11:00:07+00:00"
+        },
+        {
+            "name": "kaltura/api-client-library",
+            "version": "v17.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kaltura/KalturaGeneratedAPIClientsPHP53.git",
+                "reference": "a708d7603553bc0fd60c6ff0fa897f342abe0d69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kaltura/KalturaGeneratedAPIClientsPHP53/zipball/a708d7603553bc0fd60c6ff0fa897f342abe0d69",
+                "reference": "a708d7603553bc0fd60c6ff0fa897f342abe0d69",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Kaltura": "library"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Kaltura",
+                    "homepage": "http://www.kaltura.org/"
+                }
+            ],
+            "description": "An auto generated Composer package for the Kaltura API client library",
+            "keywords": [
+                "api",
+                "client library",
+                "kaltura",
+                "open source video",
+                "video",
+                "video platform"
+            ],
+            "support": {
+                "issues": "https://github.com/kaltura/KalturaGeneratedAPIClientsPHP53/issues",
+                "source": "https://github.com/kaltura/KalturaGeneratedAPIClientsPHP53/tree/v17.5.0"
+            },
+            "time": "2021-07-08T19:13:49+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -4846,6 +4946,67 @@
                 "xAPI"
             ],
             "time": "2019-03-05T13:31:22+00:00"
+        },
+        {
+            "name": "superbalist/laravel-prometheus-exporter",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Superbalist/laravel-prometheus-exporter.git",
+                "reference": "6e874128e893dec4e1f4e93c688b190c164df6de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Superbalist/laravel-prometheus-exporter/zipball/6e874128e893dec4e1f4e93c688b190c164df6de",
+                "reference": "6e874128e893dec4e1f4e93c688b190c164df6de",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/routing": "^5.3 || ^6.0 || ^7.0",
+                "illuminate/support": "^5.3 || ^6.0 || ^7.0",
+                "jimdo/prometheus_client_php": "^0.9.0",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.5",
+                "phpunit/phpunit": "^5.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Superbalist\\LaravelPrometheusExporter\\PrometheusServiceProvider"
+                    ],
+                    "aliases": {
+                        "Prometheus": "Superbalist\\LaravelPrometheusExporter\\PrometheusFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Superbalist\\LaravelPrometheusExporter\\": "src/",
+                    "Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Superbalist.com a division of Takealot Online (Pty) Ltd",
+                    "email": "info@superbalist.com"
+                }
+            ],
+            "description": "A prometheus exporter for Laravel",
+            "support": {
+                "issues": "https://github.com/Superbalist/laravel-prometheus-exporter/issues",
+                "source": "https://github.com/Superbalist/laravel-prometheus-exporter/tree/1.0.5"
+            },
+            "time": "2020-03-16T09:02:49+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -9465,5 +9626,6 @@
     "platform": {
         "php": "^7.2.5"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
 }

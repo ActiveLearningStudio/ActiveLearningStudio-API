@@ -28,15 +28,15 @@ node("currikistage") {
     stage('Push image') {	
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 app.push("${env.BUILD_NUMBER}")            
-                app.push("latest")        
+                app.push("stage")        
         }    
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 redis.push("${env.BUILD_NUMBER}")            
-                redis.push("latest")        
+                redis.push("stage")        
         }   
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 esmigrate.push("${env.BUILD_NUMBER}")            
-                esmigrate.push("latest")        
+                esmigrate.push("stage")        
         }   
     }
     
