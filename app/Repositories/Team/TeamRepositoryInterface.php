@@ -33,8 +33,9 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      *
      * @param $team
      * @param $user
+     * @param $role_id
      */
-    public function inviteToTeam($team, $user);
+    public function inviteToTeam($team, $user, $role_id);
 
     /**
      * Invite members to the team
@@ -105,7 +106,7 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getTeams($suborganization_id, $user_id);
-    
+
     /**
      * Get Organization Teams data
      *
