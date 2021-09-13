@@ -121,4 +121,13 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getTeamDetail($teamId);
+
+    /**
+     * To fetch team user permissions
+     *
+     * @param User $authenticatedUser
+     * @param Team $team
+     * @return Model
+     */
+    public function fetchTeamUserPermissions($authenticatedUser, $team);
 }
