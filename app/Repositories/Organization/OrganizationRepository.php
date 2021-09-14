@@ -757,4 +757,5 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         return $this->model->orderBy('id', 'asc')->first();
     }
+
 }
