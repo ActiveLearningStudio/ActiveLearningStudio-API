@@ -25,6 +25,7 @@ class TeamInviteMemberRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
+            'role_id' => 'required|exists:App\Models\TeamRoleType,id',
         ];
     }
 }
