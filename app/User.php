@@ -110,7 +110,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function teams()
     {
-        return $this->belongsToMany('App\Models\Team', 'user_team')->withPivot('role')->withTimestamps();
+        // return $this->belongsToMany('App\Models\Team', 'user_team')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany('App\Models\Team', 'team_user_roles')->using('App\Models\TeamUserRole')->withPivot('team_role_type_id')->withTimestamps();
     }
 
     /**
@@ -280,5 +281,18 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $userRepository = resolve(UserRepositoryInterface::class);
         return $userRepository->hasPermissionTo($this, $permission, $organization);
+    }
+
+    /**
+     * Check if user has the specified permission in the provided team role
+     *
+     * @param $permission
+     * @param $team
+     * @return boolean
+     */
+    public function hasTeamPermissionTo($permission, $team)
+    {
+        $userRepository = resolve(UserRepositoryInterface::class);
+        return $userRepository->hasTeamPermissionTo($this, $permission, $team);
     }
 }
