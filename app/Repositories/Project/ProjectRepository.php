@@ -113,7 +113,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'is_user_starter' => (bool) $project->starter_project, // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
-            
+
             if ($organization_id) {
                 $data['organization_id'] = $organization_id;
                 $data['organization_visibility_type_id'] = config('constants.private-organization-visibility-type-id');
@@ -393,7 +393,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // if simple request for getting project listing with search
         if ($q) {
-            $q = urlencode($data['query']);
             $query = $query->where(function($qry) use ($q) {
                 $qry->where('name', 'iLIKE', '%' .$q. '%')
                     ->orWhereHas('users', function ($qry) use ($q) {
@@ -441,7 +440,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // if simple request for getting project listing with search
         if ($q) {
-            $q = urlencode($data['query']);
             $query = $query->where(function($qry) use ($q) {
                 $qry->where('name', 'iLIKE', '%' .$q. '%')
                     ->orWhereHas('users', function ($qry) use ($q) {
@@ -528,23 +526,23 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function exportProject($authUser, Project $project)
     {
         $zip = new ZipArchive;
-        
+
         $project_dir_name = 'projects-'.uniqid();
         Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
-        
+
         $project_thumbanil = "";
         if (filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
             $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
-            $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION); 
+            $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
             if(file_exists($project_thumbanil)) {
                 Storage::disk('public')->put('/exports/'.$project_dir_name.'/'.basename($project_thumbanil),file_get_contents($project_thumbanil));
             }
         }
-       
+
         $playlists = $project->playlists;
-        
+
         foreach ($playlists as $playlist) {
-            
+
             $title = $playlist->title;
             Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/'.$title.'.json', $playlist);
             $activites = $playlist->activities;
@@ -558,34 +556,34 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $decoded_content['library_major_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('major_version');
                 $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('minor_version');
                 Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id.'.json', json_encode($decoded_content));
-                
+
                 if (filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
                     $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
-                    $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION); 
+                    $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
                     if(file_exists($activity_thumbanil)) {
                         Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.basename($activity_thumbanil),file_get_contents($activity_thumbanil));
                     }
                 }
 
                 \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), storage_path('app/public/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id) );
-            } 
+            }
         }
-        
+
         // Get real path for our folder
         $rootPath = storage_path('app/public/exports/'.$project_dir_name);
-        
+
         // Initialize archive object
         $zip = new ZipArchive();
         $fileName = $project_dir_name.'.zip';
         $zip->open(storage_path('app/public/exports/'.$fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
-        
+
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($rootPath),
             RecursiveIteratorIterator::LEAVES_ONLY
         );
-        
+
         foreach ($files as $name => $file)
         {
             // Skip directories (they would be added automatically)
@@ -594,12 +592,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
-        
+
                 // Add current file to archive
                 $zip->addFile($filePath, $relativePath);
             }
         }
-        
+
         // Zip archive will be created only after closing object
         $zip->close();
 
@@ -621,7 +619,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
             $zip = new ZipArchive;
             $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
-            
+
             if ($zip->open($source_file) === TRUE) {
                 $extracted_folder_name = "app/public/imports/project-".uniqid();
                 $zip->extractTo(storage_path($extracted_folder_name.'/'));
@@ -632,40 +630,40 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser) {
                 if(file_exists(storage_path($extracted_folder_name.'/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
-                    
+
                     $project = json_decode($project_json,true);
                     unset($project['id'], $project['organization_id'], $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
-                    
+
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
                     if (filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
-                        
+
                         if(file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
-                            
+
                             $ext = pathinfo(basename($project['thumb_url']), PATHINFO_EXTENSION);
                             $new_image_name = uniqid() . '.' . $ext;
                             $destination_file = storage_path('app/public/projects/'.$new_image_name);
-                            
+
                             \File::copy(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])), $destination_file);
                             $project['thumb_url'] = "/storage/projects/" . $new_image_name;;
                         }
                     }
-    
+
                     $cloned_project = $authUser->projects()->create($project, ['role' => 'owner']);
                     if (file_exists(storage_path($extracted_folder_name . '/playlists'))) {
                         $playlist_directories = scandir(storage_path($extracted_folder_name . '/playlists'));
-                    
+
                         for ($i=0; $i<count($playlist_directories); $i++) { // loop through all playlists
                             if ($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..') continue;
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
-                    
+
                     return $project['name'];
                 }
             });
-            
-            
+
+
         }catch (\Exception $e) {
             \DB::rollBack();
             Log::error($e->getMessage());
