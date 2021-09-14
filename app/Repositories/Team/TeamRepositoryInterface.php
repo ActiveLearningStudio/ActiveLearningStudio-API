@@ -123,7 +123,7 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
     public function getTeamDetail($teamId);
 
     /**
-     * To fetch organization user permissions
+     * To fetch team user permissions
      *
      * @param User $authenticatedUser
      * @param Team $team
