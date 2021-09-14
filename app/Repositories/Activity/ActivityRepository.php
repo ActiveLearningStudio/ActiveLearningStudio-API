@@ -510,7 +510,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $new_content = \DB::table('h5p_contents')->insert($h5p_content);
         $new_content_id = \DB::getPdo()->lastInsertId();
             
-        \File::copyDirectory(storage_path('app/exports/projects/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$old_content_id), storage_path('app/public/h5p/content/'.$new_content_id) );
+        \File::copyDirectory(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$old_content_id), storage_path('app/public/h5p/content/'.$new_content_id) );
             
         $activity['h5p_content_id'] = $new_content_id;
             
