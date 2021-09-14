@@ -71,7 +71,12 @@ class CloneProject implements ShouldQueue
             $projectRepository->clone($this->user, $this->project, $this->token, $this->organization_id, $this->team);
             $isDuplicate = $projectRepository->checkIsDuplicate($this->user, $this->project->id, $this->organization_id);
             $process = ($isDuplicate) ? "duplicate" : "clone";
-            $message = "Your request to $process project [" . $this->project->name . "] has been completed and available";
+            if (is_null($this->team)) {
+                $message = "Your request to $process project [" . $this->project->name . "] has been completed and available";
+            } else {
+                $message = "Your request to add project [" . $this->project->name . "] in team has been completed and available";
+            }
+
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
             $this->user->notify(new CloneNotification($message, $process, $userName));
         } catch (\Exception $e) {
