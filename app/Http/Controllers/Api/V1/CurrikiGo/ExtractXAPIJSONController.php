@@ -98,9 +98,6 @@ class ExtractXAPIJSONController extends Controller
                 if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
                     // It maybe an old format statement. Just save verb, object and actor, and move on.
                     $inserted = $lrsStatementsRepository->create($insertData);
-                    if ($inserted) {
-                        \Log::info(date('Y-m-d h:i:s') . ' - OLD XAPI statement with id: ' . $row->id . ' processed');
-                    }
                     continue;
                 }
                 
@@ -204,7 +201,6 @@ class ExtractXAPIJSONController extends Controller
                 $inserted = $lrsStatementsRepository->create($insertData);
                
                 if ($inserted) {
-                    \Log::info(date('Y-m-d h:i:s') . ' - NEW XAPI statement with id: ' . $row->id . ' processed');
                     //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
                     if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
                         if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {
