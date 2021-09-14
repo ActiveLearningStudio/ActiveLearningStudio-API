@@ -442,8 +442,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         if ($q) {
             $query = $query->where(function($qry) use ($q) {
                 $qry->where('name', 'iLIKE', '%' .$q. '%')
-                    ->orWhereHas('users', function ($qry) use ($q) {
-                        $qry->where('email', 'iLIKE', '%' .$q. '%');
+                    ->orWhereHas('team', function ($qry) use ($q) {
+                        $qry->where('name', 'iLIKE', '%' .$q. '%');
                 });
             });
         }

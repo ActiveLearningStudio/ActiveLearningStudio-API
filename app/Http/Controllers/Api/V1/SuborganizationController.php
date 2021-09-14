@@ -675,6 +675,7 @@ class SuborganizationController extends Controller
         if ($role) {
             return response([
                 'message' => 'Role has been added successfully.',
+                'data' => $role,
             ], 200);
         }
 
