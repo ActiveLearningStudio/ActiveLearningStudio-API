@@ -282,4 +282,17 @@ class User extends Authenticatable implements MustVerifyEmail
         $userRepository = resolve(UserRepositoryInterface::class);
         return $userRepository->hasPermissionTo($this, $permission, $organization);
     }
+
+    /**
+     * Check if user has the specified permission in the provided team role
+     *
+     * @param $permission
+     * @param $team
+     * @return boolean
+     */
+    public function hasTeamPermissionTo($permission, $team)
+    {
+        $userRepository = resolve(UserRepositoryInterface::class);
+        return $userRepository->hasTeamPermissionTo($this, $permission, $team);
+    }
 }
