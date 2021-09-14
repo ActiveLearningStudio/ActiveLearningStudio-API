@@ -110,7 +110,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function teams()
     {
-        return $this->belongsToMany('App\Models\Team', 'user_team')->withPivot('role')->withTimestamps();
+        // return $this->belongsToMany('App\Models\Team', 'user_team')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany('App\Models\Team', 'team_user_roles')->using('App\Models\TeamUserRole')->withPivot('team_role_type_id')->withTimestamps();
     }
 
     /**
