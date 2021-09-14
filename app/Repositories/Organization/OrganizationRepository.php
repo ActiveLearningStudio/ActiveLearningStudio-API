@@ -299,6 +299,28 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Get a list of the organization users.
+     *
+     * @param $data
+     * @param Organization $organization
+     * @return mixed
+     */
+    public function getOrgUsers($data, $organization)
+    {
+        $organizationUserIds = $organization->users()->get()->modelKeys();
+        $childOrganizationUserIds = $this->getChildrenOrganizationUserIds($organization);
+
+        $userInIds = array_merge($organizationUserIds, $childOrganizationUserIds);
+
+        $this->query = $this->userRepository->model->when($data['search'] ?? null, function ($query) use ($data) {
+            $query->search(['email'], $data['search']);
+            return $query;
+        });
+
+        return $this->query->whereIn('id', $userInIds)->orderBy('email', 'asc')->paginate();
+    }
+
+    /**
      * Get the parent organizations user ids
      *
      * @param $userIds
@@ -736,25 +758,4 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         return $this->model->orderBy('id', 'asc')->first();
     }
 
-    /**
-     * Get a list of the organization users.
-     *
-     * @param $data
-     * @param Organization $organization
-     * @return mixed
-     */
-    public function getOrgUsers($data, $organization)
-    {
-        $organizationUserIds = $organization->users()->get()->modelKeys();
-        $childOrganizationUserIds = $this->getChildrenOrganizationUserIds($organization);
-
-        $userInIds = array_merge($organizationUserIds, $childOrganizationUserIds);
-
-        $this->query = $this->userRepository->model->when($data['search'] ?? null, function ($query) use ($data) {
-            $query->search(['email'], $data['search']);
-            return $query;
-        });
-
-        return $this->query->whereIn('id', $userInIds)->orderBy('email', 'asc')->paginate();
-    }
 }

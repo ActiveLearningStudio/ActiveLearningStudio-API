@@ -114,44 +114,44 @@ class TeamPolicy
      * @param Team $team
      * @return mixed
      */
-    public function addProjects(User $user, Team $team)
+     public function addProjects(User $user, Team $team)
+     {
+         return $user->hasTeamPermissionTo('team:add-project', $team);
+     }
+
+     /**
+     * Determine whether the user can remove project in the team.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function removeProject(User $user, Team $team)
     {
-        return $user->hasTeamPermissionTo('team:add-project', $team);
+        return $user->hasTeamPermissionTo('team:remove-project', $team);
+    }
+
+     /**
+     * Determine whether the user can add users in the team.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function addTeamUsers(User $user, Team $team)
+    {
+        return $user->hasTeamPermissionTo('team:add-team-user', $team);
     }
 
     /**
-    * Determine whether the user can remove project in the team.
-    *
-    * @param User $user
-    * @param Team $team
-    * @return mixed
-    */
-   public function removeProject(User $user, Team $team)
-   {
-       return $user->hasTeamPermissionTo('team:remove-project', $team);
-   }
-
-    /**
-    * Determine whether the user can add users in the team.
-    *
-    * @param User $user
-    * @param Team $team
-    * @return mixed
-    */
-   public function addTeamUsers(User $user, Team $team)
-   {
-       return $user->hasTeamPermissionTo('team:add-team-user', $team);
-   }
-
-   /**
-    * Determine whether the user can remove user in the team.
-    *
-    * @param User $user
-    * @param Team $team
-    * @return mixed
-    */
-   public function removeTeamUsers(User $user, Team $team)
-   {
-       return $user->hasTeamPermissionTo('team:remove-team-user', $team);
-   }
+     * Determine whether the user can remove user in the team.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function removeTeamUsers(User $user, Team $team)
+    {
+        return $user->hasTeamPermissionTo('team:remove-team-user', $team);
+    }
 }
