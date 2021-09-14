@@ -188,7 +188,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 $valid_users[] = $con_user;
                 continue;
             }
-            $note = array_key_exists('note', $user) ? $user['note'] : '';
+            $note = array_key_exists('note', $data) ? $data['note'] : '';
 
             if ($con_user) {
                 $team->users()->attach($con_user, ['team_role_type_id' => $user['role_id']]);
