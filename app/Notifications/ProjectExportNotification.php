@@ -97,7 +97,7 @@ class ProjectExportNotification extends Notification
             'read_at' => null,
             'created_at' => $timestamp->diffForHumans(),
             'updated_at' => $timestamp->diffForHumans(),
-            'file_path'  => url(Storage::url('exports/'.basename($this->path))),
+            'file_path'  => url(Storage::url('exports/' . basename($this->path))),
         ));
     }
 

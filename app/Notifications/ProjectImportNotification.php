@@ -68,7 +68,7 @@ class ProjectImportNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'message' => "Project[".$this->projectName."] has been imported successfully.",
+            'message' => "Project[$this->projectName] has been imported successfully.",
         ];
     }
 
