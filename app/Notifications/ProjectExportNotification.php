@@ -7,6 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
+use Carbon\Carbon;
 
 class ProjectExportNotification extends Notification
 {
@@ -23,15 +25,21 @@ class ProjectExportNotification extends Notification
     public $path;
 
     /**
+     * @var string
+     */
+    public $projectName;
+
+    /**
      * Create a new notification instance.
      * 
      *
      * @return void
      */
-    public function __construct($path, $userName)
+    public function __construct($path, $userName, $projectName)
     {
         $this->path = basename($path);
         $this->userName = $userName;
+        $this->projectName = $projectName;
     }
 
     /**
@@ -66,10 +74,52 @@ class ProjectExportNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
+    public function toDatabase($notifiable)
+    {
+        return [
+            'message' => "Project[$this->projectName] has been exported successfully.",
+        ];
+    }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     * @param  mixed  $notifiable
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($notifiable)
+    {
+        $timestamp = Carbon::parse(now()->addSecond()->toDateTimeString());
+        return new BroadcastMessage(array(
+            'notifiable_id' => $notifiable->id,
+            'notifiable_type' => get_class($notifiable),
+            'data' => $this->toDatabase($notifiable),
+            'notifiable' => $notifiable,
+            'read_at' => null,
+            'created_at' => $timestamp->diffForHumans(),
+            'updated_at' => $timestamp->diffForHumans(),
+            'file_path'  => url(Storage::url('exports/'.basename($this->path))),
+        ));
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
     public function toArray($notifiable)
     {
         return [
             //
         ];
+    }
+
+    /**
+     * Return broadcast message type
+     * @return string
+     */
+    public function broadcastType()
+    {
+        return  'Export Notification';
     }
 }
