@@ -50,7 +50,7 @@ class ProjectExportNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail','database', 'broadcast'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
