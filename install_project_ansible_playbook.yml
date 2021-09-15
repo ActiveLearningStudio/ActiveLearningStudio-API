@@ -1,0 +1,35 @@
+---
+# Title: create the Ansible playbook for deploying the complete application locally
+# Mission: create the Ansible playbook for deploying the complete application locally
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+- name: Install the ActiveLearningStudio-API source code and watch service on the target. 
+  hosts: localhost
+  vars: 
+    GITHUB_ORG: "team19hackathon2021"
+    PROJECT_NAME: "ActiveLearningStudio-API"
+    PROJECT_REPO: "git@github.com:{{ GITHUB_ORG }}/{{ PROJECT_NAME }}.git"
+    PROJECT_SRC: "{{ playbook_dir }}"
+    PROJECT_CONFIG:
+      sqlTables: true
+      enableUserKey: true
+      enableSessionId: true
+      enableDeleted: true
+      enableArchived: true
+  tasks: 
+#    - include_role:
+#        name: computate.computate_postgres
+#    - include_role:
+#        name: computate.computate_zookeeper
+#    - include_role:
+#        name: computate.computate_solr
+    - include_role:
+        name: computate.computate_project
+      vars: 
+        PROJECT_JAVA_PACKAGE: org.curriki.api.enus
+        PROJECT_SERVICES: 
+          - PROJECT_NAME: "{{ PROJECT_NAME }}"
+            PROJECT_SRC: "{{ playbook_dir }}"
+            PROJECT_JAVA_PACKAGE: org.curriki.api.enus
+

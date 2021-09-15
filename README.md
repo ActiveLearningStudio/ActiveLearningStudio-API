@@ -21,3 +21,9 @@ https://github.com/ActiveLearningStudio/curriki-eks
 
 The API end points are documented here:
 <a href="https://dev.currikistudio.org/api" target="new">https://dev.currikistudio.org/api</a> 
+
+## Dependencies
+
+```bash
+sudo yum install java-11-openjdk-devel
+```
