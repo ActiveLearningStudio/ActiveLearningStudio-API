@@ -41,7 +41,7 @@ class ProjectImportNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database', 'broadcast'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
