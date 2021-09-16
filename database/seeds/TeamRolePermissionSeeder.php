@@ -37,6 +37,9 @@ class TeamRolePermissionSeeder extends Seeder
                 'team:share-activity',
                 'team:add-project-user',
                 'team:remove-project-user',
+                'team:edit-project',
+                'team:view-project',
+                'team:publish-project',
             ];
 
             if (in_array($teamPermissionType->name, $contributorPermissions)) {
@@ -50,6 +53,8 @@ class TeamRolePermissionSeeder extends Seeder
                 'team:share-project',
                 'team:share-playlist',
                 'team:share-activity',
+                'team:view-project',
+                'team:publish-project',
             ];
 
             if (in_array($teamPermissionType->name, $memberPermissions)) {

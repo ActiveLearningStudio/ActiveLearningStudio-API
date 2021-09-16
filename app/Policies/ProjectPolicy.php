@@ -3,8 +3,8 @@
 namespace App\Policies;
 
 use App\Models\Organization;
-use App\Models\Pivots\TeamProjectUser;
 use App\Models\Project;
+use App\Models\Team;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -54,11 +54,16 @@ class ProjectPolicy
      *
      * @param User $user
      * @param Organization $suborganization
+     * @param $team
      * @return mixed
      */
-    public function update(User $user, Organization $suborganization)
+    public function update(User $user, Organization $suborganization, $team)
     {
-        return $user->hasPermissionTo('project:edit', $suborganization);
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:edit-project', $team);
+        } else {
+            return $user->hasPermissionTo('project:edit', $suborganization);
+        }
     }
 
     /**
