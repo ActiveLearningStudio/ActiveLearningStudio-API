@@ -584,7 +584,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             }else {
                 return "Unable to import Project";
             }
-            return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser) {
+            return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file) {
                 if(file_exists(storage_path($extracted_folder_name.'/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
                     
@@ -602,7 +602,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             $destination_file = storage_path('app/public/projects/'.$new_image_name);
                             
                             \File::copy(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])), $destination_file);
-                            $project['thumb_url'] = "/storage/projects/" . $new_image_name;;
+                            $project['thumb_url'] = "/storage/projects/" . $new_image_name;
                         }
                     }
     
@@ -615,6 +615,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
+                    unlink($source_file); // Deleted the storage zip file
+                    $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
                     
                     return $project['name'];
                 }
@@ -627,5 +629,23 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             throw new GeneralException('Unable to import the project, please try again later!');
         }
     }
+
+    /**
+     * To Deleted the directory recurcively
+     * 
+     * @param $dir 
+     */
+    private function rrmdir($dir) {
+        if (is_dir($dir)) {
+          $objects = scandir($dir);
+          foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+              if (filetype($dir . "/" . $object) == "dir") $this->rrmdir($dir . "/" . $object); else unlink($dir . "/" . $object);
+            }
+          }
+          reset($objects);
+          rmdir($dir);
+        }
+     }
 
 }
