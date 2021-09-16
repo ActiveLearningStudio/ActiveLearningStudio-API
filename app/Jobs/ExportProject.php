@@ -49,7 +49,7 @@ class ExportProject implements ShouldQueue
             $export_file = $projectRepository->exportProject($this->user, $this->project);
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
            
-            $this->user->notify(new ProjectExportNotification($export_file, $userName));
+            $this->user->notify(new ProjectExportNotification($export_file, $userName, $this->project->name));
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }
