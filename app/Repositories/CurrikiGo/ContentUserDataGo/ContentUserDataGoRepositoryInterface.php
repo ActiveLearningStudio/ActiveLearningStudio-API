@@ -14,5 +14,5 @@ interface ContentUserDataGoRepositoryInterface extends EloquentRepositoryInterfa
      *
      * @param ContentUserDataGo $model
      */
-    public function fetchByCompositeKey($content_id, $user_id, $sub_content_id, $data_id);
+    public function fetchByCompositeKey($content_id, $user_id, $sub_content_id, $data_id , $submissionId);
 }
