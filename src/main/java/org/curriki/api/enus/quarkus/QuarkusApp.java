@@ -45,7 +45,7 @@ import io.vertx.sqlclient.PoolOptions;
 @QuarkusMain
 @ApplicationScoped
 public class QuarkusApp extends QuarkusAppGen<Object> {  
-	private static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
+	private static final Logger LOG = LoggerFactory.getLogger(QuarkusApp.class);
 
 	@Inject
 	Vertx vertx;
