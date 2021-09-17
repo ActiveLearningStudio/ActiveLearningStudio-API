@@ -15,7 +15,7 @@ class AlterTableH5pContentsUserDataGoAddSubmissionidPk extends Migration
     {
         Schema::table('h5p_contents_user_data_go', function (Blueprint $table) {
             $table->dropPrimary('fk_primary');
-            $table->primary(['content_id', 'user_id', 'sub_content_id', 'data_id','submission_id'],'fk_primary');
+            $table->primary(['content_id', 'user_id', 'sub_content_id', 'data_id','submission_id'], 'fk_primary');
         });
     }
 
@@ -28,7 +28,7 @@ class AlterTableH5pContentsUserDataGoAddSubmissionidPk extends Migration
     {
         Schema::table('h5p_contents_user_data_go', function (Blueprint $table) {
             $table->dropPrimary('fk_primary');
-            $table->primary(['content_id', 'user_id', 'sub_content_id', 'data_id'],'fk_primary');
+            $table->primary(['content_id', 'user_id', 'sub_content_id', 'data_id'], 'fk_primary');
         });
     }
 }
