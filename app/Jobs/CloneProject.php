@@ -75,6 +75,7 @@ class CloneProject implements ShouldQueue
                 $message = "Your request to $process project [" . $this->project->name . "] has been completed and available";
             } else {
                 $message = "Your request to add project [" . $this->project->name . "] in team has been completed and available";
+                $process = "Team Project";
             }
 
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
