@@ -312,54 +312,6 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Group'
         ]);
 
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:invite-member',
-            'display_name' => 'Invite Group Member',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:add-projects',
-            'display_name' => 'Add Group Projects',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:remove-projects',
-            'display_name' => 'Remove Group Projects',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:add-project-user',
-            'display_name' => 'Add Group Project User',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:remove-project-user',
-            'display_name' => 'Remove Group Project User',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:add-user',
-            'display_name' => 'Add Group User',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:remove-user',
-            'display_name' => 'Remove Group User',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:share',
-            'display_name' => 'Share Group',
-            'feature' => 'Group'
-        ]);
-
         // Search
         DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'search:advance',
