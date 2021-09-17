@@ -615,7 +615,7 @@ class H5pController extends Controller
         $data = $request->input("data");
         $preload = $request->input("preload");
         $invalidate = $request->input("invalidate");
-        $submissionId = $request->get('submission_id');
+        $submissionId = $request->get('submissionid');
 
         if ($contentId === NULL ||
             $dataId === NULL ||
