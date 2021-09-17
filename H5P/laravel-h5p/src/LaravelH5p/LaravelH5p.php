@@ -222,9 +222,12 @@ class LaravelH5p
      */
     private static function get_core_settings()
     {
-        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
+        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . 
+        '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
         if (isset($_GET['gcuid']) && isset($_GET['submissionid'])) {
-            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId'.'&gcuid='.$_GET['gcuid'].'&submissionid='.$_GET['submissionid'];
+            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . 
+            '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId' . 
+            '&gcuid=' . $_GET['gcuid'] . '&submissionid=' . $_GET['submissionid'];
         }
 
         $settings = array(

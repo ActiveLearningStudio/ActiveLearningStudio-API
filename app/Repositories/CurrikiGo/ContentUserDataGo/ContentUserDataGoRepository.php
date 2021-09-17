@@ -26,7 +26,8 @@ class ContentUserDataGoRepository extends BaseRepository implements ContentUserD
      */
     public function fetchByCompositeKey($content_id, $user_id, $sub_content_id, $data_id, $submissionId)
     {
-        return $this->model->where(['content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 'data_id' => $data_id, 'submission_id' => $submissionId])->get();
+        return $this->model->where(['content_id' => $content_id, 'user_id' => $user_id, 
+        'sub_content_id' => $sub_content_id, 'data_id' => $data_id, 'submission_id' => $submissionId])->get();
     }
 
     /**
@@ -37,7 +38,8 @@ class ContentUserDataGoRepository extends BaseRepository implements ContentUserD
     public function updateComposite($attributes, $content_id, $user_id, $sub_content_id, $data_id, $submissionId)
     {
         return $this->model->where([
-            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 'data_id' => $data_id, 'submission_id' => $submissionId
+            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 
+            'data_id' => $data_id, 'submission_id' => $submissionId
         ])->update($attributes);
     }
 
@@ -49,7 +51,8 @@ class ContentUserDataGoRepository extends BaseRepository implements ContentUserD
     public function deleteComposite($content_id, $user_id, $sub_content_id, $data_id, $submissionId)
     {
         return $this->model->where([
-            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 'data_id' => $data_id, 'submission_id' => $submissionId
+            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 
+            'data_id' => $data_id, 'submission_id' => $submissionId
         ])->delete();
     }
 }
