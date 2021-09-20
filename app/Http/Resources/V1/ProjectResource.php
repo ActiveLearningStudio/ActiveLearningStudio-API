@@ -33,6 +33,7 @@ class ProjectResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'team' => $this->team,
+            'user' => $this->user,
         ];
     }
 }
