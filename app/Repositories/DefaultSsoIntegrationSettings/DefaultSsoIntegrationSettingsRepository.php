@@ -39,8 +39,6 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
      */
     public function create($data)
     {
-//        dd($data);
-//        dd($setting = $this->model->create($data));
         try {
             if ($setting = $this->model->create($data)) {
                 return ['message' => 'Setting created successfully!', 'data' => $setting];
@@ -58,8 +56,12 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
      */
     public function find($id)
     {
-        if ($setting = $this->model->find($id)) {
-            return $setting;
+        try {
+            if ($setting = $this->model->find($id)) {
+                return $setting;
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
         }
         throw new GeneralException('Default Sso Setting not found.');
     }

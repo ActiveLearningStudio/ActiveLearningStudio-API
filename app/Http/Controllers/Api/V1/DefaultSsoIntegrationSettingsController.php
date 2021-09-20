@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\DefaultSsoIntegrationSettingsRequest;
+use App\Http\Requests\V1\StoreDefaultSsoSettingsRequest;
+use App\Http\Requests\V1\UpdateDefaultSsoSettingsRequest;
+use App\Http\Resources\V1\DefaultSsoSettingsResource;
 use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsInterface;
 use Illuminate\Http\Request;
 
@@ -27,67 +29,76 @@ class DefaultSsoIntegrationSettingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(DefaultSsoIntegrationSettingsRequest $defaultSsoSettingsRequest)
+    public function index(Request $request)
     {
-
-        $response = $this->defaultSsoSettingsRepository->getAll($defaultSsoSettingsRequest);
+        $response = $this->defaultSsoSettingsRepository->getAll($request);
         return $response;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request/StoreDefaultSsoSettingsRequest $storeDefaultSsoSettingsRequest
      * @return \Illuminate\Http\Response
      */
-    public function store(DefaultSsoIntegrationSettingsRequest $defaultSsoSettingsRequest)
+    public function store(StoreDefaultSsoSettingsRequest $storeDefaultSsoSettingsRequest)
     {
-//        dd($defaultSsoSettingsRequest->all());
-        $validated = $defaultSsoSettingsRequest->validated();
+        $validated = $storeDefaultSsoSettingsRequest->validated();
         $response = $this->defaultSsoSettingsRepository->create($validated);
-        dd($response);
-        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user', 'organization'))], 200);
+        return response(
+            [
+                'message' => $response['message'],
+                'data' => new DefaultSsoSettingsResource($response['data']->load('organization'))
+            ],
+            200
+        );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
         $setting = $this->defaultSsoSettingsRepository->find($id);
-        dd($setting);
-        return new LmsSettingResource($setting->load('user', 'organization'));
+        return new DefaultSsoSettingsResource($setting->load('organization'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request/UpdateDefaultSsoSettingsRequest $updateDefaultSsoSettingsRequest
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(DefaultSsoIntegrationSettingsRequest $defaultSsoIntegrationSettingsRequest, $id)
+    public function update(UpdateDefaultSsoSettingsRequest $updateDefaultSsoSettingsRequest, $id)
     {
-        //
-        $validated = $defaultSsoIntegrationSettingsRequest->validated();
+        $validated = $updateDefaultSsoSettingsRequest->validated();
         $response = $this->defaultSsoSettingsRepository->update($id, $validated);
-        dd($response);
-        return response(['message' => $response['message'], 'data' => new LmsSettingResource($response['data']->load('user', 'organization'))], 200);
+        return response(
+            [
+                'message' => $response['message'],
+                'data' => new DefaultSsoSettingsResource($response['data']->load('organization'))
+            ],
+            200
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
-        return response(['message' => $this->defaultSsoSettingsRepository->destroy($id)], 200);
+        return response(
+            [
+                'message' => $this->defaultSsoSettingsRepository->destroy($id)
+            ],
+            200
+        );
     }
 }

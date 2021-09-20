@@ -758,4 +758,17 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         return $this->model->orderBy('id', 'asc')->first();
     }
 
+    public function searchOrganizationByName($data)
+    {
+        return $this->model
+            ->with(['parent', 'admins'])
+            ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
+//            ->whereIn('parent_id', $parentIds)
+            ->when($data['query'] ?? null, function ($query) use ($data) {
+                $query->where('name', 'like', '%' . $data['query'] . '%');
+                return $query;
+            })
+            ->get();
+    }
+
 }

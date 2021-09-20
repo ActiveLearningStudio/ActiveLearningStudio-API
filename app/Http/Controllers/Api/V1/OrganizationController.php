@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\OrganizationRequest;
+use Illuminate\Http\Request;
 
 /**
  * @group 18. Organization API
@@ -25,7 +26,7 @@ class OrganizationController extends Controller
     {
         $this->organizationRepository = $organizationRepository;
     }
-    
+
     /**
      * Get By Domain
      *
@@ -53,6 +54,18 @@ class OrganizationController extends Controller
 
         return response([
             'organization' => new OrganizationResource($this->organizationRepository->findByField('domain', $data['domain'])),
+        ], 200);
+    }
+
+    public function searchOrganizationByName(Request $request)
+    {
+//        if(!isset($data['query']) && empty($data['query']) )
+//        {
+//
+//        }
+        $response = $this->organizationRepository->searchOrganizationByName($request);
+        return response([
+            'organization' => new OrganizationResource($response),
         ], 200);
     }
 }

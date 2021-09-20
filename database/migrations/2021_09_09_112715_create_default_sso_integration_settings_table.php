@@ -24,8 +24,8 @@ class CreateDefaultSsoIntegrationSettingsTable extends Migration
             $table->string('description')->nullable();
             $table->string('lti_client_id')->nullable();
             $table->unsignedBigInteger('organization_id');
-            $table->string('guid');
-            $table->boolean('published')->default(false);
+            $table->string('guid')->nullable();
+            $table->boolean('published')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });
