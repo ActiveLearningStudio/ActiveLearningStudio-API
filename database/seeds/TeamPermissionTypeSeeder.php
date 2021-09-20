@@ -106,5 +106,23 @@ class TeamPermissionTypeSeeder extends Seeder
             'display_name' => 'Assign Team Role',
             'feature' => 'Team'
         ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:edit-project',
+            'display_name' => 'Edit Project',
+            'feature' => 'Team'
+        ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:view-project',
+            'display_name' => 'View Project',
+            'feature' => 'Team'
+        ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:publish-project',
+            'display_name' => 'Publish Project',
+            'feature' => 'Team'
+        ]);
     }
 }
