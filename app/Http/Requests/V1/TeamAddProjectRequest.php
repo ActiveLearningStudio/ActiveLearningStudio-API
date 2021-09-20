@@ -37,6 +37,7 @@ class TeamAddProjectRequest extends FormRequest
     {
         return [
             'ids.exists' => 'Some of given project Ids are invalid or deleted.',
+            'ids.required' => 'Please select a project.',
         ];
     }
 }

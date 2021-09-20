@@ -54,7 +54,7 @@ class AuthServiceProvider extends ServiceProvider
 
         // Adding Gates for Publishing
         Gate::define('publish-to-lms', function ($user, $project) {
-            // If the project is either a) indexed-approved, and its visibility is public, or  
+            // If the project is either a) indexed-approved, and its visibility is public, or
             // b) if user is the owner, then allow to publish
             if (
                 ($project->indexing === (int)config('constants.indexing-approved')
@@ -85,9 +85,9 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
 
         // Implicitly grant "Super Admin" role all permissions
-        Gate::before(function ($user, $ability) {
-            return $user->isAdmin() ? true : null;
-        });
+        // Gate::before(function ($user, $ability) {
+        //     return $user->isAdmin() ? true : null;
+        // });
     }
 
     /**
