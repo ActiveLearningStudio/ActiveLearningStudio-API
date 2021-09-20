@@ -484,31 +484,41 @@ class ProjectController extends Controller
      */
     public function update(ProjectUpdateRequest $projectUpdateRequest, Organization $suborganization, Project $project)
     {
-        $this->authorize('update', [Project::class, $suborganization]);
+        $auth_user = auth()->user();
+        $owner = $project->getUserAttribute();
 
-        $data = $projectUpdateRequest->validated();
+        if (
+            $owner->id === $auth_user->id &&
+            $this->authorize('update', [Project::class, $suborganization, $project->team])
+        ) {
+                $data = $projectUpdateRequest->validated();
+                return \DB::transaction(function () use ($project, $data) {
 
-        return \DB::transaction(function () use ($project, $data) {
+                    if (isset($data['user_id'])) {
+                        $project->users()->sync([$data['user_id'] => ['role' => 'owner']]);
+                        Arr::forget($data, ['user_id']);
+                    }
+                    $is_updated = $this->projectRepository->update($data, $project->id);
 
-            if (isset($data['user_id'])) {
-                $project->users()->sync([$data['user_id'] => ['role' => 'owner']]);
-                Arr::forget($data, ['user_id']);
-            }
-            $is_updated = $this->projectRepository->update($data, $project->id);
+                    if ($is_updated) {
+                        $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                        event(new ProjectUpdatedEvent($updated_project));
 
-            if ($is_updated) {
-                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-                event(new ProjectUpdatedEvent($updated_project));
+                        return response([
+                            'project' => $updated_project,
+                        ], 200);
+                    }
+                });
 
                 return response([
-                    'project' => $updated_project,
-                ], 200);
-            }
-        });
+                    'errors' => ['Failed to update project.'],
+                ], 500);
+
+        }
 
         return response([
-            'errors' => ['Failed to update project.'],
-        ], 500);
+            'errors' => ['You do not have permission to update this project.'],
+        ], 403);
     }
 
     /**
