@@ -22,13 +22,6 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                                     id
                                 FROM
                                     organization_role_types
-                                WHERE
-                                    name IN (
-                                        'admin',
-                                        'course_creator',
-                                        'self_registered',
-                                        'member'
-                                    )
                             )
                             AND organization_permission_type_id IN (
                                 SELECT
@@ -65,13 +58,6 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                                     id
                                 FROM
                                     organization_role_types
-                                WHERE
-                                    name IN (
-                                        'admin',
-                                        'course_creator',
-                                        'self_registered',
-                                        'member'
-                                    )
                             )
                             AND organization_permission_type_id IN (
                                 SELECT

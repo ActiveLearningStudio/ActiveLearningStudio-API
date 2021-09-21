@@ -336,7 +336,7 @@ class ProjectController extends Controller
      */
     public function show(Organization $suborganization, Project $project)
     {
-        $this->authorize('view', [Project::class, $suborganization]);
+        $this->authorize('view', [Project::class, $project]);
 
         return response([
             'project' => new ProjectResource($project),
@@ -397,7 +397,7 @@ class ProjectController extends Controller
      */
     public function share(Organization $suborganization, Project $project)
     {
-        $this->authorize('share', [Project::class, $suborganization]);
+        $this->authorize('share', [Project::class, $project]);
 
         $is_updated = $this->projectRepository->update([
             'shared' => true,
@@ -484,41 +484,31 @@ class ProjectController extends Controller
      */
     public function update(ProjectUpdateRequest $projectUpdateRequest, Organization $suborganization, Project $project)
     {
-        $auth_user = auth()->user();
-        $owner = $project->getUserAttribute();
+        $this->authorize('update', [Project::class, $project]);
+        $data = $projectUpdateRequest->validated();
 
-        if (
-            $owner->id === $auth_user->id &&
-            $this->authorize('update', [Project::class, $suborganization, $project->team])
-        ) {
-                $data = $projectUpdateRequest->validated();
-                return \DB::transaction(function () use ($project, $data) {
+        return \DB::transaction(function () use ($project, $data) {
 
-                    if (isset($data['user_id'])) {
-                        $project->users()->sync([$data['user_id'] => ['role' => 'owner']]);
-                        Arr::forget($data, ['user_id']);
-                    }
-                    $is_updated = $this->projectRepository->update($data, $project->id);
+            if (isset($data['user_id'])) {
+                $project->users()->sync([$data['user_id'] => ['role' => 'owner']]);
+                Arr::forget($data, ['user_id']);
+            }
+            $is_updated = $this->projectRepository->update($data, $project->id);
 
-                    if ($is_updated) {
-                        $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-                        event(new ProjectUpdatedEvent($updated_project));
-
-                        return response([
-                            'project' => $updated_project,
-                        ], 200);
-                    }
-                });
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
 
                 return response([
-                    'errors' => ['Failed to update project.'],
-                ], 500);
+                    'project' => $updated_project,
+                ], 200);
+            }
 
-        }
+            return response([
+                'errors' => ['Failed to update project.'],
+            ], 500);
 
-        return response([
-            'errors' => ['You do not have permission to update this project.'],
-        ], 403);
+        });
     }
 
     /**
