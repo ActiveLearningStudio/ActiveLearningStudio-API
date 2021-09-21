@@ -28,51 +28,68 @@ class PlaylistPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Organization $organization
+     * @param Project $project
      * @return mixed
      */
-    public function view(User $user, Organization $organization)
+    public function view(User $user, Project $project)
     {
-        return $user->hasPermissionTo('playlist:view', $organization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-playlist', $team);
+        } else {
+            return $user->hasPermissionTo('playlist:view', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @param Organization $organization
-     * @param $team
+     * @param Project $project
      * @return mixed
      */
-    public function create(User $user, Organization $organization, $team)
+    public function create(User $user, Project $project)
     {
-        return $user->hasPermissionTo('playlist:create', $organization) || $user->hasTeamPermissionTo('team:add-playlist', $team);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:add-playlist', $team);
+        } else {
+            return $user->hasPermissionTo('playlist:create', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param Organization $organization
-     * @param $team
+     * @param Project $project
      * @return mixed
      */
-    public function update(User $user, Organization $organization, $team)
+    public function update(User $user, Project $project)
     {
-        return $user->hasPermissionTo('playlist:edit', $organization) || $user->hasTeamPermissionTo('team:edit-playlist', $team);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:edit-playlist', $team);
+        } else {
+            return $user->hasPermissionTo('playlist:edit', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param Organization $organization
-     * @param $team
+     * @param Project $project
      * @return mixed
      */
-    public function delete(User $user, Organization $organization, $team)
+    public function delete(User $user, Project $project)
     {
-        return $user->hasPermissionTo('playlist:delete', $organization) || $user->hasTeamPermissionTo('team:delete-playlist', $team);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:delete-playlist', $team);
+        } else {
+            return $user->hasPermissionTo('playlist:delete', $project->organization);
+        }
     }
 
     /**

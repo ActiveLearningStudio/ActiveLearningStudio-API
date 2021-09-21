@@ -149,8 +149,7 @@ class ActivityController extends Controller
      */
     public function store(ActivityCreateRequest $request, Playlist $playlist)
     {
-        $team = ($request->team_id) ? Team::find($request->team_id) : null;
-        $this->authorize('create', [Activity::class, $playlist->project->organization, $team]);
+        $this->authorize('create', [Activity::class, $playlist->project]);
 
         $data = $request->validated();
 
@@ -193,6 +192,8 @@ class ActivityController extends Controller
      */
     public function show(Playlist $playlist, Activity $activity)
     {
+        $this->authorize('view', [Activity::class, $playlist->project]);
+
         if ($activity->playlist_id !== $playlist->id) {
             return response([
                 'errors' => ['Invalid playlist or activity id.'],
@@ -242,8 +243,7 @@ class ActivityController extends Controller
      */
     public function update(ActivityEditRequest $request, Playlist $playlist, Activity $activity)
     {
-        $team = ($request->team_id) ? Team::find($request->team_id) : null;
-        $this->authorize('update', [Activity::class, $playlist->project->organization, $team]);
+        $this->authorize('update', [Activity::class, $playlist->project]);
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
@@ -401,7 +401,7 @@ class ActivityController extends Controller
      */
     public function share(Activity $activity)
     {
-        $this->authorize('share', [Activity::class, $activity->playlist->project->organization]);
+        $this->authorize('share', [Activity::class, $activity->playlist->project]);
 
         $is_updated = $this->activityRepository->update([
             'shared' => true,
@@ -483,13 +483,11 @@ class ActivityController extends Controller
      *
      * @param Playlist $playlist
      * @param Activity $activity
-     * @param $team_id
      * @return Response
      */
-    public function destroy(Playlist $playlist, Activity $activity, $team_id = null)
+    public function destroy(Playlist $playlist, Activity $activity)
     {
-        $team = (!is_null($team_id)) ? Team::find($team_id) : null;
-        $this->authorize('delete', [Activity::class, $activity->playlist->project->organization, $team]);
+        $this->authorize('delete', [Activity::class, $activity->playlist->project]);
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
