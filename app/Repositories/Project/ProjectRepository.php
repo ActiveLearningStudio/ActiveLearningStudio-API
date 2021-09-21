@@ -660,7 +660,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     }
                     unlink($source_file); // Deleted the storage zip file
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
-                    
+
                     return $project['name'];
                 }
             });
@@ -675,8 +675,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     /**
      * To Deleted the directory recurcively
-     * 
-     * @param $dir 
+     *
+     * @param $dir
      */
     private function rrmdir($dir) {
         if (is_dir($dir)) {
