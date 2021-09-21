@@ -2,8 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Organization;
-use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\User;
@@ -17,11 +15,12 @@ class PlaylistPolicy
      * Determine whether the user can view any models.
      *
      * @param User $user
+     * @param Project $project
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Project $project)
     {
-        return true;
+        return $user->hasPermissionTo('playlist:view', $project->organization);
     }
 
     /**
@@ -115,7 +114,7 @@ class PlaylistPolicy
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param Organization $organization
+     * @param Playlist $playlist
      * @return mixed
      */
     public function restore(User $user, Playlist $playlist)
