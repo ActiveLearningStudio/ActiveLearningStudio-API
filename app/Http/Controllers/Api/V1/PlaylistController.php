@@ -67,7 +67,7 @@ class PlaylistController extends Controller
      */
     public function index(Project $project)
     {
-        $this->authorize('view', [Playlist::class, $project->organization]);
+        $this->authorize('viewAny', [Playlist::class, $project]);
 
         return response([
             'playlists' => PlaylistResource::collection($project->playlists()->orderBy('order')->get()),
