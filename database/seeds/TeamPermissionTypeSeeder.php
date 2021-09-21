@@ -120,8 +120,32 @@ class TeamPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:view-playlist',
+            'display_name' => 'View Playlist',
+            'feature' => 'Team'
+        ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:view-activity',
+            'display_name' => 'View Activity',
+            'feature' => 'Team'
+        ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
             'name' => 'team:publish-project',
             'display_name' => 'Publish Project',
+            'feature' => 'Team'
+        ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:publish-playlist',
+            'display_name' => 'Publish Playlist',
+            'feature' => 'Team'
+        ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:publish-activity',
+            'display_name' => 'Publish Activity',
             'feature' => 'Team'
         ]);
     }

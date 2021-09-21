@@ -30,63 +30,85 @@ class ActivityPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function view(User $user, Organization $suborganization)
+    public function view(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:view', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:view', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @param Organization $suborganization
-     * @param $team
+     * @param Project $project
      * @return mixed
      */
-    public function create(User $user, Organization $suborganization, $team)
+    public function create(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:create', $suborganization) || $user->hasTeamPermissionTo('team:add-activity', $team);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:add-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:create', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param Organization $suborganization
-     * @param $team
+     * @param Project $project
      * @return mixed
      */
-    public function update(User $user, Organization $suborganization, $team)
+    public function update(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:edit', $suborganization) || $user->hasTeamPermissionTo('team:edit-activity', $team);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:edit-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:edit', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param Organization $suborganization
-     * @param $team
+     * @param Project $project
      * @return mixed
      */
-    public function delete(User $user, Organization $suborganization, $team)
+    public function delete(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:delete', $suborganization) || $user->hasTeamPermissionTo('team:delete-activity', $team);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:delete-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:delete', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can share the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function share(User $user, Organization $suborganization)
+    public function share(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:share', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:share-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:share', $project->organization);
+        }
     }
 
     /**
