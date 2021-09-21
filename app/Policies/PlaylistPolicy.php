@@ -28,12 +28,17 @@ class PlaylistPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Organization $organization
+     * @param Project $project
      * @return mixed
      */
-    public function view(User $user, Organization $organization)
+    public function view(User $user, Project $project)
     {
-        return $user->hasPermissionTo('playlist:view', $organization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-playlist', $team);
+        } else {
+            return $user->hasPermissionTo('playlist:view', $project->organization);
+        }
     }
 
     /**

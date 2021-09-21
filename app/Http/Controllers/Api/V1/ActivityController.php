@@ -192,6 +192,8 @@ class ActivityController extends Controller
      */
     public function show(Playlist $playlist, Activity $activity)
     {
+        $this->authorize('view', [Activity::class, $playlist->project]);
+
         if ($activity->playlist_id !== $playlist->id) {
             return response([
                 'errors' => ['Invalid playlist or activity id.'],

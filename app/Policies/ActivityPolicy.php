@@ -30,12 +30,17 @@ class ActivityPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function view(User $user, Organization $suborganization)
+    public function view(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:view', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:view', $project->organization);
+        }
     }
 
     /**

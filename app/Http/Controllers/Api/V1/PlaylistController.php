@@ -141,7 +141,7 @@ class PlaylistController extends Controller
      */
     public function show(Project $project, Playlist $playlist)
     {
-        $this->authorize('view', [Playlist::class, $project->organization]);
+        $this->authorize('view', [Playlist::class, $project]);
 
         if ($playlist->project_id !== $project->id) {
             return response([
