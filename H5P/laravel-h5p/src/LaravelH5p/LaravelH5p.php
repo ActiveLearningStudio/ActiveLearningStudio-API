@@ -222,9 +222,12 @@ class LaravelH5p
      */
     private static function get_core_settings()
     {
-        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
-        if (isset($_GET['gcuid'])) {
-            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId'.'&gcuid='.$_GET['gcuid'];
+        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . 
+        '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
+        if (isset($_GET['gcuid']) && isset($_GET['submissionid'])) {
+            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . 
+            '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId' . 
+            '&gcuid=' . $_GET['gcuid'] . '&submissionid=' . $_GET['submissionid'];
         }
 
         $settings = array(
@@ -422,14 +425,15 @@ class LaravelH5p
         }*/
         
         // Get preloaded user data for the current user
-        if (isset($_GET['gcuid'])) {
+        if (isset($_GET['gcuid']) && isset($_GET['submissionid'])) {
             $results = DB::select("
-                SELECT hcud.sub_content_id, hcud.data_id, hcud.data
+                SELECT hcud.sub_content_id, hcud.data_id, hcud.data, hcud.submission_id
                 FROM h5p_contents_user_data_go hcud
                 WHERE user_id = ?
                 AND content_id = ?
+                AND submission_id = ?
                 AND preload = true
-            ", [$_GET['gcuid'], $content['id']]);
+            ", [$_GET['gcuid'], $content['id'], $_GET['submissionid']]);
 
             if ($results) {
                 foreach ($results as $result) {

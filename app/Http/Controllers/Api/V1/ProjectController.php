@@ -500,14 +500,14 @@ class ProjectController extends Controller
                 event(new ProjectUpdatedEvent($updated_project));
 
                 return response([
-                    'project' => $updated_project,
-                ], 200);
-            }
-        });
+                    'errors' => ['Failed to update project.'],
+                ], 500);
+
+        }
 
         return response([
-            'errors' => ['Failed to update project.'],
-        ], 500);
+            'errors' => ['You do not have permission to update this project.'],
+        ], 403);
     }
 
     /**
