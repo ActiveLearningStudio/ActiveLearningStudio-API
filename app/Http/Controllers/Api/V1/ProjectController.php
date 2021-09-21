@@ -336,7 +336,7 @@ class ProjectController extends Controller
      */
     public function show(Organization $suborganization, Project $project)
     {
-        $this->authorize('view', [Project::class, $suborganization]);
+        $this->authorize('view', [Project::class, $project]);
 
         return response([
             'project' => new ProjectResource($project),

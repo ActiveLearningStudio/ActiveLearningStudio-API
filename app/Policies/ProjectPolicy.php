@@ -29,12 +29,16 @@ class ProjectPolicy
      *
      * @param User $user
      * @param Project $project
-     * @param Organization $suborganization
      * @return mixed
      */
-    public function view(User $user, Organization $suborganization)
+    public function view(User $user, Project $project)
     {
-        return $user->hasPermissionTo('project:view', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-project', $team);
+        } else {
+            return $user->hasPermissionTo('project:view', $project->organization);
+        }
     }
 
     /**
