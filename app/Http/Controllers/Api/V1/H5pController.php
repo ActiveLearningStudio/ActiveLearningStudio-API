@@ -615,11 +615,12 @@ class H5pController extends Controller
         $data = $request->input("data");
         $preload = $request->input("preload");
         $invalidate = $request->input("invalidate");
+        $submissionId = $request->get('submissionid');
 
         if ($contentId === NULL ||
             $dataId === NULL ||
             $subContentId === NULL ||
-            $userId === NULL) {
+            $userId === NULL || $submissionId === NULL) {
         return; // Missing parameters
         }
         
@@ -629,9 +630,9 @@ class H5pController extends Controller
         
         if ($request->get('gcuid')) {
             if ($data === '0') {
-                $records = $this->contentUserDataGoRepository->deleteComposite($contentId, $userId, $subContentId, $dataId);
+                $records = $this->contentUserDataGoRepository->deleteComposite($contentId, $userId, $subContentId, $dataId, $submissionId);
             }else {
-                $records = $this->contentUserDataGoRepository->fetchByCompositeKey($contentId, $userId, $subContentId, $dataId);
+                $records = $this->contentUserDataGoRepository->fetchByCompositeKey($contentId, $userId, $subContentId, $dataId, $submissionId);
                 
                 if ($records->count() === 0) {
                     $this->contentUserDataGoRepository->create([
@@ -643,13 +644,14 @@ class H5pController extends Controller
                         'preload' => $preload,
                         'invalidate' => $invalidate,
                         'go_integration' => 'google-classroom',
+                        'submission_id' => $submissionId,
                     ]);
                 }else {
                     $this->contentUserDataGoRepository->updateComposite([
                         'data' => $data,
                         'preload' => $preload,
                         'invalidate' => $invalidate,
-                    ], $contentId, $userId, $subContentId, $dataId);
+                    ], $contentId, $userId, $subContentId, $dataId, $submissionId);
                 }
             }
 
