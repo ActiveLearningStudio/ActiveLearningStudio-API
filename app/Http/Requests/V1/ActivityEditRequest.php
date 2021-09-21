@@ -34,7 +34,6 @@ class ActivityEditRequest extends FormRequest
             'thumb_url' => 'string',
             'subject_id' => 'nullable|string',
             'education_level_id' => 'nullable|string',
-            'team_id' => 'integer|exists:teams,id',
         ];
     }
 }
