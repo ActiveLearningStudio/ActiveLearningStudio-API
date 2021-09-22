@@ -611,7 +611,7 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettings(Activity $activity)
     {
-        $this->authorize('view', [Activity::class, $activity->playlist->project]);
+        $this->authorize('view', [Project::class, $activity->playlist->project]);
 
         if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
