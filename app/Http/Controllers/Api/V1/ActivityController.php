@@ -612,7 +612,7 @@ class ActivityController extends Controller
     public function getH5pResourceSettings(Activity $activity)
     {
         $authenticated_user = auth()->user();
-        $this->hasPermission($activity);
+
         if (!$authenticated_user->isAdmin() && !$this->hasPermission($activity)) {
             return response([
                 'errors' => ["Activity doesn't belong to this user."]
