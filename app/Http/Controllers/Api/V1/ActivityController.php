@@ -561,7 +561,7 @@ class ActivityController extends Controller
      */
     public function h5p(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('view', [Project::class, $activity->playlist->project]);
 
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
@@ -612,7 +612,7 @@ class ActivityController extends Controller
     public function getH5pResourceSettings(Activity $activity)
     {
         $authenticated_user = auth()->user();
-
+        $this->hasPermission($activity);
         if (!$authenticated_user->isAdmin() && !$this->hasPermission($activity)) {
             return response([
                 'errors' => ["Activity doesn't belong to this user."]
@@ -647,7 +647,7 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsOpen(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('view', [Project::class, $activity->playlist->project]);
 
         if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
@@ -721,6 +721,12 @@ class ActivityController extends Controller
         $authenticated_user = auth()->user();
         $project = $activity->playlist->project;
         $project_users = $project->users;
+        $team = $project->team;
+
+        if ($team && $authenticated_user->hasTeamPermissionTo('team:view-activity', $team)) {
+            return true;
+        }
+
         foreach ($project_users as $project_user) {
             if ($authenticated_user->id === $project_user->id) {
                 return true;
