@@ -358,7 +358,7 @@ class ActivityController extends Controller
      */
     public function detail(Activity $activity)
     {
-        $this->authorize('view', [Activity::class, $activity->playlist->project->organization]);
+        $this->authorize('view', [Activity::class, $activity->playlist->project]);
 
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
@@ -442,7 +442,7 @@ class ActivityController extends Controller
      */
     public function removeShare(Activity $activity)
     {
-        $this->authorize('share', [Activity::class, $activity->playlist->project->organization]);
+        $this->authorize('share', [Activity::class, $activity->playlist->project]);
 
         $is_updated = $this->activityRepository->update([
             'shared' => false,
