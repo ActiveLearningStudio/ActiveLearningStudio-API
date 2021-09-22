@@ -180,7 +180,7 @@ class ProjectController extends Controller
      */
     public function detail(Organization $suborganization)
     {
-       $this->authorize('view', [Project::class, $suborganization]);
+       $this->authorize('viewAny', [Project::class, $suborganization]);
 
         $authenticated_user = auth()->user();
 
