@@ -20,7 +20,12 @@ class PlaylistPolicy
      */
     public function viewAny(User $user, Project $project)
     {
-        return $user->hasPermissionTo('playlist:view', $project->organization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-playlist', $team);
+        } else {
+            return $user->hasPermissionTo('playlist:view', $project->organization);
+        }
     }
 
     /**
