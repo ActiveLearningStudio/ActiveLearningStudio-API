@@ -24,9 +24,10 @@ class ContentUserDataGoRepository extends BaseRepository implements ContentUserD
      *
      * @param ContentUserDataGo $model
      */
-    public function fetchByCompositeKey($content_id, $user_id, $sub_content_id, $data_id)
+    public function fetchByCompositeKey($content_id, $user_id, $sub_content_id, $data_id, $submissionId)
     {
-        return $this->model->where(['content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 'data_id' => $data_id])->get();
+        return $this->model->where(['content_id' => $content_id, 'user_id' => $user_id, 
+        'sub_content_id' => $sub_content_id, 'data_id' => $data_id, 'submission_id' => $submissionId])->get();
     }
 
     /**
@@ -34,10 +35,11 @@ class ContentUserDataGoRepository extends BaseRepository implements ContentUserD
      *
      * @param ContentUserDataGo $model
      */
-    public function updateComposite($attributes, $content_id, $user_id, $sub_content_id, $data_id)
+    public function updateComposite($attributes, $content_id, $user_id, $sub_content_id, $data_id, $submissionId)
     {
         return $this->model->where([
-            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 'data_id' => $data_id
+            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 
+            'data_id' => $data_id, 'submission_id' => $submissionId
         ])->update($attributes);
     }
 
@@ -46,10 +48,11 @@ class ContentUserDataGoRepository extends BaseRepository implements ContentUserD
      *
      * @param ContentUserDataGo $model
      */
-    public function deleteComposite($content_id, $user_id, $sub_content_id, $data_id)
+    public function deleteComposite($content_id, $user_id, $sub_content_id, $data_id, $submissionId)
     {
         return $this->model->where([
-            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 'data_id' => $data_id
+            'content_id' => $content_id, 'user_id' => $user_id, 'sub_content_id' => $sub_content_id, 
+            'data_id' => $data_id, 'submission_id' => $submissionId
         ])->delete();
     }
 }
