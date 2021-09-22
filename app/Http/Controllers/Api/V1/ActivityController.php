@@ -611,13 +611,7 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettings(Activity $activity)
     {
-        $authenticated_user = auth()->user();
-
-        if (!$authenticated_user->isAdmin() && !$this->hasPermission($activity)) {
-            return response([
-                'errors' => ["Activity doesn't belong to this user."]
-            ], 400);
-        }
+        $this->authorize('view', [Activity::class, $activity->playlist->project]);
 
         if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
@@ -708,44 +702,6 @@ class ActivityController extends Controller
         return response([
             'errors' => ['Activity not found.']
         ], 400);
-    }
-
-    /**
-     * Check permission
-     *
-     * @param Activity $activity
-     * @return bool
-     */
-    private function hasPermission(Activity $activity)
-    {
-        $authenticated_user = auth()->user();
-        $project = $activity->playlist->project;
-        $project_users = $project->users;
-        $team = $project->team;
-
-        if ($team && $authenticated_user->hasTeamPermissionTo('team:view-activity', $team)) {
-            return true;
-        }
-
-        foreach ($project_users as $project_user) {
-            if ($authenticated_user->id === $project_user->id) {
-                return true;
-            }
-        }
-
-        $project_team = $project->team;
-        if ($project_team) {
-            $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
-            ->where('project_id', $project->id)
-            ->where('user_id', $authenticated_user->id)
-            ->exists();
-
-            if ($team_project_user) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
