@@ -24,4 +24,4 @@ Never made an open source contribution before? Wondering how contributions work 
 14. Celebrate your success after your pull request is merged!
 
 ## Where can I go for help?
-If you need help, you can ask questions on [list any other communication platforms that your project uses].
+If you need help, you can ask questions on developer@curriki.org.
