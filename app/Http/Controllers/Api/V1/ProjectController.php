@@ -266,7 +266,7 @@ class ProjectController extends Controller
      */
     public function uploadThumb(ProjectUploadThumbRequest $projectUploadThumbRequest, Organization $suborganization)
     {
-        $this->authorize('uploadThumb', [Project::class, $suborganization]);
+        $this->authorize('uploadThumb', [Project::class, $suborganization, $projectUploadThumbRequest->project_id]);
 
         $data = $projectUploadThumbRequest->validated();
 
