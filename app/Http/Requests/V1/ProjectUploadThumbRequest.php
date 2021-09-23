@@ -25,6 +25,7 @@ class ProjectUploadThumbRequest extends FormRequest
     {
         return [
             'thumb' => 'required|image|max:102400',
+            'project_id' => 'integer|exists:App\Models\Project,id',
         ];
     }
 }
