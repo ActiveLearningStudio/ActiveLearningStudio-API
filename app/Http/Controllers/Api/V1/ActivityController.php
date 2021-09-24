@@ -149,8 +149,7 @@ class ActivityController extends Controller
      */
     public function store(ActivityCreateRequest $request, Playlist $playlist)
     {
-        $team = ($request->team_id) ? Team::find($request->team_id) : null;
-        $this->authorize('create', [Activity::class, $playlist->project->organization, $team]);
+        $this->authorize('create', [Activity::class, $playlist->project]);
 
         $data = $request->validated();
 
@@ -193,6 +192,8 @@ class ActivityController extends Controller
      */
     public function show(Playlist $playlist, Activity $activity)
     {
+        $this->authorize('view', [Activity::class, $playlist->project]);
+
         if ($activity->playlist_id !== $playlist->id) {
             return response([
                 'errors' => ['Invalid playlist or activity id.'],
@@ -242,8 +243,7 @@ class ActivityController extends Controller
      */
     public function update(ActivityEditRequest $request, Playlist $playlist, Activity $activity)
     {
-        $team = ($request->team_id) ? Team::find($request->team_id) : null;
-        $this->authorize('update', [Activity::class, $playlist->project->organization, $team]);
+        $this->authorize('update', [Activity::class, $playlist->project]);
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
@@ -358,7 +358,7 @@ class ActivityController extends Controller
      */
     public function detail(Activity $activity)
     {
-        $this->authorize('view', [Activity::class, $activity->playlist->project->organization]);
+        $this->authorize('view', [Activity::class, $activity->playlist->project]);
 
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
@@ -401,7 +401,7 @@ class ActivityController extends Controller
      */
     public function share(Activity $activity)
     {
-        $this->authorize('share', [Activity::class, $activity->playlist->project->organization]);
+        $this->authorize('share', [Activity::class, $activity->playlist->project]);
 
         $is_updated = $this->activityRepository->update([
             'shared' => true,
@@ -442,7 +442,7 @@ class ActivityController extends Controller
      */
     public function removeShare(Activity $activity)
     {
-        $this->authorize('share', [Activity::class, $activity->playlist->project->organization]);
+        $this->authorize('share', [Activity::class, $activity->playlist->project]);
 
         $is_updated = $this->activityRepository->update([
             'shared' => false,
@@ -483,13 +483,11 @@ class ActivityController extends Controller
      *
      * @param Playlist $playlist
      * @param Activity $activity
-     * @param $team_id
      * @return Response
      */
-    public function destroy(Playlist $playlist, Activity $activity, $team_id = null)
+    public function destroy(Playlist $playlist, Activity $activity)
     {
-        $team = (!is_null($team_id)) ? Team::find($team_id) : null;
-        $this->authorize('delete', [Activity::class, $activity->playlist->project->organization, $team]);
+        $this->authorize('delete', [Activity::class, $activity->playlist->project]);
 
         if ($activity->playlist_id !== $playlist->id) {
             return response([
@@ -563,7 +561,7 @@ class ActivityController extends Controller
      */
     public function h5p(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('view', [Project::class, $activity->playlist->project]);
 
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
@@ -613,13 +611,7 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettings(Activity $activity)
     {
-        $authenticated_user = auth()->user();
-
-        if (!$authenticated_user->isAdmin() && !$this->hasPermission($activity)) {
-            return response([
-                'errors' => ["Activity doesn't belong to this user."]
-            ], 400);
-        }
+        $this->authorize('view', [Project::class, $activity->playlist->project]);
 
         if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
@@ -649,7 +641,7 @@ class ActivityController extends Controller
      */
     public function getH5pResourceSettingsOpen(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project->organization]);
+        $this->authorize('view', [Project::class, $activity->playlist->project]);
 
         if ($activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
@@ -710,38 +702,6 @@ class ActivityController extends Controller
         return response([
             'errors' => ['Activity not found.']
         ], 400);
-    }
-
-    /**
-     * Check permission
-     *
-     * @param Activity $activity
-     * @return bool
-     */
-    private function hasPermission(Activity $activity)
-    {
-        $authenticated_user = auth()->user();
-        $project = $activity->playlist->project;
-        $project_users = $project->users;
-        foreach ($project_users as $project_user) {
-            if ($authenticated_user->id === $project_user->id) {
-                return true;
-            }
-        }
-
-        $project_team = $project->team;
-        if ($project_team) {
-            $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
-            ->where('project_id', $project->id)
-            ->where('user_id', $authenticated_user->id)
-            ->exists();
-
-            if ($team_project_user) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

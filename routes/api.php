@@ -107,8 +107,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
-        Route::apiResource('projects.playlists', 'PlaylistController')->except(['destroy']);
-        Route::delete('projects/{project}/playlists/{playlist}/{team_id?}', 'PlaylistController@destroy');
+        Route::apiResource('projects.playlists', 'PlaylistController');
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
@@ -119,8 +118,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
-        Route::apiResource('playlists.activities', 'ActivityController')->except(['destroy']);
-        Route::delete('playlists/{playlist}/activities/{activity}/{team_id?}', 'ActivityController@destroy');
+        Route::apiResource('playlists.activities', 'ActivityController');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');

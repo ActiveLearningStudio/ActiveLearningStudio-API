@@ -25,7 +25,6 @@ class PlaylistRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'team_id' => 'integer|exists:teams,id',
             'order' => 'integer',
         ];
     }

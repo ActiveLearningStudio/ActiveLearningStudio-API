@@ -246,7 +246,8 @@ class GoogleClassroomController extends Controller
                     $submissions = $service->getStudentSubmissions($courseId, $classwork->classwork_id);
                     $firstSubmission = $submissions[0];
                     return response([
-                        'submission' => GCSubmissionResource::make($firstSubmission)->resolve()
+                        'submission' => GCSubmissionResource::make($firstSubmission)->resolve(),
+                        'student_data' => $studentRes
                     ], 200);
                 } catch (\Google_Service_Exception $ex) {
                     // Could obtain error message like that.
