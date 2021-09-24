@@ -24,6 +24,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\ExportProject;
 use App\Jobs\ImportProject;
+use App\Jobs\ExportNoovoProject;
 use Illuminate\Support\Arr;
 
 /**
@@ -810,6 +811,34 @@ class ProjectController extends Controller
 
         return response([
             'message' =>  "Your request to import project has been received and is being processed. You will receive an email notice as soon as it is available.",
+        ], 200);
+    }
+
+    /**
+     * Export Noovo Project
+     *
+     * Export the specified project of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @response {
+     *   "message": "Project is being cloned|duplicated in background!"
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
+     */
+    public function exportNoovoProject(Request $request, Organization $suborganization, Project $project)
+    {
+        $this->authorize('export', [Project::class, $suborganization]);
+        // pushed cloning of project in background
+        ExportNoovoProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);
     }
 }
