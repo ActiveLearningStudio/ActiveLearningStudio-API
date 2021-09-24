@@ -29,7 +29,17 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
-        return $query->paginate($perPage);
+
+        if (isset($data['query']) && $data['query'] !== '') {
+            $query = $query->whereHas('organization', function ($qry) use ($data) {
+                $qry->where('name', 'iLIKE', '%' . $data['query'] . '%');
+                $qry->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+                $qry->orWhere('domain', 'iLIKE', '%' . $data['query'] . '%');
+            })
+                ->orWhere('lms_url', 'iLIKE', '%' . $data['query'] . '%')
+                ->orWhere('lti_client_id', 'iLIKE', '%' . $data['query'] . '%');
+        }
+        return $query->with('organization')->paginate($perPage);
     }
 
     /**

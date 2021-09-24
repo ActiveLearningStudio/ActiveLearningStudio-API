@@ -59,13 +59,9 @@ class OrganizationController extends Controller
 
     public function searchOrganizationByName(Request $request)
     {
-//        if(!isset($data['query']) && empty($data['query']) )
-//        {
-//
-//        }
         $response = $this->organizationRepository->searchOrganizationByName($request);
         return response([
-            'organization' => new OrganizationResource($response),
+            'organization' => $response,
         ], 200);
     }
 }

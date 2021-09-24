@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\StoreDefaultSsoSettingsRequest;
 use App\Http\Requests\V1\UpdateDefaultSsoSettingsRequest;
+use App\Http\Resources\V1\DefaultSsoSettingsCollection;
 use App\Http\Resources\V1\DefaultSsoSettingsResource;
 use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsInterface;
 use Illuminate\Http\Request;
@@ -31,8 +32,8 @@ class DefaultSsoIntegrationSettingsController extends Controller
      */
     public function index(Request $request)
     {
-        $response = $this->defaultSsoSettingsRepository->getAll($request);
-        return $response;
+        $collections = $this->defaultSsoSettingsRepository->getAll($request);
+        return new DefaultSsoSettingsCollection($collections);
     }
 
     /**
