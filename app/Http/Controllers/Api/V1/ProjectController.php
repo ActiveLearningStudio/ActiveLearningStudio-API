@@ -181,7 +181,7 @@ class ProjectController extends Controller
      */
     public function detail(Organization $suborganization)
     {
-       $this->authorize('view', [Project::class, $suborganization]);
+       $this->authorize('viewAny', [Project::class, $suborganization]);
 
         $authenticated_user = auth()->user();
 
@@ -267,7 +267,7 @@ class ProjectController extends Controller
      */
     public function uploadThumb(ProjectUploadThumbRequest $projectUploadThumbRequest, Organization $suborganization)
     {
-        $this->authorize('uploadThumb', [Project::class, $suborganization]);
+        $this->authorize('uploadThumb', [Project::class, $suborganization, $projectUploadThumbRequest->project_id]);
 
         $data = $projectUploadThumbRequest->validated();
 
