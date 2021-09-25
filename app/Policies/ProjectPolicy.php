@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\Organization;
-use App\Models\Pivots\TeamProjectUser;
 use App\Models\Project;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -29,12 +28,16 @@ class ProjectPolicy
      *
      * @param User $user
      * @param Project $project
-     * @param Organization $suborganization
      * @return mixed
      */
-    public function view(User $user, Organization $suborganization)
+    public function view(User $user, Project $project)
     {
-        return $user->hasPermissionTo('project:view', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-project', $team);
+        } else {
+            return $user->hasPermissionTo('project:view', $project->organization);
+        }
     }
 
     /**
@@ -53,24 +56,34 @@ class ProjectPolicy
      * Determine whether the user can update the project.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function update(User $user, Organization $suborganization)
+    public function update(User $user, Project $project)
     {
-        return $user->hasPermissionTo('project:edit', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:edit-project', $team);
+        } else {
+            return $user->hasPermissionTo('project:edit', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can share the project.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function share(User $user, Organization $suborganization)
+    public function share(User $user, Project $project)
     {
-        return $user->hasPermissionTo('project:share', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:share-project', $team);
+        } else {
+            return $user->hasPermissionTo('project:share', $project->organization);
+        }
     }
 
     /**
@@ -121,10 +134,19 @@ class ProjectPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $project_id
      * @return mixed
      */
-    public function uploadThumb(User $user, Organization $suborganization)
+    public function uploadThumb(User $user, Organization $suborganization, $project_id)
     {
+        if ($project_id) {
+            $project = Project::find($project_id);
+            $team = $project->team;
+            if ($team) {
+                return $user->hasTeamPermissionTo('team:edit-project', $team);
+            }
+        }
+
         return $user->hasPermissionTo('project:upload-thumb', $suborganization);
     }
 

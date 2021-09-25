@@ -1,0 +1,24 @@
+{
+    "teamPermissions": {
+        "activeRole": "admin",
+        "roleId": 1,
+        "Team": [
+            "team:add-team-user",
+            "team:remove-team-user",
+            "team:add-project",
+            "team:remove-project",
+            "team:add-member-project",
+            "team:remove-member-project",
+            "team:add-playlist",
+            "team:edit-playlist",
+            "team:delete-playlist",
+            "team:add-activity",
+            "team:edit-activity",
+            "team:delete-activity",
+            "team:share-project",
+            "team:share-activity",
+            "team:share-playlist",
+            "team:assign-team-role"
+        ]
+    }
+}

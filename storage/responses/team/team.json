@@ -1,0 +1,48 @@
+{
+    "teams": [
+        {
+            "id": 1,
+            "name": "Test Team",
+            "organization_id": 1,
+            "description": "This is a test team.",
+            "indexing": null,
+            "users": [
+                {
+                    "id": 2,
+                    "first_name": "test",
+                    "last_name": "user 1",
+                    "email": "test@test.com",
+                    "projects": [],
+                    "role": "owner"
+                }
+            ],
+            "invited_emails": [],
+            "projects": [],
+            "created_at": "2021-02-11T08:41:51.000000Z",
+            "updated_at": "2021-02-11T08:41:51.000000Z"
+
+        },
+        {
+            "id": 1,
+            "name": "Test Team 2",
+            "organization_id": 1,
+            "description": "This is a test team 2.",
+            "indexing": null,
+            "users": [
+                {
+                    "id": 3,
+                    "first_name": "test",
+                    "last_name": "user 2",
+                    "email": "test2@test.com",
+                    "projects": [],
+                    "role": "owner"
+                }
+            ],
+            "invited_emails": [],
+            "projects": [],
+            "created_at": "2021-02-11T08:41:51.000000Z",
+            "updated_at": "2021-02-11T08:41:51.000000Z"
+
+        }
+    ]
+}

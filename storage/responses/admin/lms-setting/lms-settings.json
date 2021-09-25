@@ -38,6 +38,21 @@
                 "subscribed_ip": "192.168.96.10",
                 "membership_type_id": 2,
                 "temp_password": null
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": false,
+                "account_id": "test123",
+                "api_key": "test",
+                "unit_path": "path"
             }
         },
         {
@@ -78,6 +93,21 @@
                 "subscribed_ip": "172.18.0.12",
                 "membership_type_id": 2,
                 "temp_password": null
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": false,
+                "account_id": "test123",
+                "api_key": "test",
+                "unit_path": "path"
             }
         }
     ],

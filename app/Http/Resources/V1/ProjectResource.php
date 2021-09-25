@@ -18,6 +18,7 @@ class ProjectResource extends JsonResource
         return [
             'id' => $this->id,
             'organization_id' => $this->organization_id,
+            'team_id' => $this->team_id,
             'organization_visibility_type_id' => $this->organization_visibility_type_id,
             'name' => $this->name,
             'description' => $this->description,
@@ -31,6 +32,8 @@ class ProjectResource extends JsonResource
             'indexing_text' => $this->indexing_text,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'team' => $this->team,
+            'users' => $this->users,
         ];
     }
 }

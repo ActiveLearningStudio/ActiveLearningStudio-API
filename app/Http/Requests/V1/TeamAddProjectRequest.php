@@ -24,7 +24,20 @@ class TeamAddProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'ids' => 'required|array|exists:App\Models\Project,id',
+            'ids' => 'required|array|exists:App\Models\Project,id,deleted_at,NULL',
+        ];
+    }
+
+    /**
+     * Get the validation message that apply to the rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'ids.exists' => 'Some of given project Ids are invalid or deleted.',
+            'ids.required' => 'Please select a project.',
         ];
     }
 }
