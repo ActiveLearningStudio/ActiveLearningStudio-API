@@ -11,8 +11,8 @@ Following are the steps to follow:
 4: Update .env like below:
 
 Kaltura_SERVICE_URL='https://www.kaltura.com'
-Kaltura_SECRET='69fe402f3429ede6dbf4b4f928767bf6'
-Kaltura_PARTNER_ID='4186473'
+Kaltura_SECRET='secret'
+Kaltura_PARTNER_ID='partner-id'
 Kaltura_EXPIRY=86400
 Kaltura_PRIVILEGES='*'
 Kaltura_SESSION_TYPE='2'
