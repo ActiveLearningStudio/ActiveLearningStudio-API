@@ -17,14 +17,14 @@ return [
     | Remember to provide the correct secret according to the sessionType you want
     |
     */
-    'secret' => env('Kaltura_SECRET', '69fe402f3429ede6dbf4b4f928767bf6'),
+    'secret' => env('Kaltura_SECRET', ''),
 
     /*
     |--------------------------------------------------------------------------
     | Kaltura Parnter Id
     |--------------------------------------------------------------------------
     */
-    'partner_id' => env('Kaltura_PARTNER_ID', '4186473'),
+    'partner_id' => env('Kaltura_PARTNER_ID', ''),
 
     /*
     |--------------------------------------------------------------------------
