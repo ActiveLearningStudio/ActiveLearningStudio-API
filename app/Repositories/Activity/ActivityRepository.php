@@ -163,6 +163,10 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             }
         }
 
+        if (isset($data['userIds']) && !empty($data['userIds']) && empty($projectIds)) {
+            $projectIds = [0];
+        }
+
         $searchResultQuery = $this->model->searchForm()
             ->searchType(Arr::get($data, 'searchType', 0))
             ->organizationParentChildrenIds($organizationParentChildrenIds)
