@@ -705,14 +705,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $zip = new ZipArchive;
 
         $project_dir_name = 'projects-'.uniqid();
-        Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
+        Storage::disk('public')->put('/exports/' . $project_dir_name . '/project.json', $project);
 
         $project_thumbanil = "";
         if (filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
             $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
             $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
             if(file_exists($project_thumbanil)) {
-                Storage::disk('public')->put('/exports/'.$project_dir_name.'/'.basename($project_thumbanil),file_get_contents($project_thumbanil));
+                Storage::disk('public')->put('/exports/' . $project_dir_name . '/' . basename($project_thumbanil),file_get_contents($project_thumbanil));
             }
         }
 
@@ -726,18 +726,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         foreach ($playlists as $playlist) {
 
             $title = $playlist->title;
-            Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/'.$title.'.json', $playlist);
+            Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title. '/' . $title . '.json', $playlist);
             $activites = $playlist->activities;
             ;
             foreach($activites as $activity) {
-                Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->title.'.json', $activity);
-                //dd(json_decode($activity->h5p_content,true));
+                Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' . $activity->title . '/' . $activity->title . '.json', $activity);
                 $decoded_content = json_decode($activity->h5p_content,true);
 
                 $decoded_content['library_title'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('name');
                 $decoded_content['library_major_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('major_version');
                 $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('minor_version');
-                Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id.'.json', json_encode($decoded_content));
+                Storage::disk('public')->put('/exports/' . $project_dir_name.'/playlists/' . $title . '/activities/' . $activity->title . '/' . $activity->h5p_content_id . '.json', json_encode($decoded_content));
 
                 if (filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
                     $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
@@ -747,15 +746,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     }
                 }
 
-                \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), storage_path('app/public/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id) );
+                \File::copyDirectory( storage_path('app/public/h5p/content/' . $activity->h5p_content_id), storage_path('app/public/exports/' . $project_dir_name.'/playlists/' . $title . '/activities/' . $activity->title . '/' . $activity->h5p_content_id) );
                 $h5p = App::make('LaravelH5p');
                 $core = $h5p::$core;
                 $interface = $h5p::$interface;
                 $content = $core->loadContent($activity->h5p_content_id);
                 $content['filtered'] = '';
                 $params = $core->filterParameters($content);
-                if(file_exists(storage_path('app/public/h5p/exports/'.$content['slug'].'-'.$activity->h5p_content_id.'.h5p'))) {
-                    @copy(storage_path('app/public/h5p/exports/'.$content['slug'].'-'.$activity->h5p_content_id.'.h5p'),storage_path('app/public/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$content['slug'].'-'.$activity->h5p_content_id.'.h5p'));
+                if(file_exists(storage_path('app/public/h5p/exports/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p'))) {
+                    @copy(storage_path('app/public/h5p/exports/' . $content['slug'] . '-'. $activity->h5p_content_id . '.h5p'),storage_path('app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' . $activity->title . '/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p'));
                 }
                 
                 
@@ -763,12 +762,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
 
         // Get real path for our folder
-        $rootPath = storage_path('app/public/exports/'.$project_dir_name);
+        $rootPath = storage_path('app/public/exports/' . $project_dir_name);
 
         // Initialize archive object
         $zip = new ZipArchive();
-        $fileName = $project_dir_name.'.zip';
-        $zip->open(storage_path('app/public/exports/'.$fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $fileName = $project_dir_name . '.zip';
+        $zip->open(storage_path('app/public/exports/' . $fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
@@ -794,7 +793,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         // Zip archive will be created only after closing object
         $zip->close();
 
-        return storage_path('app/public/exports/'.$fileName);
+        return storage_path('app/public/exports/' . $fileName);
     }
 
 }
