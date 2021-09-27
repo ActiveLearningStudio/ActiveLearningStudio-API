@@ -541,4 +541,20 @@ class GoogleClassroom implements GoogleClassroomInterface
         }
         return $front_url;
     }
+
+    /**
+     * Save user data into external Database
+     *
+     * @param string $student The Google Classroom student data
+     */
+    public function saveUserData($studentData)
+    {
+        $users = DB::connection('pgsql2')->table("student_data")->insert(
+            array(
+                   'gcuid'      =>   $studentData->userId, 
+                   'first_name' =>   $studentData->profile->name->givenName,
+                   'last_name'  =>   $studentData->profile->name->familyName,
+            )
+       );
+    }
 }
