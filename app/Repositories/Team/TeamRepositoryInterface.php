@@ -14,10 +14,9 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * Create pivots data on team creation
      *
      * @param $suborganization
-     * @param $team
      * @param $data
      */
-    public function createTeam($suborganization, $team, $data);
+    public function createTeam($suborganization, $data);
 
     /**
      * Update pivots data on team update
@@ -33,8 +32,9 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      *
      * @param $team
      * @param $user
+     * @param $role_id
      */
-    public function inviteToTeam($team, $user);
+    public function inviteToTeam($team, $user, $role_id);
 
     /**
      * Invite members to the team
@@ -105,7 +105,7 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getTeams($suborganization_id, $user_id);
-    
+
     /**
      * Get Organization Teams data
      *
@@ -121,4 +121,13 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getTeamDetail($teamId);
+
+    /**
+     * To fetch team user permissions
+     *
+     * @param User $authenticatedUser
+     * @param Team $team
+     * @return Model
+     */
+    public function fetchTeamUserPermissions($authenticatedUser, $team);
 }

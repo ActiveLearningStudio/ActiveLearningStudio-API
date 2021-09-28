@@ -2,6 +2,7 @@
 
 namespace App\Models\CurrikiGo;
 
+use App\Models\Organization;
 use App\Models\Traits\GlobalScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,7 +28,8 @@ class LmsSetting extends Model
         'lti_client_id',
         'lms_login_id',
         'user_id',
-        'published'
+        'published',
+        'organization_id',
     ];
 
     /**
@@ -36,6 +38,14 @@ class LmsSetting extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the organization for LMS setting
+     */
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
 }

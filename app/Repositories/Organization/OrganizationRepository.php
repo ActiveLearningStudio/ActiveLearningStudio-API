@@ -92,6 +92,41 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentOrganizationIds($organization, $organizationIds = [])
+    {
+        $organizationIds[] = $organization->id;
+
+        if ($organization->parent) {
+            $organizationIds = $this->getParentOrganizationIds($organization->parent, $organizationIds);
+        }
+
+        return $organizationIds;
+    }
+
+    /**
+     * Get ids for parent organizations
+     *
+     * @param Organization $organization
+     * @param array $organizationIds
+     * @return array $ids
+     */
+    public function getParentChildrenOrganizationIds($organization)
+    {
+        $parentIds = $this->getParentOrganizationIds($organization);
+        $childrenIds = $this->getSuborganizationIds($organization);
+
+        $parentChildrenOrganizationIds = $parentIds + $childrenIds;
+
+        return $parentChildrenOrganizationIds;
+    }
+
+    /**
      * To create a suborganization
      *
      * @param Organization $organization
@@ -107,6 +142,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                             ->whereHas('permissions', function (Builder $query) {
                                 $query->where('name', '=', 'organization:create');
                             })->get();
+
+        $organizationUserAdminRolesids = $organizationUserRoles->pluck('id')->toArray();
+
+        $organizationUserRolesNonAdmin = $organization->roles()
+                            ->whereNotIn('id', $organizationUserAdminRolesids)
+                            ->get();
 
         if (isset($data['admins'])) {
             $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
@@ -143,6 +184,17 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                             $userRoles[$organizationUserRoleUser->id] = ['organization_role_type_id' => $role->id];
                         }
                     }
+                }
+            }
+
+            foreach ($organizationUserRolesNonAdmin as $organizationUserRole) {
+                if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
+                    $subOrganizationUserRolesData['name'] = $organizationUserRole->name;
+                    $subOrganizationUserRolesData['display_name'] = $organizationUserRole->display_name;
+                    $subOrganizationUserRolesData['permissions'] = $organizationUserRole->permissions->pluck('id')->toArray();
+                    $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
+
+                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
                 }
             }
 
@@ -247,6 +299,28 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Get a list of the organization users.
+     *
+     * @param $data
+     * @param Organization $organization
+     * @return mixed
+     */
+    public function getOrgUsers($data, $organization)
+    {
+        $organizationUserIds = $organization->users()->get()->modelKeys();
+        $childOrganizationUserIds = $this->getChildrenOrganizationUserIds($organization);
+
+        $userInIds = array_merge($organizationUserIds, $childOrganizationUserIds);
+
+        $this->query = $this->userRepository->model->when($data['search'] ?? null, function ($query) use ($data) {
+            $query->search(['email'], $data['search']);
+            return $query;
+        });
+
+        return $this->query->whereIn('id', $userInIds)->orderBy('email', 'asc')->paginate();
+    }
+
+    /**
      * Get the parent organizations user ids
      *
      * @param $userIds
@@ -264,6 +338,25 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         }
 
         return $userIds;
+    }
+
+    /**
+     * Get the children organizations user ids
+     *
+     * @param $organization
+     * @return array
+     */
+    public function getChildrenOrganizationUserIds($organization)
+    {
+        $ids = [];
+        $childOrganizations = $organization->children;
+
+        if ($childOrganizations) {
+            foreach ($childOrganizations as $childOrganization) {
+                $ids = $childOrganization->users()->get()->modelKeys();
+            }
+        }
+        return $ids;
     }
 
     /**
@@ -536,7 +629,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             }
         ])
         ->when($data['query'] ?? null, function ($query) use ($data) {
-            $query->where('email', 'like', '%' . $data['query'] . '%');
+            $query->where('email', 'like', '%' . str_replace("_","\_", $data['query']) . '%');
             return $query;
         })
         ->paginate($perPage);
@@ -620,7 +713,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return $response;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-        } 
+        }
     }
 
         /**
@@ -634,7 +727,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return OrganizationPermissionType::all()->groupBy('feature');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-        } 
+        }
     }
 
     /**
@@ -664,4 +757,5 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         return $this->model->orderBy('id', 'asc')->first();
     }
+
 }

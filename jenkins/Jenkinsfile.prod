@@ -1,4 +1,4 @@
-node {
+node("currikidev") {
     def app     
     def redis
     def esmigrate
@@ -39,17 +39,29 @@ node {
                 esmigrate.push("latest")        
         }   
     }
-    def labels = ['currikiprod']
+    
 
-    for (label in labels) {
-        node(label) {
-            stage('Deploying Image ' + label){
-                echo 'Copy'
-                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose.yml currikistack" 
-                echo 'Copy completed'
+    
+    
+    
+     parallel(
+            "StageA": {
+                if(Jenkins.instance.getNode('currikiprod').toComputer().isOnline()){
+                    node('currikiprod') {
+                        stage ('currikiprod') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file /curriki/docker-compose.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikiprod') {
+                        echo "currikiprod is offline"
+                        exit 1
+                    }
+                }
             }
-        }
-    }
+    )
     
 }
 

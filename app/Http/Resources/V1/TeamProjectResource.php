@@ -20,6 +20,7 @@ class TeamProjectResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'thumb_url' => $this->thumb_url,
+            'team_id' => $this->team_id,
             'users' => $this->users,
         ];
     }

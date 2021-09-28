@@ -4,7 +4,9 @@ namespace App\Policies;
 
 use App\Models\Activity;
 use App\Models\Organization;
+use App\Models\Pivots\TeamProjectUser;
 use App\Models\Project;
+use App\Models\Team;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -28,60 +30,85 @@ class ActivityPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function view(User $user, Organization $suborganization)
+    public function view(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:view', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:view-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:view', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can create models.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function create(User $user, Organization $suborganization)
+    public function create(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:create', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:add-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:create', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function update(User $user, Organization $suborganization)
+    public function update(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:edit', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:edit-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:edit', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function delete(User $user, Organization $suborganization)
+    public function delete(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:delete', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:delete-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:delete', $project->organization);
+        }
     }
 
     /**
      * Determine whether the user can share the model.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Project $project
      * @return mixed
      */
-    public function share(User $user, Organization $suborganization)
+    public function share(User $user, Project $project)
     {
-        return $user->hasPermissionTo('activity:share', $suborganization);
+        $team = $project->team;
+        if ($team) {
+            return $user->hasTeamPermissionTo('team:share-activity', $team);
+        } else {
+            return $user->hasPermissionTo('activity:share', $project->organization);
+        }
     }
 
     /**
@@ -136,12 +163,12 @@ class ActivityPolicy
             }
         }
 
-        $project_teams = $project->teams;
-        foreach ($project_teams as $project_team) {
+        $project_team = $project->team;
+        if ($project_team) {
             $team_project_user = TeamProjectUser::where('team_id', $project_team->id)
-                ->where('project_id', $project->id)
-                ->where('user_id', $user->id)
-                ->first();
+            ->where('project_id', $project->id)
+            ->where('user_id', $user->id)
+            ->first();
             if ($team_project_user) {
                 return true;
             }

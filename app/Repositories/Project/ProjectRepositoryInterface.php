@@ -99,6 +99,13 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function getAll($data, $suborganization);
 
     /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getTeamProjects($data, $suborganization);
+
+    /**
      * @param $project
      * @param $index
      * @return Application|ResponseFactory|Response
