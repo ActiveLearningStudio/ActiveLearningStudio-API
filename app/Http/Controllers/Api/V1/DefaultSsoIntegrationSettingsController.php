@@ -7,6 +7,7 @@ use App\Http\Requests\V1\StoreDefaultSsoSettingsRequest;
 use App\Http\Requests\V1\UpdateDefaultSsoSettingsRequest;
 use App\Http\Resources\V1\DefaultSsoSettingsCollection;
 use App\Http\Resources\V1\DefaultSsoSettingsResource;
+use App\Models\DefaultSsoIntegrationSettings;
 use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsInterface;
 use Illuminate\Http\Request;
 
@@ -28,10 +29,14 @@ class DefaultSsoIntegrationSettingsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
+     * @param DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings)
     {
+        $this->authorize('viewAny', $defaultSsoIntegrationSettings);
+
         $collections = $this->defaultSsoSettingsRepository->getAll($request);
         return new DefaultSsoSettingsCollection($collections);
     }
@@ -40,10 +45,14 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request/StoreDefaultSsoSettingsRequest $storeDefaultSsoSettingsRequest
+     * @param DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreDefaultSsoSettingsRequest $storeDefaultSsoSettingsRequest)
+    public function store(StoreDefaultSsoSettingsRequest $storeDefaultSsoSettingsRequest,
+        DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings)
     {
+        $this->authorize('create', $defaultSsoIntegrationSettings);
+
         $validated = $storeDefaultSsoSettingsRequest->validated();
         $response = $this->defaultSsoSettingsRepository->create($validated);
         return response(
@@ -58,12 +67,14 @@ class DefaultSsoIntegrationSettingsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param DefaultSsoIntegrationSettings $default_sso_setting
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(DefaultSsoIntegrationSettings $default_sso_setting)
     {
-        $setting = $this->defaultSsoSettingsRepository->find($id);
+        $this->authorize('view', [DefaultSsoIntegrationSettings::class, $default_sso_setting]);
+
+        $setting = $this->defaultSsoSettingsRepository->find($default_sso_setting->id);
         return new DefaultSsoSettingsResource($setting->load('organization'));
     }
 
@@ -71,13 +82,16 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request/UpdateDefaultSsoSettingsRequest $updateDefaultSsoSettingsRequest
-     * @param int $id
+     * @param DefaultSsoIntegrationSettings $default_sso_setting
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDefaultSsoSettingsRequest $updateDefaultSsoSettingsRequest, $id)
+    public function update(UpdateDefaultSsoSettingsRequest $updateDefaultSsoSettingsRequest,
+        DefaultSsoIntegrationSettings $default_sso_setting)
     {
+        $this->authorize('update', [DefaultSsoIntegrationSettings::class, $default_sso_setting]);
+
         $validated = $updateDefaultSsoSettingsRequest->validated();
-        $response = $this->defaultSsoSettingsRepository->update($id, $validated);
+        $response = $this->defaultSsoSettingsRepository->update($default_sso_setting->id, $validated);
         return response(
             [
                 'message' => $response['message'],
@@ -90,14 +104,15 @@ class DefaultSsoIntegrationSettingsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param DefaultSsoIntegrationSettings $default_sso_setting
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DefaultSsoIntegrationSettings $default_sso_setting)
     {
+        $this->authorize('delete', [DefaultSsoIntegrationSettings::class, $default_sso_setting]);
         return response(
             [
-                'message' => $this->defaultSsoSettingsRepository->destroy($id)
+                'message' => $this->defaultSsoSettingsRepository->destroy($default_sso_setting->id)
             ],
             200
         );
