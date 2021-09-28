@@ -697,7 +697,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param $authUser
      * @param Project $project
-     * @param int $suborganization_id
      * @throws GeneralException
      */
     public function exportNoovoProject($authUser, Project $project)
