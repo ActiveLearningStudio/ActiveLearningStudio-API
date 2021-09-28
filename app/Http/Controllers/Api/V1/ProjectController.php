@@ -838,7 +838,8 @@ class ProjectController extends Controller
         ExportNoovoProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to export project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed.
+            You will receive an email notice as soon as it is available.",
         ], 200);
     }
 }
