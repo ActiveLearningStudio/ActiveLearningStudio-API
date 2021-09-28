@@ -22,6 +22,7 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
     }
 
     /**
+     * Get All Default Sso integration settings
      * @param $data
      * @return mixed
      */
@@ -43,6 +44,7 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
     }
 
     /**
+     * Create new Default Sso integration setting
      * @param $data
      * @return mixed
      * @throws GeneralException
@@ -60,6 +62,7 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
     }
 
     /**
+     * Find/Search Default Sso integration setting by id
      * @param $id
      * @return mixed
      * @throws GeneralException
@@ -77,6 +80,7 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
     }
 
     /**
+     * Update Default Sso integration setting
      * @param $data
      * @return mixed
      * @throws GeneralException
@@ -94,6 +98,7 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
     }
 
     /**
+     * Remove Default Sso integration setting
      * @param $id
      * @return mixed
      * @throws GeneralException

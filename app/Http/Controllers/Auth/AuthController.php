@@ -9,7 +9,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\SsoLoginRequest;
 use App\Http\Resources\V1\UserResource;
-use App\Models\DefaultSsoIntegrationSettings;
+use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsRepository;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
@@ -43,6 +43,7 @@ class AuthController extends Controller
     private $teamRepository;
     private $groupRepository;
     private $organizationRepository;
+    private $defaultSsoSettingsRepository;
 
     /**
      * AuthController constructor.
@@ -64,7 +65,8 @@ class AuthController extends Controller
         InvitedGroupUserRepositoryInterface $invitedGroupUserRepository,
         TeamRepositoryInterface $teamRepository,
         GroupRepositoryInterface $groupRepository,
-        OrganizationRepositoryInterface $organizationRepository
+        OrganizationRepositoryInterface $organizationRepository,
+        DefaultSsoIntegrationSettingsRepository $defaultSsoSettingsRepository
     ) {
         $this->userRepository = $userRepository;
         $this->userLoginRepository = $userLoginRepository;
@@ -74,6 +76,7 @@ class AuthController extends Controller
         $this->teamRepository = $teamRepository;
         $this->groupRepository = $groupRepository;
         $this->organizationRepository = $organizationRepository;
+        $this->defaultSsoSettingsRepository = $defaultSsoSettingsRepository;
     }
 
     /**
@@ -473,7 +476,7 @@ class AuthController extends Controller
     private function stemuliSsoLogin($ip, $info)
     {
         try {
-            if($info) {
+            if ($info) {
                 $result['user_email'] = $info['email'];
                 $result['first_name'] = $info['firstName'];
                 $result['last_name'] = $info['lastName'];
@@ -615,7 +618,7 @@ class AuthController extends Controller
         $data = $request->validated();
         parse_str(base64_decode($data['sso_info']), $result);
 
-        $user = User::with(['lmssetting' => function($query) use ($result){
+        $user = User::with(['lmssetting' => function($query) use ($result) {
             $query->where('lti_client_id', $result['lti_client_id']);
         }])->where('email', $result['email'])->first();
 
@@ -630,9 +633,9 @@ class AuthController extends Controller
                 'email_verified_at' => now(),
             ]);
             if ($user) {
-                $default_lms_setting = DefaultSsoIntegrationSettings::where('lti_client_id', $result['lti_client_id'])->first();
+                $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $result['lti_client_id']);
                 //if default LMS setting not exist!
-                if(!$default_lms_setting) {
+                if (!$default_lms_setting) {
                     return response([
                         'errors' => ['Unable to find default LMS setting with your client id.'],
                     ]);
@@ -683,9 +686,9 @@ class AuthController extends Controller
             if (sizeof($user->lmssetting) > 0) {
                 $user['user_organization'] = $user->lmssetting[0]->organization;
             } else {
-                $default_lms_setting = DefaultSsoIntegrationSettings::where('lti_client_id', $result['lti_client_id'])->first();
+                $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $result['lti_client_id']);
                 //if default LMS setting not exist!
-                if(!$default_lms_setting) {
+                if (!$default_lms_setting) {
                     return response([
                         'errors' => ['Unable to find default LMS setting with your client id.'],
                     ]);
