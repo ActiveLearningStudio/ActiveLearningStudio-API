@@ -24,6 +24,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use App\Jobs\ExportProject;
 use App\Jobs\ImportProject;
+use Illuminate\Support\Arr;
 
 /**
  * @group 3. Project
@@ -71,7 +72,12 @@ class ProjectController extends Controller
         }
 */
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $suborganization->id)->get()),
+            'projects' => ProjectResource::collection(
+                                        $authenticated_user->projects()
+                                        ->where('organization_id', $suborganization->id)
+                                        ->whereNull('team_id')
+                                        ->get()
+                                    ),
         ], 200);
     }
 
@@ -89,6 +95,22 @@ class ProjectController extends Controller
         $this->authorize('viewAny', [Project::class, $suborganization]);
 
         return  UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization));
+    }
+
+    /**
+     * Get All Organization Team's Projects
+     *
+     * Get a list of the team's projects of an organization.
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @responseFile responses/project/team-projects.json
+     *
+     * @return Response
+     */
+    public function getTeamProjects(Request $request, Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Project::class, $suborganization]);
+
+        return  UserProjectResource::collection($this->projectRepository->getTeamProjects($request->all(), $suborganization));
     }
 
     /**
@@ -118,7 +140,7 @@ class ProjectController extends Controller
     {
         return response(['message' => $this->projectRepository->updateIndex($project, $index)], 200);
     }
-    
+
     /**
      * Starter Project Toggle
      *
@@ -146,7 +168,7 @@ class ProjectController extends Controller
     {
         return response(['message' => $this->projectRepository->toggleStarter($request->projects, $flag)], 200);
     }
-    
+
     /**
      * Get All Projects Detail
      *
@@ -158,7 +180,7 @@ class ProjectController extends Controller
      */
     public function detail(Organization $suborganization)
     {
-       $this->authorize('view', [Project::class, $suborganization]);
+       $this->authorize('viewAny', [Project::class, $suborganization]);
 
         $authenticated_user = auth()->user();
 
@@ -244,7 +266,7 @@ class ProjectController extends Controller
      */
     public function uploadThumb(ProjectUploadThumbRequest $projectUploadThumbRequest, Organization $suborganization)
     {
-        $this->authorize('uploadThumb', [Project::class, $suborganization]);
+        $this->authorize('uploadThumb', [Project::class, $suborganization, $projectUploadThumbRequest->project_id]);
 
         $data = $projectUploadThumbRequest->validated();
 
@@ -314,7 +336,7 @@ class ProjectController extends Controller
      */
     public function show(Organization $suborganization, Project $project)
     {
-        $this->authorize('view', [Project::class, $suborganization]);
+        $this->authorize('view', [Project::class, $project]);
 
         return response([
             'project' => new ProjectResource($project),
@@ -375,7 +397,7 @@ class ProjectController extends Controller
      */
     public function share(Organization $suborganization, Project $project)
     {
-        $this->authorize('share', [$project, $suborganization]);
+        $this->authorize('share', $project);
 
         $is_updated = $this->projectRepository->update([
             'shared' => true,
@@ -462,24 +484,31 @@ class ProjectController extends Controller
      */
     public function update(ProjectUpdateRequest $projectUpdateRequest, Organization $suborganization, Project $project)
     {
-        $this->authorize('update', [Project::class, $suborganization]);
-
+        $this->authorize('update', [Project::class, $project]);
         $data = $projectUpdateRequest->validated();
 
-        $is_updated = $this->projectRepository->update($data, $project->id);
+        return \DB::transaction(function () use ($project, $data) {
 
-        if ($is_updated) {
-            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-            event(new ProjectUpdatedEvent($updated_project));
+            if (isset($data['user_id'])) {
+                $project->users()->sync([$data['user_id'] => ['role' => 'owner']]);
+                Arr::forget($data, ['user_id']);
+            }
+            $is_updated = $this->projectRepository->update($data, $project->id);
+
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
+
+                return response([
+                    'project' => $updated_project,
+                ], 200);
+            }
 
             return response([
-                'project' => $updated_project,
-            ], 200);
-        }
+                'errors' => ['Failed to update project.'],
+            ], 500);
 
-        return response([
-            'errors' => ['Failed to update project.'],
-        ], 500);
+        });
     }
 
     /**
@@ -776,9 +805,9 @@ class ProjectController extends Controller
 
         $projectUploadImportRequest->validated();
         $path = $projectUploadImportRequest->file('project')->store('public/imports');
-        
+
         ImportProject::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
-        
+
         return response([
             'message' =>  "Your request to import project has been received and is being processed. You will receive an email notice as soon as it is available.",
         ], 200);

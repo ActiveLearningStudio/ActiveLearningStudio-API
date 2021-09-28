@@ -98,9 +98,6 @@ class ExtractXAPIJSONController extends Controller
                 if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
                     // It maybe an old format statement. Just save verb, object and actor, and move on.
                     $inserted = $lrsStatementsRepository->create($insertData);
-                    if ($inserted) {
-                        \Log::info(date('Y-m-d h:i:s') . ' - OLD XAPI statement with id: ' . $row->id . ' processed');
-                    }
                     continue;
                 }
                 
@@ -152,6 +149,13 @@ class ExtractXAPIJSONController extends Controller
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
                     $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
                     $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
+
+                    if (empty($glassAltCourseId)) {
+                        $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_NAME);
+                        $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
+                        $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_CODE);
+                    }
+
                     $chapterName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_NAME);
                     $chapterIndex = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_INDEX);
                     $referrer = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_REFERRER);
@@ -197,7 +201,6 @@ class ExtractXAPIJSONController extends Controller
                 $inserted = $lrsStatementsRepository->create($insertData);
                
                 if ($inserted) {
-                    \Log::info(date('Y-m-d h:i:s') . ' - NEW XAPI statement with id: ' . $row->id . ' processed');
                     //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
                     if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
                         if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {

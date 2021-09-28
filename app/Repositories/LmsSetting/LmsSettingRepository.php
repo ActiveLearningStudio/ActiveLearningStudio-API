@@ -27,7 +27,7 @@ class LmsSettingRepository extends BaseRepository
      * @param $data
      * @return mixed
      */
-    public function getAll($data)
+    public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
@@ -37,12 +37,12 @@ class LmsSettingRepository extends BaseRepository
                 $qry->where('first_name', 'iLIKE', '%' . $data['query'] . '%');
                 $qry->orWhere('last_name', 'iLIKE', '%' . $data['query'] . '%');
                 $qry->orWhere('email', 'iLIKE', '%' . $data['query'] . '%');
+                $qry->orwhere('lms_url', 'iLIKE', '%' . $data['query'] . '%');
+                $qry->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
             });
-            $query = $query->orwhere('lms_url', 'iLIKE', '%' . $data['query'] . '%');
-            $query = $query->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
         }
 
-        return $query->with('user')->paginate($perPage);
+         return $query->with(['user', 'organization'])->where('organization_id', $suborganization->id)->paginate($perPage);
     }
 
     /**

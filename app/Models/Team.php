@@ -29,7 +29,8 @@ class Team extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_team')->withPivot('role')->withTimestamps();
+        // return $this->belongsToMany('App\User', 'user_team')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany('App\User', 'team_user_roles')->using('App\Models\TeamUserRole')->withPivot('team_role_type_id')->withTimestamps();
     }
 
     /**
@@ -38,6 +39,20 @@ class Team extends Model
     public function invitedUsers()
     {
         return $this->hasMany('App\Models\InvitedTeamUser', 'team_id');
+    }
+
+    /**
+     * Cascade on delete the team
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function (Team $team) {
+            foreach ($team->projects as $project) {
+                $project->delete();
+            }
+        });
     }
 
     /**
@@ -103,5 +118,13 @@ class Team extends Model
     public function getModelTypeAttribute()
     {
         return 'Team';
+    }
+
+    /**
+     * The user roles that belong to the team.
+     */
+    public function userRoles()
+    {
+        return $this->belongsToMany('App\Models\TeamRoleType', 'team_user_roles');
     }
 }
