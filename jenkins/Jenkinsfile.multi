@@ -50,7 +50,7 @@ node("currikidev") {
                     node('currikimultitenancy') {
                         stage ('currikimultitenancy') {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file ~/curriki/docker-compose-multi.yml currikistack" 
+                                sh "yes | docker stack deploy --compose-file /curriki/docker-compose-multi.yml currikistack" 
                                 echo 'Copy completed'
                         }
                     }
