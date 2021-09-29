@@ -60,7 +60,7 @@ class MyActivityController extends Controller
      *
      * Get a list of my activities
      *
-     * @urlParam playlist required The Id of a playlist Example: 1
+     * @urlParam Request $request
      *
      * @responseFile responses/activity/activities.json
      *
