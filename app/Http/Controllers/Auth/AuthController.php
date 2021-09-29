@@ -614,7 +614,8 @@ class AuthController extends Controller
      * @param SsoLoginRequest $request
      * @return Response
      */
-    public function ltiSsoLogin(SsoLoginRequest $request){
+    public function ltiSsoLogin(SsoLoginRequest $request)
+    {
         $data = $request->validated();
         parse_str(base64_decode($data['sso_info']), $result);
 
