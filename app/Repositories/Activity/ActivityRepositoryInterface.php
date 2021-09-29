@@ -54,7 +54,7 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * @param $playlistId
      */
     public function getPlaylistIsPublicValue($playlistId);
-    
+
     /**
      * Get latest order of activity for Playlist
      * @param $playlist_id
@@ -74,7 +74,15 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * @param string $playlist_dir
      * @param string $activity_dir
      * @param string $extracted_folder
-     * 
+     *
      */
     public function importActivity(Playlist $playlist, $authUser, $playlist_dir, $activity_dir, $extracted_folder);
+
+    /**
+     * Get all user activities
+     *
+     * @param $data
+     * @param $user
+     */
+    public function myActivities($data, $user);
 }

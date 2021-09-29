@@ -84,6 +84,16 @@ class Activity extends Model
     }
 
     /**
+     * Get the playlists that owns the activities
+     */
+    public function playlists()
+    {
+        return $this->belongsToMany('App\Models\Playlist', 'activity_playlist')
+                    ->withPivot('order')
+                    ->withTimestamps();
+    }
+
+    /**
      * Get the activity's project's user.
      *
      * @return object
