@@ -236,7 +236,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
         // default Sso Integration Setting
         Route::apiResource('default-sso-settings', 'DefaultSsoIntegrationSettingsController');
-        Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('search');
+        Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
     // public route for get user's shared projects

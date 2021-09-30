@@ -60,7 +60,7 @@ class DefaultSsoIntegrationSettingsController extends Controller
                 'message' => $response['message'],
                 'data' => new DefaultSsoSettingsResource($response['data']->load('organization'))
             ],
-            200
+            201
         );
     }
 
