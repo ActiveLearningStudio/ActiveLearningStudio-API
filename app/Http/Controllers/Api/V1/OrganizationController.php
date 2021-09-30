@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\OrganizationSearchRequest;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\OrganizationRequest;
@@ -57,9 +58,17 @@ class OrganizationController extends Controller
         ], 200);
     }
 
-    public function searchOrganizationByName(Request $request)
+    /**
+     * Search organization by name
+     *
+     * @bodyParam query string required Organization name to get data for Example: curriki
+     * @param OrganizationSearchRequest $organizationSearchRequest
+     * @return Response
+     */
+    public function searchOrganizationByName(OrganizationSearchRequest $organizationSearchRequest)
     {
-        $response = $this->organizationRepository->searchOrganizationByName($request);
+        $data = $organizationSearchRequest->validated();
+        $response = $this->organizationRepository->searchOrganizationByName($data);
         return response([
             'organization' => $response,
         ], 200);
