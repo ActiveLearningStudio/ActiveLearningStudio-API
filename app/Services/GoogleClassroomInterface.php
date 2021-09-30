@@ -220,7 +220,7 @@ interface GoogleClassroomInterface
      /**
      * Save student data into external database
      *
-     * @param string $user The Google Classroom student data
+     * @param array $studentData The Google Classroom student data
      */
     public function saveStudentData($studentData);
 

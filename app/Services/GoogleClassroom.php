@@ -545,7 +545,7 @@ class GoogleClassroom implements GoogleClassroomInterface
     /**
      * Save student data into external Database
      *
-     * @param string $student The Google Classroom student data
+     * @param array $studentData The Google Classroom student data
      */
     public function saveStudentData($studentData)
     {
