@@ -76,45 +76,6 @@ class MyActivityController extends Controller
     }
 
     /**
-     * Upload Activity thumbnail
-     *
-     * Upload thumbnail image for a activity
-     *
-     * @bodyParam thumb image required Thumbnail image to upload Example: (binary)
-     *
-     * @response {
-     *   "thumbUrl": "/storage/activities/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
-     * }
-     *
-     * @response 400 {
-     *   "errors": [
-     *     "Invalid image."
-     *   ]
-     * }
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function uploadThumb(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'thumb' => 'required|image|max:102400',
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => ['Invalid image.']
-            ], 400);
-        }
-
-        $path = $request->file('thumb')->store('/public/activities');
-
-        return response([
-            'thumbUrl' => Storage::url($path),
-        ], 200);
-    }
-
-    /**
      * Create Activity
      *
      * Create a new activity.

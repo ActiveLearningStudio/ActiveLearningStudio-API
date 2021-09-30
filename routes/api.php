@@ -119,6 +119,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::apiResource('playlists.activities', 'ActivityController');
         Route::apiResource('my-activities', 'MyActivityController');
+        Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');

@@ -14,4 +14,9 @@ interface ActivityItemRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getAll($data);
+
+    /**
+     * @return mixed
+     */
+    public function getActivityLayouts();
 }

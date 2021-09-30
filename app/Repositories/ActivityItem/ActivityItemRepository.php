@@ -38,6 +38,22 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
     }
 
     /**
+     * @return mixed
+     */
+    public function getActivityLayouts()
+    {
+        return $this->model->whereIn('title', [
+                                        'Interactive Video',
+                                        'Column Layout',
+                                        'Interactive Book',
+                                        'Course Presentation',
+                                        'Quiz'
+                                        ]
+                                    )
+                            ->get();
+    }
+
+    /**
      * @param $data
      * @return mixed
      * @throws GeneralException
