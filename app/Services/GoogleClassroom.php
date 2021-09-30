@@ -12,7 +12,7 @@ use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Exceptions\GeneralException;
 use App\Models\Project;
 use Illuminate\Http\Request;
-
+use DB;
 /**
  * Google Classroom Service class
  */
@@ -540,5 +540,20 @@ class GoogleClassroom implements GoogleClassroomInterface
             }
         }
         return $front_url;
+    }
+
+    /**
+     * Save student data into external Database
+     *
+     * @param array $studentData The Google Classroom student data
+     */
+    public function saveStudentData($studentData)
+    {
+        $statement =  "'" . $studentData['student_data']['userid'] . "' , '" . $studentData['student_data']['profile']['name']['givenName'] . "' , '" . $studentData['student_data']['profile']['name']['familyName'] . "'";
+        if (config('student-data.run_dev_proc')) {
+            \DB::connection('pgsql-cust')->select("call dev_dcmg199iaigp51_updi ($statement) ");
+        } else {
+            \DB::connection('pgsql-cust')->select("call dcmg199iaigp51_updi ($statement) ");
+        }
     }
 }
