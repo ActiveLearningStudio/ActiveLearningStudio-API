@@ -101,5 +101,20 @@ class ParamValidate
         return ($custom_fields && property_exists($custom_fields, $key)) ? $custom_fields->{$key} : null;
     }
 
+    public static function toolPlatformElement($session, $element='')
+    {
+        if (isset($session['tsugi_jwt'])) {
+            $lti_jwt = $session['tsugi_jwt'];
+            $lti_claim_tool_platform = "https://purl.imsglobal.org/spec/lti/claim/tool_platform";
+            $tool_family_code = $lti_jwt->body->{$lti_claim_tool_platform};
+            return property_exists($tool_family_code, $element) && !empty($element) ? $tool_family_code->$element : $tool_family_code->product_family_code;
+        } else {
+            // get from LTI post
+            if (isset($session['lti_post'])) {
+                return $session['lti_post'][LTIConstants::TOOL_CONSUMER_INFO_PRODUCT_FAMILY_CODE];
+            }
+        }
+        return null;
+    }
 
 }

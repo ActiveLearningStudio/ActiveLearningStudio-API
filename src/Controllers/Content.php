@@ -86,6 +86,24 @@ class Content implements ControllerInterface
             $response->send();
         }elseif ( isset($_SESSION['lti']['issuer_client']) ) {
             $custom_email_id = ParamValidate::getKeyInCustomFields($_SESSION, 'person_email_primary');
+            if (isset($_SESSION['lti_post']['placement']) && $_SESSION['lti_post']['placement'] === 'canvas_sso') {
+                $user_data = [];
+                $user_data['email'] = $custom_email_id;
+                $user_data['first_name'] = ParamValidate::getKeyInCustomFields($_SESSION, 'person_name_given');
+                $user_data['last_name'] = ParamValidate::getKeyInCustomFields($_SESSION, 'person_name_family');
+                $user_data['lti_client_id'] = $_SESSION['lti']['issuer_client'];
+                $user_data['tool_platform'] = ParamValidate::toolPlatformInfo($_SESSION);
+                $user_data['guid'] = ParamValidate::toolPlatformElement($_SESSION, 'guid');
+
+                $build_request_data = http_build_query($user_data);
+
+                // encode user information.
+                $lti_user_info = base64_encode($build_request_data);
+                $studio_login_link = CURRIKI_STUDIO_HOST . "/canvas-lti-sso?sso_info=$lti_user_info";
+                // Redirect User to the login page.
+                header("Location: $studio_login_link");
+                exit(0);
+            }
             // handle LTI 1.3
             $lti_client_id = $_SESSION['lti']['issuer_client'];
             $lti13_deeplink = $_SESSION['lti']['lti13_deeplink'];
