@@ -96,6 +96,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
+        Route::post('suborganization/{suborganization}/projects/{project}/export-noovo', 'ProjectController@exportNoovoProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
 
 

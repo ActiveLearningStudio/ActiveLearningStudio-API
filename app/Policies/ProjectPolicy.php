@@ -135,10 +135,19 @@ class ProjectPolicy
      *
      * @param User $user
      * @param Organization $organization
+     * @param $project_id
      * @return mixed
      */
-    public function uploadThumb(User $user, Organization $suborganization)
+    public function uploadThumb(User $user, Organization $suborganization, $project_id)
     {
+        if ($project_id) {
+            $project = Project::find($project_id);
+            $team = $project->team;
+            if ($team) {
+                return $user->hasTeamPermissionTo('team:edit-project', $team);
+            }
+        }
+
         return $user->hasPermissionTo('project:upload-thumb', $suborganization);
     }
 
