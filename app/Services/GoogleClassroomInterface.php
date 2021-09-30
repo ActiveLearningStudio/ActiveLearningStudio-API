@@ -218,10 +218,10 @@ interface GoogleClassroomInterface
     public function isAssignmentSubmitted($state);
 
      /**
-     * Save user data into external database
+     * Save student data into external database
      *
      * @param string $user The Google Classroom student data
      */
-    public function saveUserData($studentData);
+    public function saveStudentData($studentData);
 
 }

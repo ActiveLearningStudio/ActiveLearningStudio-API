@@ -245,10 +245,11 @@ class GoogleClassroomController extends Controller
                     // Get the student's submission...
                     $submissions = $service->getStudentSubmissions($courseId, $classwork->classwork_id);
                     $firstSubmission = $submissions[0];
-
-                    // Save student Data
-                    $service->saveUserData($studentRes);
-
+                    
+                    // Save student Data for VIV if check is enabled
+                    if (config('student-data.save_student_data')) {
+                        $service->saveStudentData($studentRes);
+                    }
                     return response([
                         'submission' => GCSubmissionResource::make($firstSubmission)->resolve()
                     ], 200);

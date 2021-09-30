@@ -78,14 +78,14 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'pgsql2' => [
-            'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+        'pgsql-cust' => [
+            'driver' => env('DB_CUST_CONNECTION', 'pgsql'),
+            'url' => env('DB_CUST_URL'),
+            'host' => env('DB_CUST_HOST', '127.0.0.1'),
+            'port' => env('DB_CUST_PORT', '5432'),
+            'database' => env('DB_CUST_DATABASE', 'forge'),
+            'username' => env('DB_CUST_USERNAME', 'forge'),
+            'password' => env('DB_CUST_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,

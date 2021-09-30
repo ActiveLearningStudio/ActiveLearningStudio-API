@@ -12,7 +12,7 @@ use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Exceptions\GeneralException;
 use App\Models\Project;
 use Illuminate\Http\Request;
-
+use DB;
 /**
  * Google Classroom Service class
  */
@@ -543,18 +543,17 @@ class GoogleClassroom implements GoogleClassroomInterface
     }
 
     /**
-     * Save user data into external Database
+     * Save student data into external Database
      *
      * @param string $student The Google Classroom student data
      */
-    public function saveUserData($studentData)
+    public function saveStudentData($studentData)
     {
-        $users = DB::connection('pgsql2')->table("student_data")->insert(
-            array(
-                   'gcuid'      =>   $studentData->userId, 
-                   'first_name' =>   $studentData->profile->name->givenName,
-                   'last_name'  =>   $studentData->profile->name->familyName,
-            )
-       );
+        $statement =  "'" . $studentData['student_data']['userid'] . "' , '" . $studentData['student_data']['profile']['name']['givenName'] . "' , '" . $studentData['student_data']['profile']['name']['familyName'] . "'";
+        if (config('student-data.run_dev_proc')) {
+            \DB::connection('pgsql-cust')->select("call dev_dcmg199iaigp51_updi ($statement) ");
+        } else {
+            \DB::connection('pgsql-cust')->select("call dcmg199iaigp51_updi ($statement) ");
+        }
     }
 }
