@@ -549,7 +549,7 @@ class GoogleClassroom implements GoogleClassroomInterface
      */
     public function saveStudentData($studentData)
     {
-        $statement =  "'" . $studentData->userid . "' , '" . trim($studentData->profile->name->givenName, '\'"') . "' , '" . trim($studentData->profile->name->familyName, '\'"') . "'";
+        $statement =  "'" . $studentData->userId . "' , '" . trim($studentData->profile->name->givenName, '\'"') . "' , '" . trim($studentData->profile->name->familyName, '\'"') . "'";
         if (config('student-data.run_dev_proc')) {
             DB::connection('pgsql-cust')->select("call dev_dcmg199iaigp51_updi ($statement) ");
         } else {
