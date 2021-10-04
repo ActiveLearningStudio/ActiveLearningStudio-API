@@ -106,8 +106,9 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
     public function destroy($id)
     {
         try {
-            $this->find($id)->delete();
-            return 'Setting deleted!';
+            if ($this->find($id)->delete()) {
+                return ['message' => 'Setting deleted!', 'data' => $id];
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
