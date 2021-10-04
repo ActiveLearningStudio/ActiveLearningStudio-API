@@ -19,7 +19,7 @@ class DefaultSsoIntegrationSettingsPolicy
      */
     public function viewAny(User $user, Organization $organization)
     {
-        return $user->hasPermissionTo('organization:view-default-sso');
+        return $user->hasPermissionTo('organization:view-default-sso', $organization);
     }
 
     /**
