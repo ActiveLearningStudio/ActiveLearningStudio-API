@@ -8,6 +8,7 @@ use App\Http\Requests\V1\UpdateDefaultSsoSettingsRequest;
 use App\Http\Resources\V1\DefaultSsoSettingsCollection;
 use App\Http\Resources\V1\DefaultSsoSettingsResource;
 use App\Models\DefaultSsoIntegrationSettings;
+use App\Models\Organization;
 use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsInterface;
 use Illuminate\Http\Request;
 
@@ -30,12 +31,12 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @param DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings
+     * @param Organization $organization
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings)
+    public function index(Request $request, Organization $organization)
     {
-        $this->authorize('viewAny', $defaultSsoIntegrationSettings);
+        $this->authorize('viewAny', [DefaultSsoIntegrationSettings::class, $organization]);
 
         $collections = $this->defaultSsoSettingsRepository->getAll($request);
         return new DefaultSsoSettingsCollection($collections);
@@ -45,13 +46,13 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request/StoreDefaultSsoSettingsRequest $storeDefaultSsoSettingsRequest
-     * @param DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings
+     * @param Organization $organization
      * @return \Illuminate\Http\Response
      */
     public function store(StoreDefaultSsoSettingsRequest $storeDefaultSsoSettingsRequest,
-        DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings)
+        Organization $organization)
     {
-        $this->authorize('create', $defaultSsoIntegrationSettings);
+        $this->authorize('create', [DefaultSsoIntegrationSettings::class, $organization]);
 
         $validated = $storeDefaultSsoSettingsRequest->validated();
         $response = $this->defaultSsoSettingsRepository->create($validated);
@@ -68,11 +69,12 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * Display the specified resource.
      *
      * @param DefaultSsoIntegrationSettings $default_sso_setting
+     * @param Organization $organization
      * @return \Illuminate\Http\Response
      */
-    public function show(DefaultSsoIntegrationSettings $default_sso_setting)
+    public function show(DefaultSsoIntegrationSettings $default_sso_setting, Organization $organization)
     {
-        $this->authorize('view', [DefaultSsoIntegrationSettings::class, $default_sso_setting]);
+        $this->authorize('view', [DefaultSsoIntegrationSettings::class, $organization]);
 
         $setting = $this->defaultSsoSettingsRepository->find($default_sso_setting->id);
         return new DefaultSsoSettingsResource($setting->load('organization'));
@@ -105,11 +107,12 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param DefaultSsoIntegrationSettings $default_sso_setting
+     * @param Organization $organization
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DefaultSsoIntegrationSettings $default_sso_setting)
+    public function destroy(DefaultSsoIntegrationSettings $default_sso_setting, Organization $organization)
     {
-        $this->authorize('delete', [DefaultSsoIntegrationSettings::class, $default_sso_setting]);
+        $this->authorize('delete', [DefaultSsoIntegrationSettings::class, $organization]);
         return response(
             [
                 'message' => $this->defaultSsoSettingsRepository->destroy($default_sso_setting->id)
