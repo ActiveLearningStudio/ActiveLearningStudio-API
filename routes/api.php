@@ -237,7 +237,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
         // default Sso Integration Setting
-        Route::apiResource('default-sso-settings', 'DefaultSsoIntegrationSettingsController');
+        Route::apiResource('organizations/{organization}/default-sso-settings', 'DefaultSsoIntegrationSettingsController');
         Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');

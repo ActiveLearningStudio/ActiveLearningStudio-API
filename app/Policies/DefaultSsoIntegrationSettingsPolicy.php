@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\DefaultSsoIntegrationSettings;
 use App\Models\Organization;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
