@@ -29,16 +29,16 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         $query = $this->model;
         // if specific index projects requested
         if (isset($data['query']) && $data['query'] !== '') {
-            $query = $query->where('title', 'iLIKE', '%'.$data['query'].'%');
+            $query = $query->where('title', 'iLIKE', '%' . $data['query'] . '%');
         }
 
         if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
-            return $query->orderBy('title', 'ASC')->get();
+            return $query->orderBy('order', 'ASC')->get();
         }
 
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return $query->orderBy('title', 'ASC')->paginate($perPage)->appends(request()->query());
+        return $query->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
     }
 
     /**
