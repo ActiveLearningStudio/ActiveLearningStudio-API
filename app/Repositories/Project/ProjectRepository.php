@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use Illuminate\Support\Facades\App;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -690,5 +691,123 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
           rmdir($dir);
         }
      }
+
+     /**
+     * To export project and associated playlists
+     *
+     * @param $authUser
+     * @param Project $project
+     * @throws GeneralException
+     */
+    public function exportNoovoProject($authUser, Project $project)
+    {
+        $zip = new ZipArchive;
+
+        $project_dir_name = 'projects-' . uniqid();
+        Storage::disk('public')->put('/exports/' . $project_dir_name . '/project.json', $project);
+
+        $project_thumbanil = "";
+        if (filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
+            $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
+            $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
+            if (file_exists($project_thumbanil)) {
+                Storage::disk('public')->put('/exports/' . $project_dir_name . '/' . basename($project_thumbanil), file_get_contents($project_thumbanil));
+            }
+        }
+
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $interface = $h5p::$interface;
+
+
+        $playlists = $project->playlists;
+
+        foreach ($playlists as $playlist) {
+
+            $title = $playlist->title;
+            Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title. '/' . $title . '.json', $playlist);
+            $activites = $playlist->activities;
+            ;
+            foreach($activites as $activity) {
+                $destination_playlist_json = '/exports/' . $project_dir_name . '/playlists/' . $title . 
+                                                '/activities/' . $activity->title . '/' . $activity->title . '.json';
+                Storage::disk('public')->put($destination_playlist_json, $activity);
+                $decoded_content = json_decode($activity->h5p_content, true);
+
+                $decoded_content['library_title'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('name');
+                $decoded_content['library_major_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('major_version');
+                $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('minor_version');
+                $destination_activity_json = '/exports/' . $project_dir_name . '/playlists/' . $title . 
+                                                '/activities/' . $activity->title . '/' . $activity->h5p_content_id . '.json';
+                
+                Storage::disk('public')->put($destination_activity_json, json_encode($decoded_content));
+
+                if (filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
+                    $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
+                    $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
+                    if (file_exists($activity_thumbanil)) {
+                        $destination_activity_thumbnail = '/exports/' . $project_dir_name . '/playlists/' . $title . 
+                                                            '/activities/' . $activity->title . '/' . basename($activity_thumbanil);
+                        Storage::disk('public')->put($destination_activity_thumbnail, file_get_contents($activity_thumbanil));
+                    }
+                }
+
+                $content_directory_source = storage_path('app/public/h5p/content/' . $activity->h5p_content_id);
+                $content_directory_destination_path = 'app/public/exports/' . $project_dir_name .'/playlists/' . $title . 
+                                                        '/activities/' . $activity->title . '/' . $activity->h5p_content_id;
+                $content_directory_destination = storage_path($content_directory_destination_path);
+                \File::copyDirectory($content_directory_source, $content_directory_destination);
+                $h5p = App::make('LaravelH5p');
+                $core = $h5p::$core;
+                $interface = $h5p::$interface;
+                $content = $core->loadContent($activity->h5p_content_id);
+                $content['filtered'] = '';
+                $params = $core->filterParameters($content);
+                if (file_exists(storage_path('app/public/h5p/exports/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p'))) {
+                    $h5p_source = storage_path('app/public/h5p/exports/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p');
+                    $h5p_destination_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' . 
+                                                $activity->title . '/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p';
+                    $h5p_destination = storage_path($h5p_destination_path);
+                    @copy($h5p_source, $h5p_destination);
+                }
+                
+                
+            }
+        }
+
+        // Get real path for our folder
+        $rootPath = storage_path('app/public/exports/' . $project_dir_name);
+
+        // Initialize archive object
+        $zip = new ZipArchive();
+        $fileName = $project_dir_name . '.zip';
+        $zip->open(storage_path('app/public/exports/' . $fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        // Create recursive directory iterator
+        /** @var SplFileInfo[] $files */
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file)
+        {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir())
+            {
+                // Get real and relative path for current file
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
+
+                // Add current file to archive
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        // Zip archive will be created only after closing object
+        $zip->close();
+
+        return storage_path('app/public/exports/' . $fileName);
+    }
 
 }
