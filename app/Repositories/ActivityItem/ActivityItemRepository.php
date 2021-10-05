@@ -26,15 +26,19 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
      */
     public function getAll($data)
     {
-        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
-
         // if specific index projects requested
         if (isset($data['query']) && $data['query'] !== '') {
             $query = $query->where('title', 'iLIKE', '%'.$data['query'].'%');
         }
 
-        return $query->paginate($perPage)->appends(request()->query());
+        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+            return $query->orderBy('title', 'ASC')->get();
+        }
+
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        return $query->orderBy('title', 'ASC')->paginate($perPage)->appends(request()->query());
     }
 
     /**
