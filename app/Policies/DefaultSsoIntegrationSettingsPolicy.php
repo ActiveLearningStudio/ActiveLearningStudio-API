@@ -54,9 +54,9 @@ class DefaultSsoIntegrationSettingsPolicy
      * @param  Organization  $organization
      * @return mixed
      */
-    public function update(User $user, DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings)
+    public function update(User $user, Organization $organization)
     {
-        return $user->hasPermissionTo('organization:update-default-sso', $defaultSsoIntegrationSettings->organization);
+        return $user->hasPermissionTo('organization:update-default-sso', $organization);
     }
 
     /**

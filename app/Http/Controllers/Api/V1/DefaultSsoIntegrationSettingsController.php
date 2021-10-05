@@ -90,7 +90,7 @@ class DefaultSsoIntegrationSettingsController extends Controller
     public function update(UpdateDefaultSsoSettingsRequest $updateDefaultSsoSettingsRequest,
         Organization $organization, DefaultSsoIntegrationSettings $default_sso_setting)
     {
-        $this->authorize('update', [DefaultSsoIntegrationSettings::class, $default_sso_setting]);
+        $this->authorize('update', [DefaultSsoIntegrationSettings::class, $organization]);
 
         $validated = $updateDefaultSsoSettingsRequest->validated();
         $response = $this->defaultSsoSettingsRepository->update($default_sso_setting->id, $validated);
