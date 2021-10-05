@@ -36,6 +36,8 @@ class ActivityResource extends JsonResource
         }
 
         $data['h5p_content'] = $this->h5p_content;
+        $data['library_name'] = $data['h5p_content']->library->name;
+
         return $data;
     }
 }
