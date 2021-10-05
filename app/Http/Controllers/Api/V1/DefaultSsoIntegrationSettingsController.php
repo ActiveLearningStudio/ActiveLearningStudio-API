@@ -88,7 +88,7 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateDefaultSsoSettingsRequest $updateDefaultSsoSettingsRequest,
-        DefaultSsoIntegrationSettings $default_sso_setting)
+        Organization $organization, DefaultSsoIntegrationSettings $default_sso_setting)
     {
         $this->authorize('update', [DefaultSsoIntegrationSettings::class, $default_sso_setting]);
 
@@ -110,7 +110,7 @@ class DefaultSsoIntegrationSettingsController extends Controller
      * @param Organization $organization
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DefaultSsoIntegrationSettings $default_sso_setting, Organization $organization)
+    public function destroy(Organization $organization, DefaultSsoIntegrationSettings $default_sso_setting)
     {
         $this->authorize('delete', [DefaultSsoIntegrationSettings::class, $organization]);
         return response(

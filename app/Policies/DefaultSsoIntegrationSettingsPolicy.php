@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\DefaultSsoIntegrationSettings;
 use App\Models\Organization;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -53,9 +54,9 @@ class DefaultSsoIntegrationSettingsPolicy
      * @param  Organization  $organization
      * @return mixed
      */
-    public function update(User $user, Organization $organization)
+    public function update(User $user, DefaultSsoIntegrationSettings $defaultSsoIntegrationSettings)
     {
-        return $user->hasPermissionTo('organization:update-default-sso', $organization);
+        return $user->hasPermissionTo('organization:update-default-sso', $defaultSsoIntegrationSettings->organization);
     }
 
     /**
