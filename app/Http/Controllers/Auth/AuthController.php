@@ -648,7 +648,7 @@ class AuthController extends Controller
                 $user->ssoLogin()->create([
                     'user_id' => $user->id,
                     'provider' => $result['tool_platform'],
-                    'uniqueid' => $result['guid'],
+                    'uniqueid' => $user->id . '-' . $result['guid'],
                     //'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
                     'tool_consumer_instance_guid' => $result['guid'],
                     //'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
@@ -709,7 +709,7 @@ class AuthController extends Controller
                 $user->ssoLogin()->create([
                     'user_id' => $user->id,
                     'provider' => $result['tool_platform'],
-                    'uniqueid' => $result['guid'],
+                    'uniqueid' => $user->id . '-' . $result['guid'],
                     //'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
                     'tool_consumer_instance_guid' => $result['guid'],
                     //'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
