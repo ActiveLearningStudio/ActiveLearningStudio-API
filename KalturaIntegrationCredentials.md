@@ -11,8 +11,8 @@ Following are the steps to follow:
 4: Update .env like below:
 
 Kaltura_SERVICE_URL='https://www.kaltura.com'
-Kaltura_SECRET='69fe402f3429ede6dbf4b4f928767bf6'
-Kaltura_PARTNER_ID='4186473'
+Kaltura_SECRET=SECRET_KEY		//Remember to provide the correct secret according to the sessionType you want
+Kaltura_PARTNER_ID=PARTNER_ID	
 Kaltura_EXPIRY=86400
 Kaltura_PRIVILEGES='*'
-Kaltura_SESSION_TYPE='2'
+Kaltura_SESSION_TYPE=SESSION_TYPE	//It may be 0 or 2, 0 for user and 2 for admin (https://www.kaltura.com/api_v3/testmeDoc/  |enums/KalturaSessionType.html)
