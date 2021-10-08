@@ -609,6 +609,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchOrganizationUsers($data, $organization)
     {
+        $data['query'] = strtolower($data['query']);
+
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         $organizationUsers = $organization->users();
