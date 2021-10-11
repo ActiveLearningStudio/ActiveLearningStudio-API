@@ -111,7 +111,7 @@ class AuthController extends Controller
         $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($data['email']);
 
         if ($invited_users->isEmpty()) {
-            $organization = $this->organizationRepository->getRootOrganization();
+            $organization = $this->organizationRepository->findByField('domain', $data['domain']);
             if ($organization && !$organization->self_registration) {
                 return response()->error(['Self registration is not allowed on this domain.', 400]);
             }
