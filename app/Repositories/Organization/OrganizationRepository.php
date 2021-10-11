@@ -616,8 +616,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchOrganizationUsers($data, $organization)
     {
-        $data['query'] = strtolower($data['query']);
-
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         $organizationUsers = $organization->users();
@@ -638,7 +636,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             }
         ])
             ->when($data['query'] ?? null, function ($query) use ($data) {
-                $query->where('email', 'like', '%' . str_replace("_", "\_", $data['query']) . '%');
+                $query->where('email', 'like', '%' . str_replace("_", "\_", strtolower($data['query'])) . '%');
                 return $query;
             })
             ->paginate($perPage);
