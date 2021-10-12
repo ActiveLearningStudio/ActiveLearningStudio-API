@@ -699,9 +699,8 @@ class UserController extends Controller
      */
     public function exportProjectList(Request $request)
     {
-        $this->userRepository->getUsersExportProjectList();
         return response([
-            'exports' =>$this->userRepository->getUsersExportProjectList(),
+            'exports' =>$this->userRepository->getUsersExportProjectList(config('constants.default-pagination-limit-exported-projects')),
         ], 200);
     }
 

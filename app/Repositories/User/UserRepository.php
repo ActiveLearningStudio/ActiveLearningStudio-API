@@ -184,11 +184,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     
     /**
      * To get exported project list of last 10 days
+     * @param $days_limit
      * @return array
      */
-    public function getUsersExportProjectList()
+    public function getUsersExportProjectList($days_limit)
     {
-        $date = Carbon::now()->subDays(10); // list for last 10 days
+        $date = Carbon::now()->subDays($days_limit); 
 
         $user_export_notifications = auth()->user()->notifications()->where('type', 'App\Notifications\ProjectExportNotification')->where('created_at', '>=', $date)->get();
         
