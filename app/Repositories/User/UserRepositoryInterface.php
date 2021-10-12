@@ -53,4 +53,10 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function reportBasic($data);
+
+    /**
+     * To get exported project list of last 10 days
+     * @return array
+     */
+    public function getUsersExportProjectList();
 }

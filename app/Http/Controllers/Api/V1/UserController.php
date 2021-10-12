@@ -26,6 +26,7 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 /**
  * @group 2. User
@@ -684,6 +685,24 @@ class UserController extends Controller
     public function reportBasic(Request $request)
     {
         return UserStatsResource::collection($this->userRepository->reportBasic($request->all()), 200);
+    }
+
+    /**
+     * Get All User Export list
+     *
+     * Get a list of the users exported project
+     *
+     * @responseFile responses/notifications/export-notifications.json
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function exportProjectList(Request $request)
+    {
+        $this->userRepository->getUsersExportProjectList();
+        return response([
+            'exports' =>$this->userRepository->getUsersExportProjectList(),
+        ], 200);
     }
 
 }

@@ -79,6 +79,9 @@ class ProjectExportNotification extends Notification
         $file_path = url(Storage::url('exports/' . basename($this->path)));
         return [
             'message' => "Project[$this->projectName] has been exported successfully.Please <a href='$file_path' target='_blank'>Click Here</a> to download the exported file",
+            'project' => $this->projectName,
+            'link' => $file_path,
+            'file_name' => basename($this->path),
         ];
     }
 
