@@ -692,6 +692,8 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
+     * * @queryParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     * 
      * @responseFile responses/notifications/export-notifications.json
      *
      * @param Request $request
@@ -699,8 +701,13 @@ class UserController extends Controller
      */
     public function exportProjectList(Request $request)
     {
+        
+        $days_limit = config('constants.default-exported-projects-days-limit');
+        if ($request->has('days_limit')) 
+            $days_limit = $request->input('days_limit');
+         
         return response([
-            'exports' =>$this->userRepository->getUsersExportProjectList(config('constants.default-pagination-limit-exported-projects')),
+            'exports' =>$this->userRepository->getUsersExportProjectList($days_limit),
         ], 200);
     }
 
