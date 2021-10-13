@@ -71,7 +71,7 @@ class App
                     $scorestr = "Your score of " . sprintf("%.2f%%", $gradetosend * 100) . " has been saved.";
                    
                     $lti_data = $LTI->ltiParameterArray();
-                    if ($_SESSION['lti_post']['lti_version'] == "LTI-1p0") {
+                    if (isset($_SESSION['lti_post']['lti_version']) && $_SESSION['lti_post']['lti_version'] == "LTI-1p0") {
                         $grade_params = $lti_data;
                         $grade_params['note'] = "You've been graded.";
                         $grade_params['result_id'] = $lti_data['result_id'];
@@ -100,7 +100,7 @@ class App
                     // encode user information.
                     $lti_submission_info = base64_encode($build_review_data);
 
-                    if ($_SESSION['lti_post']['lti_version'] != "LTI-1p0") {
+                    if (isset($_SESSION['lti']['issuer_client'])) {
                         $grade_params['lti13_extra'] = [
                             'https://canvas.instructure.com/lti/submission' => [
                                 "new_submission" => true,
