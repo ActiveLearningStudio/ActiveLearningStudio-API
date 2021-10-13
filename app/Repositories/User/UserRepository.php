@@ -191,7 +191,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         $date = Carbon::now()->subDays($days_limit); 
 
-        $user_export_notifications = auth()->user()->notifications()->where('type', 'App\Notifications\ProjectExportNotification')->where('created_at', '>=', $date)->get();
+        $user_export_notifications = auth()->user()->notifications()
+                                                        ->where('type', 'App\Notifications\ProjectExportNotification')
+                                                        ->where('created_at', '>=', $date)->get();
         
         $return_exported_list = [];
         foreach ($user_export_notifications as $exported_project) {
@@ -202,10 +204,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
             $return_project = [];
             $return_project['project'] = isset($exported_project->data['project']) ? $exported_project->data['project'] : "" ;
-            $return_project['created_at'] = Carbon::parse($exported_project->created_at)->format('M d Y');
-            $return_project['will_expire_on'] = Carbon::parse($exported_project->created_at)->addDays(10)->format('M d Y');
+            $return_project['created_at'] = Carbon::parse($exported_project->created_at)
+                                                                                    ->format(config('constants.default-date-format'));
+            $return_project['will_expire_on'] = Carbon::parse($exported_project->created_at)->addDays($days_limit)
+                                                                                    ->format(config('constants.default-date-format'));
             $return_project['link'] = isset($exported_project->data['link']) ? $exported_project->data['link'] : "";
-            array_push($return_exported_list,$return_project);
+            array_push($return_exported_list, $return_project);
         }
         
         return $return_exported_list;

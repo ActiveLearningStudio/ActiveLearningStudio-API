@@ -50,7 +50,7 @@ class ProjectExportNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database', 'broadcast'];
+        return [ 'database', 'broadcast'];
     }
 
     /**
@@ -77,8 +77,10 @@ class ProjectExportNotification extends Notification
     public function toDatabase($notifiable)
     {
         $file_path = url(Storage::url('exports/' . basename($this->path)));
+        $message = "Project[$this->projectName] has been exported successfully. 
+                    Please <a href='$file_path' target='_blank'>Click Here</a> to download the exported file";
         return [
-            'message' => "Project[$this->projectName] has been exported successfully.Please <a href='$file_path' target='_blank'>Click Here</a> to download the exported file",
+            'message' => $message,
             'project' => $this->projectName,
             'link' => $file_path,
             'file_name' => basename($this->path),
