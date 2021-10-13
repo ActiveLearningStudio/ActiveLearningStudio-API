@@ -51,7 +51,7 @@ RUN pecl install -o -f redis \
 RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-9.18.1.303-linux.tar.gz
 RUN tar -xzf newrelic-php5-9.18.1.303-linux.tar.gz
 RUN cd newrelic-php5-9.18.1.303-linux
-run export NR_INSTALL_SILENT=true
+RUN export NR_INSTALL_SILENT=true
 RUN export NR_INSTALL_KEY=${NR_INSTALL_KEY}
 
 
