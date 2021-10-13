@@ -206,7 +206,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             $return_project['project'] = isset($exported_project->data['project']) ? $exported_project->data['project'] : "" ;
             $return_project['created_at'] = Carbon::parse($exported_project->created_at)
                                                                                     ->format(config('constants.default-date-format'));
-            $return_project['will_expire_on'] = Carbon::parse($exported_project->created_at)->addDays($days_limit)
+            $return_project['will_expire_on'] = Carbon::parse($exported_project->created_at)->addDays(config('constants.default-exported-projects-days-limit'))
                                                                                     ->format(config('constants.default-date-format'));
             $return_project['link'] = isset($exported_project->data['link']) ? $exported_project->data['link'] : "";
             array_push($return_exported_list, $return_project);
