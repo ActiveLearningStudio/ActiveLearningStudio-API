@@ -68,7 +68,23 @@ class ActivityItemController extends Controller
     public function getItems(Request $request)
     {
         return  ActivityItemResource::collection($this->activityItemRepository->getAll($request->all()));
-    }    
+    }
+
+    /**
+     * Get Specific Activity Items
+     *
+     * Get the Specific Activity layouts data.
+     *
+     * @responseFile responses/admin/activity-item/activity-items.json
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function activityLayouts()
+    {
+        $collections = $this->activityItemRepository->getActivityLayouts();
+
+        return ActivityItemResource::collection($collections);
+    }
 
     /**
      * Upload Thumbnail

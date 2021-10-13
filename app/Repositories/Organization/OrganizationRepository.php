@@ -40,8 +40,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         UserRepositoryInterface $userRepository,
         InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
         ProjectRepositoryInterface $projectRepository
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         parent::__construct($model);
         $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
@@ -64,14 +63,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         }
 
         return $this->model
-                ->with(['parent', 'admins'])
-                ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
-                ->whereIn('parent_id', $parentIds)
-                ->when($data['query'] ?? null, function ($query) use ($data) {
-                    $query->where('name', 'like', '%' . $data['query'] . '%');
-                    return $query;
-                })
-                ->get();
+            ->with(['parent', 'admins'])
+            ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
+            ->whereIn('parent_id', $parentIds)
+            ->when($data['query'] ?? null, function ($query) use ($data) {
+                $query->where('name', 'like', '%' . $data['query'] . '%');
+                return $query;
+            })
+            ->get();
     }
 
     /**
@@ -138,19 +137,20 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     public function createSuborganization($organization, $data, $authenticatedUser)
     {
         $organizationUserRoles = $organization->userRoles()
-                            ->wherePivot('user_id', $authenticatedUser->id)
-                            ->whereHas('permissions', function (Builder $query) {
-                                $query->where('name', '=', 'organization:create');
-                            })->get();
+            ->wherePivot('user_id', $authenticatedUser->id)
+            ->whereHas('permissions', function (Builder $query) {
+                $query->where('name', '=', 'organization:create');
+            })->get();
 
         $organizationUserAdminRolesids = $organizationUserRoles->pluck('id')->toArray();
 
         $organizationUserRolesNonAdmin = $organization->roles()
-                            ->whereNotIn('id', $organizationUserAdminRolesids)
-                            ->get();
+            ->whereNotIn('id', $organizationUserAdminRolesids)
+            ->get();
 
         if (isset($data['admins'])) {
-            $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
+            $userRoles = array_fill_keys($data['admins'],
+                ['organization_role_type_id' => config('constants.admin-role-id')]);
         }
 
         if (isset($data['users'])) {
@@ -222,7 +222,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     public function update($organization, $data)
     {
         if (isset($data['admins'])) {
-            $userRoles = array_fill_keys($data['admins'], ['organization_role_type_id' => config('constants.admin-role-id')]);
+            $userRoles = array_fill_keys($data['admins'],
+                ['organization_role_type_id' => config('constants.admin-role-id')]);
         }
 
         if (isset($data['users'])) {
@@ -286,8 +287,10 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         if ($data['page'] === 'create') {
             $userInIds = array_merge($organizationUserIds, $parentOrganizationUserIds);
-        } else if ($data['page'] === 'update') {
-            $userInIds = array_diff($parentOrganizationUserIds, $organizationUserIds);
+        } else {
+            if ($data['page'] === 'update') {
+                $userInIds = array_diff($parentOrganizationUserIds, $organizationUserIds);
+            }
         }
 
         $this->query = $this->userRepository->model->when($data['query'] ?? null, function ($query) use ($data) {
@@ -431,7 +434,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     public function updateUser($organization, $data)
     {
         try {
-            $organization->users()->updateExistingPivot($data['user_id'], ['organization_role_type_id' => $data['role_id']]);
+            $organization->users()->updateExistingPivot($data['user_id'],
+                ['organization_role_type_id' => $data['role_id']]);
 
             return true;
         } catch (\Exception $e) {
@@ -459,24 +463,27 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             foreach ($userOrganizations as $userOrganization) {
                 $organizationUserRole = $userOrganization->userRoles()
-                            ->withPivot('user_id')
-                            ->whereHas('permissions', function (Builder $query) {
-                                $query->where('name', '=', 'organization:delete-user');
-                            })->first();
+                    ->withPivot('user_id')
+                    ->whereHas('permissions', function (Builder $query) {
+                        $query->where('name', '=', 'organization:delete-user');
+                    })->first();
 
                 $organizationAdminUserId = $organizationUserRole->pivot->user_id;
 
-                $organizationProjects = $userOrganization->projects()->whereHas('users', function (Builder $query) use ($data) {
-                    $query->where('id', '=', $data['user_id']);
-                })->get();
+                $organizationProjects = $userOrganization->projects()->whereHas('users',
+                    function (Builder $query) use ($data) {
+                        $query->where('id', '=', $data['user_id']);
+                    })->get();
 
-                $organizationTeams = $userOrganization->teams()->whereHas('users', function (Builder $query) use ($data) {
-                    $query->where('id', '=', $data['user_id']);
-                })->get();
+                $organizationTeams = $userOrganization->teams()->whereHas('users',
+                    function (Builder $query) use ($data) {
+                        $query->where('id', '=', $data['user_id']);
+                    })->get();
 
-                $organizationGroups = $userOrganization->groups()->whereHas('users', function (Builder $query) use ($data) {
-                    $query->where('id', '=', $data['user_id']);
-                })->get();
+                $organizationGroups = $userOrganization->groups()->whereHas('users',
+                    function (Builder $query) use ($data) {
+                        $query->where('id', '=', $data['user_id']);
+                    })->get();
 
                 $userOrganization->users()->detach($data['user_id']);
 
@@ -628,11 +635,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $query->where('organization_id', $organization->id);
             }
         ])
-        ->when($data['query'] ?? null, function ($query) use ($data) {
-            $query->where('email', 'like', '%' . str_replace("_","\_", $data['query']) . '%');
-            return $query;
-        })
-        ->paginate($perPage);
+            ->when($data['query'] ?? null, function ($query) use ($data) {
+                $query->where('email', 'like', '%' . str_replace("_", "\_", strtolower($data['query'])) . '%');
+                return $query;
+            })
+            ->paginate($perPage);
     }
 
     /**
@@ -645,7 +652,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         try {
             if ($organization) {
-                return $organization->users()->wherePivot('organization_role_type_id', config('constants.admin-role-id'))->first();
+                return $organization->users()->wherePivot('organization_role_type_id',
+                    config('constants.admin-role-id'))->first();
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -673,7 +681,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         } elseif ($data['email']) {
             $token = Hash::make((string)Str::uuid() . date('D M d, Y G:i'));
             $temp_user = new User(['email' => $data['email']]);
-            $temp_user->notify(new OrganizationInvite($authenticatedUser, $organization, 'register', $note, $data['email']));
+            $temp_user->notify(new OrganizationInvite($authenticatedUser, $organization, 'register', $note,
+                $data['email']));
 
             $invited_user = array(
                 'invited_email' => $data['email'],
@@ -700,9 +709,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         try {
             $orgUsrPermissions = $organization->userRoles()
-            ->wherePivot('user_id', $authenticatedUser->id)
-            ->with('permissions')
-            ->first();
+                ->wherePivot('user_id', $authenticatedUser->id)
+                ->with('permissions')
+                ->first();
 
             $response['activeRole'] = $orgUsrPermissions['name'];
             $response['roleId'] = $orgUsrPermissions['id'];
@@ -716,7 +725,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         }
     }
 
-        /**
+    /**
      * To fetch organization default permissions
      *
      * @return Model
@@ -756,6 +765,16 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     public function getRootOrganization()
     {
         return $this->model->orderBy('id', 'asc')->first();
+    }
+
+    public function searchOrganizationByName($data)
+    {
+        return $this->model
+            ->when($data['query'] ?? null, function ($query) use ($data) {
+                $query->where('name', 'like', '%' . $data['query'] . '%');
+                return $query;
+            })
+            ->get();
     }
 
 }

@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\SsoLoginRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsRepository;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\InvitedGroupUser\InvitedGroupUserRepositoryInterface;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
@@ -17,6 +18,7 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\UserLogin\UserLoginRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -41,6 +43,7 @@ class AuthController extends Controller
     private $teamRepository;
     private $groupRepository;
     private $organizationRepository;
+    private $defaultSsoSettingsRepository;
 
     /**
      * AuthController constructor.
@@ -62,7 +65,8 @@ class AuthController extends Controller
         InvitedGroupUserRepositoryInterface $invitedGroupUserRepository,
         TeamRepositoryInterface $teamRepository,
         GroupRepositoryInterface $groupRepository,
-        OrganizationRepositoryInterface $organizationRepository
+        OrganizationRepositoryInterface $organizationRepository,
+        DefaultSsoIntegrationSettingsRepository $defaultSsoSettingsRepository
     ) {
         $this->userRepository = $userRepository;
         $this->userLoginRepository = $userLoginRepository;
@@ -72,6 +76,7 @@ class AuthController extends Controller
         $this->teamRepository = $teamRepository;
         $this->groupRepository = $groupRepository;
         $this->organizationRepository = $organizationRepository;
+        $this->defaultSsoSettingsRepository = $defaultSsoSettingsRepository;
     }
 
     /**
@@ -106,7 +111,7 @@ class AuthController extends Controller
         $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($data['email']);
 
         if ($invited_users->isEmpty()) {
-            $organization = $this->organizationRepository->getRootOrganization();
+            $organization = $this->organizationRepository->findByField('domain', $data['domain']);
             if ($organization && !$organization->self_registration) {
                 return response()->error(['Self registration is not allowed on this domain.', 400]);
             }
@@ -471,7 +476,7 @@ class AuthController extends Controller
     private function stemuliSsoLogin($ip, $info)
     {
         try {
-            if($info) {
+            if ($info) {
                 $result['user_email'] = $info['email'];
                 $result['first_name'] = $info['firstName'];
                 $result['last_name'] = $info['lastName'];
@@ -556,8 +561,8 @@ class AuthController extends Controller
             }
         } else {
             $sso_login = $user->ssoLogin()->where([
-                'user_id' => $user->id, 
-                'provider' => $result['tool_platform'], 
+                'user_id' => $user->id,
+                'provider' => $result['tool_platform'],
                 'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'
                 ]])->first();
             if (!$sso_login) {
@@ -593,6 +598,133 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Login with LTI SSO
+     *
+     * @bodyParam sso_info string required The base64encode query params Example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Unable to login with LTI SSO."
+     *   ]
+     * }
+     *
+     * @param SsoLoginRequest $request
+     * @return Response
+     */
+    public function ltiSsoLogin(SsoLoginRequest $request)
+    {
+        $data = $request->validated();
+        parse_str(base64_decode($data['sso_info']), $result);
+
+        $user = User::with(['lmssetting' => function($query) use ($result) {
+            $query->where('lti_client_id', $result['lti_client_id']);
+        }])->where('email', $result['email'])->first();
+
+        if (!$user) {
+            $password = Str::random(10);
+            $user = $this->userRepository->create([
+                'first_name' => $result['first_name'],
+                'last_name' => $result['last_name'],
+                'email' => $result['email'],
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(64),
+                'email_verified_at' => now(),
+            ]);
+            if ($user) {
+                $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $result['lti_client_id']);
+                //if default LMS setting not exist!
+                if (!$default_lms_setting) {
+                    return response([
+                        'errors' => ['Unable to find default LMS setting with your client id.'],
+                    ]);
+                }
+                $default_lms_setting = $default_lms_setting->toArray();
+                $default_lms_setting['lms_login_id'] = $user['email'];
+                $user->lmssetting()->create($default_lms_setting);
+
+                $user->ssoLogin()->create([
+                    'user_id' => $user->id,
+                    'provider' => $result['tool_platform'],
+                    'uniqueid' => $user->id . '-' . $result['guid'],
+                    //'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                    'tool_consumer_instance_guid' => $result['guid'],
+                    //'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                ]);
+                $user['user_organization'] = $user->lmssetting[0]->organization;
+
+                $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
+                if ($invited_users->isNotEmpty()) {
+                    foreach ($invited_users as $invited_user) {
+                        $organization = $this->organizationRepository->find($invited_user->organization_id);
+                        if ($organization) {
+                            $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
+                            $this->invitedOrganizationUserRepository->delete($user->email);
+                        }
+                    }
+                } else {
+                    $organization = $this->organizationRepository->find($user['user_organization']['id']);
+                    if ($organization) {
+                        $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    }
+                }
+
+                $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
+                if ($invited_users->isNotEmpty()) {
+                    foreach ($invited_users as $invited_user) {
+                        $group = $this->groupRepository->find($invited_user->group_id);
+                        if ($group) {
+                            $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
+                            $this->invitedGroupUserRepository->delete($user->email);
+                        }
+                    }
+                }
+            }
+        } else {
+            if (sizeof($user->lmssetting) > 0) {
+                $user['user_organization'] = $user->lmssetting[0]->organization;
+            } else {
+                $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $result['lti_client_id']);
+                //if default LMS setting not exist!
+                if (!$default_lms_setting) {
+                    return response([
+                        'errors' => ['Unable to find default LMS setting with your client id.'],
+                    ]);
+                }
+                $default_lms_setting = $default_lms_setting->toArray();
+                $default_lms_setting['lms_login_id'] = $user['email'];
+                $user->lmssetting()->create($default_lms_setting);
+            }
+
+            $sso_login = $user->ssoLogin()->where([
+                'user_id' => $user->id,
+                'provider' => $result['tool_platform'],
+                'tool_consumer_instance_guid' => $result['guid']
+            ])->first();
+
+            if (!$sso_login) {
+                $user->ssoLogin()->create([
+                    'user_id' => $user->id,
+                    'provider' => $result['tool_platform'],
+                    'uniqueid' => $user->id . '-' . $result['guid'],
+                    //'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                    'tool_consumer_instance_guid' => $result['guid'],
+                    //'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+                ]);
+            }
+        }
+
+        $accessToken = $user->createToken('auth_token')->accessToken;
+
+        $this->userLoginRepository->create(['user_id' => $user->id, 'ip_address' => $request->ip()]);
+
+        $response = ['user' => $user, 'access_token' => $accessToken];
+
+        return $response;
+    }
     /**
      * Logout
      *

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\OrganizationSearchRequest;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Requests\V1\OrganizationRequest;
+use Illuminate\Http\Request;
 
 /**
  * @group 18. Organization API
@@ -25,7 +27,7 @@ class OrganizationController extends Controller
     {
         $this->organizationRepository = $organizationRepository;
     }
-    
+
     /**
      * Get By Domain
      *
@@ -53,6 +55,22 @@ class OrganizationController extends Controller
 
         return response([
             'organization' => new OrganizationResource($this->organizationRepository->findByField('domain', $data['domain'])),
+        ], 200);
+    }
+
+    /**
+     * Search organization by name
+     *
+     * @bodyParam query string required Organization name to get data for Example: curriki
+     * @param OrganizationSearchRequest $organizationSearchRequest
+     * @return Response
+     */
+    public function searchOrganizationByName(OrganizationSearchRequest $organizationSearchRequest)
+    {
+        $data = $organizationSearchRequest->validated();
+        $response = $this->organizationRepository->searchOrganizationByName($data);
+        return response([
+            'organization' => $response,
         ], 200);
     }
 }
