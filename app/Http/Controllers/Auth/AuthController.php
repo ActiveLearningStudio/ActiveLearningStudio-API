@@ -150,11 +150,14 @@ class AuthController extends Controller
                     }
                 }
             } else {
-                $organization = $this->organizationRepository->find(1);
+                $organization = $this->organizationRepository->findByField('domain', $data['domain']);
                 if ($organization) {
                     $exist_user_id = $organization->users()->where('user_id', $user->id)->first();
                     if (!$exist_user_id) {
                         $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        if (!$selfRegisteredRole) {
+                            $selfRegisteredRole = $this->organizationRepository->duplicateRole($organization, 'self_registered');
+                        }
                         $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                     }
                 }
