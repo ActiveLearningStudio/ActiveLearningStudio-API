@@ -623,7 +623,12 @@ class ProjectController extends Controller
         $this->projectRepository->saveList($request->projects);
 
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $suborganization->id)->get()),
+            'projects' => ProjectResource::collection(
+                                        $authenticated_user->projects()
+                                        ->where('organization_id', $suborganization->id)
+                                        ->whereNull('team_id')
+                                        ->get()
+                                    ),
         ], 200);
     }
 
