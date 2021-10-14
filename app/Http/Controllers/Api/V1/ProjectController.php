@@ -439,7 +439,7 @@ class ProjectController extends Controller
      */
     public function removeShare(Organization $suborganization, Project $project)
     {
-        $this->authorize('share', [Project::class, $suborganization]);
+        $this->authorize('share', [Project::class, $project]);
 
         $is_updated = $this->projectRepository->update([
             'shared' => false,
@@ -623,7 +623,12 @@ class ProjectController extends Controller
         $this->projectRepository->saveList($request->projects);
 
         return response([
-            'projects' => ProjectResource::collection($authenticated_user->projects()->where('organization_id', $suborganization->id)->get()),
+            'projects' => ProjectResource::collection(
+                                        $authenticated_user->projects()
+                                        ->where('organization_id', $suborganization->id)
+                                        ->whereNull('team_id')
+                                        ->get()
+                                    ),
         ], 200);
     }
 
