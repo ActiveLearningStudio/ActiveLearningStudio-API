@@ -30,6 +30,8 @@ class LmsSetting extends Model
         'user_id',
         'published',
         'organization_id',
+        'project_visibility',
+        'activity_visibility',
     ];
 
     /**
