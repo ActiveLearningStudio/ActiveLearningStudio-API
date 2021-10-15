@@ -31,6 +31,7 @@ class LmsSetting extends Model
         'published',
         'organization_id',
         'project_visibility',
+        'playlist_visibility',
         'activity_visibility',
     ];
 

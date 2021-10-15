@@ -51,6 +51,7 @@ class UpdateLmsSetting extends FormRequest
             'published' => 'nullable|boolean',
             'organization_id' => 'required|exists:organizations,id',
             'project_visibility' => 'nullable|boolean',
+            'playlist_visibility' => 'nullable|boolean',
             'activity_visibility' => 'nullable|boolean',
         ];
     }

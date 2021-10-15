@@ -28,6 +28,7 @@ class UserLmsSettingResource extends JsonResource
             'description' => $this->description,
             'published' => $this->published,
             'project_visibility' =>  $this->project_visibility,
+            'playlist_visibility' =>  $this->playlist_visibility,
             'activity_visibility' =>  $this->activity_visibility,
         ];
     }

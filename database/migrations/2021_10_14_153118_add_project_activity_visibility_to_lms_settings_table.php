@@ -15,6 +15,7 @@ class AddProjectActivityVisibilityToLmsSettingsTable extends Migration
     {
         Schema::table('lms_settings', function (Blueprint $table) {
             $table->boolean('project_visibility')->nullable()->default(false);
+            $table->boolean('playlist_visibility')->nullable()->default(false);
             $table->boolean('activity_visibility')->nullable()->default(false);
         });
     }
@@ -27,7 +28,7 @@ class AddProjectActivityVisibilityToLmsSettingsTable extends Migration
     public function down()
     {
         Schema::table('lms_settings', function (Blueprint $table) {
-            $table->dropColumn(['project_visibility', 'activity_visibility']);
+            $table->dropColumn(['project_visibility', 'playlist_visibility', 'activity_visibility']);
         });
     }
 }
