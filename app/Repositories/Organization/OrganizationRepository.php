@@ -777,4 +777,33 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             ->get();
     }
 
+    /**
+     * Duplicate role for particular organization
+     *
+     * @param Organization $organization
+     * @param string $roleName
+     * @return Model
+     */
+    public function duplicateRole($organization, $roleName)
+    {
+        try {
+            $topOrg = $this->model->whereHas('roles', function (Builder $query) use ($roleName) {
+                $query->where('name', '=', $roleName);
+            })->first();
+
+            $topOrgRole = $topOrg->roles()->where('name', $roleName)->first();
+
+            $subOrganizationUserRolesData['name'] = $topOrgRole->name;
+            $subOrganizationUserRolesData['display_name'] = $topOrgRole->display_name;
+            $subOrganizationUserRolesData['permissions'] = $topOrgRole->permissions->pluck('id')->toArray();
+
+            $role = $this->addRole($organization, $subOrganizationUserRolesData);
+
+            return $role;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+        return false;
+    }
 }
