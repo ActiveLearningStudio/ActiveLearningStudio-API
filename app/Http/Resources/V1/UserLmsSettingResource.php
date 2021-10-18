@@ -27,6 +27,9 @@ class UserLmsSettingResource extends JsonResource
             'lms_access_secret' => $this->lms_access_secret,
             'description' => $this->description,
             'published' => $this->published,
+            'project_visibility' =>  $this->project_visibility,
+            'playlist_visibility' =>  $this->playlist_visibility,
+            'activity_visibility' =>  $this->activity_visibility,
         ];
     }
 }
