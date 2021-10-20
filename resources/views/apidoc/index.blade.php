@@ -29724,7 +29724,6 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/brightcove/{accountId}/{videoId}/h5p-resource-settings</code></p>
 <!-- END_11ed109de5bd6a58e0c35e0a71d61198 -->
-<!-- END_fc2a4353e3093252e672968599713345 -->
 <h1>1008. Admin/LTI Tool Settings</h1>
 <p>APIs for lti tool settings on admin panel.</p>
 <!-- START_8f4fad2b19011e1c4fa626a51f418e6f -->
