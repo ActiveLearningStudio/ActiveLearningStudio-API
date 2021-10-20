@@ -186,6 +186,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // lms-settings
         Route::apiResource('suborganizations/{suborganization}/lms-settings', 'LmsSettingsController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        // lti-tool-settings
+        Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
