@@ -100,7 +100,7 @@ class LtiToolSettingRepository extends BaseRepository
     {
         try {
             $this->find($id)->delete();
-            return ['message' => 'Lti tool setting deleted!', 'data' => $this->find($id)];
+            return ['message' => 'Lti tool setting deleted!', 'data' => []];
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
