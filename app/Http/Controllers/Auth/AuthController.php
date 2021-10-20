@@ -354,10 +354,21 @@ class AuthController extends Controller
                     }
                 }
             } else {
-                if (!$organization = $user->organizations()->where('domain', $request->domain)->first()) {
+                $domainOrganization = $this->organizationRepository->findByField('domain', $request->domain);
+                $organization = $user->organizations()->where('domain', $request->domain)->first();
+
+                if (!$domainOrganization) {
                     return response([
                         'errors' => ['Invalid Domain.'],
                     ], 400);
+                } else if (!$organization && !$domainOrganization->self_registration) {
+                    return response()->error(['Self registration is not allowed on this domain.', 400]);
+                } else if (!$organization && $domainOrganization->self_registration) {
+                    $selfRegisteredRole = $domainOrganization->roles()->where('name', 'self_registered')->first();
+                    if (!$selfRegisteredRole) {
+                        $selfRegisteredRole = $this->organizationRepository->duplicateRole($domainOrganization, 'self_registered');
+                    }
+                    $domainOrganization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                 }
             }
             $user->gapi_access_token = $request->tokenObj;
