@@ -30327,6 +30327,11 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
 <td><code>lti_tool_setting</code></td>
 <td>required</td>
 <td>The Id of a lti tool setting</td>
@@ -30654,6 +30659,11 @@ response.json()</code></pre>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
 <tr>
 <td><code>lti_tool_setting</code></td>
 <td>required</td>
