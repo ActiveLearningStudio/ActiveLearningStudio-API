@@ -6,15 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @author        Asim Sarwar
- * Date           11-10-2021
- * @bodyParam     tool_name required. Example: Safari Montage
- * @bodyParam     tool_url required. Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
- * @bodyParam     lti_version required. Example: LTI-1p0
- * @bodyParam     tool_consumer_key nullable. Example: consumer key
- * @bodyParam     tool_secret_key required_with:tool_consumer_key. Example: secret key
- * @bodyParam     tool_content_selection_url nullable. Example: if not set, automatically set the tool_url
- * @bodyParam     user_id required. Example: 1
- * @bodyParam     organization_id required. Example: 1
+ * Date           11-10-2021 
+ * Description    Validation request class for update lti tool settings
+ * class          UpdateLtiToolSetting
  */
 class UpdateLtiToolSetting extends FormRequest
 {
@@ -30,7 +24,14 @@ class UpdateLtiToolSetting extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
+     * @bodyParam     tool_name required|unique. Example: Safari Montage
+     * @bodyParam     tool_url required. Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
+     * @bodyParam     lti_version required. Example: LTI-1p0
+     * @bodyParam     tool_consumer_key nullable. Example: consumer key
+     * @bodyParam     tool_secret_key required_with:tool_consumer_key. Example: secret key
+     * @bodyParam     tool_content_selection_url nullable. Example: if not set, automatically set the tool_url
+     * @bodyParam     user_id required. Example: 1
+     * @bodyParam     organization_id required. Example: 1
      * @return array
      */
     public function rules()

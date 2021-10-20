@@ -20,7 +20,7 @@ use Illuminate\View\View;
 /**
  * @author        Asim Sarwar
  * Date           11-10-2021
- * @group 1005. Admin/Lti Tool Settings *
+ * @group 1008.   Admin/Lti Tool Settings *
  * APIs for Lti tool settings on admin panel.
  */
 class LtiToolSettingsController extends Controller
