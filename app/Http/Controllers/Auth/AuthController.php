@@ -354,14 +354,18 @@ class AuthController extends Controller
                 $domainOrganization = $this->organizationRepository->findByField('domain', $request->domain);
                 $organization = $user->organizations()->where('domain', $request->domain)->first();
 
-                if (!$domainOrganization || !$organization) {
+                if (!$domainOrganization) {
                     return response([
                         'errors' => ['Invalid Domain.'],
                     ], 400);
-                }
-
-                if (!$organization && !$domainOrganization->self_registration) {
+                } else if (!$organization && !$domainOrganization->self_registration) {
                     return response()->error(['Self registration is not allowed on this domain.', 400]);
+                } else if (!$organization && $domainOrganization->self_registration) {
+                    $selfRegisteredRole = $domainOrganization->roles()->where('name', 'self_registered')->first();
+                    if (!$selfRegisteredRole) {
+                        $selfRegisteredRole = $this->organizationRepository->duplicateRole($domainOrganization, 'self_registered');
+                    }
+                    $domainOrganization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                 }
             }
             $user->gapi_access_token = $request->tokenObj;
