@@ -294,7 +294,7 @@ class AuthController extends Controller
                 $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($result['email']);
 
                 if ($invited_users->isEmpty()) {
-                    $organization = $this->organizationRepository->getRootOrganization();
+                    $organization = $this->organizationRepository->findByField('domain', $request->domain);
                     if ($organization && !$organization->self_registration) {
                         return response()->error(['Self registration is not allowed on this domain.', 400]);
                     }
@@ -332,9 +332,12 @@ class AuthController extends Controller
                             }
                         }
                     } else {
-                        $organization = $this->organizationRepository->find(1);
+                        $organization = $this->organizationRepository->findByField('domain', $request->domain);
                         if ($organization) {
                             $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                            if (!$selfRegisteredRole) {
+                                $selfRegisteredRole = $this->organizationRepository->duplicateRole($organization, 'self_registered');
+                            }
                             $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                         }
                     }
