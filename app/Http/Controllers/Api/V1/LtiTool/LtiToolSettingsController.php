@@ -127,7 +127,6 @@ class LtiToolSettingsController extends Controller
      */
     public function update(UpdateLtiToolSetting $request, Organization $suborganization, $id)
     {
-        dd($request->all());
         $data = $request->only([
             'user_id',
             'organization_id',
@@ -144,7 +143,7 @@ class LtiToolSettingsController extends Controller
         $data['tool_domain'] = $parse['host'];
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->update($id, $data);
-        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('ltiToolTypesConfig', 'user', 'organization'))], 200);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization'))], 200);
     }
 
     /**

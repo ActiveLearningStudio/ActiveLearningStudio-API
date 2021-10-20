@@ -32,7 +32,6 @@ class LtiToolSettingRepository extends BaseRepository
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
-
         if (isset($data['query']) && $data['query'] !== '') {
             $query = $query->whereHas('user', function ($qry) use ($data) {
                 $qry->where('first_name', 'iLIKE', '%' . $data['query'] . '%');
@@ -42,8 +41,7 @@ class LtiToolSettingRepository extends BaseRepository
                 $qry->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
             });
         }
-
-         return $query->with(['user', 'organization'])->where('organization_id', $suborganization->id)->paginate($perPage);
+        return $query->with(['user', 'organization'])->where('organization_id', $suborganization->id)->paginate($perPage);
     }
 
     /**
@@ -54,9 +52,9 @@ class LtiToolSettingRepository extends BaseRepository
     public function create($data)
     {        
         try {            
-            if($createSetting = $this->model->create($data)){
-            }
-            return ['message' => 'Lti Tool setting created successfully!', 'data' => $createSetting];
+            if ($createSetting = $this->model->create($data)) {
+                return ['message' => 'Lti Tool setting created successfully!', 'data' => $createSetting];
+            }            
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
@@ -102,7 +100,7 @@ class LtiToolSettingRepository extends BaseRepository
     {
         try {
             $this->find($id)->delete();
-            return 'Lti tool setting deleted!';
+            return ['message' => 'Lti tool setting deleted!', 'data' => $this->find($id)];
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
