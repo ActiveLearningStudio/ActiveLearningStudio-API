@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Activity;
+use App\Services\SaveStudentdataService;
 use Validator;
 
 class LmsServicesController extends Controller
@@ -86,6 +87,12 @@ class LmsServicesController extends Controller
      */
     public function saveLtiTeachersData(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
+        // Save student Data for VIV if check is enabled
+        if (config('student-data.save_student_data')) {
+            $service = new SaveStudentdataService();
+            $service->saveStudentData($request);
+        }
+
         $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
         $canvasClient = new Client($lmsSetting);
         $saveData = new SaveTeacherData($canvasClient);
