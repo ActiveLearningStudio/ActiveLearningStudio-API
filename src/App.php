@@ -37,6 +37,9 @@ class App
             $custom_course_name = ParamValidate::getKeyInCustomFields($_SESSION, 'course_name');
             $custom_api_domain_url = ParamValidate::getKeyInCustomFields($_SESSION, 'api_domain_url');
             $custom_course_code = ParamValidate::getKeyInCustomFields($_SESSION, 'course_code');
+            $custom_person_name_given = ParamValidate::getKeyInCustomFields($_SESSION, 'person_name_given');
+            $custom_person_name_family = ParamValidate::getKeyInCustomFields($_SESSION, 'person_name_family');
+            $issuer_client = $_SESSION['lti']['issuer_client'];
 
             // $LTI->var_dump();
             // Obtain User ID
@@ -152,14 +155,17 @@ class App
                     'course_id',
                     'custom_course_name',
                     'custom_api_domain_url',
-                    'custom_course_code'
+                    'custom_course_code',
+                    'custom_email_id',
+                    'issuer_client',
+                    'custom_person_name_given',
+                    'custom_person_name_family'
                 );
                 foreach($custom_variable_array as $extra_param) {
                     $redirect_to_studio_url .= '&' . $extra_param . '=' . urlencode($$extra_param);
                 }
                 $redirect_to_studio_url .= '&homepage=' . urlencode($CFG->wwwroot);
                 $redirect_to_studio_url = addSession($redirect_to_studio_url);
-                
                 header("Location: $redirect_to_studio_url");
             } else {
                 // LTI Submission Review - Canvas' Score API implementation
