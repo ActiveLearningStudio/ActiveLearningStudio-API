@@ -56,4 +56,20 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
         }
         throw new GeneralException('Unable to add Google Classroom data into storage, please try again later!');
     }
+
+    /**
+     * Validate if Course teacher record already exist in DB or Not
+     *
+     * @param $courseId
+     * @param $email
+     * @return Response
+     */
+    public function duplicateRecordValidation($courseId, $email) {
+        $response  = $this->model->where([
+            ['course_id', '=', $courseId],
+            ['curriki_teacher_email', '=', $email]
+        ])->get();
+
+        return $response;
+    }
 }

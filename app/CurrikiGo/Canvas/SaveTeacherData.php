@@ -41,13 +41,17 @@ class SaveTeacherData
 
         if ($courseData) {
             foreach ($courseData->teachers as $teacher) {
-                $teacherInfo = new \stdClass();
                 $record = $this->canvasClient->run(new GetUserCommand($teacher->id));
-                $teacherInfo->user_id = 1;
-                $teacherInfo->id = $data->courseId;
-                $teacherInfo->name = $courseData->name;
-                $teacherInfo->curriki_teacher_email = $record->email;
-                $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
+                $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $record->email);
+                if (!$duplicateRecord) {
+                    $teacherInfo = new \stdClass();
+                    $teacherInfo->user_id = 1;
+                    $teacherInfo->id = $data->courseId;
+                    $teacherInfo->name = $courseData->name;
+                    $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;
+                    $teacherInfo->curriki_teacher_email = $record->email;
+                    $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
+                }
             }
             return response(
                 ['message' => "Teacher's data saved successfuly!"],
