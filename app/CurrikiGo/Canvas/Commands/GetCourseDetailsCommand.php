@@ -5,9 +5,9 @@ namespace App\CurrikiGo\Canvas\Commands;
 use App\CurrikiGo\Canvas\Contracts\Command;
 
 /**
- * This class handles fetching user data in Canvas LMS
+ * This class handles fetching Course details in Canvas LMS
  */
-class GetUserCommand implements Command
+class GetCourseDetailsCommand implements Command
 {
     /**
      * API URL
@@ -28,25 +28,33 @@ class GetUserCommand implements Command
      */
     public $httpClient;
     /**
-     * User id
+     * Course Id
      *
      * @var int
      */
-    public $userId;
+    private $courseId;
+    /**
+     * Request queryString
+     *
+     * @var array
+     */
+    private $queryString;
 
     /**
      * Creates an instance of the command class
      *
-     * @param int $userId
+     * @param int $courseId
+     * @param array $queryString
      * @return void
      */
-    public function __construct($userId = '')
+    public function __construct($courseId, $queryString = '')
     {
-        $this->userId = !empty($userId) ? $userId : 'self';
+        $this->courseId = $courseId;
+        $this->queryString = $queryString;
     }
 
     /**
-     * Executes an API request for fetching user data
+     * Execute an API request for fetching course details
      *
      * @return string|null
      */
@@ -54,9 +62,9 @@ class GetUserCommand implements Command
     {
         $response = null;
         try {
-            $response = $this->httpClient->request('GET', $this->apiURL . '/users/' . $this->userId, [
-                    'headers' => ['Authorization' => "Bearer {$this->accessToken}"]
-                ])->getBody()->getContents();
+            $response = $this->httpClient->request('GET', $this->apiURL . '/courses/' . $this->courseId . $this->queryString, [
+                'headers' => ['Authorization' => "Bearer {$this->accessToken}"]
+            ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {}
 
