@@ -31,6 +31,8 @@ class LmsServicesController extends Controller
      * LmsServicesController constructor.
      *
      * @param $lmsSettingRepository LmsSettingRepositoryInterface
+     * @param LMSIntegrationServiceInterface $lms,
+     * @param Client $canvasClient
      */
     public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, LMSIntegrationServiceInterface $lms, Client $canvasClient)
     {
@@ -39,6 +41,13 @@ class LmsServicesController extends Controller
         $this->canvasClient = $canvasClient;
     }
 
+    /**
+     * Login to Canvas LMS
+     *
+     * @param Request $request
+     * @param array $lms
+     * @return Response
+     */
     public function login(Request $request, $lms) {
         $request->validate([
             'username' => 'required|string|max:255',
@@ -57,6 +66,13 @@ class LmsServicesController extends Controller
         );
     }
 
+    /**
+     * Login to Canvas LMS
+     *
+     * @param Request $request
+     * @param Activity $activity
+     * @return download file
+     */
     public function getXAPIFile(Request $request, Activity $activity) {
         return Storage::download($this->lms->getXAPIFile($activity));
     }
