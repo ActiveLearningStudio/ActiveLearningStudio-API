@@ -656,7 +656,7 @@ class AuthController extends Controller
                 if (!$default_lms_setting) {
                     return response([
                         'errors' => ['Unable to find default LMS setting with your client id.'],
-                    ]);
+                    ], 404);
                 }
                 $default_lms_setting = $default_lms_setting->toArray();
                 $default_lms_setting['lms_login_id'] = $user['email'];
@@ -709,7 +709,7 @@ class AuthController extends Controller
                 if (!$default_lms_setting) {
                     return response([
                         'errors' => ['Unable to find default LMS setting with your client id.'],
-                    ]);
+                    ], 404);
                 }
                 $default_lms_setting = $default_lms_setting->toArray();
                 $default_lms_setting['lms_login_id'] = $user['email'];
