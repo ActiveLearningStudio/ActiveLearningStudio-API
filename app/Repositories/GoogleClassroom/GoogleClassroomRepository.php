@@ -68,7 +68,7 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
         $response  = $this->model->where([
             ['course_id', '=', $courseId],
             ['curriki_teacher_email', '=', $email]
-        ])->get();
+        ])->first();
 
         return $response;
     }
