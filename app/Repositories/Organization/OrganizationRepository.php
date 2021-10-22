@@ -248,6 +248,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             return $is_updated;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            DB::rollBack();
         }
     }
 
@@ -787,6 +788,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     public function duplicateRole($organization, $roleName)
     {
         try {
+            DB::beginTransaction();
+
             $topOrg = $this->model->whereHas('roles', function (Builder $query) use ($roleName) {
                 $query->where('name', '=', $roleName);
             })->first();
@@ -799,9 +802,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             $role = $this->addRole($organization, $subOrganizationUserRolesData);
 
+            DB::commit();
             return $role;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+            DB::rollBack();
         }
 
         return false;

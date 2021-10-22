@@ -186,6 +186,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // lms-settings
         Route::apiResource('suborganizations/{suborganization}/lms-settings', 'LmsSettingsController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        // lti-tool-settings
+        Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
@@ -241,6 +243,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // default Sso Integration Setting
         Route::apiResource('organizations/{organization}/default-sso-settings', 'DefaultSsoIntegrationSettingsController');
         Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
+        Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
     // public route for get user's shared projects
