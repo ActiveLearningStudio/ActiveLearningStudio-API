@@ -40,6 +40,7 @@ class SaveTeacherData
         $courseData = $this->canvasClient->run(new GetCourseDetailsCommand($data->courseId, '?include[]=teachers'));
 
         if ($courseData) {
+            $response = [];
             foreach ($courseData->teachers as $teacher) {
                 $record = $this->canvasClient->run(new GetUserCommand($teacher->id));
                 $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $record->email);
@@ -50,13 +51,18 @@ class SaveTeacherData
                     $teacherInfo->name = $courseData->name;
                     $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;
                     $teacherInfo->curriki_teacher_email = $record->email;
-                    $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
+                    $response[] = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
                 }
             }
+            if ($response) {
+                return response(
+                    ['message' => "Teacher's data saved successfuly!"], 201
+                );
+            }
             return response(
-                ['message' => "Teacher's data saved successfuly!"],
-                201
+                ['message' => "Record already exist!"], 200
             );
+
         }
         return response(
             ['message' => "No course found!"], 404

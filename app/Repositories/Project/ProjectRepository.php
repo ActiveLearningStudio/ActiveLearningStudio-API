@@ -355,6 +355,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         // see Project Model @status property for mapping
         $project->status = 3 - $project->status; // this will toggle status, if draft then it will be final or vice versa
         if ($project->status === 1){
+            if ($project->indexing === 3){
+                $project->status = 2;
+            }
             $project->indexing = null; // remove indexing if project is reverted to draft state
             $returnProject = $project->save();
             resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
