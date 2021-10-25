@@ -264,18 +264,6 @@ class OrganizationPermissionTypeSeeder extends Seeder
 
         // Teams
         DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'team:edit',
-            'display_name' => 'Edit Team',
-            'feature' => 'Team'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'team:delete',
-            'display_name' => 'Delete Team',
-            'feature' => 'Team'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'team:view',
             'display_name' => 'View Team',
             'feature' => 'Team'
