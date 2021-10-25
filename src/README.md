@@ -85,22 +85,6 @@ cd /usr/local/src/ActiveLearningStudio-API && ansible-playbook install.yml -K
 * Browse to the directory: /usr/local/src/ActiveLearningStudio-API
 * Click [ Finish ]
 
-## Setup an Eclipse Debug/Run configuration to regenerate the OpenAPI spec
-
-* In Eclipse, go to File -> Debug Configurations...
-* Right click on Java Application -> New Configuration
-* Name: ActiveLearningStudio-API AppOpenApi3
-* Project: ActiveLearningStudio-API
-* Main class: org.curriki.api.enus.vertx.AppOpenApi3
-
-### In the Environment tab
-
-Setup the following variables to setup the Vert.x verticle. 
-
-* CONFIG_PATH: /usr/local/src/ActiveLearningStudio-API/config/ActiveLearningStudio-API.yml
-
-Click [ Apply ] and [ Debug ] to regenerate the OpenAPI spec. 
-
 ## Setup an Eclipse Debug/Run configuration to run and debug ActiveLearningStudio-API
 
 * In Eclipse, go to File -> Debug Configurations...
