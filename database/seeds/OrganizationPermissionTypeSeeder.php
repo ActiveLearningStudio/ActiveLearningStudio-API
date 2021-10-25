@@ -277,18 +277,6 @@ class OrganizationPermissionTypeSeeder extends Seeder
 
         // Groups
         DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:edit',
-            'display_name' => 'Edit Group',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'group:delete',
-            'display_name' => 'Delete Group',
-            'feature' => 'Group'
-        ]);
-
-        DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'group:view',
             'display_name' => 'View Group',
             'feature' => 'Group'
