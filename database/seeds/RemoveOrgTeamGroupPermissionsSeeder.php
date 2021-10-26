@@ -42,7 +42,7 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                             name LIKE 'team:%'
                             AND name NOT IN (
                                 'team:view',
-                                'team:create',
+                                'team:create'
                             )");
 
             // Delete extra group permissions from organization.
