@@ -148,5 +148,17 @@ class TeamPermissionTypeSeeder extends Seeder
             'display_name' => 'Publish Activity',
             'feature' => 'Team'
         ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:edit',
+            'display_name' => 'Edit Team',
+            'feature' => 'Team'
+        ]);
+
+        DB::table('team_permission_types')->insertOrIgnore([
+            'name' => 'team:delete',
+            'display_name' => 'Delete Team',
+            'feature' => 'Team'
+        ]);
     }
 }

@@ -26,6 +26,7 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 /**
  * @group 2. User
@@ -684,6 +685,30 @@ class UserController extends Controller
     public function reportBasic(Request $request)
     {
         return UserStatsResource::collection($this->userRepository->reportBasic($request->all()), 200);
+    }
+
+    /**
+     * Get All User Export list
+     *
+     * Get a list of the users exported project
+     *
+     * * @queryParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     * 
+     * @responseFile responses/notifications/export-notifications.json
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function exportProjectList(Request $request)
+    {
+        
+        $days_limit = config('constants.default-exported-projects-days-limit');
+        if ($request->has('days_limit')) 
+            $days_limit = $request->input('days_limit');
+         
+        return response([
+            'exports' =>$this->userRepository->getUsersExportProjectList($days_limit),
+        ], 200);
     }
 
 }

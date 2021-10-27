@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y \
     cron \
     redis \
     redis-server \
+    wget \
     nodejs \
     npm \
     && docker-php-ext-install opcache \
@@ -46,6 +47,13 @@ RUN docker-php-ext-install gd
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
+
+RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-9.18.1.303-linux.tar.gz
+RUN tar -xzf newrelic-php5-9.18.1.303-linux.tar.gz
+RUN cd newrelic-php5-9.18.1.303-linux
+RUN export NR_INSTALL_SILENT=true
+RUN export NR_INSTALL_KEY=${NR_INSTALL_KEY}
+
 
 RUN npm install -g laravel-echo-server
 
