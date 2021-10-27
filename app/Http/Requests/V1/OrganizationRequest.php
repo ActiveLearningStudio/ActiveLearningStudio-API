@@ -24,7 +24,7 @@ class OrganizationRequest extends FormRequest
     public function rules()
     {
         return [
-            'domain' => 'required|string|max:255|exists:App\Models\Organization,domain',
+            'domain' => 'required|string|max:255|exists:App\Models\Organization,domain,deleted_at,NULL',
         ];
     }
 }

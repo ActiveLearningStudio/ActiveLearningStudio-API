@@ -29724,6 +29724,954 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/brightcove/{accountId}/{videoId}/h5p-resource-settings</code></p>
 <!-- END_11ed109de5bd6a58e0c35e0a71d61198 -->
+<h1>1008. Admin/LTI Tool Settings</h1>
+<p>APIs for lti tool settings on admin panel.</p>
+<!-- START_8f4fad2b19011e1c4fa626a51f418e6f -->
+<h2>Get All LTI Tool Settings for listing.</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "lti_tool_settings": [
+            {
+                "id": 1,
+                "user_id": 23,
+                "organization_id": 1,
+                "tool_name": "Safari Montage",
+                "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+                "tool_domain": "partner.safarimontage.com",
+                "lti_version": "LTI-1p0",
+                "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+                "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+                "tool_description": "Testing safari montage as LTI Tool Consumer",
+                "tool_custom_parameter": null,
+                "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+                "tool_client_id": null,
+                "tool_proxy_id": null,
+                "tool_enabled_capability": null,
+                "tool_icon": null,
+                "tool_secure_icon": null,
+                "created_at": "2021-10-18T12:34:05.000000Z",
+                "updated_at": "2021-10-18T12:38:38.000000Z",
+                "deleted_at": null,
+                "user": {
+                    "id": 23,
+                    "name": "Asim Sarwar",
+                    "email": "asim@curriki.org",
+                    "email_verified_at": "2021-09-09T12:22:36.000000Z",
+                    "created_at": "2021-09-09T12:22:37.000000Z",
+                    "updated_at": "2021-09-09T12:23:12.000000Z",
+                    "first_name": "Asim",
+                    "last_name": "Sarwar",
+                    "organization_name": "Curriki",
+                    "job_title": "FD",
+                    "address": null,
+                    "phone_number": null,
+                    "organization_type": "Other",
+                    "website": null,
+                    "deleted_at": null,
+                    "role": null,
+                    "hubspot": false,
+                    "subscribed": true,
+                    "subscribed_ip": "127.0.0.1",
+                    "gapi_access_token": null,
+                    "membership_type_id": 2
+                },
+                "organization": {
+                    "id": 1,
+                    "name": "Curriki Studio",
+                    "description": "Curriki Studio, default organization.",
+                    "domain": "currikistudio",
+                    "parent_id": null,
+                    "image": null,
+                    "created_at": null,
+                    "updated_at": null,
+                    "deleted_at": null,
+                    "self_registration": true,
+                    "account_id": null,
+                    "api_key": null,
+                    "unit_path": null
+                }
+            },
+            {
+                "id": 2,
+                "user_id": 23,
+                "organization_id": 1,
+                "tool_name": "Safari Montage 2",
+                "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+                "tool_domain": "partner.safarimontage.com",
+                "lti_version": "LTI-1p0",
+                "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+                "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+                "tool_description": "Testing safari montage as LTI Tool Consumer",
+                "tool_custom_parameter": null,
+                "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+                "tool_client_id": null,
+                "tool_proxy_id": null,
+                "tool_enabled_capability": null,
+                "tool_icon": null,
+                "tool_secure_icon": null,
+                "created_at": "2021-10-18T12:36:09.000000Z",
+                "updated_at": "2021-10-18T12:38:43.000000Z",
+                "deleted_at": null,
+                "user": {
+                    "id": 23,
+                    "name": "Asim Sarwar",
+                    "email": "asim@curriki.org",
+                    "email_verified_at": "2021-09-09T12:22:36.000000Z",
+                    "created_at": "2021-09-09T12:22:37.000000Z",
+                    "updated_at": "2021-09-09T12:23:12.000000Z",
+                    "first_name": "Asim",
+                    "last_name": "Sarwar",
+                    "organization_name": "Curriki",
+                    "job_title": "FD",
+                    "address": null,
+                    "phone_number": null,
+                    "organization_type": "Other",
+                    "website": null,
+                    "deleted_at": null,
+                    "role": null,
+                    "hubspot": false,
+                    "subscribed": true,
+                    "subscribed_ip": "127.0.0.1",
+                    "gapi_access_token": null,
+                    "membership_type_id": 2
+                },
+                "organization": {
+                    "id": 1,
+                    "name": "Curriki Studio",
+                    "description": "Curriki Studio, default organization.",
+                    "domain": "currikistudio",
+                    "parent_id": null,
+                    "image": null,
+                    "created_at": null,
+                    "updated_at": null,
+                    "deleted_at": null,
+                    "self_registration": true,
+                    "account_id": null,
+                    "api_key": null,
+                    "unit_path": null
+                }
+            }
+        ]
+    },
+    "links": {
+        "first": "http://curriki-studio-api.local/api/v1/suborganizations/1/lti-tool-settings?page=1",
+        "last": "http://curriki-studio-api.local/api/v1/suborganizations/1/lti-tool-settings?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://curriki-studio-api.local/api/v1/suborganizations/1/lti-tool-settings",
+        "per_page": 10,
+        "to": 2,
+        "total": 2
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/1/lti-tool-settings</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8f4fad2b19011e1c4fa626a51f418e6f -->
+<!-- START_e75b6b178b609b7bd0cce5907371aa27 -->
+<h2>Create LTI Tool Setting</h2>
+<p>Creates the new lti tool setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "user_id": 1,
+            "organization_id": 1,
+            "tool_name": "Safari Montage",
+            "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+            "lti_version": "LTI-1p0",
+            "tool_description": "Testing safari montage as LTI Tool Consumer",
+            "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+            "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+            "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+            "tool_custom_parameter": "launch_frame='iframe', iframe='embed'"
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+            "user_id": 1,
+            "organization_id": 1,
+            "tool_name": "Safari Montage",
+            "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+            "lti_version": "LTI-1p0",
+            "tool_description": "Testing safari montage as LTI Tool Consumer",
+            "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+            "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+            "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+            "tool_custom_parameter": "launch_frame='iframe', iframe='embed'"
+        }
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "user_id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "tool_name" =&gt; "Safari Montage",
+            "tool_url" =&gt; "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+            "lti_version" =&gt; "LTI-1p0",
+            "tool_description" =&gt; "Testing safari montage as LTI Tool Consumer",
+            "tool_consumer_key" =&gt; "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+            "tool_secret_key" =&gt; "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+            "tool_content_selection_url" =&gt; "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+            "tool_custom_parameter" =&gt; "launch_frame='iframe', iframe='embed'"
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings'
+payload = {
+    "user_id": 1,
+    "organization_id": 1,
+    "tool_name": "Safari Montage",
+    "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+    "lti_version": "LTI-1p0",
+    "tool_description": "Testing safari montage as LTI Tool Consumer",
+    "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+    "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+    "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+    "tool_custom_parameter": "launch_frame='iframe', iframe='embed'"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Lti Tool setting created successfully!",
+    "data": {
+        "user_id": "23",
+        "organization_id": "1",
+        "tool_name": "Safari Montage 2",
+        "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+        "lti_version": "LTI-1p0",
+        "tool_description": "Testing safari montage as LTI Tool Consumer",
+        "tool_custom_parameter": "launch_frame='iframe', iframe=\"embed\"",
+        "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+        "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+        "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+        "tool_domain": "partner.safarimontage.com",
+        "updated_at": "2021-10-20T05:38:36.000000Z",
+        "created_at": "2021-10-20T05:38:36.000000Z",
+        "id": 4,
+        "user": {
+            "id": 23,
+            "name": "Asim Sarwar",
+            "email": "asim@curriki.org",
+            "email_verified_at": "2021-09-09T12:22:36.000000Z",
+            "created_at": "2021-09-09T12:22:37.000000Z",
+            "updated_at": "2021-09-09T12:23:12.000000Z",
+            "first_name": "Asim",
+            "last_name": "Sarwar",
+            "organization_name": "Curriki",
+            "job_title": "FD",
+            "address": null,
+            "phone_number": null,
+            "organization_type": "Other",
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "hubspot": false,
+            "subscribed": true,
+            "subscribed_ip": "127.0.0.1",
+            "gapi_access_token": null,
+            "membership_type_id": 2
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": true,
+            "account_id": null,
+            "api_key": null,
+            "unit_path": null
+        }
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create lti tool setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/suborganizations/1/lti-tool-settings</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>tool_name</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid tool name.Max 255 characters.</td>
+</tr>
+<tr>
+<td><code>tool_url</code></td>
+<td>url</td>
+<td>required</td>
+<td>Valid tool url.Max 255 characters.</td>
+</tr>
+<tr>
+<td><code>lti_version</code></td>
+<td>string</td>
+<td>required</td>
+<td>Valid lti version like LTI-1p0.</td>
+</tr>
+<tr>
+<td><code>tool_consumer_key</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid tool consumer key.</td>
+</tr>
+<tr>
+<td><code>tool_secret_key</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid tool secret key.Require with tool consumer key.</td>
+</tr>
+<tr>
+<td><code>tool_description</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid tool description.</td>
+</tr>
+<tr>
+<td><code>tool_custom_parameter</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid comma seperated value like launch_frame='iframe', iframe='embed'.</td>
+</tr>
+<tr>
+<td><code>tool_content_selection_url</code></td>
+<td>url</td>
+<td>optional</td>
+<td>If null automatically set the tool url.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e75b6b178b609b7bd0cce5907371aa27 -->
+<!-- START_2f2758b0abc25e98982d44b733c0347d -->
+<h2>Get LTI Tool Setting</h2>
+<p>Get the specified lti tool setting data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 1,
+        "user_id": 23,
+        "organization_id": 1,
+        "tool_name": "Safari Montage",
+        "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+        "tool_domain": "partner.safarimontage.com",
+        "lti_version": "LTI-1p0",
+        "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+        "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+        "tool_description": "Testing safari montage as LTI Tool Consumer",
+        "tool_custom_parameter": null,
+        "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+        "tool_client_id": null,
+        "tool_proxy_id": null,
+        "tool_enabled_capability": null,
+        "tool_icon": null,
+        "tool_secure_icon": null,
+        "created_at": "2021-10-18T12:34:05.000000Z",
+        "updated_at": "2021-10-18T12:38:38.000000Z",
+        "deleted_at": null,
+        "user": {
+            "id": 23,
+            "name": "Asim Sarwar",
+            "email": "asim@curriki.org",
+            "email_verified_at": "2021-09-09T12:22:36.000000Z",
+            "created_at": "2021-09-09T12:22:37.000000Z",
+            "updated_at": "2021-09-09T12:23:12.000000Z",
+            "first_name": "Asim",
+            "last_name": "Sarwar",
+            "organization_name": "Curriki",
+            "job_title": "FD",
+            "address": null,
+            "phone_number": null,
+            "organization_type": "Other",
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "hubspot": false,
+            "subscribed": true,
+            "subscribed_ip": "127.0.0.1",
+            "gapi_access_token": null,
+            "membership_type_id": 2
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": true,
+            "account_id": null,
+            "api_key": null,
+            "unit_path": null
+        }
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/{sub_organazation}/lti-tool-settings/{lti_tool_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+<td><code>lti_tool_setting</code></td>
+<td>required</td>
+<td>The Id of a lti tool setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_2f2758b0abc25e98982d44b733c0347d -->
+<!-- START_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+<h2>Update LTI Tool Setting</h2>
+<p>Updates the lti tool setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "user_id": 1,
+            "organization_id": 1,
+            "tool_name": "Safari Montage",
+            "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+            "lti_version": "LTI-1p0",
+            "tool_description": "Testing safari montage as LTI Tool Consumer",
+            "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+            "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+            "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+            "tool_custom_parameter": "launch_frame='iframe', iframe='embed'"
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_id": 1,
+    "organization_id": 1,
+    "tool_name": "Safari Montage",
+    "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+    "lti_version": "LTI-1p0",
+    "tool_description": "Testing safari montage as LTI Tool Consumer",
+    "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+    "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+    "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+    "tool_custom_parameter": "launch_frame='iframe', iframe='embed'"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "user_id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "tool_name" =&gt; "Safari Montage",
+            "tool_url" =&gt; "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+            "lti_version" =&gt; "LTI-1p0",
+            "tool_description" =&gt; "Testing safari montage as LTI Tool Consumer",
+            "tool_consumer_key" =&gt; "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+            "tool_secret_key" =&gt; "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+            "tool_content_selection_url" =&gt; "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+            "tool_custom_parameter" =&gt; "launch_frame='iframe', iframe='embed'"
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1'
+payload = {
+    "user_id": 1,
+    "organization_id": 1,
+    "tool_name": "Safari Montage",
+    "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+    "lti_version": "LTI-1p0",
+    "tool_description": "Testing safari montage as LTI Tool Consumer",
+    "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+    "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+    "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+    "tool_custom_parameter": "launch_frame='iframe', iframe='embed'"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Lti tool setting updated successfully!",
+    "data": {
+        "user_id": "23",
+        "organization_id": "1",
+        "tool_name": "Safari Montage 2",
+        "tool_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearch.php",
+        "lti_version": "LTI-1p0",
+        "tool_description": "Testing safari montage as LTI Tool Consumer",
+        "tool_custom_parameter": "launch_frame='iframe', iframe=\"embed\"",
+        "tool_consumer_key": "2b9d3d6f-a46f-11eb-915b-001e67972a31.partner.safarimontage.com",
+        "tool_secret_key": "4dbe1fa5c24b0cb35bc33097393d70a329c14933",
+        "tool_content_selection_url": "https://partner.safarimontage.com/SAFARI/api/imsltisearchdd.php",
+        "tool_domain": "partner.safarimontage.com",
+        "updated_at": "2021-10-20T05:38:36.000000Z",
+        "created_at": "2021-10-20T05:38:36.000000Z",
+        "id": 4,
+        "user": {
+            "id": 23,
+            "name": "Asim Sarwar",
+            "email": "asim@curriki.org",
+            "email_verified_at": "2021-09-09T12:22:36.000000Z",
+            "created_at": "2021-09-09T12:22:37.000000Z",
+            "updated_at": "2021-09-09T12:23:12.000000Z",
+            "first_name": "Asim",
+            "last_name": "Sarwar",
+            "organization_name": "Curriki",
+            "job_title": "FD",
+            "address": null,
+            "phone_number": null,
+            "organization_type": "Other",
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "hubspot": false,
+            "subscribed": true,
+            "subscribed_ip": "127.0.0.1",
+            "gapi_access_token": null,
+            "membership_type_id": 2
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": true,
+            "account_id": null,
+            "api_key": null,
+            "unit_path": null
+        }
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update lti tool setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/suborganizations/{sub_organization}/lti-tool-settings/{lti_tool_setting}</code></p>
+<p><code>PATCH api/v1/suborganizations/{sub_organization}/lti-tool-settings/{lti_tool_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>tool_name</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid tool name.Max 255 characters.</td>
+</tr>
+<tr>
+<td><code>tool_url</code></td>
+<td>url</td>
+<td>required</td>
+<td>Valid tool url.Max 255 characters.</td>
+</tr>
+<tr>
+<td><code>lti_version</code></td>
+<td>string</td>
+<td>required</td>
+<td>Valid lti version like LTI-1p0.</td>
+</tr>
+<tr>
+<td><code>tool_consumer_key</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid tool consumer key.</td>
+</tr>
+<tr>
+<td><code>tool_secret_key</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid tool secret key.Require with tool consumer key.</td>
+</tr>
+<tr>
+<td><code>tool_description</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid tool description.</td>
+</tr>
+<tr>
+<td><code>tool_custom_parameter</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid comma seperated value like launch_frame='iframe', iframe='embed'.</td>
+</tr>
+<tr>
+<td><code>tool_content_selection_url</code></td>
+<td>url</td>
+<td>optional</td>
+<td>If null automatically set the tool url.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+<!-- START_b1748719c1f572e3601dbbb3b63923dc -->
+<h2>Delete LTI Tool Setting</h2>
+<p>Deletes the lti tool setting from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/lti-tool-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": {
+        "message": "Lti tool setting deleted!",
+        "data": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete lti tool setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/suborganizations/{sub_organization}/lti-tool-settings/{lti_tool_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+<td><code>lti_tool_setting</code></td>
+<td>required</td>
+<td>The Id of a lti tool setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_b1748719c1f572e3601dbbb3b63923dc -->
       </div>
       <div class="dark-box">
                         <div class="lang-selector">

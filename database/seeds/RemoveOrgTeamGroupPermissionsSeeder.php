@@ -32,9 +32,7 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                                     name LIKE 'team:%'
                                     AND name NOT IN (
                                         'team:view',
-                                        'team:edit',
-                                        'team:create',
-                                        'team:delete'
+                                        'team:create'
                                     )
                             )");
 
@@ -44,9 +42,7 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                             name LIKE 'team:%'
                             AND name NOT IN (
                                 'team:view',
-                                'team:edit',
-                                'team:create',
-                                'team:delete'
+                                'team:create'
                             )");
 
             // Delete extra group permissions from organization.
@@ -68,9 +64,7 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                                     name LIKE 'group:%'
                                     AND name NOT IN (
                                         'group:view',
-                                        'group:edit',
-                                        'group:create',
-                                        'group:delete'
+                                        'group:create'
                                     )
                             )");
 
@@ -80,9 +74,7 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                             name LIKE 'group:%'
                             AND name NOT IN (
                                 'group:view',
-                                'group:edit',
-                                'group:create',
-                                'group:delete'
+                                'group:create'
                             )");
 
 
