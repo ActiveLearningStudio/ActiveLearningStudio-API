@@ -40,7 +40,7 @@ class StoreActivityItem extends FormRequest
             'demo_activity_id' => 'max:255',
             'demo_video_id' => 'max:255',
             'image' => 'image|max:1000',
-            'order' => 'required|integer',
+            'order' => 'required|integer|max:2147483647',
             'type' => 'required',
             'activity_type_id' => 'required|exists:activity_types,id',
             'h5pLib' => 'required',

@@ -28,7 +28,7 @@ class StoreOrganizationType extends FormRequest
             return [
                 'name' => 'required|string|max:255|unique:organization_types,name,'.$orgType->id,
                 'label' => 'required|string|max:255|unique:organization_types,label,'.$orgType->id,
-                'order' => 'integer'
+                'order' => 'integer|max:2147483647'
             ];
         } else {
             return [
