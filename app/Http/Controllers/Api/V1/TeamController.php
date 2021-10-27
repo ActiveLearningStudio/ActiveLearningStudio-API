@@ -680,7 +680,7 @@ class TeamController extends Controller
      */
     public function update(TeamUpdateRequest $teamUpdateRequest, Organization $suborganization, Team $team)
     {
-        $this->authorize('update', [Team::class, $team]);
+        $this->authorize('update', [Team::class, $suborganization]);
 
         $data = $teamUpdateRequest->validated();
 
@@ -772,7 +772,7 @@ class TeamController extends Controller
      */
     public function destroy(Organization $suborganization, Team $team)
     {
-        $this->authorize('delete', [Team::class, $team]);
+        $this->authorize('delete', [Team::class, $suborganization]);
 
         $is_deleted = $this->teamRepository->delete($team->id);
 
