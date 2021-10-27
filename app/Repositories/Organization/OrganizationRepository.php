@@ -734,7 +734,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     public function fetchOrganizationDefaultPermissions()
     {
         try {
-            return OrganizationPermissionType::all()->groupBy('feature');
+            return OrganizationPermissionType::where('feature', '<>', 'Group')->get()->groupBy('feature');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

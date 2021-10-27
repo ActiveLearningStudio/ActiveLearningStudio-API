@@ -301,14 +301,24 @@ class AuthController extends Controller
                 }
 
                 $password = Str::random(10);
-                $user = $this->userRepository->create([
+                $userData = [
                     'first_name' => $result['name'],
                     'last_name' => ' ',
                     'email' => $result['email'],
                     'password' => Hash::make($password),
                     'remember_token' => Str::random(64),
                     'email_verified_at' => now(),
-                ]);
+                ];
+
+                if (isset($request->organization_name)) {
+                    $userData['organization_name'] = $request->organization_name;
+                } else if (isset($request->organization_type)) {
+                    $userData['organization_type'] = $request->organization_type;
+                } else if (isset($request->job_title)) {
+                    $userData['job_title'] = $request->job_title;
+                }
+
+                $user = $this->userRepository->create($userData);
 
                 if ($user) {
                     // $invited_users = $this->invitedTeamUserRepository->searchByEmail($user->email);
