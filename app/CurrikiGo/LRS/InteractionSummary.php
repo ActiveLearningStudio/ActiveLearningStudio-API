@@ -73,7 +73,7 @@ abstract class InteractionSummary
         if (!$definition->getDescription()->isEmpty()) {
             $description = $definition->getDescription()->getNegotiatedLanguageString();
         }
-        return strip_tags(html_entity_decode($description));
+        return strip_tags(str_replace("<br/>", "\n", html_entity_decode($description)));
     }
 
     /**
