@@ -31,7 +31,7 @@ class StoreActivityItem extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required',
-            'order' => 'integer',
+            'order' => 'integer|max:2147483647',
             'activity_type_id' => 'required|integer|exists:activity_types,id',
             'type' => 'required',
             'h5pLib' => 'required',
