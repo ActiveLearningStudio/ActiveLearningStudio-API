@@ -21,3 +21,6 @@ yarn-error.log
 /nbproject
 .idea/
 laravel-echo-server.lock
+
+composer.lock
+composer.phar

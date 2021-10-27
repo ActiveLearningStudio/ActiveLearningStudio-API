@@ -18,6 +18,7 @@ Route::post('login', 'Auth\AuthController@login')->name('login');
 Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('login/sso', 'Auth\AuthController@ssoLogin');
+Route::post('login/lti-sso', 'Auth\AuthController@ltiSsoLogin');
 Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
 Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
@@ -44,6 +45,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::get('users/notifications', 'UserController@listNotifications');
+        Route::get('users/notifications/export-list', 'UserController@exportProjectList');
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
@@ -96,6 +98,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
+        Route::post('suborganization/{suborganization}/projects/{project}/export-noovo', 'ProjectController@exportNoovoProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
 
 
@@ -118,6 +121,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::apiResource('playlists.activities', 'ActivityController');
+
+        Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
@@ -181,6 +186,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // lms-settings
         Route::apiResource('suborganizations/{suborganization}/lms-settings', 'LmsSettingsController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
+        // lti-tool-settings
+        Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
@@ -233,6 +240,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         });
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
+        // default Sso Integration Setting
+        Route::apiResource('organizations/{organization}/default-sso-settings', 'DefaultSsoIntegrationSettingsController');
+        Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
+        Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
     // public route for get user's shared projects

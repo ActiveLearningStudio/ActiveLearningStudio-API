@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Organization;
 use App\Models\Project;
+use App\Models\Team;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

@@ -15,25 +15,25 @@ class OrganizationVisibilityTypeSeeder extends Seeder
         DB::table('organization_visibility_types')
             ->updateOrInsert(
                 ['name' => 'private'],
-                ['display_name' => 'Private']
+                ['display_name' => 'Private (only Me)']
             );
 
         DB::table('organization_visibility_types')
             ->updateOrInsert(
                 ['name' => 'protected'],
-                ['display_name' => 'My Org']
+                ['display_name' => 'My Organization']
             );
 
         DB::table('organization_visibility_types')
             ->updateOrInsert(
                 ['name' => 'global'],
-                ['display_name' => 'Parent/Child Org']
+                ['display_name' => 'My Org + Parent and Child Org']
             );
 
         DB::table('organization_visibility_types')
             ->updateOrInsert(
                 ['name' => 'public'],
-                ['display_name' => 'Instance Wide']
+                ['display_name' => 'All']
             );
     }
 }
