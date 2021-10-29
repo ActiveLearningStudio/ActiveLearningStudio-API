@@ -8,6 +8,7 @@ use App\CurrikiGo\Canvas\SaveTeacherData as SaveTeacherData;
 use App\Http\Controllers\Controller;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use App\Services\CurrikiGo\LMSIntegrationServiceInterface;
 use App\Models\CurrikiGo\LmsSetting;
 use Illuminate\Http\Request;
@@ -68,7 +69,7 @@ class LmsServicesController extends Controller
     }
 
     /**
-     * Login to Canvas LMS
+     * Download XApi File
      *
      * @param Request $request
      * @param Activity $activity
@@ -83,9 +84,10 @@ class LmsServicesController extends Controller
      *
      * @param Request $request
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @param UserRepositoryInterface $userRepository
      * @return Response message
      */
-    public function saveLtiTeachersData(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    public function saveLtiTeachersData(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository, UserRepositoryInterface $userRepository)
     {
         // Save student Data for VIV if check is enabled
         if (config('student-data.save_student_data')) {
@@ -96,6 +98,6 @@ class LmsServicesController extends Controller
         $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
         $canvasClient = new Client($lmsSetting);
         $saveData = new SaveTeacherData($canvasClient);
-        return $saveData->saveData($request, $googleClassroomRepository);
+        return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
     }
 }
