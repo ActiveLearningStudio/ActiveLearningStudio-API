@@ -312,9 +312,13 @@ class AuthController extends Controller
 
                 if (isset($request->organization_name)) {
                     $userData['organization_name'] = $request->organization_name;
-                } else if (isset($request->organization_type)) {
+                }
+
+                if (isset($request->organization_type)) {
                     $userData['organization_type'] = $request->organization_type;
-                } else if (isset($request->job_title)) {
+                }
+
+                if (isset($request->job_title)) {
                     $userData['job_title'] = $request->job_title;
                 }
 

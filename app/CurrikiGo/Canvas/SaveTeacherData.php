@@ -5,6 +5,7 @@ namespace App\CurrikiGo\Canvas;
 use App\CurrikiGo\Canvas\Commands\GetCourseDetailsCommand;
 use App\CurrikiGo\Canvas\Commands\GetUserCommand;
 use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 
 /**
  * SaveTeacherData class for saving Teacher's data who publishing course/assignment to Canvas LMS
@@ -32,10 +33,11 @@ class SaveTeacherData
      * Pull Course detail and teacher data from Canvas LMS
      *
      * @param array $data
-     * @param \App\Repositories\GoogleClassroom\GoogleClassroomRepository
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @param UserRepositoryInterface $userRepository
      * @return array
      */
-    public function saveData($data, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    public function saveData($data, GoogleClassroomRepositoryInterface $googleClassroomRepository, UserRepositoryInterface $userRepository)
     {
         $courseData = $this->canvasClient->run(new GetCourseDetailsCommand($data->courseId, '?include[]=teachers'));
 
@@ -44,9 +46,13 @@ class SaveTeacherData
             foreach ($courseData->teachers as $teacher) {
                 $record = $this->canvasClient->run(new GetUserCommand($teacher->id));
                 $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $record->email);
+                $userExists = $userRepository->findByField('email', $record->email);
+                if (!$userExists) {
+                    $userExists = $userRepository->all()[0];
+                }
                 if (!$duplicateRecord) {
                     $teacherInfo = new \stdClass();
-                    $teacherInfo->user_id = 1;
+                    $teacherInfo->user_id = $userExists->id;
                     $teacherInfo->id = $data->courseId;
                     $teacherInfo->name = $courseData->name;
                     $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;

@@ -44,7 +44,7 @@ class GetCourseDetailsCommand implements Command
      * Creates an instance of the command class
      *
      * @param int $courseId
-     * @param array $queryString
+     * @param string $queryString
      * @return void
      */
     public function __construct($courseId, $queryString = '')

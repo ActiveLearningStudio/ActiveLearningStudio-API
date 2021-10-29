@@ -54,6 +54,7 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
                                         'Quiz'
                                         ]
                                     )
+                            ->orderBy('order', 'ASC')
                             ->get();
     }
 
