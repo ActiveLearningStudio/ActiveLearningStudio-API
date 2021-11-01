@@ -512,4 +512,64 @@ class GoogleClassroomController extends Controller
             'organization' => new H5pOrganizationResource($activity->playlist->project->organization),
         ], 200);
     }
+
+    /**
+     * Get Courses Topics
+     *
+     * Get existing Google Classroom Course Topics
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function getCourseTopics(Request $request)
+    {
+        try {
+            $accessToken = (isset($request['access_token']) && !empty($request['access_token']) ? $request['access_token'] : null);
+            $service = new GoogleClassroom($accessToken);
+            $params = array(
+                'pageSize' => 100,
+                'course_id' => $request->course_id
+            );
+            return response([
+                'topics' => $service->getTopics($params)
+            ], 200);
+        } catch (Exception $e) {
+            return response([
+                'errors' => [$e->getMessage()],
+            ], 500);
+        }
+    }
+
+
+    /**
+     *
+     */
+    public function publishPlaylistToGoogleClassroom()
+    {
+        try {
+            $data = $copyProjectRequest->validated();
+            $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
+            $courseId = $data['course_id'] ?? 0;
+            $service = new GoogleClassroom($accessToken);
+            $service->setGcClassworkObject($gcClassworkRepository);
+            $course = $service->createProjectAsCourse($project, $courseId, $googleClassroomRepository);
+
+            return response([
+                'course' => $course,
+            ], 200);
+        } catch (\Google_Service_Exception $ex) {
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
+        }
+
+    }
+
+    /**
+     *
+     */
+    public function publishActivityToGoogleClassroom()
+    {
+
+    }
 }

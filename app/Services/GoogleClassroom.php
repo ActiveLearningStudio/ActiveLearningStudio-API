@@ -215,14 +215,14 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param int $courseId The id of the course
      * @return array
      */
-    public function getTopics($courseId)
+    public function getTopics($data)
     {
         $pageToken = NULL;
         $topics = array();
 
         do {
             $params['pageToken'] = $pageToken;
-            $response = $this->service->courses_topics->listCoursesTopics($courseId, $params);
+            $response = $this->service->courses_topics->listCoursesTopics($data['course_id'], $params);
             $topics = array_merge($topics, $response->getTopic());
             $pageToken = $response->nextPageToken;
         } while (!empty($pageToken));
