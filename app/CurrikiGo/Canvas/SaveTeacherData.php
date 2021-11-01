@@ -48,7 +48,7 @@ class SaveTeacherData
                 $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $record->email);
                 $userExists = $userRepository->findByField('email', $record->email);
                 if (!$userExists) {
-                    $userExists = $userRepository->all()[0];
+                    $userExists = $userRepository->getFirstUser();
                 }
                 if (!$duplicateRecord) {
                     $teacherInfo = new \stdClass();
