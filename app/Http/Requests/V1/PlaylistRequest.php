@@ -25,7 +25,7 @@ class PlaylistRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'order' => 'integer',
+            'order' => 'integer|max:2147483647',
         ];
     }
 }

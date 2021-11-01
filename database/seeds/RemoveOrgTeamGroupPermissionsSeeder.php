@@ -111,7 +111,7 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                         WHERE name IN (
                                    'team:edit',
                                    'team:delete'
-                            )")
+                            )");
 
         });
 

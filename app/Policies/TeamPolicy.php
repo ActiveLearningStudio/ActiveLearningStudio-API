@@ -51,12 +51,12 @@ class TeamPolicy
      * Determine whether the user can update the team.
      *
      * @param User $user
-     * @param Team $team
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function update(User $user, Team $team)
+    public function update(User $user, Organization $suborganization)
     {
-        return $user->hasTeamPermissionTo('team:edit', $team);
+        return $user->hasPermissionTo('team:edit', $suborganization);
     }
 
     /**
@@ -87,12 +87,12 @@ class TeamPolicy
      * Determine whether the user can delete the team.
      *
      * @param User $user
-     * @param Team $team
+     * @param Organization $suborganization
      * @return mixed
      */
-    public function delete(User $user,  Team $team)
+    public function delete(User $user,  Organization $suborganization)
     {
-        return $user->hasTeamPermissionTo('team:delete', $team);
+        return $user->hasPermissionTo('team:delete', $suborganization);
     }
 
     /**

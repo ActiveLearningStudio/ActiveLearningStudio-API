@@ -207,4 +207,13 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return array
      */
     public function getChildrenOrganizationUserIds($organization);
+
+    /**
+     * Duplicate role for particular organization
+     *
+     * @param Organization $organization
+     * @param string $roleName
+     * @return Model
+     */
+    public function duplicateRole($organization, $roleName);
 }
