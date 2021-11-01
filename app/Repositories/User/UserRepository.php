@@ -181,7 +181,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         return $this->query->paginate($perPage)->appends(request()->query());
     }
-    
+
     /**
      * To get exported project list of last 10 days
      * @param $days_limit
@@ -189,15 +189,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getUsersExportProjectList($days_limit)
     {
-        $date = Carbon::now()->subDays($days_limit); 
+        $date = Carbon::now()->subDays($days_limit);
 
         $user_export_notifications = auth()->user()->notifications()
                                                         ->where('type', 'App\Notifications\ProjectExportNotification')
                                                         ->where('created_at', '>=', $date)->get();
-        
+
         $return_exported_list = [];
         foreach ($user_export_notifications as $exported_project) {
-            
+
             if(!isset($exported_project->data['file_name'])) continue; // skip if file_name param not exist in table
 
             if(!file_exists(storage_path('app/public/exports/' . $exported_project->data['file_name']))) continue; // skip if file not exist in directory
@@ -211,7 +211,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             $return_project['link'] = isset($exported_project->data['link']) ? $exported_project->data['link'] : "";
             array_push($return_exported_list, $return_project);
         }
-        
+
         return $return_exported_list;
+    }
+
+    public function getFirstUser()
+    {
+        return $this->model->orderBy('id', 'asc')->first();
     }
 }
