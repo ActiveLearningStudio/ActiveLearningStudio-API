@@ -31,7 +31,7 @@ class UpdateActivityItem extends FormRequest
         return [
             'title' => 'string|max:255',
             'description' => 'string',
-            'order' => 'integer',
+            'order' => 'integer|max:2147483647',
             'activity_type_id' => 'required|integer|exists:activity_types,id',
             'type' => 'sometimes',
             'h5pLib' => 'sometimes',

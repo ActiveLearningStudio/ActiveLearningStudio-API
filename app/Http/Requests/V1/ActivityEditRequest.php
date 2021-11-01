@@ -28,7 +28,7 @@ class ActivityEditRequest extends FormRequest
             'type' => 'required|string|max:255',
             'content' => 'required|string|max:255',
             'data' => 'required',
-            'order' => 'integer',
+            'order' => 'integer|max:2147483647',
             'shared' => 'boolean',
             'h5p_content_id' => 'integer',
             'thumb_url' => 'string',

@@ -32,8 +32,8 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                                     name LIKE 'team:%'
                                     AND name NOT IN (
                                         'team:view',
-                                        'team:edit',
                                         'team:create',
+                                        'team:edit',
                                         'team:delete'
                                     )
                             )");
@@ -44,8 +44,8 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                             name LIKE 'team:%'
                             AND name NOT IN (
                                 'team:view',
-                                'team:edit',
                                 'team:create',
+                                'team:edit',
                                 'team:delete'
                             )");
 
@@ -68,8 +68,8 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                                     name LIKE 'group:%'
                                     AND name NOT IN (
                                         'group:view',
-                                        'group:edit',
                                         'group:create',
+                                        'group:edit',
                                         'group:delete'
                                     )
                             )");
@@ -80,9 +80,37 @@ class RemoveOrgTeamGroupPermissionsSeeder extends Seeder
                             name LIKE 'group:%'
                             AND name NOT IN (
                                 'group:view',
-                                'group:edit',
                                 'group:create',
+                                'group:edit',
                                 'group:delete'
+                            )");
+
+            // Delete extra team permissions from teams permissions.
+            DB::delete("DELETE FROM
+                            team_role_permissions
+                        WHERE
+                            team_role_type_id IN (
+                                SELECT
+                                    id
+                                FROM
+                                    organization_role_types
+                            )
+                            AND team_permission_type_id IN (
+                                SELECT
+                                    id
+                                FROM
+                                    team_permission_types
+                                WHERE name IN (
+                                        'team:edit',
+                                        'team:delete'
+                                    )
+                            )");
+
+            DB::delete("DELETE FROM
+                            team_permission_types
+                        WHERE name IN (
+                                   'team:edit',
+                                   'team:delete'
                             )");
 
         });
