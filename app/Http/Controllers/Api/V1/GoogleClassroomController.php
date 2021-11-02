@@ -8,6 +8,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GCCopyProjectRequest;
+use App\Http\Requests\V1\GCPublishPlaylistRequest;
 use App\Http\Requests\V1\GCSaveAccessTokenRequest;
 use App\Http\Requests\V1\GCTurnInRequest;
 use App\Http\Requests\V1\GCSummaryPageAccessRequest;
@@ -543,6 +544,7 @@ class GoogleClassroomController extends Controller
 
 
     /**
+     * To Publish playlist To Google Classroom
      * @param Project $project
      * @param Playlist $playlist
      * @param GCCopyProjectRequest $copyProjectRequest
@@ -552,11 +554,11 @@ class GoogleClassroomController extends Controller
      * @throws \Exception
      */
     public function publishPlaylistToGoogleClassroom(Project $project, Playlist $playlist,
-        GCCopyProjectRequest $copyProjectRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
+        GCPublishPlaylistRequest $publishPlaylistRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
         GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         try {
-            $data = $copyProjectRequest->validated();
+            $data = $publishPlaylistRequest->validated();
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
             $topicId = $data['topic_id'] ?? 0;
