@@ -547,7 +547,7 @@ class GoogleClassroomController extends Controller
      * To Publish playlist To Google Classroom
      * @param Project $project
      * @param Playlist $playlist
-     * @param GCCopyProjectRequest $copyProjectRequest
+     * @param GCPublishPlaylistRequest $publishPlaylistRequest
      * @bodyParam string access_token (The stringified of the GAPI access token JSON object)
      * @bodyParam string course_id (The Google Classroom course id)
      * @bodyParam string topic_id (The Google Classroom topic id)
@@ -578,14 +578,6 @@ class GoogleClassroomController extends Controller
                 'errors' => [$ex->getMessage()],
             ], 500);
         }
-
-    }
-
-    /**
-     *
-     */
-    public function publishActivityToGoogleClassroom()
-    {
 
     }
 }

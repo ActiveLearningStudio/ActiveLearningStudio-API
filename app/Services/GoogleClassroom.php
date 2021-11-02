@@ -214,6 +214,7 @@ class GoogleClassroom implements GoogleClassroomInterface
      * Get Topics by course id
      *
      * @param int $courseId The id of the course
+     * @param array $data
      * @return array
      */
     public function getTopics($courseId, $data = [])
