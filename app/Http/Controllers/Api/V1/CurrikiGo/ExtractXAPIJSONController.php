@@ -153,6 +153,8 @@ class ExtractXAPIJSONController extends Controller
                     if (empty($glassAltCourseId)) {
                         $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_NAME);
                         $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
+                        // CANVAS: Need to make this alt course id URL unique; appending class id to the domain URL
+                        $glassAltCourseId .= '/' . $groupingInfo['class'];
                         $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_CODE);
                     }
 
