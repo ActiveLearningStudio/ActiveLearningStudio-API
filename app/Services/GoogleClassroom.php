@@ -383,14 +383,14 @@ class GoogleClassroom implements GoogleClassroomInterface
      *
      * @param Project $project
      * @param Playlist $playlist
-     * @param int|null $courseId
-     * @param int|null $topic_id
+     * @param string|null $courseId
+     * @param string|null $topicId
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
      * @return array
      * @throws GeneralException
      */
     public function publishPlaylistAsTopic(Project $project, Playlist $playlist, $courseId = null,
-        $topic_id = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+        $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         if (!$this->gc_classwork) {
             throw new GeneralException("GcClasswork repository object is required");
@@ -422,7 +422,7 @@ class GoogleClassroom implements GoogleClassroomInterface
 
         // Existing topics that the course has.
         $existingTopics = $this->getTopics($course->id);
-        if ($topic_id) {
+        if ($topicId) {
             $topic = $this->getOrCreateTopic($courseId);
         } else {
             // Check for duplicate topic here..
