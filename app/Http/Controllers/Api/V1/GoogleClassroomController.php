@@ -8,6 +8,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GCCopyProjectRequest;
+use App\Http\Requests\V1\GCPublishPlaylistRequest;
 use App\Http\Requests\V1\GCSaveAccessTokenRequest;
 use App\Http\Requests\V1\GCTurnInRequest;
 use App\Http\Requests\V1\GCSummaryPageAccessRequest;
@@ -17,6 +18,7 @@ use App\Http\Resources\V1\GCCourseResource;
 use App\Http\Resources\V1\GCStudentResource;
 use App\Http\Resources\V1\GCTeacherResource;
 use App\Http\Resources\V1\GCSubmissionResource;
+use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
 use App\Models\GcClasswork;
@@ -511,5 +513,71 @@ class GoogleClassroomController extends Controller
             'playlist' => new PlaylistResource($activity->playlist),
             'organization' => new H5pOrganizationResource($activity->playlist->project->organization),
         ], 200);
+    }
+
+    /**
+     * Get Courses Topics
+     *
+     * Get existing Google Classroom Course Topics
+     *
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     */
+    public function getCourseTopics(Request $request)
+    {
+        try {
+            $accessToken = (isset($request['access_token']) && !empty($request['access_token']) ? $request['access_token'] : null);
+            $service = new GoogleClassroom($accessToken);
+            $params = array(
+                'pageSize' => 100,
+            );
+            return response([
+                'topics' => $service->getTopics($request->course_id, $params)
+            ], 200);
+        } catch (Exception $e) {
+            return response([
+                'errors' => [$e->getMessage()],
+            ], 500);
+        }
+    }
+
+
+    /**
+     * To Publish playlist To Google Classroom
+     * @param Project $project
+     * @param Playlist $playlist
+     * @param GCPublishPlaylistRequest $publishPlaylistRequest
+     * @bodyParam string access_token (The stringified of the GAPI access token JSON object)
+     * @bodyParam string course_id (The Google Classroom course id)
+     * @bodyParam string topic_id (The Google Classroom topic id)
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @return Response
+     * @throws \Exception
+     */
+    public function publishPlaylistToGoogleClassroom(Project $project, Playlist $playlist,
+        GCPublishPlaylistRequest $publishPlaylistRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
+        GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    {
+        try {
+            $data = $publishPlaylistRequest->validated();
+            $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
+            $courseId = $data['course_id'] ?? 0;
+            $topicId = $data['topic_id'] ?? 0;
+
+            $service = new GoogleClassroom($accessToken);
+            $service->setGcClassworkObject($gcClassworkRepository);
+            $publish_playlist = $service->publishPlaylistAsTopic($project, $playlist, $courseId, $topicId, $googleClassroomRepository);
+
+            return response([
+                'playlist' => $publish_playlist,
+            ], 200);
+        } catch (\Google_Service_Exception $ex) {
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
+        }
+
     }
 }

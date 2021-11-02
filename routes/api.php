@@ -237,6 +237,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::post('access-token', 'GoogleClassroomController@saveAccessToken');
             Route::get('courses', 'GoogleClassroomController@getCourses');
             Route::post('projects/{project}/copy', 'GoogleClassroomController@copyProject');
+            Route::get('topics', 'GoogleClassroomController@getCourseTopics');
+            Route::post('projects/{project}/playlists/{playlist}/publish',
+                'GoogleClassroomController@publishPlaylistToGoogleClassroom');
+            Route::post('projects/{project}/playlists/{playlist}/activities/{activity}/publish',
+                'GoogleClassroomController@publishActivityToGoogleClassroom');
         });
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
