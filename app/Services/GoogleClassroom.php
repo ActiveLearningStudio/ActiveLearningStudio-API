@@ -11,6 +11,7 @@ use App\Http\Resources\V1\GCCourseWorkResource;
 use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Exceptions\GeneralException;
 use App\Models\Project;
+use App\Models\Playlist;
 use Illuminate\Http\Request;
 use DB;
 /**
@@ -215,14 +216,14 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param int $courseId The id of the course
      * @return array
      */
-    public function getTopics($data)
+    public function getTopics($courseId, $data = [])
     {
         $pageToken = NULL;
         $topics = array();
 
         do {
             $params['pageToken'] = $pageToken;
-            $response = $this->service->courses_topics->listCoursesTopics($data['course_id'], $params);
+            $response = $this->service->courses_topics->listCoursesTopics($courseId, $params);
             $topics = array_merge($topics, $response->getTopic());
             $pageToken = $response->nextPageToken;
         } while (!empty($pageToken));
@@ -372,6 +373,127 @@ class GoogleClassroom implements GoogleClassroomInterface
             $count++;
         }
 
+        return $return;
+    }
+
+    /**
+     * Get whole Playlist as a course in Google Classroom
+     * It will create playlists as topics, and activities as assignments.
+     * If a course already exists, then playlists and activities will be created in that.
+     *
+     * @param Project $project
+     * @param Playlist $playlist
+     * @param int|null $courseId
+     * @param int|null $topic_id
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @return array
+     * @throws GeneralException
+     */
+    public function publishPlaylistAsTopic(Project $project, Playlist $playlist, $courseId = null,
+        $topic_id = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    {
+        if (!$this->gc_classwork) {
+            throw new GeneralException("GcClasswork repository object is required");
+        }
+        $frontURL = $this->getFrontURL();
+        // If course already exists
+        $course = NULL;
+        if ($courseId) {
+            $course = $this->getCourse($courseId);
+        } else {
+            $courseData = [
+                'name' => $project->name,
+                'descriptionHeading' => $project->description,
+                'description' => $project->description,
+                'room' => '1', // optional
+                'ownerId' => 'me',
+                'courseState' => self::COURSE_CREATE_STATE
+            ];
+            $course = $this->createCourse($courseData);
+        }
+
+        //Storing publisher data
+        $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
+        $return = GCCourseResource::make($course)->resolve();
+
+        // inserting playlists/topics to Classroom
+        $count = 0;
+        $return['topics'] = [];
+
+        // Existing topics that the course has.
+        $existingTopics = $this->getTopics($course->id);
+        if ($topic_id) {
+            $topic = $this->getOrCreateTopic($courseId);
+        } else {
+            // Check for duplicate topic here..
+            $topic = null;
+            if (!empty($existingTopics)) {
+                // Find a duplicate..
+                foreach ($existingTopics as $oneTopic) {
+                    if ($oneTopic->name === $playlist->title) {
+                        $topic = $oneTopic;
+                        break;
+                    }
+                }
+            }
+            if (!$topic) {
+                $topicData = [
+                    'courseId' => $course->id,
+                    'name' => $playlist->title
+                ];
+                $topic = $this->createTopic($topicData);
+                // Pushing to existing topics
+                $existingTopics[] = $topic;
+            }
+        }
+
+        $return['topics'][$count] = GCTopicResource::make($topic)->resolve();
+
+        // Iterate over activities
+        $activities = $playlist->activities;
+        foreach ($activities as $activity) {
+            if (empty($activity->title)) {
+                continue;
+            }
+            $activity->shared = true;
+            $activity->save();
+
+            // Make an assignment URL with context of
+            // classroom id, user id (teacher), and the h5p activity id
+            $userId = auth()->user()->id;
+            $activityLink = '/gclass/launch/' . $userId . '/' . $course->id . '/' . $activity->id;
+
+            // We need to save the classwork id in the database, and also need to retrieve it later.
+            // So we make a dummy insertion in the database, and append the id in the link.
+            // We have to do this way because, we cannot update the 'Materials' link for classwork
+            $classworkItem = $this->gc_classwork->create([
+                'classwork_id' => uniqid(),
+                'path' => $activityLink,
+                'course_id' => $course->id
+            ]);
+
+            if ($classworkItem) {
+                // Now, we append the activity link with our database id.
+                $activityLink .= '/' . $classworkItem->id;
+
+                $courseWorkData = [
+                    'course_id' => $course->id,
+                    'topic_id' => $topic->topicId,
+                    'activity_id' => $activity->id,
+                    'activity_title' => $activity->title,
+                    'activity_link' => $frontURL . $activityLink
+                ];
+                $courseWork = $this->createCourseWork($courseWorkData);
+
+                // Once coursework id is generated, we'll update that in our database.
+                $this->gc_classwork->update([
+                    'classwork_id' => $courseWork->id,
+                    'path' => $activityLink
+                ], $classworkItem->id);
+
+                $return['topics'][$count]['course_work'][] = GCCourseWorkResource::make($courseWork)->resolve();
+            }
+        }
         return $return;
     }
 
