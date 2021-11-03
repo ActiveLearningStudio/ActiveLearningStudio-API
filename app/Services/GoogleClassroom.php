@@ -509,7 +509,7 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @return array
      * @throws GeneralException
      */
-    public function publishActivityAsAssignment(Project $project, Playlist $playlist, $courseId = null,
+    public function publishActivityAsAssignment(Project $project, Playlist $playlist, Activity $activity, $courseId = null,
         $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         if (!$this->gc_classwork) {
