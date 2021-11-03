@@ -1,7 +1,12 @@
 <?php
 
 namespace App\Services;
+
+use App\Models\Project;
+use App\Models\Playlist;
+use App\Models\Activity;
 use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 
 /**
  * Interface for Google Classroom service
@@ -118,9 +123,20 @@ interface GoogleClassroomInterface
      * Get Topics by course id
      * 
      * @param int $courseId The id of the course
+     * @param array $params
      * @return array
      */
-    public function getTopics($courseId);
+    public function getTopics($courseId, $params = []);
+
+    /**
+     * Get Topic by id
+     *
+     * @param string $courseId The id of the course
+     * @param string $id The id of the topic
+     * @param array $params
+     * @return array
+     */
+    public function getTopicById($courseId, $id, $params = []);
 
     /**
      * Get or Create a topic in a course.
@@ -129,6 +145,52 @@ interface GoogleClassroomInterface
      * @return \Google_Service_Classroom_Topic
      */
     public function getOrCreateTopic($data);
+
+    /**
+     * Get whole project as a course in Google Classroom
+     * It will create playlists as topics, and activities as assignments.
+     * If a course already exists, then playlists and activities will be created in that.
+     *
+     * @param Project $project
+     * @param int|null $courseId The id of the course
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @return array
+     * @throws GeneralException
+     */
+    public function createProjectAsCourse(Project $project, $courseId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository);
+    
+    /**
+     * Get whole Playlist as a topic in Google Classroom
+     * It will create playlist as the topic, and activities as assignments.
+     * If a course and/or topic already exist, then the playlist and activities will be created in that.
+     *
+     * @param Project $project
+     * @param Playlist $playlist
+     * @param string|null $courseId
+     * @param string|null $topicId
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @return array
+     * @throws GeneralException
+     */
+    public function publishPlaylistAsTopic(Project $project, Playlist $playlist, $courseId = null,
+        $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository);
+
+    /**
+     * Get Activity as an assignment in Google Classroom
+     * It will create activity as an assignment.
+     * If a course and/or topic already exist, then the activity will be created in that.
+     *
+     * @param Project $project
+     * @param Playlist $playlist
+     * @param Activity $activity
+     * @param string|null $courseId
+     * @param string|null $topicId
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @return array
+     * @throws GeneralException
+     */
+    public function publishActivityAsAssignment(Project $project, Playlist $playlist, Activity $activity, $courseId = null,
+        $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository);
 
     /**
      * Check if student is enrolled in a class
