@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GCCopyProjectRequest;
 use App\Http\Requests\V1\GCPublishPlaylistRequest;
+use App\Http\Requests\V1\GCPublishActivityRequest;
 use App\Http\Requests\V1\GCSaveAccessTokenRequest;
 use App\Http\Requests\V1\GCTurnInRequest;
 use App\Http\Requests\V1\GCSummaryPageAccessRequest;
@@ -479,7 +480,6 @@ class GoogleClassroomController extends Controller
     /**
      * Get H5P Resource Settings For Google Classroom
      *
-     *
      * @urlParam activity required The Id of a activity
      *
      * @responseFile responses/h5p/h5p-resource-settings-open.json
@@ -545,14 +545,31 @@ class GoogleClassroomController extends Controller
 
     /**
      * To Publish playlist To Google Classroom
+     * 
+     * @urlParam project required The Id of a project. Example: 9
+     * @urlParam playlist required The Id of a playlist. Example: 10
+     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
+     * @bodyParam string course_id (The Google Classroom course id)
+     * @bodyParam string topic_id (The Google Classroom topic id)
      * @param Project $project
      * @param Playlist $playlist
      * @param GCPublishPlaylistRequest $publishPlaylistRequest
-     * @bodyParam string access_token (The stringified of the GAPI access token JSON object)
-     * @bodyParam string course_id (The Google Classroom course id)
-     * @bodyParam string topic_id (The Google Classroom topic id)
      * @param GcClassworkRepositoryInterface $gcClassworkRepository
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * 
+     * @responseFile responses/google-classroom/google-classroom-publish-playlist.json
+     *
+     * @response  403 {
+     *   "errors": [
+     *     "Forbidden. You are trying to share other user's project."
+     *   ]
+     * }
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "Failed to copy playlist."
+     *   ]
+     * }
      * @return Response
      * @throws \Exception
      */
@@ -560,6 +577,13 @@ class GoogleClassroomController extends Controller
         GCPublishPlaylistRequest $publishPlaylistRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
         GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
+        $authUser = auth()->user();
+        if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {
+            return response([
+                'errors' => ['Forbidden. You are trying to share other user\'s project.'],
+            ], 403);
+        }
+
         try {
             $data = $publishPlaylistRequest->validated();
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
@@ -568,10 +592,74 @@ class GoogleClassroomController extends Controller
 
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $publish_playlist = $service->publishPlaylistAsTopic($project, $playlist, $courseId, $topicId, $googleClassroomRepository);
+            $publishedPlaylist = $service->publishPlaylistAsTopic($project, $playlist, $courseId, $topicId, $googleClassroomRepository);
 
             return response([
-                'playlist' => $publish_playlist,
+                'course' => $publishedPlaylist,
+            ], 200);
+        } catch (\Google_Service_Exception $ex) {
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
+        }
+
+    }
+
+    /**
+     * To Publish activity To Google Classroom under a specific topic
+     * 
+     * @urlParam project required The Id of a project. Example: 9
+     * @urlParam playlist required The Id of a playlist. Example: 10
+     * @urlParam activity required The Id of a activity. Example: 11
+     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
+     * @bodyParam string course_id (The Google Classroom course id)
+     * @bodyParam string topic_id (The Google Classroom topic id)
+     * @param Project $project
+     * @param Playlist $playlist
+     * @param Activity $activity
+     * @param GCPublishActivityRequest $publishActivityRequest
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * 
+     * @responseFile responses/google-classroom/google-classroom-publish-activity.json
+     *
+     * @response  403 {
+     *   "errors": [
+     *     "Forbidden. You are trying to share other user's project."
+     *   ]
+     * }
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "Failed to copy playlist."
+     *   ]
+     * }
+     * @return Response
+     * @throws \Exception
+     */
+    public function publishActivityToGoogleClassroom(Project $project, Playlist $playlist, Activity $activity,
+        GCPublishActivityRequest $publishActivityRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
+        GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    {
+        $authUser = auth()->user();
+        if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {
+            return response([
+                'errors' => ['Forbidden. You are trying to share other user\'s project.'],
+            ], 403);
+        }
+
+        try {
+            $data = $publishActivityRequest->validated();
+            $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
+            $courseId = $data['course_id'] ?? 0;
+            $topicId = $data['topic_id'] ?? 0;
+
+            $service = new GoogleClassroom($accessToken);
+            $service->setGcClassworkObject($gcClassworkRepository);
+            $publishedActivity = $service->publishActivityAsAssignment($project, $playlist, $activity, $courseId, $topicId, $googleClassroomRepository);
+
+            return response([
+                'course' => $publishedActivity,
             ], 200);
         } catch (\Google_Service_Exception $ex) {
             return response([

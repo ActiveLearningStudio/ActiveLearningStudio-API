@@ -45,25 +45,6 @@
                             }
                         ],
                         "max_points": 100
-                    },
-                    {
-                        "id": "422474036071",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Dialog Cards",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http://localhost:3000/gclass/launch/3/422473650924/39452/7064"
-                                }
-                            }
-                        ],
-                        "max_points": 100
                     }
                 ]
             }
