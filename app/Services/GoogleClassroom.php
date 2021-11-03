@@ -12,6 +12,7 @@ use App\Repositories\GcClasswork\GcClassworkRepositoryInterface;
 use App\Exceptions\GeneralException;
 use App\Models\Project;
 use App\Models\Playlist;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use DB;
 /**
