@@ -184,35 +184,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * To get exported project list of last 10 days
-     * @param $days_limit
-     * @return array
+     * @param $data
+     * @return mixed
      */
-    public function getUsersExportProjectList($days_limit)
+    public function getUsersExportProjectList($data)
     {
+        $days_limit = isset($data['days_limit']) ? $data['days_limit'] : config('default-exported-projects-days-limit');
         $date = Carbon::now()->subDays($days_limit);
 
-        $user_export_notifications = auth()->user()->notifications()
-                                                        ->where('type', 'App\Notifications\ProjectExportNotification')
-                                                        ->where('created_at', '>=', $date)->get();
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        $return_exported_list = [];
-        foreach ($user_export_notifications as $exported_project) {
-
-            if(!isset($exported_project->data['file_name'])) continue; // skip if file_name param not exist in table
-
-            if(!file_exists(storage_path('app/public/exports/' . $exported_project->data['file_name']))) continue; // skip if file not exist in directory
-
-            $return_project = [];
-            $return_project['project'] = isset($exported_project->data['project']) ? $exported_project->data['project'] : "" ;
-            $return_project['created_at'] = Carbon::parse($exported_project->created_at)
-                                                                                    ->format(config('constants.default-date-format'));
-            $return_project['will_expire_on'] = Carbon::parse($exported_project->created_at)->addDays(config('constants.default-exported-projects-days-limit'))
-                                                                                    ->format(config('constants.default-date-format'));
-            $return_project['link'] = isset($exported_project->data['link']) ? $exported_project->data['link'] : "";
-            array_push($return_exported_list, $return_project);
-        }
-
-        return $return_exported_list;
+        return auth()->user()->notifications()
+                                ->where('type', 'App\Notifications\ProjectExportNotification')
+                                ->where('created_at', '>=', $date)->paginate($perPage)->appends(request()->query());
     }
 
     public function getFirstUser()
