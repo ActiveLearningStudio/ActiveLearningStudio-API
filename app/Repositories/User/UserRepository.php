@@ -189,11 +189,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function getUsersExportProjectList($data)
     {
-        $days_limit = isset($data['days_limit']) ? $data['days_limit'] : config('default-exported-projects-days-limit');
+        $days_limit = isset($data['days_limit']) ? $data['days_limit'] : config('constants.default-exported-projects-days-limit');
+        
         $date = Carbon::now()->subDays($days_limit);
 
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-
+        
         return auth()->user()->notifications()
                                 ->where('type', 'App\Notifications\ProjectExportNotification')
                                 ->where('created_at', '>=', $date)->paginate($perPage)->appends(request()->query());
