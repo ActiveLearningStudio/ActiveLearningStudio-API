@@ -123,6 +123,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('playlists.activities', 'ActivityController');
 
         Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
+        Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
