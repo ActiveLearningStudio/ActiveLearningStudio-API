@@ -19,7 +19,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Resources\V1\NotificationListResource;
+use App\Http\Resources\V1\ExportedProjectsResource;
 use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
@@ -691,8 +691,9 @@ class UserController extends Controller
      * Get All User Export list
      *
      * Get a list of the users exported project
-     *
-     * * @queryParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     *  
+     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @queryParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
      * 
      * @responseFile responses/notifications/export-notifications.json
      *
@@ -702,13 +703,7 @@ class UserController extends Controller
     public function exportProjectList(Request $request)
     {
         
-        $days_limit = config('constants.default-exported-projects-days-limit');
-        if ($request->has('days_limit')) 
-            $days_limit = $request->input('days_limit');
-         
-        return response([
-            'exports' =>$this->userRepository->getUsersExportProjectList($days_limit),
-        ], 200);
+        return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all()), 200);
     }
 
 }
