@@ -368,6 +368,10 @@ class AuthController extends Controller
                     }
                 }
             } else {
+                if (isset($request->organization_name) || isset($request->organization_type) || isset($request->job_title)) {
+                    return response()->error(['Email already registered.', 400]);
+                }
+
                 $domainOrganization = $this->organizationRepository->findByField('domain', $request->domain);
                 $organization = $user->organizations()->where('domain', $request->domain)->first();
 
