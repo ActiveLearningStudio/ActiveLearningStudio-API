@@ -594,7 +594,7 @@ class ProjectController extends Controller
         // pushed cloning of project in background
         CloneProject::dispatch($user, $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
-            'message' =>  "Your request to $process project [$project->name] has been received and is being processed. 
+            'message' =>  "Your request to $process project [$project->name] has been received and is being processed.<br> 
                             Check notifications at the top page, A new message will be delivered when it is ready.",
         ], 200);
     }
@@ -784,7 +784,7 @@ class ProjectController extends Controller
         ExportProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to export project [$project->name] has been received and is being processed. 
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed. <br>
                             Check notifications at the top page, A new message will be delivered when it is ready.",
         ], 200);
     }
@@ -817,7 +817,7 @@ class ProjectController extends Controller
         ImportProject::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to import project has been received and is being processed. 
+            'message' =>  "Your request to import project has been received and is being processed. <br>
                             Check notifications at the top page, A new message will be delivered when it is ready.",
         ], 200);
     }
@@ -846,7 +846,7 @@ class ProjectController extends Controller
         ExportNoovoProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to export project [$project->name] has been received and is being processed.
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed.<br>
             Check notifications at the top page, A new message will be delivered when it is ready.",
         ], 200);
     }
