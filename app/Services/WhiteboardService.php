@@ -11,14 +11,21 @@ use Illuminate\Support\Facades\Http;
  */
 class WhiteboardService implements WhiteboardInterface
 {
+    public $apiURL;
+    public $tokenURL;
+    public $headers;
+    public $response;
+
     /**
-     * Public properties
+     * WhiteboardService constructor.
      */
-    public $apiURL = 'https://curriki-whiteboard-bk.flyerssoft.com';
-    public $tokenURL = 'http://50.116.28.176:8100';
-    public $apiV = '/v1';
-    public $headers = ['Accept' => 'application/json'];
-    public $response = [];
+    public function __construct()
+    {
+        $this->apiURL = config('whiteboard.apiURL');
+        $this->tokenURL = config('whiteboard.tokenURL');
+        $this->headers = ['Accept' => 'application/json'];
+        $this->response = [];
+    }
 
     /**
      * Get Whiteboard URL Service class
@@ -30,7 +37,7 @@ class WhiteboardService implements WhiteboardInterface
     {
         return $this->response = Http::withToken($access_token)
                               ->withHeaders($this->headers)
-                              ->post($this->apiURL . $this->apiV . '/whiteboardUrl/getWhiteboardUrl', $params);
+                              ->post($this->apiURL . 'whiteboardUrl/getWhiteboardUrl', $params);
 
         throw_if($this->response->failed() || $this->response->serverError(), new GeneralException('Unauthorized'));
     }
@@ -45,7 +52,7 @@ class WhiteboardService implements WhiteboardInterface
         $params['secretKey'] = config('whiteboard.secretKey');
 
         $this->response = Http::withHeaders($this->headers)
-                              ->post($this->tokenURL . $this->apiV . '/client/get_token', $params);
+                              ->post($this->tokenURL . 'client/get_token', $params);
 
         throw_if($this->response->failed()
                 || $this->response->serverError(),
