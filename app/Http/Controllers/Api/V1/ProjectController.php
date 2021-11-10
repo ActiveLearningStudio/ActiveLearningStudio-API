@@ -595,7 +595,7 @@ class ProjectController extends Controller
         CloneProject::dispatch($user, $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
             'message' =>  "Your request to $process project [$project->name] has been received and is being processed.<br> 
-                            Check notifications at the top page, A new message will be delivered when it is ready.",
+                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -785,7 +785,7 @@ class ProjectController extends Controller
 
         return response([
             'message' =>  "Your request to export project [$project->name] has been received and is being processed. <br>
-                            Check notifications at the top page, A new message will be delivered when it is ready.",
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -818,7 +818,7 @@ class ProjectController extends Controller
 
         return response([
             'message' =>  "Your request to import project has been received and is being processed. <br>
-                            Check notifications at the top page, A new message will be delivered when it is ready.",
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -847,7 +847,7 @@ class ProjectController extends Controller
 
         return response([
             'message' =>  "Your request to export project [$project->name] has been received and is being processed.<br>
-            Check notifications at the top page, A new message will be delivered when it is ready.",
+                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 }
