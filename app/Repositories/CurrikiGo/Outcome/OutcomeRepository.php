@@ -334,8 +334,8 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                             $result_array = array('title' => ($chapter) ? html_entity_decode($chapter) : 'Summary');
                             foreach ($result as $data) {
                                 $insertData = true;
-                                $title = empty($data->question) ? $data->object_name : $data->question;
-                                $answer = empty($data->answer) ? "Quiz Result" : $data->answer; 
+                                $title = empty(trim($data->question)) ? $data->object_name : $data->question;
+                                $answer = empty(trim($data->answer)) ? "Quiz Result" : $data->answer; 
                             //    if ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
                             //        // $title = $data->object_name;
                             //         $answer = "Quiz Result";
