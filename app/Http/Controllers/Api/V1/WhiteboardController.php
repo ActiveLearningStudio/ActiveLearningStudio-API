@@ -34,9 +34,8 @@ class WhiteboardController extends Controller
      *
      * Get Whiteboard.
      *
-     * @queryParam WhiteboardRequest $request
+     * @param WhiteboardRequest $request
      *
-     * @param Request $request
      * @return mixed
      */
     public function getWhiteboard(WhiteboardRequest $request)
