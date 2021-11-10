@@ -4,6 +4,7 @@
 /public/storage
 
 /storage/*.key
+/storage/whiteboard.json
 /storage/framework/laravel-excel/*
 /vendor
 
