@@ -24,8 +24,8 @@ class GCPublishPlaylistRequest extends FormRequest
     public function rules()
     {
         return [
-            'course_id' => 'string',
-            'topic_id' => 'string'
+            'course_id' => 'string|nullable',
+            'topic_id' => 'string|nullable'
         ];
     }
 }
