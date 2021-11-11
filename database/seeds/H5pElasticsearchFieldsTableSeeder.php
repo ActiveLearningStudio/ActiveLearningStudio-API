@@ -21,7 +21,7 @@ class H5pElasticsearchFieldsTableSeeder extends Seeder
             $h5pElasticsearchFields = $h5pLibraryRepository->getFieldSemantics($h5pLibrary);
 
             if ($h5pElasticsearchFields) {
-                DB::table('h5p_elasticsearch_fields')->insert($h5pElasticsearchFields);
+                DB::table('h5p_elasticsearch_fields')->insertOrIgnore($h5pElasticsearchFields);
             }
         }
     }
