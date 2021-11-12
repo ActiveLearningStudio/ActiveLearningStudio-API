@@ -11,12 +11,12 @@ class OrganizationSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('organizations')->insert([
+        DB::table('organizations')->insertOrIgnore([
             'name' => 'Curriki Studio',
             'description' => 'Curriki Studio, default organization.',
             'domain' => 'currikistudio'
         ]);
 
-        DB::table('projects')->update(['organization_id' => 1, 'organization_visibility_type_id' => 4]);
+        DB::table('projects')->whereNull('organization_id')->update(['organization_id' => 1, 'organization_visibility_type_id' => 4]);
     }
 }

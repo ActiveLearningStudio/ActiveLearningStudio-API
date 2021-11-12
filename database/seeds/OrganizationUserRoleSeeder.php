@@ -20,7 +20,7 @@ class OrganizationUserRoleSeeder extends Seeder
     {
         DB::transaction(function () {
             $organizations = DB::table('organizations')->get();
-            
+
             foreach ($organizations as $organization) {
                 $organizationId = $organization->id;
                 $organizationRoleTypes = DB::table('organization_role_types')->where('organization_id', $organizationId)->get();
@@ -55,7 +55,7 @@ class OrganizationUserRoleSeeder extends Seeder
                                                                 ->get();
 
                         foreach ($otherOrganizationRolePermissions as $otherOrganizationRolePermission) {
-                            DB::table('organization_role_permissions')->insert([
+                            DB::table('organization_role_permissions')->insertOrIgnore([
                                 'organization_role_type_id' => $organizationRoleTypeId,
                                 'organization_permission_type_id' => $otherOrganizationRolePermission->organization_permission_type_id,
                                 'created_at' => 'NOW()',

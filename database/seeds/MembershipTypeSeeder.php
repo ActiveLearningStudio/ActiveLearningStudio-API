@@ -12,7 +12,7 @@ class MembershipTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('membership_types')->insert([
+        DB::table('membership_types')->insertOrIgnore([
             'name' => 'demo',
             'label' => 'Demo',
             'description' => 'Demo account',
@@ -21,7 +21,7 @@ class MembershipTypeSeeder extends Seeder
             'price' => 0
         ]);
 
-        DB::table('membership_types')->insert([
+        DB::table('membership_types')->insertOrIgnore([
             'name' => 'free',
             'label' => 'Free',
             'description' => 'Free account',
@@ -30,7 +30,7 @@ class MembershipTypeSeeder extends Seeder
             'price' => 0
         ]);
 
-        DB::table('membership_types')->insert([
+        DB::table('membership_types')->insertOrIgnore([
             'name' => 'basic',
             'label' => 'Basic',
             'description' => 'Basic account',
