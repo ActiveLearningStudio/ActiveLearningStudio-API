@@ -545,7 +545,8 @@ class ActivityController extends Controller
         $isDuplicate = ($activity->playlist_id == $playlist->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         return response([
-            "message" => "Your request to $process  activity [$activity->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            "message" => "Your request to $process  activity [$activity->title] has been received and is being processed. <br> 
+            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 

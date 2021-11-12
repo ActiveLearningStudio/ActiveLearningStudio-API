@@ -218,7 +218,8 @@ class SuborganizationController extends Controller
         $is_updated = $this->organizationRepository->update($suborganization, $data);
 
         if ($is_updated) {
-            $updated_suborganization = new OrganizationResource($this->organizationRepository->find($suborganization->id));
+            $authenticatedUser = auth()->user();
+            $updated_suborganization = new OrganizationResource($this->organizationRepository->fetchOrganizationData($authenticatedUser, $suborganization));
 
             return response([
                 'suborganization' => $updated_suborganization,

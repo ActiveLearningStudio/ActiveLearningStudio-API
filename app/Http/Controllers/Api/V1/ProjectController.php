@@ -594,7 +594,8 @@ class ProjectController extends Controller
         // pushed cloning of project in background
         CloneProject::dispatch($user, $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
-            'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to $process project [$project->name] has been received and is being processed.<br> 
+                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -783,7 +784,8 @@ class ProjectController extends Controller
         ExportProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to export project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -815,7 +817,8 @@ class ProjectController extends Controller
         ImportProject::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to import project has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to import project has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -843,8 +846,8 @@ class ProjectController extends Controller
         ExportNoovoProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to export project [$project->name] has been received and is being processed.
-            You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed.<br>
+                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 }
