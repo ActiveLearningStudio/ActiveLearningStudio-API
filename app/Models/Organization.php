@@ -26,7 +26,8 @@ class Organization extends Model
         'self_registration',
         'account_id',
         'api_key',
-        'unit_path'
+        'unit_path',
+        'noovo_client_id'
     ];
 
     /**
