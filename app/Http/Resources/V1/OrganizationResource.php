@@ -22,6 +22,7 @@ class OrganizationResource extends JsonResource
             'account_id' => $this->account_id,
             'api_key' => $this->api_key,
             'unit_path' => $this->unit_path,
+            'noovo_client_id' => $this->noovo_client_id,
             'parent' =>  new OrganizationResource($this->whenLoaded('parent')),
             'projects' =>  ProjectResource::collection($this->whenLoaded('projects')),
             'children' =>  OrganizationResource::collection($this->whenLoaded('children')),
