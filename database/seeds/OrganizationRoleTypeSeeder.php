@@ -37,7 +37,10 @@ class OrganizationRoleTypeSeeder extends Seeder
             'display_name' => 'Self Registered'
         ]);
 
-        if ($courseCreator) {
+        $orgUserRoles = DB::table('organization_user_roles')->count();
+        
+        // If there are no user roles associations yet, then we patch user.
+        if ($courseCreator && !$orgUserRoles) {
             $users = DB::table('users')->select('id')->get();
             foreach ($users as $user) {
                 DB::table('organization_user_roles')->insertOrIgnore([
