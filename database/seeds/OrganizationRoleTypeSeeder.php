@@ -11,7 +11,7 @@ class OrganizationRoleTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('organization_role_types')->insert([
+        DB::table('organization_role_types')->insertOrIgnore([
             'name' => 'admin',
             'display_name' => 'Administrator'
         ]);
@@ -21,12 +21,12 @@ class OrganizationRoleTypeSeeder extends Seeder
             'display_name' => 'Course Creator'
         ]);
 
-        DB::table('organization_role_types')->insert([
+        DB::table('organization_role_types')->insertOrIgnore([
             'name' => 'member',
             'display_name' => 'Member'
         ]);
 
-        DB::table('organization_role_types')->insert([
+        DB::table('organization_role_types')->insertOrIgnore([
             'name' => 'self_registered',
             'display_name' => 'Self Registered'
         ]);
@@ -34,7 +34,7 @@ class OrganizationRoleTypeSeeder extends Seeder
         $users = DB::table('users')->select('id')->get();
 
         foreach ($users as $user) {
-            DB::table('organization_user_roles')->insert([
+            DB::table('organization_user_roles')->insertOrIgnore([
                 'organization_id' => 1,
                 'user_id' => $user->id,
                 'organization_role_type_id' => $courseCreatorId

@@ -376,7 +376,8 @@ class PlaylistController extends Controller
         $isDuplicate = ($playlist->project_id == $project->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         return response([
-            "message" =>  "Your request to $process playlist [$playlist->title] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            "message" =>  "Your request to $process playlist [$playlist->title] has been received and is being processed.<br>  
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 

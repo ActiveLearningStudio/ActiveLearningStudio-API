@@ -1,0 +1,53 @@
+{
+    "course": {
+        "id": "422473650924",
+        "name": "Activity Sampler",
+        "topics": [
+            {
+                "course_id": "422473650924",
+                "topic_id": "422474476539",
+                "name": "Questions",
+                "course_work": [
+                    {
+                        "id": "422473053485",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Advanced Fill In the Blank",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http://localhost:3000/gclass/launch/3/422473650924/39449/7062"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    },
+                    {
+                        "id": "422474476548",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Arithmetic Quiz",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http://localhost:3000/gclass/launch/3/422473650924/39450/7063"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    }
+                ]
+            }
+        ]
+    }
+}
