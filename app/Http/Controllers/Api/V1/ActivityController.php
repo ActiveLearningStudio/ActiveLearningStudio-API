@@ -555,7 +555,7 @@ class ActivityController extends Controller
      *
      * @urlParam activity required The Id of a activity Example: 1
      *
-     * @responseFile responses/activity/activity-playlists.json
+     * @responseFile responses/activity/activity-h5p.json
      *
      * @param Activity $activity
      * @return Response

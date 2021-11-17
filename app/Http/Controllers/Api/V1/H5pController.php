@@ -44,6 +44,8 @@ class H5pController extends Controller
      *
      * Get a list of the H5Ps.
      *
+     * @responseFile responses/h5p/h5p-index.json
+     * 
      * @return JsonResponse
      */
     public function index(Request $request)
@@ -72,6 +74,14 @@ class H5pController extends Controller
 
     /**
      * Create H5P Settings
+     *
+     * Retrieve H5P settings which is used to create new H5P content
+     * 
+     * @urlParam machineName required H5P.Dictation 1.0
+     * @urlParam majorVersion required Example 1
+     * @urlParam minorVersion required Example 0
+     * 
+     * @responseFile responses/h5p/h5p-settings.json
      *
      * @param Request $request
      * @return Response
@@ -111,7 +121,23 @@ class H5pController extends Controller
     /**
      * Store H5P
      *
-     * @param Request $request
+     * Create new H5P. It also handle H5P upload
+     * 
+     * @bodyParam action string required Example create or upload
+     * @bodyParam library string required Example H5P.Dictation 1.0
+     * @bodyParam parameters string required Parameters are retrieve from setteings endpoint
+     * 
+     * @response  201 {
+     *  "id": 4,
+     *  "success": "Content created.",
+     *  "title": "The History of the U.S. National Parks",
+     *  "type": "h5p"
+     * }
+     * 
+     * @response 400 {
+     *  "fail": "Content created."
+     * }
+     * 
      * @return Response
      * @throws ValidationException
      */
@@ -199,7 +225,7 @@ class H5pController extends Controller
                 } else {
                     return response([
                         'fail' => trans('laravel-h5p.content.can_not_created')
-                    ], 422);
+                    ], 400);
                 }
             }
 
@@ -227,7 +253,7 @@ class H5pController extends Controller
      *
      * Get the specified H5P
      *
-     * @urlParam id required The Id of a H5p
+     * @urlParam id required int H5P content id Example 1
      *
      * @responseFile responses/h5p/h5p-edit.json
      *
@@ -278,11 +304,13 @@ class H5pController extends Controller
 
     /**
      * Get H5P based on Activity
+     * 
+     * Get H5P based on activity id
      *
-     * @urlParam activity required The Id of a activity Example: 1
-     * @urlParam visibility The status of visibility
+     * @urlParam activity required The Id of a activity Example 1
+     * @urlParam visibility The status of visibility Example public
      *
-     * @responseFile responses/h5p-activity.json
+     * @responseFile responses/h5p/h5p-activity.json
      *
      * @param Activity $activity
      * @param $visibility
@@ -327,7 +355,7 @@ class H5pController extends Controller
      *
      * Update the specified H5P
      *
-     * @urlParam id required The Id of a H5p Example 5
+     * @urlParam id required The H5P content id Example 5
      *
      * @response 200 {
      *   "success": "Content updated.",
@@ -487,7 +515,7 @@ class H5pController extends Controller
      *
      * Get the specified H5P embed parameters
      *
-     * @urlParam id required The Id of a H5p Example: 1
+     * @urlParam id int required The Id of a H5p Example 1
      *
      * @responseFile responses/h5p/h5p-embed.json
      *
@@ -512,8 +540,18 @@ class H5pController extends Controller
      *
      * Remove the specified H5P
      *
-     * @urlParam id required The Id of a H5P Example: 1
+     * @urlParam id required The H5P content id Example 1
      *
+     * @response {
+     *   "message": "H5P content has been deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Can not delete."
+     *   ]
+     * }
+     * 
      * @param Request $request
      * @param $id
      * @return Response|string
@@ -522,9 +560,16 @@ class H5pController extends Controller
     {
         try {
             $content = H5pContent::findOrFail($id);
-            return $content->delete();
+            $is_deleted = $content->delete();
+            if ($is_deleted) {
+                return response([
+                    'message' => 'H5P content has been deleted successfully.',
+                ], 200);
+            }
         } catch (Exception $ex) {
-            return trans('laravel-h5p.content.can_not_delete');
+            return response([
+                'errors' => [trans('laravel-h5p.content.can_not_delete')],
+            ], 500);
         }
     }
 

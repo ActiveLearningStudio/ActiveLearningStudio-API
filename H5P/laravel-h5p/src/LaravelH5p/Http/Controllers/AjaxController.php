@@ -11,8 +11,26 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group 12. H5P
+ *
+ * APIs for H5P management
+ */
 class AjaxController extends Controller
 {
+    /**
+     * Get H5P libraries
+     *
+     * Get a list of libraries
+     * 
+     * @urlParam machineName H5P.Dictation 1.0
+     * @urlParam majorVersion Example 1
+     * @urlParam minorVersion Example 0
+     * 
+     * @responseFile responses/h5p/h5p-ajax-libraries.json
+     *
+     * @return Response
+     */
     public function libraries(Request $request)
     {
         // headers for CORS
@@ -56,6 +74,19 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     * Get single H5P library
+     *
+     * Get single H5P library details
+     *
+     * @urlParam machineName string H5P.Dictation 1.0
+     * @urlParam majorVersion string Example 1
+     * @urlParam minorVersion string Example 0
+     * 
+     * @responseFile responses/h5p/h5p-ajax-library.json
+     *
+     * @return Response
+     */
     public function singleLibrary(Request $request)
     {
         $h5p = App::make('LaravelH5p');
@@ -63,6 +94,15 @@ class AjaxController extends Controller
         $editor->ajax->action(H5PEditorEndpoints::SINGLE_LIBRARY, $request->get('_token'));
     }
 
+    /**
+     * Get H5P Content Type Cache
+     *
+     * Get H5P Content Type Cache mainly for H5P Hub
+     * 
+     * @responseFile responses/h5p/h5p-ajax-content-type-cache.json
+     *
+     * @return Response
+     */
     public function contentTypeCache(Request $request)
     {
         $h5p = App::make('LaravelH5p');
@@ -70,6 +110,17 @@ class AjaxController extends Controller
         $editor->ajax->action(H5PEditorEndpoints::CONTENT_TYPE_CACHE, $request->get('_token'));
     }
 
+    /**
+     * Install H5P library
+     *
+     * Install H5P library and list all
+     *
+     * @bodyParam id int required Example H5P.Dictation 1.0
+     * 
+     * @responseFile responses/h5p/h5p-ajax-content-type-cache.json
+     *
+     * @return Response
+     */
     public function libraryInstall(Request $request)
     {
         $h5p = App::make('LaravelH5p');
@@ -80,6 +131,17 @@ class AjaxController extends Controller
         $editor->ajax->action(H5PEditorEndpoints::LIBRARY_INSTALL, $token, $machineName);
     }
 
+    /**
+     * Upload H5P library
+     *
+     * Upload H5P library and list all
+     *
+     * @bodyParam h5p file required Example example-h5p.h5p
+     * 
+     * @responseFile responses/h5p/h5p-ajax-library-upload.json
+     *
+     * @return Response
+     */
     public function libraryUpload(Request $request)
     {
         $filePath = $request->file('h5p')->getPathName();
@@ -90,6 +152,24 @@ class AjaxController extends Controller
         $editor->ajax->action(H5PEditorEndpoints::LIBRARY_UPLOAD, $token, $filePath, $request->get('contentId'));
     }
 
+    /**
+    * Upload H5P Editor files
+    * 
+    * Upload H5P Editor files based on content
+    *
+    * @bodyParam file binary required File upload on H5P Editor Example: an-image.png
+    * @bodyParam field string required Upload filem meta data
+    * @bodyParam contentId int required H5P content id
+    *
+    * @response {
+    *   "height": "1080",
+    *   "mime": "image/png",
+    *   "path": "images/file-5f7b61fb0355b.png#tmp",
+    *   "width": 1920
+    * }
+    *
+    * @return Response
+    */
     public function files(Request $request)
     {
         $filePath = $request->file('file');
@@ -100,6 +180,20 @@ class AjaxController extends Controller
         $editor->ajax->action(H5PEditorEndpoints::FILES, $token, $request->get('contentId'));
     }
 
+    /**
+    * Filter H5P
+    *
+    * Filter parameter values according to semantics 
+    *
+    * @urlParam libraryParameters string required
+    *
+    * @response {
+    *   "success": TRUE,
+    *   "data": "JsonData"
+    * }
+    * 
+    * @return Response
+    */
     public function filter(Request $request)
     {
         $token = csrf_token();
@@ -115,7 +209,28 @@ class AjaxController extends Controller
     {
         return response()->json($request->all());
     }
-
+    
+    /**
+     * Upload H5P library
+     *
+     * Upload H5P library and list all
+     *
+     * @bodyParam contentId int required H5P content id Example 1
+     * @bodyParam score int required H5P score Example 2
+     * @bodyParam maxScore int required H5P maximum score Example 3
+     * @bodyParam opened float required H5P opened Example 3.333
+     * @bodyParam finished float required H5P finished Example 8.9898
+     * 
+     * @response {
+     *   "success": "true"
+     * }
+     * 
+     * @response {
+     *   "success": "false"
+     * }
+     *
+     * @return Response
+     */
     public function finish(Request $request)
     {
         $content_id = $request->input('contentId');
@@ -199,8 +314,27 @@ class AjaxController extends Controller
         exit;
     }
 
+    /**
+     * H5P content user data 
+     *
+     * Save H5P content user data
+     *
+     * @bodyParam content_id int required H5P content id Example 1
+     * @bodyParam data_type string required Example H5P-Blanks-question-important-description-open
+     * @bodyParam sub_content_id int required Example 0
+     * 
+     * @response {
+     *   "success": "true"
+     * }
+     *
+     * @return Response
+     */
     public function contentUserData(Request $request)
     {
-        return response()->json($request->all());
+
+        //TODO: actual logic
+        return response([
+            'success' => true
+        ], 201);
     }
 }

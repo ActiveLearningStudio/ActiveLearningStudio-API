@@ -1,0 +1,22 @@
+[
+    {
+      "uberName": "H5P.Image 1.1",
+      "name": "H5P.Image",
+      "majorVersion": "1",
+      "minorVersion": "1",
+      "tutorialUrl": "",
+      "title": "Image",
+      "runnable": 0,
+      "restricted": false
+    },
+    {
+      "uberName": "H5P.Video 1.5",
+      "name": "H5P.Video",
+      "majorVersion": "1",
+      "minorVersion": "5",
+      "tutorialUrl": "",
+      "title": "Video",
+      "runnable": 0,
+      "restricted": false
+    }
+  ]
