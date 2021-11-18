@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -120,12 +121,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     }
 
     /**
-     * Get the advance search request
+     * Get the advance elasticsearch request
      *
      * @param array $data
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function advanceSearchForm($data)
+    public function advanceElasticsearchForm($data)
     {
 
         $counts = [];
@@ -210,6 +211,230 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $counts['total'] = array_sum($counts);
 
         return (SearchResource::collection($searchResult->models()))->additional(['meta' => $counts]);
+    }
+
+    /**
+     * Get the advance search request
+     *
+     * @param array $data
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function advanceSearchForm($data)
+    {
+
+        $counts = [];
+        // $projectIds = [];
+        $organizationParentChildrenIds = [];
+
+        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
+            $organization = $data['orgObj'];
+            $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
+        }
+
+        // if (isset($data['userIds']) && !empty($data['userIds'])) {
+        //     $userIds = $data['userIds'];
+
+        //     $projectIds = Project::whereHas('users', function (Builder $query) use ($userIds) {
+        //         $query->whereIn('id', $userIds);
+        //     })->pluck('id')->toArray();
+        // }
+
+        // if (isset($data['author']) && !empty($data['author'])) {
+        //     $author = $data['author'];
+
+        //     $authorProjectIds = Project::whereHas('users', function (Builder $query) use ($author) {
+        //         $query->where('first_name', 'like', '%' . $author . '%')
+        //                 ->orWhere('last_name', 'like', '%' . $author . '%')
+        //                 ->orWhere('email', 'like', '%' . $author . '%');
+        //     })->pluck('id')->toArray();
+
+        //     if (empty($authorProjectIds)) {
+        //         if (empty($projectIds)) {
+        //             $projectIds = [0];
+        //         }
+        //     } else {
+        //         $projectIds = array_merge($projectIds, $authorProjectIds);
+        //     }
+        // }
+
+        // if (isset($data['userIds']) && !empty($data['userIds']) && empty($projectIds)) {
+        //     $projectIds = [0];
+        // }
+
+        // $searchResultQuery = $this->model->searchForm()
+        //     ->searchType(Arr::get($data, 'searchType', 0))
+        //     ->organizationParentChildrenIds($organizationParentChildrenIds)
+        //     ->query(Arr::get($data, 'query', 0))
+        //     ->join(Project::class, Playlist::class)
+        //     ->aggregate('count_by_index', [
+        //         'terms' => [
+        //             'field' => '_index',
+        //         ]
+        //     ])
+        //     ->organizationIds(Arr::get($data, 'organizationIds', []))
+        //     ->organizationVisibilityTypeIds(Arr::get($data, 'organizationVisibilityTypeIds', []))
+        //     ->type(Arr::get($data, 'type', 0))
+        //     ->startDate(Arr::get($data, 'startDate', 0))
+        //     ->endDate(Arr::get($data, 'endDate', 0))
+        //     ->indexing(Arr::get($data, 'indexing', []))
+        //     ->subjectIds(Arr::get($data, 'subjectIds', []))
+        //     ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
+        //     ->projectIds($projectIds)
+        //     ->h5pLibraries(Arr::get($data, 'h5pLibraries', []))
+        //     ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
+        //     ->sort('created_at', "desc")
+        //     ->from(Arr::get($data, 'from', 0))
+        //     ->size(Arr::get($data, 'size', 10));
+
+        // if (isset($data['model']) && !empty($data['model'])) {
+        //     $searchResultQuery = $searchResultQuery->postFilter('term', ['_index' => $data['model']]);
+        // }
+
+        // $searchResult = $searchResultQuery->execute();
+
+        // $aggregations = $searchResult->aggregations();
+        // $countByIndex = $aggregations->get('count_by_index');
+
+        // if (isset($countByIndex['buckets'])) {
+        //     foreach ($countByIndex['buckets'] as $indexData) {
+        //         $counts[$indexData['key']] = $indexData['doc_count'];
+        //     }
+        // }
+
+        // $counts['total'] = array_sum($counts);
+
+        // return (SearchResource::collection($searchResult->models()))->additional(['meta' => $counts]);
+
+        $query = 'SELECT * FROM advSearch(:user_id)';
+        $queryWhere = [];
+
+        if (isset($data['startDate']) && !empty($data['startDate'])) {
+           $queryWhere[] = "created_at >= '" . $data['startDate'] . "'::date";
+        }
+
+        if (isset($data['endDate']) && !empty($data['endDate'])) {
+            $queryWhere[] = "created_at <= '" . $data['endDate'] . "'::date";
+        }
+
+        if (isset($data['searchType']) && !empty($data['searchType'])) {
+            $dataSearchType = $data['searchType'];
+            if (
+                $dataSearchType === 'my_projects'
+                || $dataSearchType === 'org_projects_admin'
+                || $dataSearchType === 'org_projects_non_admin'
+            ) {
+                if (isset($data['organizationIds']) && !empty($data['organizationIds'])) {
+                    $dataOrganizationIds = implode(',', $data['organizationIds']);
+                    $queryWhere[] = "org_id IN (" . $dataOrganizationIds . ")";
+                }
+
+                if ($dataSearchType === 'org_projects_non_admin') {
+                    $queryWhere[] = "organization_visibility_type_id NOT IN (" . config('constants.private-organization-visibility-type-id') . ")";
+                }
+            } elseif ($dataSearchType === 'showcase_projects') {
+                // Get all public items
+                $organizationIdsShouldQueries[] = "organization_visibility_type_id IN (" . config('constants.public-organization-visibility-type-id') . ")";
+
+                // Get all global items
+                $dataOrganizationParentChildrenIds = implode(',', $organizationParentChildrenIds);
+                $globalOrganizationIdsQueries[] = "org_id IN (" . $dataOrganizationParentChildrenIds . ")";
+                $globalOrganizationIdsQueries[] = "organization_visibility_type_id IN (" . config('constants.global-organization-visibility-type-id') . ")";
+
+                $globalOrganizationIdsQueries = implode(' AND ', $globalOrganizationIdsQueries);
+                $organizationIdsShouldQueries[] = "(" . $globalOrganizationIdsQueries . ")";
+
+                // Get all protected items
+                $dataOrganizationIds = implode(',', $data['organizationIds']);
+                $protectedOrganizationIdsQueries[] = "org_id IN (" . $dataOrganizationIds . ")";
+                $protectedOrganizationIdsQueries[] = "organization_visibility_type_id IN (" . config('constants.protected-organization-visibility-type-id') . ")";
+
+                $protectedOrganizationIdsQueries = implode(' AND ', $protectedOrganizationIdsQueries);
+                $organizationIdsShouldQueries[] = "(" . $protectedOrganizationIdsQueries . ")";
+
+                $organizationIdsShouldQueries = implode(' OR ', $organizationIdsShouldQueries);
+                $queryWhere[] = "(" . $organizationIdsShouldQueries . ")";
+            }
+        } else {
+            if (isset($data['organizationVisibilityTypeIds']) && !empty($data['organizationVisibilityTypeIds'])) {
+                $dataOrganizationVisibilityTypeIds = implode(',', array_values(array_filter($data['organizationVisibilityTypeIds'])));
+                if (in_array(null, $data['organizationVisibilityTypeIds'], true)) {
+                    $organizationVisibilityTypeQueries[] = "organization_visibility_type_id IN (" . $dataOrganizationVisibilityTypeIds . ")";
+                    $organizationVisibilityTypeQueries[] = "organization_visibility_type_id IS NULL";
+                    $organizationVisibilityTypeQueries = implode(' OR ', $organizationVisibilityTypeQueries);
+                    $queryWhere[] = "(" . $organizationVisibilityTypeQueries . ")";
+                } else {
+                    $queryWhere[] = "organization_visibility_type_id IN (" . $dataOrganizationVisibilityTypeIds . ")";
+                }
+            }
+        }
+
+        if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
+            $dataSubjectIds = implode("','", $data['subjectIds']);
+            $queryWhere[] = "subject_id IN ('" . $dataSubjectIds . "')";
+        }
+
+        if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
+            $dataEducationLevelIds = implode("','", $data['educationLevelIds']);
+            $queryWhere[] = "education_level_id IN ('" . $dataEducationLevelIds . "')";
+        }
+
+        if (isset($data['userIds']) && !empty($data['userIds'])) {
+            $dataUserIds = implode("','", $data['userIds']);
+            $queryWhere[] = "user_id IN (" . $dataUserIds . ")";
+        }
+
+        if (isset($data['author']) && !empty($data['author'])) {
+            $queryWhereAuthor[] = "first_name LIKE '%" . $data['author'] . "%'";
+            $queryWhereAuthor[] = "last_name LIKE '%" . $data['author'] . "%'";
+            // $queryWhereAuthor[] = "email LIKE '%" . $data['author'] . "%'";
+
+            $queryWhereAuthor = implode(' OR ', $queryWhereAuthor);
+            $queryWhere[] = "(" . $queryWhereAuthor . ")";
+        }
+
+        if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
+            $dataH5pLibraries = implode("','", $data['h5pLibraries']);
+            $queryWhere[] = "h5plib IN ('" . $dataH5pLibraries . "')";
+        }
+
+        if (isset($data['indexing']) && !empty($data['indexing'])) {
+            $dataIndexingIds = implode(',', array_values(array_filter($data['indexing'])));
+            if (in_array(null, $data['indexing'], true)) {
+                $indexingQueries[] = "indexing IN (" . $dataIndexingIds . ")";
+                $indexingQueries[] = "indexing IS NULL";
+                $indexingQueries = implode(' OR ', $indexingQueries);
+                $queryWhere[] = "(" . $indexingQueries . ")";
+            } else {
+                $queryWhere[] = "indexing IN (" . $dataIndexingIds . ")";
+            }
+        }
+
+        if (isset($data['query']) && !empty($data['query'])) {
+            $queryWhereQuery[] = "name LIKE '%" . $data['query'] . "%'";
+            $queryWhereQuery[] = "description LIKE '%" . $data['query'] . "%'";
+
+            $queryWhereQuery = implode(' OR ', $queryWhereQuery);
+            $queryWhere[] = "(" . $queryWhereQuery . ")";
+        }
+        
+        if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
+            $queryWhere[] = "name NOT LIKE '%" . $data['negativeQuery'] . "%'";
+            $queryWhere[] = "description NOT LIKE '%" . $data['negativeQuery'] . "%'";
+        }
+
+        if (isset($data['model']) && !empty($data['model'])) {
+            $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
+            $dataModel = $modelMapping[$data['model']];
+            $queryWhere[] = "entity IN ('" . $dataModel . "')";
+        }
+
+        if (!empty($queryWhere)) {
+            $queryWhere = " WHERE " . implode(' AND ', $queryWhere);
+            $query = $query . $queryWhere;
+        }
+
+        $results = DB::select($query, ['user_id' => auth()->user()->id]);
+        return (SearchResource::collection($results));
     }
 
     /**
