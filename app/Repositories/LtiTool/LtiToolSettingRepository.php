@@ -111,6 +111,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     /**
      * To clone Lti Tool Setting
      * @param LtiToolSetting $ltiToolSetting
+     * @param Organization $subOrganization
      * @param string $token
      * @return int id
      */

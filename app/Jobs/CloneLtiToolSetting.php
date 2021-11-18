@@ -49,8 +49,8 @@ class CloneLtiToolSetting implements ShouldQueue
 
     /**
      * Execute the job.
-     ** @param LtiToolSettingInterface $ltiToolSettingRepository
-     ** @param UserRepositoryInterface $userRepository
+     * @param LtiToolSettingInterface $ltiToolSettingRepository
+     * @param UserRepositoryInterface $userRepository
      * @return void
      */
     public function handle(LtiToolSettingInterface $ltiToolSettingRepository, UserRepositoryInterface $userRepository)
