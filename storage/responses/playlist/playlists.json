@@ -5,6 +5,7 @@
             "title": "Math Playlist",
             "order": 0,
             "is_public": true,
+            "gcr_playlist_visibility": true,
             "project_id": 1,
             "project": {
                 "id": 1,
