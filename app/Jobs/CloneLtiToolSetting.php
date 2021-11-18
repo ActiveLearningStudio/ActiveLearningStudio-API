@@ -36,6 +36,7 @@ class CloneLtiToolSetting implements ShouldQueue
     /**
      * Create a new job instance.
      * @param LtiToolSetting $ltiToolSetting
+     * @param Organization $suborganization
      * @param $token
      * @return void
      */
