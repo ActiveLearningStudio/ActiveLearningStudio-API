@@ -31,6 +31,9 @@ class OrganizationResource extends JsonResource
             'image' => $this->image,
             'domain' => $this->domain,
             'self_registration' => $this->self_registration,
+            'gcr_project_visibility' => $this->gcr_project_visibility,
+            'gcr_playlist_visibility' => $this->gcr_playlist_visibility,
+            'gcr_activity_visibility' => $this->gcr_activity_visibility,
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->display_name;
             }),

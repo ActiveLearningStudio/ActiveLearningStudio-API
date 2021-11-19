@@ -28,6 +28,7 @@ class ActivityResource extends JsonResource
             'education_level_id' => $this->education_level_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'gcr_activity_visibility' => $this->playlist->project->organization->gcr_activity_visibility,
         ];
 
         // Feature added after the fact for optimization

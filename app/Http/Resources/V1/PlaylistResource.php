@@ -26,6 +26,7 @@ class PlaylistResource extends JsonResource
             'activities' => ActivityResource::collection($this->activities->sortBy('order')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'gcr_playlist_visibility' => $this->project->organization->gcr_playlist_visibility,
         ];
     }
 }

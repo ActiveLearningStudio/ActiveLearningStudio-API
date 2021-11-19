@@ -46,7 +46,10 @@ class SuborganizationUpdate extends FormRequest
             'account_id' => 'max:255',
             'api_key' => 'max:255',
             'unit_path' => 'max:255',
-            'noovo_client_id' => 'string|max:255'
+            'noovo_client_id' => 'string|max:255',
+            'gcr_project_visibility' => 'boolean',
+            'gcr_playlist_visibility' => 'boolean',
+            'gcr_activity_visibility' => 'boolean',
         ];
     }
 }
