@@ -21,6 +21,7 @@ class Playlist extends Model
     protected $fillable = [
         'title',
         'project_id',
+        'shared',
         'order'
     ];
 

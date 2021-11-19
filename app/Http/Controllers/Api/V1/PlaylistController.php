@@ -388,4 +388,82 @@ class PlaylistController extends Controller
     {
         $this->playlistRepository->populateOrderNumber();
     }
+    /**
+     * Share playlist
+     *
+     * Share the specified playlist of a user.
+     *
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to share playlist."
+     *   ]
+     * }
+     *
+     * @param playlist $playlist
+     * @return Response
+     */
+    public function share(Project $project, Playlist $playlist)
+    {
+        $this->authorize('clone', [Playlist::class, $project]);
+
+        $is_updated = $this->playlistRepository->update([
+            'shared' => true,
+        ], $playlist->id);
+
+        if ($is_updated) {
+            $updated_playlist = new playlistResource($this->playlistRepository->find($playlist->id));
+
+            return response([
+                'playlist' => $updated_playlist,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to share playlist.'],
+        ], 500);
+    }
+    /**
+     * Remove Share playlist
+     *
+     * Remove Share the specified playlist of a user.
+     *
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to remove share playlist."
+     *   ]
+     * }
+     *
+     * @param playlist $playlist
+     * @return Response
+     */
+    public function removeShare(Project $project, Playlist $playlist)
+    {
+        $this->authorize('clone', [Playlist::class, $project]);
+
+        $is_updated = $this->playlistRepository->update([
+            'shared' => false,
+        ], $playlist->id);
+
+        if ($is_updated) {
+            $updated_playlist = new playlistResource($this->playlistRepository->find($playlist->id));
+
+            return response([
+                'playlist' => $updated_playlist,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to stop share playlist.'],
+        ], 500);
+    }
 }
