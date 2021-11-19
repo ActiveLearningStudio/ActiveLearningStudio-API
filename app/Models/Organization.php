@@ -27,7 +27,10 @@ class Organization extends Model
         'account_id',
         'api_key',
         'unit_path',
-        'noovo_client_id'
+        'noovo_client_id',
+        'gcr_project_visibility',
+        'gcr_playlist_visibility',
+        'gcr_activity_visibility'
     ];
 
     /**
