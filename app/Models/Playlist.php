@@ -77,9 +77,14 @@ class Playlist extends Model
         parent::boot();
 
         self::deleting(function (Playlist $playlist) {
+            $isForceDeleting = $playlist->isForceDeleting();
             foreach ($playlist->activities as $activity)
             {
-                $activity->delete();
+                if ($isForceDeleting) {
+                    $activity->forceDelete();
+                } else {
+                    $activity->delete();
+                }
             }
         });
     }

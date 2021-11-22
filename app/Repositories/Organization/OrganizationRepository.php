@@ -561,8 +561,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         try {
             DB::beginTransaction();
 
-            $organization->users()->detach($data['user_id']);
-
             foreach ($organizationProjects as $organizationProject) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
                     $organizationProject->original_user = $data['user_id'];
@@ -570,7 +568,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationProject->users()->detach($data['user_id']);
                     $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
                 } else {
-                    $this->projectRepository->delete($organizationProject->id);
+                    $organizationProject->users()->detach($data['user_id']);
+                    $this->projectRepository->forceDelete($organizationProject);
                 }
             }
 
@@ -579,9 +578,10 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationTeam->original_user = $data['user_id'];
                     $organizationTeam->save();
                     $organizationTeam->users()->detach($data['user_id']);
-                    $organizationTeam->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                    $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
                 } else {
-                    resolve(TeamRepositoryInterface::class)->delete($organizationTeam->id);
+                    $organizationTeam->users()->detach($data['user_id']);
+                    resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
                 }
             }
 
@@ -592,8 +592,19 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationGroup->users()->detach($data['user_id']);
                     $organizationGroup->users()->attach($authenticatedUser->id, ['role' => 'owner']);
                 } else {
-                    resolve(GroupRepositoryInterface::class)->delete($organizationGroup->id);
+                    $organizationGroup->users()->detach($data['user_id']);
+                    resolve(GroupRepositoryInterface::class)->forceDelete($organizationGroup);
                 }
+            }
+
+            // check if user exists to other organizations
+            $user = $organization->users()->where('user_id', $data['user_id'])->first();
+            $userOrganizations = $user->organizations()->where('organization_id', '<>', $organization->id)->get();
+
+            $organization->users()->detach($data['user_id']);
+
+            if(count($userOrganizations) == 0) {
+                $this->userRepository->forceDelete($user);
             }
 
             DB::commit();
