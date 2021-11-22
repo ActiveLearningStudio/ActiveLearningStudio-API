@@ -114,6 +114,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // playlist share toggle
         Route::get('projects/{project}/playlists/{playlist}/share', 'PlaylistController@share');
         Route::get('projects/{project}/playlists/{playlist}/remove-share', 'PlaylistController@removeShare');
+
+        Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
+        Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
         
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');

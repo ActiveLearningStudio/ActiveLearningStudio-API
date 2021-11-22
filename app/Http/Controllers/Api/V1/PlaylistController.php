@@ -466,4 +466,74 @@ class PlaylistController extends Controller
             'errors' => ['Failed to stop share playlist.'],
         ], 500);
     }
+    
+    /**
+     * Get Shared Playlist
+     *
+     * Get the specified shared playlist detail.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * 
+     * @urlParam project required The Id of a playlist Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "No shareable Playlist found."
+     *   ]
+     * }
+     *
+     * @param Project $project
+     * @return Response
+     */
+    public function loadSharedPlaylist(Project $project, Playlist $playlist)
+    {
+        // 3 is for indexing approved - see Project Model @indexing property
+        if ($project->shared || ($project->indexing === 3)) {
+            if($playlist->shared){
+                return response([
+                    'playlist' => $this->playlistRepository->loadSharedPlaylist($project, $playlist),
+                ], 200);
+            }
+        }
+
+        return response([
+            'errors' => ['No shareable Playlist found.'],
+        ], 400);
+    }
+
+    /**
+     * Get All Shared Playlists of a Project
+     *
+     * Get the specified shared playlists detail.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * 
+     * @urlParam project required The Id of a playlist Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "No shareable Playlist found."
+     *   ]
+     * }
+     *
+     * @param Project $project
+     * @return Response
+     */
+    public function allSharedPlaylists(Project $project, Playlist $playlist)
+    {
+        // 3 is for indexing approved - see Project Model @indexing property
+        if ($project->shared || ($project->indexing === 3)) {
+                return response([
+                    'project' => $this->playlistRepository->allSharedPlaylists($project, $playlist),
+                ], 200);
+        }
+
+        return response([
+            'errors' => ['No shareable Playlist found.'],
+        ], 400);
+    }
 }
