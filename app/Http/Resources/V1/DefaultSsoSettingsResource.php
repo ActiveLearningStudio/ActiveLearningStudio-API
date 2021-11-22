@@ -27,6 +27,7 @@ class DefaultSsoSettingsResource extends JsonResource
             'guid' => $this->guid,
             'published' => $this->published,
             'organization' =>  $this->organization,
+            'role' =>  $this->role,
         ];
     }
 }
