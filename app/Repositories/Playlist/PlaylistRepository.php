@@ -223,6 +223,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             }
         }
     }
+
     /**
      * To show single shared playlist
      *
@@ -268,7 +269,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             return $proj;
         }
 
-        /**
+    /**
      * To show all shared playlist
      *
      * @param $authUser
@@ -324,7 +325,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             }
             $proj["playlists"][] = $plist;
         }
-
         return $proj;
-        }
+    }
+    
 }

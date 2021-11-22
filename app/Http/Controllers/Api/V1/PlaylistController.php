@@ -388,6 +388,7 @@ class PlaylistController extends Controller
     {
         $this->playlistRepository->populateOrderNumber();
     }
+
     /**
      * Share playlist
      *
@@ -427,6 +428,7 @@ class PlaylistController extends Controller
             'errors' => ['Failed to share playlist.'],
         ], 500);
     }
+
     /**
      * Remove Share playlist
      *
@@ -536,4 +538,5 @@ class PlaylistController extends Controller
             'errors' => ['No shareable Playlist found.'],
         ], 400);
     }
+    
 }
