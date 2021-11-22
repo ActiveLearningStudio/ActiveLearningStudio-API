@@ -247,7 +247,6 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
                 $oneplaylist->shared = $playlist['shared'] ?? false;
                 $oneplaylist->created_at = $playlist['created_at'];
                 $oneplaylist->updated_at = $playlist['updated_at'];
-                $oneplaylist->project = $playlist->project;
                 $oneplaylist->activities = [];
     
                 foreach ($playlist['activities'] as $activity) {
