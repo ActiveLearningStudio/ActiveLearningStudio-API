@@ -233,40 +233,10 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      */
     public function loadSharedPlaylist(Project $project, Playlist $playlist){
 
-        $playlist = Playlist::where('id', $playlist->id)
-                ->with([
-                    'activities' => function ($query) {
-                    $query->orderBy('order');
-                }])
-                ->first();
-    
-            $oneplaylist = new stdClass();
-                
-                $oneplaylist->id = $playlist['id'];
-                $oneplaylist->title = $playlist['title'];
-                $oneplaylist->project_id = $playlist->project->id;
-                $oneplaylist->shared = $playlist['shared'] ?? false;
-                $oneplaylist->created_at = $playlist['created_at'];
-                $oneplaylist->updated_at = $playlist['updated_at'];
-                $oneplaylist->activities = [];
-    
-                foreach ($playlist['activities'] as $activity) {
-                    $h5pContent = \DB::table('h5p_contents')
-                        ->select(['h5p_contents.title', 'h5p_libraries.name as library_name'])
-                        ->where(['h5p_contents.id' => $activity->h5p_content_id])
-                        ->join('h5p_libraries', 'h5p_contents.library_id', '=', 'h5p_libraries.id')->first();
-    
-                    $plistActivity = [];
-                    $plistActivity['id'] = $activity->id;
-                    $plistActivity['type'] = $activity->type;
-                    $plistActivity['title'] = $activity->title;
-                    $plistActivity['library_name'] = $h5pContent ? $h5pContent->library_name : null;
-                    $plistActivity['thumb_url'] = $activity->thumb_url;
-                    $oneplaylist->activities[] = $plistActivity;
-                }
-                $proj = $oneplaylist;
-    
-            return $proj;
+        return $this->model::whereHas('project')
+            ->where('id', $playlist->id)
+            ->with('project')
+            ->first();
         }
 
     /**
@@ -276,55 +246,16 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
      * @param Project $project
      * @throws GeneralException
      */
-    public function allSharedPlaylists(Project $project, Playlist $playlist){
+    public function allSharedPlaylists(Project $project){
 
-        $project = Project::where(['id' => $project->id])
-            ->with(['playlists' => function ($query) {
-                $query->where('shared', true)->orderBy('order');
-            },
-            'playlists.activities' => function ($query) {
-                $query->orderBy('order');
-            }])
-            ->first();
-        $proj = [];
-        $proj["id"] = $project['id'];
-        $proj["name"] = $project['name'];
-        $proj["description"] = $project['description'];
-        $proj["thumb_url"] = $project['thumb_url'];
-        $proj["shared"] = $project['shared'] ?? false;
-        $proj["indexing"] = $project['indexing'];
-        $proj["indexing_text"] = $project['indexing_text'];
-        $proj["created_at"] = $project['created_at'];
-        $proj["updated_at"] = $project['updated_at'];
+        $playlists = $this->model::whereHas('project')
+            ->where('project_id', $project->id)
+            ->with('project');
 
-        $proj["playlists"] = [];
-        foreach ($project['playlists'] as $playlist) {
-            $plist = [];
-            $plist["id"] = $playlist['id'];
-            $plist["title"] = $playlist['title'];
-            $plist["project_id"] = $playlist->project->id;
-            $plist["shared"] = $playlist->shared;
-            $plist["created_at"] = $playlist['created_at'];
-            $plist["updated_at"] = $playlist['updated_at'];
-            $plist['activities'] = [];
-
-            foreach ($playlist['activities'] as $activity) {
-                $h5pContent = \DB::table('h5p_contents')
-                    ->select(['h5p_contents.title', 'h5p_libraries.name as library_name'])
-                    ->where(['h5p_contents.id' => $activity->h5p_content_id])
-                    ->join('h5p_libraries', 'h5p_contents.library_id', '=', 'h5p_libraries.id')->first();
-
-                $plistActivity = [];
-                $plistActivity['id'] = $activity->id;
-                $plistActivity['type'] = $activity->type;
-                $plistActivity['title'] = $activity->title;
-                $plistActivity['library_name'] = $h5pContent ? $h5pContent->library_name : null;
-                $plistActivity['thumb_url'] = $activity->thumb_url;
-                $plist['activities'][] = $plistActivity;
-            }
-            $proj["playlists"][] = $plist;
-        }
-        return $proj;
+        $playlists->when($project->indexing != 3, function ($q){
+            return $q->where('shared', true);
+        });    
+        return $playlists = $playlists->get();
     }
 
 }

@@ -495,7 +495,7 @@ class PlaylistController extends Controller
         if ($project->shared || ($project->indexing === 3)) {
             if($playlist->shared){
                 return response([
-                    'playlist' => $this->playlistRepository->loadSharedPlaylist($project, $playlist),
+                    'playlist' => new PlaylistResource($this->playlistRepository->loadSharedPlaylist($project, $playlist)),
                 ], 200);
             }
         }
@@ -530,7 +530,7 @@ class PlaylistController extends Controller
         // 3 is for indexing approved - see Project Model @indexing property
         if ($project->shared || ($project->indexing === 3)) {
                 return response([
-                    'project' => $this->playlistRepository->allSharedPlaylists($project, $playlist),
+                    'playlist' => PlaylistResource::collection($this->playlistRepository->allSharedPlaylists($project, $playlist)),
                 ], 200);
         }
 
@@ -538,5 +538,5 @@ class PlaylistController extends Controller
             'errors' => ['No shareable Playlist found.'],
         ], 400);
     }
-    
+
 }
