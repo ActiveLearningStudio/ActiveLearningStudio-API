@@ -240,7 +240,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
     }
 
     /**
-     * To show all shared playlist
+     * To show all shared playlists
      *
      * @param Project $project
      * @throws GeneralException
@@ -251,7 +251,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             ->where('project_id', $project->id)
             ->with('project');
 
-        //if project is indexed then all shared/unshared playlists will be visible. if not indexed then only shared playlists will be visible
+        //if a project is indexed then all shared/unshared playlists will be visible. if not indexed then only shared playlists will be visible
         $playlists->when($project->indexing != Config::get('constants.indexing-approved'), function ($q){
             return $q->where('shared', true);
         }); 

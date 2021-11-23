@@ -112,8 +112,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('projects.playlists', 'PlaylistController');
         
         // playlist share toggle
-        Route::get('projects/{project}/playlists/{playlist}/share', 'PlaylistController@share');
-        Route::get('projects/{project}/playlists/{playlist}/remove-share', 'PlaylistController@removeShare');
+        Route::put('projects/{project}/playlists/{playlist}/share', 'PlaylistController@share');
+        Route::put('projects/{project}/playlists/{playlist}/remove-share', 'PlaylistController@removeShare');
 
         Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
         Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
