@@ -95,6 +95,14 @@ class Project extends Model
     }
 
     /**
+     * Get the single playlist for the project
+     */
+    public function singlePlaylist()
+    {
+        return $this->hasOne('App\Models\Playlist', 'project_id');
+    }
+
+    /**
      * Get the organization that owns the project.
      */
     public function organization()
