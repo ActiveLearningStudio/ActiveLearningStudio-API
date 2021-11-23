@@ -468,7 +468,7 @@ class PlaylistController extends Controller
         }
 
         return response([
-            'errors' => ['Failed to stop share playlist.'],
+            'errors' => ['Failed to remove share playlist.'],
         ], 500);
     }
     
@@ -478,7 +478,6 @@ class PlaylistController extends Controller
      * Get the specified shared playlist detail.
      *
      * @urlParam project required The Id of a project Example: 1
-     * 
      * @urlParam project required The Id of a playlist Example: 1
      *
      * @responseFile responses/playlist/playlist.json

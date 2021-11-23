@@ -228,35 +228,30 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
     /**
      * To show single shared playlist
      *
-     * @param $authUser
-     * @param Project $project
+     * @param Playlist $playlist
      * @throws GeneralException
      */
-    public function loadSharedPlaylist(Project $project, Playlist $playlist){
-
+    public function loadSharedPlaylist(Playlist $playlist)
+    {
         return $this->model::whereHas('project')
             ->where('id', $playlist->id)
             ->with('project')
             ->first();
-        }
+    }
 
     /**
      * To show all shared playlist
      *
-     * @param $authUser
      * @param Project $project
      * @throws GeneralException
      */
-    public function allSharedPlaylists(Project $project){
-
+    public function allSharedPlaylists(Project $project)
+    {
         $playlists = $this->model::whereHas('project')
             ->where('project_id', $project->id)
             ->with('project');
 
-        /**
-         * if project is indexed then all shared/unshared playlists will be visible.
-         * if not indexed then only shared playlists will be visible
-         */
+        //if project is indexed then all shared/unshared playlists will be visible. if not indexed then only shared playlists will be visible
         $playlists->when($project->indexing != Config::get('constants.indexing-approved'), function ($q){
             return $q->where('shared', true);
         }); 
