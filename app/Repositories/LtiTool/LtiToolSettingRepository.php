@@ -32,17 +32,17 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-        $query = $this->model;
+        $query = $this->model->with(['user', 'organization']);
         if (isset($data['query']) && $data['query'] !== '') {
-            $query = $query->whereHas('user', function ($qry) use ($data) {
-                $qry->where('first_name', 'iLIKE', '%' . $data['query'] . '%');
-                $qry->orWhere('last_name', 'iLIKE', '%' . $data['query'] . '%');
-                $qry->orWhere('email', 'iLIKE', '%' . $data['query'] . '%');
-            })
-            ->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%')
-            ->orWhere('tool_url', 'iLIKE', '%' . $data['query'] . '%');
+            $query->where(function ($query) use ($data) {
+                $query = $query->whereHas('user', function ($qry) use ($data) {
+                    $qry->where('email', 'iLIKE', '%' . $data['query'] . '%');
+                });
+                $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');
+                $query->orWhere('tool_url', 'iLIKE', '%' . $data['query'] . '%');
+            });
         }
-        return $query->with(['user', 'organization'])->where('organization_id', $suborganization->id)->paginate($perPage);
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage);
     }
 
     /**
