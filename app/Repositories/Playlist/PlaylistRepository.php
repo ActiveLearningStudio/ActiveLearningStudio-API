@@ -286,7 +286,6 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
                 $query->orderBy('order');
             }])
             ->first();
-
         $proj = [];
         $proj["id"] = $project['id'];
         $proj["name"] = $project['name'];
@@ -327,5 +326,5 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         }
         return $proj;
     }
-    
+
 }
