@@ -18,6 +18,7 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 
 /**
  * @group 4. Playlist
@@ -405,7 +406,8 @@ class PlaylistController extends Controller
      *   ]
      * }
      *
-     * @param playlist $playlist
+     * @param Playlist $playlist
+     * @param Project $project
      * @return Response
      */
     public function share(Project $project, Playlist $playlist)
@@ -445,7 +447,8 @@ class PlaylistController extends Controller
      *   ]
      * }
      *
-     * @param playlist $playlist
+     * @param Playlist $playlist
+     * @param Project $project
      * @return Response
      */
     public function removeShare(Project $project, Playlist $playlist)
@@ -486,13 +489,14 @@ class PlaylistController extends Controller
      *   ]
      * }
      *
+     * @param Playlist $playlist
      * @param Project $project
      * @return Response
      */
     public function loadSharedPlaylist(Project $project, Playlist $playlist)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($project->shared || ($project->indexing === 3)) {
+        if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
             if($playlist->shared){
                 return response([
                     'playlist' => new PlaylistResource($this->playlistRepository->loadSharedPlaylist($project, $playlist)),
@@ -508,11 +512,9 @@ class PlaylistController extends Controller
     /**
      * Get All Shared Playlists of a Project
      *
-     * Get the specified shared playlists detail.
+     * Get the list of shared playlists detail.
      *
      * @urlParam project required The Id of a project Example: 1
-     * 
-     * @urlParam project required The Id of a playlist Example: 1
      *
      * @responseFile responses/playlist/playlist.json
      *
@@ -522,13 +524,14 @@ class PlaylistController extends Controller
      *   ]
      * }
      *
+     * @param Playlist $playlist
      * @param Project $project
      * @return Response
      */
     public function allSharedPlaylists(Project $project, Playlist $playlist)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($project->shared || ($project->indexing === 3)) {
+        if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
                 return response([
                     'playlist' => PlaylistResource::collection($this->playlistRepository->allSharedPlaylists($project, $playlist)),
                 ], 200);
