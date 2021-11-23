@@ -252,9 +252,14 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             ->where('project_id', $project->id)
             ->with('project');
 
+        /**
+         * if project is indexed then all shared/unshared playlists will be visible.
+         * if not indexed then only shared playlists will be visible
+         */
         $playlists->when($project->indexing != 3, function ($q){
             return $q->where('shared', true);
-        });    
+        }); 
+           
         return $playlists = $playlists->get();
     }
 
