@@ -5,6 +5,10 @@ namespace App\Repositories\Organization;
 use App\Models\Organization;
 use App\Models\OrganizationPermissionType;
 use App\Models\OrganizationRoleType;
+use App\Models\Pivots\GroupProjectUser;
+use App\Models\Pivots\TeamProjectUser;
+use App\Models\SsoLogin;
+use App\Models\UserLogin;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
@@ -572,7 +576,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $this->projectRepository->forceDelete($organizationProject);
                 }
             }
-           
+
             foreach ($organizationTeams as $organizationTeam) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
                     $organizationTeam->original_user = $data['user_id'];
@@ -580,6 +584,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationTeam->users()->detach($data['user_id']);
                     $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
                 } else {
+                    TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationTeam->users()->detach($data['user_id']);
                     resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
                 }
@@ -592,13 +597,24 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationGroup->users()->detach($data['user_id']);
                     $organizationGroup->users()->attach($authenticatedUser->id, ['role' => 'owner']);
                 } else {
+                    GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationGroup->users()->detach($data['user_id']);
                     resolve(GroupRepositoryInterface::class)->forceDelete($organizationGroup);
                 }
             }
 
-            // check if user exists to other organizations
             $user = $organization->users()->where('user_id', $data['user_id'])->first();
+
+            if (!isset($data['preserve_data']) || (isset($data['preserve_data']) && $data['preserve_data'] !== true)) {
+                TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                UserLogin::where('user_id', $data['user_id'])->forceDelete();
+                $user->favoriteProjects()->detach();
+                $user->ssoLogin()->forceDelete();
+                $user->lmssetting()->forceDelete();
+            }
+
+            // check if user exists to other organizations
             $userOrganizations = $user->organizations()->where('organization_id', '<>', $organization->id)->get();
 
             $organization->users()->detach($data['user_id']);
