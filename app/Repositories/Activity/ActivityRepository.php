@@ -223,7 +223,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     {
 
         $counts = [];
-        // $projectIds = [];
         $organizationParentChildrenIds = [];
 
         if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
@@ -231,82 +230,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
         }
 
-        // if (isset($data['userIds']) && !empty($data['userIds'])) {
-        //     $userIds = $data['userIds'];
-
-        //     $projectIds = Project::whereHas('users', function (Builder $query) use ($userIds) {
-        //         $query->whereIn('id', $userIds);
-        //     })->pluck('id')->toArray();
-        // }
-
-        // if (isset($data['author']) && !empty($data['author'])) {
-        //     $author = $data['author'];
-
-        //     $authorProjectIds = Project::whereHas('users', function (Builder $query) use ($author) {
-        //         $query->where('first_name', 'like', '%' . $author . '%')
-        //                 ->orWhere('last_name', 'like', '%' . $author . '%')
-        //                 ->orWhere('email', 'like', '%' . $author . '%');
-        //     })->pluck('id')->toArray();
-
-        //     if (empty($authorProjectIds)) {
-        //         if (empty($projectIds)) {
-        //             $projectIds = [0];
-        //         }
-        //     } else {
-        //         $projectIds = array_merge($projectIds, $authorProjectIds);
-        //     }
-        // }
-
-        // if (isset($data['userIds']) && !empty($data['userIds']) && empty($projectIds)) {
-        //     $projectIds = [0];
-        // }
-
-        // $searchResultQuery = $this->model->searchForm()
-        //     ->searchType(Arr::get($data, 'searchType', 0))
-        //     ->organizationParentChildrenIds($organizationParentChildrenIds)
-        //     ->query(Arr::get($data, 'query', 0))
-        //     ->join(Project::class, Playlist::class)
-        //     ->aggregate('count_by_index', [
-        //         'terms' => [
-        //             'field' => '_index',
-        //         ]
-        //     ])
-        //     ->organizationIds(Arr::get($data, 'organizationIds', []))
-        //     ->organizationVisibilityTypeIds(Arr::get($data, 'organizationVisibilityTypeIds', []))
-        //     ->type(Arr::get($data, 'type', 0))
-        //     ->startDate(Arr::get($data, 'startDate', 0))
-        //     ->endDate(Arr::get($data, 'endDate', 0))
-        //     ->indexing(Arr::get($data, 'indexing', []))
-        //     ->subjectIds(Arr::get($data, 'subjectIds', []))
-        //     ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
-        //     ->projectIds($projectIds)
-        //     ->h5pLibraries(Arr::get($data, 'h5pLibraries', []))
-        //     ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
-        //     ->sort('created_at', "desc")
-        //     ->from(Arr::get($data, 'from', 0))
-        //     ->size(Arr::get($data, 'size', 10));
-
-        // if (isset($data['model']) && !empty($data['model'])) {
-        //     $searchResultQuery = $searchResultQuery->postFilter('term', ['_index' => $data['model']]);
-        // }
-
-        // $searchResult = $searchResultQuery->execute();
-
-        // $aggregations = $searchResult->aggregations();
-        // $countByIndex = $aggregations->get('count_by_index');
-
-        // if (isset($countByIndex['buckets'])) {
-        //     foreach ($countByIndex['buckets'] as $indexData) {
-        //         $counts[$indexData['key']] = $indexData['doc_count'];
-        //     }
-        // }
-
-        // $counts['total'] = array_sum($counts);
-
-        // return (SearchResource::collection($searchResult->models()))->additional(['meta' => $counts]);
-
         $query = 'SELECT * FROM advSearch(:user_id)';
         $queryWhere = [];
+        $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
 
         if (isset($data['startDate']) && !empty($data['startDate'])) {
            $queryWhere[] = "created_at >= '" . $data['startDate'] . "'::date";
@@ -386,7 +312,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         if (isset($data['author']) && !empty($data['author'])) {
             $queryWhereAuthor[] = "first_name LIKE '%" . $data['author'] . "%'";
             $queryWhereAuthor[] = "last_name LIKE '%" . $data['author'] . "%'";
-            // $queryWhereAuthor[] = "email LIKE '%" . $data['author'] . "%'";
+            $queryWhereAuthor[] = "email LIKE '%" . $data['author'] . "%'";
 
             $queryWhereAuthor = implode(' OR ', $queryWhereAuthor);
             $queryWhere[] = "(" . $queryWhereAuthor . ")";
@@ -416,14 +342,13 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $queryWhereQuery = implode(' OR ', $queryWhereQuery);
             $queryWhere[] = "(" . $queryWhereQuery . ")";
         }
-        
+
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
             $queryWhere[] = "name NOT LIKE '%" . $data['negativeQuery'] . "%'";
             $queryWhere[] = "description NOT LIKE '%" . $data['negativeQuery'] . "%'";
         }
 
         if (isset($data['model']) && !empty($data['model'])) {
-            $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
             $dataModel = $modelMapping[$data['model']];
             $queryWhere[] = "entity IN ('" . $dataModel . "')";
         }
@@ -434,7 +359,20 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $results = DB::select($query, ['user_id' => auth()->user()->id]);
-        return (SearchResource::collection($results));
+        $query = 'SELECT * FROM advSearch(:user_id)';
+        $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
+        $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id]);
+
+        if (isset($countResults)) {
+            foreach ($countResults as $countResult) {
+                $modelMappingKey = array_search ($countResult->entity, $modelMapping);
+                $counts[$modelMappingKey] = $countResult->count;
+            }
+        }
+
+        $counts['total'] = array_sum($counts);
+
+        return (SearchResource::collection($results))->additional(['meta' => $counts]);
     }
 
     /**
