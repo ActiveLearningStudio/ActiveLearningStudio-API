@@ -536,7 +536,7 @@ class SuborganizationController extends Controller
      */
     public function removeUser(SuborganizationDeleteUserRequest $suborganizationDeleteUserRequest, Organization $suborganization)
     {
-       // $this->authorize('removeUser', $suborganization);
+        $this->authorize('removeUser', $suborganization);
 
         $data = $suborganizationDeleteUserRequest->validated();
 
