@@ -532,7 +532,7 @@ class PlaylistController extends Controller
         // 3 is for indexing approved - see Project Model @indexing property
         if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
                 return response([
-                    'playlist' => PlaylistResource::collection($this->playlistRepository->allSharedPlaylists($project, $playlist)),
+                    'playlists' => PlaylistResource::collection($this->playlistRepository->allSharedPlaylists($project, $playlist)),
                 ], 200);
         }
 
