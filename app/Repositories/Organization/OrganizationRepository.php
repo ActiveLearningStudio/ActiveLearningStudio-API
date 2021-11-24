@@ -572,7 +572,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $this->projectRepository->forceDelete($organizationProject);
                 }
             }
-
+           
             foreach ($organizationTeams as $organizationTeam) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
                     $organizationTeam->original_user = $data['user_id'];

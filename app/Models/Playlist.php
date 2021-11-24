@@ -8,6 +8,7 @@ use Laravel\Scout\Searchable;
 use ElasticScoutDriverPlus\CustomSearch;
 use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 use App\Models\QueryBuilders\SearchFormQueryBuilder;
+use Illuminate\Support\Facades\File;
 
 class Playlist extends Model
 {
@@ -81,7 +82,14 @@ class Playlist extends Model
             foreach ($playlist->activities as $activity)
             {
                 if ($isForceDeleting) {
+                    if (File::exists(public_path($activity->thumb_url))) {
+                        File::delete(public_path($activity->thumb_url));
+                    }
+                    if (File::exists(public_path('storage/h5p/content/' . $activity->h5p_content_id))) {
+                        File::deleteDirectory(public_path('storage/h5p/content/' . $activity->h5p_content_id));
+                    }
                     $activity->forceDelete();
+                    $activity->h5p_content()->forceDelete();
                 } else {
                     $activity->delete();
                 }
