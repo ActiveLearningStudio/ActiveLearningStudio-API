@@ -122,9 +122,13 @@ class SuborganizationController extends Controller
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
+     * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
+     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
      *
      * @responseFile 201 responses/organization/suborganization.json
      *
@@ -193,9 +197,13 @@ class SuborganizationController extends Controller
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
+     * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
+     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
      *
      * @responseFile responses/organization/suborganization.json
      *

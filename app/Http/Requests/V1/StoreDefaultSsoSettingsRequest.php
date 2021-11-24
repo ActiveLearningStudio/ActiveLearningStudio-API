@@ -34,6 +34,7 @@ class StoreDefaultSsoSettingsRequest extends FormRequest
             'description' => 'nullable|max:255',
             'organization_id' => 'required|exists:organizations,id',
             'published' => 'nullable|boolean',
+            'role_id' => 'required|integer|exists:organization_role_types,id',
         ];
     }
 }

@@ -89,4 +89,15 @@ class BaseRepository implements EloquentRepositoryInterface
     {
         return $this->model->destroy($id);
     }
+
+    /**
+     * Force delete model in storage
+     *
+     * @param $modelObj
+     * @return int
+     */
+    public function forceDelete($modelObj)
+    {
+        return $modelObj->forceDelete();
+    }
 }

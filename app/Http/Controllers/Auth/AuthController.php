@@ -690,31 +690,14 @@ class AuthController extends Controller
                 ]);
                 $user['user_organization'] = $user->lmssetting[0]->organization;
 
-                $invited_users = $this->invitedOrganizationUserRepository->searchByEmail($user->email);
-                if ($invited_users->isNotEmpty()) {
-                    foreach ($invited_users as $invited_user) {
-                        $organization = $this->organizationRepository->find($invited_user->organization_id);
-                        if ($organization) {
-                            $organization->users()->attach($user, ['organization_role_type_id' => $invited_user->organization_role_type_id]);
-                            $this->invitedOrganizationUserRepository->delete($user->email);
-                        }
+                $organization = $this->organizationRepository->find($user['user_organization']['id']);
+                if ($organization) {
+                    if($default_lms_setting['role_id']) {
+                        $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
                     }
-                } else {
-                    $organization = $this->organizationRepository->find($user['user_organization']['id']);
-                    if ($organization) {
+                    else {
                         $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                         $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
-                    }
-                }
-
-                $invited_users = $this->invitedGroupUserRepository->searchByEmail($user->email);
-                if ($invited_users->isNotEmpty()) {
-                    foreach ($invited_users as $invited_user) {
-                        $group = $this->groupRepository->find($invited_user->group_id);
-                        if ($group) {
-                            $group->users()->attach($user, ['role' => 'collaborator', 'token' => $invited_user->token]);
-                            $this->invitedGroupUserRepository->delete($user->email);
-                        }
                     }
                 }
             }
@@ -731,7 +714,18 @@ class AuthController extends Controller
                 }
                 $default_lms_setting = $default_lms_setting->toArray();
                 $default_lms_setting['lms_login_id'] = $user['email'];
-                $user->lmssetting()->create($default_lms_setting);
+                $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
+
+                $organization = $this->organizationRepository->find($newly_created_setting->id);
+                if ($organization) {
+                    if($default_lms_setting['role_id']) {
+                        $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
+                    }
+                    else {
+                        $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    }
+                }
             }
 
             $sso_login = $user->ssoLogin()->where([

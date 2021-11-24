@@ -35,11 +35,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView')->name('metrics.activity-log');
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
-
+    
     Route::get('organization-types', 'OrganizationTypesController@index');
-
+    
     Route::get('organization/get-by-domain', 'OrganizationController@getByDomain')->name('organization.get-by-domain');
-
+    
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::get('users/organizations', 'UserController@getOrganizations');
         Route::post('subscribe', 'UserController@subscribe');
@@ -57,7 +57,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
         ]);
-
+        
         // Teams
         Route::post('teams/invite', 'TeamController@inviteTeamMember');
         Route::post('teams/{team}/invite-member', 'TeamController@inviteMember');
@@ -72,7 +72,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/team/{team}/team-permissions', 'TeamController@getUserTeamPermissions');
         Route::put('suborganization/{suborganization}/team/{team}/update-team-member-role', 'TeamController@updateTeamMemberRole');
         Route::apiResource('suborganization.teams', 'TeamController');
-
+        
         // Groups
         Route::post('groups/invite', 'GroupController@inviteGroupMember');
         Route::post('groups/{group}/invite-member', 'GroupController@inviteMember');
@@ -84,8 +84,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('groups/{group}/projects/{project}/remove-member', 'GroupController@removeMemberFromProject');
         Route::get('suborganization/{suborganization}/get-groups', 'GroupController@getOrgGroups');
         Route::apiResource('suborganization.groups', 'GroupController');
-
-
+        
+        
         Route::post('suborganization/{suborganization}/projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::get('suborganization/{suborganization}/projects/recent', 'ProjectController@recent');
         Route::get('suborganization/{suborganization}/projects/default', 'ProjectController@default');
@@ -100,17 +100,24 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
         Route::post('suborganization/{suborganization}/projects/{project}/export-noovo', 'ProjectController@exportNoovoProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
-
-
+        
+        
         Route::post('suborganization/{suborganization}/projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
         Route::apiResource('suborganization.projects', 'ProjectController');
-
+        
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
+        
+        // playlist share toggle
+        Route::get('projects/{project}/playlists/{playlist}/share', 'PlaylistController@share');
+        Route::get('projects/{project}/playlists/{playlist}/remove-share', 'PlaylistController@removeShare');
 
+        Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
+        Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
+        
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
         Route::get('activities/{activity}/share', 'ActivityController@share');
@@ -121,22 +128,22 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::apiResource('playlists.activities', 'ActivityController');
-
+        
         Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
-
+        
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
-
+        
         Route::apiResource('activity-items', 'ActivityItemController');
-
+        
         Route::get('users/{user}/metrics', 'UserMetricsController@show')->name('metrics.user');
         Route::get('users/{user}/membership', 'UserMembershipController@show')->name('membership.show');
-
+        
         Route::get('h5p/settings', 'H5pController@create');
         Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
         Route::apiResource('h5p', 'H5pController');
-
+        
         Route::group(['prefix' => 'h5p'], function () {
             // H5P Ajax calls
             Route::match(['GET', 'POST'], 'ajax/libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraries')->name('h5p.ajax.libraries');
@@ -189,6 +196,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         // lti-tool-settings
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
+        Route::post('suborganizations/{suborganization}/lti-tool-settings/{ltiToolSetting}/clone', 'LtiTool\LtiToolSettingsController@clone');
+
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');

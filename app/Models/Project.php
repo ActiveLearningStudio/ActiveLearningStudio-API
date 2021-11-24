@@ -9,6 +9,7 @@ use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\File;
 use Laravel\Scout\Searchable;
 
 class Project extends Model
@@ -95,6 +96,14 @@ class Project extends Model
     }
 
     /**
+     * Get the single playlist for the project
+     */
+    public function singlePlaylist()
+    {
+        return $this->hasOne('App\Models\Playlist', 'project_id');
+    }
+
+    /**
      * Get the organization that owns the project.
      */
     public function organization()
@@ -110,9 +119,18 @@ class Project extends Model
         parent::boot();
 
         self::deleting(function (Project $project) {
-            foreach ($project->playlists as $playlist)
-            {
-                $playlist->delete();
+            $isForceDeleting = $project->isForceDeleting();
+
+            if ($isForceDeleting && File::exists(public_path($project->thumb_url))) {
+                File::delete(public_path($project->thumb_url));
+            }
+
+            foreach ($project->playlists as $playlist) {
+                if ($isForceDeleting) {
+                    $playlist->forceDelete();
+                } else {
+                    $playlist->delete();
+                }
             }
         });
     }
