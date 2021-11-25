@@ -359,13 +359,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $results = DB::select($query, ['user_id' => auth()->user()->id]);
-        $query = 'SELECT * FROM advSearch(:user_id)';
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
         $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id]);
 
         if (isset($countResults)) {
             foreach ($countResults as $countResult) {
-                $modelMappingKey = array_search ($countResult->entity, $modelMapping);
+                $modelMappingKey = array_search($countResult->entity, $modelMapping);
                 $counts[$modelMappingKey] = $countResult->count;
             }
         }
