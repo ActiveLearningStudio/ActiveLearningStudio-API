@@ -231,6 +231,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $query = 'SELECT * FROM advSearch(:user_id)';
+        $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
         $queryWhere = [];
         $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
 
@@ -354,12 +355,20 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (!empty($queryWhere)) {
-            $queryWhere = " WHERE " . implode(' AND ', $queryWhere);
-            $query = $query . $queryWhere;
+            $queryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
+            $countQuery = $query;
+            $query = $query . $queryWhereStr;
+
+            if (isset($data['model']) && !empty($data['model'])) {
+                unset($queryWhere[count($queryWhere) - 1]);
+            }
+
+            $countQueryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
+            $countQuery = $countQuery . $countQueryWhereStr;
+            $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
         }
 
         $results = DB::select($query, ['user_id' => auth()->user()->id]);
-        $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
         $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id]);
 
         if (isset($countResults)) {
