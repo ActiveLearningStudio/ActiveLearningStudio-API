@@ -498,7 +498,7 @@ class PlaylistController extends Controller
         if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
             if($playlist->shared){
                 return response([
-                    'playlist' => new PlaylistResource($this->playlistRepository->loadSharedPlaylist($project, $playlist)),
+                    'playlist' => new PlaylistResource($this->playlistRepository->loadSharedPlaylist($playlist)),
                 ], 200);
             }
         }
