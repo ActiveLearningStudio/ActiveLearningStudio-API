@@ -72,9 +72,7 @@ class SuborganizationController extends Controller
 
         $data = $suborganizationSearchRequest->validated();
 
-        return response([
-            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($data, $suborganization)),
-        ], 200);
+        return  OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($data, $suborganization));
     }
 
     /**
