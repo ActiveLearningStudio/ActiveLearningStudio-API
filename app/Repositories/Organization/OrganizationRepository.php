@@ -60,6 +60,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function fetchSuborganizations($data, $organization)
     {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
         if (isset($data['query']) && !empty($data['query'])) {
             $parentIds = $this->getSuborganizationIds($organization);
         } else {
@@ -74,7 +76,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $query->where('name', 'like', '%' . $data['query'] . '%');
                 return $query;
             })
-            ->get();
+            ->paginate($perPage)->withQueryString();
     }
 
     /**
