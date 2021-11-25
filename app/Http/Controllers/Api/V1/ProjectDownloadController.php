@@ -165,4 +165,10 @@ class ProjectDownloadController extends Controller
 
         return url('storage/exports/'.$fileName);
     }
+
+    public function deleteProject(Request $request, $projectPath)
+    {
+        Storage::disk('public')->delete('/exports/'.$projectPath.'.zip');
+        return Storage::disk('public')->deleteDirectory('/exports/'.$projectPath);
+    }
 }

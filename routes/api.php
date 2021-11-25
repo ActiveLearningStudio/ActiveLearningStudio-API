@@ -122,6 +122,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::get('h5p/settings', 'H5pController@create');
         Route::get('suborganization/{suborganization}/projects/{project}/offline-project', 'ProjectDownloadController@exportProject');
+        Route::get('project/delete/{project_path}', 'ProjectDownloadController@deleteProject');
         Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
         Route::apiResource('h5p', 'H5pController');
 
