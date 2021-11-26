@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
+use DB;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -516,7 +517,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                                 storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . 
                                                                     $activity_dir . '/' . $old_content_id . '.json'));
         $h5p_content = json_decode($content_json,true);
-        $h5p_content['library_id'] = \DB::table('h5p_libraries')
+        $h5p_content['library_id'] = DB::table('h5p_libraries')
                                             ->where('name', $h5p_content['library_title'])
                                             ->where('major_version',$h5p_content['library_major_version'])
                                             ->where('minor_version',$h5p_content['library_minor_version'])
@@ -527,8 +528,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             
         $h5p_content['user_id'] = $authUser->id;
             
-        $new_content = \DB::table('h5p_contents')->insert($h5p_content);
-        $new_content_id = \DB::getPdo()->lastInsertId();
+        $new_content = DB::table('h5p_contents')->insert($h5p_content);
+        $new_content_id = DB::getPdo()->lastInsertId();
             
         \File::copyDirectory(
                     storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . $old_content_id), 
@@ -539,15 +540,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             
         if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
             $activitiy_thumbnail_path = storage_path(
-                                            $extracted_folder . '/playlists/'.$playlist_dir . '/activities/' . $activity_dir . '/' . basename($activity['thumb_url'])
+                                            $extracted_folder . '/playlists/'.$playlist_dir . '/activities/' . 
+                                                        $activity_dir . '/' . basename($activity['thumb_url'])
                                         );
             if(file_exists($activitiy_thumbnail_path)) {
                 $ext = pathinfo(basename($activity['thumb_url']), PATHINFO_EXTENSION);
                 $new_image_name = uniqid() . '.' . $ext;
                 $destination_file = storage_path('app/public/activities/'.$new_image_name);
+                $source_file = $extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . 
+                                                $activity_dir . '/' . basename($activity['thumb_url']);
                 \File::copy(
-                    storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . basename($activity['thumb_url'])), 
-                        $destination_file
+                    storage_path($source_file), $destination_file
                     );
                 $activity['thumb_url'] = "/storage/activities/" . $new_image_name; 
             }

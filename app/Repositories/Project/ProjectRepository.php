@@ -21,6 +21,7 @@ use ZipArchive;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\App;
+use DB;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -120,7 +121,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $data['organization_visibility_type_id'] = config('constants.private-organization-visibility-type-id');
             }
 
-            return \DB::transaction(function () use ($authUser, $data, $project, $team, $token) {
+            return DB::transaction(function () use ($authUser, $data, $project, $team, $token) {
                 $cloned_project = $authUser->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
@@ -143,7 +144,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             });
 
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             Log::error($e->getMessage());
             throw new GeneralException('Unable to clone the project, please try again later!');
         }
@@ -235,7 +236,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $plist['activities'] = [];
 
             foreach ($playlist['activities'] as $activity) {
-                $h5pContent = \DB::table('h5p_contents')
+                $h5pContent = DB::table('h5p_contents')
                     ->select(['h5p_contents.title', 'h5p_libraries.name as library_name'])
                     ->where(['h5p_contents.id' => $activity->h5p_content_id])
                     ->join('h5p_libraries', 'h5p_contents.library_id', '=', 'h5p_libraries.id')->first();
@@ -560,12 +561,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 
                 $decoded_content = json_decode($activity->h5p_content,true);
 
-                $decoded_content['library_title'] = \DB::table('h5p_libraries')
+                $decoded_content['library_title'] = DB::table('h5p_libraries')
                                                                     ->where('id', $decoded_content['library_id'])->value('name');
-                $decoded_content['library_major_version'] = \DB::table('h5p_libraries')
+                $decoded_content['library_major_version'] = DB::table('h5p_libraries')
                                                                         ->where('id', $decoded_content['library_id'])
                                                                         ->value('major_version');
-                $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')
+                $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
                                                                         ->where('id', $decoded_content['library_id'])
                                                                         ->value('minor_version');
                 
@@ -649,7 +650,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             }else {
                 return "Unable to import Project";
             }
-            return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file) {
+            return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file) {
                 if(file_exists(storage_path($extracted_folder_name.'/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
 
@@ -690,7 +691,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
 
         }catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             Log::error($e->getMessage());
             throw new GeneralException('Unable to import the project, please try again later!');
         }
@@ -756,13 +757,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 Storage::disk('public')->put($destination_playlist_json, $activity);
                 $decoded_content = json_decode($activity->h5p_content, true);
 
-                $decoded_content['library_title'] = \DB::table('h5p_libraries')
+                $decoded_content['library_title'] = DB::table('h5p_libraries')
                                                             ->where('id', $decoded_content['library_id'])
                                                             ->value('name');
-                $decoded_content['library_major_version'] = \DB::table('h5p_libraries')
+                $decoded_content['library_major_version'] = DB::table('h5p_libraries')
                                                                 ->where('id', $decoded_content['library_id'])
                                                                 ->value('major_version');
-                $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')
+                $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
                                                                 ->where('id', $decoded_content['library_id'])
                                                                 ->value('minor_version');
                 $destination_activity_json = '/exports/' . $project_dir_name . '/playlists/' . $title . 
