@@ -501,7 +501,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      */
     public function importActivity(Playlist $playlist, $authUser, $playlist_dir, $activity_dir, $extracted_folder)
     {
-        $activity_json = file_get_contents(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$activity_dir.'.json'));
+        $activity_json = file_get_contents(
+                                storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . 
+                                                                    $activity_dir . '/' . $activity_dir . '.json'));
         $activity = json_decode($activity_json,true);
             
         $old_content_id = $activity['h5p_content_id'];
@@ -510,29 +512,43 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         
         $activity['playlist_id'] = $playlist->id; //assign playlist to activities
             
-        $content_json = file_get_contents(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$old_content_id.'.json'));
+        $content_json = file_get_contents(
+                                storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . 
+                                                                    $activity_dir . '/' . $old_content_id . '.json'));
         $h5p_content = json_decode($content_json,true);
-        $h5p_content['library_id'] = \DB::table('h5p_libraries')->where('name', $h5p_content['library_title'])->where('major_version',$h5p_content['library_major_version'])->where('minor_version',$h5p_content['library_minor_version'])->value('id');
+        $h5p_content['library_id'] = \DB::table('h5p_libraries')
+                                            ->where('name', $h5p_content['library_title'])
+                                            ->where('major_version',$h5p_content['library_major_version'])
+                                            ->where('minor_version',$h5p_content['library_minor_version'])
+                                            ->value('id');
             
-        unset($h5p_content["id"], $h5p_content["user_id"], $h5p_content["created_at"], $h5p_content["updated_at"], $h5p_content['library_title'], $h5p_content['library_major_version'], $h5p_content['library_minor_version']);
+        unset($h5p_content["id"], $h5p_content["user_id"], $h5p_content["created_at"], $h5p_content["updated_at"], 
+                                    $h5p_content['library_title'], $h5p_content['library_major_version'], $h5p_content['library_minor_version']);
             
         $h5p_content['user_id'] = $authUser->id;
             
         $new_content = \DB::table('h5p_contents')->insert($h5p_content);
         $new_content_id = \DB::getPdo()->lastInsertId();
             
-        \File::copyDirectory(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$old_content_id), storage_path('app/public/h5p/content/'.$new_content_id) );
+        \File::copyDirectory(
+                    storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . $old_content_id), 
+                    storage_path('app/public/h5p/content/'.$new_content_id) 
+                );
             
         $activity['h5p_content_id'] = $new_content_id;
             
         if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
-            $activitiy_thumbnail_path = storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url']));
+            $activitiy_thumbnail_path = storage_path(
+                                            $extracted_folder . '/playlists/'.$playlist_dir . '/activities/' . $activity_dir . '/' . basename($activity['thumb_url'])
+                                        );
             if(file_exists($activitiy_thumbnail_path)) {
                 $ext = pathinfo(basename($activity['thumb_url']), PATHINFO_EXTENSION);
                 $new_image_name = uniqid() . '.' . $ext;
-               \Log::info(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])));
                 $destination_file = storage_path('app/public/activities/'.$new_image_name);
-                \File::copy(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])), $destination_file);
+                \File::copy(
+                    storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . basename($activity['thumb_url'])), 
+                        $destination_file
+                    );
                 $activity['thumb_url'] = "/storage/activities/" . $new_image_name; 
             }
         }
