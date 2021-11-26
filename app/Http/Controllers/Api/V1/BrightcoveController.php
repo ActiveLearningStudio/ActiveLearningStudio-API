@@ -71,4 +71,38 @@ class BrightcoveController extends Controller
             return response(['h5p' => null], 404);
         }
     }
+
+    /**
+     * Get H5P Resource Settings For Brightcove
+     *
+     *
+     * @param int $videoId for brightcove video
+     *
+     * @responseFile responses/h5p/h5p-resource-settings-open.json
+     *
+     * @response 404 {
+     *   "h5p": null
+     * }
+     *
+     * @return Response
+     */
+    public function getH5pBrightcoveResourceSettings($videoId)
+    {
+        $h5p_content = $this->h5pContentRepository->getH5pContentId($videoId);
+        if ($h5p_content) {
+            $h5p = App::make('LaravelH5p');
+            $core = $h5p::$core;
+            $settings = $h5p::get_editor();
+            $content = $h5p->load_content($h5p_content['h5p_content_id']);
+            $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+            $embed = $h5p->get_embed($content, $settings);
+            $embed_code = $embed['embed'];
+            $settings = $embed['settings'];
+            $user_data = null;
+            $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+            return response(['h5p' => $h5p_data], 200);
+        } else {
+            return response(['h5p' => null], 404);
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\H5pActivityResource;
 use App\Models\Activity;
+use App\Models\H5pBrightCoveVideoContents;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
@@ -179,6 +180,13 @@ class H5pController extends Controller
 
                 // Save new content
                 $content['id'] = $core->saveContent($content);
+                
+                // for Brightcove Interactive Videos
+                if ($content['library']['machineName'] == 'H5P.BrightcoveInteractiveVideo') {
+                    $brightCoveVideoData['brightcove_video_id'] = $content['library']['libraryId'];
+                    $brightCoveVideoData['h5p_content_id'] = $content['id'];
+                    H5pBrightCoveVideoContents::create($brightCoveVideoData);
+                }
 
                 // Move images and find all content dependencies
                 $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
