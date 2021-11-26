@@ -224,13 +224,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $counts = [];
         $organizationParentChildrenIds = [];
+        $queryText = null;
 
         if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
             $organization = $data['orgObj'];
             $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
         }
 
-        $query = 'SELECT * FROM advSearch(:user_id)';
+        $query = 'SELECT * FROM advSearch(:user_id, :query_text)';
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
         $queryWhere = [];
         $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
@@ -337,11 +338,13 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['query']) && !empty($data['query'])) {
-            $queryWhereQuery[] = "name LIKE '%" . $data['query'] . "%'";
-            $queryWhereQuery[] = "description LIKE '%" . $data['query'] . "%'";
+            $queryText = $data['query'];
 
-            $queryWhereQuery = implode(' OR ', $queryWhereQuery);
-            $queryWhere[] = "(" . $queryWhereQuery . ")";
+            // $queryWhereQuery[] = "name LIKE '%" . $data['query'] . "%'";
+            // $queryWhereQuery[] = "description LIKE '%" . $data['query'] . "%'";
+
+            // $queryWhereQuery = implode(' OR ', $queryWhereQuery);
+            // $queryWhere[] = "(" . $queryWhereQuery . ")";
         }
 
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
@@ -368,8 +371,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
         }
 
-        $results = DB::select($query, ['user_id' => auth()->user()->id]);
-        $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id]);
+        $results = DB::select($query, ['user_id' => auth()->user()->id, 'query_text' => $queryText]);
+        $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id, 'query_text' => $queryText]);
 
         if (isset($countResults)) {
             foreach ($countResults as $countResult) {
