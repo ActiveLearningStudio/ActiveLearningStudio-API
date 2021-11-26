@@ -525,11 +525,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             
         $activity['h5p_content_id'] = $new_content_id;
             
-        if (filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
-            if(file_exists(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])))) {
+        if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
+            $activitiy_thumbnail_path = storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url']));
+            if(file_exists($activitiy_thumbnail_path)) {
                 $ext = pathinfo(basename($activity['thumb_url']), PATHINFO_EXTENSION);
                 $new_image_name = uniqid() . '.' . $ext;
-               
+               \Log::info(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])));
                 $destination_file = storage_path('app/public/activities/'.$new_image_name);
                 \File::copy(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])), $destination_file);
                 $activity['thumb_url'] = "/storage/activities/" . $new_image_name; 

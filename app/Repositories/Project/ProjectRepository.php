@@ -535,7 +535,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
 
         $project_thumbanil = "";
-        if (filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
+        if (!empty($project->thumb_url) && filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
             $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
             $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
             if(file_exists($project_thumbanil)) {
@@ -547,7 +547,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         foreach ($playlists as $playlist) {
 
-            $title = $playlist->title;
+            $title = str_replace('/', '-', $playlist->title);
             Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/'.$title.'.json', $playlist);
             $activites = $playlist->activities;
             ;
@@ -561,10 +561,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('minor_version');
                 Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id.'.json', json_encode($decoded_content));
 
-                if (filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
+                if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
                     $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
-                    if(file_exists($activity_thumbanil)) {
+                    if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
                         Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.basename($activity_thumbanil),file_get_contents($activity_thumbanil));
                     }
                 }
@@ -604,6 +604,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // Zip archive will be created only after closing object
         $zip->close();
+        // Remove project folder after creation of zip
+        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name)); 
 
         return storage_path('app/public/exports/'.$fileName);
     }
@@ -640,7 +642,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
-                    if (filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
+                    if (!empty($project['thumb_url']) && filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
 
                         if(file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
 
@@ -710,7 +712,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         Storage::disk('public')->put('/exports/' . $project_dir_name . '/project.json', $project);
 
         $project_thumbanil = "";
-        if (filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
+        if (!empty($project->thumb_url) && filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
             $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
             $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
             if (file_exists($project_thumbanil)) {
@@ -745,7 +747,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 
                 Storage::disk('public')->put($destination_activity_json, json_encode($decoded_content));
 
-                if (filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
+                if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
                     $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
                     if (file_exists($activity_thumbanil)) {
