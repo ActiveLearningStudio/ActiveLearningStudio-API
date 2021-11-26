@@ -225,6 +225,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $counts = [];
         $organizationParentChildrenIds = [];
         $queryText = null;
+        $queryFrom = 0;
+        $querySize = 10;
 
         if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
             $organization = $data['orgObj'];
@@ -357,6 +359,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $queryWhere[] = "entity IN ('" . $dataModel . "')";
         }
 
+        if (isset($data['from']) && !empty($data['from'])) {
+            $queryFrom = $data['from'];
+        }
+
+        if (isset($data['size']) && !empty($data['size'])) {
+            $querySize = $data['size'];
+        }
+
         if (!empty($queryWhere)) {
             $queryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
             $countQuery = $query;
@@ -370,6 +380,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $countQuery = $countQuery . $countQueryWhereStr;
             $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
         }
+
+        $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
 
         $results = DB::select($query, ['user_id' => auth()->user()->id, 'query_text' => $queryText]);
         $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id, 'query_text' => $queryText]);
