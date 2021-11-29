@@ -24,7 +24,9 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Response;
-
+use Illuminate\Http\Request;
+use App\Jobs\ExportProjecttoNoovo;
+use App\Services\NoovoCMSService;
 /**
  * @group 14. Team
  *
@@ -37,6 +39,7 @@ class TeamController extends Controller
     private $teamRepository;
     private $userRepository;
     private $projectRepository;
+    protected $noovoCMSService;
     /**
      * TeamController constructor.
      *
@@ -48,12 +51,14 @@ class TeamController extends Controller
     public function __construct(
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
-        ProjectRepositoryInterface $projectRepository
+        ProjectRepositoryInterface $projectRepository,
+        NoovoCMSService $noovoCMSService
     )
     {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
+        $this->noovoCMSService = $noovoCMSService;
     }
 
     /**
@@ -824,6 +829,49 @@ class TeamController extends Controller
         return response([
             'message' => 'Indexing request for this team has been made successfully!'
         ], 200);
+    }
+
+    /**
+     * Push Project to Noovo
+     *
+     * script to push project from curriki to noovo mapped device.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
+     *
+     * @response {
+     *   "message": "Indexing request for this team has been made successfully!"
+     * }
+     *
+     * @response 404 {
+     *   "message": "No query results for model [Team] Id"
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Indexing value is already set. Current indexing state of this team: CURRENT_STATE_OF_PROJECT_INDEX"
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Team must be finalized before requesting the indexing."
+     *   ]
+     * }
+     *
+     * @param Team $team
+     * @return Response
+     */
+    public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team)
+    {
+        $projects = $team->projects()->get(); // Get all associated projects of a team
+        
+        ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team)->delay(now()->addSecond());
+        
+        return response([
+            'message' =>  "Your request to push projects to noovo has been received and is being processed.",
+        ], 200);
+        
     }
 
 }
