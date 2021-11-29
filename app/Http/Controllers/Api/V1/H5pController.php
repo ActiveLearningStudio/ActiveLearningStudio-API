@@ -32,7 +32,7 @@ class H5pController extends Controller
 
     /**
      * ActivityController constructor.
-     * 
+     *
      * @param ContentUserDataGoRepositoryInterface $contentUserDataGoRepository
      */
     public function __construct(ContentUserDataGoRepositoryInterface $contentUserDataGoRepository)
@@ -180,9 +180,9 @@ class H5pController extends Controller
 
                 // Save new content
                 $content['id'] = $core->saveContent($content);
-                
+
                 // for Brightcove Interactive Videos
-                if ($content['library']['machineName'] == 'H5P.BrightcoveInteractiveVideo') {
+                if ($content['library']['machineName'] === 'H5P.BrightcoveInteractiveVideo') {
                     $brightCoveVideoData['brightcove_video_id'] = $params->params->interactiveVideo->video->brightcoveVideoID;
                     $brightCoveVideoData['h5p_content_id'] = $content['id'];
                     H5pBrightCoveVideoContents::create($brightCoveVideoData);
@@ -613,7 +613,7 @@ class H5pController extends Controller
         @unlink($interface->getUploadedH5pPath());
         return FALSE;
     }
-    
+
     public function contentUserData(Request $request)
     {
         $contentId =$request->get('content_id');
@@ -631,17 +631,17 @@ class H5pController extends Controller
             $userId === NULL || $submissionId === NULL) {
         return; // Missing parameters
         }
-        
+
         if ($data === NULL) {
             return response()->json(["data" => false, "success" => true]);
         }
-        
+
         if ($request->get('gcuid')) {
             if ($data === '0') {
                 $records = $this->contentUserDataGoRepository->deleteComposite($contentId, $userId, $subContentId, $dataId, $submissionId);
             }else {
                 $records = $this->contentUserDataGoRepository->fetchByCompositeKey($contentId, $userId, $subContentId, $dataId, $submissionId);
-                
+
                 if ($records->count() === 0) {
                     $this->contentUserDataGoRepository->create([
                         'content_id' => $contentId,
