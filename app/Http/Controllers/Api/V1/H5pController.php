@@ -183,7 +183,7 @@ class H5pController extends Controller
                 
                 // for Brightcove Interactive Videos
                 if ($content['library']['machineName'] == 'H5P.BrightcoveInteractiveVideo') {
-                    $brightCoveVideoData['brightcove_video_id'] = $content['library']['libraryId'];
+                    $brightCoveVideoData['brightcove_video_id'] = $params->params->interactiveVideo->video->brightcoveVideoID;
                     $brightCoveVideoData['h5p_content_id'] = $content['id'];
                     H5pBrightCoveVideoContents::create($brightCoveVideoData);
                 }
