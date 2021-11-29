@@ -38,7 +38,6 @@ class BrightcoveController extends Controller
     /**
      * Get H5P Resource Settings For Brightcove
      *
-     *
      * @param int $accountId for brightcove video
      * @param int $videoId for brightcove video
      * @param int $dataPlayer for brightcove video
@@ -74,7 +73,6 @@ class BrightcoveController extends Controller
 
     /**
      * Get H5P Resource Settings For Brightcove
-     *
      *
      * @param int $videoId for brightcove video
      *
