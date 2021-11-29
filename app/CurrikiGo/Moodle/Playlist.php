@@ -32,6 +32,7 @@ class Playlist
             "entity_id" => $playlist->id,
             "parent_name" => $playlist->project->name,
             "parent_type" => "program",
+            "project_id" => $playlist->project->id
         ];
         $response = $this->client->request('GET', $web_service_url, ['query' => $rquest_params]);
         return $response;
