@@ -46,7 +46,7 @@ class importProjects extends Command
         
         if($ext !== "zip") {
             $this->error('Please provide a valid zip file');
-            die;
+            return;
         }
                 
         $user = User::find(config('import-mapped-device.user_id'));
