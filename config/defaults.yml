@@ -1,0 +1,20 @@
+SITE_NAME: "ActiveLearningStudio-API"
+SITE_SERVICES:
+  - SITE_NAME: "ActiveLearningStudio-API"
+    SITE_SRC: "/usr/local/src/ActiveLearningStudio-API"
+LANGUAGE_NAME: "enUS"
+SITE_JAVA_PACKAGE: org.curriki.api
+SITE_PORT: 12080
+AUTH_REALM: TEAM19
+AUTH_RESOURCE: team19
+AUTH_SECRET: 0518f65a-f86d-42e8-ad65-00f46920443d
+AUTH_URL: https://sso.computate.org/auth
+AUTH_TOKEN_URI: /auth/realms/COMPUTATE.ORG/protocol/openid-connect/token
+AUTH_HOST_NAME: sso.computate.org
+AUTH_PORT: 443
+AUTH_SSL: true
+AUTH_SSL_REQUIRED: all
+AUTH_ROLES_ADMIN: [ 'SiteAdmin' ]
+AUTH_ROLES_REQUIRED_SiteUser: [ 'SiteAdmin' ]
+JDBC_DATABASE: "curriki"
+JDBC_USERNAME: "curriki"
