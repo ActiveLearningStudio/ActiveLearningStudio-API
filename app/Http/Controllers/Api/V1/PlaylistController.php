@@ -11,6 +11,7 @@ use App\Http\Resources\V1\ProjectResource;
 use App\Jobs\ClonePlayList;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Models\Team;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
@@ -66,7 +67,7 @@ class PlaylistController extends Controller
      */
     public function index(Project $project)
     {
-        $this->authorize('view', [Playlist::class, $project->organization]);
+        $this->authorize('viewAny', [Playlist::class, $project]);
 
         return response([
             'playlists' => PlaylistResource::collection($project->playlists()->orderBy('order')->get()),
@@ -97,7 +98,7 @@ class PlaylistController extends Controller
      */
     public function store(PlaylistRequest $playlistRequest, Project $project)
     {
-        $this->authorize('create', [Playlist::class, $project->organization]);
+        $this->authorize('create', [Playlist::class, $project]);
 
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
@@ -140,7 +141,7 @@ class PlaylistController extends Controller
      */
     public function show(Project $project, Playlist $playlist)
     {
-        $this->authorize('view', [Playlist::class, $project->organization]);
+        $this->authorize('view', [Playlist::class, $project]);
 
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -268,7 +269,7 @@ class PlaylistController extends Controller
      */
     public function update(PlaylistRequest $playlistRequest, Project $project, Playlist $playlist)
     {
-        $this->authorize('update', [Playlist::class, $project->organization]);
+        $this->authorize('update', [Playlist::class, $project]);
 
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -323,7 +324,7 @@ class PlaylistController extends Controller
      */
     public function destroy(Project $project, Playlist $playlist)
     {
-        $this->authorize('delete', [Playlist::class, $project->organization]);
+        $this->authorize('delete', [Playlist::class, $project]);
 
         if ($playlist->project_id !== $project->id) {
             return response([

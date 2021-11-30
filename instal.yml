@@ -1,0 +1,52 @@
+---
+# hackathonTitle: create the Ansible playbook for deploying the complete ActiveLearningStudio-API application locally
+# hackathonColumn: Automate Project Deployment
+# hackathonLabels: Ansible
+
+- name: Install the ActiveLearningStudio-API source code and watch service on the target. 
+  hosts: localhost
+  vars: 
+    GITHUB_ORG: "team19hackathon2021"
+    APP_NAME: "ActiveLearningStudio-API"
+    LANGUAGE_NAME: "enUS"
+    APP_REPO: "git@github.com:{{ GITHUB_ORG }}/{{ APP_NAME }}.git"
+    APP_SRC: "{{ playbook_dir }}"
+    APP_JAVA_PACKAGE: org.curriki.api.enus
+    SITE_PORT: 10981
+    APP_CONFIG:
+      sqlTables: true
+      enableUserKey: false
+      enableSessionId: false
+      enableDeleted: false
+      enableArchived: false
+  tasks: 
+
+
+    # TODO: Include an Ansible Galaxy role for installing a PostgreSQL database as a podman container locally. 
+    - include_role:
+        name: computate.computate_postgres
+      when: FILTER_POSTGRES is defined and FILTER_POSTGRES == 'true' or (FILTER_ZOOKEEPER is not defined and FILTER_SOLR is not defined and FILTER_PROJECT is not defined)
+
+
+    # TODO: Include an Ansible Galaxy role for installing a Zookeeper cluster manager as a podman container locally. 
+    - include_role:
+        name: computate.computate_zookeeper
+      when: FILTER_ZOOKEEPER is defined and FILTER_ZOOKEEPER == 'true' or (FILTER_POSTGRES is not defined and FILTER_SOLR is not defined and FILTER_PROJECT is not defined)
+
+
+    # TODO: Include an Ansible Galaxy role for installing a Solr search engine as a podman container locally. 
+    - include_role:
+        name: computate.computate_solr
+      when: FILTER_SOLR is defined and FILTER_SOLR == 'true' or (FILTER_POSTGRES is not defined and FILTER_ZOOKEEPER is not defined and FILTER_PROJECT is not defined)
+
+
+    # TODO: Include an Ansible Galaxy role for configuring the ActiveLearningStudio-API application for the first time. 
+    - include_role:
+        name: computate.computate_project
+      vars: 
+        APP_SERVICES: 
+          - APP_NAME: "{{ APP_NAME }}"
+            APP_SRC: "{{ APP_SRC }}"
+            APP_JAVA_PACKAGE: "{{ APP_JAVA_PACKAGE }}"
+      when: FILTER_PROJECT is defined and FILTER_PROJECT == 'true' or (FILTER_POSTGRES is not defined and FILTER_ZOOKEEPER is not defined and FILTER_SOLR is not defined)
+

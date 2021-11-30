@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Organization;
+use App\Models\Team;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -59,6 +60,18 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can update the team member role.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function updateMemberRole(User $user, Team $team)
+    {
+        return $user->hasTeamPermissionTo('team:add-team-user', $team);
+    }
+
+    /**
      * Determine whether the user can share the team.
      *
      * @param User $user
@@ -98,11 +111,47 @@ class TeamPolicy
      * Determine whether the user can add project in the team.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Team $team
      * @return mixed
      */
-     public function addProjects(User $user, Organization $suborganization)
+     public function addProjects(User $user, Team $team)
      {
-         return $user->hasPermissionTo('team:add-projects', $suborganization);
+         return $user->hasTeamPermissionTo('team:add-project', $team);
      }
+
+     /**
+     * Determine whether the user can remove project in the team.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function removeProject(User $user, Team $team)
+    {
+        return $user->hasTeamPermissionTo('team:remove-project', $team);
+    }
+
+     /**
+     * Determine whether the user can add users in the team.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function addTeamUsers(User $user, Team $team)
+    {
+        return $user->hasTeamPermissionTo('team:add-team-user', $team);
+    }
+
+    /**
+     * Determine whether the user can remove user in the team.
+     *
+     * @param User $user
+     * @param Team $team
+     * @return mixed
+     */
+    public function removeTeamUsers(User $user, Team $team)
+    {
+        return $user->hasTeamPermissionTo('team:remove-team-user', $team);
+    }
 }

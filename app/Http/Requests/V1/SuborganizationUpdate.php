@@ -37,16 +37,15 @@ class SuborganizationUpdate extends FormRequest
             'users.*.user_id' => 'required_with:users.*.role_id|integer|exists:App\User,id',
             'users.*.role_id' => 'required_with:users.*.user_id|integer|exists:App\Models\OrganizationRoleType,id',
             'parent_id' => [
-                'required',
                 'integer',
                 Rule::exists('organizations', 'id')->where(function ($query) use ($suborganization) {
                     $query->where('id', '<>', $suborganization->id);
                 }),
             ],
             'self_registration' => 'boolean',
-            'account_id' => 'string|max:255',
-            'api_key' => 'string|max:255',
-            'unit_path' => 'string|max:255'
+            'account_id' => 'max:255',
+            'api_key' => 'max:255',
+            'unit_path' => 'max:255'
         ];
     }
 }

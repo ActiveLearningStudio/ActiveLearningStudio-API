@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -129,6 +130,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $counts = [];
         $projectIds = [];
+        $organizationParentChildrenIds = [];
+
+        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
+            $organization = $data['orgObj'];
+            $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
+        }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $userIds = $data['userIds'];
@@ -142,11 +149,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $author = $data['author'];
 
             $authorProjectIds = Project::whereHas('users', function (Builder $query) use ($author) {
-                $query->orWhere(function($query) use ($author) {
-                    $query->where('first_name', 'like', '%' . $author . '%')
-                          ->where('last_name', 'like', '%' . $author . '%')
-                          ->where('email', 'like', '%' . $author . '%');
-                });
+                $query->where('first_name', 'like', '%' . $author . '%')
+                        ->orWhere('last_name', 'like', '%' . $author . '%')
+                        ->orWhere('email', 'like', '%' . $author . '%');
             })->pluck('id')->toArray();
 
             if (empty($authorProjectIds)) {
@@ -159,6 +164,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $searchResultQuery = $this->model->searchForm()
+            ->searchType(Arr::get($data, 'searchType', 0))
+            ->organizationParentChildrenIds($organizationParentChildrenIds)
             ->query(Arr::get($data, 'query', 0))
             ->join(Project::class, Playlist::class)
             ->aggregate('count_by_index', [
@@ -510,7 +517,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $new_content = \DB::table('h5p_contents')->insert($h5p_content);
         $new_content_id = \DB::getPdo()->lastInsertId();
             
-        \File::copyDirectory(storage_path('app/exports/projects/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$old_content_id), storage_path('app/public/h5p/content/'.$new_content_id) );
+        \File::copyDirectory(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.$old_content_id), storage_path('app/public/h5p/content/'.$new_content_id) );
             
         $activity['h5p_content_id'] = $new_content_id;
             
@@ -521,7 +528,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                
                 $destination_file = storage_path('app/public/activities/'.$new_image_name);
                 \File::copy(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])), $destination_file);
-                $activity['thumb_url'] = "/storage/activities/" . $destination_file; 
+                $activity['thumb_url'] = "/storage/activities/" . $new_image_name; 
             }
         }
         

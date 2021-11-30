@@ -1,0 +1,25 @@
+{
+    "teamRoleTypes": [
+        {
+            "id": 1,
+            "name": "admin",
+            "display_name": "Team Administrator",
+            "created_at": "2021-07-13T09:19:37.000000Z",
+            "updated_at": null
+        },
+        {
+            "id": 2,
+            "name": "contributor",
+            "display_name": "Team Contributor",
+            "created_at": "2021-07-13T09:19:37.000000Z",
+            "updated_at": null
+        },
+        {
+            "id": 3,
+            "name": "member",
+            "display_name": "Team Read-Only Member",
+            "created_at": "2021-07-13T09:19:37.000000Z",
+            "updated_at": null
+        }
+    ]
+}
