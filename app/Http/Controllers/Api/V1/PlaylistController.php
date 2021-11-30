@@ -19,6 +19,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
+use App\Models\Organization;
 
 /**
  * @group 4. Playlist
@@ -541,4 +542,39 @@ class PlaylistController extends Controller
         ], 400);
     }
 
+    /**
+     * Get Playlist Search Preview
+     *
+     * Get the specified playlist search preview.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @responseFile 200 responses/playlist/playlist.json
+     *
+     * @response 404 {
+     *   "message": [
+     *     "Playlist is not available."
+     *   ]
+     * }
+     *
+     * @param Organization $suborganization
+     * @param Playlist $playlist
+     * @return Response
+     */
+    public function searchPreview(Organization $suborganization, Playlist $playlist)
+    {
+        $this->authorize('searchPreview', [$playlist->project, $suborganization]);
+
+        $availablePlaylist = $this->playlistRepository->getPlaylistWithProject($playlist);
+        if ($availablePlaylist) {
+            return response([
+                'playlist' => new PlaylistResource($availablePlaylist),
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Playlist is not available.',
+        ], 404);
+    }
 }

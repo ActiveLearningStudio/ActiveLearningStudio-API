@@ -30,6 +30,14 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id);
 
     /**
+     * To fetch project based on LMS settings
+     *
+     * @param Project $project
+     * @return array
+     */
+    public function getProjectForPreview(Project $project);
+
+    /**
      * To fetch recent public project
      *
      * @param $limit
