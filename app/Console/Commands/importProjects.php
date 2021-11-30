@@ -44,7 +44,7 @@ class importProjects extends Command
 
         $ext = pathinfo(basename($path), PATHINFO_EXTENSION);
         
-        if($ext !== "zip") {
+        if ($ext !== "zip") {
             $this->error('Please provide a valid zip file');
             return;
         }

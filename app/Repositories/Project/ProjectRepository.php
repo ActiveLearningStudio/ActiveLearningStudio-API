@@ -643,7 +643,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $zip = new ZipArchive;
             $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
 
-            if($method_source === "command") {
+            if ($method_source === "command") {
                 $source_file = $path;
             }
                 
@@ -655,7 +655,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 return "Unable to import Project";
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
-                if(file_exists(storage_path($extracted_folder_name.'/project.json'))) {
+                if (file_exists(storage_path($extracted_folder_name.'/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
 
                     $project = json_decode($project_json,true);
@@ -666,7 +666,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $project['organization_visibility_type_id'] = 1;
                     if (!empty($project['thumb_url']) && filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
 
-                        if(file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
+                        if (file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
 
                             $ext = pathinfo(basename($project['thumb_url']), PATHINFO_EXTENSION);
                             $new_image_name = uniqid() . '.' . $ext;
@@ -688,9 +688,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     }
 
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
-                    if($method_source !== "command"){
+                    
+                    if ($method_source !== "command"){
                         unlink($source_file); // Deleted the storage zip file
-                    }else {
+                    } else {
                         return "Project has been imported successfully";
                     }
                     
@@ -699,10 +700,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             });
 
 
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            if($method_source === "command") {
+            if ($method_source === "command") {
                 return("Unable to import the project, please try again later!");
             }
             
