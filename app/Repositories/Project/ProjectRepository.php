@@ -689,7 +689,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
                     
-                    if ($method_source !== "command"){
+                    if ($method_source !== "command") {
                         unlink($source_file); // Deleted the storage zip file
                     } else {
                         return "Project has been imported successfully";
