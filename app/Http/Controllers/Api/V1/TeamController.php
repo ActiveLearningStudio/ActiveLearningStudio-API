@@ -68,7 +68,6 @@ class TeamController extends Controller
      *
      * @param Request $request
      * @param Organization $suborganization
-     * 
      * @return Response
      */
     public function index(Request $request, Organization $suborganization)
@@ -88,6 +87,7 @@ class TeamController extends Controller
      * 
      * @responseFile responses/team/team.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
     public function getOrgTeams(Organization $suborganization)
