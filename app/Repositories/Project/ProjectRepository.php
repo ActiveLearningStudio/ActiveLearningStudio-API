@@ -643,17 +643,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $zip = new ZipArchive;
             $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
 
-            if($method_source == "command")
+            if($method_source === "command")
                         $source_file = $path;
-
-            \Log::info($source_file);
 
             if ($zip->open($source_file) === TRUE) {
                 $extracted_folder_name = "app/public/imports/project-".uniqid();
                 $zip->extractTo(storage_path($extracted_folder_name.'/'));
                 $zip->close();
             }else {
-                if($method_source == "command")
+                if($method_source === "command")
                         die("Unable to import Project");
 
                 return "Unable to import Project";
@@ -690,7 +688,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
-                    if($method_source != "command")
+                    if($method_source !== "command")
                             unlink($source_file); // Deleted the storage zip file
 
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
@@ -703,7 +701,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            if($method_source == "command")
+            if($method_source === "command")
                         die("Unable to import the project, please try again later!");
 
             throw new GeneralException('Unable to import the project, please try again later!');
