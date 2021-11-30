@@ -636,21 +636,29 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param int $suborganization_id
      * @throws GeneralException
      */
-    public function importProject($authUser, $path, $suborganization_id)
+    public function importProject($authUser, $path, $suborganization_id, $method_source="API")
     {
         try {
 
             $zip = new ZipArchive;
             $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
 
+            if($method_source == "command")
+                        $source_file = $path;
+
+            \Log::info($source_file);
+
             if ($zip->open($source_file) === TRUE) {
                 $extracted_folder_name = "app/public/imports/project-".uniqid();
                 $zip->extractTo(storage_path($extracted_folder_name.'/'));
                 $zip->close();
             }else {
+                if($method_source == "command")
+                        die("Unable to import Project");
+
                 return "Unable to import Project";
             }
-            return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file) {
+            return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
                 if(file_exists(storage_path($extracted_folder_name.'/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
 
@@ -682,7 +690,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
-                    unlink($source_file); // Deleted the storage zip file
+                    if($method_source != "command")
+                            unlink($source_file); // Deleted the storage zip file
+
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
                     
                     return $project['name'];
@@ -693,7 +703,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
+            if($method_source == "command")
+                        die("Unable to import the project, please try again later!");
+
             throw new GeneralException('Unable to import the project, please try again later!');
+            
         }
     }
 
