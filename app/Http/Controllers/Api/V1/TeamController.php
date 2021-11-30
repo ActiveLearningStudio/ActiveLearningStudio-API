@@ -23,6 +23,7 @@ use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -66,23 +67,12 @@ class TeamController extends Controller
      *
      * @return Response
      */
-    public function index(Organization $suborganization)
+    public function index(Request $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [Team::class, $suborganization]);
-
         $user_id = auth()->user()->id;
 
-        $teams = $this->teamRepository->getTeams($suborganization->id, $user_id);
-
-        $teamDetails = [];
-        foreach ($teams as $team) {
-            $team = $this->teamRepository->getTeamDetail($team->id);
-            $teamDetails[] = $team;
-        }
-
-        return response([
-            'teams' => TeamResource::collection($teamDetails),
-        ], 200);
+        return TeamResource::collection($this->teamRepository->getTeams($suborganization->id, $user_id, $request->all()));
     }
 
     /**
