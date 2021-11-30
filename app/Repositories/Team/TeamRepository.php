@@ -383,16 +383,24 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      *
      * @param $suborganization_id
      * @param $user_id
+     * @param $data
      * @return mixed
      */
-    public function getTeams($suborganization_id, $user_id)
+    public function getTeams($suborganization_id, $user_id, $data)
     {
-        return Team::whereHas('users', function ($q) use ($user_id) {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        
+        $query =  Team::whereHas('users', function ($q) use ($user_id) {
                     $q->where('user_id', $user_id);
-                })
-                ->whereOrganizationId($suborganization_id)
-                ->get();
+                  });
+                    
+        if (isset($data['query']) && $data['query'] !== '') {
+            $query->where('name', 'iLIKE', '%' .$data['query']. '%');
+        }        
+
+        return $query->whereOrganizationId($suborganization_id)->paginate($perPage)->withQueryString();
     }
+
 
     /**
      * Get Organization Teams data

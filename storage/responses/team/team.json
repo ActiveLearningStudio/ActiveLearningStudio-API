@@ -1,48 +1,77 @@
 {
-    "teams": [
+    "data": [
         {
-            "id": 1,
-            "name": "Test Team",
+            "id": 52,
             "organization_id": 1,
-            "description": "This is a test team.",
+            "name": "Team 12",
+            "description": "desc",
             "indexing": null,
             "users": [
                 {
-                    "id": 2,
-                    "first_name": "test",
-                    "last_name": "user 1",
+                    "id": 1,
+                    "first_name": "Test",
+                    "last_name": "Test",
                     "email": "test@test.com",
-                    "projects": [],
-                    "role": "owner"
+                    "projects": [
+                        {
+                            "id": 6,
+                            "name": "The Science of Golf",
+                            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                            "thumb_url": "",
+                            "created_at": "2021-08-17T09:52:34.000000Z",
+                            "updated_at": "2021-08-17T09:52:34.000000Z",
+                            "deleted_at": null,
+                            "shared": true,
+                            "is_public": false,
+                            "starter_project": false,
+                            "elasticsearch": false,
+                            "organization_id": null,
+                            "organization_visibility_type_id": null,
+                            "cloned_from": 1,
+                            "clone_ctr": 0,
+                            "order": 1,
+                            "is_user_starter": false,
+                            "status": 1,
+                            "indexing": null,
+                            "original_user": null,
+                            "team_id": null,
+                            "pivot": {
+                                "user_id": 1,
+                                "project_id": 6,
+                                "role": "owner",
+                                "created_at": "2021-08-17T09:52:34.000000Z",
+                                "updated_at": "2021-08-17T09:52:34.000000Z"
+                            }
+                        }
+                    ],
+                    "role": {
+                        "id": 1,
+                        "name": "admin",
+                        "display_name": "Team Administrator",
+                        "created_at": "2021-07-19T11:39:05.000000Z",
+                        "updated_at": null
+                    }
                 }
             ],
             "invited_emails": [],
             "projects": [],
-            "created_at": "2021-02-11T08:41:51.000000Z",
-            "updated_at": "2021-02-11T08:41:51.000000Z"
-
-        },
-        {
-            "id": 1,
-            "name": "Test Team 2",
-            "organization_id": 1,
-            "description": "This is a test team 2.",
-            "indexing": null,
-            "users": [
-                {
-                    "id": 3,
-                    "first_name": "test",
-                    "last_name": "user 2",
-                    "email": "test2@test.com",
-                    "projects": [],
-                    "role": "owner"
-                }
-            ],
-            "invited_emails": [],
-            "projects": [],
-            "created_at": "2021-02-11T08:41:51.000000Z",
-            "updated_at": "2021-02-11T08:41:51.000000Z"
-
+            "created_at": "2021-07-20T11:02:20.000000Z",
+            "updated_at": "2021-07-20T11:02:20.000000Z"
         }
-    ]
+    ],
+    "links": {
+        "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+        "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+        "per_page": 10,
+        "to": 2,
+        "total": 2
+    }
 }
