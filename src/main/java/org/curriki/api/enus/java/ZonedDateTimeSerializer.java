@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 /**
  * Keyword: classSimpleNameZonedDateTimeSerializer
+ * Map.hackathonMission: to create a new Java class ZonedDateTimeSerializer do convert a ZonedDateTime to a String. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
  */
 public class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
 

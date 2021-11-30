@@ -15,9 +15,17 @@ import org.curriki.api.enus.wrap.Wrap;
 
 /**
  * Indexed: true
+ * Page: true
+ * SuperPage: PageLayout
  * 
  * Keyword: classSimpleNameCluster
- */
+ * Map.hackathonMission: to create a new Java class BaseModel to serve as the base persistent object for primary key, created and modified dates and other useful base model data. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
+ * Map.hackathonMissionGen: to create a generated Java class that can be extended and override these methods to serve as the base persistent object for primary key, created and modified dates and other useful base model data. 
+ * Map.hackathonColumnGen: Develop Base Classes
+ * Map.hackathonLabelsGen: Java
+ */     
 public class BaseModel extends BaseModelGen<Object> {
 
 	/**
@@ -132,19 +140,10 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * {@inheritDoc}
 	 * Indexed: true
 	 * Stored: true
-	 */ 
-	protected void _sessionId(Wrap<String> c) {
-	}
-
-	/**   
-	 * {@inheritDoc}
-	 * Var.enUS: userId
-	 * Indexed: true
-	 * Stored: true
 	 * Define: true
 	 * Modify: false
-	 */                 
-	protected void _userId(Wrap<String> c) {
+	 */ 
+	protected void _sessionId(Wrap<String> w) {
 	}
 
 	/**   
@@ -172,10 +171,9 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * Stored: true
 	 * VarTitle: true
 	 * HtmlColumn: 2
-	 */ 
+	 */  
 	protected void _objectTitle(Wrap<String> w) {
-		if(pk != null)
-			w.o(pk.toString());
+		w.o(toString());
 	}
 
 	/**
@@ -187,12 +185,12 @@ public class BaseModel extends BaseModelGen<Object> {
 	 * HtmlCell: 4
 	 * DisplayName.enUS: ID
 	 */ 
-	protected void _objectId(Wrap<String> c) {
+	protected void _objectId(Wrap<String> w) {
 		if(objectTitle != null) {
-			c.o(toId(objectTitle));
+			w.o(toId(objectTitle));
 		}
 		else if(pk != null){
-			c.o(pk.toString());
+			w.o(pk.toString());
 		}
 	}
 
@@ -209,40 +207,70 @@ public class BaseModel extends BaseModelGen<Object> {
 		return s;
 	}
 
-	protected void _objectNameVar(Wrap<String> c) {
+	protected void _objectNameVar(Wrap<String> w) {
+		if(objectId != null) {
+			Class<?> cl = getClass();
+
+			try {
+				String o = toId(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase((String)FieldUtils.getField(cl, cl.getSimpleName() + "_NameVar").get(this)), "-"));
+				w.o(o);
+			} catch (Exception e) {
+				ExceptionUtils.rethrow(e);
+			}
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * Suggested: true
 	 */    
-	protected void _objectSuggest(Wrap<String> c) { 
-		StringBuilder b = new StringBuilder();
-		if(pk != null)
-			b.append(" ").append(pk);
-		if(objectNameVar != null)
-			b.append(" ").append(objectNameVar);
-		if(objectId != null)
-			b.append(" ").append(objectId);
-		if(objectTitle != null)
-			b.append(" ").append(objectTitle);
-		c.o(b.toString());
+	protected void _objectSuggest(Wrap<String> w) { 
+		w.o(toString());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * Text: true
 	 */ 
-	protected void _objectText(Wrap<String> c) { 
-		StringBuilder b = new StringBuilder();
-		if(pk != null)
-			b.append(" ").append(pk);
-		if(objectNameVar != null)
-			b.append(" ").append(objectNameVar);
-		if(objectId != null)
-			b.append(" ").append(objectId);
-		if(objectTitle != null)
-			b.append(" ").append(objectTitle);
-		c.o(b.toString());
+	protected void _objectText(Wrap<String> w) { 
+		w.o(toString());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * Indexed: true
+	 * Stored: true
+	 * VarUrlId: true
+	 */  
+	protected void _pageUrlId(Wrap<String> w) {
+		if(objectId != null) {
+			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/" + objectNameVar + "/" + objectId;
+			w.o(o);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * Indexed: true
+	 * Stored: true
+	 * VarUrlPk: true
+	 */ 
+	protected void _pageUrlPk(Wrap<String> w) {
+		if(pk != null) {
+			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/" + objectNameVar + "/" + pk;
+			w.o(o);
+		}
+	}
+
+	/**	
+	 * {@inheritDoc}
+	 * Indexe: true
+	 * Stocke: true
+	 **/   
+	protected void _pageUrlApi(Wrap<String> w)  {
+		if(pk != null) {
+			String o = siteRequest_.getConfig().getString(ConfigKeys.SITE_BASE_URL) + "/api/" + objectNameVar + "/" + pk;
+			w.o(o);
+		}
 	}
 }

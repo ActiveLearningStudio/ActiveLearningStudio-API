@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
@@ -50,8 +49,7 @@ CREATE TABLE SiteUser(
 	, created timestamp with time zone
 	, archived boolean
 	, deleted boolean
-	, userId text
-	, userKey bigint
+	, sessionId text
 	, userKey bigint
 	, userId text
 	, userName text
@@ -65,11 +63,6 @@ DROP TABLE SiteUser CASCADE;
 */
 
 	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
-	public static final String configureConfigComplete1 = "The config was configured successfully. ";
-	public static final String configureConfigComplete = configureConfigComplete1;
-	public static final String configureConfigFail1 = "Could not configure the config(). ";
-	public static final String configureConfigFail = configureConfigFail1;
-
 	public static final String configureDataConnectionError1 = "Could not open the database client connection. ";
 	public static final String configureDataConnectionError = configureDataConnectionError1;
 	public static final String configureDataConnectionSuccess1 = "The database client connection was successful. ";
@@ -141,13 +134,8 @@ DROP TABLE SiteUser CASCADE;
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedMainVerticle = false;
-
 	public MainVerticle initDeepMainVerticle(SiteRequestEnUS siteRequest_) {
-		if(!alreadyInitializedMainVerticle) {
-			alreadyInitializedMainVerticle = true;
-			initDeepMainVerticle();
-		}
+		initDeepMainVerticle();
 		return (MainVerticle)this;
 	}
 
@@ -192,23 +180,23 @@ DROP TABLE SiteUser CASCADE;
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeMainVerticle(v, val);
+				o = relateMainVerticle(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeMainVerticle(String var, Object val) {
+	public Object relateMainVerticle(String var, Object val) {
 		MainVerticle oMainVerticle = (MainVerticle)this;
 		switch(var) {
 			default:
@@ -276,28 +264,6 @@ DROP TABLE SiteUser CASCADE;
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineMainVerticle(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineMainVerticle(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -321,37 +287,14 @@ DROP TABLE SiteUser CASCADE;
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof MainVerticle))
-			return false;
-		MainVerticle that = (MainVerticle)o;
-		return true;
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("MainVerticle { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 
-	public static final String[] MainVerticleVals = new String[] { configureConfigComplete1, configureConfigFail1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
+	public static final String[] MainVerticleVals = new String[] { configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureOpenApiError1, configureOpenApiSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureHealthChecksComplete1, configureHealthChecksFail1, configureHealthChecksErrorDatabase1, configureHealthChecksEmptySolr1, configureHealthChecksErrorSolr1, configureHealthChecksErrorVertx1, configureWebsocketsComplete1, configureWebsocketsFail1, configureEmailComplete1, configureEmailFail1, configureApiFail1, configureApiComplete1, configureUiFail1, configureUiComplete1, startServerErrorServer1, startServerSuccessServer1, startServerBeforeServer1, startServerSsl1, stopFail1, stopComplete1 };
 
 }

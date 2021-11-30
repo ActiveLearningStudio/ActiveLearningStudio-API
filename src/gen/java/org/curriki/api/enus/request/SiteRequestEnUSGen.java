@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import io.vertx.ext.web.client.WebClient;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
 import io.vertx.core.MultiMap;
 import java.util.HashMap;
@@ -50,6 +49,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.curriki.api.enus.java.LocalDateSerializer;
 
 /**	
+ * Map.hackathonLabels: Java
  * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.request.SiteRequestEnUS&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
@@ -63,11 +63,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	/**	 The entity config
 	 *	 is defined as null before being initialized. 
 	 */
-	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject config;
-	@JsonIgnore
-	public Wrap<JsonObject> configWrap = new Wrap<JsonObject>().var("config").o(config);
 
 	/**	<br/> The entity config
 	 *  is defined as null before being initialized. 
@@ -83,19 +80,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setConfig(JsonObject config) {
 		this.config = config;
-		this.configWrap.alreadyInitialized = true;
 	}
 	public static JsonObject staticSetConfig(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS configInit() {
-		if(!configWrap.alreadyInitialized) {
+		Wrap<JsonObject> configWrap = new Wrap<JsonObject>().var("config");
+		if(config == null) {
 			_config(configWrap);
-			if(config == null)
-				setConfig(configWrap.o);
-			configWrap.o(null);
+			setConfig(configWrap.o);
 		}
-		configWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -109,8 +103,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
-	@JsonIgnore
-	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_").o(siteRequest_);
 
 	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
@@ -126,19 +118,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
-		this.siteRequest_Wrap.alreadyInitialized = true;
 	}
 	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS siteRequest_Init() {
-		if(!siteRequest_Wrap.alreadyInitialized) {
+		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
+		if(siteRequest_ == null) {
 			_siteRequest_(siteRequest_Wrap);
-			if(siteRequest_ == null)
-				setSiteRequest_(siteRequest_Wrap.o);
-			siteRequest_Wrap.o(null);
+			setSiteRequest_(siteRequest_Wrap.o);
 		}
-		siteRequest_Wrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -152,8 +141,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected WebClient webClient;
-	@JsonIgnore
-	public Wrap<WebClient> webClientWrap = new Wrap<WebClient>().var("webClient").o(webClient);
 
 	/**	<br/> The entity webClient
 	 *  is defined as null before being initialized. 
@@ -169,19 +156,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setWebClient(WebClient webClient) {
 		this.webClient = webClient;
-		this.webClientWrap.alreadyInitialized = true;
 	}
 	public static WebClient staticSetWebClient(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS webClientInit() {
-		if(!webClientWrap.alreadyInitialized) {
+		Wrap<WebClient> webClientWrap = new Wrap<WebClient>().var("webClient");
+		if(webClient == null) {
 			_webClient(webClientWrap);
-			if(webClient == null)
-				setWebClient(webClientWrap.o);
-			webClientWrap.o(null);
+			setWebClient(webClientWrap.o);
 		}
-		webClientWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -195,8 +179,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected ApiRequest apiRequest_;
-	@JsonIgnore
-	public Wrap<ApiRequest> apiRequest_Wrap = new Wrap<ApiRequest>().var("apiRequest_").o(apiRequest_);
 
 	/**	<br/> The entity apiRequest_
 	 *  is defined as null before being initialized. 
@@ -212,19 +194,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setApiRequest_(ApiRequest apiRequest_) {
 		this.apiRequest_ = apiRequest_;
-		this.apiRequest_Wrap.alreadyInitialized = true;
 	}
 	public static ApiRequest staticSetApiRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS apiRequest_Init() {
-		if(!apiRequest_Wrap.alreadyInitialized) {
+		Wrap<ApiRequest> apiRequest_Wrap = new Wrap<ApiRequest>().var("apiRequest_");
+		if(apiRequest_ == null) {
 			_apiRequest_(apiRequest_Wrap);
-			if(apiRequest_ == null)
-				setApiRequest_(apiRequest_Wrap.o);
-			apiRequest_Wrap.o(null);
+			setApiRequest_(apiRequest_Wrap.o);
 		}
-		apiRequest_Wrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -235,11 +214,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	/**	 The entity jsonObject
 	 *	 is defined as null before being initialized. 
 	 */
-	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject jsonObject;
-	@JsonIgnore
-	public Wrap<JsonObject> jsonObjectWrap = new Wrap<JsonObject>().var("jsonObject").o(jsonObject);
 
 	/**	<br/> The entity jsonObject
 	 *  is defined as null before being initialized. 
@@ -255,19 +231,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setJsonObject(JsonObject jsonObject) {
 		this.jsonObject = jsonObject;
-		this.jsonObjectWrap.alreadyInitialized = true;
 	}
 	public static JsonObject staticSetJsonObject(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS jsonObjectInit() {
-		if(!jsonObjectWrap.alreadyInitialized) {
+		Wrap<JsonObject> jsonObjectWrap = new Wrap<JsonObject>().var("jsonObject");
+		if(jsonObject == null) {
 			_jsonObject(jsonObjectWrap);
-			if(jsonObject == null)
-				setJsonObject(jsonObjectWrap.o);
-			jsonObjectWrap.o(null);
+			setJsonObject(jsonObjectWrap.o);
 		}
-		jsonObjectWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -281,8 +254,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SolrQuery solrQuery;
-	@JsonIgnore
-	public Wrap<SolrQuery> solrQueryWrap = new Wrap<SolrQuery>().var("solrQuery").o(solrQuery);
 
 	/**	<br/> The entity solrQuery
 	 *  is defined as null before being initialized. 
@@ -298,19 +269,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setSolrQuery(SolrQuery solrQuery) {
 		this.solrQuery = solrQuery;
-		this.solrQueryWrap.alreadyInitialized = true;
 	}
 	public static SolrQuery staticSetSolrQuery(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS solrQueryInit() {
-		if(!solrQueryWrap.alreadyInitialized) {
+		Wrap<SolrQuery> solrQueryWrap = new Wrap<SolrQuery>().var("solrQuery");
+		if(solrQuery == null) {
 			_solrQuery(solrQueryWrap);
-			if(solrQuery == null)
-				setSolrQuery(solrQueryWrap.o);
-			solrQueryWrap.o(null);
+			setSolrQuery(solrQueryWrap.o);
 		}
-		solrQueryWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -324,8 +292,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected ServiceRequest serviceRequest;
-	@JsonIgnore
-	public Wrap<ServiceRequest> serviceRequestWrap = new Wrap<ServiceRequest>().var("serviceRequest").o(serviceRequest);
 
 	/**	<br/> The entity serviceRequest
 	 *  is defined as null before being initialized. 
@@ -341,19 +307,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setServiceRequest(ServiceRequest serviceRequest) {
 		this.serviceRequest = serviceRequest;
-		this.serviceRequestWrap.alreadyInitialized = true;
 	}
 	public static ServiceRequest staticSetServiceRequest(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS serviceRequestInit() {
-		if(!serviceRequestWrap.alreadyInitialized) {
+		Wrap<ServiceRequest> serviceRequestWrap = new Wrap<ServiceRequest>().var("serviceRequest");
+		if(serviceRequest == null) {
 			_serviceRequest(serviceRequestWrap);
-			if(serviceRequest == null)
-				setServiceRequest(serviceRequestWrap.o);
-			serviceRequestWrap.o(null);
+			setServiceRequest(serviceRequestWrap.o);
 		}
-		serviceRequestWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -367,8 +330,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected User user;
-	@JsonIgnore
-	public Wrap<User> userWrap = new Wrap<User>().var("user").o(user);
 
 	/**	<br/> The entity user
 	 *  is defined as null before being initialized. 
@@ -384,19 +345,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setUser(User user) {
 		this.user = user;
-		this.userWrap.alreadyInitialized = true;
 	}
 	public static User staticSetUser(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS userInit() {
-		if(!userWrap.alreadyInitialized) {
+		Wrap<User> userWrap = new Wrap<User>().var("user");
+		if(user == null) {
 			_user(userWrap);
-			if(user == null)
-				setUser(userWrap.o);
-			userWrap.o(null);
+			setUser(userWrap.o);
 		}
-		userWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -410,8 +368,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userId;
-	@JsonIgnore
-	public Wrap<String> userIdWrap = new Wrap<String>().var("userId").o(userId);
 
 	/**	<br/> The entity userId
 	 *  is defined as null before being initialized. 
@@ -426,19 +382,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setUserId(String o) {
 		this.userId = SiteRequestEnUS.staticSetUserId(siteRequest_, o);
-		this.userIdWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS userIdInit() {
-		if(!userIdWrap.alreadyInitialized) {
+		Wrap<String> userIdWrap = new Wrap<String>().var("userId");
+		if(userId == null) {
 			_userId(userIdWrap);
-			if(userId == null)
-				setUserId(userIdWrap.o);
-			userIdWrap.o(null);
+			setUserId(userIdWrap.o);
 		}
-		userIdWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -454,22 +407,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserId(siteRequest_, SiteRequestEnUS.staticSolrUserId(siteRequest_, SiteRequestEnUS.staticSetUserId(siteRequest_, o)));
 	}
 
-	public String solrUserId() {
-		return SiteRequestEnUS.staticSolrUserId(siteRequest_, userId);
-	}
-
-	public String strUserId() {
-		return userId == null ? "" : userId;
-	}
-
-	public String sqlUserId() {
-		return userId;
-	}
-
-	public String jsonUserId() {
-		return userId == null ? "" : userId;
-	}
-
 	/////////////
 	// userKey //
 	/////////////
@@ -481,8 +418,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Long userKey;
-	@JsonIgnore
-	public Wrap<Long> userKeyWrap = new Wrap<Long>().var("userKey").o(userKey);
 
 	/**	<br/> The entity userKey
 	 *  is defined as null before being initialized. 
@@ -498,12 +433,10 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setUserKey(Long userKey) {
 		this.userKey = userKey;
-		this.userKeyWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setUserKey(String o) {
 		this.userKey = SiteRequestEnUS.staticSetUserKey(siteRequest_, o);
-		this.userKeyWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetUserKey(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -511,13 +444,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return null;
 	}
 	protected SiteRequestEnUS userKeyInit() {
-		if(!userKeyWrap.alreadyInitialized) {
+		Wrap<Long> userKeyWrap = new Wrap<Long>().var("userKey");
+		if(userKey == null) {
 			_userKey(userKeyWrap);
-			if(userKey == null)
-				setUserKey(userKeyWrap.o);
-			userKeyWrap.o(null);
+			setUserKey(userKeyWrap.o);
 		}
-		userKeyWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -533,22 +464,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserKey(siteRequest_, SiteRequestEnUS.staticSolrUserKey(siteRequest_, SiteRequestEnUS.staticSetUserKey(siteRequest_, o)));
 	}
 
-	public Long solrUserKey() {
-		return SiteRequestEnUS.staticSolrUserKey(siteRequest_, userKey);
-	}
-
-	public String strUserKey() {
-		return userKey == null ? "" : userKey.toString();
-	}
-
-	public Long sqlUserKey() {
-		return userKey;
-	}
-
-	public String jsonUserKey() {
-		return userKey == null ? "" : userKey.toString();
-	}
-
 	///////////////
 	// sessionId //
 	///////////////
@@ -559,8 +474,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String sessionId;
-	@JsonIgnore
-	public Wrap<String> sessionIdWrap = new Wrap<String>().var("sessionId").o(sessionId);
 
 	/**	<br/> The entity sessionId
 	 *  is defined as null before being initialized. 
@@ -575,19 +488,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setSessionId(String o) {
 		this.sessionId = SiteRequestEnUS.staticSetSessionId(siteRequest_, o);
-		this.sessionIdWrap.alreadyInitialized = true;
 	}
 	public static String staticSetSessionId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS sessionIdInit() {
-		if(!sessionIdWrap.alreadyInitialized) {
+		Wrap<String> sessionIdWrap = new Wrap<String>().var("sessionId");
+		if(sessionId == null) {
 			_sessionId(sessionIdWrap);
-			if(sessionId == null)
-				setSessionId(sessionIdWrap.o);
-			sessionIdWrap.o(null);
+			setSessionId(sessionIdWrap.o);
 		}
-		sessionIdWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -603,22 +513,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrSessionId(siteRequest_, SiteRequestEnUS.staticSolrSessionId(siteRequest_, SiteRequestEnUS.staticSetSessionId(siteRequest_, o)));
 	}
 
-	public String solrSessionId() {
-		return SiteRequestEnUS.staticSolrSessionId(siteRequest_, sessionId);
-	}
-
-	public String strSessionId() {
-		return sessionId == null ? "" : sessionId;
-	}
-
-	public String sqlSessionId() {
-		return sessionId;
-	}
-
-	public String jsonSessionId() {
-		return sessionId == null ? "" : sessionId;
-	}
-
 	/////////////////////
 	// sessionIdBefore //
 	/////////////////////
@@ -629,8 +523,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String sessionIdBefore;
-	@JsonIgnore
-	public Wrap<String> sessionIdBeforeWrap = new Wrap<String>().var("sessionIdBefore").o(sessionIdBefore);
 
 	/**	<br/> The entity sessionIdBefore
 	 *  is defined as null before being initialized. 
@@ -645,19 +537,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setSessionIdBefore(String o) {
 		this.sessionIdBefore = SiteRequestEnUS.staticSetSessionIdBefore(siteRequest_, o);
-		this.sessionIdBeforeWrap.alreadyInitialized = true;
 	}
 	public static String staticSetSessionIdBefore(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS sessionIdBeforeInit() {
-		if(!sessionIdBeforeWrap.alreadyInitialized) {
+		Wrap<String> sessionIdBeforeWrap = new Wrap<String>().var("sessionIdBefore");
+		if(sessionIdBefore == null) {
 			_sessionIdBefore(sessionIdBeforeWrap);
-			if(sessionIdBefore == null)
-				setSessionIdBefore(sessionIdBeforeWrap.o);
-			sessionIdBeforeWrap.o(null);
+			setSessionIdBefore(sessionIdBeforeWrap.o);
 		}
-		sessionIdBeforeWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -673,22 +562,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrSessionIdBefore(siteRequest_, SiteRequestEnUS.staticSolrSessionIdBefore(siteRequest_, SiteRequestEnUS.staticSetSessionIdBefore(siteRequest_, o)));
 	}
 
-	public String solrSessionIdBefore() {
-		return SiteRequestEnUS.staticSolrSessionIdBefore(siteRequest_, sessionIdBefore);
-	}
-
-	public String strSessionIdBefore() {
-		return sessionIdBefore == null ? "" : sessionIdBefore;
-	}
-
-	public String sqlSessionIdBefore() {
-		return sessionIdBefore;
-	}
-
-	public String jsonSessionIdBefore() {
-		return sessionIdBefore == null ? "" : sessionIdBefore;
-	}
-
 	//////////////
 	// userName //
 	//////////////
@@ -699,8 +572,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userName;
-	@JsonIgnore
-	public Wrap<String> userNameWrap = new Wrap<String>().var("userName").o(userName);
 
 	/**	<br/> The entity userName
 	 *  is defined as null before being initialized. 
@@ -715,19 +586,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setUserName(String o) {
 		this.userName = SiteRequestEnUS.staticSetUserName(siteRequest_, o);
-		this.userNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS userNameInit() {
-		if(!userNameWrap.alreadyInitialized) {
+		Wrap<String> userNameWrap = new Wrap<String>().var("userName");
+		if(userName == null) {
 			_userName(userNameWrap);
-			if(userName == null)
-				setUserName(userNameWrap.o);
-			userNameWrap.o(null);
+			setUserName(userNameWrap.o);
 		}
-		userNameWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -743,22 +611,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserName(siteRequest_, SiteRequestEnUS.staticSolrUserName(siteRequest_, SiteRequestEnUS.staticSetUserName(siteRequest_, o)));
 	}
 
-	public String solrUserName() {
-		return SiteRequestEnUS.staticSolrUserName(siteRequest_, userName);
-	}
-
-	public String strUserName() {
-		return userName == null ? "" : userName;
-	}
-
-	public String sqlUserName() {
-		return userName;
-	}
-
-	public String jsonUserName() {
-		return userName == null ? "" : userName;
-	}
-
 	//////////////////
 	// userLastName //
 	//////////////////
@@ -769,8 +621,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userLastName;
-	@JsonIgnore
-	public Wrap<String> userLastNameWrap = new Wrap<String>().var("userLastName").o(userLastName);
 
 	/**	<br/> The entity userLastName
 	 *  is defined as null before being initialized. 
@@ -785,19 +635,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setUserLastName(String o) {
 		this.userLastName = SiteRequestEnUS.staticSetUserLastName(siteRequest_, o);
-		this.userLastNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserLastName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS userLastNameInit() {
-		if(!userLastNameWrap.alreadyInitialized) {
+		Wrap<String> userLastNameWrap = new Wrap<String>().var("userLastName");
+		if(userLastName == null) {
 			_userLastName(userLastNameWrap);
-			if(userLastName == null)
-				setUserLastName(userLastNameWrap.o);
-			userLastNameWrap.o(null);
+			setUserLastName(userLastNameWrap.o);
 		}
-		userLastNameWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -813,22 +660,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserLastName(siteRequest_, SiteRequestEnUS.staticSolrUserLastName(siteRequest_, SiteRequestEnUS.staticSetUserLastName(siteRequest_, o)));
 	}
 
-	public String solrUserLastName() {
-		return SiteRequestEnUS.staticSolrUserLastName(siteRequest_, userLastName);
-	}
-
-	public String strUserLastName() {
-		return userLastName == null ? "" : userLastName;
-	}
-
-	public String sqlUserLastName() {
-		return userLastName;
-	}
-
-	public String jsonUserLastName() {
-		return userLastName == null ? "" : userLastName;
-	}
-
 	///////////////////
 	// userFirstName //
 	///////////////////
@@ -839,8 +670,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userFirstName;
-	@JsonIgnore
-	public Wrap<String> userFirstNameWrap = new Wrap<String>().var("userFirstName").o(userFirstName);
 
 	/**	<br/> The entity userFirstName
 	 *  is defined as null before being initialized. 
@@ -855,19 +684,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setUserFirstName(String o) {
 		this.userFirstName = SiteRequestEnUS.staticSetUserFirstName(siteRequest_, o);
-		this.userFirstNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserFirstName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS userFirstNameInit() {
-		if(!userFirstNameWrap.alreadyInitialized) {
+		Wrap<String> userFirstNameWrap = new Wrap<String>().var("userFirstName");
+		if(userFirstName == null) {
 			_userFirstName(userFirstNameWrap);
-			if(userFirstName == null)
-				setUserFirstName(userFirstNameWrap.o);
-			userFirstNameWrap.o(null);
+			setUserFirstName(userFirstNameWrap.o);
 		}
-		userFirstNameWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -883,22 +709,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserFirstName(siteRequest_, SiteRequestEnUS.staticSolrUserFirstName(siteRequest_, SiteRequestEnUS.staticSetUserFirstName(siteRequest_, o)));
 	}
 
-	public String solrUserFirstName() {
-		return SiteRequestEnUS.staticSolrUserFirstName(siteRequest_, userFirstName);
-	}
-
-	public String strUserFirstName() {
-		return userFirstName == null ? "" : userFirstName;
-	}
-
-	public String sqlUserFirstName() {
-		return userFirstName;
-	}
-
-	public String jsonUserFirstName() {
-		return userFirstName == null ? "" : userFirstName;
-	}
-
 	//////////////////
 	// userFullName //
 	//////////////////
@@ -909,8 +719,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userFullName;
-	@JsonIgnore
-	public Wrap<String> userFullNameWrap = new Wrap<String>().var("userFullName").o(userFullName);
 
 	/**	<br/> The entity userFullName
 	 *  is defined as null before being initialized. 
@@ -925,19 +733,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setUserFullName(String o) {
 		this.userFullName = SiteRequestEnUS.staticSetUserFullName(siteRequest_, o);
-		this.userFullNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserFullName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS userFullNameInit() {
-		if(!userFullNameWrap.alreadyInitialized) {
+		Wrap<String> userFullNameWrap = new Wrap<String>().var("userFullName");
+		if(userFullName == null) {
 			_userFullName(userFullNameWrap);
-			if(userFullName == null)
-				setUserFullName(userFullNameWrap.o);
-			userFullNameWrap.o(null);
+			setUserFullName(userFullNameWrap.o);
 		}
-		userFullNameWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -953,22 +758,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserFullName(siteRequest_, SiteRequestEnUS.staticSolrUserFullName(siteRequest_, SiteRequestEnUS.staticSetUserFullName(siteRequest_, o)));
 	}
 
-	public String solrUserFullName() {
-		return SiteRequestEnUS.staticSolrUserFullName(siteRequest_, userFullName);
-	}
-
-	public String strUserFullName() {
-		return userFullName == null ? "" : userFullName;
-	}
-
-	public String sqlUserFullName() {
-		return userFullName;
-	}
-
-	public String jsonUserFullName() {
-		return userFullName == null ? "" : userFullName;
-	}
-
 	///////////////
 	// userEmail //
 	///////////////
@@ -979,8 +768,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String userEmail;
-	@JsonIgnore
-	public Wrap<String> userEmailWrap = new Wrap<String>().var("userEmail").o(userEmail);
 
 	/**	<br/> The entity userEmail
 	 *  is defined as null before being initialized. 
@@ -995,19 +782,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setUserEmail(String o) {
 		this.userEmail = SiteRequestEnUS.staticSetUserEmail(siteRequest_, o);
-		this.userEmailWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserEmail(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS userEmailInit() {
-		if(!userEmailWrap.alreadyInitialized) {
+		Wrap<String> userEmailWrap = new Wrap<String>().var("userEmail");
+		if(userEmail == null) {
 			_userEmail(userEmailWrap);
-			if(userEmail == null)
-				setUserEmail(userEmailWrap.o);
-			userEmailWrap.o(null);
+			setUserEmail(userEmailWrap.o);
 		}
-		userEmailWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1023,22 +807,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserEmail(siteRequest_, SiteRequestEnUS.staticSolrUserEmail(siteRequest_, SiteRequestEnUS.staticSetUserEmail(siteRequest_, o)));
 	}
 
-	public String solrUserEmail() {
-		return SiteRequestEnUS.staticSolrUserEmail(siteRequest_, userEmail);
-	}
-
-	public String strUserEmail() {
-		return userEmail == null ? "" : userEmail;
-	}
-
-	public String sqlUserEmail() {
-		return userEmail;
-	}
-
-	public String jsonUserEmail() {
-		return userEmail == null ? "" : userEmail;
-	}
-
 	////////////////////
 	// userRealmRoles //
 	////////////////////
@@ -1050,8 +818,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> userRealmRoles = new ArrayList<String>();
-	@JsonIgnore
-	public Wrap<List<String>> userRealmRolesWrap = new Wrap<List<String>>().var("userRealmRoles").o(userRealmRoles);
 
 	/**	<br/> The entity userRealmRoles
 	 *  It is constructed before being initialized with the constructor by default List<String>(). 
@@ -1067,7 +833,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setUserRealmRoles(List<String> userRealmRoles) {
 		this.userRealmRoles = userRealmRoles;
-		this.userRealmRolesWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserRealmRoles(SiteRequestEnUS siteRequest_, String o) {
 		return o;
@@ -1079,7 +844,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 	public SiteRequestEnUS addUserRealmRoles(String o) {
-		if(o != null && !userRealmRoles.contains(o))
+		if(o != null)
 			this.userRealmRoles.add(o);
 		return (SiteRequestEnUS)this;
 	}
@@ -1092,10 +857,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		}
 	}
 	protected SiteRequestEnUS userRealmRolesInit() {
-		if(!userRealmRolesWrap.alreadyInitialized) {
-			_userRealmRoles(userRealmRoles);
-		}
-		userRealmRolesWrap.alreadyInitialized(true);
+		_userRealmRoles(userRealmRoles);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1111,26 +873,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserRealmRoles(siteRequest_, SiteRequestEnUS.staticSolrUserRealmRoles(siteRequest_, SiteRequestEnUS.staticSetUserRealmRoles(siteRequest_, o)));
 	}
 
-	public List<String> solrUserRealmRoles() {
-		List<String> l = new ArrayList<String>();
-		for(String o : userRealmRoles) {
-			l.add(SiteRequestEnUS.staticSolrUserRealmRoles(siteRequest_, o));
-		}
-		return l;
-	}
-
-	public String strUserRealmRoles() {
-		return userRealmRoles == null ? "" : userRealmRoles.toString();
-	}
-
-	public List<String> sqlUserRealmRoles() {
-		return userRealmRoles;
-	}
-
-	public String jsonUserRealmRoles() {
-		return userRealmRoles == null ? "" : userRealmRoles.toString();
-	}
-
 	//////////////////
 	// userResource //
 	//////////////////
@@ -1138,11 +880,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	/**	 The entity userResource
 	 *	 is defined as null before being initialized. 
 	 */
-	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject userResource;
-	@JsonIgnore
-	public Wrap<JsonObject> userResourceWrap = new Wrap<JsonObject>().var("userResource").o(userResource);
 
 	/**	<br/> The entity userResource
 	 *  is defined as null before being initialized. 
@@ -1158,19 +897,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setUserResource(JsonObject userResource) {
 		this.userResource = userResource;
-		this.userResourceWrap.alreadyInitialized = true;
 	}
 	public static JsonObject staticSetUserResource(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS userResourceInit() {
-		if(!userResourceWrap.alreadyInitialized) {
+		Wrap<JsonObject> userResourceWrap = new Wrap<JsonObject>().var("userResource");
+		if(userResource == null) {
 			_userResource(userResourceWrap);
-			if(userResource == null)
-				setUserResource(userResourceWrap.o);
-			userResourceWrap.o(null);
+			setUserResource(userResourceWrap.o);
 		}
-		userResourceWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1185,8 +921,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> userResourceRoles = new ArrayList<String>();
-	@JsonIgnore
-	public Wrap<List<String>> userResourceRolesWrap = new Wrap<List<String>>().var("userResourceRoles").o(userResourceRoles);
 
 	/**	<br/> The entity userResourceRoles
 	 *  It is constructed before being initialized with the constructor by default List<String>(). 
@@ -1202,7 +936,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setUserResourceRoles(List<String> userResourceRoles) {
 		this.userResourceRoles = userResourceRoles;
-		this.userResourceRolesWrap.alreadyInitialized = true;
 	}
 	public static String staticSetUserResourceRoles(SiteRequestEnUS siteRequest_, String o) {
 		return o;
@@ -1214,7 +947,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return (SiteRequestEnUS)this;
 	}
 	public SiteRequestEnUS addUserResourceRoles(String o) {
-		if(o != null && !userResourceRoles.contains(o))
+		if(o != null)
 			this.userResourceRoles.add(o);
 		return (SiteRequestEnUS)this;
 	}
@@ -1227,10 +960,7 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		}
 	}
 	protected SiteRequestEnUS userResourceRolesInit() {
-		if(!userResourceRolesWrap.alreadyInitialized) {
-			_userResourceRoles(userResourceRoles);
-		}
-		userResourceRolesWrap.alreadyInitialized(true);
+		_userResourceRoles(userResourceRoles);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1246,26 +976,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrUserResourceRoles(siteRequest_, SiteRequestEnUS.staticSolrUserResourceRoles(siteRequest_, SiteRequestEnUS.staticSetUserResourceRoles(siteRequest_, o)));
 	}
 
-	public List<String> solrUserResourceRoles() {
-		List<String> l = new ArrayList<String>();
-		for(String o : userResourceRoles) {
-			l.add(SiteRequestEnUS.staticSolrUserResourceRoles(siteRequest_, o));
-		}
-		return l;
-	}
-
-	public String strUserResourceRoles() {
-		return userResourceRoles == null ? "" : userResourceRoles.toString();
-	}
-
-	public List<String> sqlUserResourceRoles() {
-		return userResourceRoles;
-	}
-
-	public String jsonUserResourceRoles() {
-		return userResourceRoles == null ? "" : userResourceRoles.toString();
-	}
-
 	//////////////////
 	// solrDocument //
 	//////////////////
@@ -1276,8 +986,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SolrDocument solrDocument;
-	@JsonIgnore
-	public Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().var("solrDocument").o(solrDocument);
 
 	/**	<br/> The entity solrDocument
 	 *  is defined as null before being initialized. 
@@ -1293,19 +1001,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setSolrDocument(SolrDocument solrDocument) {
 		this.solrDocument = solrDocument;
-		this.solrDocumentWrap.alreadyInitialized = true;
 	}
 	public static SolrDocument staticSetSolrDocument(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS solrDocumentInit() {
-		if(!solrDocumentWrap.alreadyInitialized) {
+		Wrap<SolrDocument> solrDocumentWrap = new Wrap<SolrDocument>().var("solrDocument");
+		if(solrDocument == null) {
 			_solrDocument(solrDocumentWrap);
-			if(solrDocument == null)
-				setSolrDocument(solrDocumentWrap.o);
-			solrDocumentWrap.o(null);
+			setSolrDocument(solrDocumentWrap.o);
 		}
-		solrDocumentWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1319,8 +1024,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean pageAdmin;
-	@JsonIgnore
-	public Wrap<Boolean> pageAdminWrap = new Wrap<Boolean>().var("pageAdmin").o(pageAdmin);
 
 	/**	<br/> The entity pageAdmin
 	 *  is defined as null before being initialized. 
@@ -1336,24 +1039,20 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setPageAdmin(Boolean pageAdmin) {
 		this.pageAdmin = pageAdmin;
-		this.pageAdminWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setPageAdmin(String o) {
 		this.pageAdmin = SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o);
-		this.pageAdminWrap.alreadyInitialized = true;
 	}
 	public static Boolean staticSetPageAdmin(SiteRequestEnUS siteRequest_, String o) {
 		return Boolean.parseBoolean(o);
 	}
 	protected SiteRequestEnUS pageAdminInit() {
-		if(!pageAdminWrap.alreadyInitialized) {
+		Wrap<Boolean> pageAdminWrap = new Wrap<Boolean>().var("pageAdmin");
+		if(pageAdmin == null) {
 			_pageAdmin(pageAdminWrap);
-			if(pageAdmin == null)
-				setPageAdmin(pageAdminWrap.o);
-			pageAdminWrap.o(null);
+			setPageAdmin(pageAdminWrap.o);
 		}
-		pageAdminWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1369,22 +1068,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrPageAdmin(siteRequest_, SiteRequestEnUS.staticSolrPageAdmin(siteRequest_, SiteRequestEnUS.staticSetPageAdmin(siteRequest_, o)));
 	}
 
-	public Boolean solrPageAdmin() {
-		return SiteRequestEnUS.staticSolrPageAdmin(siteRequest_, pageAdmin);
-	}
-
-	public String strPageAdmin() {
-		return pageAdmin == null ? "" : pageAdmin.toString();
-	}
-
-	public Boolean sqlPageAdmin() {
-		return pageAdmin;
-	}
-
-	public String jsonPageAdmin() {
-		return pageAdmin == null ? "" : pageAdmin.toString();
-	}
-
 	///////////////
 	// requestPk //
 	///////////////
@@ -1396,8 +1079,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Long requestPk;
-	@JsonIgnore
-	public Wrap<Long> requestPkWrap = new Wrap<Long>().var("requestPk").o(requestPk);
 
 	/**	<br/> The entity requestPk
 	 *  is defined as null before being initialized. 
@@ -1413,12 +1094,10 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setRequestPk(Long requestPk) {
 		this.requestPk = requestPk;
-		this.requestPkWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setRequestPk(String o) {
 		this.requestPk = SiteRequestEnUS.staticSetRequestPk(siteRequest_, o);
-		this.requestPkWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetRequestPk(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -1426,13 +1105,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return null;
 	}
 	protected SiteRequestEnUS requestPkInit() {
-		if(!requestPkWrap.alreadyInitialized) {
+		Wrap<Long> requestPkWrap = new Wrap<Long>().var("requestPk");
+		if(requestPk == null) {
 			_requestPk(requestPkWrap);
-			if(requestPk == null)
-				setRequestPk(requestPkWrap.o);
-			requestPkWrap.o(null);
+			setRequestPk(requestPkWrap.o);
 		}
-		requestPkWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1448,22 +1125,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrRequestPk(siteRequest_, SiteRequestEnUS.staticSolrRequestPk(siteRequest_, SiteRequestEnUS.staticSetRequestPk(siteRequest_, o)));
 	}
 
-	public Long solrRequestPk() {
-		return SiteRequestEnUS.staticSolrRequestPk(siteRequest_, requestPk);
-	}
-
-	public String strRequestPk() {
-		return requestPk == null ? "" : requestPk.toString();
-	}
-
-	public Long sqlRequestPk() {
-		return requestPk;
-	}
-
-	public String jsonRequestPk() {
-		return requestPk == null ? "" : requestPk.toString();
-	}
-
 	////////////////
 	// requestUri //
 	////////////////
@@ -1474,8 +1135,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String requestUri;
-	@JsonIgnore
-	public Wrap<String> requestUriWrap = new Wrap<String>().var("requestUri").o(requestUri);
 
 	/**	<br/> The entity requestUri
 	 *  is defined as null before being initialized. 
@@ -1490,19 +1149,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setRequestUri(String o) {
 		this.requestUri = SiteRequestEnUS.staticSetRequestUri(siteRequest_, o);
-		this.requestUriWrap.alreadyInitialized = true;
 	}
 	public static String staticSetRequestUri(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS requestUriInit() {
-		if(!requestUriWrap.alreadyInitialized) {
+		Wrap<String> requestUriWrap = new Wrap<String>().var("requestUri");
+		if(requestUri == null) {
 			_requestUri(requestUriWrap);
-			if(requestUri == null)
-				setRequestUri(requestUriWrap.o);
-			requestUriWrap.o(null);
+			setRequestUri(requestUriWrap.o);
 		}
-		requestUriWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1518,22 +1174,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrRequestUri(siteRequest_, SiteRequestEnUS.staticSolrRequestUri(siteRequest_, SiteRequestEnUS.staticSetRequestUri(siteRequest_, o)));
 	}
 
-	public String solrRequestUri() {
-		return SiteRequestEnUS.staticSolrRequestUri(siteRequest_, requestUri);
-	}
-
-	public String strRequestUri() {
-		return requestUri == null ? "" : requestUri;
-	}
-
-	public String sqlRequestUri() {
-		return requestUri;
-	}
-
-	public String jsonRequestUri() {
-		return requestUri == null ? "" : requestUri;
-	}
-
 	///////////////////
 	// requestMethod //
 	///////////////////
@@ -1544,8 +1184,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String requestMethod;
-	@JsonIgnore
-	public Wrap<String> requestMethodWrap = new Wrap<String>().var("requestMethod").o(requestMethod);
 
 	/**	<br/> The entity requestMethod
 	 *  is defined as null before being initialized. 
@@ -1560,19 +1198,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 	public void setRequestMethod(String o) {
 		this.requestMethod = SiteRequestEnUS.staticSetRequestMethod(siteRequest_, o);
-		this.requestMethodWrap.alreadyInitialized = true;
 	}
 	public static String staticSetRequestMethod(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected SiteRequestEnUS requestMethodInit() {
-		if(!requestMethodWrap.alreadyInitialized) {
+		Wrap<String> requestMethodWrap = new Wrap<String>().var("requestMethod");
+		if(requestMethod == null) {
 			_requestMethod(requestMethodWrap);
-			if(requestMethod == null)
-				setRequestMethod(requestMethodWrap.o);
-			requestMethodWrap.o(null);
+			setRequestMethod(requestMethodWrap.o);
 		}
-		requestMethodWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1588,22 +1223,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 		return SiteRequestEnUS.staticSolrStrRequestMethod(siteRequest_, SiteRequestEnUS.staticSolrRequestMethod(siteRequest_, SiteRequestEnUS.staticSetRequestMethod(siteRequest_, o)));
 	}
 
-	public String solrRequestMethod() {
-		return SiteRequestEnUS.staticSolrRequestMethod(siteRequest_, requestMethod);
-	}
-
-	public String strRequestMethod() {
-		return requestMethod == null ? "" : requestMethod;
-	}
-
-	public String sqlRequestMethod() {
-		return requestMethod;
-	}
-
-	public String jsonRequestMethod() {
-		return requestMethod == null ? "" : requestMethod;
-	}
-
 	///////////////////
 	// sqlConnection //
 	///////////////////
@@ -1614,8 +1233,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SqlConnection sqlConnection;
-	@JsonIgnore
-	public Wrap<SqlConnection> sqlConnectionWrap = new Wrap<SqlConnection>().var("sqlConnection").o(sqlConnection);
 
 	/**	<br/> The entity sqlConnection
 	 *  is defined as null before being initialized. 
@@ -1631,19 +1248,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setSqlConnection(SqlConnection sqlConnection) {
 		this.sqlConnection = sqlConnection;
-		this.sqlConnectionWrap.alreadyInitialized = true;
 	}
 	public static SqlConnection staticSetSqlConnection(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS sqlConnectionInit() {
-		if(!sqlConnectionWrap.alreadyInitialized) {
+		Wrap<SqlConnection> sqlConnectionWrap = new Wrap<SqlConnection>().var("sqlConnection");
+		if(sqlConnection == null) {
 			_sqlConnection(sqlConnectionWrap);
-			if(sqlConnection == null)
-				setSqlConnection(sqlConnectionWrap.o);
-			sqlConnectionWrap.o(null);
+			setSqlConnection(sqlConnectionWrap.o);
 		}
-		sqlConnectionWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1657,8 +1271,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected MultiMap requestHeaders;
-	@JsonIgnore
-	public Wrap<MultiMap> requestHeadersWrap = new Wrap<MultiMap>().var("requestHeaders").o(requestHeaders);
 
 	/**	<br/> The entity requestHeaders
 	 *  is defined as null before being initialized. 
@@ -1674,19 +1286,16 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setRequestHeaders(MultiMap requestHeaders) {
 		this.requestHeaders = requestHeaders;
-		this.requestHeadersWrap.alreadyInitialized = true;
 	}
 	public static MultiMap staticSetRequestHeaders(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS requestHeadersInit() {
-		if(!requestHeadersWrap.alreadyInitialized) {
+		Wrap<MultiMap> requestHeadersWrap = new Wrap<MultiMap>().var("requestHeaders");
+		if(requestHeaders == null) {
 			_requestHeaders(requestHeadersWrap);
-			if(requestHeaders == null)
-				setRequestHeaders(requestHeadersWrap.o);
-			requestHeadersWrap.o(null);
+			setRequestHeaders(requestHeadersWrap.o);
 		}
-		requestHeadersWrap.alreadyInitialized(true);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1698,11 +1307,8 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	 *	Il est construit avant d'être initialisé avec le constructeur par défaut Map<String, String>(). 
 	 */
 	@JsonProperty
-	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected Map<String, String> requestVars = new HashMap<String, String>();
-	@JsonIgnore
-	public Wrap<Map<String, String>> requestVarsWrap = new Wrap<Map<String, String>>().var("requestVars").o(requestVars);
 
 	/**	<br/> The entity requestVars
 	 *  It is constructed before being initialized with the constructor by default Map<String, String>(). 
@@ -1718,16 +1324,12 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 
 	public void setRequestVars(Map<String, String> requestVars) {
 		this.requestVars = requestVars;
-		this.requestVarsWrap.alreadyInitialized = true;
 	}
 	public static Map<String, String> staticSetRequestVars(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected SiteRequestEnUS requestVarsInit() {
-		if(!requestVarsWrap.alreadyInitialized) {
-			_requestVars(requestVars);
-		}
-		requestVarsWrap.alreadyInitialized(true);
+		_requestVars(requestVars);
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1735,14 +1337,9 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedSiteRequestEnUS = false;
-
 	public SiteRequestEnUS initDeepSiteRequestEnUS(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedSiteRequestEnUS) {
-			alreadyInitializedSiteRequestEnUS = true;
-			initDeepSiteRequestEnUS();
-		}
+		initDeepSiteRequestEnUS();
 		return (SiteRequestEnUS)this;
 	}
 
@@ -1882,23 +1479,23 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeSiteRequestEnUS(v, val);
+				o = relateSiteRequestEnUS(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeSiteRequestEnUS(String var, Object val) {
+	public Object relateSiteRequestEnUS(String var, Object val) {
 		SiteRequestEnUS oSiteRequestEnUS = (SiteRequestEnUS)this;
 		switch(var) {
 			default:
@@ -2086,28 +1683,6 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineSiteRequestEnUS(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineSiteRequestEnUS(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -2143,34 +1718,11 @@ public abstract class SiteRequestEnUSGen<DEV> extends Object {
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof SiteRequestEnUS))
-			return false;
-		SiteRequestEnUS that = (SiteRequestEnUS)o;
-		return true;
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SiteRequestEnUS { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

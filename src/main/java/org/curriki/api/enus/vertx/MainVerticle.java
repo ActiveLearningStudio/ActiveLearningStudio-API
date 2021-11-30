@@ -1,70 +1,33 @@
 package org.curriki.api.enus.vertx;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.Normalizer;
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.curator.RetryPolicy;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
-import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.client.solrj.util.ClientUtils;
-import org.apache.solr.common.util.SimpleOrderedMap;
+import org.curriki.api.enus.config.ConfigKeys;
+import org.curriki.api.enus.user.SiteUserEnUSGenApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.helper.StringHelpers;
-import org.curriki.api.enus.config.ConfigKeys;
-import org.curriki.api.enus.java.LocalDateSerializer;
-import org.curriki.api.enus.request.SiteRequestEnUS;
-import org.curriki.api.enus.search.SearchList;
-import org.curriki.api.enus.user.SiteUserEnUSGenApiService;
 
-import io.vertx.config.ConfigRetriever;
-import io.vertx.config.ConfigRetrieverOptions;
-import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
 import io.vertx.core.WorkerExecutor;
-import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.JksOptions;
-import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
 import io.vertx.ext.auth.oauth2.OAuth2Auth;
 import io.vertx.ext.auth.oauth2.OAuth2FlowType;
@@ -91,12 +54,14 @@ import io.vertx.ext.web.sstore.LocalSessionStore;
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
-import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager;
 import io.vertx.sqlclient.PoolOptions;
 
 /**	
  *	A Java class to start the Vert.x application as a main method. 
  * Keyword: classSimpleNameVerticle
+ * Map.hackathonMission: to create a new Java class to run Vert.x verticle that will serve requests to the API and the UI. 
+ * Map.hackathonColumn: Quarkus app development
+ * Map.hackathonLabels: Java,Vert.x
  **/
 public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
@@ -104,8 +69,9 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 	public final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
 	private Integer siteInstances;
-
 	private Integer workerPoolSize;
+	private Integer jdbcMaxPoolSize;
+	private Integer jdbcMaxWaitQueueSize;
 
 	/**
 	 * A io.vertx.ext.jdbc.JDBCClient for connecting to the relational database PostgreSQL. 
@@ -174,6 +140,50 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			promise.complete();
 		} catch(Exception ex) {
 			LOG.error("Unable to configure site context. ", ex);
+			promise.fail(ex);
+		}
+
+		return promise.future();
+	}
+
+	/**	
+	 * 
+	 * Val.ConnectionError.enUS:Could not open the database client connection. 
+	 * Val.ConnectionSuccess.enUS:The database client connection was successful. 
+	 * 
+	 * Val.InitError.enUS:Could not initialize the database tables. 
+	 * Val.InitSuccess.enUS:The database tables were created successfully. 
+	 * 
+	 *	Configure shared database connections across the cluster for massive scaling of the application. 
+	 *	Return a promise that configures a shared database client connection. 
+	 *	Load the database configuration into a shared io.vertx.ext.jdbc.JDBCClient for a scalable, clustered datasource connection pool. 
+	 *	Initialize the database tables if not already created for the first time. 
+	 **/
+	private Future<Void> configureData() {
+		Promise<Void> promise = Promise.promise();
+		try {
+			PgConnectOptions pgOptions = new PgConnectOptions();
+			pgOptions.setPort(config().getInteger(ConfigKeys.JDBC_PORT));
+			pgOptions.setHost(config().getString(ConfigKeys.JDBC_HOST));
+			pgOptions.setDatabase(config().getString(ConfigKeys.JDBC_DATABASE));
+			pgOptions.setUser(config().getString(ConfigKeys.JDBC_USERNAME));
+			pgOptions.setPassword(config().getString(ConfigKeys.JDBC_PASSWORD));
+			pgOptions.setIdleTimeout(config().getInteger(ConfigKeys.JDBC_MAX_IDLE_TIME, 10));
+			pgOptions.setIdleTimeoutUnit(TimeUnit.SECONDS);
+			pgOptions.setConnectTimeout(config().getInteger(ConfigKeys.JDBC_CONNECT_TIMEOUT, 5));
+
+			PoolOptions poolOptions = new PoolOptions();
+			jdbcMaxPoolSize = config().getInteger(ConfigKeys.JDBC_MAX_POOL_SIZE, 1);
+			jdbcMaxWaitQueueSize = config().getInteger(ConfigKeys.JDBC_MAX_WAIT_QUEUE_SIZE, 10);
+			poolOptions.setMaxSize(jdbcMaxPoolSize);
+			poolOptions.setMaxWaitQueueSize(jdbcMaxWaitQueueSize);
+
+			pgPool = PgPool.pool(vertx, pgOptions, poolOptions);
+
+			LOG.info(configureDataInitSuccess);
+			promise.complete();
+		} catch (Exception ex) {
+			LOG.error(configureDataInitError, ex);
 			promise.fail(ex);
 		}
 
@@ -366,7 +376,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			healthCheckHandler.register("database", 2000, a -> {
 				pgPool.preparedQuery("select current_timestamp").execute(selectCAsync -> {
 					if(selectCAsync.succeeded()) {
-						a.complete(Status.OK(new JsonObject()));
+						a.complete(Status.OK(new JsonObject().put("jdbcMaxPoolSize", jdbcMaxPoolSize).put("jdbcMaxWaitQueueSize", jdbcMaxWaitQueueSize)));
 					} else {
 						LOG.error(configureHealthChecksErrorDatabase, a.future().cause());
 						promise.fail(a.future().cause());
@@ -471,7 +481,7 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		try {
 			templateEngine = HandlebarsTemplateEngine.create(vertx);
 
-			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, vertx);
+			SiteUserEnUSGenApiService.registerService(vertx.eventBus(), config(), workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine, vertx);
 
 			LOG.info(configureApiComplete);
 			promise.complete();
@@ -492,24 +502,35 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String staticPath = config().getString(ConfigKeys.STATIC_PATH);
 			String staticBaseUrl = config().getString(ConfigKeys.STATIC_BASE_URL);
 			String siteBaseUrl = config().getString(ConfigKeys.SITE_BASE_URL);
-			HandlebarsTemplateEngine engine = HandlebarsTemplateEngine.create(vertx);
-			Handlebars handlebars = (Handlebars)engine.unwrap();
-			TemplateHandler templateHandler = TemplateHandler.create(engine, staticPath + "/template", "text/html");
+			String templatePath = config().getString(ConfigKeys.TEMPLATE_PATH);
+			Handlebars handlebars = (Handlebars)templateEngine.unwrap();
+			TemplateHandler templateHandler;
+			if(StringUtils.isBlank(templatePath))
+				templateHandler = TemplateHandler.create(templateEngine);
+			else
+				templateHandler = TemplateHandler.create(templateEngine, templatePath, "text/html");
 
 			handlebars.registerHelpers(ConditionalHelpers.class);
 			handlebars.registerHelpers(StringHelpers.class);
+			handlebars.registerHelpers(AuthHelpers.class);
+			handlebars.registerHelpers(SiteHelpers.class);
+			handlebars.registerHelpers(DateHelpers.class);
 
 			router.get("/").handler(a -> {
-				a.reroute("/template/home-page");
+				a.reroute("/template/enUS/home-page");
 			});
 
 			router.get("/api").handler(ctx -> {
-				ctx.reroute("/template/openapi");
+				ctx.reroute("/template/enUS/openapi");
 			});
 
 			router.get("/template/*").handler(ctx -> {
 				ctx.put(ConfigKeys.STATIC_BASE_URL, staticBaseUrl);
 				ctx.put(ConfigKeys.SITE_BASE_URL, siteBaseUrl);
+				ctx.put(ConfigKeys.AUTH_URL, config().getString(ConfigKeys.AUTH_URL));
+				ctx.put(ConfigKeys.AUTH_REALM, config().getString(ConfigKeys.AUTH_REALM));
+				ctx.put("staticBaseUrl", staticBaseUrl);
+				ctx.put("siteBaseUrl", siteBaseUrl);
 				ctx.next();
 			});
 
@@ -578,11 +599,19 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			String siteBaseUrl = config().getString(ConfigKeys.SITE_BASE_URL);
 			Integer sitePort = config().getInteger(ConfigKeys.SITE_PORT);
 			String sslJksPath = config().getString(ConfigKeys.SSL_JKS_PATH);
+			String sslPrivateKeyPath = config().getString(ConfigKeys.SSL_KEY_PATH);
+			String sslCertPath = config().getString(ConfigKeys.SSL_CERT_PATH);
 			HttpServerOptions options = new HttpServerOptions();
 			if(sslPassthrough) {
-				options.setKeyStoreOptions(new JksOptions().setPath(sslJksPath).setPassword(config().getString(ConfigKeys.SSL_JKS_PASSWORD)));
+				if(sslPrivateKeyPath != null && sslCertPath != null) {
+					options.setPemKeyCertOptions(new PemKeyCertOptions().setKeyPath(sslPrivateKeyPath).setCertPath(sslCertPath));
+					LOG.info(String.format(startServerSsl, sslPrivateKeyPath));
+					LOG.info(String.format(startServerSsl, sslCertPath));
+				} else if(sslJksPath != null) {
+					options.setKeyStoreOptions(new JksOptions().setPath(sslJksPath).setPassword(config().getString(ConfigKeys.SSL_JKS_PASSWORD)));
+					LOG.info(String.format(startServerSsl, sslJksPath));
+				}
 				options.setSsl(true);
-				LOG.info(String.format(startServerSsl, sslJksPath));
 			}
 			options.setPort(sitePort);
 	

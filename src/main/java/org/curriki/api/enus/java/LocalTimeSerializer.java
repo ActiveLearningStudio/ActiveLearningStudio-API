@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 /**
  * Keyword: classSimpleNameLocalTimeSerializer
+ * Map.hackathonMission: to create a new Java class LocalTimeSerializer do convert a LocalTime to a String. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
  */
 public class LocalTimeSerializer extends JsonSerializer<LocalTime> {
 

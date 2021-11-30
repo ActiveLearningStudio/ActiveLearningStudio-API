@@ -26,6 +26,10 @@ import io.vertx.sqlclient.SqlConnection;
 
 /**
  * Keyword: classSimpleNameSiteRequest
+ * Map.hackathonMission: to create a new Java class to store information about a given API request to use in building the responses to API and UI requests. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
+ * Map.hackathonLabelsGen: Java
  */
 public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Serializable {
 
@@ -155,9 +159,11 @@ public class SiteRequestEnUS extends SiteRequestEnUSGen<Object> implements Seria
 	}
 
 	protected void _requestUri(Wrap<String> c) {
+		c.o(Optional.ofNullable(serviceRequest).map(r -> r.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
 	}
 
 	protected void _requestMethod(Wrap<String> c) {
+		c.o(Optional.ofNullable(serviceRequest).map(r -> r.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 	}
 
 	protected void _sqlConnection(Wrap<SqlConnection> c) {

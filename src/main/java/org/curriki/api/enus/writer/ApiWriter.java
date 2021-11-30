@@ -126,7 +126,7 @@ public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWri
 	}
 
 	protected void _appName(Wrap<String> c) {
-		c.o((String)classSolrDocument.get("appliNom_stored_string"));
+		c.o((String)classSolrDocument.get("siteNom_stored_string"));
 	}
 
 	protected void _classAbsolutePath(Wrap<String> c) {
@@ -345,7 +345,7 @@ public class ApiWriter extends ApiWriterGen<Object> implements Comparable<ApiWri
 				SolrQuery searchEntities = new SolrQuery();
 				searchEntities.setQuery("*:*");
 				searchEntities.setRows(1000000);
-				searchEntities.addFilterQuery("appliChemin_indexed_string:" + ClientUtils.escapeQueryChars(config.getString(ConfigKeys.APP_PATH)));
+				searchEntities.addFilterQuery("siteChemin_indexed_string:" + ClientUtils.escapeQueryChars(config.getString(ConfigKeys.SITE_PATH)));
 
 				if(StringUtils.isBlank(entityCanonicalNameGeneric))
 					searchEntities.addFilterQuery("classeNomCanonique_enUS_indexed_string:" + ClientUtils.escapeQueryChars(entityCanonicalName));

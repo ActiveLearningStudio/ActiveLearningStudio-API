@@ -5,8 +5,8 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
+import org.curriki.api.enus.writer.AllWriter;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.apache.commons.lang3.StringUtils;
@@ -59,8 +59,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SolrClient solrClientComputate;
-	@JsonIgnore
-	public Wrap<SolrClient> solrClientComputateWrap = new Wrap<SolrClient>().var("solrClientComputate").o(solrClientComputate);
 
 	/**	<br/> The entity solrClientComputate
 	 *  is defined as null before being initialized. 
@@ -76,19 +74,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setSolrClientComputate(SolrClient solrClientComputate) {
 		this.solrClientComputate = solrClientComputate;
-		this.solrClientComputateWrap.alreadyInitialized = true;
 	}
 	public static SolrClient staticSetSolrClientComputate(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 solrClientComputateInit() {
-		if(!solrClientComputateWrap.alreadyInitialized) {
+		Wrap<SolrClient> solrClientComputateWrap = new Wrap<SolrClient>().var("solrClientComputate");
+		if(solrClientComputate == null) {
 			_solrClientComputate(solrClientComputateWrap);
-			if(solrClientComputate == null)
-				setSolrClientComputate(solrClientComputateWrap.o);
-			solrClientComputateWrap.o(null);
+			setSolrClientComputate(solrClientComputateWrap.o);
 		}
-		solrClientComputateWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -102,8 +97,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
-	@JsonIgnore
-	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_").o(siteRequest_);
 
 	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
@@ -119,19 +112,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
-		this.siteRequest_Wrap.alreadyInitialized = true;
 	}
 	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 siteRequest_Init() {
-		if(!siteRequest_Wrap.alreadyInitialized) {
+		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
+		if(siteRequest_ == null) {
 			_siteRequest_(siteRequest_Wrap);
-			if(siteRequest_ == null)
-				setSiteRequest_(siteRequest_Wrap.o);
-			siteRequest_Wrap.o(null);
+			setSiteRequest_(siteRequest_Wrap.o);
 		}
-		siteRequest_Wrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -142,11 +132,8 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	/**	 The entity config
 	 *	 is defined as null before being initialized. 
 	 */
-	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject config;
-	@JsonIgnore
-	public Wrap<JsonObject> configWrap = new Wrap<JsonObject>().var("config").o(config);
 
 	/**	<br/> The entity config
 	 *  is defined as null before being initialized. 
@@ -162,19 +149,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setConfig(JsonObject config) {
 		this.config = config;
-		this.configWrap.alreadyInitialized = true;
 	}
 	public static JsonObject staticSetConfig(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 configInit() {
-		if(!configWrap.alreadyInitialized) {
+		Wrap<JsonObject> configWrap = new Wrap<JsonObject>().var("config");
+		if(config == null) {
 			_config(configWrap);
-			if(config == null)
-				setConfig(configWrap.o);
-			configWrap.o(null);
+			setConfig(configWrap.o);
 		}
-		configWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -188,8 +172,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String appName;
-	@JsonIgnore
-	public Wrap<String> appNameWrap = new Wrap<String>().var("appName").o(appName);
 
 	/**	<br/> The entity appName
 	 *  is defined as null before being initialized. 
@@ -204,19 +186,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 	public void setAppName(String o) {
 		this.appName = AppSwagger2.staticSetAppName(siteRequest_, o);
-		this.appNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetAppName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected AppSwagger2 appNameInit() {
-		if(!appNameWrap.alreadyInitialized) {
+		Wrap<String> appNameWrap = new Wrap<String>().var("appName");
+		if(appName == null) {
 			_appName(appNameWrap);
-			if(appName == null)
-				setAppName(appNameWrap.o);
-			appNameWrap.o(null);
+			setAppName(appNameWrap.o);
 		}
-		appNameWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -232,22 +211,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrAppName(siteRequest_, AppSwagger2.staticSolrAppName(siteRequest_, AppSwagger2.staticSetAppName(siteRequest_, o)));
 	}
 
-	public String solrAppName() {
-		return AppSwagger2.staticSolrAppName(siteRequest_, appName);
-	}
-
-	public String strAppName() {
-		return appName == null ? "" : appName;
-	}
-
-	public String sqlAppName() {
-		return appName;
-	}
-
-	public String jsonAppName() {
-		return appName == null ? "" : appName;
-	}
-
 	//////////////////
 	// languageName //
 	//////////////////
@@ -258,8 +221,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String languageName;
-	@JsonIgnore
-	public Wrap<String> languageNameWrap = new Wrap<String>().var("languageName").o(languageName);
 
 	/**	<br/> The entity languageName
 	 *  is defined as null before being initialized. 
@@ -274,19 +235,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 	public void setLanguageName(String o) {
 		this.languageName = AppSwagger2.staticSetLanguageName(siteRequest_, o);
-		this.languageNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetLanguageName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected AppSwagger2 languageNameInit() {
-		if(!languageNameWrap.alreadyInitialized) {
+		Wrap<String> languageNameWrap = new Wrap<String>().var("languageName");
+		if(languageName == null) {
 			_languageName(languageNameWrap);
-			if(languageName == null)
-				setLanguageName(languageNameWrap.o);
-			languageNameWrap.o(null);
+			setLanguageName(languageNameWrap.o);
 		}
-		languageNameWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -302,22 +260,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrLanguageName(siteRequest_, AppSwagger2.staticSolrLanguageName(siteRequest_, AppSwagger2.staticSetLanguageName(siteRequest_, o)));
 	}
 
-	public String solrLanguageName() {
-		return AppSwagger2.staticSolrLanguageName(siteRequest_, languageName);
-	}
-
-	public String strLanguageName() {
-		return languageName == null ? "" : languageName;
-	}
-
-	public String sqlLanguageName() {
-		return languageName;
-	}
-
-	public String jsonLanguageName() {
-		return languageName == null ? "" : languageName;
-	}
-
 	/////////////
 	// appPath //
 	/////////////
@@ -328,8 +270,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String appPath;
-	@JsonIgnore
-	public Wrap<String> appPathWrap = new Wrap<String>().var("appPath").o(appPath);
 
 	/**	<br/> The entity appPath
 	 *  is defined as null before being initialized. 
@@ -344,19 +284,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 	public void setAppPath(String o) {
 		this.appPath = AppSwagger2.staticSetAppPath(siteRequest_, o);
-		this.appPathWrap.alreadyInitialized = true;
 	}
 	public static String staticSetAppPath(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected AppSwagger2 appPathInit() {
-		if(!appPathWrap.alreadyInitialized) {
+		Wrap<String> appPathWrap = new Wrap<String>().var("appPath");
+		if(appPath == null) {
 			_appPath(appPathWrap);
-			if(appPath == null)
-				setAppPath(appPathWrap.o);
-			appPathWrap.o(null);
+			setAppPath(appPathWrap.o);
 		}
-		appPathWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -372,22 +309,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrAppPath(siteRequest_, AppSwagger2.staticSolrAppPath(siteRequest_, AppSwagger2.staticSetAppPath(siteRequest_, o)));
 	}
 
-	public String solrAppPath() {
-		return AppSwagger2.staticSolrAppPath(siteRequest_, appPath);
-	}
-
-	public String strAppPath() {
-		return appPath == null ? "" : appPath;
-	}
-
-	public String sqlAppPath() {
-		return appPath;
-	}
-
-	public String jsonAppPath() {
-		return appPath == null ? "" : appPath;
-	}
-
 	////////////////////
 	// openApiVersion //
 	////////////////////
@@ -398,8 +319,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String openApiVersion;
-	@JsonIgnore
-	public Wrap<String> openApiVersionWrap = new Wrap<String>().var("openApiVersion").o(openApiVersion);
 
 	/**	<br/> The entity openApiVersion
 	 *  is defined as null before being initialized. 
@@ -414,19 +333,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 	public void setOpenApiVersion(String o) {
 		this.openApiVersion = AppSwagger2.staticSetOpenApiVersion(siteRequest_, o);
-		this.openApiVersionWrap.alreadyInitialized = true;
 	}
 	public static String staticSetOpenApiVersion(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected AppSwagger2 openApiVersionInit() {
-		if(!openApiVersionWrap.alreadyInitialized) {
+		Wrap<String> openApiVersionWrap = new Wrap<String>().var("openApiVersion");
+		if(openApiVersion == null) {
 			_openApiVersion(openApiVersionWrap);
-			if(openApiVersion == null)
-				setOpenApiVersion(openApiVersionWrap.o);
-			openApiVersionWrap.o(null);
+			setOpenApiVersion(openApiVersionWrap.o);
 		}
-		openApiVersionWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -442,22 +358,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrOpenApiVersion(siteRequest_, AppSwagger2.staticSolrOpenApiVersion(siteRequest_, AppSwagger2.staticSetOpenApiVersion(siteRequest_, o)));
 	}
 
-	public String solrOpenApiVersion() {
-		return AppSwagger2.staticSolrOpenApiVersion(siteRequest_, openApiVersion);
-	}
-
-	public String strOpenApiVersion() {
-		return openApiVersion == null ? "" : openApiVersion;
-	}
-
-	public String sqlOpenApiVersion() {
-		return openApiVersion;
-	}
-
-	public String jsonOpenApiVersion() {
-		return openApiVersion == null ? "" : openApiVersion;
-	}
-
 	//////////////////////////
 	// openApiVersionNumber //
 	//////////////////////////
@@ -469,8 +369,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Integer openApiVersionNumber;
-	@JsonIgnore
-	public Wrap<Integer> openApiVersionNumberWrap = new Wrap<Integer>().var("openApiVersionNumber").o(openApiVersionNumber);
 
 	/**	<br/> The entity openApiVersionNumber
 	 *  is defined as null before being initialized. 
@@ -486,12 +384,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setOpenApiVersionNumber(Integer openApiVersionNumber) {
 		this.openApiVersionNumber = openApiVersionNumber;
-		this.openApiVersionNumberWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setOpenApiVersionNumber(String o) {
 		this.openApiVersionNumber = AppSwagger2.staticSetOpenApiVersionNumber(siteRequest_, o);
-		this.openApiVersionNumberWrap.alreadyInitialized = true;
 	}
 	public static Integer staticSetOpenApiVersionNumber(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -499,13 +395,11 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return null;
 	}
 	protected AppSwagger2 openApiVersionNumberInit() {
-		if(!openApiVersionNumberWrap.alreadyInitialized) {
+		Wrap<Integer> openApiVersionNumberWrap = new Wrap<Integer>().var("openApiVersionNumber");
+		if(openApiVersionNumber == null) {
 			_openApiVersionNumber(openApiVersionNumberWrap);
-			if(openApiVersionNumber == null)
-				setOpenApiVersionNumber(openApiVersionNumberWrap.o);
-			openApiVersionNumberWrap.o(null);
+			setOpenApiVersionNumber(openApiVersionNumberWrap.o);
 		}
-		openApiVersionNumberWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -521,22 +415,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrOpenApiVersionNumber(siteRequest_, AppSwagger2.staticSolrOpenApiVersionNumber(siteRequest_, AppSwagger2.staticSetOpenApiVersionNumber(siteRequest_, o)));
 	}
 
-	public Integer solrOpenApiVersionNumber() {
-		return AppSwagger2.staticSolrOpenApiVersionNumber(siteRequest_, openApiVersionNumber);
-	}
-
-	public String strOpenApiVersionNumber() {
-		return openApiVersionNumber == null ? "" : openApiVersionNumber.toString();
-	}
-
-	public Integer sqlOpenApiVersionNumber() {
-		return openApiVersionNumber;
-	}
-
-	public String jsonOpenApiVersionNumber() {
-		return openApiVersionNumber == null ? "" : openApiVersionNumber.toString();
-	}
-
 	////////////////
 	// tabsSchema //
 	////////////////
@@ -548,8 +426,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Integer tabsSchema;
-	@JsonIgnore
-	public Wrap<Integer> tabsSchemaWrap = new Wrap<Integer>().var("tabsSchema").o(tabsSchema);
 
 	/**	<br/> The entity tabsSchema
 	 *  is defined as null before being initialized. 
@@ -565,12 +441,10 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setTabsSchema(Integer tabsSchema) {
 		this.tabsSchema = tabsSchema;
-		this.tabsSchemaWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setTabsSchema(String o) {
 		this.tabsSchema = AppSwagger2.staticSetTabsSchema(siteRequest_, o);
-		this.tabsSchemaWrap.alreadyInitialized = true;
 	}
 	public static Integer staticSetTabsSchema(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -578,13 +452,11 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return null;
 	}
 	protected AppSwagger2 tabsSchemaInit() {
-		if(!tabsSchemaWrap.alreadyInitialized) {
+		Wrap<Integer> tabsSchemaWrap = new Wrap<Integer>().var("tabsSchema");
+		if(tabsSchema == null) {
 			_tabsSchema(tabsSchemaWrap);
-			if(tabsSchema == null)
-				setTabsSchema(tabsSchemaWrap.o);
-			tabsSchemaWrap.o(null);
+			setTabsSchema(tabsSchemaWrap.o);
 		}
-		tabsSchemaWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -600,22 +472,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrTabsSchema(siteRequest_, AppSwagger2.staticSolrTabsSchema(siteRequest_, AppSwagger2.staticSetTabsSchema(siteRequest_, o)));
 	}
 
-	public Integer solrTabsSchema() {
-		return AppSwagger2.staticSolrTabsSchema(siteRequest_, tabsSchema);
-	}
-
-	public String strTabsSchema() {
-		return tabsSchema == null ? "" : tabsSchema.toString();
-	}
-
-	public Integer sqlTabsSchema() {
-		return tabsSchema;
-	}
-
-	public String jsonTabsSchema() {
-		return tabsSchema == null ? "" : tabsSchema.toString();
-	}
-
 	////////////////
 	// apiVersion //
 	////////////////
@@ -626,8 +482,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String apiVersion;
-	@JsonIgnore
-	public Wrap<String> apiVersionWrap = new Wrap<String>().var("apiVersion").o(apiVersion);
 
 	/**	<br/> The entity apiVersion
 	 *  is defined as null before being initialized. 
@@ -642,19 +496,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 	public void setApiVersion(String o) {
 		this.apiVersion = AppSwagger2.staticSetApiVersion(siteRequest_, o);
-		this.apiVersionWrap.alreadyInitialized = true;
 	}
 	public static String staticSetApiVersion(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected AppSwagger2 apiVersionInit() {
-		if(!apiVersionWrap.alreadyInitialized) {
+		Wrap<String> apiVersionWrap = new Wrap<String>().var("apiVersion");
+		if(apiVersion == null) {
 			_apiVersion(apiVersionWrap);
-			if(apiVersion == null)
-				setApiVersion(apiVersionWrap.o);
-			apiVersionWrap.o(null);
+			setApiVersion(apiVersionWrap.o);
 		}
-		apiVersionWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -670,22 +521,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrApiVersion(siteRequest_, AppSwagger2.staticSolrApiVersion(siteRequest_, AppSwagger2.staticSetApiVersion(siteRequest_, o)));
 	}
 
-	public String solrApiVersion() {
-		return AppSwagger2.staticSolrApiVersion(siteRequest_, apiVersion);
-	}
-
-	public String strApiVersion() {
-		return apiVersion == null ? "" : apiVersion;
-	}
-
-	public String sqlApiVersion() {
-		return apiVersion;
-	}
-
-	public String jsonApiVersion() {
-		return apiVersion == null ? "" : apiVersion;
-	}
-
 	/////////////////////
 	// openApiYamlPath //
 	/////////////////////
@@ -696,8 +531,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String openApiYamlPath;
-	@JsonIgnore
-	public Wrap<String> openApiYamlPathWrap = new Wrap<String>().var("openApiYamlPath").o(openApiYamlPath);
 
 	/**	<br/> The entity openApiYamlPath
 	 *  is defined as null before being initialized. 
@@ -712,19 +545,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 	public void setOpenApiYamlPath(String o) {
 		this.openApiYamlPath = AppSwagger2.staticSetOpenApiYamlPath(siteRequest_, o);
-		this.openApiYamlPathWrap.alreadyInitialized = true;
 	}
 	public static String staticSetOpenApiYamlPath(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected AppSwagger2 openApiYamlPathInit() {
-		if(!openApiYamlPathWrap.alreadyInitialized) {
+		Wrap<String> openApiYamlPathWrap = new Wrap<String>().var("openApiYamlPath");
+		if(openApiYamlPath == null) {
 			_openApiYamlPath(openApiYamlPathWrap);
-			if(openApiYamlPath == null)
-				setOpenApiYamlPath(openApiYamlPathWrap.o);
-			openApiYamlPathWrap.o(null);
+			setOpenApiYamlPath(openApiYamlPathWrap.o);
 		}
-		openApiYamlPathWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -740,22 +570,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 		return AppSwagger2.staticSolrStrOpenApiYamlPath(siteRequest_, AppSwagger2.staticSolrOpenApiYamlPath(siteRequest_, AppSwagger2.staticSetOpenApiYamlPath(siteRequest_, o)));
 	}
 
-	public String solrOpenApiYamlPath() {
-		return AppSwagger2.staticSolrOpenApiYamlPath(siteRequest_, openApiYamlPath);
-	}
-
-	public String strOpenApiYamlPath() {
-		return openApiYamlPath == null ? "" : openApiYamlPath;
-	}
-
-	public String sqlOpenApiYamlPath() {
-		return openApiYamlPath;
-	}
-
-	public String jsonOpenApiYamlPath() {
-		return openApiYamlPath == null ? "" : openApiYamlPath;
-	}
-
 	/////////////////////
 	// openApiYamlFile //
 	/////////////////////
@@ -766,8 +580,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected File openApiYamlFile;
-	@JsonIgnore
-	public Wrap<File> openApiYamlFileWrap = new Wrap<File>().var("openApiYamlFile").o(openApiYamlFile);
 
 	/**	<br/> The entity openApiYamlFile
 	 *  is defined as null before being initialized. 
@@ -783,19 +595,16 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setOpenApiYamlFile(File openApiYamlFile) {
 		this.openApiYamlFile = openApiYamlFile;
-		this.openApiYamlFileWrap.alreadyInitialized = true;
 	}
 	public static File staticSetOpenApiYamlFile(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 openApiYamlFileInit() {
-		if(!openApiYamlFileWrap.alreadyInitialized) {
+		Wrap<File> openApiYamlFileWrap = new Wrap<File>().var("openApiYamlFile");
+		if(openApiYamlFile == null) {
 			_openApiYamlFile(openApiYamlFileWrap);
-			if(openApiYamlFile == null)
-				setOpenApiYamlFile(openApiYamlFileWrap.o);
-			openApiYamlFileWrap.o(null);
+			setOpenApiYamlFile(openApiYamlFileWrap.o);
 		}
-		openApiYamlFileWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -809,8 +618,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter w;
-	@JsonIgnore
-	public Wrap<AllWriter> wWrap = new Wrap<AllWriter>().var("w").o(w);
 
 	/**	<br/> The entity w
 	 *  is defined as null before being initialized. 
@@ -826,21 +633,18 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setW(AllWriter w) {
 		this.w = w;
-		this.wWrap.alreadyInitialized = true;
 	}
 	public static AllWriter staticSetW(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 wInit() {
-		if(!wWrap.alreadyInitialized) {
+		Wrap<AllWriter> wWrap = new Wrap<AllWriter>().var("w");
+		if(w == null) {
 			_w(wWrap);
-			if(w == null)
-				setW(wWrap.o);
-			wWrap.o(null);
+			setW(wWrap.o);
 		}
 		if(w != null)
 			w.initDeepForClass(siteRequest_);
-		wWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -854,8 +658,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter wPaths;
-	@JsonIgnore
-	public Wrap<AllWriter> wPathsWrap = new Wrap<AllWriter>().var("wPaths").o(wPaths);
 
 	/**	<br/> The entity wPaths
 	 *  is defined as null before being initialized. 
@@ -871,21 +673,18 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setWPaths(AllWriter wPaths) {
 		this.wPaths = wPaths;
-		this.wPathsWrap.alreadyInitialized = true;
 	}
 	public static AllWriter staticSetWPaths(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 wPathsInit() {
-		if(!wPathsWrap.alreadyInitialized) {
+		Wrap<AllWriter> wPathsWrap = new Wrap<AllWriter>().var("wPaths");
+		if(wPaths == null) {
 			_wPaths(wPathsWrap);
-			if(wPaths == null)
-				setWPaths(wPathsWrap.o);
-			wPathsWrap.o(null);
+			setWPaths(wPathsWrap.o);
 		}
 		if(wPaths != null)
 			wPaths.initDeepForClass(siteRequest_);
-		wPathsWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -899,8 +698,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter wRequestBodies;
-	@JsonIgnore
-	public Wrap<AllWriter> wRequestBodiesWrap = new Wrap<AllWriter>().var("wRequestBodies").o(wRequestBodies);
 
 	/**	<br/> The entity wRequestBodies
 	 *  is defined as null before being initialized. 
@@ -916,21 +713,18 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setWRequestBodies(AllWriter wRequestBodies) {
 		this.wRequestBodies = wRequestBodies;
-		this.wRequestBodiesWrap.alreadyInitialized = true;
 	}
 	public static AllWriter staticSetWRequestBodies(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 wRequestBodiesInit() {
-		if(!wRequestBodiesWrap.alreadyInitialized) {
+		Wrap<AllWriter> wRequestBodiesWrap = new Wrap<AllWriter>().var("wRequestBodies");
+		if(wRequestBodies == null) {
 			_wRequestBodies(wRequestBodiesWrap);
-			if(wRequestBodies == null)
-				setWRequestBodies(wRequestBodiesWrap.o);
-			wRequestBodiesWrap.o(null);
+			setWRequestBodies(wRequestBodiesWrap.o);
 		}
 		if(wRequestBodies != null)
 			wRequestBodies.initDeepForClass(siteRequest_);
-		wRequestBodiesWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -944,8 +738,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected AllWriter wSchemas;
-	@JsonIgnore
-	public Wrap<AllWriter> wSchemasWrap = new Wrap<AllWriter>().var("wSchemas").o(wSchemas);
 
 	/**	<br/> The entity wSchemas
 	 *  is defined as null before being initialized. 
@@ -961,21 +753,18 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 
 	public void setWSchemas(AllWriter wSchemas) {
 		this.wSchemas = wSchemas;
-		this.wSchemasWrap.alreadyInitialized = true;
 	}
 	public static AllWriter staticSetWSchemas(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AppSwagger2 wSchemasInit() {
-		if(!wSchemasWrap.alreadyInitialized) {
+		Wrap<AllWriter> wSchemasWrap = new Wrap<AllWriter>().var("wSchemas");
+		if(wSchemas == null) {
 			_wSchemas(wSchemasWrap);
-			if(wSchemas == null)
-				setWSchemas(wSchemasWrap.o);
-			wSchemasWrap.o(null);
+			setWSchemas(wSchemasWrap.o);
 		}
 		if(wSchemas != null)
 			wSchemas.initDeepForClass(siteRequest_);
-		wSchemasWrap.alreadyInitialized(true);
 		return (AppSwagger2)this;
 	}
 
@@ -983,14 +772,9 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedAppSwagger2 = false;
-
 	public AppSwagger2 initDeepAppSwagger2(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedAppSwagger2) {
-			alreadyInitializedAppSwagger2 = true;
-			initDeepAppSwagger2();
-		}
+		initDeepAppSwagger2();
 		return (AppSwagger2)this;
 	}
 
@@ -1102,23 +886,23 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeAppSwagger2(v, val);
+				o = relateAppSwagger2(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeAppSwagger2(String var, Object val) {
+	public Object relateAppSwagger2(String var, Object val) {
 		AppSwagger2 oAppSwagger2 = (AppSwagger2)this;
 		switch(var) {
 			default:
@@ -1250,28 +1034,6 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineAppSwagger2(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineAppSwagger2(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -1307,34 +1069,11 @@ public abstract class AppSwagger2Gen<DEV> extends Object {
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof AppSwagger2))
-			return false;
-		AppSwagger2 that = (AppSwagger2)o;
-		return true;
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("AppSwagger2 { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

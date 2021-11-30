@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
@@ -60,8 +59,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
-	@JsonIgnore
-	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_").o(siteRequest_);
 
 	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
@@ -77,19 +74,16 @@ public abstract class AllWriterGen<DEV> extends Object {
 
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
-		this.siteRequest_Wrap.alreadyInitialized = true;
 	}
 	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AllWriter siteRequest_Init() {
-		if(!siteRequest_Wrap.alreadyInitialized) {
+		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
+		if(siteRequest_ == null) {
 			_siteRequest_(siteRequest_Wrap);
-			if(siteRequest_ == null)
-				setSiteRequest_(siteRequest_Wrap.o);
-			siteRequest_Wrap.o(null);
+			setSiteRequest_(siteRequest_Wrap.o);
 		}
-		siteRequest_Wrap.alreadyInitialized(true);
 		return (AllWriter)this;
 	}
 
@@ -103,8 +97,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String tabStr;
-	@JsonIgnore
-	public Wrap<String> tabStrWrap = new Wrap<String>().var("tabStr").o(tabStr);
 
 	/**	<br/> The entity tabStr
 	 *  is defined as null before being initialized. 
@@ -119,19 +111,16 @@ public abstract class AllWriterGen<DEV> extends Object {
 	}
 	public void setTabStr(String o) {
 		this.tabStr = AllWriter.staticSetTabStr(siteRequest_, o);
-		this.tabStrWrap.alreadyInitialized = true;
 	}
 	public static String staticSetTabStr(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected AllWriter tabStrInit() {
-		if(!tabStrWrap.alreadyInitialized) {
+		Wrap<String> tabStrWrap = new Wrap<String>().var("tabStr");
+		if(tabStr == null) {
 			_tabStr(tabStrWrap);
-			if(tabStr == null)
-				setTabStr(tabStrWrap.o);
-			tabStrWrap.o(null);
+			setTabStr(tabStrWrap.o);
 		}
-		tabStrWrap.alreadyInitialized(true);
 		return (AllWriter)this;
 	}
 
@@ -147,22 +136,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 		return AllWriter.staticSolrStrTabStr(siteRequest_, AllWriter.staticSolrTabStr(siteRequest_, AllWriter.staticSetTabStr(siteRequest_, o)));
 	}
 
-	public String solrTabStr() {
-		return AllWriter.staticSolrTabStr(siteRequest_, tabStr);
-	}
-
-	public String strTabStr() {
-		return tabStr == null ? "" : tabStr;
-	}
-
-	public String sqlTabStr() {
-		return tabStr;
-	}
-
-	public String jsonTabStr() {
-		return tabStr == null ? "" : tabStr;
-	}
-
 	//////////
 	// file //
 	//////////
@@ -173,8 +146,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected File file;
-	@JsonIgnore
-	public Wrap<File> fileWrap = new Wrap<File>().var("file").o(file);
 
 	/**	<br/> The entity file
 	 *  is defined as null before being initialized. 
@@ -190,19 +161,16 @@ public abstract class AllWriterGen<DEV> extends Object {
 
 	public void setFile(File file) {
 		this.file = file;
-		this.fileWrap.alreadyInitialized = true;
 	}
 	public static File staticSetFile(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AllWriter fileInit() {
-		if(!fileWrap.alreadyInitialized) {
+		Wrap<File> fileWrap = new Wrap<File>().var("file");
+		if(file == null) {
 			_file(fileWrap);
-			if(file == null)
-				setFile(fileWrap.o);
-			fileWrap.o(null);
+			setFile(fileWrap.o);
 		}
-		fileWrap.alreadyInitialized(true);
 		return (AllWriter)this;
 	}
 
@@ -216,8 +184,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected StringWriter stringWriter;
-	@JsonIgnore
-	public Wrap<StringWriter> stringWriterWrap = new Wrap<StringWriter>().var("stringWriter").o(stringWriter);
 
 	/**	<br/> The entity stringWriter
 	 *  is defined as null before being initialized. 
@@ -233,19 +199,16 @@ public abstract class AllWriterGen<DEV> extends Object {
 
 	public void setStringWriter(StringWriter stringWriter) {
 		this.stringWriter = stringWriter;
-		this.stringWriterWrap.alreadyInitialized = true;
 	}
 	public static StringWriter staticSetStringWriter(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AllWriter stringWriterInit() {
-		if(!stringWriterWrap.alreadyInitialized) {
+		Wrap<StringWriter> stringWriterWrap = new Wrap<StringWriter>().var("stringWriter");
+		if(stringWriter == null) {
 			_stringWriter(stringWriterWrap);
-			if(stringWriter == null)
-				setStringWriter(stringWriterWrap.o);
-			stringWriterWrap.o(null);
+			setStringWriter(stringWriterWrap.o);
 		}
-		stringWriterWrap.alreadyInitialized(true);
 		return (AllWriter)this;
 	}
 
@@ -259,8 +222,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected Buffer buffer;
-	@JsonIgnore
-	public Wrap<Buffer> bufferWrap = new Wrap<Buffer>().var("buffer").o(buffer);
 
 	/**	<br/> The entity buffer
 	 *  is defined as null before being initialized. 
@@ -276,19 +237,16 @@ public abstract class AllWriterGen<DEV> extends Object {
 
 	public void setBuffer(Buffer buffer) {
 		this.buffer = buffer;
-		this.bufferWrap.alreadyInitialized = true;
 	}
 	public static Buffer staticSetBuffer(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AllWriter bufferInit() {
-		if(!bufferWrap.alreadyInitialized) {
+		Wrap<Buffer> bufferWrap = new Wrap<Buffer>().var("buffer");
+		if(buffer == null) {
 			_buffer(bufferWrap);
-			if(buffer == null)
-				setBuffer(bufferWrap.o);
-			bufferWrap.o(null);
+			setBuffer(bufferWrap.o);
 		}
-		bufferWrap.alreadyInitialized(true);
 		return (AllWriter)this;
 	}
 
@@ -302,8 +260,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected PrintWriter printWriter;
-	@JsonIgnore
-	public Wrap<PrintWriter> printWriterWrap = new Wrap<PrintWriter>().var("printWriter").o(printWriter);
 
 	/**	<br/> The entity printWriter
 	 *  is defined as null before being initialized. 
@@ -319,19 +275,16 @@ public abstract class AllWriterGen<DEV> extends Object {
 
 	public void setPrintWriter(PrintWriter printWriter) {
 		this.printWriter = printWriter;
-		this.printWriterWrap.alreadyInitialized = true;
 	}
 	public static PrintWriter staticSetPrintWriter(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AllWriter printWriterInit() {
-		if(!printWriterWrap.alreadyInitialized) {
+		Wrap<PrintWriter> printWriterWrap = new Wrap<PrintWriter>().var("printWriter");
+		if(printWriter == null) {
 			_printWriter(printWriterWrap);
-			if(printWriter == null)
-				setPrintWriter(printWriterWrap.o);
-			printWriterWrap.o(null);
+			setPrintWriter(printWriterWrap.o);
 		}
-		printWriterWrap.alreadyInitialized(true);
 		return (AllWriter)this;
 	}
 
@@ -345,8 +298,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean empty;
-	@JsonIgnore
-	public Wrap<Boolean> emptyWrap = new Wrap<Boolean>().var("empty").o(empty);
 
 	/**	<br/> The entity empty
 	 *  is defined as null before being initialized. 
@@ -362,24 +313,20 @@ public abstract class AllWriterGen<DEV> extends Object {
 
 	public void setEmpty(Boolean empty) {
 		this.empty = empty;
-		this.emptyWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setEmpty(String o) {
 		this.empty = AllWriter.staticSetEmpty(siteRequest_, o);
-		this.emptyWrap.alreadyInitialized = true;
 	}
 	public static Boolean staticSetEmpty(SiteRequestEnUS siteRequest_, String o) {
 		return Boolean.parseBoolean(o);
 	}
 	protected AllWriter emptyInit() {
-		if(!emptyWrap.alreadyInitialized) {
+		Wrap<Boolean> emptyWrap = new Wrap<Boolean>().var("empty");
+		if(empty == null) {
 			_empty(emptyWrap);
-			if(empty == null)
-				setEmpty(emptyWrap.o);
-			emptyWrap.o(null);
+			setEmpty(emptyWrap.o);
 		}
-		emptyWrap.alreadyInitialized(true);
 		return (AllWriter)this;
 	}
 
@@ -395,34 +342,13 @@ public abstract class AllWriterGen<DEV> extends Object {
 		return AllWriter.staticSolrStrEmpty(siteRequest_, AllWriter.staticSolrEmpty(siteRequest_, AllWriter.staticSetEmpty(siteRequest_, o)));
 	}
 
-	public Boolean solrEmpty() {
-		return AllWriter.staticSolrEmpty(siteRequest_, empty);
-	}
-
-	public String strEmpty() {
-		return empty == null ? "" : empty.toString();
-	}
-
-	public Boolean sqlEmpty() {
-		return empty;
-	}
-
-	public String jsonEmpty() {
-		return empty == null ? "" : empty.toString();
-	}
-
 	//////////////
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedAllWriter = false;
-
 	public AllWriter initDeepAllWriter(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedAllWriter) {
-			alreadyInitializedAllWriter = true;
-			initDeepAllWriter();
-		}
+		initDeepAllWriter();
 		return (AllWriter)this;
 	}
 
@@ -499,23 +425,23 @@ public abstract class AllWriterGen<DEV> extends Object {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeAllWriter(v, val);
+				o = relateAllWriter(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeAllWriter(String var, Object val) {
+	public Object relateAllWriter(String var, Object val) {
 		AllWriter oAllWriter = (AllWriter)this;
 		switch(var) {
 			default:
@@ -599,28 +525,6 @@ public abstract class AllWriterGen<DEV> extends Object {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineAllWriter(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineAllWriter(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -656,34 +560,11 @@ public abstract class AllWriterGen<DEV> extends Object {
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof AllWriter))
-			return false;
-		AllWriter that = (AllWriter)o;
-		return true;
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("AllWriter { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

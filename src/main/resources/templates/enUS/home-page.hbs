@@ -1,0 +1,32 @@
+{{#partial "htmHead"}}{{> htmHeadPageLayout}}{{/partial}}
+{{#partial "htmTitle"}}
+		<title>ActiveLearningStudio API</title>
+{{/partial}}
+{{#partial "htmMeta"}}{{> htmMetaPageLayout}}
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<meta name="keywords" content="">
+{{/partial}}
+{{#partial "htmStyle"}}{{> htmStylePageLayout}}{{/partial}}
+{{#partial "htmScripts"}}{{> htmScriptsPageLayout}}
+{{/partial}}
+{{#partial "htmScript"}}{{> htmScriptPageLayout}}
+		<script>//<![CDATA[
+		$(document).ready(function() {
+			window.eventBus = new EventBus('/eventbus');
+		});
+		//]]></script>
+{{/partial}}
+{{#partial "htmBody"}}{{>htmBodyPageLayout}}{{/partial}}
+{{#partial "htmBodyStart"}}{{> htmBodyStartPageLayout}}
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide w3-margin-top " style="max-width:1500px;" id="home">
+	<div class="w3-display-bottom-middle w3-margin-top w3-center ">
+		<h1 class="w3-xxlarge "><span class="w3-padding "><b>ActiveLearningStudio API</b></span></h1>
+		<div class="w3-padding-32 w3-row ">
+		</div>
+	</div>
+</header>
+{{/partial}}
+{{#partial "htmBodyEnd"}}{{> htmBodyEndPageLayout}}{{/partial}}
+{{> PageLayout}}

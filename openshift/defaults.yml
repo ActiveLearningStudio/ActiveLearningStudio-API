@@ -1,0 +1,284 @@
+---
+# Label: project_openshift_defaults
+# Title: create the Ansible defaults for deploying the application to OpenShift
+# Mission: create the Ansible defaults for deploying the application to OpenShift
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+####################
+# Ansible defaults #
+####################
+
+SITE_BUILD_CONFIG_1: true
+
+######################
+# OpenShift defaults #
+######################
+
+# The OpenShift base URL where applications will be deployed.
+REDHAT_OPENSHIFT_HOST: https://api.rh-us-east-1.openshift.com
+# The OpenShift secret token to grant access to OpenShift (https://api.pro-us-east-1.openshift.com/oauth/token/request).
+REDHAT_OPENSHIFT_TOKEN: "..."
+# The OpenShift namespace where applications will be deployed.
+REDHAT_OPENSHIFT_NAMESPACE: "rh-impact"
+# The default storage class name for persistent volumes for the OpenShift cluster. 
+REDHAT_OPENSHIFT_STORAGE_CLASS_NAME: gp2
+
+######################
+# Zookeeper defaults #
+######################
+
+# The default port that Zookeeper runs to manage the cluster.
+ZOOKEEPER_PORT: 2181
+# The Zookeeper OpenShift base URL where Zookeeper will be deployed.
+ZOOKEEPER_HOST: "{{ REDHAT_OPENSHIFT_HOST }}"
+# The Zookeeper OpenShift secret token to grant access to OpenShift (https://api.pro-us-east-1.openshift.com/oauth/token/request).
+ZOOKEEPER_TOKEN: "{{ REDHAT_OPENSHIFT_TOKEN }}"
+# The Zookeeper OpenShift namespace where Zookeeper will be deployed.
+ZOOKEEPER_NAMESPACE: "{{ REDHAT_OPENSHIFT_NAMESPACE }}"
+# The Zookeeper volume size for Zookeeper files.
+ZOOKEEPER_VOLUME_SIZE: 1Gi
+# The default hostname for the Zookeeper cluster manager.
+ZOOKEEPER_HOST_NAME: "zookeeper.{{ ZOOKEEPER_NAMESPACE }}.svc"
+# The default storage class name for persistent volumes for Zookeeper. 
+ZOOKEEPER_STORAGE_CLASS_NAME: "{{ REDHAT_OPENSHIFT_STORAGE_CLASS_NAME }}"
+
+#################
+# Solr defaults #
+#################
+
+# The default port that Solr runs.
+SOLR_PORT: 8983
+# The Solr OpenShift base URL where Solr will be deployed.
+SOLR_HOST: "{{ REDHAT_OPENSHIFT_HOST }}"
+# The Solr OpenShift secret token to grant access to OpenShift (https://api.pro-us-east-1.openshift.com/oauth/token/request).
+SOLR_TOKEN: "{{ REDHAT_OPENSHIFT_TOKEN }}"
+# The Solr OpenShift namespace where Solr be deployed.
+SOLR_NAMESPACE: "{{ REDHAT_OPENSHIFT_NAMESPACE }}"
+# The Solr volume size for Solr files.
+SOLR_VOLUME_SIZE: 2Gi
+# The default hostname for the Solr search engine.
+SOLR_HOST_NAME: "solr.{{ SOLR_NAMESPACE }}.svc"
+# The default storage class name for persistent volumes for Solr. 
+SOLR_STORAGE_CLASS_NAME: "{{ REDHAT_OPENSHIFT_STORAGE_CLASS_NAME }}"
+
+#######################
+# PostgreSQL defaults #
+#######################
+
+# The default port that PostgreSQL runs.
+POSTGRES_PORT: 5432
+# The PostgreSQL OpenShift base URL where PostgreSQL will be deployed.
+POSTGRES_HOST: "{{ REDHAT_OPENSHIFT_HOST }}"
+# The PostgreSQL OpenShift secret token to grant access to OpenShift (https://api.pro-us-east-1.openshift.com/oauth/token/request).
+POSTGRES_TOKEN: "{{ REDHAT_OPENSHIFT_TOKEN }}"
+# The PostgreSQL OpenShift namespace where PostgreSQL be deployed.
+POSTGRES_NAMESPACE: "{{ REDHAT_OPENSHIFT_NAMESPACE }}"
+# The PostgreSQL volume size for Solr files.
+POSTGRES_VOLUME_SIZE: 1Gi
+# The default hostname for the PostreSQL database.
+POSTGRES_HOST_NAME: "postgresql.{{ POSTGRES_NAMESPACE }}.svc"
+# The default username for the PostreSQL database.
+POSTGRES_DB_USER: computate
+# The default PostgreSQL database name.
+POSTGRES_DB_NAME: "{{ APP_NAME }}"
+# The default PostgreSQL database password.
+POSTGRES_DB_PASSWORD: "..."
+# The default storage class name for persistent volumes for PostgreSQL. 
+POSTGRES_STORAGE_CLASS_NAME: "{{ REDHAT_OPENSHIFT_STORAGE_CLASS_NAME }}"
+
+###################
+# Github defaults #
+###################
+
+# The Github Organization. 
+GITHUB_ORG_NAME: "team19hackathon2021"
+# The Github Repository name. 
+GITHUB_REPO_NAME: "{{ SITE_NAME }}"
+
+###############################
+# application global defaults #
+###############################
+
+# The source code directory of the application
+SITE_SRC: "/usr/local/src/{{ SITE_NAME }}"
+# The application OpenShift base URL where application will be deployed.
+SITE_HOST: "{{ REDHAT_OPENSHIFT_HOST }}"
+# The application OpenShift secret token to grant access to OpenShift (https://api.pro-us-east-1.openshift.com/oauth/token/request).
+SITE_TOKEN: "{{ REDHAT_OPENSHIFT_TOKEN }}"
+# The application OpenShift namespace where application be deployed.
+SITE_NAMESPACE: "{{ REDHAT_OPENSHIFT_NAMESPACE }}"
+# The base URL where the static files will point to.
+SITE_STATIC_BASE_URL: "https://computate.neocities.org/curriki"
+# Where static files are placed in the pod. 
+SITE_STATIC_PATH: 
+# App memory limit. 
+SITE_LIMITS_MEMORY: "500Mi"
+# App cpu limit. 
+SITE_LIMITS_CPU: "1m"
+
+#########################################
+# application US English defaults #
+#########################################
+
+# The domain name of the site.
+SITE_DOMAIN_NAME_ENUS: "example.com"
+# The host name of the site.
+SITE_HOST_NAME_ENUS: "{{ SITE_NAME }}.{{ SITE_DOMAIN_NAME_ENUS }}"
+# The port of the site.
+SITE_PORT_ENUS: "8080"
+# The base URL of the site.
+SITE_BASE_URL_ENUS: "https://{{ SITE_HOST_NAME_ENUS }}"
+# The Solr collection of the site.
+SITE_SOLR_COLLECTION_ENUS: "{{ SITE_NAME }}"
+# The timezone of the site.
+SITE_ZONE_ENUS: "America/Denver"
+# The PostgreSQL database host name of the site.
+SITE_DB_HOST_NAME_ENUS: "localhost"
+# The PostgreSQL database user name of the site.
+SITE_DB_USER_ENUS: "{{ POSTGRES_DB_USER }}"
+# The PostgreSQL database password of the site.
+SITE_DB_PASSWORD_ENUS: "{{ POSTGRES_DB_PASSWORD }}"
+# The PostgreSQL database name of the site.
+SITE_DB_NAME_ENUS: "{{ SITE_NAME }}"
+# The Java main class of the site.
+SITE_JAVA_MAIN_CLASS_ENUS: io.serratus.api.enus.vertx.MainVerticle
+
+########################
+# serrtus-api defaults #
+########################
+
+AUTH_ROLES_ADMIN: [ SiteAdmin ]
+AUTH_ROLES_REQUIRED_SiteUser: [ "SiteAdmin" ]
+AUTH_ROLES_REQUIRED_SequenceRun: [ "User" ]
+AUTH_ROLES_REQUIRED_BioSample: [ "User" ]
+AUTH_ROLES_REQUIRED_Taxonomy: [ "User" ]
+
+#################
+# SMTP defaults #
+#################
+
+# The email SMTP host name.
+EMAIL_HOST_NAME: smtp.example.com
+# The email SMTP port.
+EMAIL_PORT: 465
+# The email SMTP from email address.
+EMAIL_FROM: "..."
+# Whether email SMTP SSL/TLS encryption is enabled.
+EMAIL_SSL: true
+# Whether email SMTP username password authentication is enabled.
+EMAIL_AUTH: true
+# The email SMTP username.
+EMAIL_USER: "..."
+EMAIL_PASSWORD: "..."
+
+####################
+# SSL/TLS defaults #
+####################
+
+# The keystore alias.
+SSL_ALIAS: "{{ SITE_DOMAIN_NAME_ENUS }}"
+# The keystore directory.
+SSL_KEYSTORE_PATH: /opt/keystore
+# The keystore properties filename.
+SSL_PROPERTIES_FILENAME: "{{ SITE_SSL_PROPERTIES_FILENAME }}"
+# The SSL certificate path.
+SSL_CERT_PATH: "{{ SSL_KEYSTORE_PATH }}/tls.crt"
+# The SSL private key path.
+SSL_KEY_PATH: "{{ SSL_KEYSTORE_PATH }}/tls.key"
+# The certificate filename.
+SSL_CRT_FILENAME: "{{ SSL_ALIAS }}.crt"
+# The certificate path.
+SSL_CRT_PATH: "{{ SSL_KEYSTORE_PATH }}/{{ SSL_CRT_FILENAME }}"
+# The p12 file password.
+SSL_P12_PASSWORD: "..."
+# The keystore file password.
+SSL_JKS_PASSWORD: "{{ SSL_P12_PASSWORD }}"
+# The keystore file base64 encoded (base64 -w 0 /opt/keystore/computate.org.jks).
+#SSL_JKS_BASE64: "{{ lookup('file', '{{ SSL_JKS_PATH }}') | b64encode }}"
+# The jceks file base64 encoded (base64 -w 0 /opt/keystore/computate.org.jceks).
+SSL_JCEKS_BASE64: "{{ lookup('file', '{{ SSL_JCEKS_PATH }}') | b64encode }}"
+# Enable SSL passthrough
+SSL_PASSTHROUGH: false
+
+#######################################
+# OpenID Connect auth server defaults #
+#######################################
+
+# The Red Hat SSO OpenShift base URL where Red Hat SSO will be deployed.
+SSO_HOST: "{{ REDHAT_OPENSHIFT_HOST }}"
+# The Red Hat SSO OpenShift secret token to grant access to OpenShift (https://api.pro-us-east-1.openshift.com/oauth/token/request).
+SSO_TOKEN: "{{ REDHAT_OPENSHIFT_TOKEN }}"
+# The Red Hat SSO OpenShift namespace where Red Hat SSO be deployed.
+SSO_NAMESPACE: "{{ REDHAT_OPENSHIFT_NAMESPACE }}"
+# The default username for the Red Hat SSO PostreSQL database.
+SSO_DB_USERNAME: "..."
+# The default Red Hat SSO PostgreSQL database password.
+SSO_DB_PASSWORD: "..."
+# The default Red Hat SSO PostgreSQL database name.
+SSO_DB_DATABASE: root
+# The Red Hat SSO HTTPS keystore alias.
+SSO_HTTPS_NAME: "{{ SSL_ALIAS }}"
+# The Red Hat SSO HTTPS keystore file password.
+SSO_HTTPS_PASSWORD: "{{ SSL_JKS_PASSWORD }}"
+# The Red Hat SSO JGroups keystore alias.
+SSO_JGROUPS_ENCRYPT_NAME: "{{ SSL_ALIAS }}"
+# The Red Hat SSO JGroups keystore file password.
+SSO_JGROUPS_ENCRYPT_PASSWORD: "{{ SSL_JKS_PASSWORD }}"
+# A Red Hat SSO JGroups cluster password.
+SSO_JGROUPS_CLUSTER_PASSWORD: "..."
+# A Red Hat SSO admin username.
+SSO_ADMIN_USERNAME: "..."
+# A Red Hat SSO admin password.
+SSO_ADMIN_PASSWORD: "..."
+SSO_REALM: "{{ AUTH_REALM }}"
+# A Red Hat SSO initial user username.
+SSO_SERVICE_USERNAME: "..."
+# A Red Hat SSO initial user password.
+SSO_SERVICE_PASSWORD: "..."
+# The Red Hat SSO truststore file password.
+SSO_TRUSTSTORE_PASSWORD: "{{ SSL_JKS_PASSWORD }}"
+# The Red Hat SSO volume size for Solr files.
+SSO_VOLUME_SIZE: 1Gi
+# The default hostname for Red Hat SSO.
+SSO_SITE_HOST_NAME: "sso.example.com"
+
+# The Auth realm.
+AUTH_REALM: EXAMPLE.COM
+# The Auth client or resource.
+AUTH_RESOURCE: example.com
+# The Auth secret.
+AUTH_SECRET: "..."
+# The Auth token ID. 
+AUTH_TOKEN_URI: "/auth/realms/{{ AUTH_REALM }}/protocol/openid-connect/token"
+# The Auth host name
+AUTH_HOST_NAME: "{{ SSO_SITE_HOST_NAME }}"
+# The Auth port. 
+AUTH_PORT: 443
+# Whether the Auth server uses SSL. 
+AUTH_SSL: true
+# Whether the Auth server requires SSL. 
+AUTH_SSL_REQUIRED: all
+# The Auth URL.
+AUTH_URL: "https://{{ AUTH_HOST_NAME }}/auth"
+
+# The number of Vert.X verticle instances
+SITE_INSTANCES: 5
+# The size of the Vert.X worker pool
+WORKER_POOL_SIZE: 5
+
+# The size of the persistent volume for downloading FTP data and extracting the contents. 
+FTP_VOLUME_SIZE: 10Gi
+
+READ_BUFFER_SIZE: 1000
+API_COUNTER_RESUME: 100
+API_COUNTER_FETCH: 200
+
+ENABLE_IMPORT_DATA: false
+
+TIMER_DB_SOLR_SYNC_IN_SECONDS: 1
+ENABLE_DB_SOLR_SYNC: false
+
+ENABLE_REFRESH_DATA: false
+
+TIMER_DB_SOLR_SYNC_IN_SECONDS: 1

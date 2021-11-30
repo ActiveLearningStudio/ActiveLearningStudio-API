@@ -19,6 +19,9 @@ import io.vertx.ext.mail.MailMessage;
 
 /**
  * Keyword: classSimpleNameMailVerticle
+ * Map.hackathonMission: to create a new Java class to run a Vert.x verticle that will send emails when errors occur in the site. 
+ * Map.hackathonColumn: Quarkus app development
+ * Map.hackathonLabels: Java,Vert.x
  */ 
 public class MailVerticle extends AbstractVerticle {
 	private static final Logger LOG = LoggerFactory.getLogger(MailVerticle.class);

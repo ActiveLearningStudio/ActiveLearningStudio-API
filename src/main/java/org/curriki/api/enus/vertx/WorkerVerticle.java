@@ -40,6 +40,8 @@ import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowStream;
 
 /**
+ * Map.hackathonMission: to create a new Java class to run Vert.x verticle as a background worker to perform tasks in the background. 
+ * Map.hackathonColumn: Quarkus app development
  */
 public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);

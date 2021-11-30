@@ -1,0 +1,64 @@
+{{> "htmPageLayout"}}
+{{#*inline "htmHeadPageLayout"}}{{> "htmTitlePageLayout"}}{{> "htmMetaPageLayout"}}{{> "htmStylePageLayout"}}{{> "htmScriptsPageLayout"}}{{> "htmScriptPageLayout"}}{{/inline}}
+{{#*inline "htmScriptsPageLayout"}}		<!-- inline "htmScriptsPageLayout" -->
+		<script src="{{staticBaseUrl}}/js/jquery-1.12.4.min.js"></script>
+		<script src="https://kit.fontawesome.com/59d19567d5.js"></script>
+		<script src="{{staticBaseUrl}}/js/site-enUS.js"></script>
+		<script src="{{staticBaseUrl}}/js/moment.min.js"></script>
+		<script src="{{staticBaseUrl}}/js/jqDatePicker.js"></script>
+		<script src="{{staticBaseUrl}}/js/sockjs.js"></script>
+		<script src="{{staticBaseUrl}}/js/vertx-eventbus.js"></script>
+{{/inline}}
+{{#*inline "htmScriptPageLayout"}}		<!-- inline "htmScriptPageLayout" -->
+{{/inline}}
+{{#*inline "htmStylePageLayout"}}		<!-- inline "htmStylePageLayout" -->
+		<link rel="icon" href="{{staticBaseUrl}}/favicon.ico" />
+		<link rel="stylesheet" href="{{staticBaseUrl}}/css/w3.css" />
+		<link rel="stylesheet" href="{{staticBaseUrl}}/css/site-enUS.css" />
+{{/inline}}
+{{#*inline "htmMetaPageLayout"}}		<!-- inline "htmMetaPageLayout" -->
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+{{/inline}}
+{{#*inline "htmTitlePageLayout"}}		<!-- inline "htmTitlePageLayout" -->
+		<title>ActiveLearningStudio API</title>
+{{/inline}}
+{{#*inline "htmBodyStartPageLayout"}}		<!-- inline "htmBodyStartPageLayout" -->
+		<div class="w3-bar ">
+			<a href="https://www.openlearnx.org/">
+				<img class="w3-mobile w3-bar-item " style="height: 75px" src="https://www.openlearnx.org/wp-content/uploads/2021/09/openlearnx-logo-final.svg"/>
+			</a>
+			<div class="w3-bar-item w3-padding-16 w3-right ">
+{{#if userKey}}
+				<a href="/user/{{ userKey }}" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> {{userName}}</a>
+				<a href="{{ logoutUrl }}" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> Logout</a>
+{{else}}
+				<a href="/user" class="w3-mobile w3-padding w3-text-teal "><i class="fad fa-house-user w3-text-teal "></i> Login</a>
+{{/if}}
+				<a href="{{siteBaseUrl}}/" class="w3-mobile w3-padding w3-text-indigo "><i class="fad fa-home w3-text-indigo "></i> ActiveLearningStudio API</a>
+			</div>
+		</div>
+{{/inline}}
+{{#*inline "htmBodyEndPageLayout"}}		<!-- inline "htmBodyEndPageLayout" -->
+{{/inline}}
+{{#*inline "htmBodyPageLayout"}}		<!-- inline "htmBodyPageLayout" -->
+{{#block "htmBodyStart"}}{{/block}}
+{{#block "htmBodyEnd"}}{{/block}}
+		<footer class="w3-center w3-black w3-text-white w3-padding-24 ">
+			<div class="w3-bar ">
+				<a class="w3-bar-item grow-50 w3-small " href="https://github.com/team19hackathon2021/ActiveLearningStudio-API">This site is open source.</a>
+				<a class="w3-bar-item grow-50" href="https://www.openshift.com/products/online/"><span class="w3-small ">Powered by </span><img alt="" class="w3-image " style="display: inline-block; width: 100px; margin: 0 10px;" src="{{staticBaseUrl}}/svg/openshift.svg"/></a>
+			</div>
+		</footer>
+{{/inline}}
+{{#*inline "htmPageLayout"}}<!DOCTYPE html>
+<!-- inline "htmPageLayout" -->
+<html lang="en" style="height: 100%;">
+	<head>
+{{#block "htmHead"}}{{/block}}
+	</head>
+	<body class="" style="height: 100%;">
+{{#block "htmBody"}}{{/block}}
+	</body>
+</html>
+{{/inline}}

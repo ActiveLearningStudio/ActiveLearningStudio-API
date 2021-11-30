@@ -42,6 +42,9 @@ import io.vertx.sqlclient.Tuple;
 
 /**
  * Keyword: classSimpleNameBaseApiServiceImpl
+ * Map.hackathonMission: to create a new Java class BaseApiServiceImpl containing the base structure for all the API implementation classes in the site with helpful methods for persistence, authentication and more. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java,Vert.x
  **/
 public class BaseApiServiceImpl {
 
@@ -154,14 +157,14 @@ public class BaseApiServiceImpl {
 							searchList.addFilterQuery("userId_indexedstored_string:" + ClientUtils.escapeQueryChars(userId));
 							searchList.promiseDeepSearchList(siteRequest).onSuccess(c -> {
 								SiteUser siteUser1 = searchList.getList().stream().findFirst().orElse(null);
-								SiteUserEnUSApiServiceImpl userService = new SiteUserEnUSApiServiceImpl(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider);
+								SiteUserEnUSApiServiceImpl userService = new SiteUserEnUSApiServiceImpl(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine);
 
 								if(siteUser1 == null) {
 									JsonObject jsonObject = new JsonObject();
 									jsonObject.put("userName", accessToken.getString("preferred_username"));
 									jsonObject.put("userFirstName", accessToken.getString("given_name"));
 									jsonObject.put("userLastName", accessToken.getString("family_name"));
-									jsonObject.put("userCompleteName", accessToken.getString("name"));
+									jsonObject.put("userFullName", accessToken.getString("name"));
 									jsonObject.put("userId", accessToken.getString("sub"));
 									jsonObject.put("userEmail", accessToken.getString("email"));
 									userDefine(siteRequest, jsonObject, false);
@@ -250,8 +253,7 @@ public class BaseApiServiceImpl {
 							promise.fail(ex2);
 						});
 					}).onFailure(ex2 -> {
-						LOG.error(String.format("user failed. ", ex2));
-						promise.fail(ex2);
+						promise.fail(new RuntimeException(ex2.getMessage(), ex2));
 					});
 				});
 			}

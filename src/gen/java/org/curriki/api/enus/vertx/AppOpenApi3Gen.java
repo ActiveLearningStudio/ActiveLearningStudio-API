@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
@@ -48,14 +47,9 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedAppOpenApi3 = false;
-
 	public AppOpenApi3 initDeepAppOpenApi3(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedAppOpenApi3) {
-			alreadyInitializedAppOpenApi3 = true;
-			initDeepAppOpenApi3();
-		}
+		initDeepAppOpenApi3();
 		return (AppOpenApi3)this;
 	}
 
@@ -113,27 +107,27 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	@Override public boolean attributeForClass(String var, Object val) {
+	@Override public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeAppOpenApi3(v, val);
+				o = relateAppOpenApi3(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeAppOpenApi3(String var, Object val) {
+	public Object relateAppOpenApi3(String var, Object val) {
 		AppOpenApi3 oAppOpenApi3 = (AppOpenApi3)this;
 		switch(var) {
 			default:
-				return super.attributeAppSwagger2(var, val);
+				return super.relateAppSwagger2(var, val);
 		}
 	}
 
@@ -197,28 +191,6 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	// define //
 	/////////////
 
-	@Override public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineAppOpenApi3(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineAppOpenApi3(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return super.defineAppSwagger2(var, val);
-		}
-	}
-
 	@Override public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -255,35 +227,12 @@ public abstract class AppOpenApi3Gen<DEV> extends AppSwagger2 {
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash(super.hashCode());
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof AppOpenApi3))
-			return false;
-		AppOpenApi3 that = (AppOpenApi3)o;
-		return super.equals(o);
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.toString() + "\n");
-		sb.append("AppOpenApi3 { ");
-		sb.append(" }");
+		sb.append(super.toString());
 		return sb.toString();
 	}
 

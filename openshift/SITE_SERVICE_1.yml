@@ -1,0 +1,23 @@
+---
+# Label: ansible_project_service
+# Title: create the Ansible template for the project service in OpenShift
+# Mission: create the Ansible template for the project service in OpenShift
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+apiVersion: v1
+kind: Service
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: cluster
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: "{{ SITE_NAME }}"
+  sessionAffinity: None
+  type: ClusterIP

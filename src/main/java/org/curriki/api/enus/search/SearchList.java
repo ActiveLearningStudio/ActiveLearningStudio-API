@@ -40,6 +40,8 @@ import io.vertx.core.json.JsonObject;
 
 /** 
  * Keyword: classSimpleNameSearchList
+ * Map.hackathonMission: to create a new Java class to query the search engine and return the results and metadata. 
+ * Map.hackathonColumn: Develop Base Classes
  */
 public class SearchList<DEV> extends SearchListGen<DEV> {
 
@@ -109,6 +111,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 					Map<String, Object> map = json.getMap();
 					QueryResponse r = generateSolrQueryResponse(map);
 					setQueryResponse(r);
+					Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList").o(solrDocumentList);
 					_solrDocumentList(solrDocumentListWrap);
 					setSolrDocumentList(solrDocumentListWrap.o);
 					list.clear();
@@ -141,6 +144,7 @@ public class SearchList<DEV> extends SearchListGen<DEV> {
 				Map<String, Object> map = json.getMap();
 				QueryResponse r = generateSolrQueryResponse(map);
 				setQueryResponse(r);
+				Wrap<SolrDocumentList> solrDocumentListWrap = new Wrap<SolrDocumentList>().var("solrDocumentList").o(solrDocumentList);
 				_solrDocumentList(solrDocumentListWrap);
 				setSolrDocumentList(solrDocumentListWrap.o);
 				list.clear();

@@ -5,8 +5,8 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
+import org.curriki.api.enus.writer.AllWriter;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.apache.commons.lang3.StringUtils;
@@ -55,8 +55,6 @@ public abstract class AllWritersGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
-	@JsonIgnore
-	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_").o(siteRequest_);
 
 	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
@@ -72,19 +70,16 @@ public abstract class AllWritersGen<DEV> extends Object {
 
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
-		this.siteRequest_Wrap.alreadyInitialized = true;
 	}
 	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected AllWriters siteRequest_Init() {
-		if(!siteRequest_Wrap.alreadyInitialized) {
+		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
+		if(siteRequest_ == null) {
 			_siteRequest_(siteRequest_Wrap);
-			if(siteRequest_ == null)
-				setSiteRequest_(siteRequest_Wrap.o);
-			siteRequest_Wrap.o(null);
+			setSiteRequest_(siteRequest_Wrap.o);
 		}
-		siteRequest_Wrap.alreadyInitialized(true);
 		return (AllWriters)this;
 	}
 
@@ -99,8 +94,6 @@ public abstract class AllWritersGen<DEV> extends Object {
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<AllWriter> writers = new ArrayList<AllWriter>();
-	@JsonIgnore
-	public Wrap<List<AllWriter>> writersWrap = new Wrap<List<AllWriter>>().var("writers").o(writers);
 
 	/**	<br/> The entity writers
 	 *  It is constructed before being initialized with the constructor by default List<AllWriter>(). 
@@ -116,7 +109,6 @@ public abstract class AllWritersGen<DEV> extends Object {
 
 	public void setWriters(List<AllWriter> writers) {
 		this.writers = writers;
-		this.writersWrap.alreadyInitialized = true;
 	}
 	public static AllWriter staticSetWriters(SiteRequestEnUS siteRequest_, String o) {
 		return null;
@@ -128,15 +120,12 @@ public abstract class AllWritersGen<DEV> extends Object {
 		return (AllWriters)this;
 	}
 	public AllWriters addWriters(AllWriter o) {
-		if(o != null && !writers.contains(o))
+		if(o != null)
 			this.writers.add(o);
 		return (AllWriters)this;
 	}
 	protected AllWriters writersInit() {
-		if(!writersWrap.alreadyInitialized) {
-			_writers(writers);
-		}
-		writersWrap.alreadyInitialized(true);
+		_writers(writers);
 		return (AllWriters)this;
 	}
 
@@ -144,14 +133,9 @@ public abstract class AllWritersGen<DEV> extends Object {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedAllWriters = false;
-
 	public AllWriters initDeepAllWriters(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedAllWriters) {
-			alreadyInitializedAllWriters = true;
-			initDeepAllWriters();
-		}
+		initDeepAllWriters();
 		return (AllWriters)this;
 	}
 
@@ -213,23 +197,23 @@ public abstract class AllWritersGen<DEV> extends Object {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeAllWriters(v, val);
+				o = relateAllWriters(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeAllWriters(String var, Object val) {
+	public Object relateAllWriters(String var, Object val) {
 		AllWriters oAllWriters = (AllWriters)this;
 		switch(var) {
 			default:
@@ -297,28 +281,6 @@ public abstract class AllWritersGen<DEV> extends Object {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineAllWriters(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineAllWriters(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -354,34 +316,11 @@ public abstract class AllWritersGen<DEV> extends Object {
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof AllWriters))
-			return false;
-		AllWriters that = (AllWriters)o;
-		return true;
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("AllWriters { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

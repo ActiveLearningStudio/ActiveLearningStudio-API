@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
@@ -97,13 +96,8 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedWorkerVerticle = false;
-
 	public WorkerVerticle initDeepWorkerVerticle(SiteRequestEnUS siteRequest_) {
-		if(!alreadyInitializedWorkerVerticle) {
-			alreadyInitializedWorkerVerticle = true;
-			initDeepWorkerVerticle();
-		}
+		initDeepWorkerVerticle();
 		return (WorkerVerticle)this;
 	}
 
@@ -148,23 +142,23 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeWorkerVerticle(v, val);
+				o = relateWorkerVerticle(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeWorkerVerticle(String var, Object val) {
+	public Object relateWorkerVerticle(String var, Object val) {
 		WorkerVerticle oWorkerVerticle = (WorkerVerticle)this;
 		switch(var) {
 			default:
@@ -232,28 +226,6 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineWorkerVerticle(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineWorkerVerticle(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -277,34 +249,11 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof WorkerVerticle))
-			return false;
-		WorkerVerticle that = (WorkerVerticle)o;
-		return true;
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("WorkerVerticle { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

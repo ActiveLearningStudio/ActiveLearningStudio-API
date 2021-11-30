@@ -14,6 +14,10 @@ import org.curriki.api.enus.wrap.Wrap;
 
 /**
  * Keyword: classSimpleNameApiRequest
+ * Map.hackathonMission: to create a new Java class to store information about a given API request to send as a websocket message back to the page about the status of the request. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
+ * Map.hackathonLabelsGen: Java
  */
 public class ApiRequest extends ApiRequestGen<Object> {
 	

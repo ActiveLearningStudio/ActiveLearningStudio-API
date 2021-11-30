@@ -44,6 +44,11 @@ import io.vertx.sqlclient.PoolOptions;
 
 @QuarkusMain
 @ApplicationScoped
+/**
+ * Map.hackathonMission: to create a new Java class to run the application as a Quarkus application. 
+ * Map.hackathonColumn: Quarkus app development
+ * Map.hackathonLabels: Java,Quarkus
+ */
 public class QuarkusApp extends QuarkusAppGen<Object> {  
 	private static final Logger LOG = LoggerFactory.getLogger(QuarkusApp.class);
 

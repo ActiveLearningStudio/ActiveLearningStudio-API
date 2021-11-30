@@ -6,6 +6,8 @@ import org.curriki.api.enus.wrap.Wrap;
 
 /**
  * Keyword: classSimpleNameSearchResult
+ * Map.hackathonMission: to create a new Java class to store a result from querying the search engine. 
+ * Map.hackathonColumn: Develop Base Classes
  */
 public class SearchResult extends SearchResultGen<Object> {
 

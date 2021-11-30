@@ -2,6 +2,9 @@ package org.curriki.api.enus.config;
 
 /**
  * Keyword: classSimpleNameConfigKeys
+ * Map.hackathonMission: to create a new Java class ConfigKeys to define all of the environment variables for configuring the application. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
  */
 public class ConfigKeys {
 
@@ -53,7 +56,7 @@ public class ConfigKeys {
 	/**
 	 * The path to the project of the site cloned from git. 
 	 **/
-	public static final String APP_PATH = "APP_PATH";
+	public static final String SITE_PATH = "SITE_PATH";
 
 	/**
 	 * The path to the basic authentication properties file with users and passwords. 
@@ -121,6 +124,21 @@ public class ConfigKeys {
 	public static final String AUTH_SSL_REQUIRED = "AUTH_SSL_REQUIRED";
 
 	/**
+	 * JsonArray of user roles required for an action. 
+	 **/
+	public static final String AUTH_ROLES_REQUIRED = "AUTH_ROLES_REQUIRED";
+
+	/**
+	 * JsonArray of user roles required for read access. 
+	 **/
+	public static final String AUTH_ROLES_READ_REQUIRED = "AUTH_ROLES_READ_REQUIRED";
+
+	/**
+	 * JsonArray of admin user roles. 
+	 **/
+	public static final String AUTH_ROLES_ADMIN = "AUTH_ROLES_ADMIN";
+
+	/**
 	 * Enable SSL Passthrough. 
 	 **/
 	public static final String SSL_PASSTHROUGH = "SSL_PASSTHROUGH";
@@ -134,6 +152,16 @@ public class ConfigKeys {
 	 * The password for the Java keystore for the site. 
 	 **/
 	public static final String SSL_JKS_PASSWORD = "SSL_JKS_PASSWORD";
+
+	/**
+	 * PEM Private Key path for enabling SSL
+	 **/
+	public static final String SSL_KEY_PATH = "SSL_KEY_PATH";
+
+	/**
+	 * PEM Public Certificate path for enabling SSL
+	 **/
+	public static final String SSL_CERT_PATH = "SSL_CERT_PATH";
 
 	/**
 	 * The port to the Auth server. 
@@ -379,6 +407,11 @@ public class ConfigKeys {
 	 * The default timezone of the site. 
 	 **/
 	public static final String SITE_ZONE = "SITE_ZONE";
+
+	/**
+	 * The default locale of the site. 
+	 **/
+	public static final String SITE_LOCALE = "SITE_LOCALE";
 
 	/**
 	 * 

@@ -13,6 +13,7 @@ import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.pgclient.PgPool;
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
+import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.core.eventbus.DeliveryOptions;
 import java.io.IOException;
 import java.util.Collections;
@@ -97,18 +98,20 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.curriki.api.enus.user.SiteUserEnUSApiServiceImpl;
 import org.curriki.api.enus.search.SearchList;
-import org.curriki.api.enus.writer.AllWriter;
 
 
 /**
+ * Map.hackathonMission: to create a new Java API implementation class to persist information about site users in a database and a search engine. 
+ * Map.hackathonColumn: Develop SiteUser API
+ * Map.hackathonLabels: Java,Vert.x
  * Translate: false
  **/
 public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements SiteUserEnUSGenApiService {
 
 	protected static final Logger LOG = LoggerFactory.getLogger(SiteUserEnUSGenApiServiceImpl.class);
 
-	public SiteUserEnUSGenApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider) {
-		super(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider);
+	public SiteUserEnUSGenApiServiceImpl(EventBus eventBus, JsonObject config, WorkerExecutor workerExecutor, PgPool pgPool, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, HandlebarsTemplateEngine templateEngine) {
+		super(eventBus, config, workerExecutor, pgPool, webClient, oauth2AuthenticationProvider, authorizationProvider, templateEngine);
 	}
 
 	// Search //
@@ -117,10 +120,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void searchSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 				{
-					searchSiteUserList(siteRequest, false, true, false, "/api/user", "Search").onSuccess(listSiteUser -> {
+					searchSiteUserList(siteRequest, false, true, false).onSuccess(listSiteUser -> {
 						response200SearchSiteUser(listSiteUser).onSuccess(response -> {
 							eventHandler.handle(Future.succeededFuture(response));
 							LOG.debug(String.format("searchSiteUser succeeded. "));
@@ -138,7 +139,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -210,7 +211,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				JsonObject facetFieldsJson = new JsonObject();
 				json.put("facet_fields", facetFieldsJson);
 				for(FacetField facetField : facetFields) {
-					String facetFieldVar = StringUtils.substringBefore(facetField.getName(), "_indexedstored_");
+					String facetFieldVar = StringUtils.substringBefore(facetField.getName(), "_docvalues_");
 					JsonObject facetFieldCounts = new JsonObject();
 					facetFieldsJson.put(facetFieldVar, facetFieldCounts);
 					List<FacetField.Count> facetFieldValues = facetField.getValues();
@@ -227,7 +228,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				json.put("facet_ranges", rangeJson);
 				for(RangeFacet rangeFacet : facetRanges) {
 					JsonObject rangeFacetJson = new JsonObject();
-					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_indexedstored_");
+					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsMap = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsMap);
@@ -251,7 +252,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					String[] entityVars = new String[varsIndexed.length];
 					for(Integer i = 0; i < entityVars.length; i++) {
 						String entityIndexed = varsIndexed[i];
-						entityVars[i] = StringUtils.substringBefore(entityIndexed, "_indexedstored_");
+						entityVars[i] = StringUtils.substringBefore(entityIndexed, "_docvalues_");
 					}
 					JsonArray pivotArray = new JsonArray();
 					facetPivotJson.put(StringUtils.join(entityVars, ","), pivotArray);
@@ -271,7 +272,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	public void responsePivotSearchSiteUser(List<PivotField> pivotFields, JsonArray pivotArray) {
 		for(PivotField pivotField : pivotFields) {
 			String entityIndexed = pivotField.getField();
-			String entityVar = StringUtils.substringBefore(entityIndexed, "_indexedstored_");
+			String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
 			JsonObject pivotJson = new JsonObject();
 			pivotArray.add(pivotJson);
 			pivotJson.put("field", entityVar);
@@ -284,7 +285,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				pivotJson.put("ranges", rangeJson);
 				for(RangeFacet rangeFacet : pivotRanges) {
 					JsonObject rangeFacetJson = new JsonObject();
-					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_indexedstored_");
+					String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
 					rangeJson.put(rangeFacetVar, rangeFacetJson);
 					JsonObject rangeFacetCountsObject = new JsonObject();
 					rangeFacetJson.put("counts", rangeFacetCountsObject);
@@ -311,12 +312,10 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 				{
-					searchSiteUserList(siteRequest, false, true, true, "/api/user", "PATCH").onSuccess(listSiteUser -> {
+					searchSiteUserList(siteRequest, false, true, true).onSuccess(listSiteUser -> {
 						try {
-							List<String> roles2 = Arrays.asList("SiteAdmin");
+							List<String> roles2 = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_ADMIN)).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 							if(listSiteUser.getQueryResponse().getResults().getNumFound() > 1
 									&& !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles2)
 									&& !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roles2)
@@ -364,7 +363,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -425,7 +424,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
-				searchSiteUserList(siteRequest, false, true, true, "/api/user", "PATCH").onSuccess(listSiteUser -> {
+				searchSiteUserList(siteRequest, false, true, true).onSuccess(listSiteUser -> {
 					try {
 						SiteUser o = listSiteUser.first();
 						if(o != null && listSiteUser.getQueryResponse().getResults().getNumFound() == 1) {
@@ -479,7 +478,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				siteRequest.setSqlConnection(sqlConnection);
 				sqlPATCHSiteUser(o, inheritPk).onSuccess(siteUser -> {
 					defineSiteUser(siteUser).onSuccess(c -> {
-						attributeSiteUser(siteUser).onSuccess(d -> {
+						relateSiteUser(siteUser).onSuccess(d -> {
 							indexSiteUser(siteUser).onSuccess(e -> {
 								promise1.complete(siteUser);
 							}).onFailure(ex -> {
@@ -565,14 +564,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							num++;
 							bParams.add(o2.sqlDeleted());
 						break;
-					case "setUserId":
-							o2.setUserId(jsonObject.getString(entityVar));
-							if(bParams.size() > 0)
-								bSql.append(", ");
-							bSql.append(SiteUser.VAR_userId + "=$" + num);
-							num++;
-							bParams.add(o2.sqlUserId());
-						break;
 					case "setUserName":
 							o2.setUserName(jsonObject.getString(entityVar));
 							if(bParams.size() > 0)
@@ -625,8 +616,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							).onSuccess(b -> {
 						a.handle(Future.succeededFuture());
 					}).onFailure(ex -> {
-						RuntimeException ex2 = new RuntimeException("value SiteUser.userFullName failed", ex);
-						LOG.error(String.format("attributeSiteUser failed. "), ex2);
+						RuntimeException ex2 = new RuntimeException("value SiteUser failed", ex);
+						LOG.error(String.format("relateSiteUser failed. "), ex2);
 						a.handle(Future.failedFuture(ex2));
 					});
 				}));
@@ -673,8 +664,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		user(serviceRequest).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
-				siteRequest.setRequestUri(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("uri")).orElse(null));
-				siteRequest.setRequestMethod(Optional.ofNullable(serviceRequest.getExtra()).map(extra -> extra.getString("method")).orElse(null));
 				{
 					ApiRequest apiRequest = new ApiRequest();
 					apiRequest.setRows(1);
@@ -690,8 +679,10 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					params.put("header", new JsonObject());
 					params.put("form", new JsonObject());
 					JsonObject query = new JsonObject();
-					Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(false);
+					Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(null);
 					Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
+					if(softCommit == null && commitWithin == null)
+						softCommit = true;
 					if(softCommit)
 						query.put("softCommit", softCommit);
 					if(commitWithin != null)
@@ -715,7 +706,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				error(null, eventHandler, ex);
 			}
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -748,7 +739,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage())) {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
 				try {
 					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
 				} catch(Exception ex2) {
@@ -772,7 +763,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				createSiteUser(siteRequest).onSuccess(siteUser -> {
 					sqlPOSTSiteUser(siteUser, inheritPk).onSuccess(b -> {
 						defineSiteUser(siteUser).onSuccess(c -> {
-							attributeSiteUser(siteUser).onSuccess(d -> {
+							relateSiteUser(siteUser).onSuccess(d -> {
 								indexSiteUser(siteUser).onSuccess(e -> {
 									promise1.complete(siteUser);
 								}).onFailure(ex -> {
@@ -861,6 +852,14 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				num++;
 				bParams.add(siteRequest.getUserKey());
 			}
+			if(siteRequest.getUserId() != null) {
+				if(bParams.size() > 0) {
+					bSql.append(", ");
+				}
+				bSql.append("userId=$" + num);
+				num++;
+				bParams.add(siteRequest.getUserId());
+			}
 
 			if(jsonObject != null) {
 				Set<String> entityVars = jsonObject.fieldNames();
@@ -892,15 +891,6 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						bSql.append(SiteUser.VAR_deleted + "=$" + num);
 						num++;
 						bParams.add(o2.sqlDeleted());
-						break;
-					case SiteUser.VAR_userId:
-						o2.setUserId(jsonObject.getString(entityVar));
-						if(bParams.size() > 0) {
-							bSql.append(", ");
-						}
-						bSql.append(SiteUser.VAR_userId + "=$" + num);
-						num++;
-						bParams.add(o2.sqlUserId());
 						break;
 					case SiteUser.VAR_userName:
 						o2.setUserName(jsonObject.getString(entityVar));
@@ -960,8 +950,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							).onSuccess(b -> {
 						a.handle(Future.succeededFuture());
 					}).onFailure(ex -> {
-						RuntimeException ex2 = new RuntimeException("value SiteUser.userFullName failed", ex);
-						LOG.error(String.format("attributeSiteUser failed. "), ex2);
+						RuntimeException ex2 = new RuntimeException("value SiteUser failed", ex);
+						LOG.error(String.format("relateSiteUser failed. "), ex2);
 						a.handle(Future.failedFuture(ex2));
 					});
 				}));
@@ -997,14 +987,85 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		}
 		return promise.future();
 	}
-	public static final String VAR_userKey = "userKey";
-	public static final String VAR_userKeys = "userKeys";
-	public static final String VAR_userId = "userId";
-	public static final String VAR_userName = "userName";
-	public static final String VAR_userEmail = "userEmail";
-	public static final String VAR_userFirstName = "userFirstName";
-	public static final String VAR_userLastName = "userLastName";
-	public static final String VAR_userFullName = "userFullName";
+
+	// SearchPage //
+
+	@Override
+	public void searchpageSiteUserId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		searchpageSiteUser(serviceRequest, eventHandler);
+	}
+
+	@Override
+	public void searchpageSiteUser(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		user(serviceRequest).onSuccess(siteRequest -> {
+			try {
+				{
+					searchSiteUserList(siteRequest, false, true, false).onSuccess(listSiteUser -> {
+						response200SearchPageSiteUser(listSiteUser).onSuccess(response -> {
+							eventHandler.handle(Future.succeededFuture(response));
+							LOG.debug(String.format("searchpageSiteUser succeeded. "));
+						}).onFailure(ex -> {
+							LOG.error(String.format("searchpageSiteUser failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}).onFailure(ex -> {
+						LOG.error(String.format("searchpageSiteUser failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					});
+				}
+			} catch(Exception ex) {
+				LOG.error(String.format("searchpageSiteUser failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || "invalid_grant: Refresh token expired".equals(ex.getMessage())) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("searchpageSiteUser failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else {
+				LOG.error(String.format("searchpageSiteUser failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+
+	public void searchpageSiteUserPageInit(SiteUserPage page, SearchList<SiteUser> listSiteUser) {
+	}
+	public String templateSearchPageSiteUser() {
+		return Optional.ofNullable(config.getString(ConfigKeys.TEMPLATE_PATH)).orElse("templates") + "/enUS/SiteUserPage";
+	}
+	public Future<ServiceResponse> response200SearchPageSiteUser(SearchList<SiteUser> listSiteUser) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequestEnUS siteRequest = listSiteUser.getSiteRequest_();
+			SiteUserPage page = new SiteUserPage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			if(listSiteUser.size() == 1)
+				siteRequest.setRequestPk(listSiteUser.get(0).getPk());
+			page.setSearchListSiteUser_(listSiteUser);
+			page.setSiteRequest_(siteRequest);
+			page.promiseDeepSiteUserPage(siteRequest).onSuccess(a -> {
+				JsonObject json = JsonObject.mapFrom(page);
+				templateEngine.render(json, templateSearchPageSiteUser()).onSuccess(buffer -> {
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				}).onFailure(ex -> {
+					promise.fail(ex);
+				});
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200SearchPageSiteUser failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
 
 	// General //
 
@@ -1037,13 +1098,13 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		return promise.future();
 	}
 
-	public void searchSiteUserQ(String uri, String apiMethod, SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
+	public void searchSiteUserQ(SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		searchList.setQuery(varIndexed + ":" + ("*".equals(valueIndexed) ? valueIndexed : ClientUtils.escapeQueryChars(valueIndexed)));
 		if(!"*".equals(entityVar)) {
 		}
 	}
 
-	public String searchSiteUserFq(String uri, String apiMethod, SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
+	public String searchSiteUserFq(SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		if(varIndexed == null)
 			throw new RuntimeException(String.format("\"%s\" is not an indexed entity. ", entityVar));
 		if(StringUtils.startsWith(valueIndexed, "[")) {
@@ -1058,25 +1119,25 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		}
 	}
 
-	public void searchSiteUserSort(String uri, String apiMethod, SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
+	public void searchSiteUserSort(SearchList<SiteUser> searchList, String entityVar, String valueIndexed, String varIndexed) {
 		if(varIndexed == null)
 			throw new RuntimeException(String.format("\"%s\" is not an indexed entity. ", entityVar));
 		searchList.addSort(varIndexed, ORDER.valueOf(valueIndexed));
 	}
 
-	public void searchSiteUserRows(String uri, String apiMethod, SearchList<SiteUser> searchList, Integer valueRows) {
-			searchList.setRows(apiMethod != null ? valueRows : 10);
+	public void searchSiteUserRows(SearchList<SiteUser> searchList, Integer valueRows) {
+			searchList.setRows(valueRows != null ? valueRows : 10);
 	}
 
-	public void searchSiteUserStart(String uri, String apiMethod, SearchList<SiteUser> searchList, Integer valueStart) {
+	public void searchSiteUserStart(SearchList<SiteUser> searchList, Integer valueStart) {
 		searchList.setStart(valueStart);
 	}
 
-	public void searchSiteUserVar(String uri, String apiMethod, SearchList<SiteUser> searchList, String var, String value) {
+	public void searchSiteUserVar(SearchList<SiteUser> searchList, String var, String value) {
 		searchList.getSiteRequest_().getRequestVars().put(var, value);
 	}
 
-	public void searchSiteUserUri(String uri, String apiMethod, SearchList<SiteUser> searchList) {
+	public void searchSiteUserUri(SearchList<SiteUser> searchList) {
 	}
 
 	public Future<ServiceResponse> varsSiteUser(SiteRequestEnUS siteRequest) {
@@ -1109,7 +1170,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		return promise.future();
 	}
 
-	public Future<SearchList<SiteUser>> searchSiteUserList(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, String uri, String apiMethod) {
+	public Future<SearchList<SiteUser>> searchSiteUserList(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify) {
 		Promise<SearchList<SiteUser>> promise = Promise.promise();
 		try {
 			ServiceRequest serviceRequest = siteRequest.getServiceRequest();
@@ -1126,12 +1187,12 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 			String id = serviceRequest.getParams().getJsonObject("path").getString("id");
 			if(id != null && NumberUtils.isCreatable(id)) {
-				searchList.addFilterQuery("(pk_indexedstored_long:" + ClientUtils.escapeQueryChars(id) + " OR objectId_indexedstored_string:" + ClientUtils.escapeQueryChars(id) + ")");
+				searchList.addFilterQuery("(pk_docvalues_long:" + ClientUtils.escapeQueryChars(id) + " OR objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id) + ")");
 			} else if(id != null) {
-				searchList.addFilterQuery("objectId_indexedstored_string:" + ClientUtils.escapeQueryChars(id));
+				searchList.addFilterQuery("objectId_docvalues_string:" + ClientUtils.escapeQueryChars(id));
 			}
 
-			List<String> roles = Arrays.asList("SiteAdmin", "SiteAdmin");
+			List<String> roles = Optional.ofNullable(config.getValue(ConfigKeys.AUTH_ROLES_REQUIRED + "_SiteUser")).map(v -> v instanceof JsonArray ? (JsonArray)v : new JsonArray(v.toString())).orElse(new JsonArray()).getList();
 			List<String> roleReads = Arrays.asList("");
 			if(
 					!CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roles)
@@ -1139,8 +1200,8 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					&& (modify || !CollectionUtils.containsAny(siteRequest.getUserResourceRoles(), roleReads))
 					&& (modify || !CollectionUtils.containsAny(siteRequest.getUserRealmRoles(), roleReads))
 					) {
-				searchList.addFilterQuery("sessionId_indexedstored_string:" + ClientUtils.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionId()).orElse("-----")) + " OR " + "sessionId_indexedstored_string:" + ClientUtils.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionIdBefore()).orElse("-----"))
-						+ " OR userKeys_indexedstored_longs:" + Optional.ofNullable(siteRequest.getUserKey()).orElse(0L));
+				searchList.addFilterQuery("sessionId_docvalues_string:" + ClientUtils.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionId()).orElse("-----")) + " OR " + "sessionId_docvalues_string:" + ClientUtils.escapeQueryChars(Optional.ofNullable(siteRequest.getSessionIdBefore()).orElse("-----"))
+						+ " OR userKeys_docvalues_longs:" + Optional.ofNullable(siteRequest.getUserKey()).orElse(0L));
 			}
 
 			serviceRequest.getParams().getJsonObject("query").forEach(paramRequest -> {
@@ -1173,11 +1234,21 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						for(Object paramObject : paramObjects) {
 							switch(paramName) {
 								case "q":
-									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
-									varIndexed = "*".equals(entityVar) ? entityVar : SiteUser.varSearchSiteUser(entityVar);
-									valueIndexed = URLDecoder.decode(StringUtils.trim(StringUtils.substringAfter((String)paramObject, ":")), "UTF-8");
-									valueIndexed = StringUtils.isEmpty(valueIndexed) ? "*" : valueIndexed;
-									searchSiteUserQ(uri, apiMethod, searchList, entityVar, valueIndexed, varIndexed);
+									Matcher mQ = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|\\^|$)))").matcher((String)paramObject);
+									boolean foundQ = mQ.find();
+									if(foundQ) {
+										StringBuffer sb = new StringBuffer();
+										while(foundQ) {
+											entityVar = mQ.group(1).trim();
+											valueIndexed = mQ.group(2).trim();
+											varIndexed = SiteUser.varIndexedSiteUser(entityVar);
+											String entityQ = searchSiteUserFq(searchList, entityVar, valueIndexed, varIndexed);
+											mQ.appendReplacement(sb, entityQ);
+											foundQ = mQ.find();
+										}
+										mQ.appendTail(sb);
+										searchList.setQuery(sb.toString());
+									}
 									break;
 								case "fq":
 									Matcher mFq = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|$)))").matcher((String)paramObject);
@@ -1188,7 +1259,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 											entityVar = mFq.group(1).trim();
 											valueIndexed = mFq.group(2).trim();
 											varIndexed = SiteUser.varIndexedSiteUser(entityVar);
-											String entityFq = searchSiteUserFq(uri, apiMethod, searchList, entityVar, valueIndexed, varIndexed);
+											String entityFq = searchSiteUserFq(searchList, entityVar, valueIndexed, varIndexed);
 											mFq.appendReplacement(sb, entityFq);
 											foundFq = mFq.find();
 										}
@@ -1200,15 +1271,15 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, " "));
 									valueIndexed = StringUtils.trim(StringUtils.substringAfter((String)paramObject, " "));
 									varIndexed = SiteUser.varIndexedSiteUser(entityVar);
-									searchSiteUserSort(uri, apiMethod, searchList, entityVar, valueIndexed, varIndexed);
+									searchSiteUserSort(searchList, entityVar, valueIndexed, varIndexed);
 									break;
 								case "start":
 									valueStart = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
-									searchSiteUserStart(uri, apiMethod, searchList, valueStart);
+									searchSiteUserStart(searchList, valueStart);
 									break;
 								case "rows":
 									valueRows = paramObject instanceof Integer ? (Integer)paramObject : Integer.parseInt(paramObject.toString());
-									searchSiteUserRows(uri, apiMethod, searchList, valueRows);
+									searchSiteUserRows(searchList, valueRows);
 									break;
 								case "facet":
 									searchList.add("facet", ((Boolean)paramObject).toString());
@@ -1246,7 +1317,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 								case "var":
 									entityVar = StringUtils.trim(StringUtils.substringBefore((String)paramObject, ":"));
 									valueIndexed = URLDecoder.decode(StringUtils.trim(StringUtils.substringAfter((String)paramObject, ":")), "UTF-8");
-									searchSiteUserVar(uri, apiMethod, searchList, entityVar, valueIndexed);
+									searchSiteUserVar(searchList, entityVar, valueIndexed);
 									break;
 								case "cursorMark":
 									valueCursorMark = (String)paramObject;
@@ -1254,16 +1325,16 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 									break;
 							}
 						}
-						searchSiteUserUri(uri, apiMethod, searchList);
+						searchSiteUserUri(searchList);
 					}
 				} catch(Exception e) {
 					ExceptionUtils.rethrow(e);
 				}
 			});
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
-				searchList.addSort("created_indexedstored_date", ORDER.desc);
+				searchList.addSort("created_docvalues_date", ORDER.desc);
 			}
-			searchSiteUser2(siteRequest, populate, store, modify, uri, apiMethod, searchList);
+			searchSiteUser2(siteRequest, populate, store, modify, searchList);
 			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 				promise.complete(searchList);
 			}).onFailure(ex -> {
@@ -1276,7 +1347,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		}
 		return promise.future();
 	}
-	public void searchSiteUser2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, String uri, String apiMethod, SearchList<SiteUser> searchList) {
+	public void searchSiteUser2(SiteRequestEnUS siteRequest, Boolean populate, Boolean store, Boolean modify, SearchList<SiteUser> searchList) {
 	}
 
 	public Future<Void> defineSiteUser(SiteUser o) {
@@ -1320,7 +1391,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		return promise.future();
 	}
 
-	public Future<Void> attributeSiteUser(SiteUser o) {
+	public Future<Void> relateSiteUser(SiteUser o) {
 		Promise<Void> promise = Promise.promise();
 			promise.complete();
 		return promise.future();
@@ -1337,8 +1408,12 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
 				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
-				Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(false);
+				Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(null);
 				Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
+					if(softCommit == null && commitWithin == null)
+						softCommit = true;
+					else if(softCommit == null)
+						softCommit = false;
 				String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
 				JsonArray json = new JsonArray().add(new JsonObject(document.toMap(new HashMap<String, Object>())));
 				webClient.post(solrPort, solrHostName, solrRequestUri).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {

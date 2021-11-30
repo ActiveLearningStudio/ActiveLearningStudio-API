@@ -62,13 +62,8 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedQuarkusApp = false;
-
 	public QuarkusApp initDeepQuarkusApp(SiteRequestEnUS siteRequest_) {
-		if(!alreadyInitializedQuarkusApp) {
-			alreadyInitializedQuarkusApp = true;
-			initDeepQuarkusApp();
-		}
+		initDeepQuarkusApp();
 		return (QuarkusApp)this;
 	}
 
@@ -113,23 +108,23 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeQuarkusApp(v, val);
+				o = relateQuarkusApp(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeQuarkusApp(String var, Object val) {
+	public Object relateQuarkusApp(String var, Object val) {
 		QuarkusApp oQuarkusApp = (QuarkusApp)this;
 		switch(var) {
 			default:
@@ -197,28 +192,6 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 	// define //
 	/////////////
 
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineQuarkusApp(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineQuarkusApp(String var, String val) {
-		switch(var.toLowerCase()) {
-			default:
-				return null;
-		}
-	}
-
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
@@ -242,34 +215,11 @@ public abstract class QuarkusAppGen<DEV> extends Object {
 	}
 
 	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash();
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof QuarkusApp))
-			return false;
-		QuarkusApp that = (QuarkusApp)o;
-		return true;
-	}
-
-	//////////////
 	// toString //
 	//////////////
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("QuarkusApp { ");
-		sb.append(" }");
 		return sb.toString();
 	}
 

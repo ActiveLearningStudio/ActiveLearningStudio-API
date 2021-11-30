@@ -28,7 +28,6 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;
@@ -59,11 +58,15 @@ import java.lang.Object;
 import org.curriki.api.enus.java.LocalDateSerializer;
 
 /**	
+ * Map.hackathonMission: to create a generated Java class that can be extended and override these methods to serve as the base persistent object for primary key, created and modified dates and other useful base model data. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
  * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true">Find the class  in Solr. </a>
  * <br/>
  **/
 public abstract class BaseModelGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseModel.class);
+
 
 	//////////////////
 	// siteRequest_ //
@@ -75,8 +78,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonIgnore
 	@JsonInclude(Include.NON_NULL)
 	protected SiteRequestEnUS siteRequest_;
-	@JsonIgnore
-	public Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_").o(siteRequest_);
 
 	/**	<br/> The entity siteRequest_
 	 *  is defined as null before being initialized. 
@@ -92,19 +93,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setSiteRequest_(SiteRequestEnUS siteRequest_) {
 		this.siteRequest_ = siteRequest_;
-		this.siteRequest_Wrap.alreadyInitialized = true;
 	}
 	public static SiteRequestEnUS staticSetSiteRequest_(SiteRequestEnUS siteRequest_, String o) {
 		return null;
 	}
 	protected BaseModel siteRequest_Init() {
-		if(!siteRequest_Wrap.alreadyInitialized) {
+		Wrap<SiteRequestEnUS> siteRequest_Wrap = new Wrap<SiteRequestEnUS>().var("siteRequest_");
+		if(siteRequest_ == null) {
 			_siteRequest_(siteRequest_Wrap);
-			if(siteRequest_ == null)
-				setSiteRequest_(siteRequest_Wrap.o);
-			siteRequest_Wrap.o(null);
+			setSiteRequest_(siteRequest_Wrap.o);
 		}
-		siteRequest_Wrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -119,8 +117,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Long pk;
-	@JsonIgnore
-	public Wrap<Long> pkWrap = new Wrap<Long>().var("pk").o(pk);
 
 	/**	<br/> The entity pk
 	 *  is defined as null before being initialized. 
@@ -136,12 +132,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setPk(Long pk) {
 		this.pk = pk;
-		this.pkWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setPk(String o) {
 		this.pk = BaseModel.staticSetPk(siteRequest_, o);
-		this.pkWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetPk(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -149,13 +143,11 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return null;
 	}
 	protected BaseModel pkInit() {
-		if(!pkWrap.alreadyInitialized) {
+		Wrap<Long> pkWrap = new Wrap<Long>().var("pk");
+		if(pk == null) {
 			_pk(pkWrap);
-			if(pk == null)
-				setPk(pkWrap.o);
-			pkWrap.o(null);
+			setPk(pkWrap.o);
 		}
-		pkWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -171,22 +163,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrPk(siteRequest_, BaseModel.staticSolrPk(siteRequest_, BaseModel.staticSetPk(siteRequest_, o)));
 	}
 
-	public Long solrPk() {
-		return BaseModel.staticSolrPk(siteRequest_, pk);
-	}
-
-	public String strPk() {
-		return pk == null ? "" : pk.toString();
-	}
-
-	public Long sqlPk() {
-		return pk;
-	}
-
-	public String jsonPk() {
-		return pk == null ? "" : pk.toString();
-	}
-
 	///////////////
 	// inheritPk //
 	///////////////
@@ -197,8 +173,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String inheritPk;
-	@JsonIgnore
-	public Wrap<String> inheritPkWrap = new Wrap<String>().var("inheritPk").o(inheritPk);
 
 	/**	<br/> The entity inheritPk
 	 *  is defined as null before being initialized. 
@@ -213,19 +187,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 	}
 	public void setInheritPk(String o) {
 		this.inheritPk = BaseModel.staticSetInheritPk(siteRequest_, o);
-		this.inheritPkWrap.alreadyInitialized = true;
 	}
 	public static String staticSetInheritPk(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel inheritPkInit() {
-		if(!inheritPkWrap.alreadyInitialized) {
+		Wrap<String> inheritPkWrap = new Wrap<String>().var("inheritPk");
+		if(inheritPk == null) {
 			_inheritPk(inheritPkWrap);
-			if(inheritPk == null)
-				setInheritPk(inheritPkWrap.o);
-			inheritPkWrap.o(null);
+			setInheritPk(inheritPkWrap.o);
 		}
-		inheritPkWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -241,20 +212,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrInheritPk(siteRequest_, BaseModel.staticSolrInheritPk(siteRequest_, BaseModel.staticSetInheritPk(siteRequest_, o)));
 	}
 
-	public String solrInheritPk() {
-		return BaseModel.staticSolrInheritPk(siteRequest_, inheritPk);
-	}
-
-	public String strInheritPk() {
-		return inheritPk == null ? "" : inheritPk;
-	}
-
 	public String sqlInheritPk() {
 		return inheritPk;
-	}
-
-	public String jsonInheritPk() {
-		return inheritPk == null ? "" : inheritPk;
 	}
 
 	////////
@@ -267,8 +226,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String id;
-	@JsonIgnore
-	public Wrap<String> idWrap = new Wrap<String>().var("id").o(id);
 
 	/**	<br/> The entity id
 	 *  is defined as null before being initialized. 
@@ -283,19 +240,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 	}
 	public void setId(String o) {
 		this.id = BaseModel.staticSetId(siteRequest_, o);
-		this.idWrap.alreadyInitialized = true;
 	}
 	public static String staticSetId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel idInit() {
-		if(!idWrap.alreadyInitialized) {
+		Wrap<String> idWrap = new Wrap<String>().var("id");
+		if(id == null) {
 			_id(idWrap);
-			if(id == null)
-				setId(idWrap.o);
-			idWrap.o(null);
+			setId(idWrap.o);
 		}
-		idWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -311,22 +265,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrId(siteRequest_, BaseModel.staticSolrId(siteRequest_, BaseModel.staticSetId(siteRequest_, o)));
 	}
 
-	public String solrId() {
-		return BaseModel.staticSolrId(siteRequest_, id);
-	}
-
-	public String strId() {
-		return id == null ? "" : id;
-	}
-
-	public String sqlId() {
-		return id;
-	}
-
-	public String jsonId() {
-		return id == null ? "" : id;
-	}
-
 	/////////////
 	// created //
 	/////////////
@@ -340,8 +278,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime created;
-	@JsonIgnore
-	public Wrap<ZonedDateTime> createdWrap = new Wrap<ZonedDateTime>().var("created").o(created);
 
 	/**	<br/> The entity created
 	 *  is defined as null before being initialized. 
@@ -357,18 +293,15 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setCreated(ZonedDateTime created) {
 		this.created = created;
-		this.createdWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setCreated(Instant o) {
 		this.created = o == null ? null : ZonedDateTime.from(o).truncatedTo(ChronoUnit.MILLIS);
-		this.createdWrap.alreadyInitialized = true;
 	}
 	/** Example: 2011-12-03T10:15:30+01:00 **/
 	@JsonIgnore
 	public void setCreated(String o) {
 		this.created = BaseModel.staticSetCreated(siteRequest_, o);
-		this.createdWrap.alreadyInitialized = true;
 	}
 	public static ZonedDateTime staticSetCreated(SiteRequestEnUS siteRequest_, String o) {
 		if(StringUtils.endsWith(o, "Z"))
@@ -379,16 +312,13 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonIgnore
 	public void setCreated(Date o) {
 		this.created = o == null ? null : ZonedDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
-		this.createdWrap.alreadyInitialized = true;
 	}
 	protected BaseModel createdInit() {
-		if(!createdWrap.alreadyInitialized) {
+		Wrap<ZonedDateTime> createdWrap = new Wrap<ZonedDateTime>().var("created");
+		if(created == null) {
 			_created(createdWrap);
-			if(created == null)
-				setCreated(createdWrap.o);
-			createdWrap.o(null);
+			setCreated(createdWrap.o);
 		}
-		createdWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -404,20 +334,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrCreated(siteRequest_, BaseModel.staticSolrCreated(siteRequest_, BaseModel.staticSetCreated(siteRequest_, o)));
 	}
 
-	public Date solrCreated() {
-		return BaseModel.staticSolrCreated(siteRequest_, created);
-	}
-
-	public String strCreated() {
-		return created == null ? "" : created.format(DateTimeFormatter.ofPattern("EEE d MMM yyyy H:mm:ss a zz", Locale.forLanguageTag("en-US")));
-	}
-
 	public OffsetDateTime sqlCreated() {
 		return created == null ? null : created.toOffsetDateTime();
-	}
-
-	public String jsonCreated() {
-		return created == null ? "" : created.format(DateTimeFormatter.ISO_DATE_TIME);
 	}
 
 	//////////////
@@ -433,8 +351,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSV'['VV']'")
 	@JsonInclude(Include.NON_NULL)
 	protected ZonedDateTime modified;
-	@JsonIgnore
-	public Wrap<ZonedDateTime> modifiedWrap = new Wrap<ZonedDateTime>().var("modified").o(modified);
 
 	/**	<br/> The entity modified
 	 *  is defined as null before being initialized. 
@@ -450,18 +366,15 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setModified(ZonedDateTime modified) {
 		this.modified = modified;
-		this.modifiedWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setModified(Instant o) {
 		this.modified = o == null ? null : ZonedDateTime.from(o).truncatedTo(ChronoUnit.MILLIS);
-		this.modifiedWrap.alreadyInitialized = true;
 	}
 	/** Example: 2011-12-03T10:15:30+01:00 **/
 	@JsonIgnore
 	public void setModified(String o) {
 		this.modified = BaseModel.staticSetModified(siteRequest_, o);
-		this.modifiedWrap.alreadyInitialized = true;
 	}
 	public static ZonedDateTime staticSetModified(SiteRequestEnUS siteRequest_, String o) {
 		if(StringUtils.endsWith(o, "Z"))
@@ -472,16 +385,13 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonIgnore
 	public void setModified(Date o) {
 		this.modified = o == null ? null : ZonedDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
-		this.modifiedWrap.alreadyInitialized = true;
 	}
 	protected BaseModel modifiedInit() {
-		if(!modifiedWrap.alreadyInitialized) {
+		Wrap<ZonedDateTime> modifiedWrap = new Wrap<ZonedDateTime>().var("modified");
+		if(modified == null) {
 			_modified(modifiedWrap);
-			if(modified == null)
-				setModified(modifiedWrap.o);
-			modifiedWrap.o(null);
+			setModified(modifiedWrap.o);
 		}
-		modifiedWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -497,22 +407,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrModified(siteRequest_, BaseModel.staticSolrModified(siteRequest_, BaseModel.staticSetModified(siteRequest_, o)));
 	}
 
-	public Date solrModified() {
-		return BaseModel.staticSolrModified(siteRequest_, modified);
-	}
-
-	public String strModified() {
-		return modified == null ? "" : modified.format(DateTimeFormatter.ofPattern("EEE d MMM yyyy H:mm:ss a zz", Locale.forLanguageTag("en-US")));
-	}
-
-	public OffsetDateTime sqlModified() {
-		return modified == null ? null : modified.toOffsetDateTime();
-	}
-
-	public String jsonModified() {
-		return modified == null ? "" : modified.format(DateTimeFormatter.ISO_DATE_TIME);
-	}
-
 	//////////////
 	// archived //
 	//////////////
@@ -523,8 +417,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean archived;
-	@JsonIgnore
-	public Wrap<Boolean> archivedWrap = new Wrap<Boolean>().var("archived").o(archived);
 
 	/**	<br/> The entity archived
 	 *  is defined as null before being initialized. 
@@ -540,24 +432,20 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setArchived(Boolean archived) {
 		this.archived = archived;
-		this.archivedWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setArchived(String o) {
 		this.archived = BaseModel.staticSetArchived(siteRequest_, o);
-		this.archivedWrap.alreadyInitialized = true;
 	}
 	public static Boolean staticSetArchived(SiteRequestEnUS siteRequest_, String o) {
 		return Boolean.parseBoolean(o);
 	}
 	protected BaseModel archivedInit() {
-		if(!archivedWrap.alreadyInitialized) {
+		Wrap<Boolean> archivedWrap = new Wrap<Boolean>().var("archived");
+		if(archived == null) {
 			_archived(archivedWrap);
-			if(archived == null)
-				setArchived(archivedWrap.o);
-			archivedWrap.o(null);
+			setArchived(archivedWrap.o);
 		}
-		archivedWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -573,20 +461,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrArchived(siteRequest_, BaseModel.staticSolrArchived(siteRequest_, BaseModel.staticSetArchived(siteRequest_, o)));
 	}
 
-	public Boolean solrArchived() {
-		return BaseModel.staticSolrArchived(siteRequest_, archived);
-	}
-
-	public String strArchived() {
-		return archived == null ? "" : archived.toString();
-	}
-
 	public Boolean sqlArchived() {
 		return archived;
-	}
-
-	public String jsonArchived() {
-		return archived == null ? "" : archived.toString();
 	}
 
 	/////////////
@@ -599,8 +475,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected Boolean deleted;
-	@JsonIgnore
-	public Wrap<Boolean> deletedWrap = new Wrap<Boolean>().var("deleted").o(deleted);
 
 	/**	<br/> The entity deleted
 	 *  is defined as null before being initialized. 
@@ -616,24 +490,20 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
-		this.deletedWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setDeleted(String o) {
 		this.deleted = BaseModel.staticSetDeleted(siteRequest_, o);
-		this.deletedWrap.alreadyInitialized = true;
 	}
 	public static Boolean staticSetDeleted(SiteRequestEnUS siteRequest_, String o) {
 		return Boolean.parseBoolean(o);
 	}
 	protected BaseModel deletedInit() {
-		if(!deletedWrap.alreadyInitialized) {
+		Wrap<Boolean> deletedWrap = new Wrap<Boolean>().var("deleted");
+		if(deleted == null) {
 			_deleted(deletedWrap);
-			if(deleted == null)
-				setDeleted(deletedWrap.o);
-			deletedWrap.o(null);
+			setDeleted(deletedWrap.o);
 		}
-		deletedWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -649,20 +519,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrDeleted(siteRequest_, BaseModel.staticSolrDeleted(siteRequest_, BaseModel.staticSetDeleted(siteRequest_, o)));
 	}
 
-	public Boolean solrDeleted() {
-		return BaseModel.staticSolrDeleted(siteRequest_, deleted);
-	}
-
-	public String strDeleted() {
-		return deleted == null ? "" : deleted.toString();
-	}
-
 	public Boolean sqlDeleted() {
 		return deleted;
-	}
-
-	public String jsonDeleted() {
-		return deleted == null ? "" : deleted.toString();
 	}
 
 	////////////////////////
@@ -675,8 +533,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String classCanonicalName;
-	@JsonIgnore
-	public Wrap<String> classCanonicalNameWrap = new Wrap<String>().var("classCanonicalName").o(classCanonicalName);
 
 	/**	<br/> The entity classCanonicalName
 	 *  is defined as null before being initialized. 
@@ -691,19 +547,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 	}
 	public void setClassCanonicalName(String o) {
 		this.classCanonicalName = BaseModel.staticSetClassCanonicalName(siteRequest_, o);
-		this.classCanonicalNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetClassCanonicalName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel classCanonicalNameInit() {
-		if(!classCanonicalNameWrap.alreadyInitialized) {
+		Wrap<String> classCanonicalNameWrap = new Wrap<String>().var("classCanonicalName");
+		if(classCanonicalName == null) {
 			_classCanonicalName(classCanonicalNameWrap);
-			if(classCanonicalName == null)
-				setClassCanonicalName(classCanonicalNameWrap.o);
-			classCanonicalNameWrap.o(null);
+			setClassCanonicalName(classCanonicalNameWrap.o);
 		}
-		classCanonicalNameWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -719,22 +572,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrClassCanonicalName(siteRequest_, BaseModel.staticSolrClassCanonicalName(siteRequest_, BaseModel.staticSetClassCanonicalName(siteRequest_, o)));
 	}
 
-	public String solrClassCanonicalName() {
-		return BaseModel.staticSolrClassCanonicalName(siteRequest_, classCanonicalName);
-	}
-
-	public String strClassCanonicalName() {
-		return classCanonicalName == null ? "" : classCanonicalName;
-	}
-
-	public String sqlClassCanonicalName() {
-		return classCanonicalName;
-	}
-
-	public String jsonClassCanonicalName() {
-		return classCanonicalName == null ? "" : classCanonicalName;
-	}
-
 	/////////////////////
 	// classSimpleName //
 	/////////////////////
@@ -745,8 +582,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String classSimpleName;
-	@JsonIgnore
-	public Wrap<String> classSimpleNameWrap = new Wrap<String>().var("classSimpleName").o(classSimpleName);
 
 	/**	<br/> The entity classSimpleName
 	 *  is defined as null before being initialized. 
@@ -761,19 +596,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 	}
 	public void setClassSimpleName(String o) {
 		this.classSimpleName = BaseModel.staticSetClassSimpleName(siteRequest_, o);
-		this.classSimpleNameWrap.alreadyInitialized = true;
 	}
 	public static String staticSetClassSimpleName(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel classSimpleNameInit() {
-		if(!classSimpleNameWrap.alreadyInitialized) {
+		Wrap<String> classSimpleNameWrap = new Wrap<String>().var("classSimpleName");
+		if(classSimpleName == null) {
 			_classSimpleName(classSimpleNameWrap);
-			if(classSimpleName == null)
-				setClassSimpleName(classSimpleNameWrap.o);
-			classSimpleNameWrap.o(null);
+			setClassSimpleName(classSimpleNameWrap.o);
 		}
-		classSimpleNameWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -789,22 +621,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrClassSimpleName(siteRequest_, BaseModel.staticSolrClassSimpleName(siteRequest_, BaseModel.staticSetClassSimpleName(siteRequest_, o)));
 	}
 
-	public String solrClassSimpleName() {
-		return BaseModel.staticSolrClassSimpleName(siteRequest_, classSimpleName);
-	}
-
-	public String strClassSimpleName() {
-		return classSimpleName == null ? "" : classSimpleName;
-	}
-
-	public String sqlClassSimpleName() {
-		return classSimpleName;
-	}
-
-	public String jsonClassSimpleName() {
-		return classSimpleName == null ? "" : classSimpleName;
-	}
-
 	///////////////
 	// sessionId //
 	///////////////
@@ -815,35 +631,30 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String sessionId;
-	@JsonIgnore
-	public Wrap<String> sessionIdWrap = new Wrap<String>().var("sessionId").o(sessionId);
 
 	/**	<br/> The entity sessionId
 	 *  is defined as null before being initialized. 
 	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
 	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _sessionId(Wrap<String> c);
+	protected abstract void _sessionId(Wrap<String> w);
 
 	public String getSessionId() {
 		return sessionId;
 	}
 	public void setSessionId(String o) {
 		this.sessionId = BaseModel.staticSetSessionId(siteRequest_, o);
-		this.sessionIdWrap.alreadyInitialized = true;
 	}
 	public static String staticSetSessionId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel sessionIdInit() {
-		if(!sessionIdWrap.alreadyInitialized) {
+		Wrap<String> sessionIdWrap = new Wrap<String>().var("sessionId");
+		if(sessionId == null) {
 			_sessionId(sessionIdWrap);
-			if(sessionId == null)
-				setSessionId(sessionIdWrap.o);
-			sessionIdWrap.o(null);
+			setSessionId(sessionIdWrap.o);
 		}
-		sessionIdWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -859,90 +670,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrSessionId(siteRequest_, BaseModel.staticSolrSessionId(siteRequest_, BaseModel.staticSetSessionId(siteRequest_, o)));
 	}
 
-	public String solrSessionId() {
-		return BaseModel.staticSolrSessionId(siteRequest_, sessionId);
-	}
-
-	public String strSessionId() {
-		return sessionId == null ? "" : sessionId;
-	}
-
 	public String sqlSessionId() {
 		return sessionId;
-	}
-
-	public String jsonSessionId() {
-		return sessionId == null ? "" : sessionId;
-	}
-
-	////////////
-	// userId //
-	////////////
-
-	/**	 The entity userId
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String userId;
-	@JsonIgnore
-	public Wrap<String> userIdWrap = new Wrap<String>().var("userId").o(userId);
-
-	/**	<br/> The entity userId
-	 *  is defined as null before being initialized. 
-	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
-	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _userId(Wrap<String> c);
-
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String o) {
-		this.userId = BaseModel.staticSetUserId(siteRequest_, o);
-		this.userIdWrap.alreadyInitialized = true;
-	}
-	public static String staticSetUserId(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-	protected BaseModel userIdInit() {
-		if(!userIdWrap.alreadyInitialized) {
-			_userId(userIdWrap);
-			if(userId == null)
-				setUserId(userIdWrap.o);
-			userIdWrap.o(null);
-		}
-		userIdWrap.alreadyInitialized(true);
-		return (BaseModel)this;
-	}
-
-	public static String staticSolrUserId(SiteRequestEnUS siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSolrStrUserId(SiteRequestEnUS siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSolrFqUserId(SiteRequestEnUS siteRequest_, String o) {
-		return BaseModel.staticSolrStrUserId(siteRequest_, BaseModel.staticSolrUserId(siteRequest_, BaseModel.staticSetUserId(siteRequest_, o)));
-	}
-
-	public String solrUserId() {
-		return BaseModel.staticSolrUserId(siteRequest_, userId);
-	}
-
-	public String strUserId() {
-		return userId == null ? "" : userId;
-	}
-
-	public String sqlUserId() {
-		return userId;
-	}
-
-	public String jsonUserId() {
-		return userId == null ? "" : userId;
 	}
 
 	/////////////
@@ -956,8 +685,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected Long userKey;
-	@JsonIgnore
-	public Wrap<Long> userKeyWrap = new Wrap<Long>().var("userKey").o(userKey);
 
 	/**	<br/> The entity userKey
 	 *  is defined as null before being initialized. 
@@ -973,12 +700,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setUserKey(Long userKey) {
 		this.userKey = userKey;
-		this.userKeyWrap.alreadyInitialized = true;
 	}
 	@JsonIgnore
 	public void setUserKey(String o) {
 		this.userKey = BaseModel.staticSetUserKey(siteRequest_, o);
-		this.userKeyWrap.alreadyInitialized = true;
 	}
 	public static Long staticSetUserKey(SiteRequestEnUS siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
@@ -986,13 +711,11 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return null;
 	}
 	protected BaseModel userKeyInit() {
-		if(!userKeyWrap.alreadyInitialized) {
+		Wrap<Long> userKeyWrap = new Wrap<Long>().var("userKey");
+		if(userKey == null) {
 			_userKey(userKeyWrap);
-			if(userKey == null)
-				setUserKey(userKeyWrap.o);
-			userKeyWrap.o(null);
+			setUserKey(userKeyWrap.o);
 		}
-		userKeyWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -1008,20 +731,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrUserKey(siteRequest_, BaseModel.staticSolrUserKey(siteRequest_, BaseModel.staticSetUserKey(siteRequest_, o)));
 	}
 
-	public Long solrUserKey() {
-		return BaseModel.staticSolrUserKey(siteRequest_, userKey);
-	}
-
-	public String strUserKey() {
-		return userKey == null ? "" : userKey.toString();
-	}
-
 	public Long sqlUserKey() {
 		return userKey;
-	}
-
-	public String jsonUserKey() {
-		return userKey == null ? "" : userKey.toString();
 	}
 
 	///////////
@@ -1035,8 +746,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
 	@JsonInclude(Include.NON_NULL)
 	protected List<String> saves = new ArrayList<String>();
-	@JsonIgnore
-	public Wrap<List<String>> savesWrap = new Wrap<List<String>>().var("saves").o(saves);
 
 	/**	<br/> The entity saves
 	 *  It is constructed before being initialized with the constructor by default List<String>(). 
@@ -1052,7 +761,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public void setSaves(List<String> saves) {
 		this.saves = saves;
-		this.savesWrap.alreadyInitialized = true;
 	}
 	public static String staticSetSaves(SiteRequestEnUS siteRequest_, String o) {
 		return o;
@@ -1064,7 +772,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return (BaseModel)this;
 	}
 	public BaseModel addSaves(String o) {
-		if(o != null && !saves.contains(o))
+		if(o != null)
 			this.saves.add(o);
 		return (BaseModel)this;
 	}
@@ -1077,10 +785,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 		}
 	}
 	protected BaseModel savesInit() {
-		if(!savesWrap.alreadyInitialized) {
-			_saves(saves);
-		}
-		savesWrap.alreadyInitialized(true);
+		_saves(saves);
 		return (BaseModel)this;
 	}
 
@@ -1096,26 +801,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrSaves(siteRequest_, BaseModel.staticSolrSaves(siteRequest_, BaseModel.staticSetSaves(siteRequest_, o)));
 	}
 
-	public List<String> solrSaves() {
-		List<String> l = new ArrayList<String>();
-		for(String o : saves) {
-			l.add(BaseModel.staticSolrSaves(siteRequest_, o));
-		}
-		return l;
-	}
-
-	public String strSaves() {
-		return saves == null ? "" : saves.toString();
-	}
-
-	public List<String> sqlSaves() {
-		return saves;
-	}
-
-	public String jsonSaves() {
-		return saves == null ? "" : saves.toString();
-	}
-
 	/////////////////
 	// objectTitle //
 	/////////////////
@@ -1126,8 +811,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String objectTitle;
-	@JsonIgnore
-	public Wrap<String> objectTitleWrap = new Wrap<String>().var("objectTitle").o(objectTitle);
 
 	/**	<br/> The entity objectTitle
 	 *  is defined as null before being initialized. 
@@ -1142,19 +825,16 @@ public abstract class BaseModelGen<DEV> extends Object {
 	}
 	public void setObjectTitle(String o) {
 		this.objectTitle = BaseModel.staticSetObjectTitle(siteRequest_, o);
-		this.objectTitleWrap.alreadyInitialized = true;
 	}
 	public static String staticSetObjectTitle(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel objectTitleInit() {
-		if(!objectTitleWrap.alreadyInitialized) {
+		Wrap<String> objectTitleWrap = new Wrap<String>().var("objectTitle");
+		if(objectTitle == null) {
 			_objectTitle(objectTitleWrap);
-			if(objectTitle == null)
-				setObjectTitle(objectTitleWrap.o);
-			objectTitleWrap.o(null);
+			setObjectTitle(objectTitleWrap.o);
 		}
-		objectTitleWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -1170,22 +850,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrObjectTitle(siteRequest_, BaseModel.staticSolrObjectTitle(siteRequest_, BaseModel.staticSetObjectTitle(siteRequest_, o)));
 	}
 
-	public String solrObjectTitle() {
-		return BaseModel.staticSolrObjectTitle(siteRequest_, objectTitle);
-	}
-
-	public String strObjectTitle() {
-		return objectTitle == null ? "" : objectTitle;
-	}
-
-	public String sqlObjectTitle() {
-		return objectTitle;
-	}
-
-	public String jsonObjectTitle() {
-		return objectTitle == null ? "" : objectTitle;
-	}
-
 	//////////////
 	// objectId //
 	//////////////
@@ -1196,35 +860,30 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String objectId;
-	@JsonIgnore
-	public Wrap<String> objectIdWrap = new Wrap<String>().var("objectId").o(objectId);
 
 	/**	<br/> The entity objectId
 	 *  is defined as null before being initialized. 
 	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectId">Find the entity objectId in Solr</a>
 	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _objectId(Wrap<String> c);
+	protected abstract void _objectId(Wrap<String> w);
 
 	public String getObjectId() {
 		return objectId;
 	}
 	public void setObjectId(String o) {
 		this.objectId = BaseModel.staticSetObjectId(siteRequest_, o);
-		this.objectIdWrap.alreadyInitialized = true;
 	}
 	public static String staticSetObjectId(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel objectIdInit() {
-		if(!objectIdWrap.alreadyInitialized) {
+		Wrap<String> objectIdWrap = new Wrap<String>().var("objectId");
+		if(objectId == null) {
 			_objectId(objectIdWrap);
-			if(objectId == null)
-				setObjectId(objectIdWrap.o);
-			objectIdWrap.o(null);
+			setObjectId(objectIdWrap.o);
 		}
-		objectIdWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -1240,22 +899,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrObjectId(siteRequest_, BaseModel.staticSolrObjectId(siteRequest_, BaseModel.staticSetObjectId(siteRequest_, o)));
 	}
 
-	public String solrObjectId() {
-		return BaseModel.staticSolrObjectId(siteRequest_, objectId);
-	}
-
-	public String strObjectId() {
-		return objectId == null ? "" : objectId;
-	}
-
-	public String sqlObjectId() {
-		return objectId;
-	}
-
-	public String jsonObjectId() {
-		return objectId == null ? "" : objectId;
-	}
-
 	///////////////////
 	// objectNameVar //
 	///////////////////
@@ -1266,35 +909,30 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String objectNameVar;
-	@JsonIgnore
-	public Wrap<String> objectNameVarWrap = new Wrap<String>().var("objectNameVar").o(objectNameVar);
 
 	/**	<br/> The entity objectNameVar
 	 *  is defined as null before being initialized. 
 	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectNameVar">Find the entity objectNameVar in Solr</a>
 	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _objectNameVar(Wrap<String> c);
+	protected abstract void _objectNameVar(Wrap<String> w);
 
 	public String getObjectNameVar() {
 		return objectNameVar;
 	}
 	public void setObjectNameVar(String o) {
 		this.objectNameVar = BaseModel.staticSetObjectNameVar(siteRequest_, o);
-		this.objectNameVarWrap.alreadyInitialized = true;
 	}
 	public static String staticSetObjectNameVar(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel objectNameVarInit() {
-		if(!objectNameVarWrap.alreadyInitialized) {
+		Wrap<String> objectNameVarWrap = new Wrap<String>().var("objectNameVar");
+		if(objectNameVar == null) {
 			_objectNameVar(objectNameVarWrap);
-			if(objectNameVar == null)
-				setObjectNameVar(objectNameVarWrap.o);
-			objectNameVarWrap.o(null);
+			setObjectNameVar(objectNameVarWrap.o);
 		}
-		objectNameVarWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -1310,22 +948,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrObjectNameVar(siteRequest_, BaseModel.staticSolrObjectNameVar(siteRequest_, BaseModel.staticSetObjectNameVar(siteRequest_, o)));
 	}
 
-	public String solrObjectNameVar() {
-		return BaseModel.staticSolrObjectNameVar(siteRequest_, objectNameVar);
-	}
-
-	public String strObjectNameVar() {
-		return objectNameVar == null ? "" : objectNameVar;
-	}
-
-	public String sqlObjectNameVar() {
-		return objectNameVar;
-	}
-
-	public String jsonObjectNameVar() {
-		return objectNameVar == null ? "" : objectNameVar;
-	}
-
 	///////////////////
 	// objectSuggest //
 	///////////////////
@@ -1336,35 +958,30 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String objectSuggest;
-	@JsonIgnore
-	public Wrap<String> objectSuggestWrap = new Wrap<String>().var("objectSuggest").o(objectSuggest);
 
 	/**	<br/> The entity objectSuggest
 	 *  is defined as null before being initialized. 
 	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectSuggest">Find the entity objectSuggest in Solr</a>
 	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _objectSuggest(Wrap<String> c);
+	protected abstract void _objectSuggest(Wrap<String> w);
 
 	public String getObjectSuggest() {
 		return objectSuggest;
 	}
 	public void setObjectSuggest(String o) {
 		this.objectSuggest = BaseModel.staticSetObjectSuggest(siteRequest_, o);
-		this.objectSuggestWrap.alreadyInitialized = true;
 	}
 	public static String staticSetObjectSuggest(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel objectSuggestInit() {
-		if(!objectSuggestWrap.alreadyInitialized) {
+		Wrap<String> objectSuggestWrap = new Wrap<String>().var("objectSuggest");
+		if(objectSuggest == null) {
 			_objectSuggest(objectSuggestWrap);
-			if(objectSuggest == null)
-				setObjectSuggest(objectSuggestWrap.o);
-			objectSuggestWrap.o(null);
+			setObjectSuggest(objectSuggestWrap.o);
 		}
-		objectSuggestWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -1380,22 +997,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrObjectSuggest(siteRequest_, BaseModel.staticSolrObjectSuggest(siteRequest_, BaseModel.staticSetObjectSuggest(siteRequest_, o)));
 	}
 
-	public String solrObjectSuggest() {
-		return BaseModel.staticSolrObjectSuggest(siteRequest_, objectSuggest);
-	}
-
-	public String strObjectSuggest() {
-		return objectSuggest == null ? "" : objectSuggest;
-	}
-
-	public String sqlObjectSuggest() {
-		return objectSuggest;
-	}
-
-	public String jsonObjectSuggest() {
-		return objectSuggest == null ? "" : objectSuggest;
-	}
-
 	////////////////
 	// objectText //
 	////////////////
@@ -1406,35 +1007,30 @@ public abstract class BaseModelGen<DEV> extends Object {
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
 	protected String objectText;
-	@JsonIgnore
-	public Wrap<String> objectTextWrap = new Wrap<String>().var("objectText").o(objectText);
 
 	/**	<br/> The entity objectText
 	 *  is defined as null before being initialized. 
 	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:objectText">Find the entity objectText in Solr</a>
 	 * <br/>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _objectText(Wrap<String> c);
+	protected abstract void _objectText(Wrap<String> w);
 
 	public String getObjectText() {
 		return objectText;
 	}
 	public void setObjectText(String o) {
 		this.objectText = BaseModel.staticSetObjectText(siteRequest_, o);
-		this.objectTextWrap.alreadyInitialized = true;
 	}
 	public static String staticSetObjectText(SiteRequestEnUS siteRequest_, String o) {
 		return o;
 	}
 	protected BaseModel objectTextInit() {
-		if(!objectTextWrap.alreadyInitialized) {
+		Wrap<String> objectTextWrap = new Wrap<String>().var("objectText");
+		if(objectText == null) {
 			_objectText(objectTextWrap);
-			if(objectText == null)
-				setObjectText(objectTextWrap.o);
-			objectTextWrap.o(null);
+			setObjectText(objectTextWrap.o);
 		}
-		objectTextWrap.alreadyInitialized(true);
 		return (BaseModel)this;
 	}
 
@@ -1450,36 +1046,160 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return BaseModel.staticSolrStrObjectText(siteRequest_, BaseModel.staticSolrObjectText(siteRequest_, BaseModel.staticSetObjectText(siteRequest_, o)));
 	}
 
-	public String solrObjectText() {
-		return BaseModel.staticSolrObjectText(siteRequest_, objectText);
+	///////////////
+	// pageUrlId //
+	///////////////
+
+	/**	 The entity pageUrlId
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String pageUrlId;
+
+	/**	<br/> The entity pageUrlId
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlId">Find the entity pageUrlId in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _pageUrlId(Wrap<String> w);
+
+	public String getPageUrlId() {
+		return pageUrlId;
+	}
+	public void setPageUrlId(String o) {
+		this.pageUrlId = BaseModel.staticSetPageUrlId(siteRequest_, o);
+	}
+	public static String staticSetPageUrlId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected BaseModel pageUrlIdInit() {
+		Wrap<String> pageUrlIdWrap = new Wrap<String>().var("pageUrlId");
+		if(pageUrlId == null) {
+			_pageUrlId(pageUrlIdWrap);
+			setPageUrlId(pageUrlIdWrap.o);
+		}
+		return (BaseModel)this;
 	}
 
-	public String strObjectText() {
-		return objectText == null ? "" : objectText;
+	public static String staticSolrPageUrlId(SiteRequestEnUS siteRequest_, String o) {
+		return o;
 	}
 
-	public String sqlObjectText() {
-		return objectText;
+	public static String staticSolrStrPageUrlId(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
 	}
 
-	public String jsonObjectText() {
-		return objectText == null ? "" : objectText;
+	public static String staticSolrFqPageUrlId(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrPageUrlId(siteRequest_, BaseModel.staticSolrPageUrlId(siteRequest_, BaseModel.staticSetPageUrlId(siteRequest_, o)));
+	}
+
+	///////////////
+	// pageUrlPk //
+	///////////////
+
+	/**	 The entity pageUrlPk
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String pageUrlPk;
+
+	/**	<br/> The entity pageUrlPk
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlPk">Find the entity pageUrlPk in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _pageUrlPk(Wrap<String> w);
+
+	public String getPageUrlPk() {
+		return pageUrlPk;
+	}
+	public void setPageUrlPk(String o) {
+		this.pageUrlPk = BaseModel.staticSetPageUrlPk(siteRequest_, o);
+	}
+	public static String staticSetPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected BaseModel pageUrlPkInit() {
+		Wrap<String> pageUrlPkWrap = new Wrap<String>().var("pageUrlPk");
+		if(pageUrlPk == null) {
+			_pageUrlPk(pageUrlPkWrap);
+			setPageUrlPk(pageUrlPkWrap.o);
+		}
+		return (BaseModel)this;
+	}
+
+	public static String staticSolrPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqPageUrlPk(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrPageUrlPk(siteRequest_, BaseModel.staticSolrPageUrlPk(siteRequest_, BaseModel.staticSetPageUrlPk(siteRequest_, o)));
+	}
+
+	////////////////
+	// pageUrlApi //
+	////////////////
+
+	/**	 The entity pageUrlApi
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String pageUrlApi;
+
+	/**	<br/> The entity pageUrlApi
+	 *  is defined as null before being initialized. 
+	 * <br/><a href="http://localhost:8983/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:org.curriki.api.enus.base.BaseModel&fq=classeEtendGen_indexed_boolean:true&fq=entiteVar_enUS_indexed_string:pageUrlApi">Find the entity pageUrlApi in Solr</a>
+	 * <br/>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _pageUrlApi(Wrap<String> w);
+
+	public String getPageUrlApi() {
+		return pageUrlApi;
+	}
+	public void setPageUrlApi(String o) {
+		this.pageUrlApi = BaseModel.staticSetPageUrlApi(siteRequest_, o);
+	}
+	public static String staticSetPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+	protected BaseModel pageUrlApiInit() {
+		Wrap<String> pageUrlApiWrap = new Wrap<String>().var("pageUrlApi");
+		if(pageUrlApi == null) {
+			_pageUrlApi(pageUrlApiWrap);
+			setPageUrlApi(pageUrlApiWrap.o);
+		}
+		return (BaseModel)this;
+	}
+
+	public static String staticSolrPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSolrStrPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSolrFqPageUrlApi(SiteRequestEnUS siteRequest_, String o) {
+		return BaseModel.staticSolrStrPageUrlApi(siteRequest_, BaseModel.staticSolrPageUrlApi(siteRequest_, BaseModel.staticSetPageUrlApi(siteRequest_, o)));
 	}
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	protected boolean alreadyInitializedBaseModel = false;
-
 	public Future<Void> promiseDeepBaseModel(SiteRequestEnUS siteRequest_) {
 		setSiteRequest_(siteRequest_);
-		if(!alreadyInitializedBaseModel) {
-			alreadyInitializedBaseModel = true;
-			return promiseDeepBaseModel();
-		} else {
-			return Future.succeededFuture();
-		}
+		return promiseDeepBaseModel();
 	}
 
 	public Future<Void> promiseDeepBaseModel() {
@@ -1509,7 +1229,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				classCanonicalNameInit();
 				classSimpleNameInit();
 				sessionIdInit();
-				userIdInit();
 				userKeyInit();
 				savesInit();
 				objectTitleInit();
@@ -1517,6 +1236,9 @@ public abstract class BaseModelGen<DEV> extends Object {
 				objectNameVarInit();
 				objectSuggestInit();
 				objectTextInit();
+				pageUrlIdInit();
+				pageUrlPkInit();
+				pageUrlApiInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -1591,8 +1313,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return oBaseModel.classSimpleName;
 			case "sessionId":
 				return oBaseModel.sessionId;
-			case "userId":
-				return oBaseModel.userId;
 			case "userKey":
 				return oBaseModel.userKey;
 			case "saves":
@@ -1607,29 +1327,35 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return oBaseModel.objectSuggest;
 			case "objectText":
 				return oBaseModel.objectText;
+			case "pageUrlId":
+				return oBaseModel.pageUrlId;
+			case "pageUrlPk":
+				return oBaseModel.pageUrlPk;
+			case "pageUrlApi":
+				return oBaseModel.pageUrlApi;
 			default:
 				return null;
 		}
 	}
 
 	///////////////
-	// attribute //
+	// relate //
 	///////////////
 
-	public boolean attributeForClass(String var, Object val) {
+	public boolean relateForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = attributeBaseModel(v, val);
+				o = relateBaseModel(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
-				o = baseModel.attributeForClass(v, val);
+				o = baseModel.relateForClass(v, val);
 			}
 		}
 		return o != null;
 	}
-	public Object attributeBaseModel(String var, Object val) {
+	public Object relateBaseModel(String var, Object val) {
 		BaseModel oBaseModel = (BaseModel)this;
 		switch(var) {
 			default:
@@ -1666,8 +1392,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSetClassSimpleName(siteRequest_, o);
 		case "sessionId":
 			return BaseModel.staticSetSessionId(siteRequest_, o);
-		case "userId":
-			return BaseModel.staticSetUserId(siteRequest_, o);
 		case "userKey":
 			return BaseModel.staticSetUserKey(siteRequest_, o);
 		case "saves":
@@ -1682,6 +1406,12 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSetObjectSuggest(siteRequest_, o);
 		case "objectText":
 			return BaseModel.staticSetObjectText(siteRequest_, o);
+		case "pageUrlId":
+			return BaseModel.staticSetPageUrlId(siteRequest_, o);
+		case "pageUrlPk":
+			return BaseModel.staticSetPageUrlPk(siteRequest_, o);
+		case "pageUrlApi":
+			return BaseModel.staticSetPageUrlApi(siteRequest_, o);
 			default:
 				return null;
 		}
@@ -1716,8 +1446,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSolrClassSimpleName(siteRequest_, (String)o);
 		case "sessionId":
 			return BaseModel.staticSolrSessionId(siteRequest_, (String)o);
-		case "userId":
-			return BaseModel.staticSolrUserId(siteRequest_, (String)o);
 		case "userKey":
 			return BaseModel.staticSolrUserKey(siteRequest_, (Long)o);
 		case "saves":
@@ -1732,6 +1460,12 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSolrObjectSuggest(siteRequest_, (String)o);
 		case "objectText":
 			return BaseModel.staticSolrObjectText(siteRequest_, (String)o);
+		case "pageUrlId":
+			return BaseModel.staticSolrPageUrlId(siteRequest_, (String)o);
+		case "pageUrlPk":
+			return BaseModel.staticSolrPageUrlPk(siteRequest_, (String)o);
+		case "pageUrlApi":
+			return BaseModel.staticSolrPageUrlApi(siteRequest_, (String)o);
 			default:
 				return null;
 		}
@@ -1766,8 +1500,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSolrStrClassSimpleName(siteRequest_, (String)o);
 		case "sessionId":
 			return BaseModel.staticSolrStrSessionId(siteRequest_, (String)o);
-		case "userId":
-			return BaseModel.staticSolrStrUserId(siteRequest_, (String)o);
 		case "userKey":
 			return BaseModel.staticSolrStrUserKey(siteRequest_, (Long)o);
 		case "saves":
@@ -1782,6 +1514,12 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSolrStrObjectSuggest(siteRequest_, (String)o);
 		case "objectText":
 			return BaseModel.staticSolrStrObjectText(siteRequest_, (String)o);
+		case "pageUrlId":
+			return BaseModel.staticSolrStrPageUrlId(siteRequest_, (String)o);
+		case "pageUrlPk":
+			return BaseModel.staticSolrStrPageUrlPk(siteRequest_, (String)o);
+		case "pageUrlApi":
+			return BaseModel.staticSolrStrPageUrlApi(siteRequest_, (String)o);
 			default:
 				return null;
 		}
@@ -1816,8 +1554,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSolrFqClassSimpleName(siteRequest_, o);
 		case "sessionId":
 			return BaseModel.staticSolrFqSessionId(siteRequest_, o);
-		case "userId":
-			return BaseModel.staticSolrFqUserId(siteRequest_, o);
 		case "userKey":
 			return BaseModel.staticSolrFqUserKey(siteRequest_, o);
 		case "saves":
@@ -1832,6 +1568,12 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSolrFqObjectSuggest(siteRequest_, o);
 		case "objectText":
 			return BaseModel.staticSolrFqObjectText(siteRequest_, o);
+		case "pageUrlId":
+			return BaseModel.staticSolrFqPageUrlId(siteRequest_, o);
+		case "pageUrlPk":
+			return BaseModel.staticSolrFqPageUrlPk(siteRequest_, o);
+		case "pageUrlApi":
+			return BaseModel.staticSolrFqPageUrlApi(siteRequest_, o);
 			default:
 				return null;
 		}
@@ -1840,58 +1582,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	/////////////
 	// define //
 	/////////////
-
-	public boolean defineForClass(String var, String val) {
-		String[] vars = StringUtils.split(var, ".");
-		Object o = null;
-		if(val != null) {
-			for(String v : vars) {
-				if(o == null)
-					o = defineBaseModel(v, val);
-				else if(o instanceof BaseModel) {
-					BaseModel oBaseModel = (BaseModel)o;
-					o = oBaseModel.defineForClass(v, val);
-				}
-			}
-		}
-		return o != null;
-	}
-	public Object defineBaseModel(String var, String val) {
-		switch(var.toLowerCase()) {
-			case "inheritpk":
-				if(val != null)
-					setInheritPk(val);
-				saves.add("inheritPk");
-				return val;
-			case "created":
-				if(val != null)
-					setCreated(val);
-				saves.add("created");
-				return val;
-			case "archived":
-				if(val != null)
-					setArchived(val);
-				saves.add("archived");
-				return val;
-			case "deleted":
-				if(val != null)
-					setDeleted(val);
-				saves.add("deleted");
-				return val;
-			case "userid":
-				if(val != null)
-					setUserId(val);
-				saves.add("userId");
-				return val;
-			case "userkey":
-				if(val != null)
-					setUserKey(val);
-				saves.add("userKey");
-				return val;
-			default:
-				return null;
-		}
-	}
 
 	public boolean defineForClass(String var, Object val) {
 		String[] vars = StringUtils.split(var, ".");
@@ -1932,10 +1622,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 					setDeleted((Boolean)val);
 				saves.add("deleted");
 				return val;
-			case "userid":
+			case "sessionid":
 				if(val instanceof String)
-					setUserId((String)val);
-				saves.add("userId");
+					setSessionId((String)val);
+				saves.add("sessionId");
 				return val;
 			case "userkey":
 				if(val instanceof Long)
@@ -1992,9 +1682,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		if(sessionId != null) {
 			document.addField("sessionId_indexedstored_string", sessionId);
 		}
-		if(userId != null) {
-			document.addField("userId_indexedstored_string", userId);
-		}
 		if(userKey != null) {
 			document.addField("userKey_indexedstored_long", userKey);
 		}
@@ -2015,6 +1702,12 @@ public abstract class BaseModelGen<DEV> extends Object {
 		if(objectText != null) {
 			document.addField("objectText_text_enUS", objectText.toString());
 			document.addField("objectText_indexed_string", objectText);
+		}
+		if(pageUrlId != null) {
+			document.addField("pageUrlId_indexedstored_string", pageUrlId);
+		}
+		if(pageUrlPk != null) {
+			document.addField("pageUrlPk_indexedstored_string", pageUrlPk);
 		}
 	}
 
@@ -2040,8 +1733,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return "classSimpleName_indexedstored_string";
 			case "sessionId":
 				return "sessionId_indexedstored_string";
-			case "userId":
-				return "userId_indexedstored_string";
 			case "userKey":
 				return "userKey_indexedstored_long";
 			case "saves":
@@ -2054,6 +1745,10 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return "objectSuggest_suggested";
 			case "objectText":
 				return "objectText_text_enUS";
+			case "pageUrlId":
+				return "pageUrlId_indexedstored_string";
+			case "pageUrlPk":
+				return "pageUrlPk_indexedstored_string";
 			default:
 				return null;
 		}
@@ -2100,7 +1795,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		oBaseModel.setClassCanonicalName(Optional.ofNullable(solrDocument.get("classCanonicalName_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setClassSimpleName(Optional.ofNullable(solrDocument.get("classSimpleName_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setSessionId(Optional.ofNullable(solrDocument.get("sessionId_indexedstored_string")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setUserId(Optional.ofNullable(solrDocument.get("userId_indexedstored_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setUserKey(Optional.ofNullable(solrDocument.get("userKey_indexedstored_long")).map(v -> v.toString()).orElse(null));
 		Optional.ofNullable((List<?>)solrDocument.get("saves_indexedstored_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oBaseModel.addSaves(v.toString());
@@ -2110,6 +1804,8 @@ public abstract class BaseModelGen<DEV> extends Object {
 		String objectSuggest = (String)solrDocument.get("objectSuggest_suggested");
 		oBaseModel.setObjectSuggest(objectSuggest);
 		oBaseModel.setObjectText(Optional.ofNullable(solrDocument.get("objectText_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setPageUrlId(Optional.ofNullable(solrDocument.get("pageUrlId_indexedstored_string")).map(v -> v.toString()).orElse(null));
+		oBaseModel.setPageUrlPk(Optional.ofNullable(solrDocument.get("pageUrlPk_indexedstored_string")).map(v -> v.toString()).orElse(null));
 	}
 
 	//////////////////
@@ -2141,8 +1837,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				apiRequest.addVars("classSimpleName");
 			if(!Objects.equals(sessionId, original.getSessionId()))
 				apiRequest.addVars("sessionId");
-			if(!Objects.equals(userId, original.getUserId()))
-				apiRequest.addVars("userId");
 			if(!Objects.equals(userKey, original.getUserKey()))
 				apiRequest.addVars("userKey");
 			if(!Objects.equals(saves, original.getSaves()))
@@ -2155,44 +1849,11 @@ public abstract class BaseModelGen<DEV> extends Object {
 				apiRequest.addVars("objectSuggest");
 			if(!Objects.equals(objectText, original.getObjectText()))
 				apiRequest.addVars("objectText");
+			if(!Objects.equals(pageUrlId, original.getPageUrlId()))
+				apiRequest.addVars("pageUrlId");
+			if(!Objects.equals(pageUrlPk, original.getPageUrlPk()))
+				apiRequest.addVars("pageUrlPk");
 		}
-	}
-
-	//////////////
-	// hashCode //
-	//////////////
-
-	@Override public int hashCode() {
-		return Objects.hash(pk, inheritPk, id, created, modified, archived, deleted, classCanonicalName, classSimpleName, sessionId, userId, userKey, saves, objectTitle, objectId, objectSuggest, objectText);
-	}
-
-	////////////
-	// equals //
-	////////////
-
-	@Override public boolean equals(Object o) {
-		if(this == o)
-			return true;
-		if(!(o instanceof BaseModel))
-			return false;
-		BaseModel that = (BaseModel)o;
-		return Objects.equals( pk, that.pk )
-				&& Objects.equals( inheritPk, that.inheritPk )
-				&& Objects.equals( id, that.id )
-				&& Objects.equals( created, that.created )
-				&& Objects.equals( modified, that.modified )
-				&& Objects.equals( archived, that.archived )
-				&& Objects.equals( deleted, that.deleted )
-				&& Objects.equals( classCanonicalName, that.classCanonicalName )
-				&& Objects.equals( classSimpleName, that.classSimpleName )
-				&& Objects.equals( sessionId, that.sessionId )
-				&& Objects.equals( userId, that.userId )
-				&& Objects.equals( userKey, that.userKey )
-				&& Objects.equals( saves, that.saves )
-				&& Objects.equals( objectTitle, that.objectTitle )
-				&& Objects.equals( objectId, that.objectId )
-				&& Objects.equals( objectSuggest, that.objectSuggest )
-				&& Objects.equals( objectText, that.objectText );
 	}
 
 	//////////////
@@ -2201,25 +1862,24 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	@Override public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("BaseModel { ");
-		sb.append( "pk: " ).append(pk);
-		sb.append( ", inheritPk: \"" ).append(inheritPk).append( "\"" );
-		sb.append( ", id: \"" ).append(id).append( "\"" );
-		sb.append( ", created: " ).append(created);
-		sb.append( ", modified: " ).append(modified);
-		sb.append( ", archived: " ).append(archived);
-		sb.append( ", deleted: " ).append(deleted);
-		sb.append( ", classCanonicalName: \"" ).append(classCanonicalName).append( "\"" );
-		sb.append( ", classSimpleName: \"" ).append(classSimpleName).append( "\"" );
-		sb.append( ", sessionId: \"" ).append(sessionId).append( "\"" );
-		sb.append( ", userId: \"" ).append(userId).append( "\"" );
-		sb.append( ", userKey: " ).append(userKey);
-		sb.append( ", saves: " ).append(saves);
-		sb.append( ", objectTitle: \"" ).append(objectTitle).append( "\"" );
-		sb.append( ", objectId: \"" ).append(objectId).append( "\"" );
-		sb.append( ", objectSuggest: \"" ).append(objectSuggest).append( "\"" );
-		sb.append( ", objectText: \"" ).append(objectText).append( "\"" );
-		sb.append(" }");
+		sb.append(Optional.ofNullable(pk).map(v -> "pk: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(inheritPk).map(v -> "inheritPk: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(id).map(v -> "id: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(created).map(v -> "created: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(modified).map(v -> "modified: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(archived).map(v -> "archived: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(deleted).map(v -> "deleted: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(classCanonicalName).map(v -> "classCanonicalName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(classSimpleName).map(v -> "classSimpleName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(sessionId).map(v -> "sessionId: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(userKey).map(v -> "userKey: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(saves).map(v -> "saves: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(objectTitle).map(v -> "objectTitle: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(objectId).map(v -> "objectId: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(objectSuggest).map(v -> "objectSuggest: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(objectText).map(v -> "objectText: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(pageUrlId).map(v -> "pageUrlId: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(pageUrlPk).map(v -> "pageUrlPk: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 
@@ -2234,7 +1894,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String VAR_classCanonicalName = "classCanonicalName";
 	public static final String VAR_classSimpleName = "classSimpleName";
 	public static final String VAR_sessionId = "sessionId";
-	public static final String VAR_userId = "userId";
 	public static final String VAR_userKey = "userKey";
 	public static final String VAR_saves = "saves";
 	public static final String VAR_objectTitle = "objectTitle";
@@ -2242,4 +1901,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String VAR_objectNameVar = "objectNameVar";
 	public static final String VAR_objectSuggest = "objectSuggest";
 	public static final String VAR_objectText = "objectText";
+	public static final String VAR_pageUrlId = "pageUrlId";
+	public static final String VAR_pageUrlPk = "pageUrlPk";
+	public static final String VAR_pageUrlApi = "pageUrlApi";
 }

@@ -11,6 +11,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 /**
  * Keyword: classSimpleNameLocalDateSerializer
+ * Map.hackathonMission: to create a new Java class LocalDateSerializer do convert a LocalDate to a String. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
  */
 public class LocalDateSerializer extends JsonSerializer<LocalDate> {
 

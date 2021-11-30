@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+hackathonTitle: create a pom.xml file for managing Java depencies in the project. 
+hackathonColumn: Develop Base Classes
+hackathonLabels: Java,Maven
+TODO: Define the groupId and artifactId for ActiveLearningStudio-API. 
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.curriki.api</groupId>
@@ -7,6 +13,10 @@
 	<name>ActiveLearningStudio-API</name>
 	<description></description>
 
+
+	<!-- 
+	TODO: Define properties for maven. 
+	-->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -35,6 +45,10 @@
 		<apache-curator.version>4.3.0</apache-curator.version>
 	</properties>
 
+
+	<!-- 
+	TODO: Define the managed dependencies for maven. 
+	-->
 	<dependencyManagement>
 		<dependencies>
 
@@ -56,6 +70,10 @@
 		</dependencies>
 	</dependencyManagement>
 
+
+	<!-- 
+	TODO: Define the dependencies for maven. 
+	-->
 	<dependencies>
 
 		<!-- ############## -->
@@ -327,10 +345,19 @@
 			<version>0.1.0</version>
 		</dependency>
 
+		<!-- ###### -->
+		<!-- Charts -->
+		<!-- ###### -->
+
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+
 		<!-- ######### -->
 		<!-- Zookeeper -->
 		<!-- ######### -->
-
 
 		<dependency>
 			<groupId>org.apache.curator</groupId>
@@ -348,16 +375,6 @@
 			<version>${apache-curator.version}</version>
 		</dependency>
 
-		<!-- ###### -->
-		<!-- Charts -->
-		<!-- ###### -->
-
-		<dependency>
-			<groupId>org.jfree</groupId>
-			<artifactId>jfreechart</artifactId>
-			<version>1.5.0</version>
-		</dependency>
-
 		<!-- ############ -->
 		<!-- Unit Testing -->
 		<!-- ############ -->
@@ -370,6 +387,10 @@
 		</dependency>
 	</dependencies>
 
+
+	<!-- 
+	TODO: Define the build plugins for Maven. 
+	 -->
 	<build>
 		<resources>
 			<resource>

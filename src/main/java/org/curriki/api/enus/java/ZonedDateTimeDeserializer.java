@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 /**
  * Keyword: classSimpleNameZonedDateTimeDeserializer
+ * Map.hackathonMission: to create a new Java class ZonedDateTimeDeserializer do convert a String to a ZonedDateTime. 
+ * Map.hackathonColumn: Develop Base Classes
+ * Map.hackathonLabels: Java
  */
 public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
 
