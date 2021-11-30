@@ -85,7 +85,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/get-groups', 'GroupController@getOrgGroups');
         Route::apiResource('suborganization.groups', 'GroupController');
         
-        
+        //Projects
+        Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
+
         Route::post('suborganization/{suborganization}/projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::get('suborganization/{suborganization}/projects/recent', 'ProjectController@recent');
         Route::get('suborganization/{suborganization}/projects/default', 'ProjectController@default');
@@ -113,12 +115,17 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('projects.playlists', 'PlaylistController');
         
         // playlist share toggle
+        Route::get('suborganization/{suborganization}/playlists/{playlist}/search-preview', 'PlaylistController@searchPreview');
+
         Route::get('projects/{project}/playlists/{playlist}/share', 'PlaylistController@share');
         Route::get('projects/{project}/playlists/{playlist}/remove-share', 'PlaylistController@removeShare');
 
         Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
         Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
         
+        // Activities
+        Route::get('suborganization/{suborganization}/activities/{activity}/search-preview', 'ActivityController@searchPreview');
+
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
         Route::get('activities/{activity}/share', 'ActivityController@share');
