@@ -1,0 +1,311 @@
+---
+# Label: ansible_project_deployment_config
+# Title: create the Ansible template for the project deployment config in OpenShift
+# Mission: create the Ansible template for the project deployment config in OpenShift
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+spec:
+  replicas: 1
+  selector:
+    app: "{{ SITE_NAME }}"
+    deploymentconfig: "{{ SITE_NAME }}"
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: "{{ SITE_NAME }}"
+        deploymentconfig: "{{ SITE_NAME }}"
+    spec:
+      containers:
+        - imagePullPolicy: Always
+          name: "{{ SITE_NAME }}"
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 8081
+              name: cluster
+              protocol: TCP
+            - containerPort: 9779
+              name: prometheus
+              protocol: TCP
+            - containerPort: 8778
+              name: jolokia
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: "{% if SSL_PASSTHROUGH %}HTTPS{% else %}HTTP{% endif %}"
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: "{% if SSL_PASSTHROUGH %}HTTPS{% else %}HTTP{% endif %}"
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: '{{ SITE_LIMITS_MEMORY }}'
+              cpu: '{{ SITE_LIMITS_CPU }}'
+          env:
+            - name: AUTH_REALM
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_REALM
+                  name: "{{ SITE_NAME }}-secret"
+            - name: AUTH_RESOURCE
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_RESOURCE
+                  name: "{{ SITE_NAME }}-secret"
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_SECRET
+                  name: "{{ SITE_NAME }}-secret"
+            - name: AUTH_HOST_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_HOST_NAME
+                  name: "{{ SITE_NAME }}-secret"
+            - name: AUTH_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_PORT
+                  name: "{{ SITE_NAME }}-secret"
+            - name: AUTH_SSL
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_SSL
+                  name: "{{ SITE_NAME }}-secret"
+            - name: AUTH_URL
+              valueFrom:
+                secretKeyRef:
+                  key: AUTH_URL
+                  name: "{{ SITE_NAME }}-secret"
+            - name: AUTH_TOKEN_URI
+              value: "{{ AUTH_TOKEN_URI }}"
+            - name: EMAIL_AUTH
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_AUTH
+                  name: "{{ SITE_NAME }}-secret"
+            - name: EMAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_FROM
+                  name: "{{ SITE_NAME }}-secret"
+            - name: EMAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_HOST
+                  name: "{{ SITE_NAME }}-secret"
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_PASSWORD
+                  name: "{{ SITE_NAME }}-secret"
+            - name: EMAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_PORT
+                  name: "{{ SITE_NAME }}-secret"
+            - name: EMAIL_SSL
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_SSL
+                  name: "{{ SITE_NAME }}-secret"
+            - name: EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: EMAIL_USERNAME
+                  name: "{{ SITE_NAME }}-secret"
+            - name: JDBC_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: JDBC_HOST
+                  name: "{{ SITE_NAME }}-secret"
+            - name: JDBC_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: JDBC_PORT
+                  name: "{{ SITE_NAME }}-secret"
+            - name: JDBC_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: JDBC_DATABASE
+                  name: "{{ SITE_NAME }}-secret"
+            - name: JDBC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: JDBC_USERNAME
+                  name: "{{ SITE_NAME }}-secret"
+            - name: JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: JDBC_PASSWORD
+                  name: "{{ SITE_NAME }}-secret"
+            - name: SSL_PASSTHROUGH
+              valueFrom:
+                secretKeyRef:
+                  key: SSL_PASSTHROUGH
+                  name: "{{ SITE_NAME }}-secret"
+            - name: SSL_ALIAS
+              valueFrom:
+                secretKeyRef:
+                  key: SSL_ALIAS
+                  name: "{{ SITE_NAME }}-secret"
+            - name: SSL_CERT_PATH
+              valueFrom:
+                secretKeyRef:
+                  key: SSL_CERT_PATH
+                  name: "{{ SITE_NAME }}-secret"
+            - name: SSL_KEY_PATH
+              valueFrom:
+                secretKeyRef:
+                  key: SSL_KEY_PATH
+                  name: "{{ SITE_NAME }}-secret"
+            - name: SSL_KEYSTORE_PATH
+              valueFrom:
+                secretKeyRef:
+                  key: SSL_KEYSTORE_PATH
+                  name: "{{ SITE_NAME }}-secret"
+            - name: ACS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: ACS_API_KEY
+                  name: "{{ SITE_NAME }}-secret"
+
+            - name: FTP_SYNC_HOST_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: FTP_SYNC_HOST_NAME
+                  name: "{{ SITE_NAME }}-secret"
+            - name: FTP_SYNC_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: FTP_SYNC_PORT
+                  name: "{{ SITE_NAME }}-secret"
+            - name: FTP_SYNC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: FTP_SYNC_USERNAME
+                  name: "{{ SITE_NAME }}-secret"
+            - name: FTP_SYNC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: FTP_SYNC_PASSWORD
+                  name: "{{ SITE_NAME }}-secret"
+            - name: FTP_SYNC_REMOTE_PATH
+              valueFrom:
+                secretKeyRef:
+                  key: FTP_SYNC_REMOTE_PATH
+                  name: "{{ SITE_NAME }}-secret"
+
+            - name: OPENSHIFT_SERVICE
+              value: "{{ SITE_NAME }}"
+            - name: CLUSTER_PORT
+              value: "8081"
+            - name: ZOOKEEPER_HOST_NAME
+              value: "{{ ZOOKEEPER_HOST_NAME }}"
+            - name: ZOOKEEPER_PORT
+              value: "{{ ZOOKEEPER_PORT }}"
+            - name: SOLR_HOST_NAME
+              value: "{{ SOLR_HOST_NAME }}"
+            - name: SOLR_PORT
+              value: "{{ SOLR_PORT }}"
+            - name: SOLR_URL
+              value: "http://{{ SOLR_HOST_NAME}}:{{SOLR_PORT}}/solr/{{SITE_SOLR_COLLECTION_ENUS }}"
+            - name: SITE_HOST_NAME
+              value: "{{ SITE_HOST_NAME_ENUS }}"
+            - name: SITE_PORT
+              value: "{{ SITE_PORT_ENUS }}"
+            - name: SITE_BASE_URL
+              value: "{{ SITE_BASE_URL_ENUS }}"
+            - name: STATIC_BASE_URL
+              value: "{{ SITE_STATIC_BASE_URL }}"
+            - name: STATIC_PATH
+              value: "{{ SITE_STATIC_PATH }}"
+            - name: SITE_ZONE
+              value: "{{ SITE_ZONE_ENUS }}"
+            - name: SITE_LOCALE
+              value: "{{ SITE_LOCALE }}"
+            - name: JAVA_MAIN_CLASS
+              value: "{{ SITE_JAVA_MAIN_CLASS_ENUS }}"
+            - name: SITE_INSTANCES
+              value: "{{ SITE_INSTANCES }}"
+            - name: WORKER_POOL_SIZE
+              value: "{{ WORKER_POOL_SIZE }}"
+
+            - name: READ_BUFFER_SIZE
+              value: "{{ READ_BUFFER_SIZE }}"
+            - name: API_COUNTER_FETCH
+              value: "{{ API_COUNTER_FETCH }}"
+            - name: API_COUNTER_RESUME
+              value: "{{ API_COUNTER_RESUME }}"
+            - name: API_COUNTER_FETCH
+              value: "{{ API_COUNTER_FETCH }}"
+            - name: ENABLE_IMPORT_DATA
+              value: "{{ ENABLE_IMPORT_DATA }}"
+            - name: TIMER_DB_SOLR_SYNC_IN_SECONDS
+              value: "{{ TIMER_DB_SOLR_SYNC_IN_SECONDS }}"
+            - name: ENABLE_DB_SOLR_SYNC
+              value: "{{ ENABLE_DB_SOLR_SYNC }}"
+            - name: ENABLE_REFRESH_DATA
+              value: "{{ ENABLE_REFRESH_DATA }}"
+            - name: TIMER_DB_SOLR_SYNC_IN_SECONDS
+              value: "{{ TIMER_DB_SOLR_SYNC_IN_SECONDS }}"
+            - name: AUTH_ROLES_ADMIN
+              value: '{{ AUTH_ROLES_ADMIN | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_SequenceRun
+              value: '{{ AUTH_ROLES_REQUIRED_SequenceRun | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_BioSample
+              value: '{{ AUTH_ROLES_REQUIRED_BioSample | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_Taxonomy
+              value: '{{ AUTH_ROLES_REQUIRED_Taxonomy | to_json }}'
+            - name: AUTH_ROLES_REQUIRED_SiteUser
+              value: '{{ AUTH_ROLES_REQUIRED_SiteUser | to_json }}'
+          volumeMounts:
+            - mountPath: /opt/keystore
+              name: volume-certificate
+              readOnly: true
+            - mountPath: /opt/static/template/enUS
+              name: volume-template
+              readOnly: true
+      volumes:
+        - name: volume-certificate
+          secret:
+            defaultMode: 420
+            secretName: "{{ SITE_NAME }}-certificate"
+        - name: volume-template
+          configMap:
+            defaultMode: 420
+            name: "{{ SITE_NAME }}-template"
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - {{ SITE_NAME }}
+        from:
+          kind: ImageStreamTag
+          name: '{{ SITE_NAME }}:latest'
+          namespace: "{{ SITE_NAMESPACE }}"
+      type: ImageChange
+    - type: ConfigChange

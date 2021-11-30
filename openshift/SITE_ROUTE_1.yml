@@ -1,0 +1,28 @@
+---
+# Label: ansible_project_route
+# Title: create the Ansible template for the project route in OpenShift
+# Mission: create the Ansible template for the project route in OpenShift
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: 'true'
+    acme.openshift.io/secret-name: "{{ SITE_NAME }}-certificate"
+spec:
+  host: "{{ SITE_HOST_NAME_ENUS }}"
+  port:
+    targetPort: http
+{% if SSL_PASSTHROUGH %}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: passthrough
+{% endif %}
+  to:
+    kind: Service
+    name: "{{ SITE_NAME }}"
+    weight: 100
+  wildcardPolicy: None
+

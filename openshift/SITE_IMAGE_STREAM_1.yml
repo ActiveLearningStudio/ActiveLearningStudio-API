@@ -1,0 +1,12 @@
+---
+# Label: ansible_project_image_stream
+# Title: create the Ansible template for the project image stream in OpenShift
+# Mission: create the Ansible template for the project image stream in OpenShift
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+spec:
+  lookupPolicy:
+    local: false

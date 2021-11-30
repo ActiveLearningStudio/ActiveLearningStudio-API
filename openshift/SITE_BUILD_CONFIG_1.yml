@@ -1,0 +1,39 @@
+---
+# Label: ansible_project_build_config
+# Title: create the Ansible template for the project build config in OpenShift
+# Mission: create the Ansible template for the project build config in OpenShift
+# Milestone: Automate Project Deployment
+# Column: Automate Project Deployment
+
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: '{{ SITE_NAME }}:latest'
+  postCommit: {}
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
+  runPolicy: Serial
+  source:
+    git:
+      uri: 'https://github.com/{{ GITHUB_ORG_NAME }}/{{ GITHUB_REPO_NAME }}.git'
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: 'java:latest'
+        namespace: openshift
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+    - imageChange:
+      type: ImageChange
+    - type: ConfigChange
