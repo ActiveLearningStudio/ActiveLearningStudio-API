@@ -44,11 +44,14 @@ class importProjects extends Command
 
         $ext = pathinfo(basename($path), PATHINFO_EXTENSION);
         
-        if($ext != "zip")
-                die('Please provide a valid zip file');
-        
+        if($ext !== "zip") {
+            $this->error('Please provide a valid zip file');
+            die;
+        }
+                
         $user = User::find(config('import-mapped-device.user_id'));
         
-        $projectRepository->importProject($user, $path, config('import-mapped-device.organization_id'), "command");
+        $response = $projectRepository->importProject($user, $path, config('import-mapped-device.organization_id'), "command");
+        $this->info($response);
     }
 }

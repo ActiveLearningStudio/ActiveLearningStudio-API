@@ -643,17 +643,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $zip = new ZipArchive;
             $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
 
-            if($method_source === "command")
-                        $source_file = $path;
-
+            if($method_source === "command") {
+                $source_file = $path;
+            }
+                
             if ($zip->open($source_file) === TRUE) {
                 $extracted_folder_name = "app/public/imports/project-".uniqid();
                 $zip->extractTo(storage_path($extracted_folder_name.'/'));
                 $zip->close();
             }else {
-                if($method_source === "command")
-                        die("Unable to import Project");
-
                 return "Unable to import Project";
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
@@ -693,6 +691,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
                     
+                    if($method_source === "command") {
+                        return "Project has been imported successfully";
+                    }
+                    
                     return $project['name'];
                 }
             });
@@ -701,11 +703,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            if($method_source === "command")
-                        die("Unable to import the project, please try again later!");
-
-            throw new GeneralException('Unable to import the project, please try again later!');
+            if($method_source === "command") {
+                return("Unable to import the project, please try again later!");
+            }
             
+            throw new GeneralException('Unable to import the project, please try again later!');
         }
     }
 
