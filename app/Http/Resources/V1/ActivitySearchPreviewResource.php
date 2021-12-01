@@ -5,7 +5,7 @@ namespace App\Http\Resources\V1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TeamUserResource extends JsonResource
+class ActivitySearchPreviewResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,10 @@ class TeamUserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'role' => $this->pivot->role,
+            'title' => $this->title,
+            'type' => $this->type,
+            'thumb_url' => $this->thumb_url,
+            'library_name' => $this->h5pLibrary,
         ];
     }
 }

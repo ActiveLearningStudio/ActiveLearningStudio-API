@@ -12,10 +12,11 @@ class AddH5PDropLibDependency extends Seeder
      */
     public function run()
     {
-        DB::table('h5p_libraries_libraries')->insert([
-            'library_id' => 1,
-            'required_library_id' => 13,
-            'dependency_type' => 'preloaded',
-        ]);
+        $h5pLibLibParams = ['library_id' => 1, 'required_library_id' => 13, 'dependency_type' => 'preloaded'];
+        $videoAndTehterLib = DB::table('h5p_libraries_libraries')->where($h5pLibLibParams)->first();
+
+        if (!$videoAndTehterLib) {
+            DB::table('h5p_libraries_libraries')->insert($h5pLibLibParams);
+        }
     }
 }
