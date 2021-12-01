@@ -864,9 +864,10 @@ class TeamController extends Controller
      */
     public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team)
     {
+        
         $projects = $team->projects()->get(); // Get all associated projects of a team
         
-        ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team)->delay(now()->addSecond());
+        ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
         
         return response([
             'message' =>  "Your request to push projects to noovo has been received and is being processed.",

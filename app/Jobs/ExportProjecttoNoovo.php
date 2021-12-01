@@ -10,8 +10,10 @@ use Illuminate\Queue\SerializesModels;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Models\Project;
 use App\Models\Team;
+use App\Models\Organization;
 use App\User;
 use App\Services\NoovoCMSService;
+use Illuminate\Support\Facades\Storage;
 
 class ExportProjecttoNoovo implements ShouldQueue
 {
@@ -44,14 +46,20 @@ class ExportProjecttoNoovo implements ShouldQueue
      * @var string
      */
     protected $team;
+
+     /**
+     * @var string
+     */
+    protected $suborganization;
     
-    public function __construct(User $user, $projects, $noovoCMSService, Team $team)
+    public function __construct(User $user, $projects, $noovoCMSService, Team $team, Organization $suborganization)
     {
        
         $this->user = $user;
         $this->projects = $projects;
         $this->noovoCMSService = $noovoCMSService;
         $this->team = $team;
+        $this->suborganization = $suborganization;
     }
 
     /**
@@ -63,18 +71,37 @@ class ExportProjecttoNoovo implements ShouldQueue
     {
         try {
                 $upload_file_ids = [];
-                foreach($this->projects as $project) {
 
+                $post = [];
+                $post['target_company'] = array(
+                    'company_name' => $this->suborganization->noovo_client_id,
+                    'group_name' => $this->team->noovo_group_id
+                );
+                $asd = [];
+                foreach($this->projects as $project) {
+                   
                     // Create the zip archive of folder
                     $export_file = $projectRepository->exportProject($this->user, $project);
                     \Log::Info($export_file);
-
+                    $file_info = array(
+                        "filename" => $project->name ,
+                        "description"=> $project->description,
+                        "url"=> url(Storage::url('exports/'.basename($export_file))),
+                        "md5sum"=> md5_file($export_file)
+                    );
                     // Upload the zip files into Noovo CMS
-                    $upload_file_id = $this->noovoCMSService->uploadFileToNoovo($export_file, $project);
-                    \Log::info($upload_file_id);
-                    array_push($upload_file_ids, $upload_file_id);
+                    //$upload_file_id = $this->noovoCMSService->uploadFileToNoovo($export_file, $project);
+                    //\Log::info($upload_file_id);
+                    //array_push($upload_file_ids, $upload_file_id);
+                    array_push($asd, $file_info);
                 }
 
+                $post['files'] = $asd;
+                \Log::info($post);
+               return;
+                $upload_file_ids = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
+                \Log::info($upload_file_ids);
+                
                 $list_data = array(
                     "name" => $this->team->name ." Projects",
                     "description" => $this->team->name ." Projects",

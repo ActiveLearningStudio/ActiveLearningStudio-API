@@ -30,9 +30,6 @@ class NoovoCMSService implements NoovoCMSInterface
     {
         $this->host =  config('noovo.host');
         $this->token = $this->getNoovoCMSToken();
-        
-        \Log::info('consturxt Nooco');
-
     }
 
     /**
@@ -129,6 +126,39 @@ class NoovoCMSService implements NoovoCMSInterface
         curl_close($ch);
        
         
+    }
+
+    public function uploadMultipleFilestoNoovo($data)
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->host . ':8088/file/uploads');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        
+        //echo "<pre>";print_r(json_encode($post)); die;
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $headers = array();
+        $headers[] = 'Authorization: ' . config('noovo.file_upload_token');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo 'Error:' . curl_error($ch);
+        }
+        curl_close($ch);
+        
+        \Log::info(json_decode($result)->data);
+        $response_data = json_decode($result)->data;
+
+        $return_arr = [];
+        foreach ($response_data as $file_rec) {
+            array_push($return_arr, $file_rec->id );
+        }
+
+        return $return_arr;
+
     }
 
 }
