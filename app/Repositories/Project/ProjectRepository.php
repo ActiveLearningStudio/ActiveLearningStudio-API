@@ -643,7 +643,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
-                    if ( !empty($project['thumb_url']) && filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
+                    if (!empty($project['thumb_url']) && filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
 
                         if(file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
 
