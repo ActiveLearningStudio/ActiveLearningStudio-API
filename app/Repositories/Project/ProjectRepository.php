@@ -620,12 +620,16 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param int $suborganization_id
      * @throws GeneralException
      */
-    public function importProject($authUser, $path, $suborganization_id)
+    public function importProject($authUser, $path, $suborganization_id, $method_source="API")
     {
         try {
 
             $zip = new ZipArchive;
             $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
+
+            if ($method_source === "command") {
+                $source_file = $path;
+            }
 
             if ($zip->open($source_file) === TRUE) {
                 $extracted_folder_name = "app/public/imports/project-".uniqid();
@@ -634,8 +638,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             }else {
                 return "Unable to import Project";
             }
-            return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file) {
-                if(file_exists(storage_path($extracted_folder_name.'/project.json'))) {
+            return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
+                if (file_exists(storage_path($extracted_folder_name.'/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
 
                     $project = json_decode($project_json,true);
@@ -645,7 +649,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $project['organization_visibility_type_id'] = 1;
                     if (!empty($project['thumb_url']) && filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
 
-                        if(file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
+                        if (file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
 
                             $ext = pathinfo(basename($project['thumb_url']), PATHINFO_EXTENSION);
                             $new_image_name = uniqid() . '.' . $ext;
@@ -665,17 +669,27 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
-                    unlink($source_file); // Deleted the storage zip file
+                    //unlink($source_file); // Deleted the storage zip file - It will user in future
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
+
+                    if ($method_source !== "command") {
+                        unlink($source_file); // Deleted the storage zip file
+                    } else {
+                        return "Project has been imported successfully";
+                    }
                     
                     return $project['name'];
                 }
             });
 
 
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             \DB::rollBack();
             Log::error($e->getMessage());
+
+            if ($method_source === "command") {
+                return("Unable to import the project, please try again later!");
+            }
             throw new GeneralException('Unable to import the project, please try again later!');
         }
     }
