@@ -525,7 +525,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             
         $activity['h5p_content_id'] = $new_content_id;
             
-        if (filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
+        if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
             if(file_exists(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/activities/'.$activity_dir.'/'.basename($activity['thumb_url'])))) {
                 $ext = pathinfo(basename($activity['thumb_url']), PATHINFO_EXTENSION);
                 $new_image_name = uniqid() . '.' . $ext;
