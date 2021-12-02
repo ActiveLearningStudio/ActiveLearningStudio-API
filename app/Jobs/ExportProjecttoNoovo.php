@@ -20,20 +20,13 @@ class ExportProjecttoNoovo implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-
-
-     /**
      * @var object
-     */
+    */
     protected $user;
 
     /**
      * @var string
-     */
+    */
     protected $projects;
 
     /**
@@ -44,7 +37,7 @@ class ExportProjecttoNoovo implements ShouldQueue
 
     /**
      * @var string
-     */
+    */
     protected $team;
 
      /**
@@ -52,10 +45,14 @@ class ExportProjecttoNoovo implements ShouldQueue
      */
     protected $suborganization;
     
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
     public function __construct(User $user, $projects, $noovoCMSService, Team $team, Organization $suborganization)
     {
-       
-        $this->user = $user;
+       $this->user = $user;
         $this->projects = $projects;
         $this->noovoCMSService = $noovoCMSService;
         $this->team = $team;
@@ -78,7 +75,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                     'group_name' => $this->team->noovo_group_id
                 );
                 $files_arr = [];
-                foreach($this->projects as $project) {
+                foreach ($this->projects as $project) {
                    
                     // Create the zip archive of folder
                     $export_file = $projectRepository->exportProject($this->user, $project);

@@ -39,7 +39,7 @@ class TeamController extends Controller
     private $teamRepository;
     private $userRepository;
     private $projectRepository;
-    protected $noovoCMSService;
+    private $noovoCMSService;
     /**
      * TeamController constructor.
      *
@@ -232,6 +232,7 @@ class TeamController extends Controller
      * }
      *
      * @param TeamRequest $teamRequest
+     * @param $suborganization
      * @return Response
      */
     public function store(TeamRequest $teamRequest, Organization $suborganization)
@@ -689,6 +690,7 @@ class TeamController extends Controller
      *
      * @param TeamUpdateRequest $teamUpdateRequest
      * @param Team $team
+     * @param $suborganization
      * @return Response
      */
     public function update(TeamUpdateRequest $teamUpdateRequest, Organization $suborganization, Team $team)
@@ -867,6 +869,8 @@ class TeamController extends Controller
      *   ]
      * }
      *
+     * @param Request $request
+     * @param $suborganization
      * @param Team $team
      * @return Response
      */
@@ -875,13 +879,13 @@ class TeamController extends Controller
         
         $projects = $team->projects()->get(); // Get all associated projects of a team
 
-        if(empty($suborganization->noovo_client_id) || empty($team->noovo_group_id) || empty($team->noovo_group_title)) {
+        if (empty($suborganization->noovo_client_id) || empty($team->noovo_group_id) || empty($team->noovo_group_title)) {
             return response([
                 'message' =>  "Noovo Client id or group id is missing.",
             ], 500);
         }
         
-        if($projects) {
+        if ($projects) {
             ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
         
             return response([

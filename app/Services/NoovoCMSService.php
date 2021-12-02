@@ -21,8 +21,6 @@ class NoovoCMSService implements NoovoCMSInterface
      */
     public $host;
 
-   
-
     /**
      * NoovoCMSService constructor.
      */
@@ -34,14 +32,13 @@ class NoovoCMSService implements NoovoCMSInterface
 
     /**
      * To get Authentication Token
+     * 
      * @return string token
      */
     public function getNoovoCMSToken()
     {
         
         $host = $this->host . ":8082/auth"; // noovo have different ports for different api's. We will remove it once they finalize their api
-        
-
         $username = config('noovo.username');
         $password = config('noovo.password');
        
