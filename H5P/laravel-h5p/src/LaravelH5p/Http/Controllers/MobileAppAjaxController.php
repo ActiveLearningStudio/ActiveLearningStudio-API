@@ -15,17 +15,13 @@ class MobileAppAjaxController extends Controller
 {
     public function finish(Request $request)
     {
+        // get content id of the activity
         $content_id = $request->input('contentId');
         $email = $request->input('email');
         if (!$content_id) {
             H5PCore::ajaxError('Invalid content');
             exit;
         }
-
-        // if (!wp_verify_nonce(filter_input(INPUT_GET, 'token'), 'h5p_result')) {
-        //     H5PCore::ajaxError('Invalid security token');
-        //     exit;
-        // }
 
         $rs = DB::select("
             SELECT id
@@ -45,6 +41,7 @@ class MobileAppAjaxController extends Controller
             'time' => $request->input('time')
         );
 
+        // Set time = 0 if It's not available
         if ($data['time'] === NULL) {
             $data['time'] = 0;
         }
@@ -56,7 +53,7 @@ class MobileAppAjaxController extends Controller
             '%d',
             '%d'
         );
-        // return $result_id;
+        // Check for if record already exists
         if (!$result_id) {
             // Insert new results
             $data['email'] = $email;
@@ -68,26 +65,6 @@ class MobileAppAjaxController extends Controller
             // Update existing results
             DB::table($table)->where('id', $result_id)->update($data);
         }
-
-        // Get content info for log
-        // $row = DB::select("
-        //     SELECT c.title, l.name, l.major_version, l.minor_version
-        //     FROM h5p_contents c
-        //     JOIN h5p_libraries l ON l.id = c.library_id
-        //     WHERE c.id = ?
-        // ", [$content_id]);
-
-        // $content = is_array($row) && count($row) > 0 ? $row[0] : NULL;
-
-        // // Log view
-        // event(new H5pEvent(
-        //     'results',
-        //     'set',
-        //     $content_id,
-        //     $content->title,
-        //     $content->name,
-        //     $content->major_version . '.' . $content->minor_version
-        // ));
 
         // Success
         \H5PCore::ajaxSuccess();
