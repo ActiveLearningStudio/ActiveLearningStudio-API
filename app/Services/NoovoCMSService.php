@@ -39,12 +39,12 @@ class NoovoCMSService implements NoovoCMSInterface
     public function getNoovoCMSToken()
     {
         
-        $host = $this->host . ":8082/auth";
+        $host = $this->host . ":8082/auth"; // noovo have different ports for different api's. We will remove it once they finalize their api
         
 
         $username = config('noovo.username');
         $password = config('noovo.password');
-        
+       
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,$host);
         curl_setopt($ch, CURLOPT_POST,1);
@@ -54,48 +54,14 @@ class NoovoCMSService implements NoovoCMSInterface
         curl_setopt($ch, CURLINFO_HTTP_CODE, true);
         $result=curl_exec ($ch);
         
+        if (curl_errno($ch)) {
+            \Log::error(curl_error($ch));
+            return;
+        }
         curl_close ($ch);
         
         $this->token = json_decode($result)->data->authorization;
         return  json_decode($result)->data->authorization;
-
-    }
-
-    /**
-     * Upload exported file to Noovo
-     *
-     * @param string $export_file
-     * @param object $project
-     */
-    public function uploadFileToNoovo ($export_file, $project) { 
-
-        
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $this->host . ':8088/file');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        $post = array(
-            'filename' => $project->name,
-            'description' => $project->description,
-            'gid' => "298",
-            'file' => curl_file_create($export_file)
-            
-        );
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-
-        $headers = array();
-        $headers[] = 'Authorization: '. $this->token;
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
-        }
-        curl_close($ch);
-        
-        $response = $data = json_decode($result)->data;
-        return $response->id;
 
     }
 
@@ -121,13 +87,20 @@ class NoovoCMSService implements NoovoCMSInterface
 
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
+            \Log::error(curl_error($ch));
+            return;
         }
         curl_close($ch);
-       
-        
+    
     }
 
+    /**
+     * To Upload Curriki zip projects into Noovo
+     * 
+     * @param array $data
+     * 
+     * @return array $return_arr uploaded file ids
+     */
     public function uploadMultipleFilestoNoovo($data)
     {
         $ch = curl_init();
@@ -136,7 +109,6 @@ class NoovoCMSService implements NoovoCMSInterface
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         
-        //echo "<pre>";print_r(json_encode($post)); die;
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
         $headers = array();
@@ -145,11 +117,12 @@ class NoovoCMSService implements NoovoCMSInterface
 
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
+            \Log::error(curl_error($ch));
+            return;
         }
         curl_close($ch);
         
-        \Log::info(json_decode($result)->data);
+        \Log::info($result);
         $response_data = json_decode($result)->data;
 
         $return_arr = [];

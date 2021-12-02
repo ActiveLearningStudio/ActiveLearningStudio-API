@@ -25,7 +25,6 @@ use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use App\Jobs\ExportProjecttoNoovo;
 use App\Services\NoovoCMSService;
 /**
@@ -221,6 +220,8 @@ class TeamController extends Controller
      *
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
+     * @bodyParam noovo_group_id integer ID of a Noovo Group Example: 1
+     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
      *
      * @responseFile 201 responses/team/team.json
      *
@@ -675,6 +676,8 @@ class TeamController extends Controller
      * @urlParam team required The Id of a team Example: 1
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
+     * @bodyParam noovo_group_id integer ID of a Noovo Group Example: 1
+     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
      *
      * @responseFile responses/team/team.json
      *
@@ -854,7 +857,7 @@ class TeamController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Indexing value is already set. Current indexing state of this team: CURRENT_STATE_OF_PROJECT_INDEX"
+     *     "Noovo Client id or group id is missing."
      *   ]
      * }
      *
@@ -871,13 +874,25 @@ class TeamController extends Controller
     {
         
         $projects = $team->projects()->get(); // Get all associated projects of a team
+
+        if(empty($suborganization->noovo_client_id) || empty($team->noovo_group_id) || empty($team->noovo_group_title)) {
+            return response([
+                'message' =>  "Noovo Client id or group id is missing.",
+            ], 500);
+        }
         
-        ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
+        if($projects) {
+            ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
         
+            return response([
+                'message' =>  "Your request to push projects to noovo has been received and is being processed.",
+            ], 200);
+        }
+
         return response([
-            'message' =>  "Your request to push projects to noovo has been received and is being processed.",
-        ], 200);
-        
+            'message' =>  "No Project to Export.",
+        ], 500);
+    
     }
 
 }

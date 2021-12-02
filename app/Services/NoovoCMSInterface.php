@@ -14,12 +14,13 @@ interface NoovoCMSInterface
     public function getNoovoCMSToken();
 
     /**
-     * Upload exported file to Noovo
-     *
-     * @param string $export_file
-     * @param object $project
-    */
-    public function uploadFileToNoovo ($export_file, $project);
+     * To Upload Curriki zip projects into Noovo
+     * 
+     * @param array $data
+     * 
+     * @return array $return_arr uploaded file ids
+     */
+    public function uploadMultipleFilestoNoovo($data);
     
     /**
      * Create the file list of uploaded files

@@ -77,7 +77,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                     'company_name' => $this->suborganization->noovo_client_id,
                     'group_name' => $this->team->noovo_group_id
                 );
-                $asd = [];
+                $files_arr = [];
                 foreach($this->projects as $project) {
                    
                     // Create the zip archive of folder
@@ -89,16 +89,12 @@ class ExportProjecttoNoovo implements ShouldQueue
                         "url"=> url(Storage::url('exports/'.basename($export_file))),
                         "md5sum"=> md5_file($export_file)
                     );
-                    // Upload the zip files into Noovo CMS
-                    //$upload_file_id = $this->noovoCMSService->uploadFileToNoovo($export_file, $project);
-                    //\Log::info($upload_file_id);
-                    //array_push($upload_file_ids, $upload_file_id);
-                    array_push($asd, $file_info);
+                    array_push($files_arr, $file_info);
                 }
 
-                $post['files'] = $asd;
+                $post['files'] = $files_arr;
                 \Log::info($post);
-               return;
+                // Uploads files into Noovo CMS
                 $upload_file_ids = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
                 \Log::info($upload_file_ids);
                 
@@ -106,9 +102,9 @@ class ExportProjecttoNoovo implements ShouldQueue
                     "name" => $this->team->name ." Projects",
                     "description" => $this->team->name ." Projects",
                     "files" => $upload_file_ids,
-                    "gid" => 298
+                    "gid" => $this->team->noovo_group_id
                 );
-                // Create the File List.
+                // Create the File List on Noovo CMS
                 $upload_file_id = $this->noovoCMSService->createFileList($list_data);
                
                 

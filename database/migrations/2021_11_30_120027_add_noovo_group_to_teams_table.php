@@ -15,6 +15,7 @@ class AddNoovoGroupToTeamsTable extends Migration
     {
         Schema::table('teams', function (Blueprint $table) {
             $table->string('noovo_group_id')->nullable();
+            $table->integer('noovo_group_title')->nullable();
         });
     }
 
@@ -26,7 +27,7 @@ class AddNoovoGroupToTeamsTable extends Migration
     public function down()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->dropColumn(['noovo_group_id']);
+            $table->dropColumn(['noovo_group_id','noovo_group_title']);
         });
     }
 }
