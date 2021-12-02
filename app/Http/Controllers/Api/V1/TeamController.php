@@ -23,6 +23,7 @@ use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Jobs\ExportProjecttoNoovo;
@@ -67,17 +68,19 @@ class TeamController extends Controller
      * Get a list of the teams of a user.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @responseFile responses/team/team.json
      *
+     * @param Request $request
+     * @param Organization $suborganization
      * @return Response
      */
-    public function index(Organization $suborganization)
+    public function index(Request $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [Team::class, $suborganization]);
-
         $user_id = auth()->user()->id;
 
-        $teams = $this->teamRepository->getTeams($suborganization->id, $user_id);
+        $teams = $this->teamRepository->getTeams($suborganization->id, $user_id, $request->all());
 
         $teamDetails = [];
         foreach ($teams as $team) {
@@ -96,8 +99,10 @@ class TeamController extends Controller
      * Get a list of the teams of an Organization.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @responseFile responses/team/team.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
     public function getOrgTeams(Organization $suborganization)
