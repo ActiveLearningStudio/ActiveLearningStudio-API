@@ -26,7 +26,12 @@ class SearchResource extends JsonResource
             'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->entity,
             'created_at' => $this->created_at,
-            'user' => $this->first_name . ' ' . $this->last_name
+            'user' => [
+                "email" => $this->email,
+                "first_name" => $this->first_name,
+                "id" => $this->user_id,
+                "last_name" => $this->last_name
+            ]
         ];
     }
 }
