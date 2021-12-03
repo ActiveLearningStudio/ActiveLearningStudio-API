@@ -14,8 +14,8 @@ class AddNoovoGroupToTeamsTable extends Migration
     public function up()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->string('noovo_group_id')->nullable();
-            $table->integer('noovo_group_title')->nullable();
+            $table->string('noovo_group_title')->nullable();
+            $table->integer('noovo_group_id')->nullable();
         });
     }
 
