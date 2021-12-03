@@ -52,6 +52,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('users/search', 'UserController@getAllUsers');
         Route::post('suborganization/{suborganization}/users/search', 'UserController@getOrgUsers');
         Route::post('suborganization/{suborganization}/users/check', 'UserController@checkOrgUser');
+        Route::get('suborganization/{suborganization}/users/check-email', 'UserController@checkUserEmail');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
