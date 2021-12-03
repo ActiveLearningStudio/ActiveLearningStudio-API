@@ -72,7 +72,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                 $post = [];
                 $post['target_company'] = array(
                     'company_name' => $this->suborganization->noovo_client_id,
-                    'group_name' => $this->team->noovo_group_id
+                    'group_name' => $this->team->noovo_group_title
                 );
                 $files_arr = [];
                 foreach ($this->projects as $project) {
