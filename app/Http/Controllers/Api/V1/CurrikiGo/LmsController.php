@@ -80,6 +80,7 @@ class LmsController extends Controller
                 'query' => 'string|max:255',
                 'from' => 'integer',
                 'subject' => 'string|max:255',
+                'org' => 'string|max:255',
                 'level' => 'string|max:255',
                 'start' => 'string|max:255',
                 'end' => 'string|max:255',
