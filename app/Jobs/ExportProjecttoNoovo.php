@@ -14,6 +14,7 @@ use App\Models\Organization;
 use App\User;
 use App\Services\NoovoCMSService;
 use Illuminate\Support\Facades\Storage;
+use App\Models\NoovoLogs;
 
 class ExportProjecttoNoovo implements ShouldQueue
 {
@@ -75,6 +76,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                     'group_name' => $this->team->noovo_group_title
                 );
                 $files_arr = [];
+                $project_ids = [];
                 foreach ($this->projects as $project) {
                    
                     // Create the zip archive of folder
@@ -87,6 +89,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                         "md5sum"=> md5_file($export_file)
                     );
                     array_push($files_arr, $file_info);
+                    array_push($project_ids, $project->id);
                 }
 
                 $post['files'] = $files_arr;
@@ -102,11 +105,43 @@ class ExportProjecttoNoovo implements ShouldQueue
                     "gid" => $this->team->noovo_group_id
                 );
                 // Create the File List on Noovo CMS
-                $upload_file_id = $this->noovoCMSService->createFileList($list_data);
+                $file_list_id = $this->noovoCMSService->createFileList($list_data);
+
+                $group_attachment = array(
+                    "group" => $this->team->noovo_group_id,
+                    "id" => $file_list_id
+                );
+                // Attach file list with Group
+                $this->setFileListtoGroup->createFileList($group_attachment);
+
+                // Insert Logging
+                NoovoLogs::create([
+                    'organization_id' => $this->suborganization->id,
+                    'team_id' => $this->team->id,
+                    'noovo_company_id' => $this->suborganization->noovo_client_id,
+                    'noovo_company_title' => $this->suborganization->noovo_client_id,
+                    'noovo_team_id' => $this->team->noovo_group_id,
+                    'noovo_team_title' => $this->team->noovo_group_title,
+                    'projects' => json_encode($project_ids),
+                    'response' => 'Projects Transfer Successful',
+                    'status' => 1,
+                ]);
                
                 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
+            // Insert Logging
+            NoovoLogs::create([
+                'organization_id' => $this->suborganization->id,
+                'team_id' => $this->team->id,
+                'noovo_company_id' => $this->suborganization->noovo_client_id,
+                'noovo_company_title' => $this->suborganization->noovo_client_id,
+                'noovo_team_id' => $this->team->noovo_group_id,
+                'noovo_team_title' => $this->team->noovo_group_title,
+                'projects' => json_encode($project_ids),
+                'response' => $e->getMessage(),
+                'status' => 0,
+            ]);
             
         }
     }
