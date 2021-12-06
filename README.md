@@ -104,7 +104,7 @@ install -d ~/.local/src/ActiveLearningStudio-API
 git clone git@github.com:team19hackathon2021/ActiveLearningStudio-API.git ~/.local/src/ActiveLearningStudio-API
 ```
 
-## Setup the environment using the requirements.yml file
+## Setup the Ansible Galaxy roles for installing the complete project locally. 
 
 ```bash
 git clone git@github.com:computate-org/computate_postgres.git ~/.ansible/roles/computate.computate_postgres
@@ -113,7 +113,7 @@ git clone git@github.com:computate-org/computate_solr.git ~/.ansible/roles/compu
 git clone git@github.com:computate-org/computate_project.git ~/.ansible/roles/computate.computate_project
 ```
 
-## Install the 4 required roles using the main ansible playbook
+## Run the Ansible Galaxy roles to install the complete project locally. 
 
 ```bash
 
