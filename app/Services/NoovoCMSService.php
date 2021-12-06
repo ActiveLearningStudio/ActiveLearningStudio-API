@@ -145,7 +145,7 @@ class NoovoCMSService implements NoovoCMSInterface
         
         $ch = curl_init();
         
-        curl_setopt($ch, CURLOPT_URL, $this->host . ":8088/filelist");
+        curl_setopt($ch, CURLOPT_URL, $this->host . ":8088/group/filelist");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
