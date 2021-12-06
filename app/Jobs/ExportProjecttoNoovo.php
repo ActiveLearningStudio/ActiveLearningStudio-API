@@ -115,34 +115,30 @@ class ExportProjecttoNoovo implements ShouldQueue
                 $this->noovoCMSService->setFileListtoGroup($group_attachment);
 
                 // Insert Logging
-                NoovoLogs::create([
-                    'organization_id' => $this->suborganization->id,
-                    'team_id' => $this->team->id,
-                    'noovo_company_id' => $this->suborganization->noovo_client_id,
-                    'noovo_company_title' => $this->suborganization->noovo_client_id,
-                    'noovo_team_id' => $this->team->noovo_group_id,
-                    'noovo_team_title' => $this->team->noovo_group_title,
-                    'projects' => json_encode($project_ids),
-                    'response' => 'Projects Transfer Successful',
-                    'status' => 1,
-                ]);
+                $this->createLog($project_ids, 'Projects Transfer Successful', 1);
+                
                
                 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
-            // Insert Logging
-            NoovoLogs::create([
-                'organization_id' => $this->suborganization->id,
-                'team_id' => $this->team->id,
-                'noovo_company_id' => $this->suborganization->noovo_client_id,
-                'noovo_company_title' => $this->suborganization->noovo_client_id,
-                'noovo_team_id' => $this->team->noovo_group_id,
-                'noovo_team_title' => $this->team->noovo_group_title,
-                'projects' => json_encode($project_ids),
-                'response' => $e->getMessage(),
-                'status' => 0,
-            ]);
+            
+            $this->createLog($project_ids, $e->getMessage(), 0);
             
         }
+    }
+
+    protected function createLog (array $projects, string $response, bool $status)
+    {
+        NoovoLogs::create([
+            'organization_id' => $this->suborganization->id,
+            'team_id' => $this->team->id,
+            'noovo_company_id' => $this->suborganization->noovo_client_id,
+            'noovo_company_title' => $this->suborganization->noovo_client_id,
+            'noovo_team_id' => $this->team->noovo_group_id,
+            'noovo_team_title' => $this->team->noovo_group_title,
+            'projects' => json_encode($projects),
+            'response' => $response,
+            'status' => $status,
+        ]);
     }
 }
