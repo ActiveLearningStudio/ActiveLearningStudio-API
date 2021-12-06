@@ -829,6 +829,31 @@ class AuthController extends Controller
             'access_token' => $user->createToken('auth_token')->accessToken,
         ], 200);
     }
+
+    /**
+     * Check if email is already registered
+     *
+     * @urlParam email address to be checked: currikiuser@curriki.org
+     *
+     * @param string $email
+     * @return Application|ResponseFactory|Response
+     * @throws \Throwable
+     */
+    public function checkEmail($email)
+    {
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            return response([
+                'exists' => true,
+                'message' => "Email is already registered",
+            ], 200);
+        } else {
+            return response([
+                'exists' => false,
+                'message' => "Email is not registered",
+            ], 200);
+        }
+    }
 }
 
 
