@@ -28,6 +28,6 @@ class NoovoLogs extends Model
         'noovo_team_title',
         'projects',
         'response',
-        'unit_path'
+        'status'
     ];
 }

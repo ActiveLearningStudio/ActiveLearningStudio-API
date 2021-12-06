@@ -88,6 +88,10 @@ class NoovoCMSService implements NoovoCMSInterface
             return;
         }
         curl_close($ch);
+
+        $response_data = json_decode($result)->data;
+
+        return $response_data ->id;
     
     }
 
@@ -129,6 +133,35 @@ class NoovoCMSService implements NoovoCMSInterface
 
         return $return_arr;
 
+    }
+
+    /**
+     * Attach the file list to group
+     *
+     * @param array $data
+     * 
+    */
+    public function setFileListtoGroup($data) {
+        
+        $ch = curl_init();
+        
+        curl_setopt($ch, CURLOPT_URL, $this->host . ":8088/filelist");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $headers = array();
+        $headers[] = 'Authorization: '.$this->token;
+        $headers[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            \Log::error(curl_error($ch));
+            return;
+        }
+        curl_close($ch);
+    
     }
 
 }

@@ -25,6 +25,7 @@ class CreatePushToNoovoLogsTable extends Migration
             $table->string('noovo_team_title')->nullable();
             $table->string('projects')->nullable();
             $table->string('response')->nullable();
+            $table->tinyInteger('status')->nullable()->default(1);
 
             $table->timestamps();
         });
