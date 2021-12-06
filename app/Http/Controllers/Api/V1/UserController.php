@@ -8,6 +8,7 @@ use App\Http\Requests\V1\SharedProjectRequest;
 use App\Http\Requests\V1\SuborganizationAddNewUser;
 use App\Http\Requests\V1\SuborganizationUpdateUserDetail;
 use App\Http\Requests\V1\UserCheckRequest;
+use App\Http\Requests\V1\CheckUserEmailRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
@@ -151,6 +152,49 @@ class UserController extends Controller
             'message' => 'Success',
             'invited' => true,
         ], 200);
+    }
+
+    /**
+     * Check User Email
+     *
+     * Check if user email exist in the instance.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam email string required The email of a user Example: john.doe@currikistudio.org
+     *
+     * @responseFile responses/user/user.json
+     *
+     * @response 422 {
+     *   "message": "The user already exists in the organization."
+     * }
+     *
+     * @param CheckUserEmailRequest $checkUserEmailRequest
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function checkUserEmail(CheckUserEmailRequest $checkUserEmailRequest, Organization $suborganization)
+    {
+        $data = $checkUserEmailRequest->validated();
+
+        $user = $this->userRepository->findByField('email', $data['email']);
+
+        if ($user) {
+            $suborganizationUser = $suborganization->users()->where('user_id', $user->id)->first();
+
+            if ($suborganizationUser) {
+                return response([
+                    'message' => 'The user already exists in the organization.'
+                ], 422);
+            }
+
+            return response([
+                'user' => new UserResource($user),
+            ], 200);
+        } else {
+            return response([
+                'message' => 'The user not found.'
+            ], 422);
+        }
     }
 
     /**
