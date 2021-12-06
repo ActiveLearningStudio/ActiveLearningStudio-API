@@ -112,7 +112,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                     "id" => $file_list_id
                 );
                 // Attach file list with Group
-                $this->setFileListtoGroup->createFileList($group_attachment);
+                $this->noovoCMSService->setFileListtoGroup($group_attachment);
 
                 // Insert Logging
                 NoovoLogs::create([
