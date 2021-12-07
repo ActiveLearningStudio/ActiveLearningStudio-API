@@ -58,6 +58,13 @@ class ExportProjecttoNoovo implements ShouldQueue
         $this->noovoCMSService = $noovoCMSService;
         $this->team = $team;
         $this->suborganization = $suborganization;
+        
+        $token_response = json_decode($noovoCMSService->token);
+        if (isset($token_response->result) && $token_response->result === "Failed") {
+            $this->createLog([], $token_response->description, 0);
+            die($token_response->description);
+        }
+        
     }
 
     /**
@@ -95,7 +102,19 @@ class ExportProjecttoNoovo implements ShouldQueue
                 $post['files'] = $files_arr;
                 \Log::info($post);
                 // Uploads files into Noovo CMS
-                $upload_file_ids = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
+                $upload_file_result = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
+                $decoded_upload_result = json_decode($upload_file_result);
+                if ($decoded_upload_result->result === "Failed") {
+                    $this->createLog($project_ids, $decoded_upload_result->description, 0);
+                    return false;
+                }
+                $response_data = $decoded_upload_result->data;
+
+                $upload_file_ids = [];
+                foreach ($response_data as $file_rec) {
+                    array_push($upload_file_ids, $file_rec->id );
+                }
+                
                 \Log::info($upload_file_ids);
                 
                 $list_data = array(
@@ -105,14 +124,27 @@ class ExportProjecttoNoovo implements ShouldQueue
                     "gid" => $this->team->noovo_group_id
                 );
                 // Create the File List on Noovo CMS
-                $file_list_id = $this->noovoCMSService->createFileList($list_data);
+                $file_list_response = $this->noovoCMSService->createFileList($list_data);
+
+                $decoded_list_response = json_decode($file_list_response);
+                if ($decoded_list_response->result === "Failed") {
+                    $this->createLog($project_ids, $decoded_list_response->description, 0);
+                    return false;
+                }
+
+                $file_list_response_data = $decoded_list_response->data;
 
                 $group_attachment = array(
                     "group" => $this->team->noovo_group_id,
-                    "id" => $file_list_id
+                    "id" => $file_list_response_data->id
                 );
                 // Attach file list with Group
-                $this->noovoCMSService->setFileListtoGroup($group_attachment);
+                $response_setting_list = $this->noovoCMSService->setFileListtoGroup($group_attachment);
+                $decoded_resp_set_list = json_decode($response_setting_list);
+                if ($decoded_resp_set_list->result === "Failed") {
+                    $this->createLog($project_ids, $decoded_resp_set_list->description, 0);
+                    return false;
+                }
 
                 // Insert Logging
                 $this->createLog($project_ids, 'Projects Transfer Successful', 1);
