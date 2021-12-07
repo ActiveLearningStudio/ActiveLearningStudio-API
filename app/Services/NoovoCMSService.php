@@ -37,7 +37,6 @@ class NoovoCMSService implements NoovoCMSInterface
      */
     public function getNoovoCMSToken()
     {
-        
         $host = $this->host . ":8082/auth"; // noovo have different ports for different api's. We will remove it once they finalize their api
         $username = config('noovo.username');
         $password = config('noovo.password');
@@ -56,12 +55,12 @@ class NoovoCMSService implements NoovoCMSInterface
             return;
         }
         curl_close ($ch);
-        if (json_decode($result)->result === "Failed") {
+        $json_result = json_decode($result);
+        if ($json_result->result === "Failed") {
             return $result;
         }
-        $this->token = json_decode($result)->data->authorization;
-        return  json_decode($result)->data->authorization;
-
+        $this->token = $json_result->data->authorization;
+        return  $json_result->data->authorization;
     }
 
     /**
@@ -70,8 +69,8 @@ class NoovoCMSService implements NoovoCMSInterface
      * @param array $export_file
      * 
     */
-    public function createFileList($data) {
-        
+    public function createFileList($data) 
+    {
         $ch = curl_init();
         
         curl_setopt($ch, CURLOPT_URL, $this->host . ":8088/filelist");
@@ -92,7 +91,6 @@ class NoovoCMSService implements NoovoCMSInterface
         curl_close($ch);
 
         return $result;
-    
     }
 
     /**
@@ -134,8 +132,8 @@ class NoovoCMSService implements NoovoCMSInterface
      * @param array $data
      * 
     */
-    public function setFileListtoGroup($data) {
-        
+    public function setFileListtoGroup($data) 
+    {
         $ch = curl_init();
         
         curl_setopt($ch, CURLOPT_URL, $this->host . ":8088/group/filelist");
@@ -157,7 +155,6 @@ class NoovoCMSService implements NoovoCMSInterface
         curl_close($ch);
 
         return $result;
-    
     }
 
 }
