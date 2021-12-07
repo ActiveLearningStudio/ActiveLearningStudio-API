@@ -1,7 +1,8 @@
+GITHUB_ORG: team19hackathon2021
 SITE_NAME: "ActiveLearningStudio-API"
 SITE_SERVICES:
   - SITE_NAME: "ActiveLearningStudio-API"
-    SITE_SRC: "/usr/local/src/ActiveLearningStudio-API"
+    SITE_SRC: "{{ lookup('env', 'HOME') }}/.local/src/ActiveLearningStudio-API"
 LANGUAGE_NAME: "enUS"
 SITE_JAVA_PACKAGE: org.curriki.api
 SITE_PORT: 12080
