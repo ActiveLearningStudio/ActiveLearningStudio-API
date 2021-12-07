@@ -10,7 +10,7 @@ php /var/www/html/artisan migrate --force
 sh /var/www/newrelic-php5-9.18.1.303-linux/newrelic-install install
 git clone https://github.com/ActiveLearningStudio/H5P.Distribution.git /tmp/htp-dist
 
-cp -rf /tmp/htp-dist/* /var/www/html/storage/app/public/h5p-course-presentation-ali/
+cp -rf /tmp/htp-dist/* /var/www/html/storage/app/public/h5p/libraries/
 
 touch /var/www/html/health.ok
 
