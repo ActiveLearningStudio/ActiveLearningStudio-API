@@ -119,6 +119,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $teamData = [];
             $teamData['name'] = $data['name'];
             $teamData['description'] = $data['description'];
+            $teamData['noovo_group_id'] = $data['noovo_group_id'];
+            $teamData['noovo_group_title'] = $data['noovo_group_title'];
 
             $this->update($teamData, $team->id);
 
