@@ -30,11 +30,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     cron \
-    redis \
-    redis-server \
     wget \
-    nodejs \
-    npm \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure pgsql \
     && docker-php-ext-install pdo pdo_pgsql \
@@ -44,18 +40,11 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
 
-RUN pecl install -o -f redis \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable redis
-
 RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-9.18.1.303-linux.tar.gz
 RUN tar -xzf newrelic-php5-9.18.1.303-linux.tar.gz
 RUN cd newrelic-php5-9.18.1.303-linux
 RUN export NR_INSTALL_SILENT=true
 RUN export NR_INSTALL_KEY=${NR_INSTALL_KEY}
-
-
-RUN npm install -g laravel-echo-server
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
