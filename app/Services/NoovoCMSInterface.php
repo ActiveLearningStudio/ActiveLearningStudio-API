@@ -27,4 +27,12 @@ interface NoovoCMSInterface
      * @param array $export_file
     */
     public function createFileList($data);
+
+    /**
+     * Attach the file list to group
+     *
+     * @param array $data
+     * 
+    */
+    public function setFileListtoGroup($data);
 }

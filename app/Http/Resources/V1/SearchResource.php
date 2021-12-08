@@ -18,13 +18,13 @@ class SearchResource extends JsonResource
     {
         if (is_a($this->resource, 'App\Models\Project')) {
             $user = $this->users->first();
-            $org = $this->organization;
+            $org = $this->organization()->first(['id', 'name', 'description', 'image']);
         } elseif (is_a($this->resource, 'App\Models\Playlist')) {
             $user = $this->project->users()->first();
-            $org = $this->project->organization;
+            $org = $this->project->organization()->first(['id', 'name', 'description', 'image']);
         } elseif (is_a($this->resource, 'App\Models\Activity')) {
             $user = $this->playlist->project->users()->first();
-            $org = $this->playlist->project->organization;
+            $org = $this->playlist->project->organization()->first(['id', 'name', 'description', 'image']);
         }
 
         return [
@@ -39,12 +39,7 @@ class SearchResource extends JsonResource
             'model' => $this->modelType,
             'created_at' => $this->created_at,
             'user' => isset($user) ? new SearchUserResource($user) : null,
-            'organization' => [
-                'id' => $org->id,
-                'name' => $org->name,
-                'description' => $org->id,
-                'image' => $org->image,
-            ]
+            'organization' => $org
         ];
     }
 }
