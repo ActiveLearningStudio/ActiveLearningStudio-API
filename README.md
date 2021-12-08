@@ -35,8 +35,8 @@ pkcon install -y java-11-openjdk-devel
 
 ```bash
 pkcon install -y git
-pkcon install python3-pip
-pkcon install python3-virtualenv
+pkcon install -y python3-pip
+pkcon install -y python3-virtualenv
 ```
 
 ## Install Ansible dependencies on MacOSX
@@ -81,6 +81,8 @@ pkcon install -y openssl-devel
 pkcon install -y perl-core
 pkcon install -y libselinux-devel
 pkcon install -y container-selinux
+pkcon install -y java-1.8.0-openjdk
+pkcon install -y java-11-openjdk
 ```
 
 ## Install dependencies on MacOSX
@@ -107,6 +109,7 @@ git clone git@github.com:team19hackathon2021/ActiveLearningStudio-API.git ~/.loc
 ## Setup the Ansible Galaxy roles for installing the complete project locally. 
 
 ```bash
+install -d ~/.ansible/roles
 git clone git@github.com:computate-org/computate_postgres.git ~/.ansible/roles/computate.computate_postgres
 git clone git@github.com:computate-org/computate_zookeeper.git ~/.ansible/roles/computate.computate_zookeeper
 git clone git@github.com:computate-org/computate_solr.git ~/.ansible/roles/computate.computate_solr
@@ -127,7 +130,7 @@ cd ~/.ansible/roles/computate.computate_solr
 ansible-playbook install.yml
 
 cd ~/.ansible/roles/computate.computate_project
-ansible-playbook install.yml -e SITE_NAME=ActiveLearningStudio-API
+ansible-playbook install.yml -e SITE_NAME=ActiveLearningStudio-API -e ENABLE_CODE_GENERATION_SERVICE=true
 ```
 
 # Configure Eclipse
@@ -151,7 +154,7 @@ ansible-playbook install.yml -e SITE_NAME=ActiveLearningStudio-API
 * Right click on Java Application -> New Configuration
 * Name: ActiveLearningStudio-API QuarkusApp
 * Project: ActiveLearningStudio-API
-* Main class: org.curriki.api.enus.vertx.QuarkusApp
+* Main class: org.curriki.api.enus.quarkus.QuarkusApp
 
 ### In the "Arguments" tab
 
