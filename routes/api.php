@@ -26,6 +26,7 @@ Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->name('verification.resend');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
+Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
@@ -52,6 +53,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('users/search', 'UserController@getAllUsers');
         Route::post('suborganization/{suborganization}/users/search', 'UserController@getOrgUsers');
         Route::post('suborganization/{suborganization}/users/check', 'UserController@checkOrgUser');
+        Route::get('suborganization/{suborganization}/users/check-email', 'UserController@checkUserEmail');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
@@ -100,6 +102,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
+        Route::post('suborganization/{suborganization}/teams/{team}/export-projects-to-noovo', 'TeamController@exportProjecttoNoovo');
         Route::post('suborganization/{suborganization}/projects/{project}/export-noovo', 'ProjectController@exportNoovoProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
         

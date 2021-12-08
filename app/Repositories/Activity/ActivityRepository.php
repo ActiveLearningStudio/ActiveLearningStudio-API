@@ -6,6 +6,7 @@ use App\User;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
+use App\Models\Organization;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
@@ -593,6 +594,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'size' => 11,
             'model' => 'projects',
             'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
+            'searchType' => 'org_projects_non_admin'
         ];
 
         $user = User::where('email', $request->input('userEmail'))->first();
@@ -627,6 +629,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $data['userIds'] = $authors->toArray();
         }
 
+        $data['organizationIds'] = $request->has('org') ? [intval($request->input('org'))] : [];
         $data['subjectIds'] = $request->has('subject') ? [$request->input('subject')] : [];
         $data['educationLevelIds'] = $request->has('level') ? [$request->input('level')] : [];
 
