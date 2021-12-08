@@ -755,7 +755,24 @@ class AuthController extends Controller
         return $response;
     }
 
-    //LTI SSO login 1.0
+
+
+    /**
+     * Login with LTI SSO 1.0
+     *
+     * @bodyParam sso_info string required The base64encode query params Example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
+     *
+     * @responseFile responses/user/user-with-token.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Unable to login with LTI SSO."
+     *   ]
+     * }
+     *
+     * @param SsoLoginRequest $request
+     * @return Response
+     */
     public function ltiSsoLogin1p0(SsoLoginRequest $request) {
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
