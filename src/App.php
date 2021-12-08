@@ -199,12 +199,14 @@ class App
                 $tool_consumer_instance_name = $LTI->ltiRawParameter(LTIConstants::TOOL_CONSUMER_INSTANCE_NAME, false);
                 $tool_consumer_instance_guid = $LTI->ltiRawParameter(LTIConstants::TOOL_CONSUMER_INSTANCE_GUID, false);
                 $custom_school = $LTI->ltiRawParameter('custom_' . $tool_platform . '_schoolname', false);
+                $oauth_consumer_key = $LTI->ltiRawParameter('oauth_consumer_key');
                 $request_data['first_name'] = $first_name;
                 $request_data['last_name'] = $last_name;
                 $request_data['tool_platform'] = $tool_platform;
                 $request_data['tool_consumer_instance_name'] = $tool_consumer_instance_name;
                 $request_data['tool_consumer_instance_guid'] = $tool_consumer_instance_guid;
                 $request_data['custom_' . $tool_platform . '_school'] = $custom_school;
+                $request_data['oauth_consumer_key'] = $oauth_consumer_key;
 
                 $build_request_data = http_build_query($request_data);
 
