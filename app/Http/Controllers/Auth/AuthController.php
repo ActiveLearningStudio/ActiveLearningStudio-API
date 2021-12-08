@@ -774,94 +774,36 @@ class AuthController extends Controller
      * @return Response
      */
     public function ltiSsoLogin1p0(SsoLoginRequest $request) {
-            $data = $request->validated();
-            parse_str(base64_decode($data['sso_info']), $result);
+        $data = $request->validated();
+        parse_str(base64_decode($data['sso_info']), $result);
 
-            $user = User::with(['lmssetting' => function($query) use ($result) {
-                $query->where('lms_access_key', $result['oauth_consumer_key']);
-            }])->where('email', $result['user_email'])->first();
+        $user = User::with(['lmssetting' => function($query) use ($result) {
+            $query->where('lms_access_key', $result['oauth_consumer_key']);
+        }])->where('email', $result['user_email'])->first();
 
-            if (!$user) {
-                $password = Str::random(10);
-                $user = $this->userRepository->create([
-                    'first_name' => $result['first_name'],
-                    'last_name' => $result['last_name'],
-                    'email' => $result['user_email'],
-                    'password' => Hash::make($password),
-                    'remember_token' => Str::random(64),
-                    'email_verified_at' => now(),
-                ]);
-                if($user) {
-                    $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lms_access_key', $result['oauth_consumer_key']);
-                    //if default LMS setting not exist!
-                    if (!$default_lms_setting) {
-                        return response([
-                            'errors' => ['Unable to find default LMS setting with your client id.'],
-                        ], 404);
-                    }
-
-                    $default_lms_setting = $default_lms_setting->toArray();
-                    $default_lms_setting['lms_login_id'] = $user['user_email'];
-                    $user->lmssetting()->create($default_lms_setting);
-
-                    $user->ssoLogin()->create([
-                        'user_id' => $user->id,
-                        'provider' => $result['tool_platform'],
-                        'uniqueid' => $result['user_key'],
-                        'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
-                        'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
-                        'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
-                    ]);
-
-                    $user['user_organization'] = $user->lmssetting[0]->organization;
-
-                    $organization = $this->organizationRepository->find($user['user_organization']['id']);
-                    if ($organization) {
-                        if($default_lms_setting['role_id']) {
-                            $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
-                        }
-                        else {
-                            $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
-                            $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
-                        }
-                    }
+        if (!$user) {
+            $password = Str::random(10);
+            $user = $this->userRepository->create([
+                'first_name' => $result['first_name'],
+                'last_name' => $result['last_name'],
+                'email' => $result['user_email'],
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(64),
+                'email_verified_at' => now(),
+            ]);
+            if($user) {
+                $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lms_access_key', $result['oauth_consumer_key']);
+                //if default LMS setting not exist!
+                if (!$default_lms_setting) {
+                    return response([
+                        'errors' => ['Unable to find default LMS setting with your client id.'],
+                    ], 404);
                 }
 
-            } else {
-                if (sizeof($user->lmssetting) > 0) {
-                    $user['user_organization'] = $user->lmssetting[0]->organization;
-                } else {
-                    $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lms_access_key', $result['oauth_consumer_key']);
-                    //if default LMS setting not exist!
-                    if (!$default_lms_setting) {
-                        return response([
-                            'errors' => ['Unable to find default LMS setting with your client id.'],
-                        ], 404);
-                    }
-                    $default_lms_setting = $default_lms_setting->toArray();
-                    $default_lms_setting['lms_login_id'] = $user['user_email'];
-                    $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
+                $default_lms_setting = $default_lms_setting->toArray();
+                $default_lms_setting['lms_login_id'] = $user['user_email'];
+                $user->lmssetting()->create($default_lms_setting);
 
-                    $organization = $this->organizationRepository->find($newly_created_setting->id);
-                    if ($organization) {
-                        if($default_lms_setting['role_id']) {
-                            $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
-                        }
-                        else {
-                            $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
-                            $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
-                        }
-                    }
-                }
-
-            }
-            $sso_login = $user->ssoLogin()->where([
-                'user_id' => $user->id,
-                'provider' => $result['tool_platform'],
-                'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']
-            ])->first();
-
-            if (!$sso_login) {
                 $user->ssoLogin()->create([
                     'user_id' => $user->id,
                     'provider' => $result['tool_platform'],
@@ -870,15 +812,73 @@ class AuthController extends Controller
                     'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
                     'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
                 ]);
+
+                $user['user_organization'] = $user->lmssetting[0]->organization;
+
+                $organization = $this->organizationRepository->find($user['user_organization']['id']);
+                if ($organization) {
+                    if($default_lms_setting['role_id']) {
+                        $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
+                    }
+                    else {
+                        $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    }
+                }
             }
 
-            $accessToken = $user->createToken('auth_token')->accessToken;
+        } else {
+            if (sizeof($user->lmssetting) > 0) {
+                $user['user_organization'] = $user->lmssetting[0]->organization;
+            } else {
+                $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lms_access_key', $result['oauth_consumer_key']);
+                //if default LMS setting not exist!
+                if (!$default_lms_setting) {
+                    return response([
+                        'errors' => ['Unable to find default LMS setting with your client id.'],
+                    ], 404);
+                }
+                $default_lms_setting = $default_lms_setting->toArray();
+                $default_lms_setting['lms_login_id'] = $user['user_email'];
+                $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
 
-            $this->userLoginRepository->create(['user_id' => $user->id, 'ip_address' => $request->ip()]);
+                $organization = $this->organizationRepository->find($newly_created_setting->id);
+                if ($organization) {
+                    if($default_lms_setting['role_id']) {
+                        $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
+                    }
+                    else {
+                        $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                        $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                    }
+                }
+            }
 
-            $response = ['user' => $user, 'access_token' => $accessToken];
+        }
+        $sso_login = $user->ssoLogin()->where([
+            'user_id' => $user->id,
+            'provider' => $result['tool_platform'],
+            'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid']
+        ])->first();
 
-            return $response;
+        if (!$sso_login) {
+            $user->ssoLogin()->create([
+                'user_id' => $user->id,
+                'provider' => $result['tool_platform'],
+                'uniqueid' => $result['user_key'],
+                'tool_consumer_instance_name' => $result['tool_consumer_instance_name'],
+                'tool_consumer_instance_guid' => $result['tool_consumer_instance_guid'],
+                'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
+            ]);
+        }
+
+        $accessToken = $user->createToken('auth_token')->accessToken;
+
+        $this->userLoginRepository->create(['user_id' => $user->id, 'ip_address' => $request->ip()]);
+
+        $response = ['user' => $user, 'access_token' => $accessToken];
+
+        return $response;
 
     }
 
