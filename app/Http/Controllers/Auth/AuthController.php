@@ -791,7 +791,7 @@ class AuthController extends Controller
                 'remember_token' => Str::random(64),
                 'email_verified_at' => now(),
             ]);
-            if($user) {
+            if ($user) {
                 $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lms_access_key', $result['oauth_consumer_key']);
                 //if default LMS setting not exist!
                 if (!$default_lms_setting) {
@@ -817,16 +817,14 @@ class AuthController extends Controller
 
                 $organization = $this->organizationRepository->find($user['user_organization']['id']);
                 if ($organization) {
-                    if($default_lms_setting['role_id']) {
+                    if ($default_lms_setting['role_id']) {
                         $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
-                    }
-                    else {
+                    } else {
                         $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                         $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                     }
                 }
             }
-
         } else {
             if (sizeof($user->lmssetting) > 0) {
                 $user['user_organization'] = $user->lmssetting[0]->organization;
@@ -844,16 +842,14 @@ class AuthController extends Controller
 
                 $organization = $this->organizationRepository->find($newly_created_setting->id);
                 if ($organization) {
-                    if($default_lms_setting['role_id']) {
+                    if ($default_lms_setting['role_id']) {
                         $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
-                    }
-                    else {
+                    } else {
                         $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                         $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                     }
                 }
             }
-
         }
         $sso_login = $user->ssoLogin()->where([
             'user_id' => $user->id,
@@ -871,11 +867,8 @@ class AuthController extends Controller
                 'custom_school' => ($result['tool_platform']) ? $result['custom_' . $result['tool_platform'] . '_school'] : 'Curriki School',
             ]);
         }
-
         $accessToken = $user->createToken('auth_token')->accessToken;
-
         $this->userLoginRepository->create(['user_id' => $user->id, 'ip_address' => $request->ip()]);
-
         $response = ['user' => $user, 'access_token' => $accessToken];
 
         return $response;
