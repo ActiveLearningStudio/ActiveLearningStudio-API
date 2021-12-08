@@ -17,7 +17,7 @@ Route::post('register', 'Auth\AuthController@register')->name('register');
 Route::post('login', 'Auth\AuthController@login')->name('login');
 Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
-Route::post('login/sso', 'Auth\AuthController@ssoLogin');
+Route::post('login/sso', 'Auth\AuthController@ltiSsoLogin1p0');
 Route::post('login/lti-sso', 'Auth\AuthController@ltiSsoLogin');
 Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
 Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
