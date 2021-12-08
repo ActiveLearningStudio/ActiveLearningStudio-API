@@ -1,6 +1,5 @@
 node("currikidev") {
-    def app     
-    def redis
+    def app
     def esmigrate
       
     
@@ -10,17 +9,13 @@ node("currikidev") {
     }  
     
     stage('Build image') {         
-        app = docker.build("quay.io/curriki/api")    
-        redis = docker.build("quay.io/curriki/redis", "-f Dockerfile.redis .")    
+        app = docker.build("quay.io/curriki/api")
         esmigrate = docker.build("quay.io/curriki/es-migrate", "-f Dockerfile.esmigrate .")    
     } 
     stage('Test image') {           
         app.inside { 
                 sh 'echo "Api Tests passed"'        
         }    
-        redis.inside { 
-                sh 'echo "Redis Tests passed"'        
-        }   
         esmigrate.inside { 
                 sh 'echo "ES Migrate Tests passed"'        
         }   
@@ -30,10 +25,6 @@ node("currikidev") {
                 app.push("${env.BUILD_NUMBER}")            
                 app.push("multi")        
         }    
-        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                redis.push("${env.BUILD_NUMBER}")            
-                redis.push("multi")        
-        }   
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 esmigrate.push("${env.BUILD_NUMBER}")            
                 esmigrate.push("multi")        
