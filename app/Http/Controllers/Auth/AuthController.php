@@ -870,9 +870,7 @@ class AuthController extends Controller
         $accessToken = $user->createToken('auth_token')->accessToken;
         $this->userLoginRepository->create(['user_id' => $user->id, 'ip_address' => $request->ip()]);
         $response = ['user' => $user, 'access_token' => $accessToken];
-
         return $response;
-
     }
 
     /**
