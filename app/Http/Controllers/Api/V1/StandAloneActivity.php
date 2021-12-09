@@ -64,7 +64,7 @@ class StandAloneActivity extends Controller
      */
     public function index(Organization $suborganization, Request $request)
     {
-        return  StandAloneActivityResource::collection($this->activityRepository->getStandAloneActivities($suborganization->id, $request->all()));
+        return StandAloneActivityResource::collection($this->activityRepository->getStandAloneActivities($suborganization->id, $request->all()));
     }
 
     /**
