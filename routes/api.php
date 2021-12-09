@@ -17,7 +17,7 @@ Route::post('register', 'Auth\AuthController@register')->name('register');
 Route::post('login', 'Auth\AuthController@login')->name('login');
 Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
-Route::post('login/sso', 'Auth\AuthController@ssoLogin');
+Route::post('login/sso', 'Auth\AuthController@ltiSsoLogin1p0');
 Route::post('login/lti-sso', 'Auth\AuthController@ltiSsoLogin');
 Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
 Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
@@ -36,11 +36,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView')->name('metrics.activity-log');
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
-    
+
     Route::get('organization-types', 'OrganizationTypesController@index');
-    
+
     Route::get('organization/get-by-domain', 'OrganizationController@getByDomain')->name('organization.get-by-domain');
-    
+
     Route::middleware(['auth:api', 'verified'])->group(function () {
         Route::get('users/organizations', 'UserController@getOrganizations');
         Route::post('subscribe', 'UserController@subscribe');
@@ -59,7 +59,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('users', 'UserController')->only([
             'index', 'show', 'update', 'destroy'
         ]);
-        
+
         // Teams
         Route::post('teams/invite', 'TeamController@inviteTeamMember');
         Route::post('teams/{team}/invite-member', 'TeamController@inviteMember');
@@ -74,7 +74,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/team/{team}/team-permissions', 'TeamController@getUserTeamPermissions');
         Route::put('suborganization/{suborganization}/team/{team}/update-team-member-role', 'TeamController@updateTeamMemberRole');
         Route::apiResource('suborganization.teams', 'TeamController');
-        
+
         // Groups
         Route::post('groups/invite', 'GroupController@inviteGroupMember');
         Route::post('groups/{group}/invite-member', 'GroupController@inviteMember');
@@ -86,7 +86,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('groups/{group}/projects/{project}/remove-member', 'GroupController@removeMemberFromProject');
         Route::get('suborganization/{suborganization}/get-groups', 'GroupController@getOrgGroups');
         Route::apiResource('suborganization.groups', 'GroupController');
-        
+
         //Projects
         Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
 
@@ -105,17 +105,17 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/teams/{team}/export-projects-to-noovo', 'TeamController@exportProjecttoNoovo');
         Route::post('suborganization/{suborganization}/projects/{project}/export-noovo', 'ProjectController@exportNoovoProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
-        
-        
+
+
         Route::post('suborganization/{suborganization}/projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
         Route::apiResource('suborganization.projects', 'ProjectController');
-        
+
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
-        
+
         // playlist share toggle
         Route::get('suborganization/{suborganization}/playlists/{playlist}/search-preview', 'PlaylistController@searchPreview');
 
@@ -124,7 +124,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
         Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
-        
+
         // Activities
         Route::get('suborganization/{suborganization}/activities/{activity}/search-preview', 'ActivityController@searchPreview');
 
@@ -138,22 +138,23 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::apiResource('playlists.activities', 'ActivityController');
-        
+
         Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
-        
+
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
-        
+
         Route::apiResource('activity-items', 'ActivityItemController');
-        
+
         Route::get('users/{user}/metrics', 'UserMetricsController@show')->name('metrics.user');
         Route::get('users/{user}/membership', 'UserMembershipController@show')->name('membership.show');
-        
+
         Route::get('h5p/settings', 'H5pController@create');
         Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
         Route::apiResource('h5p', 'H5pController');
-        
+        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivity');
+
         Route::group(['prefix' => 'h5p'], function () {
             // H5P Ajax calls
             Route::match(['GET', 'POST'], 'ajax/libraries', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@libraries')->name('h5p.ajax.libraries');
