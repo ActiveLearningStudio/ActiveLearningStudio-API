@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Events\ActivityUpdatedEvent;
-use App\Events\PlaylistUpdatedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\ActivityCreateRequest;
 use App\Http\Requests\V1\ActivityEditRequest;
 use App\Http\Requests\V1\StandAloneActivityCreateRequest;
 use App\Http\Resources\V1\ActivityResource;
@@ -13,12 +11,10 @@ use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Http\Resources\V1\StandAloneActivityResource;
-use App\Jobs\CloneActivity;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
-use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Http\Request;
@@ -38,7 +34,6 @@ use App\Models\Organization;
  */
 class StandAloneActivity extends Controller
 {
-
     private $activityRepository;
 
     /**
@@ -51,8 +46,6 @@ class StandAloneActivity extends Controller
     )
     {
         $this->activityRepository = $activityRepository;
-
-        // $this->authorizeResource(Activity::class, 'activity');
     }
 
     /**
