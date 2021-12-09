@@ -123,11 +123,7 @@ class SearchController extends Controller
         if ($data['searchType'] === 'showcase_projects') {
             $data['indexing'] = [config('constants.indexing-approved')];
         } elseif ($data['searchType'] === 'org_projects') {
-            if (!auth()->user()->hasPermissionTo('organization:view', $organization)) {
-                $data['searchType'] = 'org_projects_non_admin';
-            } else {
-                $data['searchType'] = 'org_projects_admin';
-            }
+            $data['searchType'] = 'org_projects_non_admin';
         }
 
         $results = $this->activityRepository->advanceSearchForm($data);

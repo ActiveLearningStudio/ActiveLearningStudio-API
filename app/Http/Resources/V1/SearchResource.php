@@ -31,6 +31,12 @@ class SearchResource extends JsonResource
                 "first_name" => $this->first_name,
                 "id" => $this->user_id,
                 "last_name" => $this->last_name
+            ],
+            'organization' => [
+                "id" => $this->org_id,
+                "name" => $this->organization_name,
+                "description" => $this->org_description,
+                "image" => $this->org_image
             ]
         ];
     }
