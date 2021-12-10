@@ -151,7 +151,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name('h5p.ajax.finish');
             Route::any('ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
             Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
-            Route::any('ajax/reader/finish', '\Djoudi\LaravelH5p\Http\Controllers\MobileAppAjaxController@finish')->name('h5p.ajax.finish');
+            Route::any('ajax/reader/finish', 'MobileAppAjaxController@finish')->name('h5p.ajax.finish');
         });
 
         // Elasticsearch
