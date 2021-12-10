@@ -277,15 +277,26 @@ class ActivityItemController extends Controller
     public function getExternalCss($activityId)
     {
         // return $activityId;
-        $get_path = DB::table('activity_items')
-            ->join('activity_types', 'activity_items.activity_type_id', '=', 'activity_types.id')
+        $get_path = DB::table('activities')
+            ->join('h5p_contents', 'h5p_contents.id', '=', 'activities.h5p_content_id')
+            ->join('h5p_libraries', 'h5p_libraries.id', '=', 'h5p_contents.library_id')
+            // ->join('activity_types', 'activity_types.id', '=', 'activity_items.activity_type_id')
+            // ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
+            ->select('h5p_libraries.name','h5p_libraries.major_version','h5p_libraries.minor_version')
+            ->where('activities.id', $activityId)
+            ->get();
+            // return $get_path[0]->name;
+            $title = $get_path[0]->name . ' ' . $get_path[0]->major_version . '.' . $get_path[0]->minor_version;
+            $get_css_path = DB::table('activity_items')
+            ->join('activity_types', 'activity_types.id', '=', 'activity_items.activity_type_id')
             ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
             ->select('activity_ui_updates.css_path')
-            ->where('activity_items.id', $activityId)
+            ->where('h5pLib', $title)
             ->get();
-        if ($get_path) {
-            return response($get_path);
-        }
+            // dd($get_css_path);
+            if ($get_css_path) {
+                return response($get_css_path);
+            }
             // return $get_path;
     }
 }
