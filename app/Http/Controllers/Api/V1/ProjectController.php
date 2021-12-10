@@ -401,22 +401,22 @@ class ProjectController extends Controller
     {
         $this->authorize('share', [Project::class, $project]);
 
-        $is_updated = $this->projectRepository->update([
-            'shared' => true,
-        ], $project->id);
+        return \DB::transaction(function () use ($project) {
+            $is_updated = $this->projectRepository->updateShared($project, true);
 
-        if ($is_updated) {
-            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-            event(new ProjectUpdatedEvent($updated_project));
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
+
+                return response([
+                    'project' => $updated_project,
+                ], 200);
+            }
 
             return response([
-                'project' => $updated_project,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to share project.'],
-        ], 500);
+                'errors' => ['Failed to share project.'],
+            ], 500);
+        });
     }
 
     /**
@@ -442,22 +442,22 @@ class ProjectController extends Controller
     {
         $this->authorize('share', [Project::class, $project]);
 
-        $is_updated = $this->projectRepository->update([
-            'shared' => false,
-        ], $project->id);
+        return \DB::transaction(function () use ($project) {
+            $is_updated = $this->projectRepository->updateShared($project, false);
 
-        if ($is_updated) {
-            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-            event(new ProjectUpdatedEvent($updated_project));
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
+
+                return response([
+                    'project' => $updated_project,
+                ], 200);
+            }
 
             return response([
-                'project' => $updated_project,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to remove share project.'],
-        ], 500);
+                'errors' => ['Failed to remove share project.'],
+            ], 500);
+        });
     }
 
     /**
