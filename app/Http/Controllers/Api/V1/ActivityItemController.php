@@ -274,29 +274,37 @@ class ActivityItemController extends Controller
         ], 500);
     }
 
+    /**
+     * Return External CSS path
+     *
+     *
+     * @response {
+     *   "css_path": "/storage/activity-types/css/Audio/index.css"
+     * }
+     *
+     * @param $activityId
+     * @return Response
+     */
     public function getExternalCss($activityId)
     {
-        // return $activityId;
-        $get_path = DB::table('activities')
+        // Get the Name of the Library
+        $getLibName = DB::table('activities')
             ->join('h5p_contents', 'h5p_contents.id', '=', 'activities.h5p_content_id')
             ->join('h5p_libraries', 'h5p_libraries.id', '=', 'h5p_contents.library_id')
-            // ->join('activity_types', 'activity_types.id', '=', 'activity_items.activity_type_id')
-            // ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
             ->select('h5p_libraries.name','h5p_libraries.major_version','h5p_libraries.minor_version')
             ->where('activities.id', $activityId)
             ->get();
-            // return $get_path[0]->name;
-            $title = $get_path[0]->name . ' ' . $get_path[0]->major_version . '.' . $get_path[0]->minor_version;
-            $get_css_path = DB::table('activity_items')
+        // Create full name of library with major and minor version
+        $libName = $getLibName[0]->name . ' ' . $getLibName[0]->major_version . '.' . $getLibName[0]->minor_version;
+        // Get path of external css file from library name
+        $getCssPath = DB::table('activity_items')
             ->join('activity_types', 'activity_types.id', '=', 'activity_items.activity_type_id')
             ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
             ->select('activity_ui_updates.css_path')
-            ->where('h5pLib', $title)
+            ->where('h5pLib', $libName)
             ->get();
-            // dd($get_css_path);
-            if ($get_css_path) {
-                return response($get_css_path);
-            }
-            // return $get_path;
+        if ($getCssPath) {
+            return response($getCssPath);
+        }
     }
 }

@@ -248,21 +248,16 @@ class ActivityTypeController extends Controller
     }
 
     /**
-     * Upload Thumbnail
+     * Upload CSS
      *
-     * Upload thumbnail image for a activity type
+     * Upload css file for a activity type
      *
-     * @bodyParam thumb image required Thumbnail image
+     * @bodyParam css file required file
      *
      * @response {
-     *   "thumbUrl": "/storage/activity-types/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+     *   "file": "/storage/activity-types/css/Audio.file-name.css"
      * }
      *
-     * @response 400 {
-     *   "errors": [
-     *     "Invalid image."
-     *   ]
-     * }
      *
      * @param Request $request
      * @return Response
