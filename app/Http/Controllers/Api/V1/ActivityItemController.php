@@ -272,4 +272,19 @@ class ActivityItemController extends Controller
             'errors' => ['Failed to delete activity item.'],
         ], 500);
     }
+
+    public function getExternalCss($activityId)
+    {
+        // return $activityId;
+        $get_path = DB::table('activity_items')
+            ->join('activity_types', 'activity_items.activity_type_id', '=', 'activity_types.id')
+            ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
+            ->select('activity_ui_updates.css_path')
+            ->where('activity_items.id', $activityId)
+            ->get();
+        if ($get_path) {
+            return response($get_path);
+        }
+            // return $get_path;
+    }
 }

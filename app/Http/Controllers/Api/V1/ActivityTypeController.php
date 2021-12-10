@@ -245,4 +245,53 @@ class ActivityTypeController extends Controller
             'errors' => ['Failed to delete activity type.'],
         ], 500);
     }
+
+    /**
+     * Upload Thumbnail
+     *
+     * Upload thumbnail image for a activity type
+     *
+     * @bodyParam thumb image required Thumbnail image
+     *
+     * @response {
+     *   "thumbUrl": "/storage/activity-types/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid image."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function uploadCss(Request $request)
+    {
+        $fileName = $request->all()['fileName'];
+        $typeName = $request->all()['typeName'];
+        if (strpos($fileName, "css")) {
+            $path = $request->file('file')->storeAs('/public/activity-types/css/'.$typeName, $fileName);
+            $rs = DB::select("
+                SELECT id
+                FROM activity_ui_updates
+                WHERE activity_type_title = ?
+            ", [$typeName]);
+            $result_id = is_array($rs) && count($rs) > 0 ? $rs[0]->id : NULL;
+
+            $table = 'activity_ui_updates';
+            $data = array(
+                'activity_type_title' => $typeName,
+                'css_path' => Storage::url($path)
+            );
+            if (!$result_id) {
+                DB::table($table)->insert($data);
+            } else {
+                DB::table($table)->where('activity_type_title', $typeName)->update($data);
+            }
+            return response([
+                'file' => Storage::url($path),
+            ], 200);
+        }
+    }
 }
