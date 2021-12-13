@@ -36,7 +36,7 @@ node("currikidev") {
         }   
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 esmigrate.push("${env.BUILD_NUMBER}")            
-                esmigrate.push("${ApiTag}")        
+                esmigrate.push("${tag}")        
         }   
     }
     
@@ -46,16 +46,16 @@ node("currikidev") {
     
      parallel(
             "StageA": {
-                if(Jenkins.instance.getNode('currikiscde').toComputer().isOnline()){
-                    node('currikiscde') {
-                        stage ('currikiscde') {
+                if(Jenkins.instance.getNode("${node}").toComputer().isOnline()){
+                    node("${node}") {
+                        stage ("${node}") {
                                 echo 'Copy'
                                 sh "yes | docker stack deploy --compose-file /curriki/docker-compose-scde.yml currikistack" 
                                 echo 'Copy completed'
                         }
                     }
                 } else {
-                    stage ('currikiscde') {
+                    stage ("${node}") {
                         echo "currikiscde is offline"
                         exit 1
                     }
