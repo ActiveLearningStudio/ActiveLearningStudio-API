@@ -50,7 +50,7 @@ node("currikidev") {
                     node("${node}") {
                         stage ("${node}") {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file /curriki/${dockerfile} currikistack" 
+                                sh "yes | docker service update --image quay.io/curriki/api:${tag}@${env.BUILD_NUMBER} currikistack_currikiprod-api" 
                                 echo 'Copy completed'
                         }
                     }
