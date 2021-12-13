@@ -50,7 +50,7 @@ node("currikidev") {
                     node("${node}") {
                         stage ("${node}") {
                                 echo 'Copy'
-                                sh "yes | docker stack deploy --compose-file /curriki/docker-compose-scde.yml currikistack" 
+                                sh "yes | docker stack deploy --compose-file /curriki/${dockerfile} currikistack" 
                                 echo 'Copy completed'
                         }
                     }
