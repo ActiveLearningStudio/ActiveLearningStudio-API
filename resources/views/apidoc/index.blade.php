@@ -30672,6 +30672,325 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_b1748719c1f572e3601dbbb3b63923dc -->
+
+<h1>1009. Admin/Brightcove API Settings</h1>
+<p>APIs for brightcove settings on admin panel.</p>
+<!-- START_e75b6b178b609b7bd0cce5907371aa27 -->
+<h2>Get Brightcove Videos List</h2>
+<p>To get the list of videos from brightcove account by using brightcove api.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8383/api/v1/brightcove/get-bc-videos-list" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "id": 1,
+            "organization_id": 1,
+            "search_param": "6283184730001 or name of video"
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/brightcove/get-bc-videos-list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {            
+            "id": 1,
+            "organization_id": 1,
+            "search_param": "6283184730001 or name of video"
+        }
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8383/api/v1/brightcove/get-bc-videos-list',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "search_param" =&gt; "6283184730001 or name of video"
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/brightcove/get-bc-videos-list'
+payload = {
+    "id": 1,
+    "organization_id": 1,
+    "search_param": "6283184730001 or name of video"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{    
+    "data": [
+        {
+            "id": "6283184730001",
+            "account_id": "6282550302001",
+            "ad_keys": null,
+            "clip_source_video_id": null,
+            "complete": true,
+            "created_at": "2021-11-22T09:48:57.628Z",
+            "created_by": {
+                "type": "user",
+                "id": "76076254098",
+                "email": "mike@curriki.org"
+            },
+            "cue_points": [],
+            "custom_fields": [],
+            "delivery_type": "dynamic_origin",
+            "description": null,
+            "digital_master_id": null,
+            "duration": 30592,
+            "economics": "AD_SUPPORTED",
+            "folder_id": null,
+            "geo": null,
+            "has_digital_master": true,
+            "images": {
+                "poster": {
+                    "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/1280x720/15s296ms/match/image.jpg",
+                    "sources": [
+                        {
+                            "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/1280x720/15s296ms/match/image.jpg",
+                            "height": 720,
+                            "width": 1280
+                        }
+                    ]
+                },
+                "thumbnail": {
+                    "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/160x90/15s296ms/match/image.jpg",
+                    "sources": [
+                        {
+                            "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/160x90/15s296ms/match/image.jpg",
+                            "height": 90,
+                            "width": 160
+                        }
+                    ]
+                }
+            },
+            "link": null,
+            "long_description": null,
+            "name": "file_example_MP4_480_1_5MG",
+            "original_filename": "file_example_MP4_480_1_5MG.mp4",
+            "projection": null,
+            "published_at": "2021-11-22T09:48:57.642Z",
+            "reference_id": null,
+            "schedule": null,
+            "sharing": null,
+            "state": "ACTIVE",
+            "tags": [],
+            "text_tracks": [],
+            "updated_at": "2021-11-23T14:28:46.976Z",
+            "updated_by": {
+                "type": "user",
+                "id": "76076254098",
+                "email": "mike@curriki.org"
+            },
+            "playback_rights_id": "primary"
+        }
+    ]
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Brightcove api token not found.Please try later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/brightcove/get-bc-videos-list</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing brightcove api setting.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>search_param</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid video id or video name.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e75b6b178b609b7bd0cce5907371aa27 -->
+<!-- START_2f2758b0abc25e98982d44b733c0347d -->
+<h2>Get Brightcove Account List</h2>
+<p>Get the brightcove account list.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brightcove CMS",
+            "account_eamil": "mike@curriki.org",
+            "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+            "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+            "description": "Brightcove API Testing.",
+            "created_at": "2021-12-09T00:00:00.000000Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "user": {
+                "id": 1,
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "email_verified_at": "2020-08-26T10:49:59.000000Z",
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-10-29T08:52:59.000000Z",
+                "first_name": "test",
+                "last_name": "test",
+                "organization_name": "organization_name",
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "127.0.0.1",
+                "gapi_access_token": null,
+                "membership_type_id": 1
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false
+            }
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/brightcove/suborganization/1/get-bc-account-list</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+</tbody>
+</table>
+<!-- END_2f2758b0abc25e98982d44b733c0347d -->
       </div>
       <div class="dark-box">
                         <div class="lang-selector">
