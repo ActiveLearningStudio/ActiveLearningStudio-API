@@ -56,4 +56,20 @@ interface PlaylistRepositoryInterface extends EloquentRepositoryInterface
      * @param string $playlist_dir
      */
     public function playlistImport(Project $project, $authUser, $extracted_folder, $playlist_dir="");
+
+    /**
+     * To show single shared playlist
+     *
+     * @param Playlist $playlist
+     * @throws GeneralException
+     */
+    public function loadSharedPlaylist(Playlist $playlist);
+
+    /**
+     * To show all shared playlist
+     *
+     * @param Project $project
+     * @throws GeneralException
+     */
+    public function allSharedPlaylists(Project $project);
 }

@@ -26,12 +26,21 @@ class DefaultSsoIntegrationSettings extends Model
         'organization_id',
         'guid',
         'published',
+        'role_id',
     ];
     /**
-     * Get the organization for LMS setting
+     * Get the organization for Default SSO Integration
      */
     public function organization()
     {
         return $this->belongsTo(Organization::class, 'organization_id');
+    }
+
+    /**
+     * Get the Role for Default SSO Integration
+     */
+    public function role()
+    {
+        return $this->belongsTo('App\Models\OrganizationRoleType', 'role_id');
     }
 }

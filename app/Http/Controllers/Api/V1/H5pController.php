@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\H5pActivityResource;
 use App\Models\Activity;
+use App\Models\H5pBrightCoveVideoContents;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
@@ -31,7 +32,7 @@ class H5pController extends Controller
 
     /**
      * ActivityController constructor.
-     * 
+     *
      * @param ContentUserDataGoRepositoryInterface $contentUserDataGoRepository
      */
     public function __construct(ContentUserDataGoRepositoryInterface $contentUserDataGoRepository)
@@ -179,6 +180,13 @@ class H5pController extends Controller
 
                 // Save new content
                 $content['id'] = $core->saveContent($content);
+
+                // for Brightcove Interactive Videos
+                if ($content['library']['machineName'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightCoveVideoData['brightcove_video_id'] = $params->params->interactiveVideo->video->brightcoveVideoID;
+                    $brightCoveVideoData['h5p_content_id'] = $content['id'];
+                    H5pBrightCoveVideoContents::create($brightCoveVideoData);
+                }
 
                 // Move images and find all content dependencies
                 $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
@@ -605,7 +613,7 @@ class H5pController extends Controller
         @unlink($interface->getUploadedH5pPath());
         return FALSE;
     }
-    
+
     public function contentUserData(Request $request)
     {
         $contentId =$request->get('content_id');
@@ -623,17 +631,17 @@ class H5pController extends Controller
             $userId === NULL || $submissionId === NULL) {
         return; // Missing parameters
         }
-        
+
         if ($data === NULL) {
             return response()->json(["data" => false, "success" => true]);
         }
-        
+
         if ($request->get('gcuid')) {
             if ($data === '0') {
                 $records = $this->contentUserDataGoRepository->deleteComposite($contentId, $userId, $subContentId, $dataId, $submissionId);
             }else {
                 $records = $this->contentUserDataGoRepository->fetchByCompositeKey($contentId, $userId, $subContentId, $dataId, $submissionId);
-                
+
                 if ($records->count() === 0) {
                     $this->contentUserDataGoRepository->create([
                         'content_id' => $contentId,
