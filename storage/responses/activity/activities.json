@@ -11,6 +11,7 @@
             "thumb_url": null,
             "subject_id": null,
             "education_level_id": null,
+            "gcr_activity_visibility": true,
             "h5p_content": {
                 "id": 59,
                 "user_id": 1,

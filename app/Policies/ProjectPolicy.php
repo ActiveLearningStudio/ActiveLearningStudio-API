@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Team;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Repositories\Organization\OrganizationRepositoryInterface;
 
 class ProjectPolicy
 {
@@ -235,4 +236,49 @@ class ProjectPolicy
         return $user->hasPermissionTo('project:import', $suborganization);
     }
 
+    /**
+     * Determine whether the user can preview the project in search.
+     *
+     * @param User $user
+     * @param Project $project
+     * @param Organization $suborganization
+     * @return mixed
+     */
+    public function searchPreview(User $user, Project $project, Organization $suborganization)
+    {
+        if (!($user->hasPermissionTo('search:advance', $suborganization) || $user->hasPermissionTo('search:dashboard', $suborganization))) {
+            return false;
+        }
+
+        if ($user->hasPermissionTo('organization:view', $suborganization)) {
+            return true;
+        }
+
+        if ($project->user->id === $user->id) {
+            return true;
+        }
+
+        if ($project->indexing === (int)config('constants.indexing-approved')) {
+            if ($project->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id')) {
+                return true;
+            }
+
+            if ($project->organization_visibility_type_id === (int)config('constants.protected-organization-visibility-type-id')) {
+                if ($project->organization_id === $suborganization->id) {
+                    return true;
+                }
+            }
+
+            if ($project->organization_visibility_type_id === (int)config('constants.global-organization-visibility-type-id')) {
+                $organizationRepository = resolve(OrganizationRepositoryInterface::class);
+                $organizationParentChildrenIds = $organizationRepository->getParentChildrenOrganizationIds($suborganization);
+
+                if (in_array($project->organization_id, $organizationParentChildrenIds)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

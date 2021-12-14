@@ -22,6 +22,7 @@ class OrganizationResource extends JsonResource
             'account_id' => $this->account_id,
             'api_key' => $this->api_key,
             'unit_path' => $this->unit_path,
+            'noovo_client_id' => $this->noovo_client_id,
             'parent' =>  new OrganizationResource($this->whenLoaded('parent')),
             'projects' =>  ProjectResource::collection($this->whenLoaded('projects')),
             'children' =>  OrganizationResource::collection($this->whenLoaded('children')),
@@ -30,6 +31,9 @@ class OrganizationResource extends JsonResource
             'image' => $this->image,
             'domain' => $this->domain,
             'self_registration' => $this->self_registration,
+            'gcr_project_visibility' => $this->gcr_project_visibility,
+            'gcr_playlist_visibility' => $this->gcr_playlist_visibility,
+            'gcr_activity_visibility' => $this->gcr_activity_visibility,
             'organization_role' => $this->whenPivotLoaded('organization_user_roles', function () {
                 return $this->pivot->role->display_name;
             }),

@@ -43,4 +43,10 @@ interface EloquentRepositoryInterface
      * @return int
      */
     public function delete($id);
+
+    /**
+     * @param $modelObj
+     * @return int
+     */
+    public function forceDelete($modelObj);
 }

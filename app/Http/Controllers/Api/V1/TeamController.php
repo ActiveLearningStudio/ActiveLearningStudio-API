@@ -23,8 +23,10 @@ use App\Repositories\InvitedTeamUser\InvitedTeamUserRepositoryInterface;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use App\Jobs\ExportProjecttoNoovo;
+use App\Services\NoovoCMSService;
 /**
  * @group 14. Team
  *
@@ -37,6 +39,7 @@ class TeamController extends Controller
     private $teamRepository;
     private $userRepository;
     private $projectRepository;
+    private $noovoCMSService;
     /**
      * TeamController constructor.
      *
@@ -48,12 +51,14 @@ class TeamController extends Controller
     public function __construct(
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
-        ProjectRepositoryInterface $projectRepository
+        ProjectRepositoryInterface $projectRepository,
+        NoovoCMSService $noovoCMSService
     )
     {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
+        $this->noovoCMSService = $noovoCMSService;
     }
 
     /**
@@ -62,17 +67,19 @@ class TeamController extends Controller
      * Get a list of the teams of a user.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @responseFile responses/team/team.json
      *
+     * @param Request $request
+     * @param Organization $suborganization
      * @return Response
      */
-    public function index(Organization $suborganization)
+    public function index(Request $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [Team::class, $suborganization]);
-
         $user_id = auth()->user()->id;
 
-        $teams = $this->teamRepository->getTeams($suborganization->id, $user_id);
+        $teams = $this->teamRepository->getTeams($suborganization->id, $user_id, $request->all());
 
         $teamDetails = [];
         foreach ($teams as $team) {
@@ -91,8 +98,10 @@ class TeamController extends Controller
      * Get a list of the teams of an Organization.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
      * @responseFile responses/team/team.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
     public function getOrgTeams(Organization $suborganization)
@@ -211,6 +220,8 @@ class TeamController extends Controller
      *
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
+     * @bodyParam noovo_group_id integer ID of a Noovo Group Example: 1
+     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
      *
      * @responseFile 201 responses/team/team.json
      *
@@ -221,6 +232,7 @@ class TeamController extends Controller
      * }
      *
      * @param TeamRequest $teamRequest
+     * @param $suborganization
      * @return Response
      */
     public function store(TeamRequest $teamRequest, Organization $suborganization)
@@ -665,6 +677,8 @@ class TeamController extends Controller
      * @urlParam team required The Id of a team Example: 1
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
+     * @bodyParam noovo_group_id integer ID of a Noovo Group Example: 1
+     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
      *
      * @responseFile responses/team/team.json
      *
@@ -676,6 +690,7 @@ class TeamController extends Controller
      *
      * @param TeamUpdateRequest $teamUpdateRequest
      * @param Team $team
+     * @param $suborganization
      * @return Response
      */
     public function update(TeamUpdateRequest $teamUpdateRequest, Organization $suborganization, Team $team)
@@ -824,6 +839,64 @@ class TeamController extends Controller
         return response([
             'message' => 'Indexing request for this team has been made successfully!'
         ], 200);
+    }
+
+    /**
+     * Push Project to Noovo
+     *
+     * script to push project from curriki to noovo mapped device.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
+     *
+     * @response {
+     *   "message": "Indexing request for this team has been made successfully!"
+     * }
+     *
+     * @response 404 {
+     *   "message": "No query results for model [Team] Id"
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Noovo Client id or group id is missing."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Team must be finalized before requesting the indexing."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param $suborganization
+     * @param Team $team
+     * @return Response
+     */
+    public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team)
+    {
+        
+        $projects = $team->projects()->get(); // Get all associated projects of a team
+
+        if (empty($suborganization->noovo_client_id) || empty($team->noovo_group_id) || empty($team->noovo_group_title)) {
+            return response([
+                'message' =>  "Noovo Client id or group id is missing.",
+            ], 500);
+        }
+        
+        if ($projects) {
+            ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
+        
+            return response([
+                'message' =>  "Your request to push projects to noovo has been received and is being processed.",
+            ], 200);
+        }
+
+        return response([
+            'message' =>  "No Project to Export.",
+        ], 500);
+    
     }
 
 }

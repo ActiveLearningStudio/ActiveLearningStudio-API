@@ -38,7 +38,8 @@ class Course
             'wstoken' => $web_service_token,
             'wsfunction' => $web_service_function,
             'moodlewsrestformat' => 'json',
-            'name' => $project->name
+            'name' => $project->name,
+            'project_id' => $project->id
         ];
         $response = $this->client->request('GET', $web_service_url, ['query' => $rquest_params]);
 

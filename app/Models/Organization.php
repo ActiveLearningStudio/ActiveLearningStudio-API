@@ -26,7 +26,11 @@ class Organization extends Model
         'self_registration',
         'account_id',
         'api_key',
-        'unit_path'
+        'unit_path',
+        'noovo_client_id',
+        'gcr_project_visibility',
+        'gcr_playlist_visibility',
+        'gcr_activity_visibility'
     ];
 
     /**
