@@ -9,9 +9,9 @@ if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage
 service cron start &
 
 touch /var/www/html/health.ok
-php /var/www/html/artisan queue:work --timeout=0
+php /var/www/html/artisan queue:work --timeout=0 &
 
 
-# apache2ctl -D FOREGROUND
+apache2ctl -D FOREGROUND
 # while true; do sleep 1000000000000; done
  
