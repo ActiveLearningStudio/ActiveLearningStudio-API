@@ -624,6 +624,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         // Remove project folder after creation of zip
         $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name)); 
 
+        // Remove project folder after creation of zip
+        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name)); 
+
         return storage_path('app/public/exports/'.$fileName);
     }
 
@@ -761,7 +764,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         foreach ($playlists as $playlist) {
 
-            $title = $playlist->title;
+            $title = str_replace('/', '-', $playlist->title);
             Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title. '/' . $title . '.json', $playlist);
             $activites = $playlist->activities;
             ;
