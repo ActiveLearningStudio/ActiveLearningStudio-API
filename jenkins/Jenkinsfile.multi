@@ -1,6 +1,6 @@
 node("currikidev") {
     def app
-    def esmigrate
+    def cron
       
     
     
@@ -10,14 +10,14 @@ node("currikidev") {
     
     stage('Build image') {         
         app = docker.build("quay.io/curriki/api")
-        esmigrate = docker.build("quay.io/curriki/es-migrate", "-f Dockerfile.esmigrate .")    
+        cron = docker.build("quay.io/curriki/cron", "-f Dockerfile.cron .")    
     } 
     stage('Test image') {           
         app.inside { 
                 sh 'echo "Api Tests passed"'        
         }    
-        esmigrate.inside { 
-                sh 'echo "ES Migrate Tests passed"'        
+        cron.inside { 
+                sh 'echo "Cron Tests passed"'        
         }   
     } 
     stage('Push image') {	
@@ -26,14 +26,10 @@ node("currikidev") {
                 app.push("multi")        
         }    
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                esmigrate.push("${env.BUILD_NUMBER}")            
-                esmigrate.push("multi")        
+                cron.push("${env.BUILD_NUMBER}")            
+                cron.push("multi")        
         }   
     }
-    
-
-    
-    
     
      parallel(
             "StageA": {

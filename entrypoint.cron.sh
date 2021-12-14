@@ -7,11 +7,11 @@ if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage
 
 
 service cron start &
-redis-server &
-laravel-echo-server start --force &
-php /var/www/html/artisan queue:work --timeout=0 &
-touch /var/www/html/health.ok
 
-apache2ctl -D FOREGROUND
+touch /var/www/html/health.ok
+php /var/www/html/artisan queue:work --timeout=0
+
+
+# apache2ctl -D FOREGROUND
 # while true; do sleep 1000000000000; done
  
