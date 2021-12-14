@@ -183,8 +183,9 @@ class UserController extends Controller
 
             if ($suborganizationUser) {
                 return response([
+                    'user' => new UserResource($user),
                     'message' => 'The user already exists in the organization.'
-                ], 422);
+                ], 200);
             }
 
             return response([
@@ -193,7 +194,7 @@ class UserController extends Controller
         } else {
             return response([
                 'message' => 'The user not found.'
-            ], 422);
+            ], 200);
         }
     }
 
