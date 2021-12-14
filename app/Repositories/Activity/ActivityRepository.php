@@ -364,12 +364,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         if (isset($data['query']) && !empty($data['query'])) {
             $queryText = $data['query'];
-
-            // $queryWhereQuery[] = "name LIKE '%" . $data['query'] . "%'";
-            // $queryWhereQuery[] = "description LIKE '%" . $data['query'] . "%'";
-
-            // $queryWhereQuery = implode(' OR ', $queryWhereQuery);
-            // $queryWhere[] = "(" . $queryWhereQuery . ")";
         }
 
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
