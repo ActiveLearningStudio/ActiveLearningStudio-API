@@ -28,7 +28,7 @@ class OrganizationProjectRequest extends FormRequest
             'indexing' => 'in:0,1,2,3',
             'exclude_starter' => 'in:true',
             'starter_project' => 'in:true,false',
-            'shared' => 'in:true,false',
+            'shared' => 'boolean',
             'created_from' => 'date_format:Y-m-d',
             'created_to' => 'date_format:Y-m-d',
             'updated_from' => 'date_format:Y-m-d',
