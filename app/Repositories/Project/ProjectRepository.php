@@ -74,6 +74,37 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     }
 
     /**
+     * Update shared for project and its playlists and activities
+     *
+     * @param Project $project
+     * @param bool $shared
+     * @return bool
+     */
+    public function updateShared(Project $project, bool $shared)
+    {
+        $project->shared = $shared;
+        $is_updated = $project->save();
+
+        if ($is_updated) {
+            foreach ($project->playlists as $playlist)
+            {
+                $playlist->shared = $shared;
+                $is_playlist_updated = $playlist->save();
+
+                if ($is_playlist_updated) {
+                    foreach ($playlist->activities as $activity)
+                    {
+                        $activity->shared = $shared;
+                        $activity->save();
+                    }
+                }
+            }
+        }
+
+        return $is_updated;
+    }
+
+    /**
      * Get latest order of project for User
      * @param $authenticated_user
      * @return int
