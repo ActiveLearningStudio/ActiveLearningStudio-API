@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 class BrightcoveAPISettingRepository extends BaseRepository implements BrightcoveAPISettingInterface
 {
 
+    protected $model;
     /**
      * BrightcoveAPISettingRepository constructor
      * @param BrightcoveAPISetting $model
@@ -27,7 +28,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
 
     /**
      * To get list of brightcove account/setting   
-     * @param  id
+     * @param  integer $suborganization
      * @return mixed
      * @throws GeneralException
      */
@@ -43,7 +44,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
 
     /**
      * To get row record of brightcove account/setting
-     * @param $id
+     * @param integer $suborganization, $id
      * @return mixed
      * @throws GeneralException
      */

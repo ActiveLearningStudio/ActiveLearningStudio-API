@@ -14,7 +14,7 @@ interface BrightcoveAPISettingInterface extends EloquentRepositoryInterface
 
     /**
      * To get list of brightcove account/setting   
-     * @param  id
+     * @param  integer $suborganization
      * @return mixed
      * @throws GeneralException
      */
@@ -22,7 +22,7 @@ interface BrightcoveAPISettingInterface extends EloquentRepositoryInterface
 
     /**
      * To get row record of brightcove account/setting
-     * @param $id
+     * @param integer $suborganization, $id
      * @return mixed
      * @throws GeneralException
      */

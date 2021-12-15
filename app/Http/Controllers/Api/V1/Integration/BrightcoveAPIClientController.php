@@ -21,7 +21,7 @@ class BrightcoveAPIClientController extends Controller
     /**
      * BrightcoveAPIClientController constructor.
      *
-     * @param 
+     * @param BrightcoveAPISettingRepository $brightcoveAPISettingRepository
      */
     public function __construct(BrightcoveAPISettingRepository $brightcoveAPISettingRepository)
     {
@@ -30,7 +30,7 @@ class BrightcoveAPIClientController extends Controller
     
     /**
      * Get All Brightcove Account List.
-     * @param id
+     * @param integer $suborganization
      * @return BrightcoveAPISettingCollection
      */
     public function getAccountList($suborganization)
@@ -42,7 +42,10 @@ class BrightcoveAPIClientController extends Controller
     /**
      * Get Brightcove Videos List
      * Get the specified Brightcove API setting data.
-     * @param $request
+     * @param Request $request
+     * @bodyParam id require Valid id of a brightcove api settings table Example: 1
+     * @bodyParam organization_id require Valid id of existing user organization  Example: 1
+     * @bodyParam search_param optional Valid brightcove video id or name Example: 6283186896001 or bunny
      * @return BrightcoveAPISettingResource     
      * @throws GeneralException
      */
@@ -53,11 +56,11 @@ class BrightcoveAPIClientController extends Controller
         'organization_id',
         'search_param'
       ]);
-      $queryParam = isset($data['search_param']) ? '?query=name='.$data['search_param'] : '';
+      $queryParam = isset($data['search_param']) ? '?query=name=' . $data['search_param'] : '';
       $setting = $this->bcAPISettingRepository->getRowRecordByOrgId($data['organization_id'], $data['id']);
       $getToken = $this->getAPIToken($setting);
       if (isset($getToken['Authorization'])) {
-        $getVideoListUrl = config('brightcove-api.base_url').'v1/accounts/'.$setting->account_id.'/videos'.$queryParam;
+        $getVideoListUrl = config('brightcove-api.base_url') . 'v1/accounts/' . $setting->account_id . '/videos' . $queryParam;
         $response = Http::withHeaders($getToken)
                     ->get($getVideoListUrl);
         return new BrightcoveAPISettingResource($response->json());  
@@ -67,13 +70,13 @@ class BrightcoveAPIClientController extends Controller
 
     /**
      * Get Brightcove API Token
-     * @param object
+     * @param object $setting
      * @return array
     */
     private function getAPIToken($setting)
     {
-      $requestParam = '?grant_type=client_credentials&client_id='.$setting->client_id.'&client_secret='.$setting->client_secret.'';
-      $response = Http::post(config('brightcove-api.token_url').$requestParam);
+      $requestParam = '?grant_type=client_credentials&client_id=' . $setting->client_id . '&client_secret=' . $setting->client_secret . '';
+      $response = Http::post(config('brightcove-api.token_url') . $requestParam);
       if ($response->status() == 200) {
         $result = $response->json();
         return array('Authorization' => ' Bearer ' . $result['access_token'], 'Content-Type: ' => 'application/json');
