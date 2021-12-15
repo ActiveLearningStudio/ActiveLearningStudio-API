@@ -28,6 +28,12 @@ class OrganizationProjectRequest extends FormRequest
             'indexing' => 'in:0,1,2,3',
             'exclude_starter' => 'in:true',
             'starter_project' => 'in:true,false',
+            'shared' => 'in:true,false',
+            'created_from' => 'date_format:Y-m-d',
+            'created_to' => 'date_format:Y-m-d',
+            'updated_from' => 'date_format:Y-m-d',
+            'updated_to' => 'date_format:Y-m-d',
+            'author_id' => 'integer|exists:users,id',
         ];
     }
 
@@ -37,6 +43,7 @@ class OrganizationProjectRequest extends FormRequest
             'indexing.in' => 'Indexing should be 1,2 or 3',
             'exclude_starter.in' => 'Indexing should be true',
             'starter_project.in' => 'Indexing should be true or false',
+            'shared.in' => 'Shared status should be true or false',
         ];
     }
 }
