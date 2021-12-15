@@ -13,6 +13,7 @@ use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Jobs\CloneActivity;
 use App\Models\Activity;
+use App\Models\ActivityItem;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
 use App\Models\Project;
@@ -29,6 +30,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
+use DB;
+use Session;
 
 /**
  * @group 5. Activity
@@ -563,7 +566,6 @@ class ActivityController extends Controller
     public function h5p(Activity $activity)
     {
         $this->authorize('view', [Project::class, $activity->playlist->project]);
-
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();
@@ -574,6 +576,25 @@ class ActivityController extends Controller
         $settings = $embed['settings'];
         $user = Auth::user();
 
+        // Get the Name of the Library
+        $getLibName = DB::table('h5p_contents')
+            ->join('h5p_libraries', 'h5p_libraries.id', '=', 'h5p_contents.library_id')
+            ->select('h5p_libraries.name','h5p_libraries.major_version','h5p_libraries.minor_version')
+            ->where('h5p_contents.id', $activity->h5p_content_id)
+            ->get();
+        // Create full name of library with major and minor version
+        $libName = $getLibName[0]->name . ' ' . $getLibName[0]->major_version . '.' . $getLibName[0]->minor_version;
+        // Get path of external css file from library name
+        $getCssPath = optional(ActivityItem::join('activity_types', 'activity_types.id', '=', 'activity_items.activity_type_id')
+            ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
+            ->select('activity_ui_updates.css_path')
+            ->where('h5pLib', $libName)
+            ->first())
+            ->toArray();
+        if($getCssPath) {
+           array_push($settings['contents']['cid-'.$activity->h5p_content_id]['styles'], config('app.url').$getCssPath['css_path']);
+        }
+       
         // create event dispatch
         event(new H5pEvent(
             'content',
