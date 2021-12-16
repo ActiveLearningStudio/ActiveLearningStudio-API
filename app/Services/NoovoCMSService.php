@@ -84,7 +84,6 @@ class NoovoCMSService implements NoovoCMSInterface
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         $result = curl_exec($ch);
-        dd($result);
         if (curl_errno($ch)) {
             \Log::error(curl_error($ch));
             return;
