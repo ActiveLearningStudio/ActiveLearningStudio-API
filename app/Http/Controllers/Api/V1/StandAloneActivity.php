@@ -225,9 +225,6 @@ class StandAloneActivity extends Controller
             $this->update_h5p($validated['data'], $stand_alone_activity->h5p_content_id);
 
             $updated_activity = new ActivityResource($this->activityRepository->find($stand_alone_activity->id));
-            $playlist = new PlaylistResource($updated_activity->playlist);
-            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
-
             return response([
                 'activity' => $updated_activity,
             ], 200);
@@ -324,8 +321,6 @@ class StandAloneActivity extends Controller
      */
     public function detail(Activity $activity)
     {
-        $this->authorize('view', [Activity::class, $activity->playlist->project]);
-
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
         if ($activity->playlist->project->user) {
@@ -333,7 +328,7 @@ class StandAloneActivity extends Controller
             $data['user_id'] = $activity->playlist->project->id;
         }
 
-        if ($activity->type === 'h5p') {
+        if ($activity->type === 'h5p_standalone') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $editor = $h5p::$h5peditor;
@@ -348,93 +343,11 @@ class StandAloneActivity extends Controller
     }
 
     /**
-     * Share Activity
-     *
-     * Share the specified activity.
-     *
-     * @urlParam activity required The Id of a activity Example: 1
-     *
-     * @responseFile responses/activity/activity-shared.json
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Failed to share activity."
-     *   ]
-     * }
-     *
-     * @param Activity $activity
-     * @return Response
-     */
-    public function share(Activity $activity)
-    {
-        $this->authorize('share', [Activity::class, $activity->playlist->project]);
-
-        $is_updated = $this->activityRepository->update([
-            'shared' => true,
-        ], $activity->id);
-
-        if ($is_updated) {
-            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
-            $playlist = new PlaylistResource($updated_activity->playlist);
-            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
-
-            return response([
-                'activity' => $updated_activity,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to share activity.'],
-        ], 500);
-    }
-
-    /**
-     * Remove Share Activity
-     *
-     * Remove share the specified activity.
-     *
-     * @urlParam activity required The Id of a activity Example: 1
-     *
-     * @responseFile responses/activity/activity.json
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Failed to remove share activity."
-     *   ]
-     * }
-     *
-     * @param Activity $activity
-     * @return Response
-     */
-    public function removeShare(Activity $activity)
-    {
-        $this->authorize('share', [Activity::class, $activity->playlist->project]);
-
-        $is_updated = $this->activityRepository->update([
-            'shared' => false,
-        ], $activity->id);
-
-        if ($is_updated) {
-            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
-            $playlist = new PlaylistResource($updated_activity->playlist);
-            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
-
-            return response([
-                'activity' => $updated_activity,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to remove share activity.'],
-        ], 500);
-    }
-
-    /**
-     * Remove Activity
+     * Remove Standalone Activity
      *
      * Remove the specified activity.
      *
-     * @urlParam playlist required The Id of a playlist Example: 1
+     * @urlParam Organization required The Id of a playlist Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @response {
@@ -447,21 +360,13 @@ class StandAloneActivity extends Controller
      *   ]
      * }
      *
-     * @param Playlist $playlist
-     * @param Activity $activity
+     * @param Organization $suborganization
+     * @param Activity $stand_alone_activity
      * @return Response
      */
-    public function destroy(Playlist $playlist, Activity $activity)
+    public function destroy(Organization $suborganization, Activity $stand_alone_activity)
     {
-        $this->authorize('delete', [Activity::class, $activity->playlist->project]);
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity id.'],
-            ], 400);
-        }
-
-        $is_deleted = $this->activityRepository->delete($activity->id);
+        $is_deleted = $this->activityRepository->delete($stand_alone_activity->id);
 
         if ($is_deleted) {
             return response([
@@ -486,8 +391,6 @@ class StandAloneActivity extends Controller
      */
     public function h5p(Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project]);
-
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();
@@ -512,7 +415,6 @@ class StandAloneActivity extends Controller
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         return response([
             'activity' => new H5pActivityResource($activity, $h5p_data),
-            'playlist' => new PlaylistResource($activity->playlist),
         ], 200);
     }
 
