@@ -4,12 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Repositories\Team\TeamRepositoryInterface;
-use App\Services\NoovoCMSService;
-use App\Jobs\ExportProjecttoNoovo;
-use App\Models\Organization;
-use App\Models\Project;
-use App\Models\Team;
-use App\User;
+
 
 class PushNoovo extends Command
 {
@@ -19,7 +14,6 @@ class PushNoovo extends Command
      * @var string
      */
     protected $signature = 'push:noovo';
-    private $noovoCMSService;
     private $teamRepository;
 
     /**
@@ -34,10 +28,9 @@ class PushNoovo extends Command
      *
      * @return void
      */
-    public function __construct(NoovoCMSService $noovoCMSService, TeamRepositoryInterface $teamRepository)
+    public function __construct(TeamRepositoryInterface $teamRepository)
     {
         parent::__construct();
-        $this->noovoCMSService = $noovoCMSService;
         $this->teamRepository = $teamRepository;
     }
 
