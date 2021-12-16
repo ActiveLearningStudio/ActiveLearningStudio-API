@@ -33,6 +33,7 @@ class Playlist
             "parent_name" => $playlist->project->name,
             "parent_type" => "program",
             "project_id" => $playlist->project_id,
+            "tool_url" => config('constants.curriki-tsugi-host')
         ];
         $response = $this->client->request('GET', $web_service_url, ['query' => $rquest_params]);
         return $response;

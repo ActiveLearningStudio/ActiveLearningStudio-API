@@ -147,5 +147,13 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function importProject($authUser, $path, $suborganization_id);
-    
+
+    /**
+     * Update shared for project and its playlists and activities
+     *
+     * @param Project $project
+     * @param bool $shared
+     * @return bool
+     */
+    public function updateShared(Project $project, bool $shared);
 }
