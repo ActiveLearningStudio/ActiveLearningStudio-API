@@ -27,7 +27,7 @@ class NoovoCMSService implements NoovoCMSInterface
     public function __construct()
     {
         $this->host =  config('noovo.host');
-        $this->token = $this->getNoovoCMSToken();
+        //$this->token = $this->getNoovoCMSToken();  // Commenting as it will use in V2 of Noovo API
     }
 
     /**
@@ -84,6 +84,7 @@ class NoovoCMSService implements NoovoCMSInterface
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         $result = curl_exec($ch);
+        dd($result);
         if (curl_errno($ch)) {
             \Log::error(curl_error($ch));
             return;
@@ -104,7 +105,7 @@ class NoovoCMSService implements NoovoCMSInterface
     {
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $this->host . ':8088/file/uploads');
+        curl_setopt($ch, CURLOPT_URL, $this->host . ':8088/file/integration');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         

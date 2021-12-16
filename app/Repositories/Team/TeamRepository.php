@@ -4,6 +4,7 @@ namespace App\Repositories\Team;
 
 use App\Events\TeamCreatedEvent;
 use App\Jobs\CloneProject;
+use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Team;
 use App\Models\TeamRoleType;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Jobs\ExportProjecttoNoovo;
+use App\Services\NoovoCMSService;
+use App\Models\NoovoLogs;
+use Illuminate\Support\Facades\Storage;
 
 class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 {
@@ -27,6 +32,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     private $projectRepository;
     private $invitedTeamUserRepository;
     private $organizationRepository;
+    private $noovoCMSService;
 
     /**
      * TeamRepository constructor.
@@ -42,7 +48,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         UserRepositoryInterface $userRepository,
         ProjectRepositoryInterface $projectRepository,
         InvitedTeamUserRepositoryInterface $invitedTeamUserRepository,
-        OrganizationRepositoryInterface $organizationRepository
+        OrganizationRepositoryInterface $organizationRepository,
+        NoovoCMSService $noovoCMSService
     )
     {
         parent::__construct($model);
@@ -51,6 +58,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $this->projectRepository = $projectRepository;
         $this->invitedTeamUserRepository = $invitedTeamUserRepository;
         $this->organizationRepository = $organizationRepository;
+        $this->noovoCMSService = $noovoCMSService;
     }
 
     /**
@@ -505,6 +513,128 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             return $response;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+        }
+    }
+
+    /**
+     * CronJob topush curriki projects into Noovo 
+     * @return mixed
+     */
+    public function noovoIntegration()
+    {
+        // Fetch all organization having noovo client id
+        $organizations = Organization::with('teams')->whereNotNull('noovo_client_id')->get();
+        
+        foreach ($organizations as $organization) {
+
+            $teams = $organization->teams;
+            
+            foreach ($teams as $team) {
+                if (empty($team->noovo_group_title)) continue;
+                
+                $projects = $team->projects()->get(); // Get all associated projects of a team
+                if ($projects) {
+
+                    $user = User::find(config('import-mapped-device.user_id'));
+                    
+                    try {
+               
+                        $upload_file_ids = [];
+        
+                        $post = [];
+                        $post['target_company'] = array(
+                            'company_name' => $organization->noovo_client_id,
+                            'group_name' => $team->noovo_group_title
+                        );
+                        $files_arr = [];
+                        $project_ids = [];
+                        foreach ($projects as $project) {
+                            $projectStatus = $this->checkProjectAlreadyMoved($project->id, $team->noovo_group_title, $team->id); 
+                            if (!$projectStatus) continue;
+
+                            // Create the zip archive of folder
+                            $export_file = $this->projectRepository->exportProject($user, $project);
+                            \Log::Info($export_file);
+                            $file_info = array(
+                                "filename" => $project->name ,
+                                "description"=> $project->description,
+                                "url"=> url(Storage::url('exports/'.basename($export_file))),
+                                "md5sum"=> md5_file($export_file)
+                            );
+                            array_push($files_arr, $file_info);
+                            array_push($project_ids, $project->id);
+                        }
+        
+                        $post['files'] = $files_arr;
+                        $post['filelist'] = array(
+                                            "name" => $team->name ." Projects",
+                                            "description" => $team->name ." Projects"
+                                            );
+                        \Log::info($post); 
+                        \Log::info(count($post['files']));
+        
+                        if (count($post['files']) > 0) {
+                            $upload_file_result = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
+                            $decoded_upload_result = json_decode($upload_file_result);
+                            if ($decoded_upload_result->result === "Failed") {
+                                $this->createLog($organization, $team, $project_ids, $decoded_upload_result->description, 0);
+                                return false;
+                            }
+                            $this->createLog($organization, $team, $project_ids, 'Projects Transfer Successful', 1);
+                            return false;
+                        }
+        
+                        $this->createLog($organization, $team, $project_ids, 'No project to move or teams project already moved.', 0);
+                        
+                    } catch (\Exception $e) {
+                        \Log::error($e->getMessage());
+                        
+                        $this->createLog($organization, $team, $project_ids, $e->getMessage(), 0);
+                    }
+                }
+            }
+            
+        }
+    }
+
+    /**
+     * param array $projects
+     * param string $response
+     * param bool $status
+     */
+    private function createLog (Organization $organization,Team $team, array $projects, string $response, bool $status)
+    {
+        NoovoLogs::create([
+            'organization_id' => $organization->id,
+            'team_id' => $team->id,
+            'noovo_company_id' => $organization->noovo_client_id,
+            'noovo_company_title' => $organization->noovo_client_id,
+            'noovo_team_id' => $team->noovo_group_id,
+            'noovo_team_title' => $team->noovo_group_title,
+            'projects' => json_encode($projects),
+            'response' => $response,
+            'status' => $status,
+        ]);
+    }
+
+    /**
+     * @param integer $project_id
+     * @param string $group_title
+     * @param integer $team_id
+     * 
+     * @return bool 
+     */
+    private function checkProjectAlreadyMoved(int $project_id, string $group_title, int $team_id)
+    {
+        $noovoLogs = NoovoLogs::where('team_id',$team_id)->where('noovo_team_title',$group_title)->where('status',1)->get();
+        \Log::info($noovoLogs);
+        foreach ($noovoLogs as $log) {
+            $projectsArr = json_decode($log->projects);
+            \Log::info($projectsArr);
+           if (in_array($project_id, $projectsArr)) {
+                return true;
+           }
+           return false;
         }
     }
 }

@@ -131,4 +131,10 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function fetchTeamUserPermissions($authenticatedUser, $team);
+    
+    /**
+     * CronJob topush curriki projects into Noovo 
+     * @return mixed
+     */
+    public function noovoIntegration();
 }
