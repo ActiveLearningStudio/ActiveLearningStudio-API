@@ -556,7 +556,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             $export_file = $this->projectRepository->exportProject($user, $project);
                             \Log::Info($export_file);
                             $file_info = array(
-                                "filename" => $project->name ,
+                                "filename" => str_replace(' ', '-', strtolower($project->name)) . ".zip",
                                 "description"=> $project->description,
                                 "url"=> url(Storage::url('exports/'.basename($export_file))),
                                 "md5sum"=> md5_file($export_file)
