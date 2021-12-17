@@ -550,7 +550,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                         $project_ids = [];
                         foreach ($projects as $project) {
                             $projectStatus = $this->checkProjectAlreadyMoved($project->id, $team->noovo_group_title, $team->id); 
-                            if (!$projectStatus) continue;
+                            if ($projectStatus) continue;
 
                             // Create the zip archive of folder
                             $export_file = $this->projectRepository->exportProject($user, $project);
@@ -567,7 +567,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         
                         $post['files'] = $files_arr;
                         $post['filelist'] = array(
-                                            "name" => $team->name ." Projects",
+                                            "name" => $team->name ." Projects-" . uniqid(),
                                             "description" => $team->name ." Projects"
                                             );
                         \Log::info($post); 
@@ -634,7 +634,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
            if (in_array($project_id, $projectsArr)) {
                 return true;
            }
-           return false;
         }
+        return false;
     }
 }
