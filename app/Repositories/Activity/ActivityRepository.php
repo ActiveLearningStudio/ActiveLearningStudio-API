@@ -240,11 +240,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      * Get the advance search request
      *
      * @param array $data
+     * @param int $authUser
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function advanceSearchForm($data)
+    public function advanceSearchForm($data, $authUser = null)
     {
-
         $counts = [];
         $organizationParentChildrenIds = [];
         $queryText = null;
@@ -400,7 +400,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
 
-        $results = DB::select($query, ['user_id' => auth()->user()->id, 'query_text' => $queryText]);
+        $results = DB::select($query, ['user_id' => $authUser, 'query_text' => $queryText]);
         $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id, 'query_text' => $queryText]);
 
         if (isset($countResults)) {
