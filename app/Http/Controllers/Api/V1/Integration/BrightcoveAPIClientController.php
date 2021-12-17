@@ -12,15 +12,16 @@ use Illuminate\Http\Request;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
 use App\Http\Resources\V1\Integration\BrightcoveAPISettingCollection;
 use App\Http\Resources\V1\Integration\BrightcoveAPISettingResource;
-use Illuminate\Support\Facades\Http;
 use App\Exceptions\GeneralException;
+use App\CurrikiGo\Brightcove\Client;
+use App\CurrikiGo\Brightcove\Videos\GetVideoList;
+use App\CurrikiGo\Brightcove\Videos\GetVideoCount;
 
 class BrightcoveAPIClientController extends Controller
 {
-    private $bcAPISettingRepository;  
+    private $bcAPISettingRepository;
     /**
      * BrightcoveAPIClientController constructor.
-     *
      * @param BrightcoveAPISettingRepository $brightcoveAPISettingRepository
      */
     public function __construct(BrightcoveAPISettingRepository $brightcoveAPISettingRepository)
@@ -40,12 +41,38 @@ class BrightcoveAPIClientController extends Controller
     }
 
     /**
+     * Get Brightcove Videos Count
+     * Get the specified Brightcove API setting data.
+     * @param Request $request
+     * @bodyParam id require Valid id of a brightcove api settings table Example: 1
+     * @bodyParam organization_id require Valid id of existing user organization  Example: 1
+     * @bodyParam query_param optional Valid brightcove query param Example: query=name=file
+     * @return BrightcoveAPISettingResource
+     * @throws GeneralException
+     */
+    public function getVideosCount(Request $request)
+    {
+      $data = $request->only([
+        'id',
+        'organization_id',
+        'query_param'
+      ]);
+      $queryParam = isset($data['query_param']) ? '?' . $data['query_param'] : '';
+      $setting = $this->bcAPISettingRepository->getRowRecordByOrgId($data['organization_id'], $data['id']);
+
+      // Implement Command Design Pattern to access Brightcove API
+      $bcAPIClient = new Client($setting);
+      $bcInstance = new GetVideoCount($bcAPIClient);
+      return $this->connectWithBrightcoveAPI($bcInstance, $setting, $queryParam);
+    }
+
+    /**
      * Get Brightcove Videos List
      * Get the specified Brightcove API setting data.
      * @param Request $request
      * @bodyParam id require Valid id of a brightcove api settings table Example: 1
      * @bodyParam organization_id require Valid id of existing user organization  Example: 1
-     * @bodyParam search_param optional Valid brightcove video id or name Example: 6283186896001 or bunny
+     * @bodyParam query_param optional Valid brightcove query param Example: query=name=file&limit=0&offset=0
      * @return BrightcoveAPISettingResource     
      * @throws GeneralException
      */
@@ -54,33 +81,31 @@ class BrightcoveAPIClientController extends Controller
       $data = $request->only([
         'id',
         'organization_id',
-        'search_param'
+        'query_param'
       ]);
-      $queryParam = isset($data['search_param']) ? '?query=name=' . $data['search_param'] : '';
+      $queryParam = isset($data['query_param']) ? '?' . $data['query_param'] : '';
       $setting = $this->bcAPISettingRepository->getRowRecordByOrgId($data['organization_id'], $data['id']);
-      $getToken = $this->getAPIToken($setting);
-      if (isset($getToken['Authorization'])) {
-        $getVideoListUrl = config('brightcove-api.base_url') . 'v1/accounts/' . $setting->account_id . '/videos' . $queryParam;
-        $response = Http::withHeaders($getToken)
-                    ->get($getVideoListUrl);
-        return new BrightcoveAPISettingResource($response->json());  
-      }
-      throw new GeneralException('Brightcove api token not found.Please try later!');      
+
+      // Implement Command Design Pattern to access Brightcove API
+      $bcAPIClient = new Client($setting);
+      $bcInstance = new GetVideoList($bcAPIClient);
+      return $this->connectWithBrightcoveAPI($bcInstance, $setting, $queryParam);
     }
 
     /**
-     * Get Brightcove API Token
-     * @param object $setting
-     * @return array
-    */
-    private function getAPIToken($setting)
+     * Implement Command Design Pattern to access Brightcove API.
+     * @param  object $bcInstance, object $setting, string $queryParam
+     * @return BrightcoveAPISettingResource
+     * @throws GeneralException
+     */
+    private function connectWithBrightcoveAPI($bcInstance, $setting, $queryParam)
     {
-      $requestParam = '?grant_type=client_credentials&client_id=' . $setting->client_id . '&client_secret=' . $setting->client_secret . '';
-      $response = Http::post(config('brightcove-api.token_url') . $requestParam);
-      if ($response->status() == 200) {
-        $result = $response->json();
-        return array('Authorization' => ' Bearer ' . $result['access_token'], 'Content-Type: ' => 'application/json');
-      }
+      $bcApiResponse = $bcInstance->fetch($setting, $queryParam);
+      $countResult = count((array)$bcApiResponse);
+      if ($countResult >= 1) {
+        return new BrightcoveAPISettingResource($bcApiResponse);
+      } elseif ($countResult == 0) {
+        throw new GeneralException('No Record Found!');  
+      }      
     }
-    
 }
