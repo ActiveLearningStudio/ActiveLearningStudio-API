@@ -7,7 +7,7 @@ if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage
 php /var/www/html/artisan migrate --force
 
 sh /var/www/newrelic-php5-9.18.1.303-linux/newrelic-install install
-git clone https://github.com/ActiveLearningStudio/H5P.Distribution.git /tmp/htp-dist
+git clone -b develop https://github.com/ActiveLearningStudio/H5P.Distribution.git /tmp/htp-dist
 
 cp -rf /tmp/htp-dist/* /var/www/html/storage/app/public/h5p/libraries/
 chmod 777 -R /var/www/html/storage &
