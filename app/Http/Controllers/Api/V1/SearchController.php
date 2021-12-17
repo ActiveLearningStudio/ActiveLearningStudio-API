@@ -125,7 +125,7 @@ class SearchController extends Controller
             $data['searchType'] = 'org_projects_non_admin';
         }
 
-        $results = $this->activityRepository->advanceSearchForm($data);
+        $results = $this->activityRepository->advanceSearchForm($data, auth()->user()->id);
 
         return $results;
     }
@@ -177,7 +177,7 @@ class SearchController extends Controller
 
         $data['organizationIds'] = [$data['organization_id']];
 
-        $results = $this->activityRepository->advanceSearchForm($data);
+        $results = $this->activityRepository->advanceSearchForm($data, auth()->user()->id);
 
         return $results;
     }

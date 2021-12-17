@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Activity;
 
+use App\User;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Repositories\EloquentRepositoryInterface;
@@ -21,9 +22,10 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * Get the advance search request
      *
      * @param array $data
+     * @param int $authUser
      * @return Collection
      */
-    public function advanceSearchForm($data);
+    public function advanceSearchForm($data, $authUser = null);
 
     /**
      * Get the H5P Elasticsearch Field Values.
