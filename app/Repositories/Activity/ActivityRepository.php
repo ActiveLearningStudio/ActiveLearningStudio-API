@@ -401,7 +401,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
 
         $results = DB::select($query, ['user_id' => $authUser, 'query_text' => $queryText]);
-        $countResults = DB::select($countsQuery, ['user_id' => auth()->user()->id, 'query_text' => $queryText]);
+        $countResults = DB::select($countsQuery, ['user_id' => $authUser, 'query_text' => $queryText]);
 
         if (isset($countResults)) {
             foreach ($countResults as $countResult) {
