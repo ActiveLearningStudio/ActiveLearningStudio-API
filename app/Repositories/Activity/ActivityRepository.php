@@ -12,6 +12,7 @@ use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
+use App\Http\Resources\V1\SearchPostgreSqlResource;
 use App\Repositories\User\UserRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -419,7 +420,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $counts['total'] = array_sum($counts);
 
-        return (SearchResource::collection($results))->additional(['meta' => $counts]);
+        return (SearchPostgreSqlResource::collection($results))->additional(['meta' => $counts]);
     }
 
     /**
