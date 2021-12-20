@@ -247,7 +247,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     {
         $counts = [];
         $organizationParentChildrenIds = [];
-        $queryText = null;
+        $queryParams['query_text'] = null;
         $queryFrom = 0;
         $querySize = 10;
 
@@ -256,9 +256,16 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
         }
 
-        $query = 'SELECT * FROM advSearch(:user_id, :query_text)';
+        if ($authUser) {
+            $query = 'SELECT * FROM advSearch(:user_id, :query_text)';
+
+            $queryParams['user_id'] = $authUser;
+        } else {
+            $query = 'SELECT * FROM advSearch(:query_text)';
+        }
+
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
-        $queryWhere = [];
+        $queryWhere[] = "deleted_at IS NULL";
         $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
 
         if (isset($data['startDate']) && !empty($data['startDate'])) {
@@ -363,7 +370,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['query']) && !empty($data['query'])) {
-            $queryText = $data['query'];
+            $queryParams['query_text'] = $data['query'];
         }
 
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
@@ -400,8 +407,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
 
-        $results = DB::select($query, ['user_id' => $authUser, 'query_text' => $queryText]);
-        $countResults = DB::select($countsQuery, ['user_id' => $authUser, 'query_text' => $queryText]);
+        $results = DB::select($query, $queryParams);
+        $countResults = DB::select($countsQuery, $queryParams);
 
         if (isset($countResults)) {
             foreach ($countResults as $countResult) {
