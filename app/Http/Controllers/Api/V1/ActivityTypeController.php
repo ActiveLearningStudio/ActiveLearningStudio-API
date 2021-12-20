@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @group 6. Activity Type
@@ -252,6 +251,7 @@ class ActivityTypeController extends Controller
      *
      * Upload css file for a activity type
      *
+     * @bodyParam css file required typeName
      * @bodyParam css file required file
      *
      * @response {
@@ -264,30 +264,22 @@ class ActivityTypeController extends Controller
      */
     public function uploadCss(Request $request)
     {
-        $fileName = $request->all()['fileName'];
-        $typeName = $request->all()['typeName'];
-        if (strpos($fileName, "css")) {
-            $path = $request->file('file')->storeAs('/public/activity-types/css/'.$typeName, $fileName);
-            $rs = DB::select("
-                SELECT id
-                FROM activity_ui_updates
-                WHERE activity_type_title = ?
-            ", [$typeName]);
-            $result_id = is_array($rs) && count($rs) > 0 ? $rs[0]->id : NULL;
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file',
+            'fileName' => 'required|string',
+            'typeName' => 'required|string'
+        ]);
 
-            $table = 'activity_ui_updates';
-            $data = array(
-                'activity_type_title' => $typeName,
-                'css_path' => Storage::url($path)
-            );
-            if (!$result_id) {
-                DB::table($table)->insert($data);
-            } else {
-                DB::table($table)->where('activity_type_title', $typeName)->update($data);
-            }
+        if ($validator->fails()) {
             return response([
-                'file' => Storage::url($path),
-            ], 200);
+                'errors' => ['Invalid File.']
+            ], 400);
         }
+
+        $path = $request->file('file')->storeAs('/public/activity-types/css/'.$request->typeName, $request->fileName);
+
+        return response([
+            'file' => Storage::url($path),
+        ], 200);
     }
 }

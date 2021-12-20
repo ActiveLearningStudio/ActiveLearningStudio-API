@@ -20,7 +20,7 @@ class ActivityTypeResource extends JsonResource
             'title' => $this->title,
             'order' => $this->order,
             'image' => $this->image,
-            'external_css_path' => $this->activityTypeTitle['css_path'],
+            'css_path' => $this->css_path,
             'activityItems' => $this->activityItems,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @group 7. Activity Item
@@ -272,39 +271,5 @@ class ActivityItemController extends Controller
         return response([
             'errors' => ['Failed to delete activity item.'],
         ], 500);
-    }
-
-    /**
-     * Return External CSS path
-     *
-     *
-     * @response {
-     *   "css_path": "/storage/activity-types/css/Audio/index.css"
-     * }
-     *
-     * @param $activityId
-     * @return Response
-     */
-    public function getExternalCss($activityId)
-    {
-        // Get the Name of the Library
-        $getLibName = DB::table('activities')
-            ->join('h5p_contents', 'h5p_contents.id', '=', 'activities.h5p_content_id')
-            ->join('h5p_libraries', 'h5p_libraries.id', '=', 'h5p_contents.library_id')
-            ->select('h5p_libraries.name','h5p_libraries.major_version','h5p_libraries.minor_version')
-            ->where('activities.id', $activityId)
-            ->get();
-        // Create full name of library with major and minor version
-        $libName = $getLibName[0]->name . ' ' . $getLibName[0]->major_version . '.' . $getLibName[0]->minor_version;
-        // Get path of external css file from library name
-        $getCssPath = DB::table('activity_items')
-            ->join('activity_types', 'activity_types.id', '=', 'activity_items.activity_type_id')
-            ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
-            ->select('activity_ui_updates.css_path')
-            ->where('h5pLib', $libName)
-            ->get();
-        if ($getCssPath) {
-            return response($getCssPath);
-        }
     }
 }

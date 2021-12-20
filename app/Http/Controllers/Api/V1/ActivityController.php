@@ -19,7 +19,9 @@ use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Team;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Http\Request;
@@ -30,8 +32,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
-use DB;
-use Session;
 
 /**
  * @group 5. Activity
@@ -43,20 +43,27 @@ class ActivityController extends Controller
 
     private $playlistRepository;
     private $activityRepository;
+    private $h5pContentRepository;
 
     /**
      * ActivityController constructor.
      *
      * @param PlaylistRepositoryInterface $playlistRepository
      * @param ActivityRepositoryInterface $activityRepository
+     * @param H5pContentRepositoryInterface $h5pContentRepository
+     * @param ActivityItemRepositoryInterface $activityItemRepository
      */
     public function __construct(
         PlaylistRepositoryInterface $playlistRepository,
-        ActivityRepositoryInterface $activityRepository
+        ActivityRepositoryInterface $activityRepository,
+        H5pContentRepositoryInterface $h5pContentRepository,
+        ActivityItemRepositoryInterface $activityItemRepository
     )
     {
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
+        $this->h5pContentRepository = $h5pContentRepository;
+        $this->activityItemRepository = $activityItemRepository;
 
         // $this->authorizeResource(Activity::class, 'activity');
     }
@@ -576,23 +583,17 @@ class ActivityController extends Controller
         $settings = $embed['settings'];
         $user = Auth::user();
 
-        // Get the Name of the Library
-        $getLibName = DB::table('h5p_contents')
-            ->join('h5p_libraries', 'h5p_libraries.id', '=', 'h5p_contents.library_id')
-            ->select('h5p_libraries.name','h5p_libraries.major_version','h5p_libraries.minor_version')
-            ->where('h5p_contents.id', $activity->h5p_content_id)
-            ->get();
-        // Create full name of library with major and minor version
-        $libName = $getLibName[0]->name . ' ' . $getLibName[0]->major_version . '.' . $getLibName[0]->minor_version;
-        // Get path of external css file from library name
-        $getCssPath = optional(ActivityItem::join('activity_types', 'activity_types.id', '=', 'activity_items.activity_type_id')
-            ->join('activity_ui_updates', 'activity_types.title', '=', 'activity_ui_updates.activity_type_title')
-            ->select('activity_ui_updates.css_path')
-            ->where('h5pLib', $libName)
-            ->first())
-            ->toArray();
-        if($getCssPath) {
-           array_push($settings['contents']['cid-'.$activity->h5p_content_id]['styles'], config('app.url').$getCssPath['css_path']);
+        $record = $this->h5pContentRepository->getLibrary($activity->h5p_content_id);
+
+        $libraryName = $record->library->name;
+        $libraryMajorVersion = $record->library->major_version;
+        $libraryMinorVerison = $record->library->minor_version;
+
+        // Get activity item
+        $activityItem = $this->activityItemRepository->getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison);
+        
+        if(isset($activityItem['activityType']->css_path)) {
+           array_push($settings['contents']['cid-'.$activity->h5p_content_id]['styles'], config('app.url').$activityItem['activityType']->css_path);
         }
        
         // create event dispatch

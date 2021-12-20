@@ -19,4 +19,12 @@ interface ActivityItemRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getActivityLayouts();
+
+    /**
+     * @param $libraryName
+     * @param $libraryMajorVersion
+     * @param $libraryMinorVerison
+     * @return mixed
+     */
+    public function getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison);
 }
