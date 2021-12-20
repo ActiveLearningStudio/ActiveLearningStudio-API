@@ -18,7 +18,8 @@ class AdvSearchSeeder extends Seeder
         DB::statement("create index IF NOT EXISTS activities_title on activities(title)");
 
 
-        DB::statement("drop function IF EXISTS advSearch");
+        DB::statement("drop function IF EXISTS advSearch(integer,character varying)");
+        DB::statement("drop function IF EXISTS advSearch(character varying)");
 
         DB::statement("drop table IF EXISTS advSearch_dt");
 
