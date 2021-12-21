@@ -17,6 +17,7 @@ touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/v
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/vertx/AppOpenApi3.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/vertx/AppSwagger2.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/vertx/MainVerticle.java
+touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/quarkus/QuarkusApp.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/vertx/WorkerVerticle.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/page/PageLayout.java
 touch ~/.local/src/ActiveLearningStudio-API/src/main/java/org/curriki/api/enus/user/SiteUser.java

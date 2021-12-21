@@ -49,7 +49,7 @@ import io.vertx.sqlclient.PoolOptions;
  * Map.hackathonColumn: Quarkus app development
  * Map.hackathonLabels: Java,Quarkus
  */
-public class QuarkusApp extends QuarkusAppGen<Object> {  
+public class QuarkusApp extends QuarkusAppGen<Object> {
 	private static final Logger LOG = LoggerFactory.getLogger(QuarkusApp.class);
 
 	@Inject
