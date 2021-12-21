@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ActivityUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ActivityEditRequest;
 use App\Http\Requests\V1\StandAloneActivityCreateRequest;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
-use App\Http\Resources\V1\PlaylistResource;
 use App\Http\Resources\V1\StandAloneActivityResource;
 use App\Models\Activity;
-use App\Models\Playlist;
-use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
@@ -32,12 +28,12 @@ use App\Models\Organization;
  *
  * APIs for stand alone activity management
  */
-class StandAloneActivity extends Controller
+class StandAloneActivityController extends Controller
 {
     private $activityRepository;
 
     /**
-     * StandAloneActivity constructor.
+     * StandAloneActivityController constructor.
      *
      * @param ActivityRepositoryInterface $activityRepository
      */
@@ -164,7 +160,7 @@ class StandAloneActivity extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Invalid playlist or activity id."
+     *     "Invalid activity id."
      *   ]
      * }
      *
@@ -199,7 +195,7 @@ class StandAloneActivity extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Invalid playlist or activity id."
+     *     "Invalid activity id."
      *   ]
      * }
      *
@@ -312,20 +308,22 @@ class StandAloneActivity extends Controller
      *
      * Get the specified activity in detail.
      *
+     * @urlParam suborganization required The Id of a organization Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity-with-detail.json
      *
+     * @param Organization $suborganization
      * @param Activity $activity
      * @return Response
      */
-    public function detail(Activity $activity)
+    public function detail(Organization $suborganization, Activity $activity)
     {
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
-        if ($activity->playlist->project->user) {
-            $data['user_name'] = $activity->playlist->project->user;
-            $data['user_id'] = $activity->playlist->project->id;
+        if ($activity->user) {
+            $data['user_name'] = $activity->user;
+            $data['user_id'] = $activity->user->id;
         }
 
         if ($activity->type === 'h5p_standalone') {
@@ -347,8 +345,8 @@ class StandAloneActivity extends Controller
      *
      * Remove the specified activity.
      *
-     * @urlParam Organization required The Id of a playlist Example: 1
-     * @urlParam activity required The Id of a activity Example: 1
+     * @urlParam Organization required The Id of an organization Example: 1
+     * @urlParam activity required The Id of an activity Example: 1
      *
      * @response {
      *   "message": "Activity has been deleted successfully."
@@ -382,14 +380,16 @@ class StandAloneActivity extends Controller
     /**
      * H5P Activity
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity-playlists.json
      *
+     * @param Organization $suborganization
      * @param Activity $activity
      * @return Response
      */
-    public function h5p(Activity $activity)
+    public function h5p(Organization $suborganization, Activity $activity)
     {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;

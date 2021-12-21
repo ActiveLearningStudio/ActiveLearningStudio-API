@@ -153,7 +153,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('h5p/settings', 'H5pController@create');
         Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
         Route::apiResource('h5p', 'H5pController');
-        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivity');
+        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivityController');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/detail', 'StandAloneActivityController@detail');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/h5p', 'StandAloneActivityController@h5p');
 
         Route::group(['prefix' => 'h5p'], function () {
             // H5P Ajax calls
