@@ -13,6 +13,8 @@ use App\Repositories\Activity\ActivityRepositoryInterface;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use stdClass;
 
 class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInterface
 {
@@ -222,4 +224,39 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             }
         }
     }
+
+    /**
+     * To show single shared playlist
+     *
+     * @param Playlist $playlist
+     * @throws GeneralException
+     */
+    public function loadSharedPlaylist(Playlist $playlist)
+    {
+        return $this->model::whereHas('project')
+            ->where('id', $playlist->id)
+            ->with('project')
+            ->first();
+    }
+
+    /**
+     * To show all shared playlist
+     *
+     * @param Project $project
+     * @throws GeneralException
+     */
+    public function allSharedPlaylists(Project $project)
+    {
+        $playlists = $this->model::whereHas('project')
+            ->where('project_id', $project->id)
+            ->with('project');
+
+        //if project is indexed then all shared/unshared playlists will be visible. if not indexed then only shared playlists will be visible
+        $playlists->when($project->indexing != Config::get('constants.indexing-approved'), function ($q){
+            return $q->where('shared', true);
+        }); 
+
+        return $playlists = $playlists->get();
+    }
+
 }

@@ -18,6 +18,8 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
+use App\Models\Organization;
 
 /**
  * @group 4. Playlist
@@ -387,5 +389,192 @@ class PlaylistController extends Controller
     public function populateOrderNumber()
     {
         $this->playlistRepository->populateOrderNumber();
+    }
+
+    /**
+     * Share playlist
+     *
+     * Share the specified playlist of a user.
+     *
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to share playlist."
+     *   ]
+     * }
+     *
+     * @param Playlist $playlist
+     * @param Project $project
+     * @return Response
+     */
+    public function share(Project $project, Playlist $playlist)
+    {
+        $this->authorize('clone', [Playlist::class, $project]);
+
+        $is_updated = $this->playlistRepository->update([
+            'shared' => true,
+        ], $playlist->id);
+
+        if ($is_updated) {
+            $updated_playlist = new playlistResource($this->playlistRepository->find($playlist->id));
+
+            return response([
+                'playlist' => $updated_playlist,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to share playlist.'],
+        ], 500);
+    }
+
+    /**
+     * Remove Share playlist
+     *
+     * Remove Share the specified playlist of a user.
+     *
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to remove share playlist."
+     *   ]
+     * }
+     *
+     * @param Playlist $playlist
+     * @param Project $project
+     * @return Response
+     */
+    public function removeShare(Project $project, Playlist $playlist)
+    {
+        $this->authorize('clone', [Playlist::class, $project]);
+
+        $is_updated = $this->playlistRepository->update([
+            'shared' => false,
+        ], $playlist->id);
+
+        if ($is_updated) {
+            $updated_playlist = new playlistResource($this->playlistRepository->find($playlist->id));
+
+            return response([
+                'playlist' => $updated_playlist,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to remove share playlist.'],
+        ], 500);
+    }
+    
+    /**
+     * Get Shared Playlist
+     *
+     * Get the specified shared playlist detail.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     * @urlParam project required The Id of a playlist Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "No shareable Playlist found."
+     *   ]
+     * }
+     *
+     * @param Playlist $playlist
+     * @param Project $project
+     * @return Response
+     */
+    public function loadSharedPlaylist(Project $project, Playlist $playlist)
+    {
+        // 3 is for indexing approved - see Project Model @indexing property
+        if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
+            if($playlist->shared){
+                return response([
+                    'playlist' => new PlaylistResource($this->playlistRepository->loadSharedPlaylist($playlist)),
+                ], 200);
+            }
+        }
+
+        return response([
+            'errors' => ['No shareable Playlist found.'],
+        ], 400);
+    }
+
+    /**
+     * Get All Shared Playlists of a Project
+     *
+     * Get the list of shared playlists detail.
+     *
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile responses/playlist/playlist.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "No shareable Playlist found."
+     *   ]
+     * }
+     *
+     * @param Playlist $playlist
+     * @param Project $project
+     * @return Response
+     */
+    public function allSharedPlaylists(Project $project, Playlist $playlist)
+    {
+        // 3 is for indexing approved - see Project Model @indexing property
+        if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
+                return response([
+                    'playlist' => PlaylistResource::collection($this->playlistRepository->allSharedPlaylists($project, $playlist)),
+                ], 200);
+        }
+
+        return response([
+            'errors' => ['No shareable Playlist found.'],
+        ], 400);
+    }
+
+    /**
+     * Get Playlist Search Preview
+     *
+     * Get the specified playlist search preview.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @responseFile 200 responses/playlist/playlist.json
+     *
+     * @response 404 {
+     *   "message": [
+     *     "Playlist is not available."
+     *   ]
+     * }
+     *
+     * @param Organization $suborganization
+     * @param Playlist $playlist
+     * @return Response
+     */
+    public function searchPreview(Organization $suborganization, Playlist $playlist)
+    {
+        $this->authorize('searchPreview', [$playlist->project, $suborganization]);
+
+        $availablePlaylist = $this->playlistRepository->getPlaylistWithProject($playlist);
+        if ($availablePlaylist) {
+            return response([
+                'playlist' => new PlaylistResource($availablePlaylist),
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Playlist is not available.',
+        ], 404);
     }
 }

@@ -30,7 +30,9 @@ class Activity extends Model
         'subject_id',
         'education_level_id',
         'h5p_content_id',
-        'indexing'
+        'indexing',
+        'user_id',
+        'organization_id'
     ];
 
     /**

@@ -8,6 +8,8 @@ use App\Http\Requests\V1\LtiTool\StoreLtiToolSetting;
 use App\Http\Requests\V1\LtiTool\UpdateLtiToolSetting;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingCollection;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingResource;
+use App\Jobs\CloneLtiToolSetting;
+use App\Models\LtiTool\LtiToolSetting;
 use App\Models\Organization;
 use App\Repositories\LtiTool\LtiToolSettingRepository;
 use Illuminate\Contracts\Foundation\Application;
@@ -37,7 +39,7 @@ class LtiToolSettingsController extends Controller
     }
 
     /**
-     * Get All LTI Tool Settings for listing.     
+     * Get All LTI Tool Settings for listing.
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      * @queryParam Organization $suborganization
      * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
@@ -166,5 +168,38 @@ class LtiToolSettingsController extends Controller
     public function destroy(Organization $suborganization, $id)
     {
         return response(['message' => $this->ltiToolSettingRepository->destroy($id)], 200);
+    }
+
+    /**
+     * Clone LTI tool setting
+     *
+     * Clone the specified Lti tool setting of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam LtiToolSetting required The Id of a LtiToolSetting Example: 1
+     * @bodyParam user_id optional The Id of a user Example: 1
+     *
+     * @response {
+     *   "message": "Lti tool setting is being cloned in background!"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Unable to clone."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param LtiToolSetting $ltiToolSetting
+     * @return Response
+     */
+    public function clone(Request $request, Organization $suborganization, LtiToolSetting $ltiToolSetting)
+    {
+        CloneLtiToolSetting::dispatch($ltiToolSetting, $suborganization, $request->bearerToken())->delay(now()->addSecond());
+        return response([
+            "message" => "Your request to clone Lti Tool Setting [$ltiToolSetting->tool_name] has been received and is being processed. <br> 
+            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
     }
 }

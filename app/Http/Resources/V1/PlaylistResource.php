@@ -22,10 +22,12 @@ class PlaylistResource extends JsonResource
             'title' => $this->title,
             'order' => $this->order,
             'project_id' => $this->project_id,
+            'shared' => $this->shared,
             'project' => new PlaylistProjectResource($this->project),
             'activities' => ActivityResource::collection($this->activities->sortBy('order')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'gcr_playlist_visibility' => $this->project->organization->gcr_playlist_visibility,
         ];
     }
 }

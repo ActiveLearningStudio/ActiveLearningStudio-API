@@ -7,6 +7,7 @@
         "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
         "thumb_url": "/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
         "shared": false,
+        "gcr_project_visibility": true,
         "starter_project": false,
         "order": null,
         "status": 1,

@@ -15,6 +15,6 @@ class LtiToolSettingCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return ['lti_tool_settings' => $this->collection];
+        return ['data' => $this->collection];
     }
 }

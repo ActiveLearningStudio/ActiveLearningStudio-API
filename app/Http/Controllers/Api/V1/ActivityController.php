@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
+use App\Models\Organization;
 
 /**
  * @group 5. Activity
@@ -735,5 +736,40 @@ class ActivityController extends Controller
         $this->activityRepository->populateOrderNumber();
     }
 
+    /**
+     * Get Activity Search Preview
+     *
+     * Get the specified activity search preview.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @responseFile responses/h5p/h5p-resource-settings-open.json
+     *
+     * @param Organization $suborganization
+     * @param Activity $activity
+     * @return Response
+     */
+    public function searchPreview(Organization $suborganization, Activity $activity)
+    {
+        $this->authorize('searchPreview', [$activity->playlist->project, $suborganization]);
+
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->load_content($activity->h5p_content_id);
+        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+        $user_data = null;
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
+        return response([
+            'h5p' => $h5p_data,
+            'activity' => new ActivityResource($activity),
+            'playlist' => new PlaylistResource($activity->playlist),
+        ], 200);
+    }
 }
 

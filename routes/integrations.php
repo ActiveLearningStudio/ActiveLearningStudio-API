@@ -17,10 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::group(['prefix' => 'brightcove'], function () {
         Route::get('{accountId}/{videoId}/{dataPlayer}/{dataEmbed}/h5p-resource-settings', 'BrightcoveController@getH5pResourceSettings');
+        Route::get('{videoId}/h5p-resource-settings', 'BrightcoveController@getH5pBrightcoveResourceSettings');
     });
 
     // Kaltura Video Integration For Curriki Interactive Video
     Route::group(['prefix' => 'kaltura'], function () {
         Route::get('get-media-entry-list', 'CurrikiInteractiveVideoIntegration\Kaltura\KalturaGeneratedAPIClientController@getMediaEntryList');
+    });
+
+    // Brightcove Video Integration
+    Route::group(['prefix' => 'brightcove'], function () {
+        Route::get('suborganization/{suborganization}/get-bc-account-list', 'Integration\BrightcoveAPIClientController@getAccountList');        
+        Route::post('get-bc-videos-count', 'Integration\BrightcoveAPIClientController@getVideosCount');
+        Route::post('get-bc-videos-list', 'Integration\BrightcoveAPIClientController@getVideosList');
     });
 });

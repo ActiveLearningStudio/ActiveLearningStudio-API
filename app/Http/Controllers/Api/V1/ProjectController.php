@@ -11,6 +11,7 @@ use App\Http\Requests\V1\ProjectUploadThumbRequest;
 use App\Http\Requests\V1\ProjectUploadImportRequest;
 use App\Http\Resources\V1\ProjectDetailResource;
 use App\Http\Resources\V1\ProjectResource;
+use App\Http\Resources\V1\ProjectSearchPreviewResource;
 use App\Http\Resources\V1\UserProjectResource;
 use App\Jobs\CloneProject;
 use App\Models\Organization;
@@ -400,22 +401,22 @@ class ProjectController extends Controller
     {
         $this->authorize('share', [Project::class, $project]);
 
-        $is_updated = $this->projectRepository->update([
-            'shared' => true,
-        ], $project->id);
+        return \DB::transaction(function () use ($project) {
+            $is_updated = $this->projectRepository->updateShared($project, true);
 
-        if ($is_updated) {
-            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-            event(new ProjectUpdatedEvent($updated_project));
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
+
+                return response([
+                    'project' => $updated_project,
+                ], 200);
+            }
 
             return response([
-                'project' => $updated_project,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to share project.'],
-        ], 500);
+                'errors' => ['Failed to share project.'],
+            ], 500);
+        });
     }
 
     /**
@@ -441,22 +442,22 @@ class ProjectController extends Controller
     {
         $this->authorize('share', [Project::class, $project]);
 
-        $is_updated = $this->projectRepository->update([
-            'shared' => false,
-        ], $project->id);
+        return \DB::transaction(function () use ($project) {
+            $is_updated = $this->projectRepository->updateShared($project, false);
 
-        if ($is_updated) {
-            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-            event(new ProjectUpdatedEvent($updated_project));
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
+
+                return response([
+                    'project' => $updated_project,
+                ], 200);
+            }
 
             return response([
-                'project' => $updated_project,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to remove share project.'],
-        ], 500);
+                'errors' => ['Failed to remove share project.'],
+            ], 500);
+        });
     }
 
     /**
@@ -848,6 +849,29 @@ class ProjectController extends Controller
         return response([
             'message' =>  "Your request to export project [$project->name] has been received and is being processed.<br>
                              You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Get Project Search Preview
+     *
+     * Get the specified project search preview.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile 200 responses/project/project-search-preview.json
+     *
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
+     */
+    public function searchPreview(Organization $suborganization, Project $project)
+    {
+        $this->authorize('searchPreview', [$project, $suborganization]);
+
+        return response([
+            'project' => new ProjectSearchPreviewResource($project),
         ], 200);
     }
 }

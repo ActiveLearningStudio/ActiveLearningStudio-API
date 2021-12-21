@@ -1,0 +1,54 @@
+{
+    "project": {
+        "id": 2459,
+        "name": "Teach for America: High School Science",
+        "description": "This project consists of two playlists serving as exemplar high school science digital learning instruction.",
+        "thumb_url": "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+        "shared": false,
+        "indexing": null,
+        "indexing_text": "NOT REQUESTED",
+        "created_at": "2021-05-03T15:41:08.000000Z",
+        "updated_at": "2021-05-03T15:41:08.000000Z",
+        "playlists": [
+            {
+                "id": 5078,
+                "title": "The Smallest Unit of Life: The Cell",
+                "project_id": 2459,
+                "created_at": "2021-05-03T15:41:11.000000Z",
+                "updated_at": "2021-05-03T15:41:11.000000Z",
+                "activities": [
+                    {
+                        "id": 23090,
+                        "title": "What You'll Explore",
+                        "type": "h5p",
+                        "thumb_url": "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+                        "library_name": "H5P.Accordion 1.0"
+                    },
+                    {
+                        "id": 23091,
+                        "title": "History of Cell Theory",
+                        "type": "h5p",
+                        "thumb_url": "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+                        "library_name": "H5P.Column 1.11"
+                    }
+                ]
+            },
+            {
+                "id": 5079,
+                "title": "Understanding the Atom",
+                "project_id": 2459,
+                "created_at": "2021-05-03T15:41:15.000000Z",
+                "updated_at": "2021-05-03T15:41:15.000000Z",
+                "activities": [
+                    {
+                        "id": 23097,
+                        "title": "Build an Atom",
+                        "type": "h5p",
+                        "thumb_url": "https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280",
+                        "library_name": "H5P.IFrameEmbed 1.0"
+                    }
+                ]
+            }
+        ]
+    }
+}

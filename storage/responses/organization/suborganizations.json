@@ -5,7 +5,10 @@
             "name": "Suborganization",
             "description": "Suborganization description",
             "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-            "domain": "suborganization"
+            "domain": "suborganization",
+            "gcr_project_visibility": true,
+            "gcr_playlist_visibility": true,
+            "gcr_activity_visibility": true
         }
     ]
 }
