@@ -592,9 +592,13 @@ class ActivityController extends Controller
 
         // Get activity item
         $activityItem = $this->activityItemRepository->getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison);
-        
         if(isset($activityItem['activityType']->css_path)) {
-           array_push($settings['contents']['cid-'.$activity->h5p_content_id]['styles'], config('app.url').$activityItem['activityType']->css_path);
+           if(isset($settings['contents']['cid-'.$activity->h5p_content_id]['styles'])) {
+                array_push($settings['contents']['cid-'.$activity->h5p_content_id]['styles'], config('app.url').$activityItem['activityType']->css_path);
+           }
+           else {
+                array_push($settings['loadedCss'], config('app.url').$activityItem['activityType']->css_path);
+           }
         }
        
         // create event dispatch
