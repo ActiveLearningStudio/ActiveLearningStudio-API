@@ -31,7 +31,8 @@ class UpdateActivityType extends FormRequest
         return [
             'title' => 'sometimes|max:255',
             'image' => 'sometimes',
-            'order' => 'sometimes|integer|max:2147483647'
+            'order' => 'sometimes|integer|max:2147483647',
+            'css_path' => 'sometimes',
         ];
     }
 }

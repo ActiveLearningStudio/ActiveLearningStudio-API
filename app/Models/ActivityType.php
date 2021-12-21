@@ -19,6 +19,7 @@ class ActivityType extends Model
         'title',
         'order',
         'image',
+        'css_path',
     ];
 
     /**
@@ -27,6 +28,11 @@ class ActivityType extends Model
     public function activityItems()
     {
         return $this->hasMany('App\Models\ActivityItem', 'activity_type_id');
+    }
+
+    public function activityTypeTitle()
+    {
+        return $this->hasOne('App\Models\ActivityUiUpdates', 'activity_type_title', 'title');
     }
 
 }
