@@ -22,6 +22,13 @@ interface H5pContentRepositoryInterface extends EloquentRepositoryInterface
     public function getBrightcoveVideo($accountId, $videoId, $dataPlayer, $dataEmbed);
 
     /**
+     * Get the libraries's fields semantics.
+     *
+     * @param int $contentId for brightcove video
+     * @return array
+     */
+    public function getLibrary($contentId);
+     /**
      * Get the h5p content id for brightcove video.
      *
      * @param int $videoId for brightcove video

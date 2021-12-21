@@ -153,11 +153,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('h5p/settings', 'H5pController@create');
         Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
         Route::apiResource('h5p', 'H5pController');
+        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivityController');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/detail', 'StandAloneActivityController@detail');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/h5p', 'StandAloneActivityController@h5p');
 
         Route::get('suborganization/{suborganization}/projects/{project}/offline-project', 'ProjectDownloadController@exportProject');
         Route::get('project/delete/{project_path}', 'ProjectDownloadController@deleteProject');
-
-        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivity');
 
         Route::group(['prefix' => 'h5p'], function () {
             // H5P Ajax calls
@@ -225,6 +226,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
+        Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions
