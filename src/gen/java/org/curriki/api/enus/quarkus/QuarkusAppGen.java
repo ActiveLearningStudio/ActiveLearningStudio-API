@@ -5,7 +5,6 @@ import java.util.Arrays;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.curriki.api.enus.base.BaseModel;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.writer.AllWriter;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import org.curriki.api.enus.request.SiteRequestEnUS;

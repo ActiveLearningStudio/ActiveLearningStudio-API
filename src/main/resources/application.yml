@@ -1,0 +1,74 @@
+# hackathonTitle: create an application.properties file for defining the default config variable values
+# hackathonColumn: Develop Base Resources
+# hackathonLabels: Java,Maven
+# TODO: Define the JDBC Database properties. 
+JDBC_HOST: localhost
+JDBC_PORT: 5432
+JDBC_DATABASE: ActiveLearningStudio-API
+JDBC_USERNAME: ActiveLearningStudio-API
+JDBC_PASSWORD: 
+JDBC_MAX_POOL_SIZE: 10
+JDBC_MAX_WAIT_QUEUE_SIZE: 1000
+
+# TODO: Define the site properties. 
+SITE_HOST_NAME: localhost
+SITE_PORT: 11281
+SITE_BASE_URL: http://localhost:11281
+SITE_ZONE: America/Denver
+
+
+# TODO: Define the Single-Sign On Authentication properties. 
+AUTH_REALM: 
+AUTH_RESOURCE: 
+AUTH_SECRET: 
+AUTH_HOST_NAME: 
+AUTH_PORT: 443
+AUTH_SSL: true
+AUTH_SSL_REQUIRED: all
+AUTH_TOKEN_URI: /auth/realms/AUTH_REALM/protocol/openid-connect/token
+
+
+# TODO: Define the Apache Zookeeper cluster manager properties. 
+ZOOKEEPER_HOST_NAME: localhost
+ZOOKEEPER_PORT: 2181
+
+
+# TODO: Define the Apache Solr search engine properties. 
+SOLR_URL: http://localhost:8983/solr/ActiveLearningStudio-API
+SOLR_HOST_NAME: localhost
+SOLR_PORT: 8983
+SOLR_COLLECTION: ActiveLearningStudio-API
+SOLR_URL_COMPUTATE: http://localhost:8983/solr/computate
+
+
+# TODO: Define the SMTP Email properties. 
+API_CONTACT_EMAIL: 
+EMAIL_HOST: 
+EMAIL_PORT: 
+EMAIL_SSL: 
+EMAIL_AUTH: 
+EMAIL_USERNAME: 
+EMAIL_PASSWORD: 
+EMAIL_FROM: 
+EMAIL_ADMIN: 
+
+
+# TODO: Define the static content properties. 
+STATIC_BASE_URL: http://localhost:11281/static
+STATIC_PATH: /usr/local/src/ActiveLearningStudio-API-static
+
+
+# TODO: Define the API import properties. 
+API_COUNTER_PAUSE: 10
+API_COUNTER_RESUME: 5
+
+
+# TODO: Define the database to Solr sync properties, in case you restore the site from a database backup. 
+TIMER_DB_SOLR_SYNC_IN_SECONDS: 1
+ENABLE_DB_SOLR_SYNC: false
+
+
+# TODO: Enable the refresh data properties, in case you want to reindex the data in the search engine after doing more search engine tuning. 
+ENABLE_REFRESH_DATA: false
+
+MOONSHOTS_DRIVER_CLASS: com.mysql.jdbc.Driver

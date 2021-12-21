@@ -52,11 +52,21 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	public static final String configureEmailFail1 = "Configure sending email failed. ";
 	public static final String configureEmailFail = configureEmailFail1;
 
+	public static final String importTimerScheduling1 = "Scheduling the %s import at %s";
+	public static final String importTimerScheduling = importTimerScheduling1;
+	public static final String importTimerSkip1 = "Skip importing %s data. ";
+	public static final String importTimerSkip = importTimerSkip1;
+
+	public static final String configureMoonshotsDataComplete1 = "Skip The Moonshot database was configured successfully. ";
+	public static final String configureMoonshotsDataComplete = configureMoonshotsDataComplete1;
+	public static final String configureMoonshotsDataFail1 = "Skip The Moonshot database configuration failed. ";
+	public static final String configureMoonshotsDataFail = configureMoonshotsDataFail1;
+
 	public static final String importDataComplete1 = "Importing initial data completed. ";
 	public static final String importDataComplete = importDataComplete1;
 	public static final String importDataFail1 = "Importing initial data failed. ";
 	public static final String importDataFail = importDataFail1;
-	public static final String importDataSkip1 = "data import skipped. ";
+	public static final String importDataSkip1 = "Skip importing data. ";
 	public static final String importDataSkip = importDataSkip1;
 
 	public static final String syncDbToSolrComplete1 = "Syncing database to Solr completed. ";
@@ -257,6 +267,6 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		return sb.toString();
 	}
 
-	public static final String[] WorkerVerticleVals = new String[] { configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importDataComplete1, importDataFail1, importDataSkip1, syncDbToSolrComplete1, syncDbToSolrFail1, syncDbToSolrSkip1, syncDataComplete1, syncDataFail1, syncDataCounterResetFail1, syncDataSkip1, syncDataStarted1, refreshAllDataComplete1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataFail1, refreshDataSkip1 };
+	public static final String[] WorkerVerticleVals = new String[] { configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureEmailComplete1, configureEmailFail1, importTimerScheduling1, importTimerSkip1, configureMoonshotsDataComplete1, configureMoonshotsDataFail1, importDataComplete1, importDataFail1, importDataSkip1, syncDbToSolrComplete1, syncDbToSolrFail1, syncDbToSolrSkip1, syncDataComplete1, syncDataFail1, syncDataCounterResetFail1, syncDataSkip1, syncDataStarted1, refreshAllDataComplete1, refreshAllDataFail1, refreshAllDataSkip1, refreshDataComplete1, refreshDataFail1, refreshDataSkip1 };
 
 }

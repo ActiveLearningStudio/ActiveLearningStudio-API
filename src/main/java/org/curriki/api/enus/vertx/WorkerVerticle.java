@@ -1,23 +1,22 @@
 package org.curriki.api.enus.vertx;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.curriki.api.enus.config.ConfigKeys;
+import org.curriki.api.enus.java.TimeTool;
 import org.curriki.api.enus.request.SiteRequestEnUS;
 import org.curriki.api.enus.request.api.ApiRequest;
-import org.curriki.api.enus.search.SearchList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
@@ -28,14 +27,14 @@ import io.vertx.core.WorkerExecutor;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.authentication.TokenCredentials;
 import io.vertx.ext.auth.authentication.UsernamePasswordCredentials;
+import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
-import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
-import io.vertx.sqlclient.PoolOptions;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowStream;
 
@@ -48,6 +47,8 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 
 	public static final Integer FACET_LIMIT = 100;
 
+	public final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss VV");
+
 	/**
 	 * A io.vertx.ext.jdbc.JDBCClient for connecting to the relational database PostgreSQL. 
 	 **/
@@ -56,6 +57,8 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 	private WebClient webClient;
 
 	WorkerExecutor workerExecutor;
+
+	JDBCClient jdbcClient;
 
 	/**	
 	 *	This is called by Vert.x when the verticle instance is deployed. 
@@ -150,42 +153,103 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 		return promise.future();
 	}
 
+	/**
+	 * Val.Scheduling.enUS:Scheduling the %s import at %s
+	 * Val.Skip.enUS:Skip importing %s data. 
+	 */
+	private void importTimer(String classSimpleName) {
+		if(config().getBoolean(String.format("%s_%s", ConfigKeys.ENABLE_IMPORT_DATA, classSimpleName), true)) {
+			// Load the import start time and period configuration. 
+			String importStartTime = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_START_TIME, classSimpleName));
+			String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+			// Get the duration of the import period. 
+			Duration duration = TimeTool.parseNextDuration(importPeriod);
+			// Calculate the next start time, or the next start time after that, if the start time is in less than a minute, 
+			// to give the following code enough time to complete it's calculations to ensure the import starts correctly. 
+			ZonedDateTime nextStartTime = Optional.of(TimeTool.parseNextZonedTime(importStartTime))
+					.map(t -> Duration.between(Instant.now(), t).toMinutes() < 1L ? t.plus(duration) : t).get();
+			// Get the time now for the import start time zone. 
+			ZonedDateTime now = ZonedDateTime.now(nextStartTime.getZone());
+			BigDecimal[] divideAndRemainder = BigDecimal.valueOf(Duration.between(now, nextStartTime).toMillis())
+					.divideAndRemainder(BigDecimal.valueOf(duration.toMillis()));
+			Duration nextStartDuration = Duration.between(now, nextStartTime);
+			if(divideAndRemainder[0].compareTo(BigDecimal.ONE) >= 0) {
+				nextStartDuration = Duration.ofMillis(divideAndRemainder[1].longValueExact());
+				nextStartTime = now.plus(nextStartDuration);
+			}
+			LOG.info(String.format(importTimerScheduling, classSimpleName, nextStartTime.format(TIME_FORMAT)));
+			ZonedDateTime nextStartTime2 = nextStartTime;
+			vertx.setTimer(nextStartDuration.toMillis(), a -> {
+				importData(classSimpleName, nextStartTime2);
+			});
+		} else {
+			LOG.info(String.format(importTimerSkip, classSimpleName));
+		}
+	}
+
+	/**
+	 * Val.Complete.enUS:Skip The Moonshot database was configured successfully. 
+	 * Val.Fail.enUS:Skip The Moonshot database configuration failed. 
+	 */
+	private Future<Void> configureMoonshotsData() {
+		Promise<Void> promise = Promise.promise();
+
+		try {
+			JsonObject jdbcOptions = new JsonObject();
+			jdbcOptions.put("driver_class", config().getString(ConfigKeys.MOONSHOTS_DRIVER_CLASS));
+			jdbcOptions.put("url", String.format("jdbc:mysql://%s:%s@%s:%s/%s?useSSL=false", 
+					config().getString(ConfigKeys.MOONSHOTS_USERNAME)
+					, config().getString(ConfigKeys.MOONSHOTS_PASSWORD)
+					, config().getString(ConfigKeys.MOONSHOTS_HOST)
+					, config().getString(ConfigKeys.MOONSHOTS_PORT)
+					, config().getString(ConfigKeys.MOONSHOTS_DATABASE)
+					));
+			jdbcOptions.put("max_pool_size", config().getInteger(ConfigKeys.MOONSHOTS_MAX_POOL_SIZE));
+			jdbcOptions.put("min_pool_size", config().getInteger(ConfigKeys.MOONSHOTS_MIN_POOL_SIZE));
+			jdbcOptions.put("max_idle_time", config().getInteger(ConfigKeys.MOONSHOTS_MAX_IDLE_TIME));
+			jdbcOptions.put("max_statements", config().getInteger(ConfigKeys.MOONSHOTS_MAX_STATEMENTS));
+			jdbcOptions.put("max_statements_per_connection", config().getInteger(ConfigKeys.MOONSHOTS_MAX_STATEMENTS_PER_CONNECTION));
+
+			jdbcClient = JDBCClient.createShared(vertx, jdbcOptions);
+			LOG.info(configureMoonshotsDataComplete);
+			promise.complete();
+		} catch(Exception ex) {
+			LOG.error(configureMoonshotsDataFail, ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	private void importData(String classSimpleName, ZonedDateTime startDateTime) {
+		if("CurrkiResource".equals(classSimpleName)) {
+			importDataCurrikiResource().onComplete(a -> {
+				String importPeriod = config().getString(String.format("%s_%s", ConfigKeys.IMPORT_DATA_PERIOD, classSimpleName));
+				Duration duration = TimeTool.parseNextDuration(importPeriod);
+				ZonedDateTime nextStartTime = startDateTime.plus(duration);
+				LOG.info(String.format(importTimerScheduling, nextStartTime.format(TIME_FORMAT)));
+				Duration nextStartDuration = Duration.between(Instant.now(), nextStartTime);
+				vertx.setTimer(nextStartDuration.toMillis(), b -> {
+					importData(classSimpleName, nextStartTime);
+				});
+			});
+		}
+	}
+
 	/**	
 	 * Import initial data
 	 * Val.Complete.enUS:Importing initial data completed. 
 	 * Val.Fail.enUS:Importing initial data failed. 
-	 * Val.Skip.enUS:data import skipped. 
+	 * Val.Skip.enUS:Skip importing data. 
 	 **/
 	private Future<Void> importData() {
 		Promise<Void> promise = Promise.promise();
-		Integer commitWithin = config().getInteger(ConfigKeys.SOLR_WORKER_COMMIT_WITHIN_MILLIS);
-		try {
-			if(config().getBoolean(ConfigKeys.ENABLE_IMPORT_DATA, true)) {
-				List<Future> futures = new ArrayList<>();
-				futures.add(Future.future(promise1 -> {
-					workerExecutor.executeBlocking(blockingCodeHandler -> {
-					}, false).onSuccess(a -> {
-						promise1.complete();
-					}).onFailure(ex -> {
-						LOG.error(String.format("executeBlocking failed. "), ex);
-						promise1.fail(ex);
-					});
-				}));
-				CompositeFuture.all(futures).onSuccess(a -> {
-					LOG.info("importData futures completed. ");
-					promise.complete();
-				}).onFailure(ex -> {
-					LOG.error(String.format("importData futures failed. "), ex);
-					promise.fail(ex);
-				});
-			} else {
-				LOG.info(String.format(importDataSkip));
-				promise.complete();
-			}
-		} catch (Exception ex) {
-			LOG.error(configureEmailFail, ex);
-			promise.fail(ex);
-		}
+		importTimer("ChoiceDonor");
+		importTimer("ChoiceImage");
+		return promise.future();
+	}
+
+	private Future<Void> importDataCurrikiResource() {
+		Promise<Void> promise = Promise.promise();
 		return promise.future();
 	}
 

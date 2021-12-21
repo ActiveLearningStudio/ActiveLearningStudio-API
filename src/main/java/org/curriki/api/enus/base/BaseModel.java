@@ -36,8 +36,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * PrimaryKey: true
 	 * Modify: false
 	 * HtmlRow: 1
@@ -48,8 +47,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * InheritPrimaryKey: true
 	 * Define: true
 	 */
@@ -66,8 +64,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * Modify: false
 	 * VarCreated: true
@@ -80,8 +77,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Modify: false
 	 * VarModified: true
 	 * HtmlRow: 1
@@ -94,8 +90,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 2
 	 * HtmlCell: 1
@@ -107,8 +102,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * HtmlRow: 2
 	 * HtmlCell: 2
@@ -120,8 +114,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 */ 
 	protected void _classCanonicalName(Wrap<String> w) {
 		w.o(getClass().getCanonicalName());
@@ -129,8 +122,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 */ 
 	protected void _classSimpleName(Wrap<String> w) {
 		w.o(getClass().getSimpleName());
@@ -138,8 +130,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * Modify: false
 	 */ 
@@ -149,8 +140,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	/**   
 	 * {@inheritDoc}
 	 * Var.enUS: userKey
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Define: true
 	 * Modify: false
 	 */                 
@@ -158,8 +148,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	}
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * Saves: true
 	 */ 
 	protected void _saves(List<String> l) {
@@ -167,8 +156,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * VarTitle: true
 	 * HtmlColumn: 2
 	 */  
@@ -178,8 +166,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * VarId: true
 	 * HtmlRow: 1
 	 * HtmlCell: 4
@@ -231,6 +218,7 @@ public class BaseModel extends BaseModelGen<Object> {
 	/**
 	 * {@inheritDoc}
 	 * Text: true
+	 * DocValues: true
 	 */ 
 	protected void _objectText(Wrap<String> w) { 
 		w.o(toString());
@@ -238,8 +226,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * VarUrlId: true
 	 */  
 	protected void _pageUrlId(Wrap<String> w) {
@@ -251,8 +238,7 @@ public class BaseModel extends BaseModelGen<Object> {
 
 	/**
 	 * {@inheritDoc}
-	 * Indexed: true
-	 * Stored: true
+	 * DocValues: true
 	 * VarUrlPk: true
 	 */ 
 	protected void _pageUrlPk(Wrap<String> w) {
