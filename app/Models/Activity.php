@@ -86,6 +86,14 @@ class Activity extends Model
     }
 
     /**
+     * Get the user that owns the stand alone activity
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    /**
      * Get the activity's project's user.
      *
      * @return object
