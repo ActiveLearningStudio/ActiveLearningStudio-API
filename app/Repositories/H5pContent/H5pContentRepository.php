@@ -37,6 +37,17 @@ class H5pContentRepository extends BaseRepository implements H5pContentRepositor
     }
 
     /**
+     * Get the h5p content for library.
+     *
+     * @param int $contentId for library
+     * @return array
+     */
+    public function getLibrary($contentId)
+    {
+        return  $this->model::select('library_id')->where('id', $contentId)->with('library')->first();
+    }
+
+    /**
      * Get the h5p content id for brightcove video.
      *
      * @param int $videoId for brightcove video
