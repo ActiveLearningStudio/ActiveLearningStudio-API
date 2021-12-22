@@ -220,7 +220,6 @@ class TeamController extends Controller
      *
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
-     * @bodyParam noovo_group_id integer ID of a Noovo Group Example: 1
      * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
      *
      * @responseFile 201 responses/team/team.json
@@ -677,7 +676,6 @@ class TeamController extends Controller
      * @urlParam team required The Id of a team Example: 1
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
-     * @bodyParam noovo_group_id integer ID of a Noovo Group Example: 1
      * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
      *
      * @responseFile responses/team/team.json
@@ -879,7 +877,7 @@ class TeamController extends Controller
         
         $projects = $team->projects()->get(); // Get all associated projects of a team
 
-        if (empty($suborganization->noovo_client_id) || empty($team->noovo_group_id) || empty($team->noovo_group_title)) {
+        if (empty($suborganization->noovo_client_id) ||  empty($team->noovo_group_title)) {
             return response([
                 'message' =>  "Noovo Client id or group id is missing.",
             ], 500);
