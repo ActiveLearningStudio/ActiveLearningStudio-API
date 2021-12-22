@@ -9,6 +9,7 @@ use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\StandAloneActivityResource;
+use App\Jobs\CloneStandAloneActivity;
 use App\Models\Activity;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
@@ -415,6 +416,44 @@ class StandAloneActivityController extends Controller
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         return response([
             'activity' => new H5pActivityResource($activity, $h5p_data),
+        ], 200);
+    }
+
+    /**
+     * Clone Stand Alone Activity
+     *
+     * Clone the specified activity of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activity required The Id of an activity Example: 1
+     *
+     * @response {
+     *   "message": "Activity is being cloned|duplicated in background!"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Not a Public Activity."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to clone activity."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param Activity $activity
+     * @return Response
+     */
+    public function clone(Request $request, Organization $suborganization, Activity $activity)
+    {
+        CloneStandAloneActivity::dispatch($activity, $request->bearerToken())->delay(now()->addSecond());
+        return response([
+            "message" => "Your request to clone interactive video [$activity->title] has been received and is being processed. <br>
+            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 

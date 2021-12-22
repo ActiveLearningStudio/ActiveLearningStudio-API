@@ -513,6 +513,44 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     }
 
     /**
+     * To clone Stand Alone Activity
+     * @param Activity $activity
+     * @param string $token
+     * @return int
+     */
+    public function cloneStandAloneActivity(Activity $activity, $token)
+    {
+        $h5p_content = $activity->h5p_content;
+        if ($h5p_content) {
+            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        }
+        $newH5pContent = $h5p_content->id ?? null;
+
+        // copy the content data if exist
+        $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
+
+        $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
+        $activity_data = [
+            'title' => $activity->title . "-COPY",
+            'type' => $activity->type,
+            'content' => $activity->content,
+            'description' => $activity->description,
+            'order' => $activity->order + 1,
+            'h5p_content_id' => $newH5pContent, // set if new h5pContent created
+            'thumb_url' => $new_thumb_url,
+            'subject_id' => $activity->subject_id,
+            'education_level_id' => $activity->education_level_id,
+            'shared' => $activity->shared,
+            'user_id' => $activity->user_id,
+            'organization_id' => $activity->organization_id,
+        ];
+        $cloned_activity = $this->create($activity_data);
+        return $cloned_activity['id'];
+    }
+
+    /**
      * To export and import an H5p File
      *
      * @param $token

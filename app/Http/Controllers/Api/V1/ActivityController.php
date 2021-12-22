@@ -556,7 +556,7 @@ class ActivityController extends Controller
         $isDuplicate = ($activity->playlist_id == $playlist->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         return response([
-            "message" => "Your request to $process  activity [$activity->title] has been received and is being processed. <br> 
+            "message" => "Your request to $process  activity [$activity->title] has been received and is being processed. <br>
             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
@@ -600,7 +600,7 @@ class ActivityController extends Controller
                 array_push($settings['loadedCss'], config('app.url').$activityItem['activityType']->css_path);
            }
         }
-       
+
         // create event dispatch
         event(new H5pEvent(
             'content',

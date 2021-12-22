@@ -45,6 +45,14 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
     public function clone(Playlist $playlist, Activity $activity, $token);
 
     /**
+     * To clone a stand alone activity
+     *
+     * @param Activity $activity
+     * @param string $token
+     */
+    public function cloneStandAloneActivity(Activity $activity, $token);
+
+    /**
      * To Clone H5P content associated to an Activity
      *
      * @param $token

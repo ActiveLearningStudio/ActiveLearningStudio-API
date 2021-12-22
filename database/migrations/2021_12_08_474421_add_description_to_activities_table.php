@@ -14,7 +14,7 @@ class AddDescriptionToActivitiesTable extends Migration
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->mediumText('description')->nullable()->after('title');
+            $table->mediumText('description')->nullable();
         });
     }
 
