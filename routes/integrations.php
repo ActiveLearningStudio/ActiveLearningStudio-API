@@ -28,7 +28,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     // Brightcove Video Integration
     Route::group(['prefix' => 'brightcove'], function () {
         Route::get('suborganization/{suborganization}/get-bc-account-list', 'Integration\BrightcoveAPIClientController@getAccountList');        
-        Route::post('get-bc-videos-count', 'Integration\BrightcoveAPIClientController@getVideosCount');
         Route::post('get-bc-videos-list', 'Integration\BrightcoveAPIClientController@getVideosList');
     });
 });

@@ -127,7 +127,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $teamData = [];
             $teamData['name'] = $data['name'];
             $teamData['description'] = $data['description'];
-            $teamData['noovo_group_id'] = $data['noovo_group_id'];
             $teamData['noovo_group_title'] = $data['noovo_group_title'];
 
             $this->update($teamData, $team->id);
@@ -609,7 +608,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             'team_id' => $team->id,
             'noovo_company_id' => $organization->noovo_client_id,
             'noovo_company_title' => $organization->noovo_client_id,
-            'noovo_team_id' => $team->noovo_group_id,
+            'noovo_team_id' => $team->noovo_group_title,
             'noovo_team_title' => $team->noovo_group_title,
             'projects' => json_encode($projects),
             'response' => $response,
