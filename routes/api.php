@@ -156,6 +156,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivityController');
         Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/detail', 'StandAloneActivityController@detail');
         Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/h5p', 'StandAloneActivityController@h5p');
+        Route::post('suborganizations/{suborganization}/stand-alone-activity/{activity}/clone', 'StandAloneActivityController@clone');
 
         Route::get('suborganization/{suborganization}/projects/{project}/offline-project', 'ProjectDownloadController@exportProject');
         Route::get('project/delete/{project_path}', 'ProjectDownloadController@deleteProject');

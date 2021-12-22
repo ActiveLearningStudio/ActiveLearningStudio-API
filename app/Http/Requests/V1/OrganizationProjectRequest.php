@@ -40,10 +40,10 @@ class OrganizationProjectRequest extends FormRequest
     public function messages()
     {
         return [
-            'indexing.in' => 'Indexing should be 1,2 or 3',
+            'indexing.in' => 'Indexing should be 0, 1, 2 or 3',
             'exclude_starter.in' => 'Indexing should be true',
             'starter_project.in' => 'Indexing should be true or false',
-            'shared.in' => 'Shared status should be true or false',
+            'shared.boolean' => 'Shared status should be 1 or 0',
         ];
     }
 }
