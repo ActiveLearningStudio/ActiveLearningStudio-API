@@ -32,7 +32,8 @@ class Activity extends Model
         'h5p_content_id',
         'indexing',
         'user_id',
-        'organization_id'
+        'organization_id',
+        'description'
     ];
 
     /**

@@ -220,7 +220,7 @@ class StandAloneActivityController extends Controller
             // H5P meta is in 'data' index of the payload.
             $this->update_h5p($validated['data'], $stand_alone_activity->h5p_content_id);
 
-            $updated_activity = new ActivityResource($this->activityRepository->find($stand_alone_activity->id));
+            $updated_activity = new StandAloneActivityResource($this->activityRepository->find($stand_alone_activity->id));
             return response([
                 'activity' => $updated_activity,
             ], 200);
