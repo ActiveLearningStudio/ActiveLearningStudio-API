@@ -555,7 +555,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             $export_file = $this->projectRepository->exportProject($user, $project);
                             \Log::Info($export_file);
                             $file_info = array(
-                                "filename" => str_replace(' ', '-', strtolower($project->name)) . ".zip",
+                                "filename" => str_replace(' ', '-', strtolower($project->name)),
                                 "description"=> $project->description,
                                 "url"=> url(Storage::url('exports/'.basename($export_file))),
                                 "md5sum"=> md5_file($export_file)
@@ -583,7 +583,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             return false;
                         }
         
-                        $this->createLog($organization, $team, $project_ids, 'No project to move or teams project already moved.', 0);
+                        
                         
                     } catch (\Exception $e) {
                         \Log::error($e->getMessage());
