@@ -751,4 +751,32 @@ class UserController extends Controller
         return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all()), 200);
     }
 
+    public function downloadExport(Request $request, $notification_id)
+    {
+        $notification_detail = auth()->user()->notifications()->find($notification_id);
+        if ($notification_detail) {
+            $data = $notification_detail->data;
+           
+            if ($notification_detail->type == "App\Notifications\ProjectExportNotification") {
+                if(isset($data['file_name'])) {
+                   $file_path = storage_path('app/public/exports/'.$data['file_name']);
+                   if(!empty($data['file_name']) && file_exists($file_path)) {
+
+                    return response()->download($file_path, "abc.zip"); 
+                   }
+                }
+                return response([
+                    'errors' => ['File param not exist'],
+                ], 500);
+            }
+            return response([
+                'errors' => ['Not an export notification'],
+            ], 500);
+        }
+
+        return response([
+            'errors' => ['Notification with provided id is not exists.'],
+        ], 500);
+    }
+
 }
