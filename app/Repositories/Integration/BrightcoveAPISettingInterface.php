@@ -1,11 +1,11 @@
 <?php
 /**
  * @author        Asim Sarwar
- * Date           09-12-2021
  * Class          BrightcoveAPISettingInterface
  */
 namespace App\Repositories\Integration;
 
+use App\Models\Organization;
 use App\Models\Integration\BrightcoveAPISetting;
 use App\Repositories\EloquentRepositoryInterface;
 
@@ -27,4 +27,12 @@ interface BrightcoveAPISettingInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function getRowRecordByOrgId($suborganization, $id);
+
+    /**
+     * To clone Brightcove API Setting
+     * @param BrightcoveAPISetting $brightcoveAPISetting
+     * @param Organization $subOrganization
+     * @param $token
+     */
+    public function clone(BrightcoveAPISetting $brightcoveAPISetting, Organization $subOrganization, $token);
 }
