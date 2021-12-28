@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-class deleteExportedProjects extends Command
+class DeleteExportedProjects extends Command
 {
     /**
      * The name and signature of the console command.
@@ -42,15 +42,16 @@ class deleteExportedProjects extends Command
         $files = scandir($projectDir);
         
         $currentDate = date('Y-m-d');
-        $currentDate = date('Y-m-d', strtotime($currentDate));
+        
         $limitDays = "- ". config('constants.default-exported-projects-days-limit');
         
         $oldDate = date('Y-m-d', strtotime($limitDays . "days", strtotime($currentDate)));
         
         foreach ($files as $file) {
-            if($file == "." || $file == "..") continue;
+            if ($file == "." || $file == "..") {
+                continue;
+            };
 
-            
             $path = 'public/exports/' . $file;
             
             $time = Storage::lastModified($path);
