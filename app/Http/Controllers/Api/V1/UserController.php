@@ -795,7 +795,7 @@ class UserController extends Controller
         if ($notification_detail) {
             $data = $notification_detail->data;
            
-            if ($notification_detail->type == "App\Notifications\ProjectExportNotification") {
+            if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
                 if (isset($data['file_name'])) {
                    $file_path = storage_path('app/public/exports/'.$data['file_name']);
                    if(!empty($data['file_name']) && file_exists($file_path)) {
