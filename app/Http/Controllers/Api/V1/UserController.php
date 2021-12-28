@@ -751,6 +751,44 @@ class UserController extends Controller
         return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all()), 200);
     }
 
+    /**
+     * Download Exported Project
+     *
+     * Download the specific notification project.
+     *
+     * @urlParam $notification_id string required Current id of a notification Example: 123
+     *
+     * @response {
+     *   "message": "Notification has been deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Notification with provided id is not exists."
+     *   ]
+     * }
+     * 
+     *  @response 500 {
+     *   "errors": [
+     *     "File param not exist."
+     *   ]
+     * }
+     * 
+     *  @response 500 {
+     *   "errors": [
+     *     "Link has been expired."
+     *   ]
+     * }
+     * 
+     *  @response 500 {
+     *   "errors": [
+     *     "Not an export notification."
+     *   ]
+     * }
+     *
+     * @param $notification_id
+     * @return Response
+     */
     public function downloadExport(Request $request, $notification_id)
     {
         $notification_detail = auth()->user()->notifications()->find($notification_id);
@@ -762,15 +800,18 @@ class UserController extends Controller
                    $file_path = storage_path('app/public/exports/'.$data['file_name']);
                    if(!empty($data['file_name']) && file_exists($file_path)) {
 
-                    return response()->download($file_path, "abc.zip"); 
+                    return response()->download($file_path, basename($file_path)); 
                    }
+                   return response([
+                    'errors' => ['Link has been expired.'],
+                ], 500);
                 }
                 return response([
-                    'errors' => ['File param not exist'],
+                    'errors' => ['File param not exist.'],
                 ], 500);
             }
             return response([
-                'errors' => ['Not an export notification'],
+                'errors' => ['Not an export notification.'],
             ], 500);
         }
 
