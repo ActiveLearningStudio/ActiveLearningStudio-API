@@ -802,7 +802,7 @@ class UserController extends Controller
                         return response()->download($file_path, basename($file_path)); 
                    }
                    return response([
-                    'errors' => ['Link has been expired.'],
+                        'errors' => ['Link has been expired.'],
                     ], 500);
                 }
                 return response([
