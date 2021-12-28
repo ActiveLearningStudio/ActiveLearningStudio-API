@@ -764,19 +764,13 @@ class UserController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Notification with provided id is not exists."
+     *     "Notification with provided id does not exists."
      *   ]
      * }
      * 
      *  @response 500 {
      *   "errors": [
-     *     "File param not exist."
-     *   ]
-     * }
-     * 
-     *  @response 500 {
-     *   "errors": [
-     *     "Link has been expired."
+     *     "Link has expired."
      *   ]
      * }
      * 
