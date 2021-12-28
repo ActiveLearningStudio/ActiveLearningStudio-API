@@ -796,11 +796,10 @@ class UserController extends Controller
             $data = $notification_detail->data;
            
             if ($notification_detail->type == "App\Notifications\ProjectExportNotification") {
-                if(isset($data['file_name'])) {
+                if (isset($data['file_name'])) {
                    $file_path = storage_path('app/public/exports/'.$data['file_name']);
                    if(!empty($data['file_name']) && file_exists($file_path)) {
-
-                    return response()->download($file_path, basename($file_path)); 
+                        return response()->download($file_path, basename($file_path)); 
                    }
                    return response([
                     'errors' => ['Link has been expired.'],
