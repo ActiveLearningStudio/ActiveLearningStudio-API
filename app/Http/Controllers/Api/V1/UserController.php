@@ -802,11 +802,11 @@ class UserController extends Controller
                         return response()->download($file_path, basename($file_path)); 
                    }
                    return response([
-                        'errors' => ['Link has been expired.'],
+                        'errors' => ['Link has expired.'],
                     ], 500);
                 }
                 return response([
-                    'errors' => ['File param not exist.'],
+                    'errors' => ['Link has expired.'],
                 ], 500);
             }
             return response([
@@ -815,7 +815,7 @@ class UserController extends Controller
         }
 
         return response([
-            'errors' => ['Notification with provided id is not exists.'],
+            'errors' => ['Notification with provided id does not exists.'],
         ], 500);
     }
 
