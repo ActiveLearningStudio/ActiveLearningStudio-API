@@ -58,7 +58,7 @@ class DeleteExportedProjects extends Command
             
             if ($time < strtotime($oldDate)) {
                
-                if(is_dir( $projectDir . $file)) {
+                if (is_dir( $projectDir . $file)) {
                     \Log:: info($path . " has been removed");
                     Storage::deleteDirectory($path); continue;
                 }
