@@ -194,9 +194,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $date = Carbon::now()->subDays($days_limit);
 
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = auth()->user()->notifications();
+        $q = $data['query'] ?? null;
+        // if simple request for getting project listing with search
+        if ($q) {
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('data', 'iLIKE', '%' .$q. '%');
+            });
+        }
         
-        return auth()->user()->notifications()
-                                ->where('type', 'App\Notifications\ProjectExportNotification')
+        return $query->where('type', 'App\Notifications\ProjectExportNotification')
                                 ->where('created_at', '>=', $date)->paginate($perPage)->appends(request()->query());
     }
 
