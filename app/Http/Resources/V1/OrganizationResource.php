@@ -15,6 +15,24 @@ class OrganizationResource extends JsonResource
      */
     public function toArray($request)
     {
+        if ($this->tos_type === 'Parent' && $this->parent) {
+            $tos_organization = $this->parent;
+            if ($tos_organization->tos_type === 'Parent' && $tos_organization->parent) {
+                $this->tos_content = $tos_organization->parent->tos_content;
+            } else {
+                $this->tos_content =  $tos_organization->tos_content;
+            }
+        }
+
+        if ($this->privacy_policy_type === 'Parent' && $this->parent) {
+            $privacy_policy_organization = $this->parent;
+            if ($privacy_policy_organization->privacy_policy_type === 'Parent' && $privacy_policy_organization->parent) {
+                $this->privacy_policy_content = $privacy_policy_organization->parent->privacy_policy_content;
+            } else {
+                $this->privacy_policy_content =  $privacy_policy_organization->privacy_policy_content;
+            }
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -45,6 +63,12 @@ class OrganizationResource extends JsonResource
             'users_count' => isset($this->users_count) ? $this->users_count : 0,
             'groups_count' => isset($this->groups_count) ? $this->groups_count : 0,
             'teams_count' => isset($this->teams_count) ? $this->teams_count : 0,
+            'tos_type' => $this->tos_type,
+            'tos_url' => $this->tos_url,
+            'tos_content' => $this->tos_content,
+            'privacy_policy_type' => $this->privacy_policy_type,
+            'privacy_policy_url' => $this->privacy_policy_url,
+            'privacy_policy_content' => $this->privacy_policy_content,
         ];
     }
 }
