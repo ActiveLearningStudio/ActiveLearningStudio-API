@@ -12,13 +12,15 @@
 
 namespace Djoudi\LaravelH5p;
 
-use Djoudi\LaravelH5p\Repositories\EditorAjaxRepository;
-use Djoudi\LaravelH5p\Repositories\LaravelH5pRepository;
-use Djoudi\LaravelH5p\Storages\EditorStorage;
-use Djoudi\LaravelH5p\Storages\LaravelH5pStorage;
-use H5PContentValidator;
+use App\Models\ActivityItem;
 use H5PCore;
-
+use H5peditor;
+use H5PExport;
+use H5PStorage;
+use H5PValidator;
+use H5PContentValidator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 //use H5PDevelopment;
 //use H5PDefaultStorage;
 //use H5PEditorEndpoints;
@@ -26,13 +28,14 @@ use H5PCore;
 //use H5PEditorAjaxInterface;
 //use H5peditorFile;
 //use H5peditorStorage;
-use H5peditor;
-use H5PExport;
-use H5PStorage;
-use H5PValidator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
+use Djoudi\LaravelH5p\Storages\EditorStorage;
+use Djoudi\LaravelH5p\Storages\LaravelH5pStorage;
+use App\Repositories\H5pContent\H5pContentRepository;
+use Djoudi\LaravelH5p\Repositories\EditorAjaxRepository;
+use Djoudi\LaravelH5p\Repositories\LaravelH5pRepository;
+use App\Repositories\ActivityItem\ActivityItemRepository;
 
 class LaravelH5p
 {
@@ -171,10 +174,22 @@ class LaravelH5p
     {
         // Determine embed type
         $embed = H5PCore::determineEmbedType($content['embedType'], $content['library']['embedTypes']);
-
         // Make sure content isn't added twice
         $cid = 'cid-' . $content['id'];
+        // Load H5P content from Repository
+        $getH5pContent = new H5pContentRepository(new H5pContent());
+        // Load Activity Item
+        $activityItem = new ActivityItemRepository(new ActivityItem());
 
+        // Check for library
+        $record = $getH5pContent->getLibrary($content['id']);
+        // Get Library Name
+        $libraryName = $record->library->name;
+        $libraryMajorVersion = $record->library->major_version;
+        $libraryMinorVerison = $record->library->minor_version;
+
+        // Load Activity type to get the CSS Path
+        $activityTypeRes = $activityItem->getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison);
         if (!isset($settings['contents'][$cid])) {
             $settings['contents'][$cid] = self::get_content_settings($content);
             $core = self::$core;
@@ -196,9 +211,17 @@ class LaravelH5p
                         $settings['loadedCss'][] = self::get_h5plibrary_url($url);
                     }
                 }
+                // Chekc if the CSS path exist and includes into the LoadedJs object
+                if(isset($activityTypeRes['activityType']->css_path)) {
+                    array_push($settings['loadedCss'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                }
             } elseif ($embed === 'iframe') {
                 $settings['contents'][$cid]['scripts'] = $core->getAssetsUrls($files['scripts']);
                 $settings['contents'][$cid]['styles'] = $core->getAssetsUrls($files['styles']);
+                // Chekc if the CSS path exist and includes into the core script object
+                if(isset($activityTypeRes['activityType']->css_path)) {
+                    array_push($settings['contents'][$cid]['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                }
             }
         }
 
