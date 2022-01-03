@@ -221,6 +221,22 @@ class SuborganizationController extends Controller
 
         $data = $request->validated();
 
+        if ($data['tos_type'] === 'Content') {
+            $data['tos_url'] = null;
+        } else if ($data['tos_type'] === 'URL') {
+            $data['tos_content'] = null;
+        } else {
+            $data['tos_content'] = $data['tos_url'] = null;
+        }
+
+        if ($data['privacy_policy_type'] === 'Content') {
+            $data['privacy_policy_url'] = null;
+        } else if ($data['privacy_policy_type'] === 'URL') {
+            $data['privacy_policy_content'] = null;
+        } else {
+            $data['privacy_policy_content'] = $data['privacy_policy_url'] = null;
+        }
+
         $is_updated = $this->organizationRepository->update($suborganization, $data);
 
         if ($is_updated) {
