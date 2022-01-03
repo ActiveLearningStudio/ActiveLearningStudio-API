@@ -267,6 +267,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
         $queryWhere[] = "deleted_at IS NULL";
+        $queryWhere[] = "(standalone_activity_user_id IS NULL OR standalone_activity_user_id = 0)";
         $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
 
         if (isset($data['startDate']) && !empty($data['startDate'])) {

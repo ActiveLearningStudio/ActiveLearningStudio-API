@@ -105,6 +105,6 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         // Create full name of library with major and minor version
         $libName =  $libraryName. ' ' . $libraryMajorVersion . '.' .$libraryMinorVerison ;
 
-        return $this->model::select('id', 'h5pLib', 'activity_type_id')->where('h5pLib', $libName)->whereHas('activityType')->first();
+        return $this->model::select('id', 'h5pLib', 'activity_type_id')->where('h5pLib', $libName)->with('activityType')->first();
     }
 }

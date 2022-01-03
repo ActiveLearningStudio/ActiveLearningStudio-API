@@ -23,7 +23,7 @@ class BrightcoveAPISetting extends Model
         'organization_id',
         'account_id',
         'account_name',
-        'account_eamil',
+        'account_email',
         'client_id',
         'client_secret',
         'description'

@@ -216,6 +216,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
         Route::post('suborganizations/{suborganization}/lti-tool-settings/{ltiToolSetting}/clone', 'LtiTool\LtiToolSettingsController@clone');
 
+        // brightcove-api-settings
+        Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');
+        Route::post('suborganizations/{suborganization}/brightcove-api-settings/{brighcoveAPISetting}/clone', 'Integration\BrightcoveAPISettingsController@clone');
+
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');

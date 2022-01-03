@@ -584,23 +584,6 @@ class ActivityController extends Controller
         $settings = $embed['settings'];
         $user = Auth::user();
 
-        $record = $this->h5pContentRepository->getLibrary($activity->h5p_content_id);
-
-        $libraryName = $record->library->name;
-        $libraryMajorVersion = $record->library->major_version;
-        $libraryMinorVerison = $record->library->minor_version;
-
-        // Get activity item
-        $activityItem = $this->activityItemRepository->getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison);
-        if(isset($activityItem['activityType']->css_path)) {
-           if(isset($settings['contents']['cid-'.$activity->h5p_content_id]['styles'])) {
-                array_push($settings['contents']['cid-'.$activity->h5p_content_id]['styles'], config('app.url').$activityItem['activityType']->css_path);
-           }
-           else {
-                array_push($settings['loadedCss'], config('app.url').$activityItem['activityType']->css_path);
-           }
-        }
-
         // create event dispatch
         event(new H5pEvent(
             'content',
