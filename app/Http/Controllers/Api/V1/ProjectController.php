@@ -124,7 +124,7 @@ class ProjectController extends Controller
      * @urlParam  index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
      *
      * @response {
-     *   "message": "Index status changed successfully!",
+     *   "message": "Library status changed successfully!",
      * }
      *
      * @response 500 {
@@ -595,7 +595,7 @@ class ProjectController extends Controller
         // pushed cloning of project in background
         CloneProject::dispatch($user, $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
-            'message' =>  "Your request to $process project [$project->name] has been received and is being processed.<br> 
+            'message' =>  "Your request to $process project [$project->name] has been received and is being processed.<br>
                              You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }

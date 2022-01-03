@@ -91,12 +91,12 @@ class ProjectController extends Controller
      * @urlParam  index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
      *
      * @response {
-     *   "message": "Index status changed successfully!",
+     *   "message": "Library status changed successfully!",
      * }
      *
      * @response 500 {
      *   "errors": [
-     *     "Invalid index value provided."
+     *     "Invalid Library value provided."
      *   ]
      * }
      *
