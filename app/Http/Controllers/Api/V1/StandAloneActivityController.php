@@ -39,6 +39,7 @@ class StandAloneActivityController extends Controller
      * StandAloneActivityController constructor.
      *
      * @param ActivityRepositoryInterface $activityRepository
+     * @param BrightcoveAPISettingRepository $brightcoveAPISettingRepository
      */
     public function __construct(
         ActivityRepositoryInterface $activityRepository,
