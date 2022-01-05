@@ -187,8 +187,10 @@ class H5pController extends Controller
                 if ($content['library']['machineName'] === 'H5P.BrightcoveInteractiveVideo') {
                     $brightCoveVideoData['brightcove_video_id'] = $params->params->interactiveVideo->video->brightcoveVideoID;
                     $brightCoveVideoData['h5p_content_id'] = $content['id'];
-                    $bcAPISetting = $this->bcAPISettingRepository->getByAccountId($request->get('brightcove_account_id'));
-                    $brightCoveVideoData['brightcove_api_setting_id'] = $bcAPISetting->id;
+                    if ($request->get('brightcove_account_id')) {
+                        $bcAPISetting = $this->bcAPISettingRepository->getByAccountId($request->get('brightcove_account_id'));
+                        $brightCoveVideoData['brightcove_api_setting_id'] = $bcAPISetting->id;
+                    }
                     H5pBrightCoveVideoContents::create($brightCoveVideoData);
                 }
 
