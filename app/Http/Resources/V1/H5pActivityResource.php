@@ -31,7 +31,7 @@ class H5pActivityResource extends JsonResource
             $playlist->project = $this->playlist->project;
         }
 
-        return [
+        $response = [
             'id' => $this->id,
             'title' => $this->title,
             'type' => $this->type,
@@ -47,5 +47,11 @@ class H5pActivityResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+
+        if ($this->resource->brightcoveData) {
+            $response['brightcoveData'] = $this->resource->brightcoveData;
+        }
+
+        return $response;
     }
 }
