@@ -41,7 +41,7 @@ class GetVideoList
         $getToken = $this->bcAPIClient->run(new GetAPITokenCommand($setting));
         if ( isset($getToken['Authorization']) ) {
             $getCountResponse = $this->bcAPIClient->run(new GetVideoCountCommand($setting, $getToken, $queryParam));
-            $getCountResponse['count'] = $getCountResponse['count'] - $savedVideoCount;
+            $getCountResponse['count'] = ($savedVideoCount > $getCountResponse['count']) ? $savedVideoCount - $getCountResponse['count'] : $getCountResponse['count'] - $savedVideoCount;
             $response = $this->bcAPIClient->run(new GetVideoListCommand($setting, $getToken, $queryParam));
             if ( $getCountResponse && $response) {
                 if ($savedVideoCount > 0) {
