@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
 use App\Models\Organization;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 
 /**
  * @group 5. Activity
@@ -37,12 +39,15 @@ class StandAloneActivityController extends Controller
      * StandAloneActivityController constructor.
      *
      * @param ActivityRepositoryInterface $activityRepository
+     * @param BrightcoveAPISettingRepository $brightcoveAPISettingRepository
      */
     public function __construct(
-        ActivityRepositoryInterface $activityRepository
+        ActivityRepositoryInterface $activityRepository,
+        BrightcoveAPISettingRepository $brightcoveAPISettingRepository
     )
     {
         $this->activityRepository = $activityRepository;
+        $this->bcAPISettingRepository = $brightcoveAPISettingRepository;
     }
 
     /**
@@ -336,6 +341,14 @@ class StandAloneActivityController extends Controller
             $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
         }
 
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $activity->brightcoveData = $brightcoveData;
+        }
+        
         return response([
             'activity' => new ActivityDetailResource($activity, $data),
         ], 200);
@@ -414,6 +427,15 @@ class StandAloneActivityController extends Controller
         $user_data = $user->only(['id', 'name', 'email']);
 
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $activity->brightcoveData = $brightcoveData;
+        }
+        
         return response([
             'activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);

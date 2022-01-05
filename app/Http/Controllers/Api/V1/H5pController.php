@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 
 /**
  * @group 12. H5P
@@ -35,9 +36,10 @@ class H5pController extends Controller
      *
      * @param ContentUserDataGoRepositoryInterface $contentUserDataGoRepository
      */
-    public function __construct(ContentUserDataGoRepositoryInterface $contentUserDataGoRepository)
+    public function __construct(ContentUserDataGoRepositoryInterface $contentUserDataGoRepository, BrightcoveAPISettingRepository $brightcoveAPISettingRepository)
     {
         $this->contentUserDataGoRepository = $contentUserDataGoRepository;
+        $this->bcAPISettingRepository = $brightcoveAPISettingRepository;
     }
 
     /**
@@ -177,7 +179,7 @@ class H5pController extends Controller
 
                 // Set disabled features
                 $this->get_disabled_content_features($core, $content);
-
+                
                 // Save new content
                 $content['id'] = $core->saveContent($content);
 
@@ -185,6 +187,10 @@ class H5pController extends Controller
                 if ($content['library']['machineName'] === 'H5P.BrightcoveInteractiveVideo') {
                     $brightCoveVideoData['brightcove_video_id'] = $params->params->interactiveVideo->video->brightcoveVideoID;
                     $brightCoveVideoData['h5p_content_id'] = $content['id'];
+                    if ($request->get('brightcove_account_id')) {
+                        $bcAPISetting = $this->bcAPISettingRepository->getByAccountId($request->get('brightcove_account_id'));
+                        $brightCoveVideoData['brightcove_api_setting_id'] = $bcAPISetting->id;
+                    }
                     H5pBrightCoveVideoContents::create($brightCoveVideoData);
                 }
 

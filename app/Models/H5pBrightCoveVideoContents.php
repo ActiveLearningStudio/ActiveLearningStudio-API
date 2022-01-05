@@ -20,7 +20,8 @@ class H5pBrightCoveVideoContents extends Model
      */
     protected $fillable = [
         'brightcove_video_id',
-        'h5p_content_id'
+        'h5p_content_id',
+        'brightcove_api_setting_id'
     ];
 
 }
