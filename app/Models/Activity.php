@@ -71,6 +71,18 @@ class Activity extends Model
     }
 
     /**
+     * Cascade on delete the activity
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function (Activity $activity) {
+            H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->delete();
+        });
+    }
+
+    /**
      * Get the search request
      */
     public static function searchForm(): SearchRequestBuilder
