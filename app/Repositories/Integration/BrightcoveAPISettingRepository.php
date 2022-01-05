@@ -163,4 +163,18 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
         return $clonedSetting['id'];
     }
 
+    /**
+     * To get record by account id
+     * @param integer $suborganization, $id
+     * @return mixed
+     * @throws GeneralException
+     */
+    public function getByAccountId($accountId)
+    {
+        $setting = $this->model->where('account_id', $accountId)->first();
+        if ($setting) {
+            return $setting;
+        }
+        throw new GeneralException('Brightcove API setting not found.');
+    }
 }
