@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             OrganizationVisibilityTypeSeeder::class,
             OrganizationPermissionTypeSeeder::class,
             OrganizationRolePermissionSeeder::class,
-            OrganizationPermissionTypeUpdateSeeder::class,
+            OrganizationAdminPermissionTypeSeeder::class,
         ]);
     }
 }
