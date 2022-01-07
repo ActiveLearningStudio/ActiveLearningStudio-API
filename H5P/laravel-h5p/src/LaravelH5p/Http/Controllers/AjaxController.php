@@ -2,18 +2,47 @@
 
 namespace Djoudi\LaravelH5p\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Djoudi\LaravelH5p\Events\H5pEvent;
-use Djoudi\LaravelH5p\LaravelH5p;
+use GuzzleHttp\Client;
 use H5PEditorEndpoints;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Djoudi\LaravelH5p\Events\H5pEvent;
+use App\Repositories\ActivityItem\ActivityItemRepository;
+use App\Models\ActivityItem;
 
 class AjaxController extends Controller
 {
-    public function libraries(Request $request)
+
+    public function libraries(Request $req)
+    {
+        $machineName = $req->get('machineName');
+        $major_version = $req->get('majorVersion');
+        $minor_version = $req->get('minorVersion');
+        $authToken = $req->bearerToken();
+
+        $getActivityItem = new ActivityItemRepository(new ActivityItem());
+        $activityTypeRes = $getActivityItem->getActivityItem($machineName, $major_version, $minor_version);
+
+        // dd($activityTypeRes);
+        $client = new Client();
+        $url = route('h5p.ajax.libraries.before')."?&machineName=".$machineName."&majorVersion=".$major_version."&minorVersion=".$minor_version;
+        $res =  $client->get($url,[
+           "headers" => ["Authorization" => "Bearer $authToken"]
+        ]);
+        $res = $res->getBody()->getContents();
+        $libraryRes = json_decode($res);
+        // dd($activityTypeRes);
+        if (isset($activityTypeRes['activityType']) && !empty($activityTypeRes['activityType']) && $activityTypeRes != null) {
+            // dd($activityTypeRes);
+            array_push($libraryRes->css, $activityTypeRes['activityType']->css_path);
+        }
+        return response()->json($libraryRes);
+    }
+    
+    public function librariesBefore(Request $request)
     {
         // headers for CORS
         header('Access-Control-Allow-Origin: *');
