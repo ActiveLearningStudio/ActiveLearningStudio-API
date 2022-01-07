@@ -348,7 +348,7 @@ class StandAloneActivityController extends Controller
             $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
             $activity->brightcoveData = $brightcoveData;
         }
-        
+
         return response([
             'activity' => new ActivityDetailResource($activity, $data),
         ], 200);
@@ -378,6 +378,13 @@ class StandAloneActivityController extends Controller
      */
     public function destroy(Organization $suborganization, Activity $stand_alone_activity)
     {
+        $user = auth()->user();
+        if ($user->id !== $stand_alone_activity->user_id) {
+            return response([
+                'errors' => ['Invalid user or activity id.'],
+            ], 400);
+        }
+
         $is_deleted = $this->activityRepository->delete($stand_alone_activity->id);
 
         if ($is_deleted) {
@@ -435,7 +442,7 @@ class StandAloneActivityController extends Controller
             $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
             $activity->brightcoveData = $brightcoveData;
         }
-        
+
         return response([
             'activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);
