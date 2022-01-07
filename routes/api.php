@@ -234,6 +234,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
         // subjects
         Route::apiResource('subjects', 'SubjectController');
+        // education levels
+        Route::apiResource('education-levels', 'EducationLevelController');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

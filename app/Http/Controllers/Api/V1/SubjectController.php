@@ -4,18 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\SearchSubject;
-use App\Http\Requests\V1\StoreActivityItem;
 use App\Http\Requests\V1\StoreSubject;
 use App\Http\Requests\V1\UpdateSubject;
 use App\Http\Resources\V1\SubjectResource;
 use App\Models\Subject;
-use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
-use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 /**
  * @group 7. Subject
@@ -55,6 +50,9 @@ class SubjectController extends Controller
      *
      * Create a new subject.
      *
+     * @bodyParam name string required The name of a subject Example: English
+     * @bodyParam order int The order number of a subject item Example: 1
+     *
      * @responseFile 201 responses/subject/subject.json
      *
      * @response 500 {
@@ -91,7 +89,7 @@ class SubjectController extends Controller
      *
      * @responseFile responses/subject/subject.json
      *
-     * @param ActivityItem $subject
+     * @param Subject $subject
      * @return Response
      */
     public function show(Subject $subject)
@@ -125,9 +123,9 @@ class SubjectController extends Controller
     public function update(UpdateSubject $request, Subject $subject)
     {
         $data = $request->validated();
-        $is_updated = $this->subjectRepository->update($data, $subject->id);
+        $isUpdated = $this->subjectRepository->update($data, $subject->id);
 
-        if ($is_updated) {
+        if ($isUpdated) {
             return response([
                 'subject' => new SubjectResource($this->subjectRepository->find($subject->id)),
             ], 200);
@@ -160,9 +158,9 @@ class SubjectController extends Controller
      */
     public function destroy(Subject $subject)
     {
-        $is_deleted = $this->subjectRepository->delete($subject->id);
+        $isDeleted = $this->subjectRepository->delete($subject->id);
 
-        if ($is_deleted) {
+        if ($isDeleted) {
             return response([
                 'message' => 'Subject has been deleted successfully.',
             ], 200);

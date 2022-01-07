@@ -56,6 +56,8 @@ use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepository
 use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepositoryInterface;
 use App\Repositories\CurrikiGo\Outcome\OutcomeRepository;
 use App\Repositories\CurrikiGo\Outcome\OutcomeRepositoryInterface;
+use App\Repositories\EducationLevel\EducationLevelRepository;
+use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Organization\OrganizationRepository;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
@@ -106,6 +108,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DefaultSsoIntegrationSettingsInterface::class, DefaultSsoIntegrationSettingsRepository::class);
         $this->app->bind(LtiToolSettingInterface::class, LtiToolSettingRepository::class);
         $this->app->bind(SubjectRepositoryInterface::class, SubjectRepository::class);
+        $this->app->bind(EducationLevelRepositoryInterface::class, EducationLevelRepository::class);
     }
 
     /**

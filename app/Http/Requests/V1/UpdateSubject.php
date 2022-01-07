@@ -5,9 +5,8 @@ namespace App\Http\Requests\V1;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @bodyParam title string required Activity Item Title. Example: Audio
- * @bodyParam image image required Valid Image.
- * @bodyParam order int required At what order it should appear. Example: 1
+ * @bodyParam name string required Subject Name. Example: Math
+ * @bodyParam order int required at what order it should appear. Example: 1
  */
 class UpdateSubject extends FormRequest
 {
