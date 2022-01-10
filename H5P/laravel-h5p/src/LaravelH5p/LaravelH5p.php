@@ -298,15 +298,17 @@ class LaravelH5p
             'scripts' => array(),
         );
         if ($lib) {
-            $library = explode(" ", $lib);
-            $machineName = $library[0];
-            $versions = explode(".", $library[1]);
-            $majorVersion = $versions[0];
-            $minorVersion = $versions[1];
-
-            $activityTypeRes = $activityItem->getActivityItem($machineName, $majorVersion, $minorVersion);
-            if(isset($activityTypeRes['activityType']->css_path)) {
-                array_push($settings['core']['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
+            if($lib == "H5P.BrightcoveInteractiveVideo 1.0") {
+                $library = explode(" ", $lib);
+                $machineName = $library[0];
+                $versions = explode(".", $library[1]);
+                $majorVersion = $versions[0];
+                $minorVersion = $versions[1];
+    
+                $activityTypeRes = $activityItem->getActivityItem($machineName, $majorVersion, $minorVersion);
+                if(isset($activityTypeRes['activityType']->css_path)) {
+                    array_push($settings['core']['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                }
             }
         }
         $settings['core']['styles'][] = self::get_laravelh5p_url('/css/laravel-h5p.css');
