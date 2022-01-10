@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\H5pActivityResource;
-use App\Models\Activity;
-use App\Models\H5pBrightCoveVideoContents;
-use Djoudi\LaravelH5p\Eloquents\H5pContent;
-use Djoudi\LaravelH5p\Events\H5pEvent;
-use Djoudi\LaravelH5p\Exceptions\H5PException;
-use Djoudi\LaravelH5p\LaravelH5p;
 use H5pCore;
-use Illuminate\Http\JsonResponse;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
+use Djoudi\LaravelH5p\LaravelH5p;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Djoudi\LaravelH5p\Events\H5pEvent;
+use App\Models\H5pBrightCoveVideoContents;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
+use App\Http\Resources\V1\H5pActivityResource;
+use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Validation\ValidationException;
-use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
+use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
 
 /**
  * @group 12. H5P
@@ -93,10 +93,9 @@ class H5pController extends Controller
         $parameters = '{"params":{},"metadata":{}}';
 
         $display_options = $core->getDisplayOptionsForEdit(NULL);
-
+        $lib = $request->get('libraryName');
         // view Get the file and settings to print from
-        $settings = $h5p::get_editor();
-
+        $settings = $h5p::get_editor($content = null, $lib);
         // create event dispatch
         event(new H5pEvent('content', 'new'));
 

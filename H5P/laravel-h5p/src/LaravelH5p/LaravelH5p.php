@@ -151,14 +151,14 @@ class LaravelH5p
     public static function get_core($settings = array())
     {
         $settings = self::get_core_settings($settings);
-        $settings = self::get_core_files($settings);
+        $settings = self::get_core_files($settings, $lib = null);
         return $settings;
     }
 
-    public static function get_editor($content = null)
-    {
+    public static function get_editor($content = null, $lib = null)
+    {   
         $settings = self::get_editor_settings($content);
-        $settings = self::get_editor_assets($settings, $content);
+        $settings = self::get_editor_assets($settings, $content, $lib);
         return $settings;
     }
 
@@ -285,16 +285,32 @@ class LaravelH5p
         return $settings;
     }
 
-    private static function get_core_files($settings = array())
+    private static function get_core_files($settings = array(), $lib)
     {
+        $activityItem = new ActivityItemRepository(new ActivityItem());
+
+        
         $settings['loadedJs'] = array();
         $settings['loadedCss'] = array();
-
+        
         $settings['core'] = array(
             'styles' => array(),
             'scripts' => array(),
         );
-
+        if ($lib) {
+            if($lib == "H5P.BrightcoveInteractiveVideo 1.0") {
+                $library = explode(" ", $lib);
+                $machineName = $library[0];
+                $versions = explode(".", $library[1]);
+                $majorVersion = $versions[0];
+                $minorVersion = $versions[1];
+    
+                $activityTypeRes = $activityItem->getActivityItem($machineName, $majorVersion, $minorVersion);
+                if(isset($activityTypeRes['activityType']->css_path)) {
+                    array_push($settings['core']['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                }
+            }
+        }
         $settings['core']['styles'][] = self::get_laravelh5p_url('/css/laravel-h5p.css');
 
         foreach (H5PCore::$styles as $style) {
@@ -351,9 +367,9 @@ class LaravelH5p
         return $settings;
     }
 
-    private static function get_editor_assets($settings = array(), $content = null)
+    private static function get_editor_assets($settings = array(), $content = null, $lib)
     {
-        $settings = self::get_core_files($settings);
+        $settings = self::get_core_files($settings, $lib);
 
         // load core assets
         $settings['editor']['assets']['css'] = $settings['core']['styles'];
