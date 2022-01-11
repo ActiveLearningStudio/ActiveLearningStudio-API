@@ -95,7 +95,7 @@ class H5PEssaysLibSubmitButtonSeeder extends Seeder
             "label": "Sample solution",
             "importance": "high",
             "expanded": true,
-            "description": "You can optionally add a sample solution that\'\s shown after the student created a text. It\'\s called sample solution because there probably is not only one solution",
+            "description": "You can optionally add a sample solution thats shown after the student created a text. Its called sample solution because there probably is not only one solution",
             "fields": [
               {
                 "name": "introduction",
@@ -103,7 +103,7 @@ class H5PEssaysLibSubmitButtonSeeder extends Seeder
                 "label": "Introduction",
                 "importance": "low",
                 "description": "You can optionally leave the students some explanations about your example. The explanation will only show up if you add an example, too.",
-                "placeholder": "Please remember that you were not expected to come up with the exact same solution. It\'\s just a good example.",
+                "placeholder": "Please remember that you were not expected to come up with the exact same solution. Its just a good example.",
                 "optional": true,
                 "widget": "html",
                 "enterMode": "div",
@@ -156,14 +156,14 @@ class H5PEssaysLibSubmitButtonSeeder extends Seeder
                   "name": "keyword",
                   "type": "text",
                   "label": "Keyword",
-                  "description": "Keyword or phrase to look for. Use an asterisk \'\*\'\ as a wildcard for one or more characters. Use a slash \'\/\'\ at the beginning and the end to use a regular expression.",
+                  "description": "Keyword or phrase to look for. Use an asterisk * as a wildcard for one or more characters. Use a slash / at the beginning and the end to use a regular expression.",
                   "importance": "medium"
                 },
                 {
                   "name": "alternatives",
                   "type": "list",
                   "label": "Variations",
-                  "description": "Add optional variations for this keyword. Example: For a \'\city\'\ add alternatives \'\town\'\, \'\municipality\'\ etc. Points will be awarded if the user includes any of the specified alternatives.",
+                  "description": "Add optional variations for this keyword. Example: For a city add alternatives town, municipality etc. Points will be awarded if the user includes any of the specified alternatives.",
                   "importance": "medium",
                   "entity": "variation",
                   "optional": true,
@@ -431,7 +431,7 @@ class H5PEssaysLibSubmitButtonSeeder extends Seeder
                 "name": "percentagePassing",
                 "type": "number",
                 "label": "Passing percentage",
-                "description": "Percentage that\'\s necessary for passing",
+                "description": "Percentage thats necessary for passing",
                 "optional": true,
                 "min": 0,
                 "max": 100,
@@ -449,7 +449,7 @@ class H5PEssaysLibSubmitButtonSeeder extends Seeder
                 "name": "percentageMastering",
                 "type": "number",
                 "label": "Mastering percentage",
-                "description": "Percentage that\'\s necessary for mastering. Setting the mastering percentage below 100 % will lower the maximum possible score accordingly. It\'\s intended to give some leeway to students, not to \"graciously accept\" solutions that do not contain all keywords.",
+                "description": "Percentage thats necessary for mastering. Setting the mastering percentage below 100 % will lower the maximum possible score accordingly. Its intended to give some leeway to students, not to \"graciously accept\" solutions that do not contain all keywords.",
                 "optional": true,
                 "min": 0,
                 "max": 100,
@@ -566,7 +566,7 @@ class H5PEssaysLibSubmitButtonSeeder extends Seeder
             "importance": "low",
             "common": true,
             "default": "You must enter at least @chars characters!",
-            "description": "Message to indicate that the text doesn\'\t contain enough characters. You can use @chars which will be replaced by the corresponding number."
+            "description": "Message to indicate that the text doesnt contain enough characters. You can use @chars which will be replaced by the corresponding number."
           },
           {
             "name": "messageSave",
