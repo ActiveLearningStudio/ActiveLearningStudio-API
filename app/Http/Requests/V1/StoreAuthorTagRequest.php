@@ -4,7 +4,11 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchEducationLevel extends FormRequest
+/**
+ * @bodyParam name string required Author Tag name. Example: Audio
+ * @bodyParam order int required at what order it should appear. Example: 1
+ */
+class StoreAuthorTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +28,8 @@ class SearchEducationLevel extends FormRequest
     public function rules()
     {
         return [
-            'size' => 'integer|max:255|nullable',
-            'query' => 'string|max:255|nullable',
+            'name' => 'required|string|max:255|unique:author_tags,name',
+            'order' => 'integer|max:2147483647',
         ];
     }
 }

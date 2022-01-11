@@ -8,6 +8,8 @@ use App\Repositories\ActivityItem\ActivityItemRepository;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\ActivityType\ActivityTypeRepository;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
+use App\Repositories\AuthorTag\AuthorTagRepository;
+use App\Repositories\AuthorTag\AuthorTagRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
@@ -109,6 +111,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LtiToolSettingInterface::class, LtiToolSettingRepository::class);
         $this->app->bind(SubjectRepositoryInterface::class, SubjectRepository::class);
         $this->app->bind(EducationLevelRepositoryInterface::class, EducationLevelRepository::class);
+        $this->app->bind(AuthorTagRepositoryInterface::class, AuthorTagRepository::class);
     }
 
     /**

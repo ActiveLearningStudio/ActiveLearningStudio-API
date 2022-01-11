@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\SearchSubject;
-use App\Http\Requests\V1\StoreSubject;
-use App\Http\Requests\V1\UpdateSubject;
+use App\Http\Requests\V1\SearchSubjectRequest;
+use App\Http\Requests\V1\StoreSubjectRequest;
+use App\Http\Requests\V1\UpdateSubjectRequest;
 use App\Http\Resources\V1\SubjectResource;
 use App\Models\Subject;
 use App\Repositories\Subject\SubjectRepositoryInterface;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -37,10 +36,10 @@ class SubjectController extends Controller
      *
      * @responseFile responses/subject/subjects.json
      *
-     * @param SearchSubject $request
+     * @param SearchSubjectRequest $request
      * @return Response
      */
-    public function index(SearchSubject $request)
+    public function index(SearchSubjectRequest $request)
     {
         return  SubjectResource::collection($this->subjectRepository->getAll($request->all()));
     }
@@ -61,10 +60,10 @@ class SubjectController extends Controller
      *   ]
      * }
      *
-     * @param StoreSubject $request
+     * @param StoreSubjectRequest $request
      * @return Response
      */
-    public function store(StoreSubject $request)
+    public function store(StoreSubjectRequest $request)
     {
         $data = $request->validated();
         $subject = $this->subjectRepository->create($data);
@@ -116,11 +115,11 @@ class SubjectController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param UpdateSubjectRequest $request
      * @param Subject $subject
      * @return Response
      */
-    public function update(UpdateSubject $request, Subject $subject)
+    public function update(UpdateSubjectRequest $request, Subject $subject)
     {
         $data = $request->validated();
         $isUpdated = $this->subjectRepository->update($data, $subject->id);

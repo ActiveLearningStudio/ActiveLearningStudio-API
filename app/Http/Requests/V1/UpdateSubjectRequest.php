@@ -4,7 +4,11 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchSubject extends FormRequest
+/**
+ * @bodyParam name string required Subject Name. Example: Math
+ * @bodyParam order int required at what order it should appear. Example: 1
+ */
+class UpdateSubjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +27,11 @@ class SearchSubject extends FormRequest
      */
     public function rules()
     {
+        $subject = $this->route('subject');
+
         return [
-            'size' => 'integer|max:255|nullable',
-            'query' => 'string|max:255|nullable',
+            'name' => 'required|string|max:255|unique:subjects,name,'.$subject->id,
+            'order' => 'integer|max:2147483647',
         ];
     }
 }

@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\SearchEducationLevel;
-use App\Http\Requests\V1\StoreEducationLevel;
-use App\Http\Requests\V1\UpdateEducationLevel;
-use App\Http\Requests\V1\UpdateSubject;
+use App\Http\Requests\V1\SearchEducationLevelRequest;
+use App\Http\Requests\V1\StoreEducationLevelRequest;
+use App\Http\Requests\V1\UpdateEducationLevelRequest;
 use App\Http\Resources\V1\EducationLevelResource;
-use App\Http\Resources\V1\SubjectResource;
 use App\Models\EducationLevel;
 use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -39,10 +36,10 @@ class EducationLevelController extends Controller
      *
      * @responseFile responses/education-level/education-levels.json
      *
-     * @param SearchEducationLevel $request
+     * @param SearchEducationLevelRequest $request
      * @return Response
      */
-    public function index(SearchEducationLevel $request)
+    public function index(SearchEducationLevelRequest $request)
     {
         return  EducationLevelResource::collection($this->educationLevelRepository->getAll($request->all()));
     }
@@ -63,10 +60,10 @@ class EducationLevelController extends Controller
      *   ]
      * }
      *
-     * @param StoreEducationLevel $request
+     * @param StoreEducationLevelRequest $request
      * @return Response
      */
-    public function store(StoreEducationLevel $request)
+    public function store(StoreEducationLevelRequest $request)
     {
         $data = $request->validated();
         $educationLevel = $this->educationLevelRepository->create($data);
@@ -118,11 +115,11 @@ class EducationLevelController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param UpdateEducationLevelRequest $request
      * @param EducationLevel $educationLevel
      * @return Response
      */
-    public function update(UpdateEducationLevel $request, EducationLevel $educationLevel)
+    public function update(UpdateEducationLevelRequest $request, EducationLevel $educationLevel)
     {
         $data = $request->validated();
         $isUpdated = $this->educationLevelRepository->update($data, $educationLevel->id);

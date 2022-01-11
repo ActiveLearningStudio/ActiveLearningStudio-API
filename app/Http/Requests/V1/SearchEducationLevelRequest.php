@@ -4,11 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @bodyParam name string required Education Level name. Example: Special Education
- * @bodyParam order int required at what order it should appear. Example: 1
- */
-class StoreEducationLevel extends FormRequest
+class SearchEducationLevelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,8 +24,8 @@ class StoreEducationLevel extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:education_levels,name',
-            'order' => 'integer|max:2147483647',
+            'size' => 'integer|max:255|nullable',
+            'query' => 'string|max:255|nullable',
         ];
     }
 }

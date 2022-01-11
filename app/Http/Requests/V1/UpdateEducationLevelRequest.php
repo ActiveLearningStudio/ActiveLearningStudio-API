@@ -5,10 +5,10 @@ namespace App\Http\Requests\V1;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * @bodyParam name string required Subject Name. Example: Math
+ * @bodyParam name string required Education Level name. Example: Special Education
  * @bodyParam order int required at what order it should appear. Example: 1
  */
-class UpdateSubject extends FormRequest
+class UpdateEducationLevelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +27,10 @@ class UpdateSubject extends FormRequest
      */
     public function rules()
     {
-        $subject = $this->route('subject');
+        $educationlevel = $this->route('education_level');
 
         return [
-            'name' => 'required|string|max:255|unique:subjects,name,'.$subject->id,
+            'name' => 'required|string|max:255|unique:education_levels,name,'.$educationlevel->id,
             'order' => 'integer|max:2147483647',
         ];
     }
