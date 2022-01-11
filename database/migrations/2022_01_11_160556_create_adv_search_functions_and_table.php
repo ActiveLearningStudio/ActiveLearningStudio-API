@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Migrations\Migration;
 
-class AdvSearchSeeder extends Seeder
+class CreateAdvSearchFunctionsAndTable extends Migration
 {
     /**
-     * Run the database seeds.
+     * Run the migrations.
      *
      * @return void
      */
-    public function run()
+    public function up()
     {
         DB::statement("create index IF NOT EXISTS project_name on projects(name)");
 
@@ -275,5 +275,18 @@ class AdvSearchSeeder extends Seeder
         EOL;
 
         DB::statement($advsearchSqlOverloading);
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::statement("drop function IF EXISTS advSearch(int,varchar)");
+        DB::statement("drop function IF EXISTS advSearch(varchar)");
+
+        DB::statement("drop table IF EXISTS advSearch_dt");
     }
 }
