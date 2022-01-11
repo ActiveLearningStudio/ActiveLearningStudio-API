@@ -136,6 +136,22 @@ class H5PFlashCardLibSubmitButtonSeeder extends Seeder
             "common": true
           },
           {
+            "label": "Show Submit Answers Button",
+            "name": "showSubmitAnswersButton",
+            "type": "boolean",
+            "default": true,
+            "importance": "high",
+            "optional": true
+          },
+          {
+            "label": "Text for Submit Answers Button",
+            "name": "submitAnswers",
+            "type": "text",
+            "default": "Submit Answers",
+            "importance": "low",
+            "common": true
+          },
+          {
             "label": "Require user input before the solution can be viewed",
             "name": "showSolutionsRequiresInput",
             "type": "boolean",
