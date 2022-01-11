@@ -13,11 +13,10 @@ class UpdateEssaySemainticsToH5pLibraries extends Migration
      */
     public function up()
     {
-        Schema::table('h5p_libraries', function (Blueprint $table) {
-            \Artisan::call('db:seed', [
-                '--class' => H5PEssaysLibSubmitButtonSeeder::class
-            ]);
-        });
+        \Artisan::call('db:seed', [
+            '--class' => H5PEssaysLibSubmitButtonSeeder::class
+        ]);
+        
     }
 
     /**
@@ -27,8 +26,6 @@ class UpdateEssaySemainticsToH5pLibraries extends Migration
      */
     public function down()
     {
-        Schema::table('h5p_libraries', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }
