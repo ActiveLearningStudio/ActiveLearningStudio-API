@@ -26,12 +26,13 @@ class ActivityDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $response = [
             'id' => $this->id,
             'playlist' => new ActivityPlaylistResource($this->playlist),
             'title' => $this->title,
             'type' => $this->type,
             'content' => $this->content,
+            'description' => $this->description,
             'shared' => $this->shared,
             'order' => $this->order,
             'thumb_url' => $this->thumb_url,
@@ -47,5 +48,11 @@ class ActivityDetailResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+
+        if ($this->resource->brightcoveData) {
+            $response['brightcoveData'] = $this->resource->brightcoveData;
+        }
+        
+        return $response;
     }
 }

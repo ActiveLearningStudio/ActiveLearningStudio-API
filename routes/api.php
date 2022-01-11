@@ -32,7 +32,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
     Route::get('playlists/update-order', 'PlaylistController@populateOrderNumber');
-
     Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView')->name('metrics.activity-log');
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
@@ -48,6 +47,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/notifications', 'UserController@listNotifications');
         Route::get('users/notifications/export-list', 'UserController@exportProjectList');
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
+        Route::get('users/notifications/{notification}/download-export/', 'UserController@downloadExport');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
         Route::post('users/search', 'UserController@getAllUsers');
@@ -153,11 +153,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('h5p/settings', 'H5pController@create');
         Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
         Route::apiResource('h5p', 'H5pController');
+        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivityController');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/detail', 'StandAloneActivityController@detail');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/h5p', 'StandAloneActivityController@h5p');
+        Route::post('suborganizations/{suborganization}/stand-alone-activity/{activity}/clone', 'StandAloneActivityController@clone');
 
         Route::get('suborganization/{suborganization}/projects/{project}/offline-project', 'ProjectDownloadController@exportProject');
         Route::get('project/delete/{project_path}', 'ProjectDownloadController@deleteProject');
-
-        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivity');
 
         Route::group(['prefix' => 'h5p'], function () {
             // H5P Ajax calls
@@ -171,7 +173,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name('h5p.ajax.finish');
             Route::any('ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
             Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
-            Route::any('ajax/reader/finish', 'MobileAppAjaxController@finish')->name('h5p.ajax.finish');
+            Route::any('ajax/reader/finish', 'MobileAppAjaxController@finish')->name('h5p.ajax.reader-finish');
         });
 
         // Elasticsearch
@@ -214,6 +216,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
         Route::post('suborganizations/{suborganization}/lti-tool-settings/{ltiToolSetting}/clone', 'LtiTool\LtiToolSettingsController@clone');
 
+        // brightcove-api-settings
+        Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');
+        Route::post('suborganizations/{suborganization}/brightcove-api-settings/{brighcoveAPISetting}/clone', 'Integration\BrightcoveAPISettingsController@clone');
+
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
@@ -225,6 +231,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
+        Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

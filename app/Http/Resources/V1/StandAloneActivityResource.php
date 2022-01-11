@@ -22,6 +22,7 @@ class StandAloneActivityResource extends JsonResource
             'title' => $this->title,
             'type' => $this->type,
             'content' => $this->content,
+            'description' => $this->description,
             'shared' => $this->shared,
             'order' => $this->order,
             'thumb_url' => $this->thumb_url,

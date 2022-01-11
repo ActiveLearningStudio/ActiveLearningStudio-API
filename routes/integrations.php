@@ -24,4 +24,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::group(['prefix' => 'kaltura'], function () {
         Route::get('get-media-entry-list', 'CurrikiInteractiveVideoIntegration\Kaltura\KalturaGeneratedAPIClientController@getMediaEntryList');
     });
+
+    // Brightcove Video Integration
+    Route::group(['prefix' => 'brightcove'], function () {
+        Route::get('suborganization/{suborganization}/get-bc-account-list', 'Integration\BrightcoveAPIClientController@getAccountList');        
+        Route::post('get-bc-videos-list', 'Integration\BrightcoveAPIClientController@getVideosList');
+    });
 });

@@ -42,6 +42,25 @@ class SuborganizationSave extends FormRequest
             'gcr_project_visibility' => 'boolean',
             'gcr_playlist_visibility' => 'boolean',
             'gcr_activity_visibility' => 'boolean',
+            'tos_type' => 'required|in:Parent,URL,Content',
+            'tos_url' => 'required_if:tos_type,==,URL|url|max:255',
+            'tos_content' => 'required_if:tos_type,==,Content|string|max:65000',
+            'privacy_policy_type' => 'required|in:Parent,URL,Content',
+            'privacy_policy_url' => 'required_if:privacy_policy_type,==,URL|url|max:255',
+            'privacy_policy_content' => 'required_if:privacy_policy_type,==,Content|string|max:65000',
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'tos_type.in' => 'tos_type should be Parent, URL OR Content',
+            'privacy_policy_type.in' => 'privacy_policy_type should be Parent, URL OR Content',
         ];
     }
 }

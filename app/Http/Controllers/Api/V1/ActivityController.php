@@ -13,12 +13,15 @@ use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Jobs\CloneActivity;
 use App\Models\Activity;
+use App\Models\ActivityItem;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Team;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Http\Request;
@@ -41,20 +44,27 @@ class ActivityController extends Controller
 
     private $playlistRepository;
     private $activityRepository;
+    private $h5pContentRepository;
 
     /**
      * ActivityController constructor.
      *
      * @param PlaylistRepositoryInterface $playlistRepository
      * @param ActivityRepositoryInterface $activityRepository
+     * @param H5pContentRepositoryInterface $h5pContentRepository
+     * @param ActivityItemRepositoryInterface $activityItemRepository
      */
     public function __construct(
         PlaylistRepositoryInterface $playlistRepository,
-        ActivityRepositoryInterface $activityRepository
+        ActivityRepositoryInterface $activityRepository,
+        H5pContentRepositoryInterface $h5pContentRepository,
+        ActivityItemRepositoryInterface $activityItemRepository
     )
     {
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
+        $this->h5pContentRepository = $h5pContentRepository;
+        $this->activityItemRepository = $activityItemRepository;
 
         // $this->authorizeResource(Activity::class, 'activity');
     }
@@ -546,7 +556,7 @@ class ActivityController extends Controller
         $isDuplicate = ($activity->playlist_id == $playlist->id);
         $process = ($isDuplicate) ? "duplicate" : "clone";
         return response([
-            "message" => "Your request to $process  activity [$activity->title] has been received and is being processed. <br> 
+            "message" => "Your request to $process  activity [$activity->title] has been received and is being processed. <br>
             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
@@ -564,7 +574,6 @@ class ActivityController extends Controller
     public function h5p(Activity $activity)
     {
         $this->authorize('view', [Project::class, $activity->playlist->project]);
-
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();

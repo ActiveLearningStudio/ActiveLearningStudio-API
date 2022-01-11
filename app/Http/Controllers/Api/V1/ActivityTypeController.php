@@ -245,4 +245,41 @@ class ActivityTypeController extends Controller
             'errors' => ['Failed to delete activity type.'],
         ], 500);
     }
+
+    /**
+     * Upload CSS
+     *
+     * Upload css file for a activity type
+     *
+     * @bodyParam css file required typeName
+     * @bodyParam css file required file
+     *
+     * @response {
+     *   "file": "/storage/activity-types/css/Audio.file-name.css"
+     * }
+     *
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function uploadCss(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file',
+            'fileName' => 'required|string',
+            'typeName' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => ['Invalid File.']
+            ], 400);
+        }
+
+        $path = $request->file('file')->storeAs('/public/activity-types/css/'.$request->typeName, $request->fileName);
+
+        return response([
+            'file' => Storage::url($path),
+        ], 200);
+    }
 }

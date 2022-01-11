@@ -26,7 +26,6 @@ class TeamResource extends JsonResource
             'projects' => TeamProjectResource::collection($this->projects),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'noovo_group_id' => $this->noovo_group_id,
             'noovo_group_title' => $this->noovo_group_title,
         ];
     }

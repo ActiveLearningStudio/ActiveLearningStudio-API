@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ActivityUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ActivityEditRequest;
 use App\Http\Requests\V1\StandAloneActivityCreateRequest;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
-use App\Http\Resources\V1\PlaylistResource;
 use App\Http\Resources\V1\StandAloneActivityResource;
+use App\Jobs\CloneStandAloneActivity;
 use App\Models\Activity;
-use App\Models\Playlist;
-use App\Models\Project;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
@@ -26,26 +23,31 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
 use App\Models\Organization;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 
 /**
  * @group 5. Activity
  *
  * APIs for stand alone activity management
  */
-class StandAloneActivity extends Controller
+class StandAloneActivityController extends Controller
 {
     private $activityRepository;
 
     /**
-     * StandAloneActivity constructor.
+     * StandAloneActivityController constructor.
      *
      * @param ActivityRepositoryInterface $activityRepository
+     * @param BrightcoveAPISettingRepository $brightcoveAPISettingRepository
      */
     public function __construct(
-        ActivityRepositoryInterface $activityRepository
+        ActivityRepositoryInterface $activityRepository,
+        BrightcoveAPISettingRepository $brightcoveAPISettingRepository
     )
     {
         $this->activityRepository = $activityRepository;
+        $this->bcAPISettingRepository = $brightcoveAPISettingRepository;
     }
 
     /**
@@ -164,7 +166,7 @@ class StandAloneActivity extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Invalid playlist or activity id."
+     *     "Invalid activity id."
      *   ]
      * }
      *
@@ -199,7 +201,7 @@ class StandAloneActivity extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Invalid playlist or activity id."
+     *     "Invalid activity id."
      *   ]
      * }
      *
@@ -224,10 +226,7 @@ class StandAloneActivity extends Controller
             // H5P meta is in 'data' index of the payload.
             $this->update_h5p($validated['data'], $stand_alone_activity->h5p_content_id);
 
-            $updated_activity = new ActivityResource($this->activityRepository->find($stand_alone_activity->id));
-            $playlist = new PlaylistResource($updated_activity->playlist);
-            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
-
+            $updated_activity = new StandAloneActivityResource($this->activityRepository->find($stand_alone_activity->id));
             return response([
                 'activity' => $updated_activity,
             ], 200);
@@ -315,25 +314,25 @@ class StandAloneActivity extends Controller
      *
      * Get the specified activity in detail.
      *
+     * @urlParam suborganization required The Id of a organization Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity-with-detail.json
      *
+     * @param Organization $suborganization
      * @param Activity $activity
      * @return Response
      */
-    public function detail(Activity $activity)
+    public function detail(Organization $suborganization, Activity $activity)
     {
-        $this->authorize('view', [Activity::class, $activity->playlist->project]);
-
         $data = ['h5p_parameters' => null, 'user_name' => null, 'user_id' => null];
 
-        if ($activity->playlist->project->user) {
-            $data['user_name'] = $activity->playlist->project->user;
-            $data['user_id'] = $activity->playlist->project->id;
+        if ($activity->user) {
+            $data['user_name'] = $activity->user;
+            $data['user_id'] = $activity->user->id;
         }
 
-        if ($activity->type === 'h5p') {
+        if ($activity->type === 'h5p_standalone') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $editor = $h5p::$h5peditor;
@@ -342,100 +341,26 @@ class StandAloneActivity extends Controller
             $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
         }
 
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $activity->brightcoveData = $brightcoveData;
+        }
+        
         return response([
             'activity' => new ActivityDetailResource($activity, $data),
         ], 200);
     }
 
     /**
-     * Share Activity
-     *
-     * Share the specified activity.
-     *
-     * @urlParam activity required The Id of a activity Example: 1
-     *
-     * @responseFile responses/activity/activity-shared.json
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Failed to share activity."
-     *   ]
-     * }
-     *
-     * @param Activity $activity
-     * @return Response
-     */
-    public function share(Activity $activity)
-    {
-        $this->authorize('share', [Activity::class, $activity->playlist->project]);
-
-        $is_updated = $this->activityRepository->update([
-            'shared' => true,
-        ], $activity->id);
-
-        if ($is_updated) {
-            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
-            $playlist = new PlaylistResource($updated_activity->playlist);
-            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
-
-            return response([
-                'activity' => $updated_activity,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to share activity.'],
-        ], 500);
-    }
-
-    /**
-     * Remove Share Activity
-     *
-     * Remove share the specified activity.
-     *
-     * @urlParam activity required The Id of a activity Example: 1
-     *
-     * @responseFile responses/activity/activity.json
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Failed to remove share activity."
-     *   ]
-     * }
-     *
-     * @param Activity $activity
-     * @return Response
-     */
-    public function removeShare(Activity $activity)
-    {
-        $this->authorize('share', [Activity::class, $activity->playlist->project]);
-
-        $is_updated = $this->activityRepository->update([
-            'shared' => false,
-        ], $activity->id);
-
-        if ($is_updated) {
-            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
-            $playlist = new PlaylistResource($updated_activity->playlist);
-            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
-
-            return response([
-                'activity' => $updated_activity,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to remove share activity.'],
-        ], 500);
-    }
-
-    /**
-     * Remove Activity
+     * Remove Standalone Activity
      *
      * Remove the specified activity.
      *
-     * @urlParam playlist required The Id of a playlist Example: 1
-     * @urlParam activity required The Id of a activity Example: 1
+     * @urlParam Organization required The Id of an organization Example: 1
+     * @urlParam activity required The Id of an activity Example: 1
      *
      * @response {
      *   "message": "Activity has been deleted successfully."
@@ -447,21 +372,13 @@ class StandAloneActivity extends Controller
      *   ]
      * }
      *
-     * @param Playlist $playlist
-     * @param Activity $activity
+     * @param Organization $suborganization
+     * @param Activity $stand_alone_activity
      * @return Response
      */
-    public function destroy(Playlist $playlist, Activity $activity)
+    public function destroy(Organization $suborganization, Activity $stand_alone_activity)
     {
-        $this->authorize('delete', [Activity::class, $activity->playlist->project]);
-
-        if ($activity->playlist_id !== $playlist->id) {
-            return response([
-                'errors' => ['Invalid playlist or activity id.'],
-            ], 400);
-        }
-
-        $is_deleted = $this->activityRepository->delete($activity->id);
+        $is_deleted = $this->activityRepository->delete($stand_alone_activity->id);
 
         if ($is_deleted) {
             return response([
@@ -477,17 +394,17 @@ class StandAloneActivity extends Controller
     /**
      * H5P Activity
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity-playlists.json
      *
+     * @param Organization $suborganization
      * @param Activity $activity
      * @return Response
      */
-    public function h5p(Activity $activity)
+    public function h5p(Organization $suborganization, Activity $activity)
     {
-        $this->authorize('view', [Project::class, $activity->playlist->project]);
-
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
         $settings = $h5p::get_editor();
@@ -510,9 +427,55 @@ class StandAloneActivity extends Controller
         $user_data = $user->only(['id', 'name', 'email']);
 
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $activity->brightcoveData = $brightcoveData;
+        }
+        
         return response([
             'activity' => new H5pActivityResource($activity, $h5p_data),
-            'playlist' => new PlaylistResource($activity->playlist),
+        ], 200);
+    }
+
+    /**
+     * Clone Stand Alone Activity
+     *
+     * Clone the specified activity of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activity required The Id of an activity Example: 1
+     *
+     * @response {
+     *   "message": "Activity is being cloned|duplicated in background!"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Not a Public Activity."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to clone activity."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param Activity $activity
+     * @return Response
+     */
+    public function clone(Request $request, Organization $suborganization, Activity $activity)
+    {
+        CloneStandAloneActivity::dispatch($activity, $request->bearerToken())->delay(now()->addSecond());
+        return response([
+            "message" => "Your request to clone interactive video [$activity->title] has been received and is being processed. <br>
+            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 

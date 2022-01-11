@@ -12,6 +12,7 @@ use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
+use App\Http\Resources\V1\SearchPostgreSqlResource;
 use App\Repositories\User\UserRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -144,12 +145,12 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     }
 
     /**
-     * Get the advance search request
+     * Get the advance elasticsearch request
      *
      * @param array $data
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function advanceSearchForm($data)
+    public function advanceElasticsearchForm($data)
     {
 
         $counts = [];
@@ -237,6 +238,193 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     }
 
     /**
+     * Get the advance search request
+     *
+     * @param array $data
+     * @param int $authUser
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function advanceSearchForm($data, $authUser = null)
+    {
+        $counts = [];
+        $organizationParentChildrenIds = [];
+        $queryParams['query_text'] = null;
+        $queryFrom = 0;
+        $querySize = 10;
+
+        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
+            $organization = $data['orgObj'];
+            $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
+        }
+
+        if ($authUser) {
+            $query = 'SELECT * FROM advSearch(:user_id, :query_text)';
+
+            $queryParams['user_id'] = $authUser;
+        } else {
+            $query = 'SELECT * FROM advSearch(:query_text)';
+        }
+
+        $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
+        $queryWhere[] = "deleted_at IS NULL";
+        $queryWhere[] = "(standalone_activity_user_id IS NULL OR standalone_activity_user_id = 0)";
+        $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
+
+        if (isset($data['startDate']) && !empty($data['startDate'])) {
+           $queryWhere[] = "created_at >= '" . $data['startDate'] . "'::date";
+        }
+
+        if (isset($data['endDate']) && !empty($data['endDate'])) {
+            $queryWhere[] = "created_at <= '" . $data['endDate'] . "'::date";
+        }
+
+        if (isset($data['searchType']) && !empty($data['searchType'])) {
+            $dataSearchType = $data['searchType'];
+            if (
+                $dataSearchType === 'my_projects'
+                || $dataSearchType === 'org_projects_admin'
+                || $dataSearchType === 'org_projects_non_admin'
+            ) {
+                if (isset($data['organizationIds']) && !empty($data['organizationIds'])) {
+                    $dataOrganizationIds = implode(',', $data['organizationIds']);
+                    $queryWhere[] = "org_id IN (" . $dataOrganizationIds . ")";
+                }
+
+                if ($dataSearchType === 'org_projects_non_admin') {
+                    $queryWhere[] = "organization_visibility_type_id NOT IN (" . config('constants.private-organization-visibility-type-id') . ")";
+                }
+            } elseif ($dataSearchType === 'showcase_projects') {
+                // Get all public items
+                $organizationIdsShouldQueries[] = "organization_visibility_type_id IN (" . config('constants.public-organization-visibility-type-id') . ")";
+
+                // Get all global items
+                $dataOrganizationParentChildrenIds = implode(',', $organizationParentChildrenIds);
+                $globalOrganizationIdsQueries[] = "org_id IN (" . $dataOrganizationParentChildrenIds . ")";
+                $globalOrganizationIdsQueries[] = "organization_visibility_type_id IN (" . config('constants.global-organization-visibility-type-id') . ")";
+
+                $globalOrganizationIdsQueries = implode(' AND ', $globalOrganizationIdsQueries);
+                $organizationIdsShouldQueries[] = "(" . $globalOrganizationIdsQueries . ")";
+
+                // Get all protected items
+                $dataOrganizationIds = implode(',', $data['organizationIds']);
+                $protectedOrganizationIdsQueries[] = "org_id IN (" . $dataOrganizationIds . ")";
+                $protectedOrganizationIdsQueries[] = "organization_visibility_type_id IN (" . config('constants.protected-organization-visibility-type-id') . ")";
+
+                $protectedOrganizationIdsQueries = implode(' AND ', $protectedOrganizationIdsQueries);
+                $organizationIdsShouldQueries[] = "(" . $protectedOrganizationIdsQueries . ")";
+
+                $organizationIdsShouldQueries = implode(' OR ', $organizationIdsShouldQueries);
+                $queryWhere[] = "(" . $organizationIdsShouldQueries . ")";
+            }
+        } else {
+            if (isset($data['organizationVisibilityTypeIds']) && !empty($data['organizationVisibilityTypeIds'])) {
+                $dataOrganizationVisibilityTypeIds = implode(',', array_values(array_filter($data['organizationVisibilityTypeIds'])));
+                if (in_array(null, $data['organizationVisibilityTypeIds'], true)) {
+                    $organizationVisibilityTypeQueries[] = "organization_visibility_type_id IN (" . $dataOrganizationVisibilityTypeIds . ")";
+                    $organizationVisibilityTypeQueries[] = "organization_visibility_type_id IS NULL";
+                    $organizationVisibilityTypeQueries = implode(' OR ', $organizationVisibilityTypeQueries);
+                    $queryWhere[] = "(" . $organizationVisibilityTypeQueries . ")";
+                } else {
+                    $queryWhere[] = "organization_visibility_type_id IN (" . $dataOrganizationVisibilityTypeIds . ")";
+                }
+            }
+        }
+
+        if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
+            $dataSubjectIds = implode("','", $data['subjectIds']);
+            $queryWhere[] = "subject_id IN ('" . $dataSubjectIds . "')";
+        }
+
+        if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
+            $dataEducationLevelIds = implode("','", $data['educationLevelIds']);
+            $queryWhere[] = "education_level_id IN ('" . $dataEducationLevelIds . "')";
+        }
+
+        if (isset($data['userIds']) && !empty($data['userIds'])) {
+            $dataUserIds = implode("','", $data['userIds']);
+            $queryWhere[] = "user_id IN (" . $dataUserIds . ")";
+        }
+
+        if (isset($data['author']) && !empty($data['author'])) {
+            $queryWhereAuthor[] = "first_name LIKE '%" . $data['author'] . "%'";
+            $queryWhereAuthor[] = "last_name LIKE '%" . $data['author'] . "%'";
+            $queryWhereAuthor[] = "email LIKE '%" . $data['author'] . "%'";
+
+            $queryWhereAuthor = implode(' OR ', $queryWhereAuthor);
+            $queryWhere[] = "(" . $queryWhereAuthor . ")";
+        }
+
+        if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
+            $dataH5pLibraries = implode("','", $data['h5pLibraries']);
+            $queryWhere[] = "h5plib IN ('" . $dataH5pLibraries . "')";
+        }
+
+        if (isset($data['indexing']) && !empty($data['indexing'])) {
+            $dataIndexingIds = implode(',', array_values(array_filter($data['indexing'])));
+            if (in_array(null, $data['indexing'], true)) {
+                $indexingQueries[] = "indexing IN (" . $dataIndexingIds . ")";
+                $indexingQueries[] = "indexing IS NULL";
+                $indexingQueries = implode(' OR ', $indexingQueries);
+                $queryWhere[] = "(" . $indexingQueries . ")";
+            } else {
+                $queryWhere[] = "indexing IN (" . $dataIndexingIds . ")";
+            }
+        }
+
+        if (isset($data['query']) && !empty($data['query'])) {
+            $queryParams['query_text'] = $data['query'];
+        }
+
+        if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
+            $queryWhere[] = "name NOT LIKE '%" . $data['negativeQuery'] . "%'";
+            $queryWhere[] = "description NOT LIKE '%" . $data['negativeQuery'] . "%'";
+        }
+
+        if (isset($data['model']) && !empty($data['model'])) {
+            $dataModel = $modelMapping[$data['model']];
+            $queryWhere[] = "entity IN ('" . $dataModel . "')";
+        }
+
+        if (isset($data['from']) && !empty($data['from'])) {
+            $queryFrom = $data['from'];
+        }
+
+        if (isset($data['size']) && !empty($data['size'])) {
+            $querySize = $data['size'];
+        }
+
+        if (!empty($queryWhere)) {
+            $queryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
+            $countQuery = $query;
+            $query = $query . $queryWhereStr;
+
+            if (isset($data['model']) && !empty($data['model'])) {
+                unset($queryWhere[count($queryWhere) - 1]);
+            }
+
+            $countQueryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
+            $countQuery = $countQuery . $countQueryWhereStr;
+            $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
+        }
+
+        $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
+
+        $results = DB::select($query, $queryParams);
+        $countResults = DB::select($countsQuery, $queryParams);
+
+        if (isset($countResults)) {
+            foreach ($countResults as $countResult) {
+                $modelMappingKey = array_search($countResult->entity, $modelMapping);
+                $counts[$modelMappingKey] = $countResult->count;
+            }
+        }
+
+        $counts['total'] = array_sum($counts);
+
+        return (SearchPostgreSqlResource::collection($results))->additional(['meta' => $counts]);
+    }
+
+    /**
      * Get the H5P Elasticsearch Field Values.
      *
      * @param Object $h5pContent
@@ -320,6 +508,44 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'subject_id' => $activity->subject_id,
             'education_level_id' => $activity->education_level_id,
             'shared' => $activity->shared,
+        ];
+        $cloned_activity = $this->create($activity_data);
+        return $cloned_activity['id'];
+    }
+
+    /**
+     * To clone Stand Alone Activity
+     * @param Activity $activity
+     * @param string $token
+     * @return int
+     */
+    public function cloneStandAloneActivity(Activity $activity, $token)
+    {
+        $h5p_content = $activity->h5p_content;
+        if ($h5p_content) {
+            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        }
+        $newH5pContent = $h5p_content->id ?? null;
+
+        // copy the content data if exist
+        $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
+
+        $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
+        $activity_data = [
+            'title' => $activity->title . "-COPY",
+            'type' => $activity->type,
+            'content' => $activity->content,
+            'description' => $activity->description,
+            'order' => $activity->order + 1,
+            'h5p_content_id' => $newH5pContent, // set if new h5pContent created
+            'thumb_url' => $new_thumb_url,
+            'subject_id' => $activity->subject_id,
+            'education_level_id' => $activity->education_level_id,
+            'shared' => $activity->shared,
+            'user_id' => $activity->user_id,
+            'organization_id' => $activity->organization_id,
         ];
         $cloned_activity = $this->create($activity_data);
         return $cloned_activity['id'];

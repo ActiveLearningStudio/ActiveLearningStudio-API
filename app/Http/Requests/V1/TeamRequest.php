@@ -33,7 +33,6 @@ class TeamRequest extends FormRequest
             'users.*.email'  => 'required|email',
             'projects' => 'array|max:1|exists:App\Models\Project,id,deleted_at,NULL',
             'note' => 'string|max:200',
-            'noovo_group_id' => 'integer',
             'noovo_group_title' => 'string',
         ];
     }
