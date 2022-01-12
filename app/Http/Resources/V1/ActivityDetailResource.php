@@ -36,7 +36,7 @@ class ActivityDetailResource extends JsonResource
             'shared' => $this->shared,
             'order' => $this->order,
             'thumb_url' => $this->thumb_url,
-            'subject_id' => $this->subject_id,
+            'subjects' => SubjectResource::collection($this->subjects),
             'education_level_id' => $this->education_level_id,
             'h5p' => $this->data['h5p_parameters'],
             'h5p_content' => $this->h5p_content,
@@ -52,7 +52,7 @@ class ActivityDetailResource extends JsonResource
         if ($this->resource->brightcoveData) {
             $response['brightcoveData'] = $this->resource->brightcoveData;
         }
-        
+
         return $response;
     }
 }

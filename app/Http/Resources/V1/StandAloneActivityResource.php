@@ -26,7 +26,7 @@ class StandAloneActivityResource extends JsonResource
             'shared' => $this->shared,
             'order' => $this->order,
             'thumb_url' => $this->thumb_url,
-            'subject_id' => $this->subject_id,
+            'subjects' => SubjectResource::collection($this->subjects),
             'education_level_id' => $this->education_level_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

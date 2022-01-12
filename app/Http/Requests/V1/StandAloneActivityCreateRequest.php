@@ -31,7 +31,8 @@ class StandAloneActivityCreateRequest extends FormRequest
             'shared' => 'boolean',
             'h5p_content_id' => 'required|integer',
             'thumb_url' => 'string',
-            'subject_id' => 'nullable|string',
+            'subject_id' => 'nullable|array',
+            'subject_id.*' => 'integer|distinct|exists:subjects,id,deleted_at,NULL',
             'education_level_id' => 'nullable|string',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];

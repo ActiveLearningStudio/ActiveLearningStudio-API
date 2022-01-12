@@ -25,11 +25,11 @@ class ActivityResource extends JsonResource
             'shared' => $this->shared,
             'order' => $this->order,
             'thumb_url' => $this->thumb_url,
-            'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'gcr_activity_visibility' => $this->playlist->project->organization->gcr_activity_visibility,
+            'subjects' => SubjectResource::collection($this->subjects),
         ];
 
         // Feature added after the fact for optimization

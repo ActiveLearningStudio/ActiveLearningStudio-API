@@ -79,6 +79,7 @@ class Activity extends Model
 
         self::deleting(function (Activity $activity) {
             H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->delete();
+            $activity->subjects()->detach();
         });
     }
 
@@ -157,5 +158,13 @@ class Activity extends Model
         }
 
         return $h5pLibrary;
+    }
+
+    /**
+     * Get the activity subjects.
+     */
+    public function subjects()
+    {
+        return $this->belongsToMany('App\Models\Subject', 'activity_subject')->withTimestamps();
     }
 }

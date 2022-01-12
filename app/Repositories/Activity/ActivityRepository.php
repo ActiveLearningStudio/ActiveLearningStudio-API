@@ -510,6 +510,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'shared' => $activity->shared,
         ];
         $cloned_activity = $this->create($activity_data);
+
+        if ($cloned_activity && count($activity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($activity->subjects);
+        }
+
         return $cloned_activity['id'];
     }
 
@@ -548,6 +553,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'organization_id' => $activity->organization_id,
         ];
         $cloned_activity = $this->create($activity_data);
+
+        if ($cloned_activity && count($activity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($activity->subjects);
+        }
+
         return $cloned_activity['id'];
     }
 

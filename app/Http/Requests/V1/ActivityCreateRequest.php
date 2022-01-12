@@ -31,7 +31,8 @@ class ActivityCreateRequest extends FormRequest
             'shared' => 'boolean',
             'h5p_content_id' => 'integer',
             'thumb_url' => 'string',
-            'subject_id' => 'nullable|string',
+            'subject_id' => 'nullable|array',
+            'subject_id.*' => 'integer|distinct|exists:subjects,id,deleted_at,NULL',
             'education_level_id' => 'nullable|string',
         ];
     }
