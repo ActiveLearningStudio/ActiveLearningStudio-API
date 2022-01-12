@@ -212,14 +212,14 @@ class LaravelH5p
                     }
                 }
                 // Chekc if the CSS path exist and includes into the LoadedJs object
-                if(isset($activityTypeRes['activityType']->css_path)) {
+                if(isset($activityTypeRes['activityType']->css_path) && $libraryName == "H5P.BrightcoveInteractiveVideo") {
                     array_push($settings['loadedCss'], config('app.url') . $activityTypeRes['activityType']->css_path);
                 }
             } elseif ($embed === 'iframe') {
                 $settings['contents'][$cid]['scripts'] = $core->getAssetsUrls($files['scripts']);
                 $settings['contents'][$cid]['styles'] = $core->getAssetsUrls($files['styles']);
                 // Chekc if the CSS path exist and includes into the core script object
-                if(isset($activityTypeRes['activityType']->css_path)) {
+                if(isset($activityTypeRes['activityType']->css_path) && $libraryName == "H5P.BrightcoveInteractiveVideo") {
                     array_push($settings['contents'][$cid]['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
                 }
             }
