@@ -331,7 +331,7 @@ class H5PFillInTheBlankLibSubmitButtonSeeder extends Seeder
                 "type": "boolean",
                 "default": false,
                 "optional": true,
-                "description": "This options is compatible only with the standalone activities"
+                "description": "This option is only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
               },
               {
                 "name": "caseSensitive",
