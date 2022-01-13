@@ -18,7 +18,6 @@ class SaveStudentdataService implements SaveStudentDataInterface
     public function saveStudentData($request)
     {
         $statement =  "'" . $request->studentId . "' , '" . trim(str_replace(['"',"'"], "", $request->customPersonNameGiven), '\'"') . "' , '" . trim(str_replace(['"',"'"], "", $request->customPersonNameFamily), '\'"') . "'";
-        // $statement =  "'" . $request->studentId . "' , '" . trim($request->customPersonNameGiven, '\'"') . "' , '" . trim($request->customPersonNameFamily, '\'"') . "'";
         if (config('student-data.run_dev_proc')) {
             DB::connection('pgsql-cust')->select("call dev_dcmg199iaigp51_updi ($statement) ");
         } else {
