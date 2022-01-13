@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ActivityEditRequest;
 use App\Http\Requests\V1\StandAloneActivityCreateRequest;
-use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\StandAloneActivityResource;
@@ -145,11 +144,19 @@ class StandAloneActivityController extends Controller
 
         return \DB::transaction(function () use ($data) {
 
-            $attributes = Arr::except($data, ['subject_id']);
+            $attributes = Arr::except($data, ['subject_id', 'education_level_id', 'author_tag_id']);
             $activity = $this->activityRepository->create($attributes);
 
             if ($activity) {
-                $activity->subjects()->attach($data['subject_id']);
+                if (isset($data['subject_id'])) {
+                    $activity->subjects()->attach($data['subject_id']);
+                }
+                if (isset($data['education_level_id'])) {
+                    $activity->educationLevels()->attach($data['education_level_id']);
+                }
+                if (isset($data['author_tag_id'])) {
+                    $activity->authorTags()->attach($data['author_tag_id']);
+                }
                 return response([
                     'activity' => new StandAloneActivityResource($activity),
                 ], 201);
@@ -168,7 +175,7 @@ class StandAloneActivityController extends Controller
      * Get the specified stand alone activity.
      *
      * @urlParam Organization $suborganization required The Id of a organization Example: 1
-     * @urlParam Activity $activity required The Id of a activity Example: 1
+     * @urlParam Activity $standAloneActivity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity.json
      *
@@ -179,13 +186,13 @@ class StandAloneActivityController extends Controller
      * }
      *
      * @param Organization $suborganization
-     * @param Activity $stand_alone_activity
+     * @param Activity $standAloneActivity
      * @return Response
      */
-    public function show(Organization $suborganization, Activity $stand_alone_activity)
+    public function show(Organization $suborganization, Activity $standAloneActivity)
     {
         return response([
-            'activity' => new StandAloneActivityResource($stand_alone_activity),
+            'activity' => new StandAloneActivityResource($standAloneActivity),
         ], 200);
     }
 
@@ -222,32 +229,39 @@ class StandAloneActivityController extends Controller
      *
      * @param ActivityEditRequest $request
      * @param Organization $suborganization
-     * @param Activity $stand_alone_activity
+     * @param Activity $standAloneActivity
      * @return Response
      */
-    public function update(ActivityEditRequest $request, Organization $suborganization, Activity $stand_alone_activity)
+    public function update(ActivityEditRequest $request, Organization $suborganization, Activity $standAloneActivity)
     {
         $validated = $request->validated();
 
-        return \DB::transaction(function () use ($validated, $stand_alone_activity) {
+        return \DB::transaction(function () use ($validated, $standAloneActivity) {
 
-            $attributes = Arr::except($validated, ['data', 'subject_id']);
-            $is_updated = $this->activityRepository->update($attributes, $stand_alone_activity->id);
+            $attributes = Arr::except($validated, ['data', 'subject_id', 'education_level_id', 'author_tag_id']);
+            $is_updated = $this->activityRepository->update($attributes, $standAloneActivity->id);
 
             if ($is_updated) {
-
-                $stand_alone_activity->subjects()->sync($validated['subject_id']);
+                if (isset($validated['subject_id'])) {
+                    $standAloneActivity->subjects()->sync($validated['subject_id']);
+                }
+                if (isset($validated['education_level_id'])) {
+                    $standAloneActivity->educationLevels()->sync($validated['education_level_id']);
+                }
+                if (isset($validated['author_tag_id'])) {
+                    $standAloneActivity->authorTags()->sync($validated['author_tag_id']);
+                }
                 // H5P meta is in 'data' index of the payload.
-                $this->update_h5p($validated['data'], $stand_alone_activity->h5p_content_id);
+                $this->update_h5p($validated['data'], $standAloneActivity->h5p_content_id);
 
-                $updated_activity = new StandAloneActivityResource($this->activityRepository->find($stand_alone_activity->id));
+                $updated_activity = new StandAloneActivityResource($this->activityRepository->find($standAloneActivity->id));
                 return response([
                     'activity' => $updated_activity,
                 ], 200);
             }
 
             return response([
-                'errors' => ['Failed to update activity.'],
+                'errors' => ['Failed to update interactive video.'],
             ], 500);
 
         });
@@ -376,7 +390,7 @@ class StandAloneActivityController extends Controller
      * Remove the specified activity.
      *
      * @urlParam Organization required The Id of an organization Example: 1
-     * @urlParam activity required The Id of an activity Example: 1
+     * @urlParam standAloneActivity required The Id of an activity Example: 1
      *
      * @response {
      *   "message": "Activity has been deleted successfully."
@@ -389,28 +403,28 @@ class StandAloneActivityController extends Controller
      * }
      *
      * @param Organization $suborganization
-     * @param Activity $stand_alone_activity
+     * @param Activity $standAloneActivity
      * @return Response
      */
-    public function destroy(Organization $suborganization, Activity $stand_alone_activity)
+    public function destroy(Organization $suborganization, Activity $standAloneActivity)
     {
         $user = auth()->user();
-        if ($user->id !== $stand_alone_activity->user_id) {
+        if ($user->id !== $standAloneActivity->user_id) {
             return response([
-                'errors' => ['Invalid user or activity id.'],
+                'errors' => ['Invalid user or interactive video id.'],
             ], 400);
         }
 
-        $is_deleted = $this->activityRepository->delete($stand_alone_activity->id);
+        $is_deleted = $this->activityRepository->delete($standAloneActivity->id);
 
         if ($is_deleted) {
             return response([
-                'message' => 'Activity has been deleted successfully.',
+                'message' => 'Interactive video has been deleted successfully.',
             ], 200);
         }
 
         return response([
-            'errors' => ['Failed to delete activity.'],
+            'errors' => ['Failed to delete interactive video.'],
         ], 500);
     }
 
