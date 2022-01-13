@@ -40,7 +40,8 @@ class StoreBrightcoveAPISetting extends FormRequest
             'client_id' => 'nullable|string|max:255',
             'client_secret' => 'required_with:client_id|max:255',
             'user_id' => 'required|exists:users,id',
-            'organization_id' => 'required|exists:organizations,id'
+            'organization_id' => 'required|exists:organizations,id',
+            'css_path' => 'nullable|string'
         ];
     }
 }

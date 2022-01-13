@@ -219,6 +219,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // brightcove-api-settings
         Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');
         Route::post('suborganizations/{suborganization}/brightcove-api-settings/{brighcoveAPISetting}/clone', 'Integration\BrightcoveAPISettingsController@clone');
+        Route::post('brightcove-api-settings/upload-css', 'Integration\BrightcoveAPISettingsController@uploadCss');
 
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
@@ -230,7 +231,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // activity items
         Route::get('get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
-        Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
         Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
         // subjects
         Route::apiResource('subjects', 'SubjectController');
