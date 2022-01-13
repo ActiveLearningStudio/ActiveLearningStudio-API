@@ -7,18 +7,20 @@
 
 namespace App\Http\Controllers\Api\V1\Integration;
 
-use App\Http\Controllers\Controller;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
-use App\Models\Organization;
+use App\Http\Controllers\Controller;
+use App\Jobs\CloneBrightcoveAPISetting;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Integration\BrightcoveAPISetting;
 use App\Http\Requests\V1\Integration\StoreBrightcoveAPISetting;
 use App\Http\Requests\V1\Integration\UpdateBrightcoveAPISetting;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
-use App\Http\Resources\V1\Integration\BrightcoveAPISettingCollection;
 use App\Http\Resources\V1\Integration\BrightcoveAPISettingResource;
-use App\Jobs\CloneBrightcoveAPISetting;
+use App\Http\Resources\V1\Integration\BrightcoveAPISettingCollection;
 
 class BrightcoveAPISettingsController extends Controller
 {
@@ -87,7 +89,8 @@ class BrightcoveAPISettingsController extends Controller
             'account_email',
             'client_id',
             'client_secret',
-            'description'
+            'description',
+            'css_path'
         ]);
         $response = $this->bcAPISettingRepository->create($data);
         return response(['message' => $response['message'], 'data' => new BrightcoveAPISettingResource($response['data']->load('user', 'organization'))], 200);
@@ -119,7 +122,8 @@ class BrightcoveAPISettingsController extends Controller
             'account_email',
             'client_id',
             'client_secret',
-            'description'
+            'description',
+            'css_path'
         ]);
         $response = $this->bcAPISettingRepository->update($id, $data);
         return response(['message' => $response['message'], 'data' => new BrightcoveAPISettingResource($response['data']->load('user', 'organization'))], 200);
@@ -167,6 +171,43 @@ class BrightcoveAPISettingsController extends Controller
         return response([
             "message" => "Your request to clone Brightcove API Settings [$brightcoveAPISetting->account_name] has been received and is being processed. <br> 
             You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Upload CSS
+     *
+     * Upload css file for a activity type
+     *
+     * @bodyParam css file required typeName
+     * @bodyParam css file required file
+     *
+     * @response {
+     *   "file": "/storage/brightcove/css/Audio.file-name.css"
+     * }
+     *
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function uploadCss(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file',
+            'fileName' => 'required|string',
+            'typeName' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => ['Invalid File.']
+            ], 400);
+        }
+
+        $path = $request->file('file')->storeAs('/public/brightcove/css/', $request->fileName);
+
+        return response([
+            'file' => Storage::url($path),
         ], 200);
     }
     

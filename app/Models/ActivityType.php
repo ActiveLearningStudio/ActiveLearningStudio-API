@@ -19,7 +19,6 @@ class ActivityType extends Model
         'title',
         'order',
         'image',
-        'css_path',
     ];
 
     /**
