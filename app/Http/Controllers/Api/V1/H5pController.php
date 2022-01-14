@@ -543,16 +543,7 @@ class H5pController extends Controller
     {
         try {
             $content = H5pContent::findOrFail($id);
-            $deleteContent = $content->delete();
-            if ($deleteContent) {
-                $bcVideoContentsRow = H5pBrightCoveVideoContents::where('h5p_content_id', $id)->first();
-                $bcAPISetting = $this->bcAPISettingRepository->find($bcVideoContentsRow->brightcove_api_setting_id);
-                // Implement Command Design Pattern to access Update Brightcove Video API
-                $bcAPIClient = new Client($bcAPISetting);
-                $bcInstance = new UpdateVideoTags($bcAPIClient);
-                $bcInstance->fetch($bcAPISetting, $bcVideoContentsRow->brightcove_video_id, 'curriki', true);
-            }
-            return $deleteContent;
+            return $content->delete();
         } catch (Exception $ex) {
             return trans('laravel-h5p.content.can_not_delete');
         }
