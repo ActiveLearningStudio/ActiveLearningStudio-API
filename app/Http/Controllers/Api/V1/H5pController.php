@@ -20,6 +20,8 @@ use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Validation\ValidationException;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
 use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
+use App\CurrikiGo\Brightcove\Client;
+use App\CurrikiGo\Brightcove\Videos\UpdateVideoTags;
 
 /**
  * @group 12. H5P
@@ -190,7 +192,13 @@ class H5pController extends Controller
                         $bcAPISetting = $this->bcAPISettingRepository->getByAccountId($request->get('brightcove_account_id'));
                         $brightCoveVideoData['brightcove_api_setting_id'] = $bcAPISetting->id;
                     }
-                    H5pBrightCoveVideoContents::create($brightCoveVideoData);
+                    $createH5PBCVC = H5pBrightCoveVideoContents::create($brightCoveVideoData);
+                    if ($createH5PBCVC) {
+                        // Implement Command Design Pattern to access Update Brightcove Video API
+                        $bcAPIClient = new Client($bcAPISetting);
+                        $bcInstance = new UpdateVideoTags($bcAPIClient);
+                        $bcInstance->fetch($bcAPISetting, $createH5PBCVC->brightcove_video_id, 'curriki', false);
+                    }                    
                 }
 
                 // Move images and find all content dependencies
