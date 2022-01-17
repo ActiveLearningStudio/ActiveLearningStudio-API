@@ -15,6 +15,7 @@ use App\Http\Resources\V1\Integration\BrightcoveAPISettingResource;
 use App\CurrikiGo\Brightcove\Client;
 use App\CurrikiGo\Brightcove\Videos\GetVideoList;
 use App\CurrikiGo\Brightcove\Videos\GetVideoCount;
+use App\CurrikiGo\Brightcove\Videos\UpdateVideoTags;
 
 class BrightcoveAPIClientController extends Controller
 {

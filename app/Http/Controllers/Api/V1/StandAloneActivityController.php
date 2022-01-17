@@ -24,6 +24,8 @@ use H5pCore;
 use App\Models\Organization;
 use App\Models\H5pBrightCoveVideoContents;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
+use App\CurrikiGo\Brightcove\Client;
+use App\CurrikiGo\Brightcove\Videos\UpdateVideoTags;
 
 /**
  * @group 5. Activity
@@ -415,17 +417,32 @@ class StandAloneActivityController extends Controller
             ], 400);
         }
 
-        $is_deleted = $this->activityRepository->delete($standAloneActivity->id);
+        return \DB::transaction(function () use ($standAloneActivity) {
+        
+            // Implement Command Design Pattern to access Update Brightcove Video API
+            $bcVideoContentsRow = H5pBrightCoveVideoContents::where('h5p_content_id', $standAloneActivity->h5p_content_id)->first();
+            if ($bcVideoContentsRow) {
+                $bcAPISetting = $this->bcAPISettingRepository->find($bcVideoContentsRow->brightcove_api_setting_id);
+                $bcAPIClient = new Client($bcAPISetting);
+                $bcInstance = new UpdateVideoTags($bcAPIClient);
+                $bcInstance->fetch($bcAPISetting, $bcVideoContentsRow->brightcove_video_id, 'curriki', true);    
+            } else {
+                return response([
+                    'message' => 'Failed to remove brightcove video tags.',
+                ], 500);
+            }
 
-        if ($is_deleted) {
+            $isDeleted = $this->activityRepository->delete($standAloneActivity->id);
+            if ($isDeleted) {
+                return response([
+                    'message' => 'Interactive video has been deleted successfully.',
+                ], 200);
+            }
             return response([
-                'message' => 'Interactive video has been deleted successfully.',
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to delete interactive video.'],
-        ], 500);
+                'errors' => ['Failed to delete interactive video.'],
+            ], 500);
+        
+        });
     }
 
     /**

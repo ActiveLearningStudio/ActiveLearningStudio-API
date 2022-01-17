@@ -12,7 +12,6 @@
 
 namespace Djoudi\LaravelH5p;
 
-use App\Models\ActivityItem;
 use H5PCore;
 use H5peditor;
 use H5PExport;
@@ -35,7 +34,9 @@ use Djoudi\LaravelH5p\Storages\LaravelH5pStorage;
 use App\Repositories\H5pContent\H5pContentRepository;
 use Djoudi\LaravelH5p\Repositories\EditorAjaxRepository;
 use Djoudi\LaravelH5p\Repositories\LaravelH5pRepository;
-use App\Repositories\ActivityItem\ActivityItemRepository;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
+use App\Models\Integration\BrightcoveAPISetting;
 
 class LaravelH5p
 {
@@ -178,9 +179,7 @@ class LaravelH5p
         $cid = 'cid-' . $content['id'];
         // Load H5P content from Repository
         $getH5pContent = new H5pContentRepository(new H5pContent());
-        // Load Activity Item
-        $activityItem = new ActivityItemRepository(new ActivityItem());
-
+        
         // Check for library
         $record = $getH5pContent->getLibrary($content['id']);
         // Get Library Name
@@ -188,8 +187,6 @@ class LaravelH5p
         $libraryMajorVersion = $record->library->major_version;
         $libraryMinorVerison = $record->library->minor_version;
 
-        // Load Activity type to get the CSS Path
-        $activityTypeRes = $activityItem->getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison);
         if (!isset($settings['contents'][$cid])) {
             $settings['contents'][$cid] = self::get_content_settings($content);
             $core = self::$core;
@@ -211,16 +208,26 @@ class LaravelH5p
                         $settings['loadedCss'][] = self::get_h5plibrary_url($url);
                     }
                 }
-                // Chekc if the CSS path exist and includes into the LoadedJs object
-                if(isset($activityTypeRes['activityType']->css_path) && $libraryName == "H5P.BrightcoveInteractiveVideo") {
-                    array_push($settings['loadedCss'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                
+                if ($content['library']['name'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $content['id'])->first();
+                    if ($brightcoveContentData) {
+                        $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                        $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+                        array_push($settings['loadedCss'], config('app.url') . $brightcoveAPISetting->css_path);
+                    }
                 }
+
             } elseif ($embed === 'iframe') {
                 $settings['contents'][$cid]['scripts'] = $core->getAssetsUrls($files['scripts']);
                 $settings['contents'][$cid]['styles'] = $core->getAssetsUrls($files['styles']);
-                // Chekc if the CSS path exist and includes into the core script object
-                if(isset($activityTypeRes['activityType']->css_path) && $libraryName == "H5P.BrightcoveInteractiveVideo") {
-                    array_push($settings['contents'][$cid]['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                if ($content['library']['name'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $content['id'])->first();
+                    if ($brightcoveContentData) {
+                        $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                        $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+                        array_push($settings['contents'][$cid]['styles'], config('app.url') . $brightcoveAPISetting->css_path);
+                    }
                 }
             }
         }
@@ -287,9 +294,6 @@ class LaravelH5p
 
     private static function get_core_files($settings = array(), $lib)
     {
-        $activityItem = new ActivityItemRepository(new ActivityItem());
-
-        
         $settings['loadedJs'] = array();
         $settings['loadedCss'] = array();
         
@@ -297,20 +301,13 @@ class LaravelH5p
             'styles' => array(),
             'scripts' => array(),
         );
-        if ($lib) {
-            if($lib == "H5P.BrightcoveInteractiveVideo 1.0") {
-                $library = explode(" ", $lib);
-                $machineName = $library[0];
-                $versions = explode(".", $library[1]);
-                $majorVersion = $versions[0];
-                $minorVersion = $versions[1];
-    
-                $activityTypeRes = $activityItem->getActivityItem($machineName, $majorVersion, $minorVersion);
-                if(isset($activityTypeRes['activityType']->css_path)) {
-                    array_push($settings['core']['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
-                }
-            }
+
+        if ( $lib && $lib == "H5P.BrightcoveInteractiveVideo 1.0" && isset($_GET['accountId']) && $_GET['accountId'] !== 'null') {
+            $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+            $brightcoveAPISetting = $brightcoveAPISettingRepository->getByAccountId($_GET['accountId']);
+            array_push($settings['core']['styles'], config('app.url') . $brightcoveAPISetting->css_path);
         }
+        
         $settings['core']['styles'][] = self::get_laravelh5p_url('/css/laravel-h5p.css');
 
         foreach (H5PCore::$styles as $style) {
