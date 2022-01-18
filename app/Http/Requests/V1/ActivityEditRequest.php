@@ -33,8 +33,12 @@ class ActivityEditRequest extends FormRequest
             'shared' => 'boolean',
             'h5p_content_id' => 'integer',
             'thumb_url' => 'string',
-            'subject_id' => 'nullable|string',
-            'education_level_id' => 'nullable|string',
+            'subject_id' => 'array',
+            'subject_id.*' => 'integer|distinct|exists:subjects,id,deleted_at,NULL',
+            'education_level_id' => 'array',
+            'education_level_id.*' => 'integer|distinct|exists:education_levels,id,deleted_at,NULL',
+            'author_tag_id' => 'array',
+            'author_tag_id.*' => 'integer|distinct|exists:author_tags,id,deleted_at,NULL',
         ];
     }
 }

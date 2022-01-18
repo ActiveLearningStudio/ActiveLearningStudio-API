@@ -8,6 +8,8 @@ use App\Repositories\ActivityItem\ActivityItemRepository;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\ActivityType\ActivityTypeRepository;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
+use App\Repositories\AuthorTag\AuthorTagRepository;
+use App\Repositories\AuthorTag\AuthorTagRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
@@ -56,6 +58,8 @@ use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepository
 use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepositoryInterface;
 use App\Repositories\CurrikiGo\Outcome\OutcomeRepository;
 use App\Repositories\CurrikiGo\Outcome\OutcomeRepositoryInterface;
+use App\Repositories\EducationLevel\EducationLevelRepository;
+use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Organization\OrganizationRepository;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
@@ -63,6 +67,8 @@ use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepository;
 use App\Repositories\InvitedOrganizationUser\InvitedOrganizationUserRepositoryInterface;
 use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepository;
 use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
+use App\Repositories\Subject\SubjectRepository;
+use App\Repositories\Subject\SubjectRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -103,6 +109,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(GoogleClassroomRepositoryInterface::class, GoogleClassroomRepository::class);
         $this->app->bind(DefaultSsoIntegrationSettingsInterface::class, DefaultSsoIntegrationSettingsRepository::class);
         $this->app->bind(LtiToolSettingInterface::class, LtiToolSettingRepository::class);
+        $this->app->bind(SubjectRepositoryInterface::class, SubjectRepository::class);
+        $this->app->bind(EducationLevelRepositoryInterface::class, EducationLevelRepository::class);
+        $this->app->bind(AuthorTagRepositoryInterface::class, AuthorTagRepository::class);
     }
 
     /**
