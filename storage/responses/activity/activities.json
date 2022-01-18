@@ -9,54 +9,8 @@
             "shared": false,
             "order": 2,
             "thumb_url": null,
-            "subjects": [
-                {
-                    "id": 4,
-                    "name": "English",
-                    "order": 3,
-                    "created_at": "2022-01-06T11:59:52.000000Z",
-                    "updated_at": "2022-01-06T12:15:10.000000Z"
-                },
-                {
-                    "id": 1,
-                    "name": "Math",
-                    "order": 1,
-                    "created_at": "2022-01-06T11:41:46.000000Z",
-                    "updated_at": "2022-01-06T11:41:46.000000Z"
-                }
-            ],
-            "education_levels": [
-                {
-                    "id": 1,
-                    "name": "Grade A",
-                    "order": 5,
-                    "created_at": "2022-01-07T13:51:38.000000Z",
-                    "updated_at": "2022-01-07T14:07:17.000000Z"
-                },
-                {
-                    "id": 1,
-                    "name": "Grade B",
-                    "order": 6,
-                    "created_at": "2022-01-07T13:51:38.000000Z",
-                    "updated_at": "2022-01-07T14:07:17.000000Z"
-                }
-            ],
-            "author_tags": [
-                {
-                    "id": 1,
-                    "name": "Audio",
-                    "order": 1,
-                    "created_at": "2022-01-10T13:09:36.000000Z",
-                    "updated_at": "2022-01-10T13:09:36.000000Z"
-                },
-                {
-                    "id": 2,
-                    "name": "Video",
-                    "order": 2,
-                    "created_at": "2022-01-10T13:09:44.000000Z",
-                    "updated_at": "2022-01-10T13:20:57.000000Z"
-                }
-            ],
+            "subject_id": null,
+            "education_level_id": null,
             "gcr_activity_visibility": true,
             "h5p_content": {
                 "id": 59,

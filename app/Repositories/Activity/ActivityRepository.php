@@ -510,17 +510,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'shared' => $activity->shared,
         ];
         $cloned_activity = $this->create($activity_data);
-
-        if ($cloned_activity && count($activity->subjects) > 0) {
-            $cloned_activity->subjects()->attach($activity->subjects);
-        }
-        if ($cloned_activity && count($activity->educationLevels) > 0) {
-            $cloned_activity->educationLevels()->attach($activity->educationLevels);
-        }
-        if ($cloned_activity && count($activity->authorTags) > 0) {
-            $cloned_activity->authorTags()->attach($activity->authorTags);
-        }
-
         return $cloned_activity['id'];
     }
 
@@ -559,17 +548,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'organization_id' => $activity->organization_id,
         ];
         $cloned_activity = $this->create($activity_data);
-
-        if ($cloned_activity && count($activity->subjects) > 0) {
-            $cloned_activity->subjects()->attach($activity->subjects);
-        }
-        if ($cloned_activity && count($activity->educationLevels) > 0) {
-            $cloned_activity->educationLevels()->attach($activity->educationLevels);
-        }
-        if ($cloned_activity && count($activity->authorTags) > 0) {
-            $cloned_activity->authorTags()->attach($activity->authorTags);
-        }
-
         return $cloned_activity['id'];
     }
 
