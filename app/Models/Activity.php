@@ -79,9 +79,6 @@ class Activity extends Model
 
         self::deleting(function (Activity $activity) {
             H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->delete();
-            $activity->subjects()->detach();
-            $activity->educationLevels()->detach();
-            $activity->authorTags()->detach();
         });
     }
 
@@ -160,29 +157,5 @@ class Activity extends Model
         }
 
         return $h5pLibrary;
-    }
-
-    /**
-     * Get the activity subjects.
-     */
-    public function subjects()
-    {
-        return $this->belongsToMany('App\Models\Subject', 'activity_subject')->withTimestamps();
-    }
-
-    /**
-     * Get the activity education levels.
-     */
-    public function educationLevels()
-    {
-        return $this->belongsToMany('App\Models\EducationLevel', 'activity_education_level')->withTimestamps();
-    }
-
-    /**
-     * Get the activity author tags.
-     */
-    public function authorTags()
-    {
-        return $this->belongsToMany('App\Models\AuthorTag', 'activity_author_tag')->withTimestamps();
     }
 }

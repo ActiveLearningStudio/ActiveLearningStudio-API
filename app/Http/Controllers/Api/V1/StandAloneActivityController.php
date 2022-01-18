@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ActivityEditRequest;
 use App\Http\Requests\V1\StandAloneActivityCreateRequest;
+use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
 use App\Http\Resources\V1\StandAloneActivityResource;
@@ -121,9 +122,8 @@ class StandAloneActivityController extends Controller
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam shared bool The status of share of a activity Example: false
      * @bodyParam thumb_url string The image url of thumbnail Example: null
-     * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
-     * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
-     * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
+     * @bodyParam subject_id string The Id of a subject Example: null
+     * @bodyParam education_level_id string The Id of a education level Example: null
      *
      * @responseFile 201 responses/activity/activity.json
      *
@@ -143,32 +143,17 @@ class StandAloneActivityController extends Controller
         $data = $request->validated();
         $data['type'] = 'h5p_standalone';
         $data['user_id'] = auth()->user()->id;
+        $activity = $this->activityRepository->create($data);
 
-        return \DB::transaction(function () use ($data) {
-
-            $attributes = Arr::except($data, ['subject_id', 'education_level_id', 'author_tag_id']);
-            $activity = $this->activityRepository->create($attributes);
-
-            if ($activity) {
-                if (isset($data['subject_id'])) {
-                    $activity->subjects()->attach($data['subject_id']);
-                }
-                if (isset($data['education_level_id'])) {
-                    $activity->educationLevels()->attach($data['education_level_id']);
-                }
-                if (isset($data['author_tag_id'])) {
-                    $activity->authorTags()->attach($data['author_tag_id']);
-                }
-                return response([
-                    'activity' => new StandAloneActivityResource($activity),
-                ], 201);
-            }
-
+        if ($activity) {
             return response([
-                'errors' => ['Could not create activity. Please try again later.'],
-            ], 500);
+                'activity' => new StandAloneActivityResource($activity),
+            ], 201);
+        }
 
-        });
+        return response([
+            'errors' => ['Could not create activity. Please try again later.'],
+        ], 500);
     }
 
     /**
@@ -177,7 +162,7 @@ class StandAloneActivityController extends Controller
      * Get the specified stand alone activity.
      *
      * @urlParam Organization $suborganization required The Id of a organization Example: 1
-     * @urlParam Activity $standAloneActivity required The Id of a activity Example: 1
+     * @urlParam Activity $activity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity.json
      *
@@ -188,13 +173,13 @@ class StandAloneActivityController extends Controller
      * }
      *
      * @param Organization $suborganization
-     * @param Activity $standAloneActivity
+     * @param Activity $stand_alone_activity
      * @return Response
      */
-    public function show(Organization $suborganization, Activity $standAloneActivity)
+    public function show(Organization $suborganization, Activity $stand_alone_activity)
     {
         return response([
-            'activity' => new StandAloneActivityResource($standAloneActivity),
+            'activity' => new StandAloneActivityResource($stand_alone_activity),
         ], 200);
     }
 
@@ -211,9 +196,8 @@ class StandAloneActivityController extends Controller
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam h5p_content_id int The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
-     * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
-     * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
-     * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
+     * @bodyParam subject_id string The Id of a subject Example: null
+     * @bodyParam education_level_id string The Id of a education level Example: null
      *
      * @responseFile responses/activity/activity.json
      *
@@ -231,42 +215,28 @@ class StandAloneActivityController extends Controller
      *
      * @param ActivityEditRequest $request
      * @param Organization $suborganization
-     * @param Activity $standAloneActivity
+     * @param Activity $stand_alone_activity
      * @return Response
      */
-    public function update(ActivityEditRequest $request, Organization $suborganization, Activity $standAloneActivity)
+    public function update(ActivityEditRequest $request, Organization $suborganization, Activity $stand_alone_activity)
     {
         $validated = $request->validated();
+        $attributes = Arr::except($validated, ['data']);
+        $is_updated = $this->activityRepository->update($attributes, $stand_alone_activity->id);
 
-        return \DB::transaction(function () use ($validated, $standAloneActivity) {
+        if ($is_updated) {
+            // H5P meta is in 'data' index of the payload.
+            $this->update_h5p($validated['data'], $stand_alone_activity->h5p_content_id);
 
-            $attributes = Arr::except($validated, ['data', 'subject_id', 'education_level_id', 'author_tag_id']);
-            $is_updated = $this->activityRepository->update($attributes, $standAloneActivity->id);
-
-            if ($is_updated) {
-                if (isset($validated['subject_id'])) {
-                    $standAloneActivity->subjects()->sync($validated['subject_id']);
-                }
-                if (isset($validated['education_level_id'])) {
-                    $standAloneActivity->educationLevels()->sync($validated['education_level_id']);
-                }
-                if (isset($validated['author_tag_id'])) {
-                    $standAloneActivity->authorTags()->sync($validated['author_tag_id']);
-                }
-                // H5P meta is in 'data' index of the payload.
-                $this->update_h5p($validated['data'], $standAloneActivity->h5p_content_id);
-
-                $updated_activity = new StandAloneActivityResource($this->activityRepository->find($standAloneActivity->id));
-                return response([
-                    'activity' => $updated_activity,
-                ], 200);
-            }
-
+            $updated_activity = new StandAloneActivityResource($this->activityRepository->find($stand_alone_activity->id));
             return response([
-                'errors' => ['Failed to update interactive video.'],
-            ], 500);
+                'activity' => $updated_activity,
+            ], 200);
+        }
 
-        });
+        return response([
+            'errors' => ['Failed to update activity.'],
+        ], 500);
     }
 
     /**
@@ -380,7 +350,7 @@ class StandAloneActivityController extends Controller
             $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
             $activity->brightcoveData = $brightcoveData;
         }
-
+        
         return response([
             'activity' => new ActivityDetailResource($activity, $data),
         ], 200);
@@ -392,7 +362,7 @@ class StandAloneActivityController extends Controller
      * Remove the specified activity.
      *
      * @urlParam Organization required The Id of an organization Example: 1
-     * @urlParam standAloneActivity required The Id of an activity Example: 1
+     * @urlParam activity required The Id of an activity Example: 1
      *
      * @response {
      *   "message": "Activity has been deleted successfully."
@@ -405,44 +375,34 @@ class StandAloneActivityController extends Controller
      * }
      *
      * @param Organization $suborganization
-     * @param Activity $standAloneActivity
+     * @param Activity $stand_alone_activity
      * @return Response
      */
-    public function destroy(Organization $suborganization, Activity $standAloneActivity)
+    public function destroy(Organization $suborganization, Activity $stand_alone_activity)
     {
-        $user = auth()->user();
-        if ($user->id !== $standAloneActivity->user_id) {
+        // Implement Command Design Pattern to access Update Brightcove Video API
+        $bcVideoContentsRow = H5pBrightCoveVideoContents::where('h5p_content_id', $stand_alone_activity->h5p_content_id)->first();
+        if ($bcVideoContentsRow) {
+            $bcAPISetting = $this->bcAPISettingRepository->find($bcVideoContentsRow->brightcove_api_setting_id);
+            $bcAPIClient = new Client($bcAPISetting);
+            $bcInstance = new UpdateVideoTags($bcAPIClient);
+            $bcInstance->fetch($bcAPISetting, $bcVideoContentsRow->brightcove_video_id, 'curriki', true);    
+        } else {
             return response([
-                'errors' => ['Invalid user or interactive video id.'],
-            ], 400);
-        }
-
-        return \DB::transaction(function () use ($standAloneActivity) {
-        
-            // Implement Command Design Pattern to access Update Brightcove Video API
-            $bcVideoContentsRow = H5pBrightCoveVideoContents::where('h5p_content_id', $standAloneActivity->h5p_content_id)->first();
-            if ($bcVideoContentsRow) {
-                $bcAPISetting = $this->bcAPISettingRepository->find($bcVideoContentsRow->brightcove_api_setting_id);
-                $bcAPIClient = new Client($bcAPISetting);
-                $bcInstance = new UpdateVideoTags($bcAPIClient);
-                $bcInstance->fetch($bcAPISetting, $bcVideoContentsRow->brightcove_video_id, 'curriki', true);    
-            } else {
-                return response([
-                    'message' => 'Failed to remove brightcove video tags.',
-                ], 500);
-            }
-
-            $isDeleted = $this->activityRepository->delete($standAloneActivity->id);
-            if ($isDeleted) {
-                return response([
-                    'message' => 'Interactive video has been deleted successfully.',
-                ], 200);
-            }
-            return response([
-                'errors' => ['Failed to delete interactive video.'],
+                'message' => 'Failed to remove brightcove video tags.',
             ], 500);
+        }
         
-        });
+
+        $isDeleted = $this->activityRepository->delete($stand_alone_activity->id);
+        if ($isDeleted) {
+            return response([
+                'message' => 'Activity has been deleted successfully.',
+            ], 200);
+        }
+        return response([
+            'errors' => ['Failed to delete activity.'],
+        ], 500);
     }
 
     /**
@@ -489,7 +449,7 @@ class StandAloneActivityController extends Controller
             $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
             $activity->brightcoveData = $brightcoveData;
         }
-
+        
         return response([
             'activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);

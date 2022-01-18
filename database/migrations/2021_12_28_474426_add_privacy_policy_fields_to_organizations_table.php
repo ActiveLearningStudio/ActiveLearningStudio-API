@@ -32,13 +32,9 @@ class AddPrivacyPolicyFieldsToOrganizationsTable extends Migration
     {
         Schema::table('organizations', function (Blueprint $table) {
             $table->dropColumn([
-                'tos_type',
-                'tos_url',
-                'tos_content',
-                'privacy_policy_type',
-                'privacy_policy_url',
-                'privacy_policy_content'
-            ]);
+                                'tos_type', 'tos_url', 'tos_content',
+                                'privacy_policy_type', 'privacy_policy_url', 'privacy_policy_content'
+                               ]);
         });
     }
 }
