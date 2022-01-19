@@ -30,7 +30,7 @@ class UpdateEducationLevelRequest extends FormRequest
         $educationlevel = $this->route('education_level');
 
         return [
-            'name' => 'required|string|max:255|unique:education_levels,name,'.$educationlevel->id,
+            'name' => 'required|string|max:255|unique:education_levels,name,' . $educationlevel->id,
             'order' => 'integer|max:2147483647',
         ];
     }

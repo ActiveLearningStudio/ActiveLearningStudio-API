@@ -30,7 +30,7 @@ class UpdateAuthorTagRequest extends FormRequest
         $authorTag = $this->route('author_tag');
 
         return [
-            'name' => 'required|string|max:255|unique:author_tags,name,'.$authorTag->id,
+            'name' => 'required|string|max:255|unique:author_tags,name,' . $authorTag->id,
             'order' => 'integer|max:2147483647',
         ];
     }
