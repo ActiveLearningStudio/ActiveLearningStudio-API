@@ -387,12 +387,7 @@ class StandAloneActivityController extends Controller
             $bcAPIClient = new Client($bcAPISetting);
             $bcInstance = new UpdateVideoTags($bcAPIClient);
             $bcInstance->fetch($bcAPISetting, $bcVideoContentsRow->brightcove_video_id, 'curriki', true);    
-        } else {
-            return response([
-                'message' => 'Failed to remove brightcove video tags.',
-            ], 500);
-        }
-        
+        }        
 
         $isDeleted = $this->activityRepository->delete($stand_alone_activity->id);
         if ($isDeleted) {
