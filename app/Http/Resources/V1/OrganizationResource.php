@@ -18,18 +18,34 @@ class OrganizationResource extends JsonResource
         if ($this->tos_type === 'Parent' && $this->parent) {
             $tos_organization = $this->parent;
             if ($tos_organization->tos_type === 'Parent' && $tos_organization->parent) {
-                $this->tos_content = $tos_organization->parent->tos_content;
+                if (!is_null($tos_organization->parent->tos_content)) {
+                    $this->tos_content = $tos_organization->parent->tos_content;
+                } else {
+                    $this->tos_url = $tos_organization->parent->tos_url;
+                }
             } else {
-                $this->tos_content =  $tos_organization->tos_content;
+                if (!is_null($tos_organization->tos_content)) {
+                    $this->tos_content = $tos_organization->tos_content;
+                } else {
+                    $this->tos_url =  $tos_organization->tos_url;
+                }
             }
         }
 
         if ($this->privacy_policy_type === 'Parent' && $this->parent) {
             $privacy_policy_organization = $this->parent;
             if ($privacy_policy_organization->privacy_policy_type === 'Parent' && $privacy_policy_organization->parent) {
-                $this->privacy_policy_content = $privacy_policy_organization->parent->privacy_policy_content;
+                if (!is_null($privacy_policy_organization->parent->privacy_policy_content)) {
+                    $this->privacy_policy_content = $privacy_policy_organization->parent->privacy_policy_content;
+                } else {
+                    $this->privacy_policy_url = $privacy_policy_organization->parent->privacy_policy_url;
+                }
             } else {
-                $this->privacy_policy_content =  $privacy_policy_organization->privacy_policy_content;
+                if (!is_null($privacy_policy_organization->privacy_policy_content)) {
+                    $this->privacy_policy_content = $privacy_policy_organization->privacy_policy_content;
+                } else {
+                    $this->privacy_policy_url =  $privacy_policy_organization->privacy_policy_url;
+                }
             }
         }
 
