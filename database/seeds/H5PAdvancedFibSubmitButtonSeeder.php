@@ -253,7 +253,7 @@ class H5PAdvancedFibSubmitButtonSeeder extends Seeder
                               "label": "Name",
                               "description": "You can only use letters and numbers for the snippet name.",
                               "regexp": {
-                                "pattern": "^[\\w\\d]*$"
+                                "pattern": "^[\\\\w\\\\d]*$"
                               }
                             },
                             {
