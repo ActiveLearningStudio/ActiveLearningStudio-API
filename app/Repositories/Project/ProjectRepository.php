@@ -52,6 +52,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function update(array $attributes, $id)
     {
+        $projectObj = $this->model->find($id);
+
+        if ($projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']) {
+            $attributes['indexing'] = config('constants.indexing-requested');
+            $attributes['status'] = config('constants.status-finished');
+
+            if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
+                $attributes['status'] = config('constants.status-draft');
+            }
+        }
+
         $is_updated = $this->model->where('id', $id)->update($attributes);
 
         if ($is_updated) {
@@ -356,48 +367,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $userProjectIds = $authenticated_user->projects()->where('organization_id', '=', $organization_id)->pluck('id')->toArray();
         return in_array($project_id, $userProjectIds);
-    }
-
-    /**
-     * @param $project
-     * @return mixed
-     * @throws GeneralException
-     */
-    public function indexing($project)
-    {
-        // if indexing status is already set
-        if ($project->indexing) {
-            throw new GeneralException('Indexing value is already set. Current indexing state of this project: ' . $project->indexing_text);
-        }
-        // if project is in draft
-        if ($project->status === 1) {
-            throw new GeneralException('Project must be finalized before requesting the indexing.');
-        }
-        $project->indexing = 1; // 1 is for indexing requested - see Project Model @indexing property
-        resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
-        return $project->save();
-    }
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function statusUpdate($project)
-    {
-        // see Project Model @status property for mapping
-        $project->status = 3 - $project->status; // this will toggle status, if draft then it will be final or vice versa
-        if ($project->status === 1){
-            if ($project->indexing === 3){
-                $project->status = 2;
-            }
-            $project->indexing = null; // remove indexing if project is reverted to draft state
-            $returnProject = $project->save();
-            resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
-        } else {
-            $returnProject = $project->save();
-        }
-
-        return $returnProject;
     }
 
     /**

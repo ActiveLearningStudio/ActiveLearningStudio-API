@@ -80,18 +80,6 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function checkIsDuplicate($authenticated_user, $project_id, $organization_id);
 
     /**
-     * @param $project
-     * @return mixed
-     */
-    public function indexing($project);
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function statusUpdate($project);
-
-    /**
      * @param $authenticated_user
      * @param $project
      * @param $organization_id

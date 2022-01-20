@@ -11,6 +11,7 @@ use App\Models\Organization;
 use App\Repositories\BaseRepository;
 use App\Repositories\Integration\BrightcoveAPISettingInterface;
 use Illuminate\Support\Facades\Log;
+use App\Models\H5pBrightCoveVideoContents;
 
 class BrightcoveAPISettingRepository extends BaseRepository implements BrightcoveAPISettingInterface
 {
@@ -132,12 +133,16 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
     public function destroy($id)
     {
         try {
+            $vidoesCount = H5pBrightCoveVideoContents::where('brightcove_api_setting_id', $id)->count();
+            if ($vidoesCount) {
+                throw new GeneralException('Brightcove Video(s) exist for this setting.');
+            }
             $this->find($id)->delete();
             return ['message' => 'Brightcove API setting deleted!', 'data' => []];
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-        throw new GeneralException('Unable to delete Brightcove API setting, please try again later!');
+        throw new GeneralException($e->getMessage());
     }
 
     /**
