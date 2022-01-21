@@ -31,6 +31,8 @@ Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+    Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
+    Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
     Route::get('playlists/update-order', 'PlaylistController@populateOrderNumber');
     Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView')->name('metrics.activity-log');
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
@@ -97,8 +99,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::get('suborganization/{suborganization}/projects/favorites', 'ProjectController@getFavorite');
         Route::post('suborganization/{suborganization}/projects/reorder', 'ProjectController@reorder');
-        Route::get('projects/{project}/indexing', 'ProjectController@indexing');
-        Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
@@ -121,9 +121,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         Route::get('projects/{project}/playlists/{playlist}/share', 'PlaylistController@share');
         Route::get('projects/{project}/playlists/{playlist}/remove-share', 'PlaylistController@removeShare');
-
-        Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
-        Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
 
         // Activities
         Route::get('suborganization/{suborganization}/activities/{activity}/search-preview', 'ActivityController@searchPreview');
@@ -219,6 +216,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // brightcove-api-settings
         Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');
         Route::post('suborganizations/{suborganization}/brightcove-api-settings/{brighcoveAPISetting}/clone', 'Integration\BrightcoveAPISettingsController@clone');
+        Route::post('brightcove-api-settings/upload-css', 'Integration\BrightcoveAPISettingsController@uploadCss');
 
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
@@ -231,7 +229,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
-        Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

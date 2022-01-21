@@ -73,7 +73,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
             ->whereIn('parent_id', $parentIds)
             ->when($data['query'] ?? null, function ($query) use ($data) {
-                $query->where('name', 'like', '%' . $data['query'] . '%');
+                $query->where('name', 'ilike', '%' . $data['query'] . '%');
                 return $query;
             })
             ->paginate($perPage)->withQueryString();

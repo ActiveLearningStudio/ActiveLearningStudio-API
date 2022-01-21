@@ -27,7 +27,8 @@ class BrightcoveAPISetting extends Model
         'account_email',
         'client_id',
         'client_secret',
-        'description'
+        'description',
+        'css_path'
     ];
 
     /** 
