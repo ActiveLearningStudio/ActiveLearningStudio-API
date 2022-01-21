@@ -117,7 +117,7 @@ class H5PImagePairSubmitButtonSeeder extends Seeder
                     "type": "boolean",
                     "default": false,
                     "optional": true,
-                    "description": "This option is only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
+                    "description": "This option only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
                   },
                   {
                     "label": "Placeholder",
