@@ -58,7 +58,10 @@ class SuborganizationController extends Controller
      * Get a list of the suborganizations for a user's default organization.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @bodyParam query string required Query to search suborganization against Example: Vivensity
+     * @bodyParam query string Query to search suborganization against Example: Vivensity
+     * @bodyParam size integer size to show per page records Example: 10
+     * @bodyParam order_by_column string to sort data with specific column Example: name
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/suborganizations.json
      *
@@ -593,6 +596,8 @@ class SuborganizationController extends Controller
      * @bodyParam query string Query to search suborganization users against Example: Leo
      * @bodyParam size int Number of items to be displayed "per page" Example: 1
      * @bodyParam role int Organization role type id to filter by Example: 1
+     * @bodyParam order_by_column string to sort data with specific column Example: name
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/organization-users.json
      *

@@ -42,7 +42,15 @@ class LmsSettingRepository extends BaseRepository
             });
         }
 
-         return $query->with(['user', 'organization'])->where('organization_id', $suborganization->id)->paginate($perPage);
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
+        {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->with(['user', 'organization'])
+                     ->where('organization_id', $suborganization->id)
+                     ->paginate($perPage)->withQueryString();
     }
 
     /**

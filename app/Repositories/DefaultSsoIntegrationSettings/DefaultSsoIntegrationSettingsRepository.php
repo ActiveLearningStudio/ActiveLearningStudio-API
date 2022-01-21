@@ -40,7 +40,13 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
                 ->orWhere('lms_url', 'iLIKE', '%' . $data['query'] . '%')
                 ->orWhere('lti_client_id', 'iLIKE', '%' . $data['query'] . '%');
         }
-        return $query->with('organization')->paginate($perPage);
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+        
+        return $query->with('organization')->paginate($perPage)->withQueryString();
     }
 
     /**

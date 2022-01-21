@@ -28,12 +28,18 @@ class ActivityTypeRepository extends BaseRepository implements ActivityTypeRepos
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
 
-        // if specific index projects requested
         if (isset($data['query']) && $data['query'] !== '') {
             $query = $query->where('title', 'iLIKE', '%'.$data['query'].'%');
         }
 
-        return $query->paginate($perPage)->appends(request()->query());
+        if (isset($data['order_by_column']) && $data['order_by_column'] === 'order') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**

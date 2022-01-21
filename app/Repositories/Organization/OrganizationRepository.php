@@ -68,15 +68,21 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $parentIds[] = $organization->id;
         }
 
-        return $this->model
+        $query =  $this->model
             ->with(['parent', 'admins'])
             ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
             ->whereIn('parent_id', $parentIds)
             ->when($data['query'] ?? null, function ($query) use ($data) {
                 $query->where('name', 'ilike', '%' . $data['query'] . '%');
                 return $query;
-            })
-            ->paginate($perPage)->withQueryString();
+            });
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -654,6 +660,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $organizationUsers = $organizationUsers->wherePivot('organization_role_type_id', $data['role']);
         }
 
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $organizationUsers = $organizationUsers->orderBy($data['order_by_column'], $orderByType);
+        }
+
         return $organizationUsers->withCount([
             'projects' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
@@ -669,7 +680,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $query->where('email', 'like', '%' . str_replace("_", "\_", strtolower($data['query'])) . '%');
                 return $query;
             })
-            ->paginate($perPage);
+            ->paginate($perPage)->withQueryString();
     }
 
     /**
