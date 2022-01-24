@@ -203,7 +203,7 @@ class Project extends Model
      * 
      * @return Project
      */
-    public function getProjectByMultipleId(Array $projectIds)
+    public function getProjectsByIds(Array $projectIds)
     {
         if (isset($this->users)) {
             return $this->whereIn('id', $projectIds)->get();

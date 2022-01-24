@@ -818,9 +818,9 @@ class ProjectController extends Controller
      * 
      * @Response Projects
      */
-    public function projectsByMultipleId(Request $request, Project $project)
+    public function projectsByIds(Request $request, Project $project)
     {
         $projectIds = $request->all()["project_id"];
-        return $project->getProjectByMultipleId($projectIds);
+        return $project->getProjectsByIds($projectIds);
     }
 }

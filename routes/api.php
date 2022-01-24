@@ -115,7 +115,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
-        Route::post('suborganization/{suborganization}/projects-by-multiple-id', 'ProjectController@projectsByMultipleId');
+        Route::post('suborganization/{suborganization}/projects/by-ids', 'ProjectController@projectsByIds');
 
         // playlist share toggle
         Route::get('suborganization/{suborganization}/playlists/{playlist}/search-preview', 'PlaylistController@searchPreview');
