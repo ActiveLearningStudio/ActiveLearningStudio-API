@@ -276,25 +276,17 @@ class H5PArithmaticQuizSubmitButtonSeeder extends Seeder
                 "importance": "low",
                 "description": "Announces current slide and total number of slides, variables are :num and :total",
                 "default": "Slide :num of :total"
-              },
-              {
-                "label": "Text for \"Submit\" button",
-                "importance": "low",
-                "name": "submitAnswer",
-                "type": "text",
-                "default": "Submit",
-                "description": "Announces current slide and total number of slides, variables are :num and :total"
               }
             ]
           },
           {
-            "name": "behaviour",
+            "name": "currikisettings",
             "type": "group",
-            "label": "Behavioural settings",
+            "label": "Curriki settings",
             "importance": "low",
-            "description": "These options will let you control how the task behaves.",
+            "description": "These options will let you control how the curriki studio behaves.",
+            "optional": true,
             "fields": [
-              
               {
                 "label": "Do not Show Submit Button",
                 "importance": "low",
@@ -302,7 +294,41 @@ class H5PArithmaticQuizSubmitButtonSeeder extends Seeder
                 "type": "boolean",
                 "default": false,
                 "optional": true,
-                "description": "This options is compatible only with the standalone activities"
+                "description": "This option only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
+              },
+              {
+                "label": "Placeholder",
+                "importance": "low",
+                "name": "placeholder",
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "description": "This option is a place holder. will be used in future"
+              },
+              {
+                "label": "Curriki Localization",
+                "description": "Here you can edit settings or translate texts used in curriki settings",
+                "importance": "low",
+                "name": "currikil10n",
+                "type": "group",
+                "fields": [
+                  {
+                    "label": "Text for \"Submit\" button",
+                    "name": "submitAnswer",
+                    "importance": "low",
+                    "type": "text",
+                    "default": "Submit",
+                    "optional": true
+                  },
+                  {
+                    "label": "Text for \"Placeholder\" button",
+                    "importance": "low",
+                    "name": "placeholderButton",
+                    "type": "text",
+                    "default": "Placeholder",
+                    "optional": true
+                  }
+                ]
               }
             ]
           }
