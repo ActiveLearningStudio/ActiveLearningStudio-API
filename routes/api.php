@@ -218,6 +218,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganizations/{suborganization}/brightcove-api-settings/{brighcoveAPISetting}/clone', 'Integration\BrightcoveAPISettingsController@clone');
         Route::post('brightcove-api-settings/upload-css', 'Integration\BrightcoveAPISettingsController@uploadCss');
 
+        // kaltura-api-settings
+        Route::apiResource('suborganizations/{suborganization}/kaltura-api-settings', 'Integration\KalturaAPISettingsController');
+        Route::post('suborganizations/{suborganization}/kaltura-api-settings/{kalturaAPISetting}/clone', 'Integration\KalturaAPISettingsController@clone');
+
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
