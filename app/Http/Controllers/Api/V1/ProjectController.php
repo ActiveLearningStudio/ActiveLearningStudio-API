@@ -809,4 +809,18 @@ class ProjectController extends Controller
             'project' => new ProjectSearchPreviewResource($project),
         ], 200);
     }
+
+    /**
+     * Get the Projects by Ids
+     * 
+     * @urlParams 
+     * {"project_id": ["3024", "3025"]}
+     * 
+     * @Response Projects
+     */
+    public function projectsByIds(Request $request, Project $project)
+    {
+        $projectIds = $request->all()["project_id"];
+        return $project->getProjectsByIds($projectIds);
+    }
 }
