@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\QueryBuilders\SearchFormQueryBuilder;
+use Illuminate\Http\Request;
+use Laravel\Scout\Searchable;
 use App\Models\Traits\GlobalScope;
-use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
+use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\Model;
 use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\File;
-use Laravel\Scout\Searchable;
+use App\Models\QueryBuilders\SearchFormQueryBuilder;
+use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 
 class Project extends Model
 {
@@ -195,5 +196,18 @@ class Project extends Model
             return $this->favoredByUsers->find(auth()->user()->id) ? true : false;
         }
         return false;
+    }
+
+    /**
+     * Get the multiple Projects by IDs
+     * 
+     * @return Project
+     */
+    public function getProjectsByIds(Array $projectIds)
+    {
+        if (isset($this->users)) {
+            return $this->whereIn('id', $projectIds)->get();
+        }
+        return null;
     }
 }
