@@ -5,13 +5,14 @@
  */
 namespace App\Repositories\Integration;
 
-use App\Exceptions\GeneralException;
-use App\Models\Integration\BrightcoveAPISetting;
 use App\Models\Organization;
-use App\Repositories\BaseRepository;
-use App\Repositories\Integration\BrightcoveAPISettingInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\GeneralException;
+use App\Repositories\BaseRepository;
 use App\Models\H5pBrightCoveVideoContents;
+use App\Models\Integration\BrightcoveAPISetting;
+use App\Repositories\Integration\BrightcoveAPISettingInterface;
 
 class BrightcoveAPISettingRepository extends BaseRepository implements BrightcoveAPISettingInterface
 {
@@ -130,14 +131,31 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
      * @return mixed
      * @throws GeneralException
      */
+
+    public function getTitleList(Collection  $videos) : String
+    {
+        $str = "";
+        foreach($videos as $video){
+            if($video->activities->isNotEmpty()){
+                $str .= $video->activities->pluck("title")->implode(",") . ", ";
+            }
+        }
+        return substr_replace($str, " ", -2);
+    }
+
     public function destroy($id)
     {
         try {
-            $vidoesCount = H5pBrightCoveVideoContents::where('brightcove_api_setting_id', $id)->count();
-            if ($vidoesCount) {
-                throw new GeneralException('Brightcove Video(s) exist for this setting.');
+            $videos = H5pBrightCoveVideoContents::with(['activities'])->where('brightcove_api_setting_id', $id)->get();
+            if($videos->isNotEmpty()){
+                $title = $this->getTitleList($videos);
+                if($title != null){
+                    $uname = $videos->first()->brightcove_api_setting->account_name;
+                    throw new GeneralException($title.' exist against this API setting created by '.$uname);
+                }
             }
-            $this->find($id)->delete();
+            
+            $videos->delete();
             return ['message' => 'Brightcove API setting deleted!', 'data' => []];
         } catch (\Exception $e) {
             Log::error($e->getMessage());

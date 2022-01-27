@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Activity;
 use App\Models\DeepRelations\HasManyDeep;
 use App\Models\DeepRelations\HasRelationships;
 use App\Models\Traits\GlobalScope;
@@ -170,6 +171,13 @@ class User extends Authenticatable implements MustVerifyEmail
             ]
         );
     }
+
+
+    public function activities_mul()
+    {
+        return $this->hasMany(Activity::class,'user_id','id');
+    }
+
 
     public function lmssetting()
     {
