@@ -142,8 +142,9 @@ class ActivityController extends Controller
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam h5p_content_id int The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
-     * @bodyParam subject_id string The Id of a subject Example: null
-     * @bodyParam education_level_id string The Id of a education level Example: null
+     * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
+     * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
+     * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
      *
      * @responseFile 201 responses/activity/activity.json
      *
@@ -165,20 +166,36 @@ class ActivityController extends Controller
         $data = $request->validated();
 
         $data['order'] = $this->activityRepository->getOrder($playlist->id) + 1;
-        $activity = $playlist->activities()->create($data);
 
-        if ($activity) {
-            $updated_playlist = new PlaylistResource($this->playlistRepository->find($playlist->id));
-            event(new PlaylistUpdatedEvent($updated_playlist->project, $updated_playlist));
+        return \DB::transaction(function () use ($data, $playlist) {
+
+            $attributes = Arr::except($data, ['subject_id', 'education_level_id', 'author_tag_id']);
+            $activity = $playlist->activities()->create($attributes);
+
+            if ($activity) {
+                if (isset($data['subject_id'])) {
+                    $activity->subjects()->attach($data['subject_id']);
+                }
+                if (isset($data['education_level_id'])) {
+                    $activity->educationLevels()->attach($data['education_level_id']);
+                }
+                if (isset($data['author_tag_id'])) {
+                    $activity->authorTags()->attach($data['author_tag_id']);
+                }
+
+                $updated_playlist = new PlaylistResource($this->playlistRepository->find($playlist->id));
+                event(new PlaylistUpdatedEvent($updated_playlist->project, $updated_playlist));
+
+                return response([
+                    'activity' => new ActivityResource($activity),
+                ], 201);
+            }
 
             return response([
-                'activity' => new ActivityResource($activity),
-            ], 201);
-        }
+                'errors' => ['Could not create activity. Please try again later.'],
+            ], 500);
 
-        return response([
-            'errors' => ['Could not create activity. Please try again later.'],
-        ], 500);
+        });
     }
 
     /**
@@ -230,8 +247,9 @@ class ActivityController extends Controller
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam h5p_content_id int The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
-     * @bodyParam subject_id string The Id of a subject Example: null
-     * @bodyParam education_level_id string The Id of a education level Example: null
+     * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
+     * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
+     * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
      *
      * @responseFile responses/activity/activity.json
      *
@@ -262,25 +280,40 @@ class ActivityController extends Controller
             ], 400);
         }
         $validated = $request->validated();
-        $attributes = Arr::except($validated, ['data']);
-        $is_updated = $this->activityRepository->update($attributes, $activity->id);
 
-        if ($is_updated) {
-            // H5P meta is in 'data' index of the payload.
-            $this->update_h5p($validated['data'], $activity->h5p_content_id);
+        return \DB::transaction(function () use ($validated, $playlist, $activity) {
 
-            $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
-            $playlist = new PlaylistResource($updated_activity->playlist);
-            event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
+            $attributes = Arr::except($validated, ['data', 'subject_id', 'education_level_id', 'author_tag_id']);
+            $is_updated = $this->activityRepository->update($attributes, $activity->id);
+
+            if ($is_updated) {
+                if (isset($validated['subject_id'])) {
+                    $activity->subjects()->sync($validated['subject_id']);
+                }
+                if (isset($validated['education_level_id'])) {
+                    $activity->educationLevels()->sync($validated['education_level_id']);
+                }
+                if (isset($validated['author_tag_id'])) {
+                    $activity->authorTags()->sync($validated['author_tag_id']);
+                }
+
+                // H5P meta is in 'data' index of the payload.
+                $this->update_h5p($validated['data'], $activity->h5p_content_id);
+
+                $updated_activity = new ActivityResource($this->activityRepository->find($activity->id));
+                $playlist = new PlaylistResource($updated_activity->playlist);
+                event(new ActivityUpdatedEvent($playlist->project, $playlist, $updated_activity));
+
+                return response([
+                    'activity' => $updated_activity,
+                ], 200);
+            }
 
             return response([
-                'activity' => $updated_activity,
-            ], 200);
-        }
+                'errors' => ['Failed to update activity.'],
+            ], 500);
 
-        return response([
-            'errors' => ['Failed to update activity.'],
-        ], 500);
+        });
     }
 
     /**

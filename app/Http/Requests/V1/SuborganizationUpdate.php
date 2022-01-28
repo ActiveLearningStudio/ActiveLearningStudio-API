@@ -67,8 +67,8 @@ class SuborganizationUpdate extends FormRequest
     public function messages()
     {
         return [
-            'tos_type.in' => 'tos_type should be Parent, URL OR Content',
-            'privacy_policy_type.in' => 'privacy_policy_type should be Parent, URL OR Content',
+            'tos_type.in' => 'The ToS type should be Parent, URL OR Content',
+            'privacy_policy_type.in' => 'The privacy policy type should be Parent, URL OR Content',
         ];
     }
 }
