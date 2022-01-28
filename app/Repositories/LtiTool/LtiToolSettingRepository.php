@@ -47,7 +47,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
             $query->orderBy($data['order_by_column'], $orderByType);
         }
-        return $query->where('organization_id', $suborganization->id)->paginate($perPage);
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
 
     /**

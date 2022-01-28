@@ -467,7 +467,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->whereDate('updated_at', '<=', $data['updated_to']);
         }
 
-        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
 
     /**
