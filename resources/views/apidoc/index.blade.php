@@ -31423,13 +31423,13 @@ response.json()</code></pre>
 <td><code>account_name</code></td>
 <td>string</td>
 <td>required|unique</td>
-<td>Valid account id.Max 100 characters.</td>
+<td>Valid account name.Max 100 characters.</td>
 </tr>
 <tr>
 <td><code>account_email</code></td>
 <td>string</td>
 <td>required|unique</td>
-<td>Valid account id.Max 150 characters.</td>
+<td>Valid account email.Max 150 characters.</td>
 </tr>
 <tr>
 <td><code>client_id</code></td>
@@ -31649,13 +31649,13 @@ response.json()</code></pre>
 <td><code>account_name</code></td>
 <td>string</td>
 <td>required|unique</td>
-<td>Valid account id.Max 100 characters.</td>
+<td>Valid account name.Max 100 characters.</td>
 </tr>
 <tr>
 <td><code>account_email</code></td>
 <td>string</td>
 <td>required|unique</td>
-<td>Valid account id.Max 150 characters.</td>
+<td>Valid account email.Max 150 characters.</td>
 </tr>
 <tr>
 <td><code>client_id</code></td>
@@ -31900,6 +31900,894 @@ response.json()</code></pre>
 <td><code>brightcove_api_setting</code></td>
 <td>required</td>
 <td>The Id of a Brightcove API setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_b1748719c1f572e3601dbbb3b63923dc -->
+
+<!-- START_8f4fad2b19011e1c4fa626a51f418e6f -->
+<h1>1010. Admin/Kaltura API Settings</h1>
+<h2>Get All Kaltura API Settings for listing.</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 4,
+            "user_id": 1,
+            "organization_id": 1,
+            "partner_id": "4186473",
+            "sub_partner_id": "418647300",
+            "name": "Kaltura Curriki CMS",
+            "email": "asim@curriki.org",
+            "expiry": "86400",
+            "session_type": "2",
+            "admin_secret": "69fe402f3429ede6dbf4b4f928767bf6",
+            "user_secret": "06bed4dadccc1a881db6a6a01f84f68f",
+            "privileges": "*",
+            "description": "This the sample of kaltura api settings",
+            "created_at": "2022-01-21T10:25:20.000000Z",
+            "updated_at": "2022-01-21T10:25:20.000000Z",
+            "deleted_at": null,
+            "user": {
+                "id": 1,
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "email_verified_at": "2020-08-26T10:49:59.000000Z",
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-10-29T08:52:59.000000Z",
+                "first_name": "test",
+                "last_name": "test",
+                "organization_name": "organization_name",
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "127.0.0.1",
+                "gapi_access_token": null,
+                "membership_type_id": 1
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false
+            }
+        }
+    ],
+    "links": {
+        "first": "http://curriki-studio-api.local/api/v1/suborganizations/1/kaltura-api-settings?page=1",
+        "last": "http://curriki-studio-api.local/api/v1/suborganizations/1/kaltura-api-settings?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://curriki-studio-api.local/api/v1/suborganizations/1/kaltura-api-settings",
+        "per_page": 10,
+        "to": 1,
+        "total": 1
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/1/kaltura-api-settings</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8f4fad2b19011e1c4fa626a51f418e6f -->
+<!-- START_e75b6b178b609b7bd0cce5907371aa27 -->
+<h2>Create Kaltura API Setting</h2>
+<p>Creates the new Kaltura API setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "user_id": 1,
+            "organization_id": 1,
+            "partner_id": "4186473",
+            "sub_partner_id": "418647300",
+            "name": "Kaltura Curriki CMS",
+            "email": "asim@curriki.org",
+            "expiry": "86400",
+            "session_type": "2",
+            "admin_secret": "69fe402f3429ede6dbf4b4f928767bf6",
+            "user_secret": "06bed4dadccc1a881db6a6a01f84f68f",
+            "privileges": "*",
+            "description": "This the sample of kaltura api settings"
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/Kaltura-api-settings"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+            "user_id": 1,
+            "organization_id": 1,
+            "partner_id": "4186473",
+            "sub_partner_id": "418647300",
+            "name": "Kaltura Curriki CMS",
+            "email": "asim@curriki.org",
+            "expiry": "86400",
+            "session_type": "2",
+            "admin_secret": "69fe402f3429ede6dbf4b4f928767bf6",
+            "user_secret": "06bed4dadccc1a881db6a6a01f84f68f",
+            "privileges": "*",
+            "description": "This the sample of kaltura api settings"
+        }
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "user_id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "partner_id" =&gt; "4186473",
+            "sub_partner_id" =&gt; "418647300",
+            "name" =&gt; "Kaltura Curriki CMS",
+            "email" =&gt; "asim@curriki.org",
+            "expiry" =&gt; "86400",
+            "session_type" =&gt; "2",
+            "admin_secret" =&gt; "69fe402f3429ede6dbf4b4f928767bf6",
+            "user_secret" =&gt; "06bed4dadccc1a881db6a6a01f84f68f",
+            "privileges" =&gt; "*",
+            "description" =&gt; "This the sample of kaltura api settings"
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings'
+payload = {
+    "user_id": 1,
+    "organization_id": 1,
+    "partner_id": "4186473",
+    "sub_partner_id": "418647300",
+    "name": "Kaltura Curriki CMS",
+    "email": "asim@curriki.org",
+    "expiry": "86400",
+    "session_type": "2",
+    "admin_secret": "69fe402f3429ede6dbf4b4f928767bf6",
+    "user_secret": "06bed4dadccc1a881db6a6a01f84f68f",
+    "privileges": "*",
+    "description": "This the sample of kaltura api settings"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Kaltura API setting created successfully!",
+    "data": {
+        "user_id": 1,
+        "organization_id": 1,
+        "partner_id": "4186473",
+        "sub_partner_id": "418647300",
+        "name": "Kaltura Curriki CMS",
+        "email": "asim@curriki.org",
+        "expiry": "86400",
+        "session_type": "2",
+        "admin_secret": "69fe402f3429ede6dbf4b4f928767bf6",
+        "user_secret": "06bed4dadccc1a881db6a6a01f84f68f",
+        "privileges": "*",
+        "description": "This the sample of kaltura api settings",
+        "created_at": "2022-01-21T10:25:20.000000Z",
+        "updated_at": "2022-01-21T10:25:20.000000Z",
+        "deleted_at": null,
+        "id": 4,
+        "user": {
+            "id": 1,
+            "name": "localuser",
+            "email": "localuser@local.com",
+            "email_verified_at": "2020-08-26T10:49:59.000000Z",
+            "created_at": "2020-08-22T12:13:52.000000Z",
+            "updated_at": "2020-10-29T08:52:59.000000Z",
+            "first_name": "test",
+            "last_name": "test",
+            "organization_name": "organization_name",
+            "job_title": "job_title",
+            "address": null,
+            "phone_number": null,
+            "organization_type": null,
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "hubspot": false,
+            "subscribed": true,
+            "subscribed_ip": "127.0.0.1",
+            "gapi_access_token": null,
+            "membership_type_id": 1
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": true,
+            "account_id": null,
+            "api_key": null,
+            "unit_path": null,
+            "noovo_client_id": null,
+            "gcr_project_visibility": true,
+            "gcr_playlist_visibility": false,
+            "gcr_activity_visibility": false
+        }
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create kaltura api setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/suborganizations/1/kaltura-api-settings</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>partner_id</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid parner id.Max 50 characters.</td>
+</tr>
+<tr>
+<td><code>sub_partner_id</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid sub parner id.Max 50 characters.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid name.Max 100 characters.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid email.Max 150 characters.</td>
+</tr>
+<tr>
+<tr>
+<td><code>expiry</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid expiry in second like 84600.Max 150 characters.</td>
+</tr>
+<tr>
+<td><code>session_type</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>Valid session type.It must be 0 or 2.</td>
+</tr>
+<tr>    
+<tr>
+<td><code>admin_secret</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid admin secret key.</td>
+</tr>
+<tr>    
+<td><code>user_secret</code></td>
+<td>string</td>
+<td>optional|unique</td>
+<td>Valid user secret key.</td>
+</tr>
+<td><code>description</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid tool description.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e75b6b178b609b7bd0cce5907371aa27 -->
+
+<!-- START_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+<h2>Update Kaltura API Setting</h2>
+<p>Updates the Kaltura API setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Kaltura CMS",
+            "account_email": "mike@curriki.org",
+            "client_id": "client id/key",
+            "client_secret": "client secret key",
+            "description": "Brighcove CMS API testing."
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_id": 1,
+    "organization_id": 1,
+    "account_id": "6282550302001",
+    "account_name": "Curriki Kaltura CMS",
+    "account_email": "mike@curriki.org",
+    "client_id": "client id/key",
+    "client_secret": "client secret key",
+    "description": "Brighcove CMS API testing."
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "user_id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "account_id" =&gt; "6282550302001",
+            "account_name" =&gt; "Curriki Kaltura CMS",
+            "account_email" =&gt; "mike@curriki.org",
+            "client_id" =&gt; "client id/key",
+            "client_secret" =&gt; "client secret key",
+            "description" =&gt; "Brighcove CMS API testing."
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1'
+payload = {
+    "user_id": 1,
+    "organization_id": 1,
+    "account_id": "6282550302001",
+    "account_name": "Curriki Kaltura CMS",
+    "account_email": "mike@curriki.org",
+    "client_id": "client id/key",
+    "client_secret": "client secret key",
+    "description": "Brighcove CMS API testing."
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Kaltura API setting updated successfully!",
+    "data": {
+            "id": 15,
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brighcove CMS",
+            "account_email": "mike@curriki.org",
+            "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+            "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+            "description": "Kaltura API Testing.",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "user": {
+                "id": 1,
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "email_verified_at": "2020-08-26T10:49:59.000000Z",
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-10-29T08:52:59.000000Z",
+                "first_name": "test",
+                "last_name": "test",
+                "organization_name": "organization_name",
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "127.0.0.1",
+                "gapi_access_token": null,
+                "membership_type_id": 1
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false
+            }
+        }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update Kaltura API setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/suborganizations/{sub_organization}/kaltura-api-settings/{kaltura_api_setting}</code></p>
+<p><code>PATCH api/v1/suborganizations/{sub_organization}/kaltura-api-settings/{kaltura_api_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>account_id</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 50 characters.</td>
+</tr>
+<tr>
+<td><code>account_name</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 100 characters.</td>
+</tr>
+<tr>
+<td><code>account_email</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 150 characters.</td>
+</tr>
+<tr>
+<td><code>client_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid client key.</td>
+</tr>
+<tr>
+<td><code>client_secret</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid client secret.Require with client id.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid tool description.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+
+<!-- START_2f2758b0abc25e98982d44b733c0347d -->
+<h2>Get Kaltura API Setting</h2>
+<p>Get the specified Kaltura API setting data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 15,
+        "user_id": 1,
+        "organization_id": 1,
+        "account_id": "6282550302001",
+        "account_name": "Curriki Brighcove CMS",
+        "account_email": "mike@curriki.org",
+        "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+        "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+        "description": "Kaltura API Testing.",
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "user": {
+            "id": 1,
+            "name": "localuser",
+            "email": "localuser@local.com",
+            "email_verified_at": "2020-08-26T10:49:59.000000Z",
+            "created_at": "2020-08-22T12:13:52.000000Z",
+            "updated_at": "2020-10-29T08:52:59.000000Z",
+            "first_name": "test",
+            "last_name": "test",
+            "organization_name": "organization_name",
+            "job_title": "job_title",
+            "address": null,
+            "phone_number": null,
+            "organization_type": null,
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "hubspot": false,
+            "subscribed": true,
+            "subscribed_ip": "127.0.0.1",
+            "gapi_access_token": null,
+            "membership_type_id": 1
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": true,
+            "account_id": null,
+            "api_key": null,
+            "unit_path": null,
+            "noovo_client_id": null,
+            "gcr_project_visibility": true,
+            "gcr_playlist_visibility": false,
+            "gcr_activity_visibility": false
+        }
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/{sub_organazation}/kaltura-api-settings/{kaltura_api_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+<td><code>kaltura_api_setting</code></td>
+<td>required</td>
+<td>The Id of a Kaltura API setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_2f2758b0abc25e98982d44b733c0347d -->
+
+<!-- START_b1748719c1f572e3601dbbb3b63923dc -->
+<h2>Delete Kaltura API Setting</h2>
+<p>Deletes the Kaltura API setting from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/kaltura-api-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": {
+        "message": "kaltura API setting deleted!",
+        "data": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete kaltura api setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/suborganizations/{sub_organization}/kaltura-api-settings/{kaltura_api_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+<td><code>kaltura_api_setting</code></td>
+<td>required</td>
+<td>The Id of a Kaltura API setting</td>
 </tr>
 </tbody>
 </table>
