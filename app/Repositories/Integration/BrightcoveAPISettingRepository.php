@@ -132,15 +132,15 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
      * @throws GeneralException
      */
 
-    public function getTitleList(Collection  $videos) : String
+    public function getTitleList(Collection  $videos) : Array
     {
-        $str = "";
+        $title = [];
         foreach($videos as $video){
             if($video->activities->isNotEmpty()){
-                $str .= $video->activities->pluck("title")->implode(",") . ", ";
+                array_push($title, $video->activities->pluck("title")->implode(","));
             }
         }
-        return substr_replace($str, " ", -2);
+        return $title;
     }
 
     public function destroy($id)
@@ -149,9 +149,13 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
             $videos = H5pBrightCoveVideoContents::with(['activities'])->where('brightcove_api_setting_id', $id)->get();
             if($videos->isNotEmpty()){
                 $title = $this->getTitleList($videos);
-                if($title != null){
+                if($title !== null){
+                    $deleteMessage = "<ul>";
                     $uname = $videos->first()->brightcove_api_setting->account_name;
-                    throw new GeneralException($title.' exist against this API setting created by '.$uname);
+                    foreach($title as $videoTitle){
+                        $deleteMessage .= "<li>".$videoTitle.' exist against this API setting created by '.$uname;
+                    }
+                    throw new GeneralException($deleteMessage);
                 }
             }
             
