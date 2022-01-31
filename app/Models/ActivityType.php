@@ -29,4 +29,9 @@ class ActivityType extends Model
         return $this->hasMany('App\Models\ActivityItem', 'activity_type_id');
     }
 
+    public function activityTypeTitle()
+    {
+        return $this->hasOne('App\Models\ActivityUiUpdates', 'activity_type_title', 'title');
+    }
+
 }

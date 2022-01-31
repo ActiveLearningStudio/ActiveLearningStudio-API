@@ -91,4 +91,20 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         }
         throw new GeneralException('Unable to update activity Item, please try again later!');
     }
+
+    /**
+     * Get the h5p content for activity item.
+     *
+     * @param int $libraryName for activity item
+     * @param int $libraryMajorVersion for activity item
+     * @param int $libraryMinorVerison for activity item
+     * @return array
+     */
+    public function getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison) {
+
+        // Create full name of library with major and minor version
+        $libName =  $libraryName. ' ' . $libraryMajorVersion . '.' .$libraryMinorVerison ;
+
+        return $this->model::select('id', 'h5pLib', 'activity_type_id')->where('h5pLib', $libName)->with('activityType')->first();
+    }
 }

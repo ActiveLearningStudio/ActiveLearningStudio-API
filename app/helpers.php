@@ -140,7 +140,7 @@ if (!function_exists('xAPIFormatDuration')) {
     /**
      * Format 'duration' value in seconds to hh:mm:ss format
      * e.g., PT24S to 0:24
-     * 
+     *
      * @param string $duration
      * @param boolean $formatValue Return formatted value in hh:mm:ss format. Defaults to true
      * @return string
@@ -198,8 +198,8 @@ if (!function_exists('recursive_array_search_insert')) {
 if (!function_exists('getEducationalLevel')) {
     function getEducationalLevel($grade)
     {
-        // Range: -1 to 13 
-        // Note: Pre-K = -1, Kindergarten = 0, Adult = 13 
+        // Range: -1 to 13
+        // Note: Pre-K = -1, Kindergarten = 0, Adult = 13
         $grades = [
             'Kindergarten-Grade 2 (Ages 5-7)' => [0, 2],
             'Grades 3-5 (Ages 8-10)' => [3, 5],
@@ -210,7 +210,7 @@ if (!function_exists('getEducationalLevel')) {
             'Professional Development' => [13],
             'Special Education' => [13]
         ];
-        return array_key_exists($grade, $grades) ? $grades[$grade] : [0, 2]; 
+        return array_key_exists($grade, $grades) ? $grades[$grade] : [0, 2];
     }
 }
 
@@ -260,7 +260,7 @@ if (!function_exists('formatDuration')) {
     /**
      * Format 'duration' value in seconds to hh:mm:ss format
      * e.g., PT24S to 0:24
-     * 
+     *
      * @param string $duration
      * @return string
      */
@@ -268,7 +268,7 @@ if (!function_exists('formatDuration')) {
     {
         $raw_duration = str_replace(array('PT', 'S'), '', $duration);
         $seconds = round($raw_duration);
-     
+
         $formatted = sprintf('%02d:%02d', ($seconds / 60 % 60), $seconds % 60);
         if (($seconds / 3600) >= 1) {
             $formatted = sprintf('%02d:%02d:%02d', ($seconds / 3600), ($seconds / 60 % 60), $seconds % 60);

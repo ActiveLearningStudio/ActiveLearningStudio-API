@@ -30,7 +30,10 @@ class Activity extends Model
         'subject_id',
         'education_level_id',
         'h5p_content_id',
-        'indexing'
+        'indexing',
+        'user_id',
+        'organization_id',
+        'description'
     ];
 
     /**
@@ -68,6 +71,18 @@ class Activity extends Model
     }
 
     /**
+     * Cascade on delete the activity
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function (Activity $activity) {
+            H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->delete();
+        });
+    }
+
+    /**
      * Get the search request
      */
     public static function searchForm(): SearchRequestBuilder
@@ -81,6 +96,14 @@ class Activity extends Model
     public function playlist()
     {
         return $this->belongsTo('App\Models\Playlist', 'playlist_id');
+    }
+
+    /**
+     * Get the user that owns the stand alone activity
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     /**

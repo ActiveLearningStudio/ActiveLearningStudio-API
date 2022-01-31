@@ -12,13 +12,14 @@
 
 namespace Djoudi\LaravelH5p;
 
-use Djoudi\LaravelH5p\Repositories\EditorAjaxRepository;
-use Djoudi\LaravelH5p\Repositories\LaravelH5pRepository;
-use Djoudi\LaravelH5p\Storages\EditorStorage;
-use Djoudi\LaravelH5p\Storages\LaravelH5pStorage;
-use H5PContentValidator;
 use H5PCore;
-
+use H5peditor;
+use H5PExport;
+use H5PStorage;
+use H5PValidator;
+use H5PContentValidator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 //use H5PDevelopment;
 //use H5PDefaultStorage;
 //use H5PEditorEndpoints;
@@ -26,13 +27,16 @@ use H5PCore;
 //use H5PEditorAjaxInterface;
 //use H5peditorFile;
 //use H5peditorStorage;
-use H5peditor;
-use H5PExport;
-use H5PStorage;
-use H5PValidator;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
+use Djoudi\LaravelH5p\Storages\EditorStorage;
+use Djoudi\LaravelH5p\Storages\LaravelH5pStorage;
+use App\Repositories\H5pContent\H5pContentRepository;
+use Djoudi\LaravelH5p\Repositories\EditorAjaxRepository;
+use Djoudi\LaravelH5p\Repositories\LaravelH5pRepository;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
+use App\Models\Integration\BrightcoveAPISetting;
 
 class LaravelH5p
 {
@@ -148,14 +152,14 @@ class LaravelH5p
     public static function get_core($settings = array())
     {
         $settings = self::get_core_settings($settings);
-        $settings = self::get_core_files($settings);
+        $settings = self::get_core_files($settings, $lib = null);
         return $settings;
     }
 
-    public static function get_editor($content = null)
-    {
+    public static function get_editor($content = null, $lib = null)
+    {   
         $settings = self::get_editor_settings($content);
-        $settings = self::get_editor_assets($settings, $content);
+        $settings = self::get_editor_assets($settings, $content, $lib);
         return $settings;
     }
 
@@ -171,9 +175,17 @@ class LaravelH5p
     {
         // Determine embed type
         $embed = H5PCore::determineEmbedType($content['embedType'], $content['library']['embedTypes']);
-
         // Make sure content isn't added twice
         $cid = 'cid-' . $content['id'];
+        // Load H5P content from Repository
+        $getH5pContent = new H5pContentRepository(new H5pContent());
+        
+        // Check for library
+        $record = $getH5pContent->getLibrary($content['id']);
+        // Get Library Name
+        $libraryName = $record->library->name;
+        $libraryMajorVersion = $record->library->major_version;
+        $libraryMinorVerison = $record->library->minor_version;
 
         if (!isset($settings['contents'][$cid])) {
             $settings['contents'][$cid] = self::get_content_settings($content);
@@ -196,9 +208,27 @@ class LaravelH5p
                         $settings['loadedCss'][] = self::get_h5plibrary_url($url);
                     }
                 }
+                
+                if ($content['library']['name'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $content['id'])->first();
+                    if ($brightcoveContentData) {
+                        $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                        $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+                        array_push($settings['loadedCss'], config('app.url') . $brightcoveAPISetting->css_path);
+                    }
+                }
+
             } elseif ($embed === 'iframe') {
                 $settings['contents'][$cid]['scripts'] = $core->getAssetsUrls($files['scripts']);
                 $settings['contents'][$cid]['styles'] = $core->getAssetsUrls($files['styles']);
+                if ($content['library']['name'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $content['id'])->first();
+                    if ($brightcoveContentData) {
+                        $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                        $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+                        array_push($settings['contents'][$cid]['styles'], config('app.url') . $brightcoveAPISetting->css_path);
+                    }
+                }
             }
         }
 
@@ -262,16 +292,22 @@ class LaravelH5p
         return $settings;
     }
 
-    private static function get_core_files($settings = array())
+    private static function get_core_files($settings = array(), $lib)
     {
         $settings['loadedJs'] = array();
         $settings['loadedCss'] = array();
-
+        
         $settings['core'] = array(
             'styles' => array(),
             'scripts' => array(),
         );
 
+        if ( $lib && $lib == "H5P.BrightcoveInteractiveVideo 1.0" && isset($_GET['accountId']) && $_GET['accountId'] !== 'null') {
+            $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+            $brightcoveAPISetting = $brightcoveAPISettingRepository->getByAccountId($_GET['accountId']);
+            array_push($settings['core']['styles'], config('app.url') . $brightcoveAPISetting->css_path);
+        }
+        
         $settings['core']['styles'][] = self::get_laravelh5p_url('/css/laravel-h5p.css');
 
         foreach (H5PCore::$styles as $style) {
@@ -328,9 +364,9 @@ class LaravelH5p
         return $settings;
     }
 
-    private static function get_editor_assets($settings = array(), $content = null)
+    private static function get_editor_assets($settings = array(), $content = null, $lib)
     {
-        $settings = self::get_core_files($settings);
+        $settings = self::get_core_files($settings, $lib);
 
         // load core assets
         $settings['editor']['assets']['css'] = $settings['core']['styles'];

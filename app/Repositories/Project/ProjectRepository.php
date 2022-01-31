@@ -21,6 +21,7 @@ use ZipArchive;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\App;
+use DB;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -51,6 +52,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function update(array $attributes, $id)
     {
+        $projectObj = $this->model->find($id);
+
+        if ($projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']) {
+            $attributes['indexing'] = config('constants.indexing-requested');
+            $attributes['status'] = config('constants.status-finished');
+
+            if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
+                $attributes['status'] = config('constants.status-draft');
+            }
+        }
+
         $is_updated = $this->model->where('id', $id)->update($attributes);
 
         if ($is_updated) {
@@ -65,6 +77,37 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 foreach ($playlist->activities as $activity)
                 {
                     $activity->searchable();
+                }
+            }
+        }
+
+        return $is_updated;
+    }
+
+    /**
+     * Update shared for project and its playlists and activities
+     *
+     * @param Project $project
+     * @param bool $shared
+     * @return bool
+     */
+    public function updateShared(Project $project, bool $shared)
+    {
+        $project->shared = $shared;
+        $is_updated = $project->save();
+
+        if ($is_updated) {
+            foreach ($project->playlists as $playlist)
+            {
+                $playlist->shared = $shared;
+                $is_playlist_updated = $playlist->save();
+
+                if ($is_playlist_updated) {
+                    foreach ($playlist->activities as $activity)
+                    {
+                        $activity->shared = $shared;
+                        $activity->save();
+                    }
                 }
             }
         }
@@ -120,7 +163,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $data['organization_visibility_type_id'] = config('constants.private-organization-visibility-type-id');
             }
 
-            return \DB::transaction(function () use ($authUser, $data, $project, $team, $token) {
+            return DB::transaction(function () use ($authUser, $data, $project, $team, $token) {
                 $cloned_project = $authUser->projects()->create($data, ['role' => 'owner']);
                 if (!$cloned_project) {
                     return 'Could not create project. Please try again later.';
@@ -143,7 +186,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             });
 
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             Log::error($e->getMessage());
             throw new GeneralException('Unable to clone the project, please try again later!');
         }
@@ -235,7 +278,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $plist['activities'] = [];
 
             foreach ($playlist['activities'] as $activity) {
-                $h5pContent = \DB::table('h5p_contents')
+                $h5pContent = DB::table('h5p_contents')
                     ->select(['h5p_contents.title', 'h5p_libraries.name as library_name'])
                     ->where(['h5p_contents.id' => $activity->h5p_content_id])
                     ->join('h5p_libraries', 'h5p_contents.library_id', '=', 'h5p_libraries.id')->first();
@@ -327,48 +370,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     }
 
     /**
-     * @param $project
-     * @return mixed
-     * @throws GeneralException
-     */
-    public function indexing($project)
-    {
-        // if indexing status is already set
-        if ($project->indexing) {
-            throw new GeneralException('Indexing value is already set. Current indexing state of this project: ' . $project->indexing_text);
-        }
-        // if project is in draft
-        if ($project->status === 1) {
-            throw new GeneralException('Project must be finalized before requesting the indexing.');
-        }
-        $project->indexing = 1; // 1 is for indexing requested - see Project Model @indexing property
-        resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
-        return $project->save();
-    }
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function statusUpdate($project)
-    {
-        // see Project Model @status property for mapping
-        $project->status = 3 - $project->status; // this will toggle status, if draft then it will be final or vice versa
-        if ($project->status === 1){
-            if ($project->indexing === 3){
-                $project->status = 2;
-            }
-            $project->indexing = null; // remove indexing if project is reverted to draft state
-            $returnProject = $project->save();
-            resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
-        } else {
-            $returnProject = $project->save();
-        }
-
-        return $returnProject;
-    }
-
-    /**
      * @param $authenticated_user
      * @param $project
      * @param $organization_id
@@ -426,6 +427,46 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->where('starter_project', $data['starter_project']);
         }
 
+        // filter by author
+        if (isset($data['author_id'])) {
+            $query = $query->where(function($qry) use ($data) {
+                        $qry->WhereHas('users', function ($qry) use ($data) {
+                            $qry->where('id', $data['author_id']);
+                        });
+                     });
+        }
+
+        // filter by shared status
+        if (isset($data['shared'])) {
+            $query = $query->where('shared', $data['shared']);
+        }
+
+        // filter by date created
+        if (isset($data['created_from']) && isset($data['created_to'])) {
+            $query = $query->whereBetween('created_at', [$data['created_from'], $data['created_to']]);
+        }
+
+        if (isset($data['created_from']) && !isset($data['created_to'])) {
+            $query = $query->whereDate('created_at', '>=', $data['created_from']);
+        }
+
+        if (isset($data['created_to']) && !isset($data['created_from'])) {
+            $query = $query->whereDate('created_to', '<=', $data['created_to']);
+        }
+
+        // filter by date updated
+        if (isset($data['updated_from']) && isset($data['updated_to'])) {
+            $query = $query->whereBetween('updated_at', [$data['updated_from'], $data['updated_to']]);
+        }
+
+        if (isset($data['updated_from']) && !isset($data['updated_to'])) {
+            $query = $query->whereDate('updated_at', '>=', $data['updated_from']);
+        }
+
+        if (isset($data['updated_to']) && !isset($data['updated_from'])) {
+            $query = $query->whereDate('updated_at', '<=', $data['updated_to']);
+        }
+
         return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
     }
 
@@ -471,11 +512,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function updateIndex($project, $index): string
     {
         if (! isset($this->model::$indexing[$index])){
-            throw new GeneralException('Invalid index value provided.');
+            throw new GeneralException('Invalid Library value provided.');
         }
         $project->update(['indexing' => $index]);
         $this->indexProjects([$project->id]);
-        return 'Index status changed successfully!';
+        return 'Library status changed successfully!';
     }
 
     /**
@@ -539,7 +580,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
             $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
             if(file_exists($project_thumbanil)) {
-                Storage::disk('public')->put('/exports/'.$project_dir_name.'/'.basename($project_thumbanil),file_get_contents($project_thumbanil));
+                Storage::disk('public')
+                            ->put('/exports/'.$project_dir_name.'/'.basename($project_thumbanil), file_get_contents($project_thumbanil));
             }
         }
 
@@ -552,24 +594,39 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $activites = $playlist->activities;
             ;
             foreach($activites as $activity) {
-                Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->title.'.json', $activity);
-                //dd(json_decode($activity->h5p_content,true));
+
+                $activity_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                $activity->title . '/' . $activity->title . '.json';
+                Storage::disk('public')->put($activity_json_file, $activity);
+
                 $decoded_content = json_decode($activity->h5p_content,true);
 
-                $decoded_content['library_title'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('name');
-                $decoded_content['library_major_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('major_version');
-                $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('minor_version');
-                Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id.'.json', json_encode($decoded_content));
+                $decoded_content['library_title'] = DB::table('h5p_libraries')
+                                                                    ->where('id', $decoded_content['library_id'])->value('name');
+                $decoded_content['library_major_version'] = DB::table('h5p_libraries')
+                                                                        ->where('id', $decoded_content['library_id'])
+                                                                        ->value('major_version');
+                $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
+                                                                        ->where('id', $decoded_content['library_id'])
+                                                                        ->value('minor_version');
+
+                $content_json_file = '/exports/'.$project_dir_name.'/playlists/' . $title . '/activities/' .
+                                                                $activity->title.'/' . $activity->h5p_content_id . '.json';
+                Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
 
                 if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
                     $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
                     if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
-                        Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.basename($activity_thumbanil),file_get_contents($activity_thumbanil));
+                        $activity_thumbanil_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                            $activity->title . '/' . basename($activity_thumbanil);
+                        Storage::disk('public')->put($activity_thumbanil_file, file_get_contents($activity_thumbanil));
                     }
                 }
-
-                \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), storage_path('app/public/exports/'.$project_dir_name.'/playlists/'.$title.'/activities/'.$activity->title.'/'.$activity->h5p_content_id) );
+                $exported_content_dir_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                                    $activity->title . '/' . $activity->h5p_content_id;
+                $exported_content_dir = storage_path($exported_content_dir_path);
+                \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), $exported_content_dir );
             }
         }
 
@@ -604,9 +661,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // Zip archive will be created only after closing object
         $zip->close();
+        // Remove project folder after creation of zip
+        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name));
 
         // Remove project folder after creation of zip
-        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name)); 
+        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name));
 
         return storage_path('app/public/exports/'.$fileName);
     }
@@ -638,12 +697,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             }else {
                 return "Unable to import Project";
             }
-            return \DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
+            return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
                 if (file_exists(storage_path($extracted_folder_name.'/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
 
                     $project = json_decode($project_json,true);
-                    unset($project['id'], $project['organization_id'], $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
+                    unset($project['id'], $project['organization_id'],
+                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
 
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
@@ -669,7 +729,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
-                    //unlink($source_file); // Deleted the storage zip file - It will user in future
+
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
 
                     if ($method_source !== "command") {
@@ -677,27 +737,27 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     } else {
                         return "Project has been imported successfully";
                     }
-                    
+
                     return $project['name'];
                 }
             });
 
 
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             Log::error($e->getMessage());
-
             if ($method_source === "command") {
                 return("Unable to import the project, please try again later!");
             }
+
             throw new GeneralException('Unable to import the project, please try again later!');
         }
     }
 
     /**
      * To Deleted the directory recurcively
-     * 
-     * @param $dir 
+     *
+     * @param $dir
      */
     private function rrmdir($dir) {
         if (is_dir($dir)) {
@@ -749,31 +809,37 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $activites = $playlist->activities;
             ;
             foreach($activites as $activity) {
-                $destination_playlist_json = '/exports/' . $project_dir_name . '/playlists/' . $title . 
+                $destination_playlist_json = '/exports/' . $project_dir_name . '/playlists/' . $title .
                                                 '/activities/' . $activity->title . '/' . $activity->title . '.json';
                 Storage::disk('public')->put($destination_playlist_json, $activity);
                 $decoded_content = json_decode($activity->h5p_content, true);
 
-                $decoded_content['library_title'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('name');
-                $decoded_content['library_major_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('major_version');
-                $decoded_content['library_minor_version'] = \DB::table('h5p_libraries')->where('id', $decoded_content['library_id'])->value('minor_version');
-                $destination_activity_json = '/exports/' . $project_dir_name . '/playlists/' . $title . 
+                $decoded_content['library_title'] = DB::table('h5p_libraries')
+                                                            ->where('id', $decoded_content['library_id'])
+                                                            ->value('name');
+                $decoded_content['library_major_version'] = DB::table('h5p_libraries')
+                                                                ->where('id', $decoded_content['library_id'])
+                                                                ->value('major_version');
+                $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
+                                                                ->where('id', $decoded_content['library_id'])
+                                                                ->value('minor_version');
+                $destination_activity_json = '/exports/' . $project_dir_name . '/playlists/' . $title .
                                                 '/activities/' . $activity->title . '/' . $activity->h5p_content_id . '.json';
-                
+
                 Storage::disk('public')->put($destination_activity_json, json_encode($decoded_content));
 
                 if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
                     $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
                     if (file_exists($activity_thumbanil)) {
-                        $destination_activity_thumbnail = '/exports/' . $project_dir_name . '/playlists/' . $title . 
+                        $destination_activity_thumbnail = '/exports/' . $project_dir_name . '/playlists/' . $title .
                                                             '/activities/' . $activity->title . '/' . basename($activity_thumbanil);
                         Storage::disk('public')->put($destination_activity_thumbnail, file_get_contents($activity_thumbanil));
                     }
                 }
 
                 $content_directory_source = storage_path('app/public/h5p/content/' . $activity->h5p_content_id);
-                $content_directory_destination_path = 'app/public/exports/' . $project_dir_name .'/playlists/' . $title . 
+                $content_directory_destination_path = 'app/public/exports/' . $project_dir_name .'/playlists/' . $title .
                                                         '/activities/' . $activity->title . '/' . $activity->h5p_content_id;
                 $content_directory_destination = storage_path($content_directory_destination_path);
                 \File::copyDirectory($content_directory_source, $content_directory_destination);
@@ -785,13 +851,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $params = $core->filterParameters($content);
                 if (file_exists(storage_path('app/public/h5p/exports/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p'))) {
                     $h5p_source = storage_path('app/public/h5p/exports/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p');
-                    $h5p_destination_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' . 
+                    $h5p_destination_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                 $activity->title . '/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p';
                     $h5p_destination = storage_path($h5p_destination_path);
                     @copy($h5p_source, $h5p_destination);
                 }
-                
-                
+
+
             }
         }
 

@@ -442,7 +442,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
             $format[] = '%s';
             $data['user_id'] = 1; //$user->id;
             $format[] = '%d';
-            $data['slug'] = Str::slug($metadata['title'], '-');
+            $data['slug'] = \H5PCore::slugify($metadata['title']);
             $content_model = H5pContent::create($data);
             $content['id'] = $content_model->id;
             $event_type = 'create';
@@ -491,7 +491,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
         
         $whitelistArr = explode(' ', $whitelist);
         $whitelistCapitalized = array_map(function($ext) { return strtoupper($ext); }, $whitelistArr);
-        $whitelistFinalArr = array_merge($whitelistArr, $whitelistCapitalized, ['html','htm','HTML','HTM']);
+        $whitelistFinalArr = array_merge($whitelistArr, $whitelistCapitalized, ['html','htm','HTML','HTM', 'yml', 'YML']);
         $whitelist = implode(' ', $whitelistFinalArr);
         return $whitelist;
     }

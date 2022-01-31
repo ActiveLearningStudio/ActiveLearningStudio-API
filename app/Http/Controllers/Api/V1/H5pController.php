@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\H5pActivityResource;
-use App\Models\Activity;
-use Djoudi\LaravelH5p\Eloquents\H5pContent;
-use Djoudi\LaravelH5p\Events\H5pEvent;
-use Djoudi\LaravelH5p\Exceptions\H5PException;
-use Djoudi\LaravelH5p\LaravelH5p;
 use H5pCore;
-use Illuminate\Http\JsonResponse;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
+use Djoudi\LaravelH5p\LaravelH5p;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Djoudi\LaravelH5p\Events\H5pEvent;
+use App\Models\H5pBrightCoveVideoContents;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
+use App\Http\Resources\V1\H5pActivityResource;
+use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Validation\ValidationException;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
+use App\CurrikiGo\Brightcove\Client;
+use App\CurrikiGo\Brightcove\Videos\UpdateVideoTags;
 
 /**
  * @group 12. H5P
@@ -31,12 +35,13 @@ class H5pController extends Controller
 
     /**
      * ActivityController constructor.
-     * 
+     *
      * @param ContentUserDataGoRepositoryInterface $contentUserDataGoRepository
      */
-    public function __construct(ContentUserDataGoRepositoryInterface $contentUserDataGoRepository)
+    public function __construct(ContentUserDataGoRepositoryInterface $contentUserDataGoRepository, BrightcoveAPISettingRepository $brightcoveAPISettingRepository)
     {
         $this->contentUserDataGoRepository = $contentUserDataGoRepository;
+        $this->bcAPISettingRepository = $brightcoveAPISettingRepository;
     }
 
     /**
@@ -90,10 +95,9 @@ class H5pController extends Controller
         $parameters = '{"params":{},"metadata":{}}';
 
         $display_options = $core->getDisplayOptionsForEdit(NULL);
-
+        $lib = $request->get('libraryName');
         // view Get the file and settings to print from
-        $settings = $h5p::get_editor();
-
+        $settings = $h5p::get_editor($content = null, $lib);
         // create event dispatch
         event(new H5pEvent('content', 'new'));
 
@@ -176,9 +180,26 @@ class H5pController extends Controller
 
                 // Set disabled features
                 $this->get_disabled_content_features($core, $content);
-
+                
                 // Save new content
                 $content['id'] = $core->saveContent($content);
+
+                // for Brightcove Interactive Videos
+                if ($content['library']['machineName'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightCoveVideoData['brightcove_video_id'] = $params->params->interactiveVideo->video->brightcoveVideoID;
+                    $brightCoveVideoData['h5p_content_id'] = $content['id'];
+                    if ($request->get('brightcove_account_id')) {
+                        $bcAPISetting = $this->bcAPISettingRepository->getByAccountId($request->get('brightcove_account_id'));
+                        $brightCoveVideoData['brightcove_api_setting_id'] = $bcAPISetting->id;
+                    }
+                    $createH5PBCVC = H5pBrightCoveVideoContents::create($brightCoveVideoData);
+                    if ($createH5PBCVC) {
+                        // Implement Command Design Pattern to access Update Brightcove Video API
+                        $bcAPIClient = new Client($bcAPISetting);
+                        $bcInstance = new UpdateVideoTags($bcAPIClient);
+                        $bcInstance->fetch($bcAPISetting, $createH5PBCVC->brightcove_video_id, 'curriki', false);
+                    }                    
+                }
 
                 // Move images and find all content dependencies
                 $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);
@@ -605,7 +626,7 @@ class H5pController extends Controller
         @unlink($interface->getUploadedH5pPath());
         return FALSE;
     }
-    
+
     public function contentUserData(Request $request)
     {
         $contentId =$request->get('content_id');
@@ -623,17 +644,17 @@ class H5pController extends Controller
             $userId === NULL || $submissionId === NULL) {
         return; // Missing parameters
         }
-        
+
         if ($data === NULL) {
             return response()->json(["data" => false, "success" => true]);
         }
-        
+
         if ($request->get('gcuid')) {
             if ($data === '0') {
                 $records = $this->contentUserDataGoRepository->deleteComposite($contentId, $userId, $subContentId, $dataId, $submissionId);
             }else {
                 $records = $this->contentUserDataGoRepository->fetchByCompositeKey($contentId, $userId, $subContentId, $dataId, $submissionId);
-                
+
                 if ($records->count() === 0) {
                     $this->contentUserDataGoRepository->create([
                         'content_id' => $contentId,

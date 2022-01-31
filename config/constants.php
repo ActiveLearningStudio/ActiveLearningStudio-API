@@ -11,7 +11,10 @@ return [
     'global-organization-visibility-type-id' => env('GLOBAL_ORGANIZATION_VISIBILITY_TYPE_ID', 3),
     'protected-organization-visibility-type-id' => env('PROTECTED_ORGANIZATION_VISIBILITY_TYPE_ID', 2),
     'private-organization-visibility-type-id' => env('PRIVATE_ORGANIZATION_VISIBILITY_TYPE_ID', 1),
+    'status-finished' => env('STATUS_FINISHED', 2),
+    'status-draft' => env('STATUS_DRAFT', 1),
     'indexing-approved' => env('INDEXING_APPROVED', 3),
+    'indexing-requested' => env('INDEXING_REQUESTED', 1),
     'indexing-options' => env('INDEXING_OPTIONS', 'null,1,2,3'),
     // for member role
     'member-role-id' => 3,

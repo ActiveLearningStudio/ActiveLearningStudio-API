@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Activity;
 
+use App\User;
 use App\Models\Activity;
 use App\Models\Playlist;
 use App\Repositories\EloquentRepositoryInterface;
@@ -21,9 +22,10 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * Get the advance search request
      *
      * @param array $data
+     * @param int $authUser
      * @return Collection
      */
-    public function advanceSearchForm($data);
+    public function advanceSearchForm($data, $authUser = null);
 
     /**
      * Get the H5P Elasticsearch Field Values.
@@ -43,6 +45,14 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
     public function clone(Playlist $playlist, Activity $activity, $token);
 
     /**
+     * To clone a stand alone activity
+     *
+     * @param Activity $activity
+     * @param string $token
+     */
+    public function cloneStandAloneActivity(Activity $activity, $token);
+
+    /**
      * To Clone H5P content associated to an Activity
      *
      * @param $token
@@ -54,7 +64,7 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * @param $playlistId
      */
     public function getPlaylistIsPublicValue($playlistId);
-    
+
     /**
      * Get latest order of activity for Playlist
      * @param $playlist_id
@@ -74,7 +84,15 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
      * @param string $playlist_dir
      * @param string $activity_dir
      * @param string $extracted_folder
-     * 
+     *
      */
     public function importActivity(Playlist $playlist, $authUser, $playlist_dir, $activity_dir, $extracted_folder);
+
+    /**
+     * Get stand alone activities of a user
+     * @param $organization_id
+     * @param $data
+     * @return mixed
+     */
+    public function getStandAloneActivities($organization_id, $data);
 }

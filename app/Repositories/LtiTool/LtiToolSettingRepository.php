@@ -4,7 +4,8 @@ namespace App\Repositories\LtiTool;
 
 use App\Exceptions\GeneralException;
 use App\Models\LtiTool\LtiToolSetting;
-use App\Repositories\Admin\BaseRepository;
+use App\Models\Organization;
+use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Log;
  * Date           11-10-2021
  * Class          LtiToolSettingRepository
  */
-class LtiToolSettingRepository extends BaseRepository
+class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingInterface
 {
 
     /**
@@ -31,17 +32,22 @@ class LtiToolSettingRepository extends BaseRepository
     public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-        $query = $this->model;
+        $query = $this->model->with(['user', 'organization']);
         if (isset($data['query']) && $data['query'] !== '') {
-            $query = $query->whereHas('user', function ($qry) use ($data) {
-                $qry->where('first_name', 'iLIKE', '%' . $data['query'] . '%');
-                $qry->orWhere('last_name', 'iLIKE', '%' . $data['query'] . '%');
-                $qry->orWhere('email', 'iLIKE', '%' . $data['query'] . '%');
-                $qry->orwhere('lms_url', 'iLIKE', '%' . $data['query'] . '%');
-                $qry->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
+            $query->where(function ($query) use ($data) {
+                $query = $query->whereHas('user', function ($qry) use ($data) {
+                    $qry->where('email', 'iLIKE', '%' . $data['query'] . '%');
+                });
+                $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');
+                $query->orWhere('tool_url', 'iLIKE', '%' . $data['query'] . '%');
             });
         }
-        return $query->with(['user', 'organization'])->where('organization_id', $suborganization->id)->paginate($perPage);
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
+        {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        }
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage);
     }
 
     /**
@@ -50,11 +56,11 @@ class LtiToolSettingRepository extends BaseRepository
      * @throws GeneralException
      */
     public function create($data)
-    {        
-        try {            
+    {
+        try {
             if ($createSetting = $this->model->create($data)) {
                 return ['message' => 'Lti Tool setting created successfully!', 'data' => $createSetting];
-            }            
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
@@ -105,5 +111,31 @@ class LtiToolSettingRepository extends BaseRepository
             Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to delete lti tool setting, please try again later!');
+    }
+
+    /**
+     * To clone Lti Tool Setting
+     * @param LtiToolSetting $ltiToolSetting
+     * @param Organization $subOrganization
+     * @param string $token
+     * @return int id
+     */
+    public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $token)
+    {
+        $ltiToolSettingData = [
+            "user_id" => get_user_id_by_token($token),
+            "organization_id" => $subOrganization->id,
+            "tool_name" => $ltiToolSetting->tool_name,
+            "tool_url" => $ltiToolSetting->tool_url,
+            "tool_domain" => $ltiToolSetting->tool_domain,
+            "lti_version" => $ltiToolSetting->lti_version,
+            "tool_consumer_key" => $ltiToolSetting->tool_consumer_key,
+            "tool_secret_key" => $ltiToolSetting->tool_secret_key,
+            "tool_description" => $ltiToolSetting->tool_description,
+            "tool_custom_parameter" => $ltiToolSetting->tool_custom_parameter,
+            "tool_content_selection_url" => $ltiToolSetting->tool_content_selection_url
+        ];
+        $cloned_setting = $this->create($ltiToolSettingData);
+        return $cloned_setting['id'];
     }
 }

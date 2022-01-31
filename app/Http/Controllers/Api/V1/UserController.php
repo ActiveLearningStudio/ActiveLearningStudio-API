@@ -8,6 +8,7 @@ use App\Http\Requests\V1\SharedProjectRequest;
 use App\Http\Requests\V1\SuborganizationAddNewUser;
 use App\Http\Requests\V1\SuborganizationUpdateUserDetail;
 use App\Http\Requests\V1\UserCheckRequest;
+use App\Http\Requests\V1\CheckUserEmailRequest;
 use App\Http\Requests\V1\UserSearchRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
@@ -151,6 +152,50 @@ class UserController extends Controller
             'message' => 'Success',
             'invited' => true,
         ], 200);
+    }
+
+    /**
+     * Check User Email
+     *
+     * Check if user email exist in the instance.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam email string required The email of a user Example: john.doe@currikistudio.org
+     *
+     * @responseFile responses/user/user.json
+     *
+     * @response 422 {
+     *   "message": "The user already exists in the organization."
+     * }
+     *
+     * @param CheckUserEmailRequest $checkUserEmailRequest
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function checkUserEmail(CheckUserEmailRequest $checkUserEmailRequest, Organization $suborganization)
+    {
+        $data = $checkUserEmailRequest->validated();
+
+        $user = $this->userRepository->findByField('email', $data['email']);
+
+        if ($user) {
+            $suborganizationUser = $suborganization->users()->where('user_id', $user->id)->first();
+
+            if ($suborganizationUser) {
+                return response([
+                    'user' => new UserResource($user),
+                    'message' => 'The user already exists in the organization.'
+                ], 200);
+            }
+
+            return response([
+                'user' => new UserResource($user),
+            ], 200);
+        } else {
+            return response([
+                'message' => 'The user not found.'
+            ], 200);
+        }
     }
 
     /**
@@ -704,6 +749,68 @@ class UserController extends Controller
     {
         
         return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all()), 200);
+    }
+
+    /**
+     * Download Exported Project
+     *
+     * Download the specific notification project.
+     *
+     * @urlParam $notification_id string required Current id of a notification Example: 123
+     *
+     * @response {
+     *   "message": "Notification has been deleted successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Notification with provided id does not exists."
+     *   ]
+     * }
+     * 
+     *  @response 500 {
+     *   "errors": [
+     *     "Link has expired."
+     *   ]
+     * }
+     * 
+     *  @response 500 {
+     *   "errors": [
+     *     "Not an export notification."
+     *   ]
+     * }
+     *
+     * @param $notification_id
+     * @return Response
+     */
+    public function downloadExport(Request $request, $notification_id)
+    {
+        $notification_detail = auth()->user()->notifications()->find($notification_id);
+        if ($notification_detail) {
+            $data = $notification_detail->data;
+           
+            if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
+                if (isset($data['file_name'])) {
+                   $file_path = storage_path('app/public/exports/'.$data['file_name']);
+                   if (!empty($data['file_name']) && file_exists($file_path)) {
+                        return response()->download($file_path, basename($file_path)); 
+                   }
+                   return response([
+                        'errors' => ['Link has expired.'],
+                    ], 500);
+                }
+                return response([
+                    'errors' => ['Link has expired.'],
+                ], 500);
+            }
+            return response([
+                'errors' => ['Not an export notification.'],
+            ], 500);
+        }
+
+        return response([
+            'errors' => ['Notification with provided id does not exists.'],
+        ], 500);
     }
 
 }

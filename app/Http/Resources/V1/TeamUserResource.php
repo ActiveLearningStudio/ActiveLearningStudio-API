@@ -20,7 +20,6 @@ class TeamUserResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
-            'projects' => $this->projects,
             'role' => $this->pivot->role,
         ];
     }

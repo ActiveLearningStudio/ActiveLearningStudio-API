@@ -22,6 +22,8 @@ use App\Repositories\H5pLibrary\H5pLibraryRepository;
 use App\Repositories\H5pLibrary\H5pLibraryRepositoryInterface;
 use App\Repositories\H5pContent\H5pContentRepository;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
+use App\Repositories\LtiTool\LtiToolSettingInterface;
+use App\Repositories\LtiTool\LtiToolSettingRepository;
 use App\Repositories\Metrics\MetricsRepository;
 use App\Repositories\Metrics\MetricsRepositoryInterface;
 use App\Repositories\OrganizationType\OrganizationTypeRepository;
@@ -100,6 +102,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(OutcomeRepositoryInterface::class, OutcomeRepository::class);
         $this->app->bind(GoogleClassroomRepositoryInterface::class, GoogleClassroomRepository::class);
         $this->app->bind(DefaultSsoIntegrationSettingsInterface::class, DefaultSsoIntegrationSettingsRepository::class);
+        $this->app->bind(LtiToolSettingInterface::class, LtiToolSettingRepository::class);
     }
 
     /**
