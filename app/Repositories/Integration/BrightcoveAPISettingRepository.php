@@ -13,6 +13,8 @@ use App\Repositories\BaseRepository;
 use App\Models\H5pBrightCoveVideoContents;
 use App\Models\Integration\BrightcoveAPISetting;
 use App\Repositories\Integration\BrightcoveAPISettingInterface;
+use App\User;
+use SebastianBergmann\Environment\Console;
 
 class BrightcoveAPISettingRepository extends BaseRepository implements BrightcoveAPISettingInterface
 {
@@ -137,7 +139,9 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
         $title = [];
         foreach($videos as $video){
             if($video->activities->isNotEmpty()){
-                array_push($title, $video->activities->pluck("title")->implode(","));
+                $user = User::where('id', $video->activities->pluck("user_id")->implode(","))->first();
+                array_push($title, (object)["title"=> $video->activities->pluck("title")->implode(","), 
+                    "user_id" => $user->first_name." ".$user->last_name ]);
             }
         }
         return $title;
@@ -150,15 +154,13 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
             if($videos->isNotEmpty()){
                 $title = $this->getTitleList($videos);
                 if($title !== null){
-                    $deleteMessage = "<ul>";
-                    $uname = $videos->first()->brightcove_api_setting->account_name;
+                    $deleteMessage = "";
                     foreach($title as $videoTitle){
-                        $deleteMessage .= "<li>".$videoTitle.' exist against this API setting created by '.$uname;
+                        $deleteMessage .= "'".$videoTitle->title."'".' created by '."'".$videoTitle->user_id."'. ";
                     }
-                    throw new GeneralException($deleteMessage);
+                    throw new GeneralException("Cannot delete! This API settings has following Videos: ".$deleteMessage);
                 }
             }
-            
             $videos->delete();
             return ['message' => 'Brightcove API setting deleted!', 'data' => []];
         } catch (\Exception $e) {
