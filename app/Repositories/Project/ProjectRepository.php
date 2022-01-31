@@ -729,6 +729,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
+
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
 
                     if ($method_source !== "command") {
@@ -736,6 +737,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     } else {
                         return "Project has been imported successfully";
                     }
+
                     return $project['name'];
                 }
             });
