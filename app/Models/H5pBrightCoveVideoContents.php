@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use App\Models\Integration\BrightcoveAPISetting;
+use App\User;
+use Google\Service\AndroidEnterprise\Resource\Users;
 
 class H5pBrightCoveVideoContents extends Model
 {
@@ -26,7 +28,6 @@ class H5pBrightCoveVideoContents extends Model
         'brightcove_api_setting_id'
     ];
 
-
     public function brightcove_api_setting()
     {
         return $this->hasOne(BrightcoveAPISetting::class,'id','brightcove_api_setting_id');
@@ -36,5 +37,4 @@ class H5pBrightCoveVideoContents extends Model
     {
         return $this->hasMany(Activity::class,'h5p_content_id','h5p_content_id');
     }
-    
 }
