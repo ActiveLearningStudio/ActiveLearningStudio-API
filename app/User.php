@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Activity;
 use App\Models\DeepRelations\HasManyDeep;
 use App\Models\DeepRelations\HasRelationships;
 use App\Models\Traits\GlobalScope;
