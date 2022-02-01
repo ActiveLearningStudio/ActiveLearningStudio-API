@@ -26,7 +26,6 @@ class H5pBrightCoveVideoContents extends Model
         'brightcove_api_setting_id'
     ];
 
-
     public function brightcove_api_setting()
     {
         return $this->hasOne(BrightcoveAPISetting::class,'id','brightcove_api_setting_id');
@@ -36,5 +35,4 @@ class H5pBrightCoveVideoContents extends Model
     {
         return $this->hasMany(Activity::class,'h5p_content_id','h5p_content_id');
     }
-    
 }

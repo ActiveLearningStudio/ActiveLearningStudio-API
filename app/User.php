@@ -172,13 +172,6 @@ class User extends Authenticatable implements MustVerifyEmail
         );
     }
 
-
-    public function activities_mul()
-    {
-        return $this->hasMany(Activity::class,'user_id','id');
-    }
-
-
     public function lmssetting()
     {
         return $this->hasMany('App\Models\CurrikiGo\LmsSetting');
