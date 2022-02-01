@@ -150,7 +150,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
     public function destroy($id)
     {
         try {
-            $videos = H5pBrightCoveVideoContents::with(['activities'])->where('brightcove_api_setting_id', $id)->get();
+            $videos = H5pBrightCoveVideoContents::with(['activities'])->whereHas('activities')->where('brightcove_api_setting_id', $id)->get();
             if($videos->isNotEmpty()){
                 $title = $this->getTitleList($videos);
                 if($title !== null){
