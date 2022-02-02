@@ -150,7 +150,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
     public function destroy($id)
     {
         try {
-            $videos = H5pBrightCoveVideoContents::with(['activities'])->where('brightcove_api_setting_id', $id)->get();
+            $videos = H5pBrightCoveVideoContents::with(['activities'])->whereHas('activities')->where('brightcove_api_setting_id', $id)->get();
             if($videos->isNotEmpty()){
                 $title = $this->getTitleList($videos);
                 if($title !== null){
@@ -161,7 +161,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
                     throw new GeneralException("Cannot delete! This API settings has following Videos: ".$deleteMessage);
                 }
             }
-            $videos->delete();
+            $this->find($id)->delete();
             return ['message' => 'Brightcove API setting deleted!', 'data' => []];
         } catch (\Exception $e) {
             Log::error($e->getMessage());
