@@ -161,7 +161,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
                     throw new GeneralException("Cannot delete! This API settings has following Videos: ".$deleteMessage);
                 }
             }
-            $videos->delete();
+            $this->find($id)->delete();
             return ['message' => 'Brightcove API setting deleted!', 'data' => []];
         } catch (\Exception $e) {
             Log::error($e->getMessage());
