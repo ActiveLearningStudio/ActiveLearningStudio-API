@@ -20,10 +20,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('{videoId}/h5p-resource-settings', 'BrightcoveController@getH5pBrightcoveResourceSettings');
     });
 
-    // Kaltura Video Integration For Curriki Interactive Video
-    Route::group(['prefix' => 'kaltura'], function () {
-        Route::get('get-media-entry-list', 'CurrikiInteractiveVideoIntegration\Kaltura\KalturaGeneratedAPIClientController@getMediaEntryList');
+    Route::middleware(['auth:api', 'verified'])->group(function () {
+        // Kaltura Video Integration For Curriki Interactive Video
+        Route::group(['prefix' => 'kaltura'], function () {
+            Route::post('get-media-entry-list', 'CurrikiInteractiveVideoIntegration\Kaltura\KalturaGeneratedAPIClientController@getMediaEntryList');
+        });
     });
+    
 
     // Brightcove Video Integration
     Route::group(['prefix' => 'brightcove'], function () {
