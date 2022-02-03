@@ -213,7 +213,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
      * @return mixed
      * @throws GeneralException
      */
-    public function getSettingsById($id)
+    public function getById($id)
     {
         $setting = $this->model->where('id', $id)->first();
         if ($setting) {

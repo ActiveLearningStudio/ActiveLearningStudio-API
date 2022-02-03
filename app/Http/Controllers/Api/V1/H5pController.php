@@ -190,7 +190,7 @@ class H5pController extends Controller
                     $brightCoveVideoData['h5p_content_id'] = $content['id'];
                     if ($request->get('brightcove_api_setting_id')) {
                         $brightCoveVideoData['brightcove_api_setting_id'] = $request->get('brightcove_api_setting_id');
-                        $bcAPISetting = $this->bcAPISettingRepository->getSettingsById($request->get('brightcove_api_setting_id'));
+                        $bcAPISetting = $this->bcAPISettingRepository->getById($request->get('brightcove_api_setting_id'));
                         // $brightCoveVideoData['brightcove_api_setting_id'] = $bcAPISetting->id;
                     }
                     $createH5PBCVC = H5pBrightCoveVideoContents::create($brightCoveVideoData);
