@@ -15,4 +15,9 @@ interface LtiToolSettingInterface extends EloquentRepositoryInterface
      * @param $token
      */
     public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $token);
+    /**
+     * @param $orgId integer, $userId integer
+     * @return mixed
+     */
+    public function getRowRecordByOrgAndUserId($orgId, $userId);
 }

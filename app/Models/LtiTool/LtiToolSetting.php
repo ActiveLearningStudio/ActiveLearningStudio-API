@@ -26,6 +26,7 @@ class LtiToolSetting extends Model
         'tool_url',
         'tool_domain',
         'lti_version',
+        'tool_type',
         'tool_consumer_key',
         'tool_secret_key',
         'tool_description',
