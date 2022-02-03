@@ -147,7 +147,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function getRowRecordByOrgAndUserId($orgId, $userId)
     {
         try {
-            return $this->model->where('organization_id', $orgId)->where('user_id', $userId)->first();
+            return $this->model->where([['organization_id','=',$orgId],['user_id','=', $userId],['tool_type','=', 'kaltura']])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
