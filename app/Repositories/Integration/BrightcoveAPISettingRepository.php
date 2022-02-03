@@ -206,4 +206,19 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
         }
         throw new GeneralException('Brightcove API setting not found.');
     }
+
+    /**
+     * To get record by setting id
+     * @param integer $suborganization, $id
+     * @return mixed
+     * @throws GeneralException
+     */
+    public function getById($id)
+    {
+        $setting = $this->model->where('id', $id)->first();
+        if ($setting) {
+            return $setting;
+        }
+        throw new GeneralException('Brightcove API setting not found.');
+    }
 }
