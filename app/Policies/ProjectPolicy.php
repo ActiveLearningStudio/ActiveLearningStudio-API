@@ -221,7 +221,7 @@ class ProjectPolicy
      */
     public function export(User $user, Organization $suborganization)
     {
-        return $user->hasPermissionTo('project:export', $suborganization);
+        return $user->hasPermissionTo('organization:export-project', $suborganization);
     }
 
     /**
@@ -233,7 +233,7 @@ class ProjectPolicy
      */
     public function import(User $user, Organization $suborganization)
     {
-        return $user->hasPermissionTo('project:import', $suborganization);
+        return $user->hasPermissionTo('organization:import-project', $suborganization);
     }
 
     /**
@@ -246,10 +246,6 @@ class ProjectPolicy
      */
     public function searchPreview(User $user, Project $project, Organization $suborganization)
     {
-        if (!($user->hasPermissionTo('search:advance', $suborganization) || $user->hasPermissionTo('search:dashboard', $suborganization))) {
-            return false;
-        }
-
         if ($user->hasPermissionTo('organization:view', $suborganization)) {
             return true;
         }
