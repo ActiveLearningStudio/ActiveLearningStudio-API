@@ -350,7 +350,7 @@ class StandAloneActivityController extends Controller
             $brightcoveData = [
                 'videoId' => $brightcoveContentData->brightcove_video_id, 
                 'accountId' => $bcAPISettingRepository->account_id,
-                'apiSettingsId' => $brightcoveContentData->brightcove_api_setting_id
+                'apiSettingId' => $brightcoveContentData->brightcove_api_setting_id
             ];
             $activity->brightcoveData = $brightcoveData;
         }
