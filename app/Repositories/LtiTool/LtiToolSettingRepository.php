@@ -141,13 +141,13 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     }
 
     /**
-     * @param $orgId integer, $userId integer
+     * @param $userId integer, $toolType string
      * @return mixed
      */
-    public function getRowRecordByOrgAndUserId($orgId, $userId)
+    public function getRowRecordByUserIdAndToolType($userId, $toolType)
     {
         try {
-            return $this->model->where([['organization_id','=',$orgId],['user_id','=', $userId],['tool_type','=', 'kaltura']])->first();
+            return $this->model->where([['user_id','=', $userId],['tool_type','=', $toolType]])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
