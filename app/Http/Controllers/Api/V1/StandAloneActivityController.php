@@ -347,7 +347,11 @@ class StandAloneActivityController extends Controller
         $brightcoveData = null;
         if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
             $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
-            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $brightcoveData = [
+                'videoId' => $brightcoveContentData->brightcove_video_id, 
+                'accountId' => $bcAPISettingRepository->account_id,
+                'apiSettingsId' => $brightcoveContentData->brightcove_api_setting_id
+            ];
             $activity->brightcoveData = $brightcoveData;
         }
         
