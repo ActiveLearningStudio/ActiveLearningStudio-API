@@ -60,10 +60,9 @@ class KalturaGeneratedAPIClientController extends Controller
           'pageIndex',
           'searchText'
       ]);
-      $auth = \Auth::user();
+      $auth = \Auth::user();     
       if ($auth) {
-        $orgId = $auth->organizations[0]['id'];
-        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndUserId($orgId, $auth->id);
+        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserIdAndToolType($auth->id, 'kaltura');
         // Credentials For Kaltura Session
         if ($ltiRowResult) {
           $secret = $ltiRowResult->tool_secret_key;
