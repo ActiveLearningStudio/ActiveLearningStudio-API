@@ -302,9 +302,9 @@ class LaravelH5p
             'scripts' => array(),
         );
 
-        if ( $lib && $lib == "H5P.BrightcoveInteractiveVideo 1.0" && isset($_GET['accountId']) && $_GET['accountId'] !== 'null') {
+        if (isset($_GET['brightcove_api_setting_id']) && !empty($_GET['brightcove_api_setting_id']) && $_GET['brightcove_api_setting_id'] != 'null') {
             $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
-            $brightcoveAPISetting = $brightcoveAPISettingRepository->getByAccountId($_GET['accountId']);
+            $brightcoveAPISetting = $brightcoveAPISettingRepository->getById($_GET['brightcove_api_setting_id']);
             array_push($settings['core']['styles'], config('app.url') . $brightcoveAPISetting->css_path);
         }
         
