@@ -129,6 +129,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
             "tool_url" => $ltiToolSetting->tool_url,
             "tool_domain" => $ltiToolSetting->tool_domain,
             "lti_version" => $ltiToolSetting->lti_version,
+            "tool_type" => $ltiToolSetting->tool_type,
             "tool_consumer_key" => $ltiToolSetting->tool_consumer_key,
             "tool_secret_key" => $ltiToolSetting->tool_secret_key,
             "tool_description" => $ltiToolSetting->tool_description,
@@ -137,5 +138,18 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
         ];
         $cloned_setting = $this->create($ltiToolSettingData);
         return $cloned_setting['id'];
+    }
+
+    /**
+     * @param $userId integer, $toolType string
+     * @return mixed
+     */
+    public function getRowRecordByUserIdAndToolType($userId, $toolType)
+    {
+        try {
+            return $this->model->where([['user_id','=', $userId],['tool_type','=', $toolType]])->first();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 }
