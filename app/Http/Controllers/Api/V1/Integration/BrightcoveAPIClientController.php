@@ -16,6 +16,7 @@ use App\CurrikiGo\Brightcove\Client;
 use App\CurrikiGo\Brightcove\Videos\GetVideoList;
 use App\CurrikiGo\Brightcove\Videos\GetVideoCount;
 use App\CurrikiGo\Brightcove\Videos\UpdateVideoTags;
+use App\Exceptions\GeneralException;
 
 class BrightcoveAPIClientController extends Controller
 {
@@ -57,13 +58,16 @@ class BrightcoveAPIClientController extends Controller
         'organization_id',
         'query_param'
       ]);
-      $queryParam = isset($data['query_param']) ? '?' . $data['query_param'] : '';
-      $setting = $this->bcAPISettingRepository->getRowRecordByOrgId($data['organization_id'], $data['id']);
+      if ( isset($data['organization_id']) && $data['organization_id'] > 0 && isset($data['id']) && $data['id'] > 0 ) {
+        $queryParam = isset($data['query_param']) ? '?' . $data['query_param'] : '';
+        $setting = $this->bcAPISettingRepository->getRowRecordByOrgId($data['organization_id'], $data['id']);
 
-      // Implement Command Design Pattern to access Brightcove API
-      $bcAPIClient = new Client($setting);
-      $bcInstance = new GetVideoList($bcAPIClient);
-      $bcApiResponse = $bcInstance->fetch($setting, $queryParam);
-      return $bcApiResponse;
+        // Implement Command Design Pattern to access Brightcove API
+        $bcAPIClient = new Client($setting);
+        $bcInstance = new GetVideoList($bcAPIClient);
+        $bcApiResponse = $bcInstance->fetch($setting, $queryParam);
+        return $bcApiResponse;  
+      }
+      throw new GeneralException('Unable to get the record. Please check your payload data. id and organization_id is require field!');      
     }
 }
