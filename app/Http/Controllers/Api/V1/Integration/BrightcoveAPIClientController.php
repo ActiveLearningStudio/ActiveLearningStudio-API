@@ -58,7 +58,7 @@ class BrightcoveAPIClientController extends Controller
         'organization_id',
         'query_param'
       ]);
-      if ( isset ($data['organization_id']) && $data['organization_id'] > 0 && isset ($data['id']) && $data['id'] > 0 ) {
+      if ( isset($data['organization_id']) && $data['organization_id'] > 0 && isset($data['id']) && $data['id'] > 0 ) {
         $queryParam = isset($data['query_param']) ? '?' . $data['query_param'] : '';
         $setting = $this->bcAPISettingRepository->getRowRecordByOrgId($data['organization_id'], $data['id']);
 
