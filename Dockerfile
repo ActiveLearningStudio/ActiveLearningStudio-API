@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     jpegoptim optipng pngquant gifsicle \
     vim \
+    jq \
     unzip \
     git \
     curl \
