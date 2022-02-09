@@ -622,7 +622,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
                 GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
                 UserLogin::where('user_id', $data['user_id'])->forceDelete();
-                DB::table('user_team')->where('user_id', $data['user_id'])->forceDelete();
+                DB::table('user_team')->where('user_id', $data['user_id'])->delete();
 
                 $this->userRepository->forceDelete($user);
             }
