@@ -157,7 +157,7 @@ class LaravelH5p
     }
 
     public static function get_editor($content = null, $lib = null)
-    {   
+    {
         $settings = self::get_editor_settings($content);
         $settings = self::get_editor_assets($settings, $content, $lib);
         return $settings;
@@ -316,8 +316,10 @@ class LaravelH5p
         foreach (H5PCore::$scripts as $script) {
             $settings['core']['scripts'][] = self::get_h5pcore_url('/' . $script);
         }
-
-        $settings['core']['scripts'][] = self::get_h5peditor_url('/scripts/h5peditor-editor.js');
+        
+        if ($lib !== 'preview') {
+            $settings['core']['scripts'][] = self::get_h5peditor_url('/scripts/h5peditor-editor.js');
+        }
         $settings['core']['scripts'][] = self::get_laravelh5p_url('/js/laravel-h5p.js');
         $settings['core']['scripts'][] = self::get_h5plibrary_url('/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9');
         $settings['core']['scripts'][] = self::get_h5plibrary_url('/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9');
