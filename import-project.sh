@@ -23,6 +23,7 @@ for i in $(ls ${base_path}imported-projects); do
         if [[ $success == true ]]
         
         then
+            rm -rf ${base_path}imported-projects/$i
             echo 'response true'
             # mv ${base_path}imported-projects/$i ${base_path}success-imports
         else
