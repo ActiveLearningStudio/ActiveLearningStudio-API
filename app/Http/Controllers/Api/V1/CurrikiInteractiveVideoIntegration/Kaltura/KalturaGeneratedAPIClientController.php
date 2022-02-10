@@ -55,14 +55,15 @@ class KalturaGeneratedAPIClientController extends Controller
      */
     public function getMediaEntryList(Request $request)
     {
-      $getParam = $request->only([            
+      $getParam = $request->only([
+          'organization_id',
           'pageSize',
           'pageIndex',
           'searchText'
       ]);
-      $auth = \Auth::user();     
-      if ($auth) {
-        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserIdAndToolType($auth->id, 'kaltura');
+      $auth = \Auth::user();
+      if ( $auth && $auth->id && isset($getParam['organization_id']) && $getParam['organization_id'] > 0 ) {
+        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserOrgAndToolType($auth->id, $getParam['organization_id'], 'kaltura');
         // Credentials For Kaltura Session
         if ($ltiRowResult) {
           $secret = $ltiRowResult->tool_secret_key;
@@ -100,7 +101,7 @@ class KalturaGeneratedAPIClientController extends Controller
           $pager->pageIndex = $pageIndex;
           try {
             $result = $client->media->listAction($filter, $pager);
-            $responeResult = response()->json(array("results" => $result));
+            $responeResult = response()->json($result);
           } catch (Exception $e) {
             $responeResult = response()->json(array("error" => $e->getMessage()));
           }
@@ -109,7 +110,7 @@ class KalturaGeneratedAPIClientController extends Controller
         }
         return $responeResult;
       }
-      throw new GeneralException('Unauthenticated!');
+      throw new GeneralException('Unable to get the record. Require field organization_id, pageSize, pageIndex, searchText!');
     }
     
 }
