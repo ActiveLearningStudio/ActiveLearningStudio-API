@@ -17,16 +17,16 @@ for i in $(ls ${base_path}imported-projects); do
         echo "Size are equal"
         response=$(/usr/local/bin/php /var/www/html/artisan import:project ${base_path}imported-projects/$i/$zip_file)
         # response="{\"success\":false}"
-        success=$(jq '.success'  <<< $response)
+        success=$(echo "$response" | jq '.success')
         # echo $response
-        # echo $success
-        if [ $success == 'true' ]
+         
+        if [[ $success == true ]]
         
         then
-            echo 'trueeing'
+            echo 'response true'
             # mv ${base_path}imported-projects/$i ${base_path}success-imports
         else
-            echo 'falseeing'
+            echo 'response false'
             # mv ${base_path}imported-projects/$i ${base_path}error-imports
         fi
     else
