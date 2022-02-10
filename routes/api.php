@@ -231,6 +231,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
         Route::post('activity-layouts/upload-thumb', 'ActivityLayoutController@uploadImage');
+        Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
+        // subjects
+        Route::apiResource('subjects', 'SubjectController');
+        // education levels
+        Route::apiResource('education-levels', 'EducationLevelController');
+        // author tags
+        Route::apiResource('author-tags', 'AuthorTagController');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions
