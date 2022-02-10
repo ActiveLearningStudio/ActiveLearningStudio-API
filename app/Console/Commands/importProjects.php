@@ -44,8 +44,14 @@ class importProjects extends Command
 
         $ext = pathinfo(basename($path), PATHINFO_EXTENSION);
         
-        if ($ext !== "zip") {
-            $this->error('Please provide a valid zip file');
+        $mime_type = mime_content_type($path);
+
+        if ($mime_type !== "application/zip") {
+            $return_arr = [
+                            "success"=> false,
+                            "message" => "Please provide a valid zip file"
+                        ];
+            $this->error(json_encode($return_arr));
             return;
         }
                 
