@@ -111,7 +111,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
         Route::apiResource('suborganization.projects', 'ProjectController');
-        
+
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
@@ -137,7 +137,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::apiResource('playlists.activities', 'ActivityController');
 
-        Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
+        Route::apiResource('activity-layouts', 'ActivityLayoutController');
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
@@ -230,13 +230,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
-        Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
-        // subjects
-        Route::apiResource('subjects', 'SubjectController');
-        // education levels
-        Route::apiResource('education-levels', 'EducationLevelController');
-        // author tags
-        Route::apiResource('author-tags', 'AuthorTagController');
+        Route::post('activity-layouts/upload-thumb', 'ActivityLayoutController@uploadImage');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions

@@ -6,6 +6,8 @@ use App\Repositories\Activity\ActivityRepository;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepository;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
+use App\Repositories\ActivityLayout\ActivityLayoutRepositoryInterface;
+use App\Repositories\ActivityLayout\ActivityLayoutRepository;
 use App\Repositories\ActivityType\ActivityTypeRepository;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use App\Repositories\AuthorTag\AuthorTagRepository;
@@ -112,6 +114,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SubjectRepositoryInterface::class, SubjectRepository::class);
         $this->app->bind(EducationLevelRepositoryInterface::class, EducationLevelRepository::class);
         $this->app->bind(AuthorTagRepositoryInterface::class, AuthorTagRepository::class);
+        $this->app->bind(ActivityLayoutRepositoryInterface::class, ActivityLayoutRepository::class);
     }
 
     /**
