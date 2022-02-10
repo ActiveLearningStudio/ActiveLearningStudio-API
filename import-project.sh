@@ -2,7 +2,7 @@
 
 # list all folders
 # folders=$(ls -l /var/www/html/storage) # Find original_size / names
-base_path=/imported-projects/
+base_path=/
 for i in $(ls ${base_path}imported-projects); do
     json_file=$(ls ${base_path}imported-projects/$i | grep json)
     file_size=$(jq '.size' ${base_path}imported-projects/$i/$json_file | tr -d '"')
