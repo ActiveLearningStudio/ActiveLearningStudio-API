@@ -117,6 +117,7 @@ class ActivityLayoutController extends Controller
         if ($activityLayout) {
             return response([
                 'activityLayout' => new ActivityLayoutResource($activityLayout),
+                'message' => 'Activity layout created successfully!',
             ], 201);
         }
 
@@ -184,6 +185,7 @@ class ActivityLayoutController extends Controller
         if ($isUpdated) {
             return response([
                 'activityLayout' => new ActivityLayoutResource($this->activityLayoutRepository->find($activityLayout->id)),
+                'message' => 'Activity layout updated successfully!',
             ], 200);
         }
 
