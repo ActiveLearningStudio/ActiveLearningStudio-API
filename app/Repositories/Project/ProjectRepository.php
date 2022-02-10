@@ -700,7 +700,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $zip->extractTo(storage_path($extracted_folder_name.'/'));
                 $zip->close();
             }else {
-                return "Unable to import Project";
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import Project."
+                ];
+                return json_encode($return_res);
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
                 if (file_exists(storage_path($extracted_folder_name.'/project.json'))) {
@@ -740,7 +744,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     if ($method_source !== "command") {
                         unlink($source_file); // Deleted the storage zip file
                     } else {
-                        return "Project has been imported successfully";
+                        
+                        $return_res = [
+                            "success"=> true,
+                            "message" => "Project has been imported successfully"
+                        ];
+                        return json_encode($return_res);
                     }
 
                     return $project['name'];
@@ -752,7 +761,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             DB::rollBack();
             Log::error($e->getMessage());
             if ($method_source === "command") {
-                return("Unable to import the project, please try again later!");
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import the project, please try again later!"
+                ];
+                return(json_encode($return_res));
             }
 
             throw new GeneralException('Unable to import the project, please try again later!');

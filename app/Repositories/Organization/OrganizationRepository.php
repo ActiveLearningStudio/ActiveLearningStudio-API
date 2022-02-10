@@ -8,6 +8,7 @@ use App\Models\OrganizationRoleType;
 use App\Models\Pivots\GroupProjectUser;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\SsoLogin;
+use App\Models\TeamUserRole;
 use App\Models\UserLogin;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\BaseRepository;
@@ -623,6 +624,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $user->favoriteProjects()->detach();
                 $user->lmssetting()->forceDelete();
                 $user->ssoLogin()->forceDelete();
+                $user->organizations()->detach();
+                TeamUserRole::where('user_id', $data['user_id'])->forceDelete();
+                TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                UserLogin::where('user_id', $data['user_id'])->forceDelete();
+                DB::table('user_team')->where('user_id', $data['user_id'])->delete();
 
                 $this->userRepository->forceDelete($user);
             }
