@@ -35,9 +35,17 @@ class ActivityLayoutRepository extends BaseRepository implements ActivityLayoutR
             return $query->orderBy('order', 'ASC')->get();
         }
 
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
+        {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'asc';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query->orderBy('order', 'asc');
+        }
+
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return $query->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+        return $query->paginate($perPage)->withQueryString();
     }
 
 
