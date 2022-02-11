@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y \
     locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
+    vim \
     jq \
     unzip \
     git \
@@ -40,11 +41,11 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
 
-RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-9.18.1.303-linux.tar.gz
-RUN tar -xzf newrelic-php5-9.18.1.303-linux.tar.gz
-RUN cd newrelic-php5-9.18.1.303-linux
-RUN export NR_INSTALL_SILENT=true
-RUN export NR_INSTALL_KEY=${NR_INSTALL_KEY}
+# RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-9.18.1.303-linux.tar.gz
+# RUN tar -xzf newrelic-php5-9.18.1.303-linux.tar.gz
+# RUN cd newrelic-php5-9.18.1.303-linux
+# RUN export NR_INSTALL_SILENT=true
+# RUN export NR_INSTALL_KEY=${NR_INSTALL_KEY}
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
@@ -57,21 +58,18 @@ WORKDIR /var/www/html
 COPY ./php.ini /usr/local/etc/php/
 #COPY . /var/www/html/
 
-
-
-
 # Cron Jobs
 
 # Copy hello-cron file to the cron.d directory
-# COPY ./scheduler.cron /etc/cron.d/root
+COPY ./map.cron /etc/cron.d/root
 
 # Give execution rights on the cron job
-# RUN chmod 0644 /etc/cron.d/root
+RUN chmod 0644 /etc/cron.d/root
 
 # Apply cron job
-# RUN crontab /etc/cron.d/root
+RUN crontab /etc/cron.d/root
 
-# RUN touch /var/log/cron.log
+RUN touch /var/log/cron.log
 
 
 #RUN service apache2 restart
@@ -84,12 +82,10 @@ RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
 
-# USER root
-# COPY ./entrypoint.api.sh /var/www/html/
-# RUN chmod 777 /var/www/html/entrypoint.api.sh
-# RUN chmod +x /var/www/html/entrypoint.api.sh
+COPY ./entrypoint.map.sh ./
+RUN chmod +x /var/www/html/entrypoint.map.sh
 
-COPY ./entrypoint.api.sh ./
-RUN chmod +x /var/www/html/entrypoint.api.sh
+COPY ./import-project.sh /usr/bin
+RUN chmod +x /usr/bin/import-project.sh
 
-ENTRYPOINT ["sh", "/var/www/html/entrypoint.api.sh"]
+ENTRYPOINT ["sh", "/var/www/html/entrypoint.map.sh"]
