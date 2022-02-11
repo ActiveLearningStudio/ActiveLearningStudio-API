@@ -72,6 +72,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
         Route::get('suborganization/{suborganization}/get-teams', 'TeamController@getOrgTeams');
+        Route::get('suborganization/{suborganization}/get-admin-teams', 'TeamController@getAdminTeams');
         Route::get('suborganization/{suborganization}/team-role-types', 'TeamController@teamRoleTypes');
         Route::get('suborganization/{suborganization}/team/{team}/team-permissions', 'TeamController@getUserTeamPermissions');
         Route::put('suborganization/{suborganization}/team/{team}/update-team-member-role', 'TeamController@updateTeamMemberRole');
