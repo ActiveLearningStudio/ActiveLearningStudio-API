@@ -402,7 +402,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                   });
 
         if (isset($data['query']) && $data['query'] !== '') {
-            $query->where('name', 'iLIKE', '%' .$data['query']. '%');
+            $query->where('name', 'iLIKE', '%' . $data['query'] . '%');
         }
 
         return $query->whereOrganizationId($suborganization_id)->get();
@@ -433,7 +433,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $query = Team::whereOrganizationId($suborganization_id);
 
         if (isset($data['query']) && $data['query'] !== '') {
-            $query->where('name', 'iLIKE', '%' .$data['query']. '%');
+            $query->where('name', 'iLIKE', '%' . $data['query'] . '%');
         }
 
         if (isset($data['order_by_column']) && $data['order_by_column'] == 'created_at') {
