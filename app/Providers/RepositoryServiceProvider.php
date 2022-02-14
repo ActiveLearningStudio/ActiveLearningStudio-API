@@ -6,6 +6,8 @@ use App\Repositories\Activity\ActivityRepository;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepository;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
+use App\Repositories\ActivityLayout\ActivityLayoutRepositoryInterface;
+use App\Repositories\ActivityLayout\ActivityLayoutRepository;
 use App\Repositories\ActivityType\ActivityTypeRepository;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use App\Repositories\BaseRepository;
@@ -103,6 +105,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(GoogleClassroomRepositoryInterface::class, GoogleClassroomRepository::class);
         $this->app->bind(DefaultSsoIntegrationSettingsInterface::class, DefaultSsoIntegrationSettingsRepository::class);
         $this->app->bind(LtiToolSettingInterface::class, LtiToolSettingRepository::class);
+        $this->app->bind(ActivityLayoutRepositoryInterface::class, ActivityLayoutRepository::class);
     }
 
     /**
