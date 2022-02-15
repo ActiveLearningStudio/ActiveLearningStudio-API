@@ -40,6 +40,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
                 });
                 $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');
                 $query->orWhere('tool_url', 'iLIKE', '%' . $data['query'] . '%');
+                $query->orWhere('tool_type', 'iLIKE', '%' . $data['query'] . '%');
             });
         }
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
