@@ -576,7 +576,7 @@ class ActivityController extends Controller
         $this->authorize('view', [Project::class, $activity->playlist->project]);
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
-        $settings = $h5p::get_editor();
+        $settings = $h5p::get_editor($content = null, 'preview');
         $content = $h5p->load_content($activity->h5p_content_id);
         $content['disable'] = config('laravel-h5p.h5p_preview_flag');
         $embed = $h5p->get_embed($content, $settings);
@@ -694,7 +694,7 @@ class ActivityController extends Controller
         if ($activity->shared || ($activity->playlist->project->indexing === (int)config('constants.indexing-approved'))) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
-            $settings = $h5p::get_editor();
+            $settings = $h5p::get_editor($content = null, 'preview');
             $content = $h5p->load_content($activity->h5p_content_id);
             $content['disable'] = config('laravel-h5p.h5p_preview_flag');
             $embed = $h5p->get_embed($content, $settings);
