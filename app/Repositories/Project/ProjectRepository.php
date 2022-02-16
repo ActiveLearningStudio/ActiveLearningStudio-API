@@ -54,7 +54,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $projectObj = $this->model->find($id);
 
-        if ($projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']) {
+        if (
+            isset($attributes['organization_visibility_type_id']) && 
+            $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
+        ) {
             $attributes['indexing'] = config('constants.indexing-requested');
             $attributes['status'] = config('constants.status-finished');
 
