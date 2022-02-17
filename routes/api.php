@@ -41,7 +41,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('organization/get-by-domain', 'OrganizationController@getByDomain')->name('organization.get-by-domain');
 
     Route::middleware(['auth:api', 'verified'])->group(function () {
-        Route::get('users/organizations', 'UserController@getOrganizations');
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::get('users/notifications', 'UserController@listNotifications');
@@ -297,6 +296,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     // H5P embed
     Route::get('h5p/embed/{id}', 'H5pController@embed');
     // Public route used for LTI previews
+    Route::get('users/organizations', 'UserController@getOrganizations');
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
