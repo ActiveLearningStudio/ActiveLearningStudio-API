@@ -38,6 +38,8 @@ class StandAloneActivityCreateRequest extends FormRequest
             'author_tag_id' => 'array',
             'author_tag_id.*' => 'integer|distinct|exists:author_tags,id,deleted_at,NULL',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
+            'source_type' => 'nullable|string',
+            'source_url' => 'nullable|string',
         ];
     }
 }

@@ -29,6 +29,8 @@ class StandAloneActivityResource extends JsonResource
             'subjects' => SubjectResource::collection($this->subjects),
             'education_levels' => EducationLevelResource::collection($this->educationLevels),
             'author_tags' => AuthorTagResource::collection($this->authorTags),
+            'source_type' => $this->source_type,
+            'source_url' => $this->source_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

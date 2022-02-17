@@ -54,7 +54,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $projectObj = $this->model->find($id);
 
-        if ($projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']) {
+        if (
+            isset($attributes['organization_visibility_type_id']) && 
+            $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
+        ) {
             $attributes['indexing'] = config('constants.indexing-requested');
             $attributes['status'] = config('constants.status-finished');
 
@@ -346,14 +349,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * To reorder Projects
      *
-     * @param array $projects
+     * @param array $newProjectsOrder
+     * @param array $existingProjectsOrder
      */
-    public function saveList(array $projects)
+    public function saveList(array $newProjectsOrder, array $existingProjectsOrder)
     {
-        foreach ($projects as $project) {
-            $this->update([
-                'order' => $project['order'],
-            ], $project['id']);
+        foreach ($newProjectsOrder as $project) {
+            if (isset($existingProjectsOrder[$project['id']]) && ($existingProjectsOrder[$project['id']] !== $project['order'])) {
+                $this->update([
+                    'order' => $project['order'],
+                ], $project['id']);
+            }
         }
     }
 

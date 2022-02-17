@@ -39,6 +39,8 @@ class ActivityEditRequest extends FormRequest
             'education_level_id.*' => 'integer|distinct|exists:education_levels,id,deleted_at,NULL',
             'author_tag_id' => 'array',
             'author_tag_id.*' => 'integer|distinct|exists:author_tags,id,deleted_at,NULL',
+            'source_type' => 'nullable|string',
+            'source_url' => 'nullable|string',
         ];
     }
 }
