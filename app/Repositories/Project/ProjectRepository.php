@@ -349,14 +349,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * To reorder Projects
      *
-     * @param array $projects
+     * @param array $newProjectsOrder
+     * @param array $existingProjectsOrder
      */
-    public function saveList(array $projects)
+    public function saveList(array $newProjectsOrder, array $existingProjectsOrder)
     {
-        foreach ($projects as $project) {
-            $this->update([
-                'order' => $project['order'],
-            ], $project['id']);
+        foreach ($newProjectsOrder as $project) {
+            if (isset($existingProjectsOrder[$project['id']]) && ($existingProjectsOrder[$project['id']] !== $project['order'])) {
+                $this->update([
+                    'order' => $project['order'],
+                ], $project['id']);
+            }
         }
     }
 
