@@ -45,6 +45,8 @@ class ActivityDetailResource extends JsonResource
             'minor_version' => $this->h5p_content->library->minor_version,
             'user_name' => $this->data['user_name'],
             'user_id' => $this->data['user_id'],
+            'source_type' => $this->source_type,
+            'source_url' => $this->source_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
