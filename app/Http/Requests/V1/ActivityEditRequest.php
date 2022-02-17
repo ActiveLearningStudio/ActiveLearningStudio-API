@@ -35,6 +35,8 @@ class ActivityEditRequest extends FormRequest
             'thumb_url' => 'string',
             'subject_id' => 'nullable|string',
             'education_level_id' => 'nullable|string',
+            'source_type' => 'nullable|string',
+            'source_url' => 'nullable|string',
         ];
     }
 }
