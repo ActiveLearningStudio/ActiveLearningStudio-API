@@ -49,12 +49,14 @@ class ActivityDetailResource extends JsonResource
             'source_url' => $this->source_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'source_type' => $this->source_type,
+            'source_url' => $this->source_url,
         ];
 
         if ($this->resource->brightcoveData) {
             $response['brightcoveData'] = $this->resource->brightcoveData;
         }
-        
+
         return $response;
     }
 }
