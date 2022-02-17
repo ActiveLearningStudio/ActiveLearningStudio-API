@@ -28,6 +28,8 @@ class StandAloneActivityResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'subject_id' => $this->subject_id,
             'education_level_id' => $this->education_level_id,
+            'source_type' => $this->source_type,
+            'source_url' => $this->source_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
