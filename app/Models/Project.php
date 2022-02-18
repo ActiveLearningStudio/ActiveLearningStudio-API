@@ -197,17 +197,4 @@ class Project extends Model
         }
         return false;
     }
-
-    /**
-     * Get the multiple Projects by IDs
-     * 
-     * @return Project
-     */
-    public function getProjectsByIds(Array $projectIds)
-    {
-        if (isset($this->users)) {
-            return $this->whereIn('id', $projectIds)->get();
-        }
-        return null;
-    }
 }
