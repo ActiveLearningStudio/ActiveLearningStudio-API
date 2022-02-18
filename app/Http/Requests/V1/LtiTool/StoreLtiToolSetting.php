@@ -25,10 +25,11 @@ class StoreLtiToolSetting extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      * @bodyParam     tool_name required|unique. Example: Safari Montage
-     * @bodyParam     tool_url required. Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
+     * @bodyParam     tool_url required|unique. Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
      * @bodyParam     lti_version required. Example: LTI-1p0
-     * @bodyParam     tool_consumer_key nullable. Example: consumer key
-     * @bodyParam     tool_secret_key required_with:tool_consumer_key. Example: secret key
+     * @bodyParam     tool_type required. Example: kaltura or safari_montage or other
+     * @bodyParam     tool_consumer_key nullable|unique. Example: consumer key
+     * @bodyParam     tool_secret_key required_with:tool_consumer_key|unique. Example: secret key
      * @bodyParam     tool_content_selection_url nullable. Example: if not set, automatically set the tool_url
      * @bodyParam     user_id required. Example: 1
      * @bodyParam     organization_id required. Example: 1
@@ -37,11 +38,12 @@ class StoreLtiToolSetting extends FormRequest
     public function rules()
     {
         return [
-            'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL',
-            'tool_url' => 'required|url|max:255',
+            'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
             'lti_version' => 'required|max:20',
-            'tool_consumer_key' => 'nullable|string|max:255',
-            'tool_secret_key' => 'required_with:tool_consumer_key|max:255',
+            'tool_type' => 'required|in:kaltura,safari_montage,other',
+            'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
             'tool_content_selection_url' => 'nullable|url|max:255',
             'user_id' => 'required|exists:users,id',
             'organization_id' => 'required|exists:organizations,id'

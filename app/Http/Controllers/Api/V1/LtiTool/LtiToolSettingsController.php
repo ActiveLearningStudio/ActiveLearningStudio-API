@@ -95,6 +95,7 @@ class LtiToolSettingsController extends Controller
             'tool_name',
             'tool_url',
             'lti_version',
+            'tool_type',
             'tool_description',
             'tool_custom_parameter',
             'tool_consumer_key',
@@ -135,6 +136,7 @@ class LtiToolSettingsController extends Controller
             'tool_name',
             'tool_url',
             'lti_version',
+            'tool_type',
             'tool_description',
             'tool_custom_parameter',
             'tool_consumer_key',
@@ -196,6 +198,28 @@ class LtiToolSettingsController extends Controller
      */
     public function clone(Request $request, Organization $suborganization, LtiToolSetting $ltiToolSetting)
     {
+        $requestData = $request->all();
+        $requestData['tool_name'] = $ltiToolSetting->tool_name;
+        $requestData['tool_url'] = $ltiToolSetting->tool_url;
+        $requestData['lti_version'] = $ltiToolSetting->lti_version;
+        $requestData['tool_type'] = $ltiToolSetting->tool_type;
+        $requestData['tool_consumer_key'] = $ltiToolSetting->tool_consumer_key;
+        $requestData['tool_secret_key'] = $ltiToolSetting->tool_secret_key;
+        $requestData['tool_content_selection_url'] = $ltiToolSetting->tool_content_selection_url;
+        $requestData['user_id'] = $ltiToolSetting->user_id;
+        $requestData['organization_id'] = $ltiToolSetting->organization_id;
+        $request->merge($requestData);
+        $validated = $request->validate([
+            'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'lti_version' => 'required|max:20',
+            'tool_type' => 'required|in:kaltura,safari_montage,other',
+            'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'tool_content_selection_url' => 'nullable|url|max:255',
+            'user_id' => 'required|exists:users,id',
+            'organization_id' => 'required|exists:organizations,id'
+        ]);
         CloneLtiToolSetting::dispatch($ltiToolSetting, $suborganization, $request->bearerToken())->delay(now()->addSecond());
         return response([
             "message" => "Your request to clone Lti Tool Setting [$ltiToolSetting->tool_name] has been received and is being processed. <br> 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\AdminTeamSearchRequest;
 use App\Http\Requests\V1\TeamAddMemberRequest;
 use App\Http\Requests\V1\TeamAddProjectRequest;
 use App\Http\Requests\V1\TeamInviteMemberRequest;
@@ -119,6 +120,28 @@ class TeamController extends Controller
         return response([
             'teams' => TeamResource::collection($teamDetails),
         ], 200);
+    }
+
+    /**
+     * Get All Organization Teams for Admin
+     *
+     * Get a list of the teams of an Organization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/team/team.json
+     *
+     * @param AdminTeamSearchRequest $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function getAdminTeams(AdminTeamSearchRequest $request, Organization $suborganization)
+    {
+        $this->authorize('viewAny', [Team::class, $suborganization]);
+
+        $teams = $this->teamRepository->getAdminTeams($request->all(), $suborganization->id);
+
+        return  TeamResource::collection($teams);
     }
 
     /**

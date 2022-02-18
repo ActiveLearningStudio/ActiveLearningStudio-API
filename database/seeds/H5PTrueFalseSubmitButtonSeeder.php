@@ -118,14 +118,6 @@ class H5PTrueFalseSubmitButtonSeeder extends Seeder
                 "default": "False"
               },
               {
-                "label": "Text for \"Submit\" button",
-                "importance": "low",
-                "name": "submitAnswer",
-                "type": "text",
-                "default": "Submit",
-                "optional": true
-              },
-              {
                 "label": "Feedback text",
                 "importance": "low",
                 "name": "score",
@@ -251,15 +243,6 @@ class H5PTrueFalseSubmitButtonSeeder extends Seeder
                 "default": false
               },
               {
-                "label": "Do not Show Submit Button",
-                "importance": "low",
-                "name": "disableSubmitButton",
-                "type": "boolean",
-                "default": false,
-                "optional": true,
-                "description": "This option is only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
-              },
-              {
                 "name": "feedbackOnCorrect",
                 "label": "Feedback on correct answer",
                 "importance": "low",
@@ -368,6 +351,58 @@ class H5PTrueFalseSubmitButtonSeeder extends Seeder
                 "name": "confirmLabel",
                 "type": "text",
                 "default": "Confirm"
+              }
+            ]
+          },{
+            "name": "currikisettings",
+            "type": "group",
+            "label": "Curriki settings",
+            "importance": "low",
+            "description": "These options will let you control how the curriki studio behaves.",
+            "optional": true,
+            "fields": [
+              {
+                "label": "Do not Show Submit Button",
+                "importance": "low",
+                "name": "disableSubmitButton",
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "description": "This option only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
+              },
+              {
+                "label": "Placeholder",
+                "importance": "low",
+                "name": "placeholder",
+                "type": "boolean",
+                "default": false,
+                "optional": true,
+                "description": "This option is a place holder. will be used in future"
+              },
+              {
+                "label": "Curriki Localization",
+                "description": "Here you can edit settings or translate texts used in curriki settings",
+                "importance": "low",
+                "name": "currikil10n",
+                "type": "group",
+                "fields": [
+                  {
+                    "label": "Text for \"Submit\" button",
+                    "name": "submitAnswer",
+                    "importance": "low",
+                    "type": "text",
+                    "default": "Submit",
+                    "optional": true
+                  },
+                  {
+                    "label": "Text for \"Placeholder\" button",
+                    "importance": "low",
+                    "name": "placeholderButton",
+                    "type": "text",
+                    "default": "Placeholder",
+                    "optional": true
+                  }
+                ]
               }
             ]
           }

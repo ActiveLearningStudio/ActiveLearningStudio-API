@@ -41,11 +41,8 @@ class importProjects extends Command
     public function handle(ProjectRepositoryInterface $projectRepository)
     {
         $path = $this->argument('path');
-
         $ext = pathinfo(basename($path), PATHINFO_EXTENSION);
-        
         $mime_type = mime_content_type($path);
-
         if ($mime_type !== "application/zip") {
             $return_arr = [
                             "success"=> false,

@@ -49,6 +49,26 @@ class OrganizationResource extends JsonResource
             }
         }
 
+        $branding = '';
+
+        if ($this->domain === 'currikistudio') {
+            $branding =   [
+                            'primary-color' => 'red',
+                            'secondary-color' => 'green',
+                            'font-size' => '12px',
+                            'font-family-heading' => 'rubic',
+                            'font-family-secondary' => 'Open Sans",sans-serif',
+                        ];
+        } else if ($this->domain === 'domaintest') {
+            $branding =   [
+                        'primary-color' => 'blue',
+                        'secondary-color' => 'yellow',
+                        'font-size' => '16px',
+                        'font-family-heading' => 'rubic',
+                        'font-family-secondary' => 'Open Sans",sans-serif',
+                    ];
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -85,6 +105,7 @@ class OrganizationResource extends JsonResource
             'privacy_policy_type' => $this->privacy_policy_type,
             'privacy_policy_url' => $this->privacy_policy_url,
             'privacy_policy_content' => $this->privacy_policy_content,
+            'branding' => $branding,
         ];
     }
 }

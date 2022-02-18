@@ -115,7 +115,6 @@ class SearchController extends Controller
         $data = $searchRequest->validated();
 
         $organization = $this->organizationRepository->find($data['organization_id']);
-        $this->authorize('advanceSearch', $organization);
 
         $data['organizationIds'] = [$data['organization_id']];
         $data['orgObj'] = $organization;
@@ -169,9 +168,6 @@ class SearchController extends Controller
     public function dashboard(SearchRequest $searchRequest)
     {
         $data = $searchRequest->validated();
-
-        $organization = $this->organizationRepository->find($data['organization_id']);
-        $this->authorize('dashboardSearch', $organization);
 
         $data['userIds'] = [auth()->user()->id];
 

@@ -33,7 +33,9 @@ class Activity extends Model
         'indexing',
         'user_id',
         'organization_id',
-        'description'
+        'description',
+        'source_type',
+        'source_url'
     ];
 
     /**
