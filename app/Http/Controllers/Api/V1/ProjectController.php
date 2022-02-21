@@ -2,31 +2,32 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ProjectUpdatedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\OrganizationProjectRequest;
-use App\Http\Requests\V1\ProjectRequest;
-use App\Http\Requests\V1\ProjectUpdateRequest;
-use App\Http\Requests\V1\ProjectUploadThumbRequest;
-use App\Http\Requests\V1\ProjectUploadImportRequest;
-use App\Http\Resources\V1\ProjectDetailResource;
-use App\Http\Resources\V1\ProjectResource;
-use App\Http\Resources\V1\ProjectSearchPreviewResource;
-use App\Http\Resources\V1\UserProjectResource;
-use App\Jobs\CloneProject;
-use App\Models\Organization;
-use App\Models\Project;
-use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Project;
+use App\Models\Playlist;
+use App\Jobs\CloneProject;
 use App\Jobs\ExportProject;
 use App\Jobs\ImportProject;
-use App\Jobs\ExportNoovoProject;
 use Illuminate\Support\Arr;
+use App\Models\Organization;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Jobs\ExportNoovoProject;
+use App\Events\ProjectUpdatedEvent;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\V1\ProjectRequest;
+use App\Http\Resources\V1\ProjectResource;
+use App\Http\Requests\V1\ProjectUpdateRequest;
+use App\Http\Resources\V1\UserProjectResource;
+use App\Http\Resources\V1\ProjectDetailResource;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use App\Http\Requests\V1\ProjectUploadThumbRequest;
+use App\Http\Requests\V1\OrganizationProjectRequest;
+use App\Http\Requests\V1\ProjectUploadImportRequest;
+use App\Http\Resources\V1\ProjectSearchPreviewResource;
+use App\Repositories\Project\ProjectRepositoryInterface;
 
 /**
  * @group 3. Project
@@ -830,9 +831,16 @@ class ProjectController extends Controller
      * 
      * @Response Projects
      */
-    public function projectsByIds(Request $request, Project $project)
+    public function projectsByIds(Request $request,Project $project)
     {
-        $projectIds = $request->all()["project_id"];
-        return $project->getProjectsByIds($projectIds);
+
+        $projects = $project->with(['playlists','playlists.activities'])->find($request->project_id);
+        $projects->map(function($project){
+            $project->playlist_count = $project->playlists->count();
+            $project->activities_count = $project->playlists->pluck('activities')->count();
+        });
+        return response()->json([
+            "projects" => $projects
+        ]);
     }
 }
