@@ -139,7 +139,6 @@ class LmsController extends Controller
      * @param OrganizationSearchRequest $request
      * @return Response
      */
-    // TODO: need to update
     public function organizations(OrganizationSearchRequest $request)
     {
         $verifyValidCall = LmsSetting::where('lti_client_id', $request->ltiClientId)->where('lms_login_id', 'ilike', $request->userEmail)->count();
