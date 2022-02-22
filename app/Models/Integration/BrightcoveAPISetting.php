@@ -3,6 +3,7 @@
 namespace App\Models\Integration;
 
 use App\Models\Organization;
+use App\Models\H5pBrightCoveVideoContents;
 use App\Models\Traits\GlobalScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,7 +27,8 @@ class BrightcoveAPISetting extends Model
         'account_email',
         'client_id',
         'client_secret',
-        'description'
+        'description',
+        'css_path'
     ];
 
     /** 
@@ -49,6 +51,17 @@ class BrightcoveAPISetting extends Model
     public function organization()
     {
         return $this->belongsTo(Organization::class, 'organization_id', 'id');
+    }
+
+    /** 
+    * @author        Asim Sarwar
+    * Date           05-01-2022
+    * Detail         Define has many relationship with h5p_brightcove_video_contents table,
+    * @return        Relationship
+    */
+    public function h5pBrightcoveVideoContents()
+    {
+        return $this->hasMany(H5pBrightCoveVideoContents::class, 'brightcove_api_setting_id', 'id');
     }   
 
 }

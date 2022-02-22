@@ -41,11 +41,12 @@ class GetVideoList
         if ( isset($getToken['Authorization']) ) {
             $getCountResponse = $this->bcAPIClient->run(new GetVideoCountCommand($setting, $getToken, $queryParam));
             $response = $this->bcAPIClient->run(new GetVideoListCommand($setting, $getToken, $queryParam));
-            if ( $getCountResponse && $response) {
+            if ( $getCountResponse && $response) {                
                 return response()->json(['data' => $response, 'meta' => $getCountResponse]);
             } else {
                 throw new GeneralException('No Record Found!');
             }            
         }
     }
+
 }

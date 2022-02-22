@@ -56,9 +56,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
 
     /**
      * To reorder the list of projects
-     * @param array $projects
+     * @param array $newProjectsOrder
+     * @param array $existingProjectsOrder
      */
-    public function saveList(array $projects);
+    public function saveList(array $newProjectsOrder, array $existingProjectsOrder);
     /**
      * To Populate missing order number, One time script
      */
@@ -78,18 +79,6 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return bool
      */
     public function checkIsDuplicate($authenticated_user, $project_id, $organization_id);
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function indexing($project);
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function statusUpdate($project);
 
     /**
      * @param $authenticated_user

@@ -50,11 +50,13 @@ class ProjectDownloadController extends Controller
             $data = file_get_contents($project_thumbanil);
             $project->thumb_url = 'data:image/' . $ext . ';base64,' . base64_encode($data);
         }
+        $project->playlist_count = count($project->playlists);
         // Create Project.json file
         $project_dir_name = 'projects-'.uniqid();
         Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
        
         $playlists = $project->playlists;
+        $get_activities_count = 0;
         // get playlists from project
         foreach ($playlists as $playlist) {
             // Add playlist.json file
@@ -63,6 +65,8 @@ class ProjectDownloadController extends Controller
             Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/'.$title.'.json', $playlist);
             $activites = $playlist->activities;
             // return $playlist;
+            $get_activities_count += count($activites);
+
             foreach($activites as $key => $activity) {
                 // Check if activity has the thumbnails
                 // return $key;
@@ -100,7 +104,8 @@ class ProjectDownloadController extends Controller
                 // return $activity->h5p_content_id;
             } 
         }
-        
+        $project->activities_count = $get_activities_count;
+        Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
         // Get real path for our folder
         $rootPath = storage_path('app/public/exports/'.$project_dir_name);
         

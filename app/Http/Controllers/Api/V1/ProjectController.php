@@ -2,31 +2,32 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ProjectUpdatedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\OrganizationProjectRequest;
-use App\Http\Requests\V1\ProjectRequest;
-use App\Http\Requests\V1\ProjectUpdateRequest;
-use App\Http\Requests\V1\ProjectUploadThumbRequest;
-use App\Http\Requests\V1\ProjectUploadImportRequest;
-use App\Http\Resources\V1\ProjectDetailResource;
-use App\Http\Resources\V1\ProjectResource;
-use App\Http\Resources\V1\ProjectSearchPreviewResource;
-use App\Http\Resources\V1\UserProjectResource;
-use App\Jobs\CloneProject;
-use App\Models\Organization;
-use App\Models\Project;
-use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Project;
+use App\Models\Playlist;
+use App\Jobs\CloneProject;
 use App\Jobs\ExportProject;
 use App\Jobs\ImportProject;
-use App\Jobs\ExportNoovoProject;
 use Illuminate\Support\Arr;
+use App\Models\Organization;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Jobs\ExportNoovoProject;
+use App\Events\ProjectUpdatedEvent;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\V1\ProjectRequest;
+use App\Http\Resources\V1\ProjectResource;
+use App\Http\Requests\V1\ProjectUpdateRequest;
+use App\Http\Resources\V1\UserProjectResource;
+use App\Http\Resources\V1\ProjectDetailResource;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use App\Http\Requests\V1\ProjectUploadThumbRequest;
+use App\Http\Requests\V1\OrganizationProjectRequest;
+use App\Http\Requests\V1\ProjectUploadImportRequest;
+use App\Http\Resources\V1\ProjectSearchPreviewResource;
+use App\Repositories\Project\ProjectRepositoryInterface;
 
 /**
  * @group 3. Project
@@ -622,7 +623,13 @@ class ProjectController extends Controller
     {
         $authenticated_user = auth()->user();
 
-        $this->projectRepository->saveList($request->projects);
+        $existingProjectsOrder = $authenticated_user->projects()
+            ->where('organization_id', $suborganization->id)
+            ->whereNull('team_id')
+            ->pluck('order', 'id')
+            ->all();
+
+        $this->projectRepository->saveList($request->projects, $existingProjectsOrder);
 
         return response([
             'projects' => ProjectResource::collection(
@@ -631,71 +638,6 @@ class ProjectController extends Controller
                                         ->whereNull('team_id')
                                         ->get()
                                     ),
-        ], 200);
-    }
-
-    /**
-     * Indexing Request
-     *
-     * Make the indexing request for a project.
-     *
-     * @urlParam project required The Id of a project Example: 1
-     *
-     * @response {
-     *   "message": "Indexing request for this project has been made successfully!"
-     * }
-     *
-     * @response 404 {
-     *   "message": "No query results for model [Project] Id"
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Indexing value is already set. Current indexing state of this project: CURRENT_STATE_OF_PROJECT_INDEX"
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Project must be finalized before requesting the indexing."
-     *   ]
-     * }
-     *
-     *
-     * @param Project $project
-     * @return Application|ResponseFactory|Response
-     */
-    public function indexing(Project $project)
-    {
-        $this->projectRepository->indexing($project);
-        return response([
-            'message' => 'Indexing request for this project has been made successfully!'
-        ], 200);
-    }
-
-    /**
-     * Status Update
-     *
-     * Update the status of the project, draft to final or vice versa.
-     *
-     * @urlParam project required The Id of a project Example: 1
-     *
-     * @response {
-     *   "message": "Status of this project has been updated successfully!"
-     * }
-     *
-     * @response 404 {
-     *   "message": "No query results for model [Project] Id"
-     * }
-     *
-     * @param Project $project
-     * @return Application|ResponseFactory|Response
-     */
-    public function statusUpdate(Project $project)
-    {
-        $this->projectRepository->statusUpdate($project);
-        return response([
-            'message' => 'Status of this project has been updated successfully!'
         ], 200);
     }
 
@@ -873,5 +815,26 @@ class ProjectController extends Controller
         return response([
             'project' => new ProjectSearchPreviewResource($project),
         ], 200);
+    }
+
+    /**
+     * Get the Projects by Ids
+     * 
+     * @urlParams 
+     * {"project_id": ["3024", "3025"]}
+     * 
+     * @Response Projects
+     */
+    public function projectsByIds(Request $request,Project $project)
+    {
+
+        $projects = $project->with(['playlists','playlists.activities'])->find($request->project_id);
+        $projects->map(function($project){
+            $project->playlist_count = $project->playlists->count();
+            $project->activities_count = $project->playlists->pluck('activities')->count();
+        });
+        return response()->json([
+            "projects" => $projects
+        ]);
     }
 }

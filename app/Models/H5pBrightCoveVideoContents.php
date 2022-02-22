@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
+use App\Models\Integration\BrightcoveAPISetting;
 
 class H5pBrightCoveVideoContents extends Model
 {
@@ -20,7 +22,17 @@ class H5pBrightCoveVideoContents extends Model
      */
     protected $fillable = [
         'brightcove_video_id',
-        'h5p_content_id'
+        'h5p_content_id',
+        'brightcove_api_setting_id'
     ];
 
+    public function brightcove_api_setting()
+    {
+        return $this->hasOne(BrightcoveAPISetting::class,'id','brightcove_api_setting_id');
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class,'h5p_content_id','h5p_content_id');
+    }
 }

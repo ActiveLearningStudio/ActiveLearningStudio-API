@@ -52,6 +52,20 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function update(array $attributes, $id)
     {
+        $projectObj = $this->model->find($id);
+
+        if (
+            isset($attributes['organization_visibility_type_id']) && 
+            $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
+        ) {
+            $attributes['indexing'] = config('constants.indexing-requested');
+            $attributes['status'] = config('constants.status-finished');
+
+            if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
+                $attributes['status'] = config('constants.status-draft');
+            }
+        }
+
         $is_updated = $this->model->where('id', $id)->update($attributes);
 
         if ($is_updated) {
@@ -335,14 +349,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * To reorder Projects
      *
-     * @param array $projects
+     * @param array $newProjectsOrder
+     * @param array $existingProjectsOrder
      */
-    public function saveList(array $projects)
+    public function saveList(array $newProjectsOrder, array $existingProjectsOrder)
     {
-        foreach ($projects as $project) {
-            $this->update([
-                'order' => $project['order'],
-            ], $project['id']);
+        foreach ($newProjectsOrder as $project) {
+            if (isset($existingProjectsOrder[$project['id']]) && ($existingProjectsOrder[$project['id']] !== $project['order'])) {
+                $this->update([
+                    'order' => $project['order'],
+                ], $project['id']);
+            }
         }
     }
 
@@ -356,48 +373,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $userProjectIds = $authenticated_user->projects()->where('organization_id', '=', $organization_id)->pluck('id')->toArray();
         return in_array($project_id, $userProjectIds);
-    }
-
-    /**
-     * @param $project
-     * @return mixed
-     * @throws GeneralException
-     */
-    public function indexing($project)
-    {
-        // if indexing status is already set
-        if ($project->indexing) {
-            throw new GeneralException('Indexing value is already set. Current indexing state of this project: ' . $project->indexing_text);
-        }
-        // if project is in draft
-        if ($project->status === 1) {
-            throw new GeneralException('Project must be finalized before requesting the indexing.');
-        }
-        $project->indexing = 1; // 1 is for indexing requested - see Project Model @indexing property
-        resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
-        return $project->save();
-    }
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function statusUpdate($project)
-    {
-        // see Project Model @status property for mapping
-        $project->status = 3 - $project->status; // this will toggle status, if draft then it will be final or vice versa
-        if ($project->status === 1){
-            if ($project->indexing === 3){
-                $project->status = 2;
-            }
-            $project->indexing = null; // remove indexing if project is reverted to draft state
-            $returnProject = $project->save();
-            resolve(\App\Repositories\Admin\Project\ProjectRepository::class)->indexProjects([$project->id]); // resolve dependency one time only
-        } else {
-            $returnProject = $project->save();
-        }
-
-        return $returnProject;
     }
 
     /**
@@ -726,7 +701,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $zip->extractTo(storage_path($extracted_folder_name.'/'));
                 $zip->close();
             }else {
-                return "Unable to import Project";
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import Project."
+                ];
+                return json_encode($return_res);
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
                 if (file_exists(storage_path($extracted_folder_name.'/project.json'))) {
@@ -766,7 +745,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     if ($method_source !== "command") {
                         unlink($source_file); // Deleted the storage zip file
                     } else {
-                        return "Project has been imported successfully";
+                        
+                        $return_res = [
+                            "success"=> true,
+                            "message" => "Project has been imported successfully"
+                        ];
+                        return json_encode($return_res);
                     }
 
                     return $project['name'];
@@ -778,7 +762,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             DB::rollBack();
             Log::error($e->getMessage());
             if ($method_source === "command") {
-                return("Unable to import the project, please try again later!");
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import the project, please try again later!"
+                ];
+                return(json_encode($return_res));
             }
 
             throw new GeneralException('Unable to import the project, please try again later!');

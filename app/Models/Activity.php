@@ -33,7 +33,9 @@ class Activity extends Model
         'indexing',
         'user_id',
         'organization_id',
-        'description'
+        'description',
+        'source_type',
+        'source_url'
     ];
 
     /**
@@ -68,6 +70,18 @@ class Activity extends Model
         $searchableArray = $searchableArray + $activityRepository->getH5pElasticsearchFields($this->h5p_content);
 
         return $searchableArray;
+    }
+
+    /**
+     * Cascade on delete the activity
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::deleting(function (Activity $activity) {
+            H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->delete();
+        });
     }
 
     /**

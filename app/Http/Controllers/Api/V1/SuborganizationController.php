@@ -560,15 +560,13 @@ class SuborganizationController extends Controller
 
         $data = $suborganizationDeleteUserRequest->validated();
 
-        $userObj = $this->userRepository->find($data['user_id']);
+        $authenticatedUser = auth()->user();
 
-        if ($suborganization->parent && $userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
+        if ($authenticatedUser->id === $data['user_id']) {
             return response([
-                'errors' => ['Can not remove user inherited from a parent org.'],
+                'errors' => ['Can not remove yourself.'],
             ], 500);
         }
-
-        $authenticatedUser = auth()->user();
 
         $isRemoved = $this->organizationRepository->removeUser($authenticatedUser, $suborganization, $data);
 
@@ -732,8 +730,8 @@ class SuborganizationController extends Controller
      */
     public function updateRole(SuborganizationUpdateRole $request, Organization $suborganization)
     {
-        $this->authorize('updateRole', $suborganization);
-
+        // $this->authorize('updateRole', $suborganization);
+        //  have disable temporaily until frontend stuff is fully completed.
         $data = $request->validated();
 
         $role = $suborganization->roles->where("id", $data['role_id']);

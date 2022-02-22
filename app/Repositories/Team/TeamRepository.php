@@ -408,7 +408,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         return $query->whereOrganizationId($suborganization_id)->get();
     }
 
-
     /**
      * Get Organization Teams data
      *
@@ -418,6 +417,31 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     public function getOrgTeams($suborganization_id)
     {
         return Team::whereOrganizationId($suborganization_id)->get();
+    }
+
+    /**
+     * Get Organization Teams data
+     *
+     * @param $data
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getAdminTeams($data, $suborganization_id)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        $query = Team::whereOrganizationId($suborganization_id);
+
+        if (isset($data['query']) && $data['query'] !== '') {
+            $query->where('name', 'iLIKE', '%' . $data['query'] . '%');
+        }
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] == 'created_at') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**

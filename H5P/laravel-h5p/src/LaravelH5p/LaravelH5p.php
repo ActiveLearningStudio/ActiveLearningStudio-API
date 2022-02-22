@@ -12,7 +12,6 @@
 
 namespace Djoudi\LaravelH5p;
 
-use App\Models\ActivityItem;
 use H5PCore;
 use H5peditor;
 use H5PExport;
@@ -35,7 +34,9 @@ use Djoudi\LaravelH5p\Storages\LaravelH5pStorage;
 use App\Repositories\H5pContent\H5pContentRepository;
 use Djoudi\LaravelH5p\Repositories\EditorAjaxRepository;
 use Djoudi\LaravelH5p\Repositories\LaravelH5pRepository;
-use App\Repositories\ActivityItem\ActivityItemRepository;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
+use App\Models\Integration\BrightcoveAPISetting;
 
 class LaravelH5p
 {
@@ -151,14 +152,14 @@ class LaravelH5p
     public static function get_core($settings = array())
     {
         $settings = self::get_core_settings($settings);
-        $settings = self::get_core_files($settings);
+        $settings = self::get_core_files($settings, $lib = null);
         return $settings;
     }
 
-    public static function get_editor($content = null)
+    public static function get_editor($content = null, $lib = null)
     {
         $settings = self::get_editor_settings($content);
-        $settings = self::get_editor_assets($settings, $content);
+        $settings = self::get_editor_assets($settings, $content, $lib);
         return $settings;
     }
 
@@ -178,9 +179,7 @@ class LaravelH5p
         $cid = 'cid-' . $content['id'];
         // Load H5P content from Repository
         $getH5pContent = new H5pContentRepository(new H5pContent());
-        // Load Activity Item
-        $activityItem = new ActivityItemRepository(new ActivityItem());
-
+        
         // Check for library
         $record = $getH5pContent->getLibrary($content['id']);
         // Get Library Name
@@ -188,8 +187,6 @@ class LaravelH5p
         $libraryMajorVersion = $record->library->major_version;
         $libraryMinorVerison = $record->library->minor_version;
 
-        // Load Activity type to get the CSS Path
-        $activityTypeRes = $activityItem->getActivityItem($libraryName, $libraryMajorVersion, $libraryMinorVerison);
         if (!isset($settings['contents'][$cid])) {
             $settings['contents'][$cid] = self::get_content_settings($content);
             $core = self::$core;
@@ -211,16 +208,26 @@ class LaravelH5p
                         $settings['loadedCss'][] = self::get_h5plibrary_url($url);
                     }
                 }
-                // Chekc if the CSS path exist and includes into the LoadedJs object
-                if(isset($activityTypeRes['activityType']->css_path)) {
-                    array_push($settings['loadedCss'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                
+                if ($content['library']['name'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $content['id'])->first();
+                    if ($brightcoveContentData) {
+                        $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                        $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+                        array_push($settings['loadedCss'], config('app.url') . $brightcoveAPISetting->css_path);
+                    }
                 }
+
             } elseif ($embed === 'iframe') {
                 $settings['contents'][$cid]['scripts'] = $core->getAssetsUrls($files['scripts']);
                 $settings['contents'][$cid]['styles'] = $core->getAssetsUrls($files['styles']);
-                // Chekc if the CSS path exist and includes into the core script object
-                if(isset($activityTypeRes['activityType']->css_path)) {
-                    array_push($settings['contents'][$cid]['styles'], config('app.url') . $activityTypeRes['activityType']->css_path);
+                if ($content['library']['name'] === 'H5P.BrightcoveInteractiveVideo') {
+                    $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $content['id'])->first();
+                    if ($brightcoveContentData) {
+                        $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                        $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+                        array_push($settings['contents'][$cid]['styles'], config('app.url') . $brightcoveAPISetting->css_path);
+                    }
                 }
             }
         }
@@ -285,16 +292,22 @@ class LaravelH5p
         return $settings;
     }
 
-    private static function get_core_files($settings = array())
+    private static function get_core_files($settings = array(), $lib)
     {
         $settings['loadedJs'] = array();
         $settings['loadedCss'] = array();
-
+        
         $settings['core'] = array(
             'styles' => array(),
             'scripts' => array(),
         );
 
+        if (isset($_GET['brightcove_api_setting_id']) && !empty($_GET['brightcove_api_setting_id']) && $_GET['brightcove_api_setting_id'] != 'null') {
+            $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+            $brightcoveAPISetting = $brightcoveAPISettingRepository->getById($_GET['brightcove_api_setting_id']);
+            array_push($settings['core']['styles'], config('app.url') . $brightcoveAPISetting->css_path);
+        }
+        
         $settings['core']['styles'][] = self::get_laravelh5p_url('/css/laravel-h5p.css');
 
         foreach (H5PCore::$styles as $style) {
@@ -303,8 +316,10 @@ class LaravelH5p
         foreach (H5PCore::$scripts as $script) {
             $settings['core']['scripts'][] = self::get_h5pcore_url('/' . $script);
         }
-
-        $settings['core']['scripts'][] = self::get_h5peditor_url('/scripts/h5peditor-editor.js');
+        
+        if ($lib !== 'preview') {
+            $settings['core']['scripts'][] = self::get_h5peditor_url('/scripts/h5peditor-editor.js');
+        }
         $settings['core']['scripts'][] = self::get_laravelh5p_url('/js/laravel-h5p.js');
         $settings['core']['scripts'][] = self::get_h5plibrary_url('/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9');
         $settings['core']['scripts'][] = self::get_h5plibrary_url('/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9');
@@ -351,9 +366,9 @@ class LaravelH5p
         return $settings;
     }
 
-    private static function get_editor_assets($settings = array(), $content = null)
+    private static function get_editor_assets($settings = array(), $content = null, $lib)
     {
-        $settings = self::get_core_files($settings);
+        $settings = self::get_core_files($settings, $lib);
 
         // load core assets
         $settings['editor']['assets']['css'] = $settings['core']['styles'];
