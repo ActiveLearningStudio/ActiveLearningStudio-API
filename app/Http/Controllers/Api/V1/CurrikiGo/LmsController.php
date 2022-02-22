@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Api\V1\CurrikiGo;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\CurrikiGo\OrganizationSearchRequest;
 use App\Http\Resources\V1\ProjectPublicResource;
 use App\Http\Resources\V1\SearchResource;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Http\Resources\V1\OrganizationResource;
+use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
 use App\Models\Project;
+use App\User;
 
 /**
  * @group 9. LMS Settings
@@ -121,4 +125,34 @@ class LmsController extends Controller
             'activities' => $this->activityRepository->ltiSearchForm($request),
         ], 200);
     }
+
+    /**
+     * Get organizations based on LMS/LTI settings
+     *
+     * Get a list of organizations that belong to the same LMS/LTI settings
+     *
+     * @bodyParam userEmail required The email of a user: quo
+     * @bodyParam lti_client_id required The Id of a lti client Example: 12
+     *
+     * @responseFile responses/organization/organizations.json
+     *
+     * @param OrganizationSearchRequest $request
+     * @return Response
+     */
+    public function organizations(OrganizationSearchRequest $request)
+    {
+        $verifyValidCall = LmsSetting::where('lti_client_id', $request->ltiClientId)->where('lms_login_id', 'ilike', $request->userEmail)->count();
+        if ($verifyValidCall) {
+            $user = User::where('email', $request->input('userEmail'))->first();
+            $organizations = OrganizationResource::collection($user->organizations()->with('parent')->get());
+            
+            return response([
+                'organizations' => $organizations,
+            ], 200);
+        }
+        return response([
+            'organizations' => [],
+        ], 400);
+    }
+    
 }
