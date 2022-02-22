@@ -131,8 +131,8 @@ class LmsController extends Controller
      *
      * Get a list of organizations that belong to the same LMS/LTI settings
      *
-     * @bodyParam lms_url string required The url of a lms Example: quo
-     * @bodyParam lti_client_id int required The Id of a lti client Example: 12
+     * @bodyParam userEmail required The email of a user: quo
+     * @bodyParam lti_client_id required The Id of a lti client Example: 12
      *
      * @responseFile responses/organization/organizations.json
      *
