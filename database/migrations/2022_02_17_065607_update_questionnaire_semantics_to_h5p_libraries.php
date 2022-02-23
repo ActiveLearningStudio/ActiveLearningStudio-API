@@ -12,7 +12,8 @@ class UpdateQuestionnaireSemanticsToH5pLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PQuestionnaireSubmitButtonSeeder::class
+            '--class' => H5PQuestionnaireSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
