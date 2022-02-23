@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateSingleChoiceSetSemanticsToH5PLibraries extends Migration
+class UpdateSingleChoiceSetSemanticsToH5PLibrariesV2 extends Migration
 {
     /**
      * Run the migrations.
