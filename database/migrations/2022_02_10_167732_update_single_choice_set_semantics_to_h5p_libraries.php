@@ -12,7 +12,8 @@ class UpdateSingleChoiceSetSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PSingleChoiceSetSubmitButtonSeeder::class
+            '--class' => H5PSingleChoiceSetSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
