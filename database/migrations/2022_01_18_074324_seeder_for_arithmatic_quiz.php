@@ -14,7 +14,8 @@ class SeederForArithmaticQuiz extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PArithmaticQuizSubmitButtonSeeder::class
+            '--class' => H5PArithmaticQuizSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
