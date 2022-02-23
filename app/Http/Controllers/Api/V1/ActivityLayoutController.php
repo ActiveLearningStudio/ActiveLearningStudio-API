@@ -9,6 +9,7 @@ use App\Http\Requests\V1\StoreActivityLayout;
 use App\Http\Requests\V1\UpdateActivityLayout;
 use App\Http\Resources\V1\ActivityLayoutResource;
 use App\Models\ActivityLayout;
+use App\Models\Organization;
 use App\Repositories\ActivityLayout\ActivityLayoutRepositoryInterface;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -29,7 +30,7 @@ class ActivityLayoutController extends Controller
      */
     public function __construct(
         ActivityLayoutRepositoryInterface $activityLayoutRepository
-    ) 
+    )
     {
         $this->activityLayoutRepository = $activityLayoutRepository;
     }
@@ -40,14 +41,15 @@ class ActivityLayoutController extends Controller
      * Get a list of the activity layouts.
      *
      * @responseFile responses/activity-layout/activity-layouts.json
-     * 
-     * @param SearchActivityLayout $request
+     
+     * @param SearchActivityLayout $reque s t
+     * @param Organization $suborganization
      *
      * @return Response
      */
-    public function index(SearchActivityLayout $request)
+    public function index(SearchActivityLayout $request, Organization $suborganization)
     {
-        return ActivityLayoutResource::collection($this->activityLayoutRepository->getAll($request->all()));
+        return ActivityLayoutResource::collection($this->activityLayoutRepository->getAll($suborganization, $request->all()));
     }
 
     /**
@@ -107,9 +109,11 @@ class ActivityLayoutController extends Controller
      * }
      *
      * @param StoreActivityLayout $request
+     * @param Organization $suborganization
+     *
      * @return Response
      */
-    public function store(StoreActivityLayout $request)
+    public function store(StoreActivityLayout $request, Organization $suborganization)
     {
         $data = $request->validated();
         $activityLayout = $this->activityLayoutRepository->create($data);
@@ -131,16 +135,25 @@ class ActivityLayoutController extends Controller
      *
      * Get the specified activity layout.
      *
-     * @urlParam activity_item required The Id of a activity layout Example: 1
+     * @urlParam suborganization required The Id of a organization Example: 1
+     * @urlParam activityLayout required The Id of a activity layout Example: 1
      *
      * @responseFile responses/activity-layout/activity-layout.json
      *
+     * @param Organization $suborganization
      * @param ActivityLayout $activityLayout
+    
      * @return Response
      */
-    public function show(ActivityLayout $activityLayout)
+    public function show(Organization $suborganization, ActivityLayout $activityLayout)
     {
-        return response([
+        if ($suborganization->id !== $activityLayout->organization_id) {
+            return response([
+                'message' => 'Invalid activity layout or organization',
+            ], 400);
+        }
+
+        return  response([
             'activityLayout' => new ActivityLayoutResource($activityLayout),
         ], 200);
     }
@@ -174,10 +187,11 @@ class ActivityLayoutController extends Controller
      * }
      *
      * @param UpdateActivityLayout $request
+     * @param Organization $suborganization
      * @param ActivityLayout $activityLayout
      * @return Response
      */
-    public function update(UpdateActivityLayout $request, ActivityLayout $activityLayout)
+    public function update(UpdateActivityLayout $request, Organization $suborganization, ActivityLayout $activityLayout)
     {
         $data = $request->validated();
         $isUpdated = $this->activityLayoutRepository->update($activityLayout->id, $data);
@@ -199,7 +213,8 @@ class ActivityLayoutController extends Controller
      *
      * Remove the specified activity layout.
      *
-     * @urlParam activity_item required The Id of a activity layout Example: 1
+     * @urlParam suborganization required The Id of a organization Example: 1
+     * @urlParam activityLayout required The Id of a activity layout Example: 1
      *
      * @response {
      *   "message": "Activity layout has been deleted successfully."
@@ -211,14 +226,22 @@ class ActivityLayoutController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param ActivityLayout $activityLayout
+    
      * @return Response
      */
-    public function destroy(ActivityLayout $activityLayout)
+    public function destroy(Organization $suborganization, ActivityLayout $activityLayout)
     {
+        if ($suborganization->id !== $activityLayout->organization_id) {
+            return response([
+                'message' => 'Invalid activity layout or organization',
+            ], 400);
+        }
+        
         $isDeleted = $this->activityLayoutRepository->delete($activityLayout->id);
 
-        if ($isDeleted) {
+         if  ($isDeleted) {
             return response([
                 'message' => 'Activity layout has been deleted successfully.',
             ], 200);

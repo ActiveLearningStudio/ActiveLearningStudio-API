@@ -37,6 +37,7 @@ class UpdateActivityLayout extends FormRequest
             'image' => 'sometimes',
             'demo_activity_id' => 'required|string',
             'demo_video_id' => 'required|string',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];
     }
 }

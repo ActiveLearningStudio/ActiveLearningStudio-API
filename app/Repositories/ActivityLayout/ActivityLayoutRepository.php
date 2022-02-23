@@ -20,10 +20,11 @@ class ActivityLayoutRepository extends BaseRepository implements ActivityLayoutR
     }
 
     /**
+     * @param $suborganization
      * @param $data
      * @return mixed
      */
-    public function getAll($data)
+    public function getAll($suborganization, $data)
     {
         $query = $this->model;
         
@@ -45,7 +46,7 @@ class ActivityLayoutRepository extends BaseRepository implements ActivityLayoutR
 
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return $query->paginate($perPage)->withQueryString();
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
 
 

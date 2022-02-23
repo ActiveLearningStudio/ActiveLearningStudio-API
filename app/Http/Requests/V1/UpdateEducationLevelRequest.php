@@ -32,6 +32,7 @@ class UpdateEducationLevelRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:education_levels,name,' . $educationlevel->id,
             'order' => 'integer|max:2147483647',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];
     }
 }

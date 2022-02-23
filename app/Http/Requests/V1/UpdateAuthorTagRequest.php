@@ -32,6 +32,7 @@ class UpdateAuthorTagRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:author_tags,name,' . $authorTag->id,
             'order' => 'integer|max:2147483647',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];
     }
 }

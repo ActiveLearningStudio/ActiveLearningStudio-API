@@ -24,6 +24,7 @@ class ActivityLayout extends Model
         'type',
         'h5pLib',
         'image',
+        'organization_id',
     ];
 
     /**

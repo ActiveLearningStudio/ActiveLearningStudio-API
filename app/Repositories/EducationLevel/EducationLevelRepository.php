@@ -18,10 +18,12 @@ class EducationLevelRepository extends BaseRepository implements EducationLevelR
     }
 
     /**
+     * @param $suborganization
      * @param $data
+     * 
      * @return mixed
      */
-    public function getAll($data)
+    public function getAll($suborganization, $data)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
@@ -32,6 +34,6 @@ class EducationLevelRepository extends BaseRepository implements EducationLevelR
             $query = $query->where('name', 'iLIKE', '%' .$q. '%');
         }
 
-        return $query->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+        return $query->where('organization_id', $suborganization->id)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
     }
 }

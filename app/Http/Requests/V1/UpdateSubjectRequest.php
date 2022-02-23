@@ -32,6 +32,7 @@ class UpdateSubjectRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:subjects,name,' . $subject->id,
             'order' => 'integer|max:2147483647',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];
     }
 }

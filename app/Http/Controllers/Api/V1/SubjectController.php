@@ -7,6 +7,7 @@ use App\Http\Requests\V1\SearchSubjectRequest;
 use App\Http\Requests\V1\StoreSubjectRequest;
 use App\Http\Requests\V1\UpdateSubjectRequest;
 use App\Http\Resources\V1\SubjectResource;
+use App\Models\Organization;
 use App\Models\Subject;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use Illuminate\Http\Response;
@@ -37,11 +38,13 @@ class SubjectController extends Controller
      * @responseFile responses/subject/subjects.json
      *
      * @param SearchSubjectRequest $request
+     * @param Organization $suborganization
+     *
      * @return Response
      */
-    public function index(SearchSubjectRequest $request)
+    public function index(SearchSubjectRequest $request, Organization $suborganization)
     {
-        return  SubjectResource::collection($this->subjectRepository->getAll($request->all()));
+        return  SubjectResource::collection($this->subjectRepository->getAll($suborganization, $request->all()));
     }
 
     /**
@@ -61,9 +64,11 @@ class SubjectController extends Controller
      * }
      *
      * @param StoreSubjectRequest $request
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
-    public function store(StoreSubjectRequest $request)
+    public function store(StoreSubjectRequest $request, Organization $suborganization)
     {
         $data = $request->validated();
         $subject = $this->subjectRepository->create($data);
@@ -88,11 +93,19 @@ class SubjectController extends Controller
      *
      * @responseFile responses/subject/subject.json
      *
+     * @param Organization $suborganization
      * @param Subject $subject
+     * 
      * @return Response
      */
-    public function show(Subject $subject)
+    public function show(Organization $suborganization, Subject $subject)
     {
+        if ($suborganization->id !== $subject->organization_id) {
+            return response([
+                'message' => 'Invalid subject or organization',
+            ], 400);
+        }
+
         return response([
             'subject' => new SubjectResource($subject),
         ], 200);
@@ -116,10 +129,12 @@ class SubjectController extends Controller
      * }
      *
      * @param UpdateSubjectRequest $request
+     * @param Organization $suborganization
      * @param Subject $subject
+     * 
      * @return Response
      */
-    public function update(UpdateSubjectRequest $request, Subject $subject)
+    public function update(UpdateSubjectRequest $request, Organization $suborganization, Subject $subject)
     {
         $data = $request->validated();
         $isUpdated = $this->subjectRepository->update($data, $subject->id);
@@ -152,11 +167,19 @@ class SubjectController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param Subject $subject
+     * 
      * @return Response
      */
-    public function destroy(Subject $subject)
+    public function destroy(Organization $suborganization, Subject $subject)
     {
+        if ($suborganization->id !== $subject->organization_id) {
+            return response([
+                'message' => 'Invalid subject or organization',
+            ], 400);
+        }
+        
         $isDeleted = $this->subjectRepository->delete($subject->id);
 
         if ($isDeleted) {

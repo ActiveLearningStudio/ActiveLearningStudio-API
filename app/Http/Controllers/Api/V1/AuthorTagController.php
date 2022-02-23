@@ -8,6 +8,7 @@ use App\Http\Requests\V1\StoreAuthorTagRequest;
 use App\Http\Requests\V1\UpdateAuthorTagRequest;
 use App\Http\Resources\V1\AuthorTagResource;
 use App\Models\AuthorTag;
+use App\Models\Organization;
 use App\Repositories\AuthorTag\AuthorTagRepositoryInterface;
 use Illuminate\Http\Response;
 
@@ -37,11 +38,13 @@ class AuthorTagController extends Controller
      * @responseFile responses/author-tag/author-tags.json
      *
      * @param SearchAuthorTagRequest $request
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
-    public function index(SearchAuthorTagRequest $request)
+    public function index(SearchAuthorTagRequest $request, Organization $suborganization)
     {
-        return  AuthorTagResource::collection($this->authorTagRepository->getAll($request->all()));
+        return  AuthorTagResource::collection($this->authorTagRepository->getAll($suborganization, $request->all()));
     }
 
     /**
@@ -61,9 +64,11 @@ class AuthorTagController extends Controller
      * }
      *
      * @param StoreAuthorTagRequest $request
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
-    public function store(StoreAuthorTagRequest $request)
+    public function store(StoreAuthorTagRequest $request, Organization $suborganization)
     {
         $data = $request->validated();
         $authorTag = $this->authorTagRepository->create($data);
@@ -88,11 +93,19 @@ class AuthorTagController extends Controller
      *
      * @responseFile responses/author-tag/author-tag.json
      *
+     * @param Organization $suborganization
      * @param AuthorTag $authorTag
+     * 
      * @return Response
      */
-    public function show(AuthorTag $authorTag)
+    public function show(Organization $suborganization, AuthorTag $authorTag)
     {
+        if ($suborganization->id !== $authorTag->organization_id) {
+            return response([
+                'message' => 'Invalid author tag or organization',
+            ], 400);
+        }
+
         return response([
             'author-tag' => new AuthorTagResource($authorTag),
         ], 200);
@@ -116,10 +129,12 @@ class AuthorTagController extends Controller
      * }
      *
      * @param UpdateAuthorTagRequest $request
+     * @param Organization $suborganization
      * @param AuthorTag $authorTag
+     * 
      * @return Response
      */
-    public function update(UpdateAuthorTagRequest $request, AuthorTag $authorTag)
+    public function update(UpdateAuthorTagRequest $request, Organization $suborganization, AuthorTag $authorTag)
     {
         $data = $request->validated();
         $isUpdated = $this->authorTagRepository->update($data, $authorTag->id);
@@ -152,11 +167,19 @@ class AuthorTagController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param AuthorTag $authorTag
+     * 
      * @return Response
      */
-    public function destroy(AuthorTag $authorTag)
+    public function destroy(Organization $suborganization, AuthorTag $authorTag)
     {
+        if ($suborganization->id !== $authorTag->organization_id) {
+            return response([
+                'message' => 'Invalid author tag or organization',
+            ], 400);
+        }
+        
         $isDeleted = $this->authorTagRepository->delete($authorTag->id);
 
         if ($isDeleted) {

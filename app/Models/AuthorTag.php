@@ -16,6 +16,7 @@ class AuthorTag extends Model
      */
     protected $fillable = [
         'name',
-        'order'
+        'order',
+        'organization_id'
     ];
 }

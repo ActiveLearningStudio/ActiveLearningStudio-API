@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\V1;
 
-use App\Http\Resources\V1\ActivityItemTypeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,6 +25,7 @@ class ActivityLayoutResource extends JsonResource
             'image' => $this->image,
             'demo_activity_id' => $this->demo_activity_id,
             'demo_video_id' => $this->demo_video_id,
+            'organization_id' => $this->organization_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
