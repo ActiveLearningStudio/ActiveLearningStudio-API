@@ -12,7 +12,8 @@ class UpdateAdvancedFibSemanticsToH5PLibrariesV3 extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PAdvancedFibSubmitButtonSeeder::class
+            '--class' => H5PAdvancedFibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
