@@ -14,7 +14,8 @@ class UpdateSmenticsH5pFlashcards extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PFlashCardLibSubmitButtonSeeder::class
+            '--class' => H5PFlashCardLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
