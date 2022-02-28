@@ -12,7 +12,8 @@ class UpdateImagePairSemanticsToH5PLibrariesV2 extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PImagePairSubmitButtonSeeder::class
+            '--class' => H5PImagePairSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 

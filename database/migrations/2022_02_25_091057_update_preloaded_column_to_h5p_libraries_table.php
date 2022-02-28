@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class SeederForArithmaticQuiz extends Migration
+class UpdatePreloadedColumnToH5pLibrariesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +12,7 @@ class SeederForArithmaticQuiz extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PArithmaticQuizSubmitButtonSeeder::class,
+            '--class' => UpdatePreloadedColumnToH5PLibrariesSeeder::class,
             '--force' => true
         ]);
     }
@@ -26,6 +24,6 @@ class SeederForArithmaticQuiz extends Migration
      */
     public function down()
     {
-        //
+        
     }
 }
