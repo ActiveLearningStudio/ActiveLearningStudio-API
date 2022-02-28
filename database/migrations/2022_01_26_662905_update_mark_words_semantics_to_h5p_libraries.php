@@ -12,7 +12,8 @@ class UpdateMarkWordsSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PMarkTheWordsLibSubmitButtonSeeder::class
+            '--class' => H5PMarkTheWordsLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 

@@ -12,7 +12,8 @@ class UpdateFindWordSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PFindWordSubmitButtonSeeder::class
+            '--class' => H5PFindWordSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
