@@ -80,6 +80,7 @@ class ProjectController extends Controller
                                         $authenticated_user->projects()
                                         ->where('organization_id', $suborganization->id)
                                         ->whereNull('team_id')
+                                        ->orderBy('order', 'asc')
                                         ->get()
                                     ),
         ], 200);
