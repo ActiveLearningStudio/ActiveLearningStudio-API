@@ -16,21 +16,25 @@ class AddOrganizationIdToActivityModules extends Migration
         Schema::table('activity_layouts', function (Blueprint $table) {
             $table->unsignedBigInteger('organization_id')->nullable();
             $table->foreign('organization_id')->references('id')->on('organizations');
+            $table->unique(['title', 'organization_id']);
         });
 
         Schema::table('subjects', function (Blueprint $table) {
             $table->unsignedBigInteger('organization_id')->nullable();
             $table->foreign('organization_id')->references('id')->on('organizations');
+            $table->unique(['name', 'organization_id']);
         });
 
         Schema::table('author_tags', function (Blueprint $table) {
             $table->unsignedBigInteger('organization_id')->nullable();
             $table->foreign('organization_id')->references('id')->on('organizations');
+            $table->unique(['name', 'organization_id']);
         });
 
         Schema::table('education_levels', function (Blueprint $table) {
             $table->unsignedBigInteger('organization_id')->nullable();
             $table->foreign('organization_id')->references('id')->on('organizations');
+            $table->unique(['name', 'organization_id']);
         });
     }
 

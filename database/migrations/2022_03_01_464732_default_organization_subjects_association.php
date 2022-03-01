@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class DefaultActivityLayouts extends Migration
+class DefaultOrganizationSubjectsAssociation extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,12 @@ class DefaultActivityLayouts extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => ActivityLayoutSeeder::class,
+            '--class' => DefaultSubjectsSeeder::class,
+            '--force' => true
+        ]);
+
+        \Artisan::call('db:seed', [
+            '--class' => ActivitySubjectAssociationSeeder::class,
             '--force' => true
         ]);
     }
