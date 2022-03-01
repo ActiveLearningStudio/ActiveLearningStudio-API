@@ -22,11 +22,13 @@ class ActivityEducationLevelsAssociationSeeder extends Seeder
         $activitiesSubjectInsertArray = [];
 
         foreach ($activities as $activity) {
-            $activitiesSubjectInsertArray[] = [
-                'activity_id' => $activity->id,
-                'education_level_id' => $educationLevelsList[$activity->education_level_id][$activity->organization_id],
-                'created_at' => now(),
-            ];
+            if (isset($educationLevelsList[$activity->education_level_id][$activity->organization_id])) {
+                $activitiesSubjectInsertArray[] = [
+                    'activity_id' => $activity->id,
+                    'education_level_id' => $educationLevelsList[$activity->education_level_id][$activity->organization_id],
+                    'created_at' => now(),
+                ];
+            }
         }
 
         DB::table('activity_education_level')->insertOrIgnore($activitiesSubjectInsertArray);
