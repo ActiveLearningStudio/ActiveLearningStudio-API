@@ -26,6 +26,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use App\Http\Requests\V1\ProjectUploadThumbRequest;
 use App\Http\Requests\V1\OrganizationProjectRequest;
 use App\Http\Requests\V1\ProjectUploadImportRequest;
+use App\Http\Requests\V1\ProjectUpdateOrder;
 use App\Http\Resources\V1\ProjectSearchPreviewResource;
 use App\Repositories\Project\ProjectRepositoryInterface;
 
@@ -308,10 +309,10 @@ class ProjectController extends Controller
         $this->authorize('create', [Project::class, $suborganization]);
 
         $data = $projectRequest->validated();
-        $authenticated_user = auth()->user();
-        $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
-        $data['organization_id'] = $suborganization->id;
-        $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
+        $authenticatedUser = auth()->user();
+        $role = ['role' => 'owner'];
+
+        $project = $this->projectRepository->createProject($authenticatedUser, $suborganization, $data, $role);
 
         if ($project) {
             return response([
@@ -639,6 +640,50 @@ class ProjectController extends Controller
                                         ->get()
                                     ),
         ], 200);
+    }
+
+    /**
+     * Update Project's Order
+     *
+     * Update project's order.
+     *
+     * @urlParam project_id int required Id of the project whose order is to be updated Example: 1
+     * @bodyParam order int required New order to set for the project Example: 1
+     *
+     * @response {
+     *   "message": "Project reorder has been successful."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to reorder project."
+     *   ]
+     * }
+     *
+     * @param ProjectUpdateOrder $request
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
+     */
+    public function updateOrder(ProjectUpdateOrder $request, Organization $suborganization, Project $project)
+    {
+        $this->authorize('updateOrder', $project);
+
+        $data = $request->validated();
+
+        $authenticatedUser = auth()->user();
+
+        $affectedProject = $this->projectRepository->updateOrder($authenticatedUser, $project, $data['order']);
+
+        if ($affectedProject) {
+            return response([
+                'message' => 'Project reorder has been successful.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to reorder project.'],
+        ], 500);
     }
 
     /**
