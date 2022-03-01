@@ -277,4 +277,16 @@ class ProjectPolicy
 
         return false;
     }
+
+    /**
+     * Determine whether the user can update the project order.
+     *
+     * @param User $user
+     * @param Project $project
+     * @return mixed
+     */
+    public function updateOrder(User $user, Project $project)
+    {
+        return $project->users()->where('id', $user->id)->count();
+    }
 }
