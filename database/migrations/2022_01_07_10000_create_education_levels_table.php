@@ -15,7 +15,7 @@ class CreateEducationLevelsTable extends Migration
     {
         Schema::create('education_levels', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->integer('order')->nullable();
             $table->timestamps();
             $table->softDeletes();
