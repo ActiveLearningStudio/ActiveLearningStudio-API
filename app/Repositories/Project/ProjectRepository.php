@@ -968,7 +968,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function createProject($authenticatedUser, $suborganization, $data, $role)
     {
-        $data['order'] = 1;
+        $data['order'] = 0;
         $data['organization_id'] = $suborganization->id;
 
         $authenticatedUserOrgProjectIdsString = $this->getUserProjectIdsInOrganization($authenticatedUser, $suborganization);
