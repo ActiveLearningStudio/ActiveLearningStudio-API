@@ -12,7 +12,7 @@ class DefaultActivityLayouts extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => ActivityLayoutSeeder::class,
+            '--class' => DefaultActivityLayoutSeeder::class,
             '--force' => true
         ]);
     }
