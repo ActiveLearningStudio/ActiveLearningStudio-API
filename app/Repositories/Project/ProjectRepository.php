@@ -22,6 +22,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\App;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -361,6 +362,47 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 ], $project['id']);
             }
         }
+    }
+
+    /**
+     * Update Project's Order
+     *
+     * @param $authenticatedUser
+     * @param Project $project
+     * @param int $order
+     * @return int
+     */
+    public function updateOrder($authenticatedUser, Project $project, int $order)
+    {
+        $authenticatedUserOrgProjectIdsString = $this->getUserProjectIdsInOrganization($authenticatedUser, $project->organization);
+
+        $existingOrder = $project->order;// order of project whose position we want to change
+        $newOrder = $order;// new order for project
+
+        // get id of project whose position we want to change
+        $projectId = $project->id;
+
+        // Now update all order between $existingOrder and $newOrder
+        if ($existingOrder < $newOrder) {
+            // if $existingOrder is less than $newOrder then
+            $set = '"order" = "order" - 1';
+            $where = '"order" > ' . $existingOrder . ' AND "order" <= ' . $newOrder;
+        } else {
+            $set = '"order" = "order" + 1';
+            $where = '"order" < ' . $existingOrder . ' AND "order" >= ' . $newOrder;
+        }
+
+        return DB::transaction(function () use ($set, $where, $authenticatedUserOrgProjectIdsString, $newOrder, $projectId) {
+            // update order's
+            $query = 'UPDATE "projects" SET ' . $set . ' WHERE ' . $where . ' AND "id" IN (' . $authenticatedUserOrgProjectIdsString . ')';
+            $affectedProjectsCount = DB::update($query);
+
+            // now update order for $projectId
+            $query = 'UPDATE "projects" SET "order" = ' . $newOrder . ' WHERE id = ' . $projectId;
+            $affectedProject = DB::update($query);
+
+            return $affectedProject;
+        });
     }
 
     /**
@@ -920,4 +962,52 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return storage_path('app/public/exports/' . $fileName);
     }
 
+    /**
+     * Create model in storage
+     *
+     * @param $authenticatedUser
+     * @param $suborganization
+     * @param $data
+     * @param $role
+     * @return Model
+     */
+    public function createProject($authenticatedUser, $suborganization, $data, $role)
+    {
+        $data['order'] = 0;
+        $data['organization_id'] = $suborganization->id;
+
+        $authenticatedUserOrgProjectIdsString = $this->getUserProjectIdsInOrganization($authenticatedUser, $suborganization);
+
+        return DB::transaction(function () use ($authenticatedUser, $data, $role, $authenticatedUserOrgProjectIdsString) {
+
+            if (!empty($authenticatedUserOrgProjectIdsString)) {
+                // update order's
+                $query = 'UPDATE "projects" SET "order" = "order" + 1 WHERE "id" IN (' . $authenticatedUserOrgProjectIdsString . ')';
+                $affectedProjectsCount = DB::update($query);
+            }
+
+            $project = $authenticatedUser->projects()->create($data, $role);
+
+            return $project;
+        });
+    }
+
+    /**
+     * Get user project ids in org
+     *
+     * @param $authenticatedUser
+     * @param $organization
+     * @return array
+     */
+    public function getUserProjectIdsInOrganization($authenticatedUser, $organization) {
+        $authenticatedUserOrgProjectIds = $authenticatedUser
+                                        ->projects()
+                                        ->where('organization_id', $organization->id)
+                                        ->pluck('id')
+                                        ->all();
+
+        $authenticatedUserOrgProjectIdsString = implode(",", $authenticatedUserOrgProjectIds);
+
+        return $authenticatedUserOrgProjectIdsString;
+    }
 }

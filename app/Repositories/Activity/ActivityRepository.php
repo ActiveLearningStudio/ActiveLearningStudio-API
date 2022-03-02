@@ -679,7 +679,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'size' => 11,
             'model' => 'projects',
             'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
-            'searchType' => 'org_projects_non_admin'
+            'searchType' => 'org_projects_admin'
         ];
 
         $user = User::where('email', $request->input('userEmail'))->first();

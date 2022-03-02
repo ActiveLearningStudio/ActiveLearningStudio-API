@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddOrganizationAdminBrightcovePermissionTypeSeeder extends Migration
+class AddOrganizationAdminBrightcovePermissionTypeSeederWithForce extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,8 @@ class AddOrganizationAdminBrightcovePermissionTypeSeeder extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => OrganizationAdminPanelBrightCovePermissionTypeSeeder::class
+            '--class' => OrganizationAdminPanelBrightCovePermissionTypeSeeder::class,
+            '--force' => true
         ]);
     }
 
