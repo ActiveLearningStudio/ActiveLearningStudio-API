@@ -77,7 +77,7 @@ class KalturaGeneratedAPIClientController extends Controller
         $client = new $this->kalturaClient($config);
 
         $expiry = config('kaltura.expiry');
-        $privileges = config('kaltura.privileges');
+        $privileges = 'disableentitlement';
         // $sessionType mean Kaltura Session Type. It may be 0 or 2, 0 for user and 2 for admin (https://www.kaltura.com/api_v3/testmeDoc/enums/KalturaSessionType.html)
         $sessionType = config('kaltura.session_type'); 
 
@@ -88,7 +88,7 @@ class KalturaGeneratedAPIClientController extends Controller
         try {
           /**
            * Use Kaltura Session to get the api token
-           * @purpose To get those media list, which do not have any 'Entitlement Enforcement/Permission Category'
+           * @purpose Get All Kaltura Media List
            * @return string token
            */
           $ks = $client->session->start($secret, null, $sessionType, $partnerId, $expiry, $privileges);
