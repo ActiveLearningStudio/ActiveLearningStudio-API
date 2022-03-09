@@ -659,7 +659,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
             'searchType' => 'org_projects_admin'
         ];
-        if($request->input('private') === "Select all"){
+        if ($request->input('private') === "Select all") {
             unset($data['indexing']);
         }
 
@@ -671,7 +671,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             // lti_client_id. Need to find the user first
 
             $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))
-                ->where('user_id', $user->id)
+            ->where('user_id', $user->id)
                 ->first();
 
             if (empty($user) || empty($lmsSetting)) {
