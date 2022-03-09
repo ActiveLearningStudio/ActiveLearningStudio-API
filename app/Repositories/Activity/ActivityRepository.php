@@ -401,7 +401,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             if (isset($data['model']) && !empty($data['model'])) {
                 unset($queryWhere[count($queryWhere) - 1]);
             }
-
+            
             $countQueryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
             $countQuery = $countQuery . $countQueryWhereStr;
             $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
@@ -659,6 +659,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'indexing' => intval($request->input('private', 0)) === 1 ? [] : [3],
             'searchType' => 'org_projects_admin'
         ];
+        if ($request->input('private') === "Select all") {
+            unset($data['indexing']);
+        }
 
         $user = User::where('email', $request->input('userEmail'))->first();
 
@@ -668,7 +671,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             // lti_client_id. Need to find the user first
 
             $lmsSetting = LmsSetting::where('lti_client_id', $request->input('ltiClientId'))
-                ->where('user_id', $user->id)
+            ->where('user_id', $user->id)
                 ->first();
 
             if (empty($user) || empty($lmsSetting)) {
@@ -693,8 +696,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         $data['organizationIds'] = $request->has('org') ? [intval($request->input('org'))] : [];
-        $data['subjectIds'] = $request->has('subject') ? [$request->input('subject')] : [];
-        $data['educationLevelIds'] = $request->has('level') ? [$request->input('level')] : [];
+        $data['subjectIds'] = $request->has('subjectIds') || $request->has('subject') ? $request->input('subjectIds') : [];
+        $data['educationLevelIds'] = $request->has('educationLevelIds') || $request->has('level') ? $request->input('educationLevelIds') : [];
 
         if ($request->has('start')) {
             $data['startDate'] = $request->input('start', '');
