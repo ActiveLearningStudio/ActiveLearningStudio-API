@@ -77,7 +77,7 @@ class KalturaGeneratedAPIClientController extends Controller
         $client = new $this->kalturaClient($config);
 
         $expiry = config('kaltura.expiry');
-        $privileges = 'disableentitlement';
+        $privileges = 'disableentitlement,setrole:PLAYBACK_BASE_ROLE,sview';
         // $sessionType mean Kaltura Session Type. It may be 0 or 2, 0 for user and 2 for admin (https://www.kaltura.com/api_v3/testmeDoc/enums/KalturaSessionType.html)
         $sessionType = config('kaltura.session_type'); 
 
