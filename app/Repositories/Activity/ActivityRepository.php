@@ -344,21 +344,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $dataUserIds = implode("','", $data['userIds']);
             $queryWhere[] = "user_id IN (" . $dataUserIds . ")";
         }
-        
+
         if (isset($data['author']) && !empty($data['author'])) {
             $queryWhereAuthor[] = "first_name LIKE '%" . $data['author'] . "%'";
             $queryWhereAuthor[] = "last_name LIKE '%" . $data['author'] . "%'";
             $queryWhereAuthor[] = "email LIKE '%" . $data['author'] . "%'";
-            
+
             $queryWhereAuthor = implode(' OR ', $queryWhereAuthor);
             $queryWhere[] = "(" . $queryWhereAuthor . ")";
         }
-        
+
         if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
             $dataH5pLibraries = implode("','", $data['h5pLibraries']);
             $queryWhere[] = "h5plib IN ('" . $dataH5pLibraries . "')";
         }
-        
+
         if (isset($data['indexing']) && !empty($data['indexing'])) {
             $dataIndexingIds = implode(',', array_values(array_filter($data['indexing'])));
             if (in_array(null, $data['indexing'], true)) {
@@ -370,34 +370,34 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 $queryWhere[] = "indexing IN (" . $dataIndexingIds . ")";
             }
         }
-        
+
         if (isset($data['query']) && !empty($data['query'])) {
             $queryParams['query_text'] = $data['query'];
         }
-        
+
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
             $queryWhere[] = "name NOT LIKE '%" . $data['negativeQuery'] . "%'";
             $queryWhere[] = "description NOT LIKE '%" . $data['negativeQuery'] . "%'";
         }
-        
+
         if (isset($data['model']) && !empty($data['model'])) {
             $dataModel = $modelMapping[$data['model']];
             $queryWhere[] = "entity IN ('" . $dataModel . "')";
         }
-        
+
         if (isset($data['from']) && !empty($data['from'])) {
             $queryFrom = $data['from'];
         }
-        
+
         if (isset($data['size']) && !empty($data['size'])) {
             $querySize = $data['size'];
         }
-        
+
         if (!empty($queryWhere)) {
             $queryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
             $countQuery = $query;
             $query = $query . $queryWhereStr;
-            
+
             if (isset($data['model']) && !empty($data['model'])) {
                 unset($queryWhere[count($queryWhere) - 1]);
             }
@@ -406,7 +406,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $countQuery = $countQuery . $countQueryWhereStr;
             $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
         }
-        
+
         $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
 
         $results = DB::select($query, $queryParams);
