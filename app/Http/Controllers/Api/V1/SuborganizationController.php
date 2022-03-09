@@ -130,6 +130,11 @@ class SuborganizationController extends Controller
      * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
      * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
      * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam primary_color string primary font color Example: #515151
+     * @bodyParam secondary_color string primary font color Example: #515151
+     * @bodyParam tertiary_color string primary font color Example: #515151
+     * @bodyParam primary_font_family string primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string primary font color Example: Open Sans
      *
      * @responseFile 201 responses/organization/suborganization.json
      *
@@ -205,6 +210,11 @@ class SuborganizationController extends Controller
      * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
      * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
      * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam primary_color string primary font color Example: #515151
+     * @bodyParam secondary_color string primary font color Example: #515151
+     * @bodyParam tertiary_color string primary font color Example: #515151
+     * @bodyParam primary_font_family string primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string primary font color Example: Open Sans
      *
      * @responseFile responses/organization/suborganization.json
      *

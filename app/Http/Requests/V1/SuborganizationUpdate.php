@@ -56,6 +56,11 @@ class SuborganizationUpdate extends FormRequest
             'privacy_policy_type' => 'required|in:Parent,URL,Content',
             'privacy_policy_url' => 'required_if:privacy_policy_type,==,URL|url|max:255',
             'privacy_policy_content' => 'required_if:privacy_policy_type,==,Content|string|max:65000',
+            'primary_color' => 'string|nullable|max:255',
+            'secondary_color' => 'string|nullable|max:255',
+            'tertiary_color' => 'string|nullable|max:255',
+            'primary_font_family' => 'string|nullable|max:255',
+            'secondary_font_family' => 'string|nullable|max:255',
         ];
     }
 
