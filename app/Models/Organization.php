@@ -36,7 +36,12 @@ class Organization extends Model
         'tos_content',
         'privacy_policy_type',
         'privacy_policy_url',
-        'privacy_policy_content'
+        'privacy_policy_content',
+        'primary_color',
+        'secondary_color',
+        'tertiary_color',
+        'primary_font_family',
+        'secondary_font_family'
     ];
 
     /**
