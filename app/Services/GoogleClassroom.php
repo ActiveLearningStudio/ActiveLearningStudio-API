@@ -306,7 +306,7 @@ class GoogleClassroom implements GoogleClassroomInterface
         $return = GCCourseResource::make($course)->resolve();
 
         // inserting playlists/topics to Classroom
-        $playlists = $project->playlists->sortByDesc('order');
+        $playlists = $project->playlists->sortBy('order');
         $count = 0;
         $return['topics'] = [];
 
