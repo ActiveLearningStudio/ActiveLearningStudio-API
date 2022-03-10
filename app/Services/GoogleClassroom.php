@@ -306,7 +306,7 @@ class GoogleClassroom implements GoogleClassroomInterface
         $return = GCCourseResource::make($course)->resolve();
 
         // inserting playlists/topics to Classroom
-        $playlists = $project->playlists;
+        $playlists = $project->playlists->sortByDesc('order');
         $count = 0;
         $return['topics'] = [];
 
@@ -341,7 +341,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             $return['topics'][$count] = GCTopicResource::make($topic)->resolve();
 
             // Iterate over activities
-            $activities = $playlist->activities;
+            $activities = $playlist->activities->sortByDesc('order');
             foreach ($activities as $activity) {
                 if (empty($activity->title)) {
                     continue;
@@ -449,7 +449,7 @@ class GoogleClassroom implements GoogleClassroomInterface
         $return['topics'][$count] = GCTopicResource::make($topic)->resolve();
 
         // Iterate over activities
-        $activities = $playlist->activities;
+        $activities = $playlist->activities->sortByDesc('order');
         foreach ($activities as $activity) {
             if (empty($activity->title)) {
                 continue;
