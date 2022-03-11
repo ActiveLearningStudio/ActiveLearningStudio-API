@@ -85,6 +85,10 @@ class ExportProjecttoNoovo implements ShouldQueue
                 $files_arr = [];
                 $project_ids = [];
                 foreach ($this->projects as $project) {
+
+                    $projectStatus = $this->checkProjectAlreadyMoved($project->id, $this->team->noovo_group_title, $this->team->id); 
+                    
+                    if ($projectStatus) continue;
                    
                     // Create the zip archive of folder
                     $export_file = $projectRepository->exportProject($this->user, $project);
@@ -100,56 +104,26 @@ class ExportProjecttoNoovo implements ShouldQueue
                 }
 
                 $post['files'] = $files_arr;
+                $post['filelist'] = array(
+                    "name" => $this->team->name ." Projects-" . uniqid(),
+                    "description" => $this->team->name ." Projects"
+                    );
                 \Log::info($post);
                 // Uploads files into Noovo CMS
-                $upload_file_result = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
-                $decoded_upload_result = json_decode($upload_file_result);
-                if ($decoded_upload_result->result === "Failed") {
-                    $this->createLog($project_ids, $decoded_upload_result->description, 0);
-                    return false;
-                }
-                $response_data = $decoded_upload_result->data;
 
-                $upload_file_ids = [];
-                foreach ($response_data as $file_rec) {
-                    array_push($upload_file_ids, $file_rec->id );
-                }
-                
-                \Log::info($upload_file_ids);
-                
-                $list_data = array(
-                    "name" => $this->team->name ." Projects",
-                    "description" => $this->team->name ." Projects",
-                    "files" => $upload_file_ids,
-                    "gid" => $this->team->noovo_group_id
-                );
-                // Create the File List on Noovo CMS
-                $file_list_response = $this->noovoCMSService->createFileList($list_data);
 
-                $decoded_list_response = json_decode($file_list_response);
-                if ($decoded_list_response->result === "Failed") {
-                    $this->createLog($project_ids, $decoded_list_response->description, 0);
+
+                if (count($post['files']) > 0) {
+                    $upload_file_result = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
+                    $decoded_upload_result = json_decode($upload_file_result);
+                    if ($decoded_upload_result->result === "Failed") {
+                        $this->createLog($project_ids, $decoded_upload_result->description, 0);
+                        return false;
+                    }
+                    $this->createLog($project_ids, 'Projects Transfer Successful', 1);
                     return false;
                 }
 
-                $file_list_response_data = $decoded_list_response->data;
-
-                $group_attachment = array(
-                    "group" => $this->team->noovo_group_id,
-                    "id" => $file_list_response_data->id
-                );
-                // Attach file list with Group
-                $response_setting_list = $this->noovoCMSService->setFileListtoGroup($group_attachment);
-                $decoded_resp_set_list = json_decode($response_setting_list);
-                if ($decoded_resp_set_list->result === "Failed") {
-                    $this->createLog($project_ids, $decoded_resp_set_list->description, 0);
-                    return false;
-                }
-
-                // Insert Logging
-                $this->createLog($project_ids, 'Projects Transfer Successful', 1);
-                
-               
                 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
@@ -159,7 +133,12 @@ class ExportProjecttoNoovo implements ShouldQueue
         }
     }
 
-    protected function createLog (array $projects, string $response, bool $status)
+    /**
+     * param array $projects
+     * param string $response
+     * param bool $status
+     */
+    private function createLog (array $projects, string $response, bool $status)
     {
         NoovoLogs::create([
             'organization_id' => $this->suborganization->id,
@@ -172,5 +151,26 @@ class ExportProjecttoNoovo implements ShouldQueue
             'response' => $response,
             'status' => $status,
         ]);
+    }
+
+    /**
+     * @param integer $project_id
+     * @param string $group_title
+     * @param integer $team_id
+     * 
+     * @return bool 
+     */
+    private function checkProjectAlreadyMoved(int $project_id, string $group_title, int $team_id)
+    {
+        $noovoLogs = NoovoLogs::where('team_id',$team_id)->where('noovo_team_title',$group_title)->where('status',1)->get();
+        \Log::info($noovoLogs);
+        foreach ($noovoLogs as $log) {
+            $projectsArr = json_decode($log->projects);
+            \Log::info($projectsArr);
+           if (in_array($project_id, $projectsArr)) {
+                return true;
+           }
+        }
+        return false;
     }
 }
