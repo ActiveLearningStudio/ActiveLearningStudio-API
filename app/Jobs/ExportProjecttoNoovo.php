@@ -88,7 +88,9 @@ class ExportProjecttoNoovo implements ShouldQueue
 
                     $projectStatus = $this->checkProjectAlreadyMoved($project->id, $this->team->noovo_group_title, $this->team->id); 
                     
-                    if ($projectStatus) continue;
+                    if ($projectStatus) {
+                        continue;
+                    } 
                    
                     // Create the zip archive of folder
                     $export_file = $projectRepository->exportProject($this->user, $project);
@@ -138,7 +140,7 @@ class ExportProjecttoNoovo implements ShouldQueue
      * param string $response
      * param bool $status
      */
-    private function createLog (array $projects, string $response, bool $status)
+    private function createLog(array $projects, string $response, bool $status)
     {
         NoovoLogs::create([
             'organization_id' => $this->suborganization->id,
@@ -154,20 +156,20 @@ class ExportProjecttoNoovo implements ShouldQueue
     }
 
     /**
-     * @param integer $project_id
-     * @param string $group_title
-     * @param integer $team_id
+     * @param integer $projectId
+     * @param string $groupTitle
+     * @param integer $teamId
      * 
      * @return bool 
      */
-    private function checkProjectAlreadyMoved(int $project_id, string $group_title, int $team_id)
+    private function checkProjectAlreadyMoved(int $projectId, string $groupTitle, int $teamId)
     {
-        $noovoLogs = NoovoLogs::where('team_id',$team_id)->where('noovo_team_title',$group_title)->where('status',1)->get();
+        $noovoLogs = NoovoLogs::where('team_id',$teamId)->where('noovo_team_title',$groupTitle)->where('status',1)->get();
         \Log::info($noovoLogs);
         foreach ($noovoLogs as $log) {
             $projectsArr = json_decode($log->projects);
             \Log::info($projectsArr);
-           if (in_array($project_id, $projectsArr)) {
+           if (in_array($projectId, $projectsArr)) {
                 return true;
            }
         }
