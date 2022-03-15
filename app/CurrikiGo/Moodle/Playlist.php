@@ -56,10 +56,10 @@ class Playlist
     private function getActivityGrade($projectId, $activityParam)
     {
         \Log::info($projectId);
-        $playlistId = PlaylistModel::where('project_id', $projectId)->where('order',0)->value('id');
+        $playlistId = PlaylistModel::where('project_id', $projectId)->orderBy('created_at','desc')->limit(1)->value('id');
         \Log::info($playlistId);
         
-        $activity = Activity::where('playlist_id', $playlistId)->where('order',0)->value($activityParam);
+        $activity = Activity::where('playlist_id', $playlistId)->orderBy('created_at','desc')->limit(1)->value($activityParam);
         \Log::info($activity);
         return $activity;
 
