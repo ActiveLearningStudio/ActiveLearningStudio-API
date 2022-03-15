@@ -63,12 +63,16 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project)
     {
+        if ($user->hasPermissionTo('organization:view', $project->organization)) {
+            return true;
+        }
+
         $team = $project->team;
         if ($team) {
             return $user->hasTeamPermissionTo('team:edit-project', $team);
-        } else {
-            return $user->hasPermissionTo('project:edit', $project->organization);
         }
+
+        return $user->hasPermissionTo('project:edit', $project->organization);
     }
 
     /**
