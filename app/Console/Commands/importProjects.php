@@ -7,8 +7,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
 
+
 class importProjects extends Command
 {
+    /**
+     * $lmsSettingRepository
+     */
+    private $lmsSettingRepository;
+
     /**
      * The name and signature of the console command.
      *
