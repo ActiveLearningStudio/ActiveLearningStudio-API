@@ -8,6 +8,7 @@ use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\User;
+use App\Models\Organization;
 use App\Repositories\BaseRepository;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
@@ -626,6 +627,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $zip = new ZipArchive;
 
         $project_dir_name = 'projects-'.uniqid();
+        
+        // Add Grade level of first activity on project manifest
+        $organizationName = Organization::where('id', $project->organization_id)->value('name');
+        
+        
+        $project['org_name'] = $organizationName;
+        $project['grade_name'] = $this->getActivityGrade($project->id, 'education_level_id');
+        $project['subject_name'] = $this->getActivityGrade($project->id, 'subject_id');
         Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
 
         $project_thumbanil = "";
@@ -1009,5 +1018,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $authenticatedUserOrgProjectIdsString = implode(",", $authenticatedUserOrgProjectIds);
 
         return $authenticatedUserOrgProjectIdsString;
+    }
+
+    private function getActivityGrade($projectId, $activityParam)
+    {
+        \Log::info($projectId);
+        $playlistId = Playlist::where('project_id', $projectId)->where('order',0)->value('id');
+        \Log::info($playlistId);
+        
+        $activity = Activity::where('playlist_id', $playlistId)->where('order',0)->value($activityParam);
+        \Log::info($activity);
+        return $activity;
+
     }
 }

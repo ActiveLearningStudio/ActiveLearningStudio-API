@@ -38,7 +38,8 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
                 $qry->orWhere('domain', 'iLIKE', '%' . $data['query'] . '%');
             })
                 ->orWhere('lms_url', 'iLIKE', '%' . $data['query'] . '%')
-                ->orWhere('lti_client_id', 'iLIKE', '%' . $data['query'] . '%');
+                ->orWhere('lti_client_id', 'iLIKE', '%' . $data['query'] . '%')
+                ->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
         }
 
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
