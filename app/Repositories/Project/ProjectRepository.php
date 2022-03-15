@@ -1018,10 +1018,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     private function getActivityGrade($projectId, $activityParam)
     {
         \Log::info($projectId);
-        $playlistId = Playlist::where('project_id', $projectId)->where('order',0)->value('id');
+        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->value('id');
         \Log::info($playlistId);
         
-        $activity = Activity::where('playlist_id', $playlistId)->where('order',0)->value($activityParam);
+        $activity = Activity::where('playlist_id', $playlistId)->orderBy('order','asc')->limit(1)->value($activityParam);
         \Log::info($activity);
         return $activity;
 
