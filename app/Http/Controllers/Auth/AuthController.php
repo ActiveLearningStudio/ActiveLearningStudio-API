@@ -553,8 +553,7 @@ class AuthController extends Controller
                         if ($organization) {
                             if($default_lms_setting['role_id']) {
                                 $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
-                            }
-                            else {
+                            } else {
                                 $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                                 $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                             }
@@ -579,8 +578,7 @@ class AuthController extends Controller
                         if ($organization) {
                             if($default_lms_setting['role_id']) {
                                 $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
-                            }
-                            else {
+                            } else {
                                 $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                                 $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                             }
@@ -609,23 +607,17 @@ class AuthController extends Controller
 
                 $this->userLoginRepository->create(['user_id' => $user->id, 'ip_address' => $ip]);
 
-                $response = ['user' => $user, 'access_token' => $accessToken];
-
-                if (true) {
-                    $data['user'] = $user->toArray();
-                    $data['access_token'] = $accessToken;
-                    $build_request_data = json_encode($data);
-                    $user_info = base64_encode($build_request_data);
-                    return redirect()->away(config('app.front_end_url').'/sso/dologin/'.$user_info);
-                } else {
-                    return $response;
-                }
+                $data['user'] = $user->toArray();
+                $data['access_token'] = $accessToken;
+                $build_request_data = json_encode($data);
+                $user_info = base64_encode($build_request_data);
+                return redirect()->away(config('app.front_end_url') . '/sso/dologin/' . $user_info);
             }
             return response([
                 'errors' => ['Unable to login with SSO. Info is empty'],
             ], 400);
         } catch (\Exception $e) {
-            \Log::error($e->getLine() ."/". $e->getMessage());
+            \Log::error($e->getLine() . "/" . $e->getMessage());
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);
