@@ -10,6 +10,7 @@ use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepository
 use App\Services\LearnerRecordStoreService;
 use Illuminate\Support\Facades\DB;
 use App\CurrikiGo\LRS\InteractionFactory;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 
 /**
  * @group 16. XAPI
@@ -26,7 +27,7 @@ class ExtractXAPIJSONController extends Controller
      * @param  LRSStatementsSummaryDataRepositoryInterface  $lrsStatementsSummaryDataRepositoryInterface
      * @return void
      */
-    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface)
+    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface, GoogleClassroomRepositoryInterface $googleClassroom)
     {
         $max_statement_id = $lrsStatementsRepository->findMaxByField('statement_id');
         if (!$max_statement_id) {
@@ -144,9 +145,16 @@ class ExtractXAPIJSONController extends Controller
                 //added submitted_id and attempt_id column for new summary page 
                 $insertData['submission_id'] = $groupingInfo['submission'];
                 $insertData['attempt_id'] = $groupingInfo['attempt'];
+
+                $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
+                $publisherData = $googleClassroom->fetchPublisherData($glassAltCourseId);
+                if ($publisherData) {
+                    $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
+                    $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
+                }
+                
                 // Extract information from object.definition.extensions
                 if ($target->getObjectType() === 'Activity' && !empty($definition)) {
-                    $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
                     $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
                     $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
 
