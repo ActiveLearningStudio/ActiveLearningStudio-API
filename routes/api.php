@@ -72,6 +72,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
         Route::get('suborganization/{suborganization}/get-teams', 'TeamController@getOrgTeams');
+        Route::get('suborganization/{suborganization}/get-admin-teams', 'TeamController@getAdminTeams');
         Route::get('suborganization/{suborganization}/team-role-types', 'TeamController@teamRoleTypes');
         Route::get('suborganization/{suborganization}/team/{team}/team-permissions', 'TeamController@getUserTeamPermissions');
         Route::put('suborganization/{suborganization}/team/{team}/update-team-member-role', 'TeamController@updateTeamMemberRole');
@@ -99,6 +100,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::get('suborganization/{suborganization}/projects/favorites', 'ProjectController@getFavorite');
         Route::post('suborganization/{suborganization}/projects/reorder', 'ProjectController@reorder');
+        Route::post('suborganization/{suborganization}/projects/{project}/order', 'ProjectController@updateOrder');
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
@@ -111,10 +113,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
         Route::apiResource('suborganization.projects', 'ProjectController');
-
+        
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
+        Route::post('suborganization/{suborganization}/projects/by-ids', 'ProjectController@projectsByIds');
 
         // playlist share toggle
         Route::get('suborganization/{suborganization}/playlists/{playlist}/search-preview', 'PlaylistController@searchPreview');
@@ -297,6 +300,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
+    Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments

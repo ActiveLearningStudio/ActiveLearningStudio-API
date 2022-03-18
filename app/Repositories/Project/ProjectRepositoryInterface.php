@@ -56,9 +56,21 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
 
     /**
      * To reorder the list of projects
-     * @param array $projects
+     * @param array $newProjectsOrder
+     * @param array $existingProjectsOrder
      */
-    public function saveList(array $projects);
+    public function saveList(array $newProjectsOrder, array $existingProjectsOrder);
+
+    /**
+     * Update Project's Order
+     *
+     * @param $authenticatedUser
+     * @param Project $project
+     * @param int $order
+     * @return int
+     */
+    public function updateOrder($authenticatedUser, Project $project, int $order);
+
     /**
      * To Populate missing order number, One time script
      */
@@ -144,4 +156,24 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return bool
      */
     public function updateShared(Project $project, bool $shared);
+
+    /**
+     * Create model in storage
+     *
+     * @param $authenticatedUser
+     * @param $suborganization
+     * @param $data
+     * @param $role
+     * @return Model
+     */
+    public function createProject($authenticatedUser, $suborganization, $data, $role);
+
+    /**
+     * Get user project ids in org
+     *
+     * @param $authenticatedUser
+     * @param $organization
+     * @return array
+     */
+    public function getUserProjectIdsInOrganization($authenticatedUser, $organization);
 }

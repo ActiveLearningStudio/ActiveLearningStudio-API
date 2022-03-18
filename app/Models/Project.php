@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\QueryBuilders\SearchFormQueryBuilder;
+use Illuminate\Http\Request;
+use Laravel\Scout\Searchable;
 use App\Models\Traits\GlobalScope;
-use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
+use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\Model;
 use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\File;
-use Laravel\Scout\Searchable;
+use App\Models\QueryBuilders\SearchFormQueryBuilder;
+use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 
 class Project extends Model
 {

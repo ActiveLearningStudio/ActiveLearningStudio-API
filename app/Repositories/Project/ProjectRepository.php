@@ -22,6 +22,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\App;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -54,7 +55,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $projectObj = $this->model->find($id);
 
-        if ($projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']) {
+        if (
+            isset($attributes['organization_visibility_type_id']) && 
+            $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
+        ) {
             $attributes['indexing'] = config('constants.indexing-requested');
             $attributes['status'] = config('constants.status-finished');
 
@@ -346,15 +350,59 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     /**
      * To reorder Projects
      *
-     * @param array $projects
+     * @param array $newProjectsOrder
+     * @param array $existingProjectsOrder
      */
-    public function saveList(array $projects)
+    public function saveList(array $newProjectsOrder, array $existingProjectsOrder)
     {
-        foreach ($projects as $project) {
-            $this->update([
-                'order' => $project['order'],
-            ], $project['id']);
+        foreach ($newProjectsOrder as $project) {
+            if (isset($existingProjectsOrder[$project['id']]) && ($existingProjectsOrder[$project['id']] !== $project['order'])) {
+                $this->update([
+                    'order' => $project['order'],
+                ], $project['id']);
+            }
         }
+    }
+
+    /**
+     * Update Project's Order
+     *
+     * @param $authenticatedUser
+     * @param Project $project
+     * @param int $order
+     * @return int
+     */
+    public function updateOrder($authenticatedUser, Project $project, int $order)
+    {
+        $authenticatedUserOrgProjectIdsString = $this->getUserProjectIdsInOrganization($authenticatedUser, $project->organization);
+
+        $existingOrder = $project->order;// order of project whose position we want to change
+        $newOrder = $order;// new order for project
+
+        // get id of project whose position we want to change
+        $projectId = $project->id;
+
+        // Now update all order between $existingOrder and $newOrder
+        if ($existingOrder < $newOrder) {
+            // if $existingOrder is less than $newOrder then
+            $set = '"order" = "order" - 1';
+            $where = '"order" > ' . $existingOrder . ' AND "order" <= ' . $newOrder;
+        } else {
+            $set = '"order" = "order" + 1';
+            $where = '"order" < ' . $existingOrder . ' AND "order" >= ' . $newOrder;
+        }
+
+        return DB::transaction(function () use ($set, $where, $authenticatedUserOrgProjectIdsString, $newOrder, $projectId) {
+            // update order's
+            $query = 'UPDATE "projects" SET ' . $set . ' WHERE ' . $where . ' AND "id" IN (' . $authenticatedUserOrgProjectIdsString . ')';
+            $affectedProjectsCount = DB::update($query);
+
+            // now update order for $projectId
+            $query = 'UPDATE "projects" SET "order" = ' . $newOrder . ' WHERE id = ' . $projectId;
+            $affectedProject = DB::update($query);
+
+            return $affectedProject;
+        });
     }
 
     /**
@@ -695,7 +743,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $zip->extractTo(storage_path($extracted_folder_name.'/'));
                 $zip->close();
             }else {
-                return "Unable to import Project";
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import Project."
+                ];
+                return json_encode($return_res);
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
                 if (file_exists(storage_path($extracted_folder_name.'/project.json'))) {
@@ -735,7 +787,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     if ($method_source !== "command") {
                         unlink($source_file); // Deleted the storage zip file
                     } else {
-                        return "Project has been imported successfully";
+                        
+                        $return_res = [
+                            "success"=> true,
+                            "message" => "Project has been imported successfully"
+                        ];
+                        return json_encode($return_res);
                     }
 
                     return $project['name'];
@@ -747,7 +804,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             DB::rollBack();
             Log::error($e->getMessage());
             if ($method_source === "command") {
-                return("Unable to import the project, please try again later!");
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import the project, please try again later!"
+                ];
+                return(json_encode($return_res));
             }
 
             throw new GeneralException('Unable to import the project, please try again later!');
@@ -896,4 +957,52 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return storage_path('app/public/exports/' . $fileName);
     }
 
+    /**
+     * Create model in storage
+     *
+     * @param $authenticatedUser
+     * @param $suborganization
+     * @param $data
+     * @param $role
+     * @return Model
+     */
+    public function createProject($authenticatedUser, $suborganization, $data, $role)
+    {
+        $data['order'] = 0;
+        $data['organization_id'] = $suborganization->id;
+
+        $authenticatedUserOrgProjectIdsString = $this->getUserProjectIdsInOrganization($authenticatedUser, $suborganization);
+
+        return DB::transaction(function () use ($authenticatedUser, $data, $role, $authenticatedUserOrgProjectIdsString) {
+
+            if (!empty($authenticatedUserOrgProjectIdsString)) {
+                // update order's
+                $query = 'UPDATE "projects" SET "order" = "order" + 1 WHERE "id" IN (' . $authenticatedUserOrgProjectIdsString . ')';
+                $affectedProjectsCount = DB::update($query);
+            }
+
+            $project = $authenticatedUser->projects()->create($data, $role);
+
+            return $project;
+        });
+    }
+
+    /**
+     * Get user project ids in org
+     *
+     * @param $authenticatedUser
+     * @param $organization
+     * @return array
+     */
+    public function getUserProjectIdsInOrganization($authenticatedUser, $organization) {
+        $authenticatedUserOrgProjectIds = $authenticatedUser
+                                        ->projects()
+                                        ->where('organization_id', $organization->id)
+                                        ->pluck('id')
+                                        ->all();
+
+        $authenticatedUserOrgProjectIdsString = implode(",", $authenticatedUserOrgProjectIds);
+
+        return $authenticatedUserOrgProjectIdsString;
+    }
 }

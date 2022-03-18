@@ -2,31 +2,33 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ProjectUpdatedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\OrganizationProjectRequest;
-use App\Http\Requests\V1\ProjectRequest;
-use App\Http\Requests\V1\ProjectUpdateRequest;
-use App\Http\Requests\V1\ProjectUploadThumbRequest;
-use App\Http\Requests\V1\ProjectUploadImportRequest;
-use App\Http\Resources\V1\ProjectDetailResource;
-use App\Http\Resources\V1\ProjectResource;
-use App\Http\Resources\V1\ProjectSearchPreviewResource;
-use App\Http\Resources\V1\UserProjectResource;
-use App\Jobs\CloneProject;
-use App\Models\Organization;
-use App\Models\Project;
-use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Project;
+use App\Models\Playlist;
+use App\Jobs\CloneProject;
 use App\Jobs\ExportProject;
 use App\Jobs\ImportProject;
-use App\Jobs\ExportNoovoProject;
 use Illuminate\Support\Arr;
+use App\Models\Organization;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Jobs\ExportNoovoProject;
+use App\Events\ProjectUpdatedEvent;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\V1\ProjectRequest;
+use App\Http\Resources\V1\ProjectResource;
+use App\Http\Requests\V1\ProjectUpdateRequest;
+use App\Http\Resources\V1\UserProjectResource;
+use App\Http\Resources\V1\ProjectDetailResource;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use App\Http\Requests\V1\ProjectUploadThumbRequest;
+use App\Http\Requests\V1\OrganizationProjectRequest;
+use App\Http\Requests\V1\ProjectUploadImportRequest;
+use App\Http\Requests\V1\ProjectUpdateOrder;
+use App\Http\Resources\V1\ProjectSearchPreviewResource;
+use App\Repositories\Project\ProjectRepositoryInterface;
 
 /**
  * @group 3. Project
@@ -78,6 +80,7 @@ class ProjectController extends Controller
                                         $authenticated_user->projects()
                                         ->where('organization_id', $suborganization->id)
                                         ->whereNull('team_id')
+                                        ->orderBy('order', 'asc')
                                         ->get()
                                     ),
         ], 200);
@@ -307,10 +310,10 @@ class ProjectController extends Controller
         $this->authorize('create', [Project::class, $suborganization]);
 
         $data = $projectRequest->validated();
-        $authenticated_user = auth()->user();
-        $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
-        $data['organization_id'] = $suborganization->id;
-        $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
+        $authenticatedUser = auth()->user();
+        $role = ['role' => 'owner'];
+
+        $project = $this->projectRepository->createProject($authenticatedUser, $suborganization, $data, $role);
 
         if ($project) {
             return response([
@@ -622,7 +625,13 @@ class ProjectController extends Controller
     {
         $authenticated_user = auth()->user();
 
-        $this->projectRepository->saveList($request->projects);
+        $existingProjectsOrder = $authenticated_user->projects()
+            ->where('organization_id', $suborganization->id)
+            ->whereNull('team_id')
+            ->pluck('order', 'id')
+            ->all();
+
+        $this->projectRepository->saveList($request->projects, $existingProjectsOrder);
 
         return response([
             'projects' => ProjectResource::collection(
@@ -632,6 +641,50 @@ class ProjectController extends Controller
                                         ->get()
                                     ),
         ], 200);
+    }
+
+    /**
+     * Update Project's Order
+     *
+     * Update project's order.
+     *
+     * @urlParam project_id int required Id of the project whose order is to be updated Example: 1
+     * @bodyParam order int required New order to set for the project Example: 1
+     *
+     * @response {
+     *   "message": "Project reorder has been successful."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to reorder project."
+     *   ]
+     * }
+     *
+     * @param ProjectUpdateOrder $request
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
+     */
+    public function updateOrder(ProjectUpdateOrder $request, Organization $suborganization, Project $project)
+    {
+        $this->authorize('updateOrder', $project);
+
+        $data = $request->validated();
+
+        $authenticatedUser = auth()->user();
+
+        $affectedProject = $this->projectRepository->updateOrder($authenticatedUser, $project, $data['order']);
+
+        if ($affectedProject) {
+            return response([
+                'message' => 'Project reorder has been successful.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to reorder project.'],
+        ], 500);
     }
 
     /**
@@ -808,5 +861,26 @@ class ProjectController extends Controller
         return response([
             'project' => new ProjectSearchPreviewResource($project),
         ], 200);
+    }
+
+    /**
+     * Get the Projects by Ids
+     *
+     * @param Request $request
+     * @param Project $project
+     *
+     * @Response Projects
+     */
+    public function projectsByIds(Request $request,Project $project)
+    {
+
+        $projects = $project->with(['playlists','playlists.activities'])->find($request->project_id);
+        $projects->map(function($project){
+            $project->playlist_count = $project->playlists->count();
+            $project->activities_count = $project->playlists->pluck('activities')->count();
+        });
+        return response()->json([
+            "projects" => $projects
+        ]);
     }
 }

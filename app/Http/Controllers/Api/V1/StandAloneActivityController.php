@@ -347,7 +347,11 @@ class StandAloneActivityController extends Controller
         $brightcoveData = null;
         if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
             $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
-            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $brightcoveData = [
+                'videoId' => $brightcoveContentData->brightcove_video_id, 
+                'accountId' => $bcAPISettingRepository->account_id,
+                'apiSettingId' => $brightcoveContentData->brightcove_api_setting_id
+            ];
             $activity->brightcoveData = $brightcoveData;
         }
         
@@ -416,7 +420,7 @@ class StandAloneActivityController extends Controller
     {
         $h5p = App::make('LaravelH5p');
         $core = $h5p::$core;
-        $settings = $h5p::get_editor();
+        $settings = $h5p::get_editor($content = null, 'preview');
         $content = $h5p->load_content($activity->h5p_content_id);
         $content['disable'] = config('laravel-h5p.h5p_preview_flag');
         $embed = $h5p->get_embed($content, $settings);

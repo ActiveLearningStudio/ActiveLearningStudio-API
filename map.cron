@@ -1,0 +1,3 @@
+* * * * * curl -s 'http://localhost/api/v1/xapi-extract' >> /dev/null 2>&1
+* * * * * /usr/local/bin/php /var/www/html/artisan schedule:run >> /dev/null 2>&1
+* * * * * /usr/bin/flock -w 0 /var/cron.lock /bin/bash /usr/bin/import-project.sh >> /dev/null 2>&1

@@ -34,6 +34,8 @@ class StandAloneActivityCreateRequest extends FormRequest
             'subject_id' => 'nullable|string',
             'education_level_id' => 'nullable|string',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
+            'source_type' => 'nullable|string',
+            'source_url' => 'nullable|string',
         ];
     }
 }

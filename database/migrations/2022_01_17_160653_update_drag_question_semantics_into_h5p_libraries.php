@@ -14,7 +14,8 @@ class UpdateDragQuestionSemanticsIntoH5pLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PDragQuestionLibSubmitButtonSeeder::class
+            '--class' => H5PDragQuestionLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
