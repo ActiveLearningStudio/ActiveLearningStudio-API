@@ -22,6 +22,7 @@ class Team extends Model
         'organization_id',
         'description',
         'indexing',
+        'noovo_group_title'
     ];
 
     /**

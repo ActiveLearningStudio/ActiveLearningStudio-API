@@ -30,6 +30,14 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function fetchByLmsUrlAndLtiClient($lms_url, $lti_client_id);
 
     /**
+     * To fetch project based on LMS settings
+     *
+     * @param Project $project
+     * @return array
+     */
+    public function getProjectForPreview(Project $project);
+
+    /**
      * To fetch recent public project
      *
      * @param $limit
@@ -48,9 +56,21 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
 
     /**
      * To reorder the list of projects
-     * @param array $projects
+     * @param array $newProjectsOrder
+     * @param array $existingProjectsOrder
      */
-    public function saveList(array $projects);
+    public function saveList(array $newProjectsOrder, array $existingProjectsOrder);
+
+    /**
+     * Update Project's Order
+     *
+     * @param $authenticatedUser
+     * @param Project $project
+     * @param int $order
+     * @return int
+     */
+    public function updateOrder($authenticatedUser, Project $project, int $order);
+
     /**
      * To Populate missing order number, One time script
      */
@@ -70,18 +90,6 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return bool
      */
     public function checkIsDuplicate($authenticated_user, $project_id, $organization_id);
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function indexing($project);
-
-    /**
-     * @param $project
-     * @return mixed
-     */
-    public function statusUpdate($project);
 
     /**
      * @param $authenticated_user
@@ -139,5 +147,33 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function importProject($authUser, $path, $suborganization_id);
-    
+
+    /**
+     * Update shared for project and its playlists and activities
+     *
+     * @param Project $project
+     * @param bool $shared
+     * @return bool
+     */
+    public function updateShared(Project $project, bool $shared);
+
+    /**
+     * Create model in storage
+     *
+     * @param $authenticatedUser
+     * @param $suborganization
+     * @param $data
+     * @param $role
+     * @return Model
+     */
+    public function createProject($authenticatedUser, $suborganization, $data, $role);
+
+    /**
+     * Get user project ids in org
+     *
+     * @param $authenticatedUser
+     * @param $organization
+     * @return array
+     */
+    public function getUserProjectIdsInOrganization($authenticatedUser, $organization);
 }

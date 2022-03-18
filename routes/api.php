@@ -17,7 +17,7 @@ Route::post('register', 'Auth\AuthController@register')->name('register');
 Route::post('login', 'Auth\AuthController@login')->name('login');
 Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login');
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
-Route::post('login/sso', 'Auth\AuthController@ssoLogin');
+Route::post('login/sso', 'Auth\AuthController@ltiSsoLogin1p0');
 Route::post('login/lti-sso', 'Auth\AuthController@ltiSsoLogin');
 Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
 Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
@@ -26,12 +26,14 @@ Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->name('verification.resend');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
+Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
     Route::get('playlists/{playlist}/load-shared', 'PlaylistController@loadShared');
+    Route::get('projects/{project}/playlists/{playlist}/load-shared-playlist', 'PlaylistController@loadSharedPlaylist');
+    Route::get('projects/{project}/shared-playlists', 'PlaylistController@allSharedPlaylists');
     Route::get('playlists/update-order', 'PlaylistController@populateOrderNumber');
-
     Route::get('activities/{activity}/log-view', 'MetricsController@activityLogView')->name('metrics.activity-log');
     Route::get('playlists/{playlist}/log-view', 'MetricsController@playlistLogView')->name('metrics.playlist-log');
     Route::get('projects/{project}/log-view', 'MetricsController@projectLogView')->name('metrics.project-log');
@@ -47,11 +49,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/notifications', 'UserController@listNotifications');
         Route::get('users/notifications/export-list', 'UserController@exportProjectList');
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
+        Route::get('users/notifications/{notification}/download-export/', 'UserController@downloadExport');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
         Route::post('users/search', 'UserController@getAllUsers');
         Route::post('suborganization/{suborganization}/users/search', 'UserController@getOrgUsers');
         Route::post('suborganization/{suborganization}/users/check', 'UserController@checkOrgUser');
+        Route::get('suborganization/{suborganization}/users/check-email', 'UserController@checkUserEmail');
         Route::post('users/update-password', 'UserController@updatePassword');
         Route::get('users/me/redeem/{offerName}', 'UserMembershipController@redeemOffer')->name('membership.redeem-offer');
         Route::apiResource('users', 'UserController')->only([
@@ -68,6 +72,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('teams/{team}/projects/{project}/add-members', 'TeamController@addMembersToProject');
         Route::post('teams/{team}/projects/{project}/remove-member', 'TeamController@removeMemberFromProject');
         Route::get('suborganization/{suborganization}/get-teams', 'TeamController@getOrgTeams');
+        Route::get('suborganization/{suborganization}/get-admin-teams', 'TeamController@getAdminTeams');
         Route::get('suborganization/{suborganization}/team-role-types', 'TeamController@teamRoleTypes');
         Route::get('suborganization/{suborganization}/team/{team}/team-permissions', 'TeamController@getUserTeamPermissions');
         Route::put('suborganization/{suborganization}/team/{team}/update-team-member-role', 'TeamController@updateTeamMemberRole');
@@ -85,6 +90,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/get-groups', 'GroupController@getOrgGroups');
         Route::apiResource('suborganization.groups', 'GroupController');
 
+        //Projects
+        Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
 
         Route::post('suborganization/{suborganization}/projects/upload-thumb', 'ProjectController@uploadThumb');
         Route::get('suborganization/{suborganization}/projects/recent', 'ProjectController@recent');
@@ -93,11 +100,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('projects/update-order', 'ProjectController@populateOrderNumber');
         Route::get('suborganization/{suborganization}/projects/favorites', 'ProjectController@getFavorite');
         Route::post('suborganization/{suborganization}/projects/reorder', 'ProjectController@reorder');
-        Route::get('projects/{project}/indexing', 'ProjectController@indexing');
-        Route::get('projects/{project}/status-update', 'ProjectController@statusUpdate');
+        Route::post('suborganization/{suborganization}/projects/{project}/order', 'ProjectController@updateOrder');
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
+        Route::post('suborganization/{suborganization}/teams/{team}/export-projects-to-noovo', 'TeamController@exportProjecttoNoovo');
         Route::post('suborganization/{suborganization}/projects/{project}/export-noovo', 'ProjectController@exportNoovoProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
 
@@ -106,10 +113,20 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
         Route::apiResource('suborganization.projects', 'ProjectController');
-
+        
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
+        Route::post('suborganization/{suborganization}/projects/by-ids', 'ProjectController@projectsByIds');
+
+        // playlist share toggle
+        Route::get('suborganization/{suborganization}/playlists/{playlist}/search-preview', 'PlaylistController@searchPreview');
+
+        Route::get('projects/{project}/playlists/{playlist}/share', 'PlaylistController@share');
+        Route::get('projects/{project}/playlists/{playlist}/remove-share', 'PlaylistController@removeShare');
+
+        // Activities
+        Route::get('suborganization/{suborganization}/activities/{activity}/search-preview', 'ActivityController@searchPreview');
 
         Route::post('playlists/{playlist}/activities/{activity}/clone', 'ActivityController@clone');
         Route::post('activities/upload-thumb', 'ActivityController@uploadThumb');
@@ -123,6 +140,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::apiResource('playlists.activities', 'ActivityController');
 
         Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
+        Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
         Route::apiResource('activity-types', 'ActivityTypeController');
@@ -135,6 +153,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('h5p/settings', 'H5pController@create');
         Route::get('h5p/activity/{activity}', 'H5pController@showByActivity');
         Route::apiResource('h5p', 'H5pController');
+        Route::apiResource('suborganizations/{suborganization}/stand-alone-activity', 'StandAloneActivityController');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/detail', 'StandAloneActivityController@detail');
+        Route::get('suborganizations/{suborganization}/stand-alone-activity/{activity}/h5p', 'StandAloneActivityController@h5p');
+        Route::post('suborganizations/{suborganization}/stand-alone-activity/{activity}/clone', 'StandAloneActivityController@clone');
+
+        Route::get('suborganization/{suborganization}/projects/{project}/offline-project', 'ProjectDownloadController@exportProject');
+        Route::get('project/delete/{project_path}', 'ProjectDownloadController@deleteProject');
 
         Route::group(['prefix' => 'h5p'], function () {
             // H5P Ajax calls
@@ -148,6 +173,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/finish', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@finish')->name('h5p.ajax.finish');
             Route::any('ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
             Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
+            Route::any('ajax/reader/finish', 'MobileAppAjaxController@finish')->name('h5p.ajax.reader-finish');
         });
 
         // Elasticsearch
@@ -188,6 +214,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         // lti-tool-settings
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
+        Route::post('suborganizations/{suborganization}/lti-tool-settings/{ltiToolSetting}/clone', 'LtiTool\LtiToolSettingsController@clone');
+
+        // brightcove-api-settings
+        Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');
+        Route::post('suborganizations/{suborganization}/brightcove-api-settings/{brighcoveAPISetting}/clone', 'Integration\BrightcoveAPISettingsController@clone');
+        Route::post('brightcove-api-settings/upload-css', 'Integration\BrightcoveAPISettingsController@uploadCss');
+
         // queue-monitor
         Route::get('queue-monitor/jobs', 'QueueMonitorController@jobs');
         Route::get('queue-monitor/jobs/retry/all', 'QueueMonitorController@retryAll');
@@ -237,6 +270,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::post('access-token', 'GoogleClassroomController@saveAccessToken');
             Route::get('courses', 'GoogleClassroomController@getCourses');
             Route::post('projects/{project}/copy', 'GoogleClassroomController@copyProject');
+            Route::get('topics', 'GoogleClassroomController@getCourseTopics');
+            Route::post('projects/{project}/playlists/{playlist}/publish',
+                'GoogleClassroomController@publishPlaylistToGoogleClassroom');
+            Route::post('projects/{project}/playlists/{playlist}/activities/{activity}/publish',
+                'GoogleClassroomController@publishActivityToGoogleClassroom');
         });
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
@@ -262,6 +300,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('go/lms/projects', 'CurrikiGo\LmsController@projects');
     Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
+    Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments

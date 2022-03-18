@@ -2,30 +2,33 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ProjectUpdatedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\OrganizationProjectRequest;
-use App\Http\Requests\V1\ProjectRequest;
-use App\Http\Requests\V1\ProjectUpdateRequest;
-use App\Http\Requests\V1\ProjectUploadThumbRequest;
-use App\Http\Requests\V1\ProjectUploadImportRequest;
-use App\Http\Resources\V1\ProjectDetailResource;
-use App\Http\Resources\V1\ProjectResource;
-use App\Http\Resources\V1\UserProjectResource;
-use App\Jobs\CloneProject;
-use App\Models\Organization;
-use App\Models\Project;
-use App\Repositories\Project\ProjectRepositoryInterface;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Project;
+use App\Models\Playlist;
+use App\Jobs\CloneProject;
 use App\Jobs\ExportProject;
 use App\Jobs\ImportProject;
-use App\Jobs\ExportNoovoProject;
 use Illuminate\Support\Arr;
+use App\Models\Organization;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Jobs\ExportNoovoProject;
+use App\Events\ProjectUpdatedEvent;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\V1\ProjectRequest;
+use App\Http\Resources\V1\ProjectResource;
+use App\Http\Requests\V1\ProjectUpdateRequest;
+use App\Http\Resources\V1\UserProjectResource;
+use App\Http\Resources\V1\ProjectDetailResource;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use App\Http\Requests\V1\ProjectUploadThumbRequest;
+use App\Http\Requests\V1\OrganizationProjectRequest;
+use App\Http\Requests\V1\ProjectUploadImportRequest;
+use App\Http\Requests\V1\ProjectUpdateOrder;
+use App\Http\Resources\V1\ProjectSearchPreviewResource;
+use App\Repositories\Project\ProjectRepositoryInterface;
 
 /**
  * @group 3. Project
@@ -77,6 +80,7 @@ class ProjectController extends Controller
                                         $authenticated_user->projects()
                                         ->where('organization_id', $suborganization->id)
                                         ->whereNull('team_id')
+                                        ->orderBy('order', 'asc')
                                         ->get()
                                     ),
         ], 200);
@@ -123,7 +127,7 @@ class ProjectController extends Controller
      * @urlParam  index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
      *
      * @response {
-     *   "message": "Index status changed successfully!",
+     *   "message": "Library status changed successfully!",
      * }
      *
      * @response 500 {
@@ -306,10 +310,10 @@ class ProjectController extends Controller
         $this->authorize('create', [Project::class, $suborganization]);
 
         $data = $projectRequest->validated();
-        $authenticated_user = auth()->user();
-        $data['order'] = $this->projectRepository->getOrder($authenticated_user) + 1;
-        $data['organization_id'] = $suborganization->id;
-        $project = $authenticated_user->projects()->create($data, ['role' => 'owner']);
+        $authenticatedUser = auth()->user();
+        $role = ['role' => 'owner'];
+
+        $project = $this->projectRepository->createProject($authenticatedUser, $suborganization, $data, $role);
 
         if ($project) {
             return response([
@@ -400,22 +404,22 @@ class ProjectController extends Controller
     {
         $this->authorize('share', [Project::class, $project]);
 
-        $is_updated = $this->projectRepository->update([
-            'shared' => true,
-        ], $project->id);
+        return \DB::transaction(function () use ($project) {
+            $is_updated = $this->projectRepository->updateShared($project, true);
 
-        if ($is_updated) {
-            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-            event(new ProjectUpdatedEvent($updated_project));
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
+
+                return response([
+                    'project' => $updated_project,
+                ], 200);
+            }
 
             return response([
-                'project' => $updated_project,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to share project.'],
-        ], 500);
+                'errors' => ['Failed to share project.'],
+            ], 500);
+        });
     }
 
     /**
@@ -441,22 +445,22 @@ class ProjectController extends Controller
     {
         $this->authorize('share', [Project::class, $project]);
 
-        $is_updated = $this->projectRepository->update([
-            'shared' => false,
-        ], $project->id);
+        return \DB::transaction(function () use ($project) {
+            $is_updated = $this->projectRepository->updateShared($project, false);
 
-        if ($is_updated) {
-            $updated_project = new ProjectResource($this->projectRepository->find($project->id));
-            event(new ProjectUpdatedEvent($updated_project));
+            if ($is_updated) {
+                $updated_project = new ProjectResource($this->projectRepository->find($project->id));
+                event(new ProjectUpdatedEvent($updated_project));
+
+                return response([
+                    'project' => $updated_project,
+                ], 200);
+            }
 
             return response([
-                'project' => $updated_project,
-            ], 200);
-        }
-
-        return response([
-            'errors' => ['Failed to remove share project.'],
-        ], 500);
+                'errors' => ['Failed to remove share project.'],
+            ], 500);
+        });
     }
 
     /**
@@ -594,7 +598,8 @@ class ProjectController extends Controller
         // pushed cloning of project in background
         CloneProject::dispatch($user, $project, $request->bearerToken(), $suborganization->id)->delay(now()->addSecond());
         return response([
-            'message' =>  "Your request to $process project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to $process project [$project->name] has been received and is being processed.<br>
+                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -620,7 +625,13 @@ class ProjectController extends Controller
     {
         $authenticated_user = auth()->user();
 
-        $this->projectRepository->saveList($request->projects);
+        $existingProjectsOrder = $authenticated_user->projects()
+            ->where('organization_id', $suborganization->id)
+            ->whereNull('team_id')
+            ->pluck('order', 'id')
+            ->all();
+
+        $this->projectRepository->saveList($request->projects, $existingProjectsOrder);
 
         return response([
             'projects' => ProjectResource::collection(
@@ -633,68 +644,47 @@ class ProjectController extends Controller
     }
 
     /**
-     * Indexing Request
+     * Update Project's Order
      *
-     * Make the indexing request for a project.
+     * Update project's order.
      *
-     * @urlParam project required The Id of a project Example: 1
+     * @urlParam project_id int required Id of the project whose order is to be updated Example: 1
+     * @bodyParam order int required New order to set for the project Example: 1
      *
      * @response {
-     *   "message": "Indexing request for this project has been made successfully!"
-     * }
-     *
-     * @response 404 {
-     *   "message": "No query results for model [Project] Id"
+     *   "message": "Project reorder has been successful."
      * }
      *
      * @response 500 {
      *   "errors": [
-     *     "Indexing value is already set. Current indexing state of this project: CURRENT_STATE_OF_PROJECT_INDEX"
+     *     "Failed to reorder project."
      *   ]
      * }
      *
-     * @response 500 {
-     *   "errors": [
-     *     "Project must be finalized before requesting the indexing."
-     *   ]
-     * }
-     *
-     *
+     * @param ProjectUpdateOrder $request
+     * @param Organization $suborganization
      * @param Project $project
-     * @return Application|ResponseFactory|Response
+     * @return Response
      */
-    public function indexing(Project $project)
+    public function updateOrder(ProjectUpdateOrder $request, Organization $suborganization, Project $project)
     {
-        $this->projectRepository->indexing($project);
-        return response([
-            'message' => 'Indexing request for this project has been made successfully!'
-        ], 200);
-    }
+        $this->authorize('updateOrder', $project);
 
-    /**
-     * Status Update
-     *
-     * Update the status of the project, draft to final or vice versa.
-     *
-     * @urlParam project required The Id of a project Example: 1
-     *
-     * @response {
-     *   "message": "Status of this project has been updated successfully!"
-     * }
-     *
-     * @response 404 {
-     *   "message": "No query results for model [Project] Id"
-     * }
-     *
-     * @param Project $project
-     * @return Application|ResponseFactory|Response
-     */
-    public function statusUpdate(Project $project)
-    {
-        $this->projectRepository->statusUpdate($project);
+        $data = $request->validated();
+
+        $authenticatedUser = auth()->user();
+
+        $affectedProject = $this->projectRepository->updateOrder($authenticatedUser, $project, $data['order']);
+
+        if ($affectedProject) {
+            return response([
+                'message' => 'Project reorder has been successful.',
+            ], 200);
+        }
+
         return response([
-            'message' => 'Status of this project has been updated successfully!'
-        ], 200);
+            'errors' => ['Failed to reorder project.'],
+        ], 500);
     }
 
     /**
@@ -783,7 +773,8 @@ class ProjectController extends Controller
         ExportProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to export project [$project->name] has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -815,7 +806,8 @@ class ProjectController extends Controller
         ImportProject::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to import project has been received and is being processed. You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to import project has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 
@@ -843,8 +835,52 @@ class ProjectController extends Controller
         ExportNoovoProject::dispatch(auth()->user(), $project)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to export project [$project->name] has been received and is being processed.
-            You will receive an email notice as soon as it is available.",
+            'message' =>  "Your request to export project [$project->name] has been received and is being processed.<br>
+                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
+    }
+
+    /**
+     * Get Project Search Preview
+     *
+     * Get the specified project search preview.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam project required The Id of a project Example: 1
+     *
+     * @responseFile 200 responses/project/project-search-preview.json
+     *
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
+     */
+    public function searchPreview(Organization $suborganization, Project $project)
+    {
+        $this->authorize('searchPreview', [$project, $suborganization]);
+
+        return response([
+            'project' => new ProjectSearchPreviewResource($project),
+        ], 200);
+    }
+
+    /**
+     * Get the Projects by Ids
+     * 
+     * @urlParams 
+     * {"project_id": ["3024", "3025"]}
+     * 
+     * @Response Projects
+     */
+    public function projectsByIds(Request $request,Project $project)
+    {
+
+        $projects = $project->with(['playlists','playlists.activities'])->find($request->project_id);
+        $projects->map(function($project){
+            $project->playlist_count = $project->playlists->count();
+            $project->activities_count = $project->playlists->pluck('activities')->count();
+        });
+        return response()->json([
+            "projects" => $projects
+        ]);
     }
 }

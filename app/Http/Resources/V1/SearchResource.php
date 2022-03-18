@@ -16,12 +16,15 @@ class SearchResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->playlist && $this->playlist->project) {
-            $user = $this->playlist->project->users()->first();
-        } elseif ($this->project) {
-            $user = $this->project->users()->first();
-        } elseif ($this->users) {
+        if (is_a($this->resource, 'App\Models\Project')) {
             $user = $this->users->first();
+            $org = $this->organization()->first(['id', 'name', 'description', 'image']);
+        } elseif (is_a($this->resource, 'App\Models\Playlist')) {
+            $user = $this->project->users()->first();
+            $org = $this->project->organization()->first(['id', 'name', 'description', 'image']);
+        } elseif (is_a($this->resource, 'App\Models\Activity')) {
+            $user = $this->playlist->project->users()->first();
+            $org = $this->playlist->project->organization()->first(['id', 'name', 'description', 'image']);
         }
 
         return [
@@ -35,7 +38,8 @@ class SearchResource extends JsonResource
             'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->modelType,
             'created_at' => $this->created_at,
-            'user' => isset($user) ? new SearchUserResource($user) : null
+            'user' => isset($user) ? new SearchUserResource($user) : null,
+            'organization' => $org
         ];
     }
 }

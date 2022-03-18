@@ -15,7 +15,7 @@ class H5pActivityResource extends JsonResource
         $this->resource = $resource;
         $this->h5p_data = $h5p_data;
     }
-    
+
     /**
      * Transform the resource into an array.
      *
@@ -23,17 +23,20 @@ class H5pActivityResource extends JsonResource
      * @return array
      */
     public function toArray($request)
-    {    
-          
+    {
+
         //set playlist with project relation
         $playlist = $this->playlist;
-        $playlist->project = $this->playlist->project;
-        
-        return [
+        if (isset($this->playlist->project)) {
+            $playlist->project = $this->playlist->project;
+        }
+
+        $response = [
             'id' => $this->id,
             'title' => $this->title,
             'type' => $this->type,
             'content' => $this->content,
+            'description' => $this->description,
             'shared' => $this->shared,
             'order' => $this->order,
             'thumb_url' => $this->thumb_url,
@@ -44,5 +47,11 @@ class H5pActivityResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
+
+        if ($this->resource->brightcoveData) {
+            $response['brightcoveData'] = $this->resource->brightcoveData;
+        }
+
+        return $response;
     }
 }

@@ -72,9 +72,7 @@ class SuborganizationController extends Controller
 
         $data = $suborganizationSearchRequest->validated();
 
-        return response([
-            'suborganization' => OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($data, $suborganization)),
-        ], 200);
+        return  OrganizationResource::collection($this->organizationRepository->fetchSuborganizations($data, $suborganization));
     }
 
     /**
@@ -122,9 +120,18 @@ class SuborganizationController extends Controller
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
+     * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
+     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam primary_color string primary font color Example: #515151
+     * @bodyParam secondary_color string primary font color Example: #515151
+     * @bodyParam tertiary_color string primary font color Example: #515151
+     * @bodyParam primary_font_family string primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string primary font color Example: Open Sans
      *
      * @responseFile 201 responses/organization/suborganization.json
      *
@@ -193,9 +200,18 @@ class SuborganizationController extends Controller
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
+     * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
+     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam primary_color string primary font color Example: #515151
+     * @bodyParam secondary_color string primary font color Example: #515151
+     * @bodyParam tertiary_color string primary font color Example: #515151
+     * @bodyParam primary_font_family string primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string primary font color Example: Open Sans
      *
      * @responseFile responses/organization/suborganization.json
      *
@@ -215,10 +231,27 @@ class SuborganizationController extends Controller
 
         $data = $request->validated();
 
+        if ($data['tos_type'] === 'Content') {
+            $data['tos_url'] = null;
+        } else if ($data['tos_type'] === 'URL') {
+            $data['tos_content'] = null;
+        } else {
+            $data['tos_content'] = $data['tos_url'] = null;
+        }
+
+        if ($data['privacy_policy_type'] === 'Content') {
+            $data['privacy_policy_url'] = null;
+        } else if ($data['privacy_policy_type'] === 'URL') {
+            $data['privacy_policy_content'] = null;
+        } else {
+            $data['privacy_policy_content'] = $data['privacy_policy_url'] = null;
+        }
+
         $is_updated = $this->organizationRepository->update($suborganization, $data);
 
         if ($is_updated) {
-            $updated_suborganization = new OrganizationResource($this->organizationRepository->find($suborganization->id));
+            $authenticatedUser = auth()->user();
+            $updated_suborganization = new OrganizationResource($this->organizationRepository->fetchOrganizationData($authenticatedUser, $suborganization));
 
             return response([
                 'suborganization' => $updated_suborganization,
@@ -537,15 +570,13 @@ class SuborganizationController extends Controller
 
         $data = $suborganizationDeleteUserRequest->validated();
 
-        $userObj = $this->userRepository->find($data['user_id']);
+        $authenticatedUser = auth()->user();
 
-        if ($suborganization->parent && $userObj->hasPermissionTo('organization:view', $suborganization->parent)) {
+        if ($authenticatedUser->id === $data['user_id']) {
             return response([
-                'errors' => ['Can not remove user inherited from a parent org.'],
+                'errors' => ['Can not remove yourself.'],
             ], 500);
         }
-
-        $authenticatedUser = auth()->user();
 
         $isRemoved = $this->organizationRepository->removeUser($authenticatedUser, $suborganization, $data);
 
@@ -709,8 +740,8 @@ class SuborganizationController extends Controller
      */
     public function updateRole(SuborganizationUpdateRole $request, Organization $suborganization)
     {
-        $this->authorize('updateRole', $suborganization);
-
+        // $this->authorize('updateRole', $suborganization);
+        //  have disable temporaily until frontend stuff is fully completed.
         $data = $request->validated();
 
         $role = $suborganization->roles->where("id", $data['role_id']);

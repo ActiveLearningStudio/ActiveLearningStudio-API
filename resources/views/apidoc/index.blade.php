@@ -29793,8 +29793,7 @@ response.json()</code></pre>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "data": {
-        "lti_tool_settings": [
+    "data": [
             {
                 "id": 1,
                 "user_id": 23,
@@ -30062,7 +30061,7 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "message": "Lti Tool setting created successfully!",
-    "data": {
+    "data": [
         "user_id": "23",
         "organization_id": "1",
         "tool_name": "Safari Montage 2",
@@ -30115,7 +30114,7 @@ response.json()</code></pre>
             "api_key": null,
             "unit_path": null
         }
-    }
+    ]
 }</code></pre>
 <blockquote>
 <p>Example response (500):</p>
@@ -30253,7 +30252,7 @@ response.json()</code></pre>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
-    "data": {
+    "data": [
         "id": 1,
         "user_id": 23,
         "organization_id": 1,
@@ -30312,7 +30311,7 @@ response.json()</code></pre>
             "api_key": null,
             "unit_path": null
         }
-    }
+    ]
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/v1/suborganizations/{sub_organazation}/lti-tool-settings/{lti_tool_setting}</code></p>
@@ -30443,7 +30442,7 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "message": "Lti tool setting updated successfully!",
-    "data": {
+    "data": [
         "user_id": "23",
         "organization_id": "1",
         "tool_name": "Safari Montage 2",
@@ -30496,7 +30495,7 @@ response.json()</code></pre>
             "api_key": null,
             "unit_path": null
         }
-    }
+    ]
 }</code></pre>
 <blockquote>
 <p>Example response (500):</p>
@@ -30672,6 +30671,1731 @@ response.json()</code></pre>
 </tbody>
 </table>
 <!-- END_b1748719c1f572e3601dbbb3b63923dc -->
+
+<h1>1009. Admin/Brightcove API Settings</h1>
+<p>APIs for brightcove settings on admin panel.</p>
+<!-- START_2f2758b0abc25e98982d44b733c0347d -->
+<h2>Get Brightcove Account List</h2>
+<p>Get the brightcove account list.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/brightcove/suborganization/1/get-bc-account-list'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brightcove CMS",
+            "account_eamil": "mike@curriki.org",
+            "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+            "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+            "description": "Brightcove API Testing.",
+            "created_at": "2021-12-09T00:00:00.000000Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "user": {
+                "id": 1,
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "email_verified_at": "2020-08-26T10:49:59.000000Z",
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-10-29T08:52:59.000000Z",
+                "first_name": "test",
+                "last_name": "test",
+                "organization_name": "organization_name",
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "127.0.0.1",
+                "gapi_access_token": null,
+                "membership_type_id": 1
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false
+            }
+        }
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/brightcove/suborganization/1/get-bc-account-list</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>suborganazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+</tbody>
+</table>
+<!-- END_2f2758b0abc25e98982d44b733c0347d -->
+
+<!-- START_e75b6b178b609b7bd0cce5907371aa27 -->
+<h2>Get Brightcove Videos List</h2>
+<p>To get the list of videos from brightcove account by using brightcove api.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8383/api/v1/brightcove/get-bc-videos-list" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "id": 1,
+            "organization_id": 1,
+            "query_param": "query=name=SearchStringByVideoNameOrID&limit=1&offset=1"
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/brightcove/get-bc-videos-list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {            
+            "id": 1,
+            "organization_id": 1,
+            "query_param": "query=name=SearchStringByVideoNameOrID&limit=1&offset=1"
+        }
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8383/api/v1/brightcove/get-bc-videos-list',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "query_param" =&gt; "query=name=SearchStringByVideoNameOrID&limit=1&offset=1"
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/brightcove/get-bc-videos-list'
+payload = {
+    "id": 1,
+    "organization_id": 1,
+    "query_param": "query=name=SearchStringByVideoNameOrID&limit=1&offset=1"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{    
+    "data": [
+        {
+            "id": "6283184730001",
+            "account_id": "6282550302001",
+            "ad_keys": null,
+            "clip_source_video_id": null,
+            "complete": true,
+            "created_at": "2021-11-22T09:48:57.628Z",
+            "created_by": {
+                "type": "user",
+                "id": "76076254098",
+                "email": "mike@curriki.org"
+            },
+            "cue_points": [],
+            "custom_fields": [],
+            "delivery_type": "dynamic_origin",
+            "description": null,
+            "digital_master_id": null,
+            "duration": 30592,
+            "economics": "AD_SUPPORTED",
+            "folder_id": null,
+            "geo": null,
+            "has_digital_master": true,
+            "images": {
+                "poster": {
+                    "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/1280x720/15s296ms/match/image.jpg",
+                    "sources": [
+                        {
+                            "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/1280x720/15s296ms/match/image.jpg",
+                            "height": 720,
+                            "width": 1280
+                        }
+                    ]
+                },
+                "thumbnail": {
+                    "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/160x90/15s296ms/match/image.jpg",
+                    "sources": [
+                        {
+                            "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/d1945c71-39e2-44cb-811f-095b66af0727/main/160x90/15s296ms/match/image.jpg",
+                            "height": 90,
+                            "width": 160
+                        }
+                    ]
+                }
+            },
+            "link": null,
+            "long_description": null,
+            "name": "file_example_MP4_480_1_5MG",
+            "original_filename": "file_example_MP4_480_1_5MG.mp4",
+            "projection": null,
+            "published_at": "2021-11-22T09:48:57.642Z",
+            "reference_id": null,
+            "schedule": null,
+            "sharing": null,
+            "state": "ACTIVE",
+            "tags": [],
+            "text_tracks": [],
+            "updated_at": "2021-11-23T14:28:46.976Z",
+            "updated_by": {
+                "type": "user",
+                "id": "76076254098",
+                "email": "mike@curriki.org"
+            },
+            "playback_rights_id": "primary"
+        },
+        {
+            "id": "6283186896001",
+            "account_id": "6282550302001",
+            "ad_keys": null,
+            "clip_source_video_id": null,
+            "complete": true,
+            "created_at": "2021-11-22T10:51:53.158Z",
+            "created_by": {
+                "type": "user",
+                "id": "76076254098",
+                "email": "mike@curriki.org"
+            },
+            "cue_points": [],
+            "custom_fields": [],
+            "delivery_type": "dynamic_origin",
+            "description": null,
+            "digital_master_id": null,
+            "duration": 5376,
+            "economics": "AD_SUPPORTED",
+            "folder_id": null,
+            "geo": null,
+            "has_digital_master": true,
+            "images": {
+                "poster": {
+                    "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/a2534156-5e08-4fa5-b7e9-de27de9c626a/main/1280x720/2s688ms/match/image.jpg",
+                    "sources": [
+                        {
+                            "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/a2534156-5e08-4fa5-b7e9-de27de9c626a/main/1280x720/2s688ms/match/image.jpg",
+                            "height": 720,
+                            "width": 1280
+                        }
+                    ]
+                },
+                "thumbnail": {
+                    "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/a2534156-5e08-4fa5-b7e9-de27de9c626a/main/160x90/2s688ms/match/image.jpg",
+                    "sources": [
+                        {
+                            "src": "https://cf-images.ap-northeast-1.prod.boltdns.net/v1/jit/6282550302001/a2534156-5e08-4fa5-b7e9-de27de9c626a/main/160x90/2s688ms/match/image.jpg",
+                            "height": 90,
+                            "width": 160
+                        }
+                    ]
+                }
+            },
+            "link": null,
+            "long_description": null,
+            "name": "big_buck_bunny_720p_1mb",
+            "original_filename": "big_buck_bunny_720p_1mb.mp4",
+            "projection": null,
+            "published_at": "2021-11-22T10:51:53.171Z",
+            "reference_id": null,
+            "schedule": null,
+            "sharing": null,
+            "state": "ACTIVE",
+            "tags": [
+                "bunny",
+                "sample"
+            ],
+            "text_tracks": [],
+            "updated_at": "2021-11-23T14:28:46.976Z",
+            "updated_by": {
+                "type": "user",
+                "id": "76076254098",
+                "email": "mike@curriki.org"
+            },
+            "playback_rights_id": "primary"
+        }
+    ],
+    "meta": {
+        "count": 2
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Brightcove api token not found.Please try later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/brightcove/get-bc-videos-list</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing brightcove api setting.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>query_param</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid query string like query=name=SearchStringByVideoNameOrID&limit=1&offset=1</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e75b6b178b609b7bd0cce5907371aa27 -->
+
+<!-- START_8f4fad2b19011e1c4fa626a51f418e6f -->
+<h2>Get All Brightcove API Settings for listing.</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings?start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 15,
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brighcove CMS",
+            "account_email": "mike@curriki.org",
+            "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+            "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+            "description": "Brightcove API Testing.",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "user": {
+                "id": 1,
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "email_verified_at": "2020-08-26T10:49:59.000000Z",
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-10-29T08:52:59.000000Z",
+                "first_name": "test",
+                "last_name": "test",
+                "organization_name": "organization_name",
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "127.0.0.1",
+                "gapi_access_token": null,
+                "membership_type_id": 1
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false
+            }
+        }
+    ],
+    "links": {
+        "first": "http://curriki-studio-api.local/api/v1/suborganizations/1/brightcove-api-settings?page=1",
+        "last": "http://curriki-studio-api.local/api/v1/suborganizations/1/brightcove-api-settings?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://curriki-studio-api.local/api/v1/suborganizations/1/brightcove-api-settings",
+        "per_page": 10,
+        "to": 1,
+        "total": 1
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/1/brightcove-api-settings</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_8f4fad2b19011e1c4fa626a51f418e6f -->
+<!-- START_e75b6b178b609b7bd0cce5907371aa27 -->
+<h2>Create Brightcove API Setting</h2>
+<p>Creates the new Brightcove API setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brightcove CMS",
+            "account_email": "mike@curriki.org",
+            "client_id": "client id/key",
+            "client_secret": "client secret key",
+            "description": "Brighcove CMS API testing."
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brightcove CMS",
+            "account_email": "test@curriki.org",
+            "client_id": "client id/key",
+            "client_secret": "client secret key",
+            "description": "Brighcove CMS API testing."
+        }
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "user_id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "account_id" =&gt; "6282550302001",
+            "account_name" =&gt; "Curriki Brightcove CMS",
+            "account_email" =&gt; "test@curriki.org",
+            "client_id" =&gt; "client id/key",
+            "client_secret" =&gt; "client secret key",
+            "description" =&gt; "Brightcove CMS API testing.",
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings'
+payload = {
+    "user_id": 1,
+    "organization_id": 1,
+    "account_id": "6282550302001",
+    "account_name": "Curriki Brightcove CMS",
+    "account_email": "test@curriki.org",
+    "client_id": "client id/key",
+    "client_secret": "client secret key",
+    "description": "Brighcove CMS API testing."
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Brightcove API setting created successfully!",
+    "data": {
+        "user_id": "1",
+        "organization_id": "1",
+        "account_id": "62825503020011",
+        "account_name": "Curriki Brighcove CMS1",
+        "account_email": "mike1@curriki.org",
+        "client_id": "adjflajsdlfjasldjflasjd",
+        "client_secret": "qrqoweuroqwe",
+        "description": null,
+        "updated_at": "2021-12-22T18:38:36.000000Z",
+        "created_at": "2021-12-22T18:38:36.000000Z",
+        "id": 16,
+        "user": {
+            "id": 1,
+            "name": "localuser",
+            "email": "localuser@local.com",
+            "email_verified_at": "2020-08-26T10:49:59.000000Z",
+            "created_at": "2020-08-22T12:13:52.000000Z",
+            "updated_at": "2020-10-29T08:52:59.000000Z",
+            "first_name": "test",
+            "last_name": "test",
+            "organization_name": "organization_name",
+            "job_title": "job_title",
+            "address": null,
+            "phone_number": null,
+            "organization_type": null,
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "hubspot": false,
+            "subscribed": true,
+            "subscribed_ip": "127.0.0.1",
+            "gapi_access_token": null,
+            "membership_type_id": 1
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": true,
+            "account_id": null,
+            "api_key": null,
+            "unit_path": null,
+            "noovo_client_id": null,
+            "gcr_project_visibility": true,
+            "gcr_playlist_visibility": false,
+            "gcr_activity_visibility": false
+        }
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create brightcove api setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/suborganizations/1/brightcove-api-settings</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>account_id</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 50 characters.</td>
+</tr>
+<tr>
+<td><code>account_name</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 100 characters.</td>
+</tr>
+<tr>
+<td><code>account_email</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 150 characters.</td>
+</tr>
+<tr>
+<td><code>client_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid client key.</td>
+</tr>
+<tr>
+<td><code>client_secret</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid client secret.Require with client id.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid tool description.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_e75b6b178b609b7bd0cce5907371aa27 -->
+
+<!-- START_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+<h2>Update Brightcove API Setting</h2>
+<p>Updates the Brightcove API setting in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brightcove CMS",
+            "account_email": "mike@curriki.org",
+            "client_id": "client id/key",
+            "client_secret": "client secret key",
+            "description": "Brighcove CMS API testing."
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_id": 1,
+    "organization_id": 1,
+    "account_id": "6282550302001",
+    "account_name": "Curriki Brightcove CMS",
+    "account_email": "mike@curriki.org",
+    "client_id": "client id/key",
+    "client_secret": "client secret key",
+    "description": "Brighcove CMS API testing."
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "user_id" =&gt; 1,
+            "organization_id" =&gt; 1,
+            "account_id" =&gt; "6282550302001",
+            "account_name" =&gt; "Curriki Brightcove CMS",
+            "account_email" =&gt; "mike@curriki.org",
+            "client_id" =&gt; "client id/key",
+            "client_secret" =&gt; "client secret key",
+            "description" =&gt; "Brighcove CMS API testing."
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1'
+payload = {
+    "user_id": 1,
+    "organization_id": 1,
+    "account_id": "6282550302001",
+    "account_name": "Curriki Brightcove CMS",
+    "account_email": "mike@curriki.org",
+    "client_id": "client id/key",
+    "client_secret": "client secret key",
+    "description": "Brighcove CMS API testing."
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Brightcove API setting updated successfully!",
+    "data": {
+            "id": 15,
+            "user_id": 1,
+            "organization_id": 1,
+            "account_id": "6282550302001",
+            "account_name": "Curriki Brighcove CMS",
+            "account_email": "mike@curriki.org",
+            "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+            "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+            "description": "Brightcove API Testing.",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "user": {
+                "id": 1,
+                "name": "localuser",
+                "email": "localuser@local.com",
+                "email_verified_at": "2020-08-26T10:49:59.000000Z",
+                "created_at": "2020-08-22T12:13:52.000000Z",
+                "updated_at": "2020-10-29T08:52:59.000000Z",
+                "first_name": "test",
+                "last_name": "test",
+                "organization_name": "organization_name",
+                "job_title": "job_title",
+                "address": null,
+                "phone_number": null,
+                "organization_type": null,
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "127.0.0.1",
+                "gapi_access_token": null,
+                "membership_type_id": 1
+            },
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false
+            }
+        }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update Brightcove API setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/suborganizations/{sub_organization}/brightcove-api-settings/{brightcove_api_setting}</code></p>
+<p><code>PATCH api/v1/suborganizations/{sub_organization}/brightcove-api-settings/{brightcove_api_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user.</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid ID of existing user organization.</td>
+</tr>    
+<tr>
+<td><code>account_id</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 50 characters.</td>
+</tr>
+<tr>
+<td><code>account_name</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 100 characters.</td>
+</tr>
+<tr>
+<td><code>account_email</code></td>
+<td>string</td>
+<td>required|unique</td>
+<td>Valid account id.Max 150 characters.</td>
+</tr>
+<tr>
+<td><code>client_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid client key.</td>
+</tr>
+<tr>
+<td><code>client_secret</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid client secret.Require with client id.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>longtext</td>
+<td>optional</td>
+<td>Valid tool description.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+
+<!-- START_2f2758b0abc25e98982d44b733c0347d -->
+<h2>Get Brightcove API Setting</h2>
+<p>Get the specified Brightcove API setting data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 15,
+        "user_id": 1,
+        "organization_id": 1,
+        "account_id": "6282550302001",
+        "account_name": "Curriki Brighcove CMS",
+        "account_email": "mike@curriki.org",
+        "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+        "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+        "description": "Brightcove API Testing.",
+        "created_at": null,
+        "updated_at": null,
+        "deleted_at": null,
+        "user": {
+            "id": 1,
+            "name": "localuser",
+            "email": "localuser@local.com",
+            "email_verified_at": "2020-08-26T10:49:59.000000Z",
+            "created_at": "2020-08-22T12:13:52.000000Z",
+            "updated_at": "2020-10-29T08:52:59.000000Z",
+            "first_name": "test",
+            "last_name": "test",
+            "organization_name": "organization_name",
+            "job_title": "job_title",
+            "address": null,
+            "phone_number": null,
+            "organization_type": null,
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "hubspot": false,
+            "subscribed": true,
+            "subscribed_ip": "127.0.0.1",
+            "gapi_access_token": null,
+            "membership_type_id": 1
+        },
+        "organization": {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "domain": "currikistudio",
+            "parent_id": null,
+            "image": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "self_registration": true,
+            "account_id": null,
+            "api_key": null,
+            "unit_path": null,
+            "noovo_client_id": null,
+            "gcr_project_visibility": true,
+            "gcr_playlist_visibility": false,
+            "gcr_activity_visibility": false
+        }
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/suborganizations/{sub_organazation}/brightcove-api-settings/{brightcove_api_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+<td><code>brightcove_api_setting</code></td>
+<td>required</td>
+<td>The Id of a Brightcove API setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_2f2758b0abc25e98982d44b733c0347d -->
+
+<!-- START_b1748719c1f572e3601dbbb3b63923dc -->
+<h2>Delete Brightcove API Setting</h2>
+<p>Deletes the Brightcove API setting from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/suborganizations/1/brightcove-api-settings/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": {
+        "message": "Brightcove API setting deleted!",
+        "data": []
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete brightcove api setting, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/suborganizations/{sub_organization}/brightcove-api-settings/{brightcove_api_setting}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sub_organazation</code></td>
+<td>required</td>
+<td>The Id of a existing user organization</td>
+</tr>    
+<tr>
+<td><code>brightcove_api_setting</code></td>
+<td>required</td>
+<td>The Id of a Brightcove API setting</td>
+</tr>
+</tbody>
+</table>
+<!-- END_b1748719c1f572e3601dbbb3b63923dc -->
+
+<h1>1010. Get Kaltura Media List API</h1>
+<p>APIs to get Kaltura media list.</p>
+<!-- START_2f2758b0abc25e98982d44b733c0347d -->
+<h2>Get Kaltura Media List</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8383/api/v1/kaltura/get-media-entry-list" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{
+            "pageSize": 5,
+            "pageIndex": 0,
+            "searchText": "video name string like personal capture",
+            "organization_id": 1
+        }'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8383/api/v1/kaltura/get-media-entry-list"
+);
+
+let headers = {
+    "Authorization": "Bearer token",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {            
+            "pageSize": 5,
+            "pageIndex": 0,
+            "searchText": "video name string like personal capture",
+            "organization_id": 1
+        }
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8383/api/v1/brightcove/get-bc-videos-list',
+    [
+        'headers' =&gt; [
+            "Authorization"=&gt; "Bearer token",
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            "pageSize"=&gt; 5,
+            "pageIndex"=&gt; 0,
+            "searchText"=&gt; "video name string like personal capture",
+            "organization_id"=&gt; 1
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8383/api/v1/kaltura/get-media-entry-list'
+payload = {
+    "pageSize": 5,
+    "pageIndex": 0,
+    "searchText": "video name string like personal capture",
+    "organization_id": 1
+}
+headers = {
+  "Authorization": "Bearer token",
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "objects": [
+        {
+            "mediaType": 1,
+            "conversionQuality": "8053211",
+            "sourceType": "35",
+            "sourceVersion": null,
+            "searchProviderType": null,
+            "searchProviderId": null,
+            "creditUserName": null,
+            "creditUrl": null,
+            "mediaDate": null,
+            "dataUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_j7zwfjye/format/url/protocol/https",
+            "flavorParamsIds": "0,487041,487051,487061,487071,487081,487091",
+            "isTrimDisabled": null,
+            "streams": null,
+            "plays": 3,
+            "views": 12,
+            "lastPlayedAt": 1625050800,
+            "width": null,
+            "height": null,
+            "duration": 206,
+            "msDuration": 206000,
+            "durationType": null,
+            "id": "1_j7zwfjye",
+            "name": "Tips & Tricks for Better Videos - Chapter 4 - Post-Production",
+            "description": "In this video we discuss how to wrap up your video with some simple post production tips.",
+            "partnerId": 4186473,
+            "userId": "asim@curriki.org",
+            "creatorId": "asim@curriki.org",
+            "tags": "data administration, accessibility, video, search marketing, caption complete, cameras, music, video tips, video solutions, metadata, data classification, national institute for health and care excellence, data structures, presentation applications, effects, training videos, keywords (marketing), video tutorials, artistic expressions and media, video training, video editing, software",
+            "adminTags": "",
+            "categories": "",
+            "categoriesIds": "",
+            "status": "2",
+            "moderationStatus": 6,
+            "moderationCount": 0,
+            "type": "1",
+            "createdAt": 1625048693,
+            "updatedAt": 1642682997,
+            "rank": 0,
+            "totalRank": 0,
+            "votes": 0,
+            "groupId": null,
+            "partnerData": null,
+            "downloadUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_j7zwfjye/format/download/protocol/https/flavorParamIds/0",
+            "searchText": "_PAR_ONLY_ _4186473_ _MEDIA_TYPE_1|  Tips & Tricks for Better Videos - Chapter 4 - Post-Production data administration, accessibility, video, search marketing, caption complete, cameras, music, video tips, video solutions, metadata, data classification, national institute for health and care excellence, data structures, presentation applications, effects, training videos, keywords (marketing), video tutorials, artistic expressions and media, video training, video editing, software In this video we discuss how to wrap up your video with some simple post production tips. ",
+            "licenseType": -1,
+            "version": 0,
+            "thumbnailUrl": "https://cfvod.kaltura.com/p/4186473/sp/418647300/thumbnail/entry_id/1_j7zwfjye/version/100011",
+            "accessControlId": 5021003,
+            "startDate": null,
+            "endDate": null,
+            "referenceId": null,
+            "replacingEntryId": null,
+            "replacedEntryId": null,
+            "replacementStatus": "0",
+            "partnerSortValue": 20,
+            "conversionProfileId": 8053211,
+            "redirectEntryId": null,
+            "rootEntryId": "0_umnoapkt",
+            "parentEntryId": null,
+            "operationAttributes": [],
+            "entitledUsersEdit": "",
+            "entitledUsersPublish": "",
+            "entitledUsersView": "",
+            "capabilities": "",
+            "templateEntryId": null,
+            "displayInSearch": 1,
+            "application": null,
+            "applicationVersion": null,
+            "blockAutoTranscript": false
+        },
+        {
+            "mediaType": 1,
+            "conversionQuality": "9569961",
+            "sourceType": "35",
+            "sourceVersion": null,
+            "searchProviderType": null,
+            "searchProviderId": null,
+            "creditUserName": null,
+            "creditUrl": null,
+            "mediaDate": null,
+            "dataUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_mckyursn/format/url/protocol/https",
+            "flavorParamsIds": "0,487041,487051,487061,487071,487091",
+            "isTrimDisabled": null,
+            "streams": null,
+            "plays": 12,
+            "views": 30,
+            "lastPlayedAt": 1627380000,
+            "width": null,
+            "height": null,
+            "duration": 218,
+            "msDuration": 218000,
+            "durationType": null,
+            "id": "1_mckyursn",
+            "name": "Personal Capture Walkthrough ",
+            "description": "Learn how to use Kaltura's Personal Capture.",
+            "partnerId": 4186473,
+            "userId": "asim@curriki.org",
+            "creatorId": "asim@curriki.org",
+            "tags": "personal capture, walkthrough, creation tools",
+            "adminTags": null,
+            "categories": "",
+            "categoriesIds": "",
+            "status": "2",
+            "moderationStatus": 6,
+            "moderationCount": 0,
+            "type": "1",
+            "createdAt": 1625048695,
+            "updatedAt": 1627377292,
+            "rank": 0,
+            "totalRank": 0,
+            "votes": 0,
+            "groupId": null,
+            "partnerData": null,
+            "downloadUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_mckyursn/format/download/protocol/https/flavorParamIds/0",
+            "searchText": "_PAR_ONLY_ _4186473_ _MEDIA_TYPE_1|  Personal Capture Walkthrough personal capture, walkthrough, creation tools Learn how to use Kalturas Personal Capture. ",
+            "licenseType": -1,
+            "version": 0,
+            "thumbnailUrl": "https://cfvod.kaltura.com/p/4186473/sp/418647300/thumbnail/entry_id/1_mckyursn/version/100011",
+            "accessControlId": 5021003,
+            "startDate": null,
+            "endDate": null,
+            "referenceId": null,
+            "replacingEntryId": null,
+            "replacedEntryId": null,
+            "replacementStatus": "0",
+            "partnerSortValue": 0,
+            "conversionProfileId": 9569961,
+            "redirectEntryId": null,
+            "rootEntryId": "0_zjpg91ti",
+            "parentEntryId": null,
+            "operationAttributes": [],
+            "entitledUsersEdit": "",
+            "entitledUsersPublish": "",
+            "entitledUsersView": "",
+            "capabilities": "",
+            "templateEntryId": null,
+            "displayInSearch": 1,
+            "application": null,
+            "applicationVersion": null,
+            "blockAutoTranscript": false
+        },
+        {
+            "mediaType": 1,
+            "conversionQuality": "8053211",
+            "sourceType": "35",
+            "sourceVersion": null,
+            "searchProviderType": null,
+            "searchProviderId": null,
+            "creditUserName": null,
+            "creditUrl": null,
+            "mediaDate": null,
+            "dataUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_roo6ltck/format/url/protocol/https",
+            "flavorParamsIds": "0,487041,487051,487061,487071,487081,487091",
+            "isTrimDisabled": null,
+            "streams": null,
+            "plays": 0,
+            "views": 2,
+            "lastPlayedAt": null,
+            "width": null,
+            "height": null,
+            "duration": 198,
+            "msDuration": 198000,
+            "durationType": null,
+            "id": "1_roo6ltck",
+            "name": "Tips & Tricks for Better Videos - Chapter 1 - Preparation",
+            "description": "Learn how to prepare for creating your own video content. We cover preparing your script, how to position your camera, and even what or what not to wear.",
+            "partnerId": 4186473,
+            "userId": "asim@curriki.org",
+            "creatorId": "asim@curriki.org",
+            "tags": "jewellery, telephone, caption complete, cameras, music, video tips, telecommunications equipment, electronical devices, video solutions, web camera, bracelet (jewelry), photography, effects, photography products and equipment, training videos, computer camera, video tutorials, artistic expressions and media, computers, computer accessories, information technology supplies, video training",
+            "adminTags": "",
+            "categories": "NSCatTwo",
+            "categoriesIds": "224062953",
+            "status": "2",
+            "moderationStatus": 6,
+            "moderationCount": 0,
+            "type": "1",
+            "createdAt": 1625048681,
+            "updatedAt": 1629726550,
+            "rank": 0,
+            "totalRank": 0,
+            "votes": 0,
+            "groupId": null,
+            "partnerData": null,
+            "downloadUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_roo6ltck/format/download/protocol/https/flavorParamIds/0",
+            "searchText": "_PAR_ONLY_ _4186473_ _MEDIA_TYPE_1|  Tips & Tricks for Better Videos - Chapter 1 - Preparation jewellery, telephone, caption complete, cameras, music, video tips, telecommunications equipment, electronical devices, video solutions, web camera, bracelet (jewelry), photography, effects, photography products and equipment, training videos, computer camera, video tutorials, artistic expressions and media, computers, computer accessories, information technology supplies, video training Learn how to prepare for creating your own video content. We cover preparing your script, how to position your camera, and even what or what not to wear. ",
+            "licenseType": -1,
+            "version": 0,
+            "thumbnailUrl": "https://cfvod.kaltura.com/p/4186473/sp/418647300/thumbnail/entry_id/1_roo6ltck/version/100011",
+            "accessControlId": 5021003,
+            "startDate": null,
+            "endDate": null,
+            "referenceId": null,
+            "replacingEntryId": null,
+            "replacedEntryId": null,
+            "replacementStatus": "0",
+            "partnerSortValue": 35,
+            "conversionProfileId": 8053211,
+            "redirectEntryId": null,
+            "rootEntryId": "0_adse5iqv",
+            "parentEntryId": null,
+            "operationAttributes": [],
+            "entitledUsersEdit": "",
+            "entitledUsersPublish": "",
+            "entitledUsersView": "",
+            "capabilities": "",
+            "templateEntryId": null,
+            "displayInSearch": 1,
+            "application": null,
+            "applicationVersion": null,
+            "blockAutoTranscript": false
+        },
+        {
+            "mediaType": 1,
+            "conversionQuality": "8053211",
+            "sourceType": "35",
+            "sourceVersion": null,
+            "searchProviderType": null,
+            "searchProviderId": null,
+            "creditUserName": null,
+            "creditUrl": null,
+            "mediaDate": null,
+            "dataUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_smyk465y/format/url/protocol/https",
+            "flavorParamsIds": "0,487041,487051,487061,487071,487081,487091",
+            "isTrimDisabled": null,
+            "streams": null,
+            "plays": 0,
+            "views": 0,
+            "lastPlayedAt": null,
+            "width": null,
+            "height": null,
+            "duration": 274,
+            "msDuration": 274000,
+            "durationType": null,
+            "id": "1_smyk465y",
+            "name": "Tips & Tricks for Better Videos - Chapter 2 - Recording Video",
+            "description": "In this video we focus on how to create a great quality video without needing a professional team and studio. How to set-up, select your background, tips for lighting and more.",
+            "partnerId": 4186473,
+            "userId": "asim@curriki.org",
+            "creatorId": "asim@curriki.org",
+            "tags": "cinema & motion picture and video activities, telephone, caption complete, music composing and composers, human communication, communications, cameras, music, video tips, video solutions, business, nonverbal communication, laptops, effects, photography products and equipment, body language, training videos, video tutorials, artistic expressions and media, tv & film, conversation, video training",
+            "adminTags": "",
+            "categories": "Samples>Sample Videos",
+            "categoriesIds": "217521603",
+            "status": "2",
+            "moderationStatus": 6,
+            "moderationCount": 0,
+            "type": "1",
+            "createdAt": 1625048684,
+            "updatedAt": 1631791581,
+            "rank": 0,
+            "totalRank": 0,
+            "votes": 0,
+            "groupId": null,
+            "partnerData": null,
+            "downloadUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_smyk465y/format/download/protocol/https/flavorParamIds/0",
+            "searchText": "_PAR_ONLY_ _4186473_ _MEDIA_TYPE_1|  Tips & Tricks for Better Videos - Chapter 2 - Recording Video cinema & motion picture and video activities, telephone, caption complete, music composing and composers, human communication, communications, cameras, music, video tips, video solutions, business, nonverbal communication, laptops, effects, photography products and equipment, body language, training videos, video tutorials, artistic expressions and media, tv & film, conversation, video training In this video we focus on how to create a great quality video without needing a professional team and studio. How to set-up, select your background, tips for lighting and more. ",
+            "licenseType": -1,
+            "version": 0,
+            "thumbnailUrl": "https://cfvod.kaltura.com/p/4186473/sp/418647300/thumbnail/entry_id/1_smyk465y/version/100011",
+            "accessControlId": 5021003,
+            "startDate": null,
+            "endDate": null,
+            "referenceId": null,
+            "replacingEntryId": null,
+            "replacedEntryId": null,
+            "replacementStatus": "0",
+            "partnerSortValue": 30,
+            "conversionProfileId": 8053211,
+            "redirectEntryId": null,
+            "rootEntryId": "0_cojj28qc",
+            "parentEntryId": null,
+            "operationAttributes": [],
+            "entitledUsersEdit": "",
+            "entitledUsersPublish": "",
+            "entitledUsersView": "",
+            "capabilities": "",
+            "templateEntryId": null,
+            "displayInSearch": 1,
+            "application": null,
+            "applicationVersion": null,
+            "blockAutoTranscript": false
+        },
+        {
+            "mediaType": 1,
+            "conversionQuality": "8053211",
+            "sourceType": "35",
+            "sourceVersion": null,
+            "searchProviderType": null,
+            "searchProviderId": null,
+            "creditUserName": null,
+            "creditUrl": null,
+            "mediaDate": null,
+            "dataUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_ys3g7ccp/format/url/protocol/https",
+            "flavorParamsIds": "0,487041,487051,487061,487071,487081,487091",
+            "isTrimDisabled": null,
+            "streams": null,
+            "plays": 0,
+            "views": 0,
+            "lastPlayedAt": null,
+            "width": null,
+            "height": null,
+            "duration": 199,
+            "msDuration": 199000,
+            "durationType": null,
+            "id": "1_ys3g7ccp",
+            "name": "Tips & Tricks for Better Videos - Chapter 3 - Recording Audio",
+            "description": "In this video we cover how to get the best quality audio. Which mics to use, that aren't too expensive, how to leverage music and more.",
+            "partnerId": 4186473,
+            "userId": "asim@curriki.org",
+            "creatorId": "asim@curriki.org",
+            "tags": "musical recordings, telephone, household appliances and consumer electronics, electromechanical device, caption complete, microphone, consumer electronic and optical products, music, video tips, electronics & manufacture of computer, video solutions, sound reproduction, electrical mechanics, laptops, effects, entertainment industry, training videos, video tutorials, artistic expressions and media, audio devices, video training, audio, music industry",
+            "adminTags": "",
+            "categories": "NSCatTwo",
+            "categoriesIds": "224062953",
+            "status": "2",
+            "moderationStatus": 6,
+            "moderationCount": 0,
+            "type": "1",
+            "createdAt": 1625048677,
+            "updatedAt": 1629751565,
+            "rank": 0,
+            "totalRank": 0,
+            "votes": 0,
+            "groupId": null,
+            "partnerData": null,
+            "downloadUrl": "https://cdnapisec.kaltura.com/p/4186473/sp/418647300/playManifest/entryId/1_ys3g7ccp/format/download/protocol/https/flavorParamIds/0",
+            "searchText": "_PAR_ONLY_ _4186473_ _MEDIA_TYPE_1|  Tips & Tricks for Better Videos - Chapter 3 - Recording Audio musical recordings, telephone, household appliances and consumer electronics, electromechanical device, caption complete, microphone, consumer electronic and optical products, music, video tips, electronics & manufacture of computer, video solutions, sound reproduction, electrical mechanics, laptops, effects, entertainment industry, training videos, video tutorials, artistic expressions and media, audio devices, video training, audio, music industry In this video we cover how to get the best quality audio. Which mics to use, that arent too expensive, how to leverage music and more. ",
+            "licenseType": -1,
+            "version": 0,
+            "thumbnailUrl": "https://cfvod.kaltura.com/p/4186473/sp/418647300/thumbnail/entry_id/1_ys3g7ccp/version/100011",
+            "accessControlId": 5021003,
+            "startDate": null,
+            "endDate": null,
+            "referenceId": null,
+            "replacingEntryId": null,
+            "replacedEntryId": null,
+            "replacementStatus": "0",
+            "partnerSortValue": 25,
+            "conversionProfileId": 8053211,
+            "redirectEntryId": null,
+            "rootEntryId": "0_5eej5a3i",
+            "parentEntryId": null,
+            "operationAttributes": [],
+            "entitledUsersEdit": "",
+            "entitledUsersPublish": "",
+            "entitledUsersView": "",
+            "capabilities": "",
+            "templateEntryId": null,
+            "displayInSearch": 1,
+            "application": null,
+            "applicationVersion": null,
+            "blockAutoTranscript": false
+        }
+    ],
+    "totalCount": 5
+}
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to get the record. Require field organization_id, pageSize, pageIndex, searchText!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/kaltura/get-media-entry-list</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pageSize</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid integer value of per page record for pagination.</td>
+</tr>
+<tr>
+<td><code>pageIndex</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Valid interger value of offset or skip record for pagination.</td>
+</tr>    
+<tr>
+<td><code>searchText</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Valid string like search by video name/title</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>Valid id of existing organization</td>
+</tr>
+</tbody>
+</table>
+<!-- END_2f2758b0abc25e98982d44b733c0347d -->
       </div>
       <div class="dark-box">
                         <div class="lang-selector">

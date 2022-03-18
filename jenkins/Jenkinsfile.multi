@@ -1,0 +1,53 @@
+node("currikidev") {
+    def app
+    def cron
+      
+    
+    
+    stage('Clone repository') {               
+        checkout scm    
+    }  
+    
+    stage('Build image') {         
+        app = docker.build("quay.io/curriki/api")
+        cron = docker.build("quay.io/curriki/cron", "-f Dockerfile.cron .")    
+    } 
+    stage('Test image') {           
+        app.inside { 
+                sh 'echo "Api Tests passed"'        
+        }    
+        cron.inside { 
+                sh 'echo "Cron Tests passed"'        
+        }   
+    } 
+    stage('Push image') {	
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                app.push("${env.BUILD_NUMBER}")            
+                app.push("multi")        
+        }    
+        docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                cron.push("${env.BUILD_NUMBER}")            
+                cron.push("multi")        
+        }   
+    }
+    
+     parallel(
+            "StageA": {
+                if(Jenkins.instance.getNode('currikimultitenancy').toComputer().isOnline()){
+                    node('currikimultitenancy') {
+                        stage ('currikimultitenancy') {
+                                echo 'Copy'
+                                sh "yes | docker stack deploy --compose-file /curriki/docker-compose-multi.yml currikistack" 
+                                echo 'Copy completed'
+                        }
+                    }
+                } else {
+                    stage ('currikimultitenancy') {
+                        echo "currikimultitenancy is offline"
+                        exit 1
+                    }
+                }
+            }
+    )
+    
+}

@@ -1,9 +1,38 @@
 {
     "suborganization": {
-        "id": 6,
-        "name": "org name 5",
-        "description": "org description 5",
+        "id": 1,
+        "name": "Curriki Studio",
+        "description": "test",
+        "account_id": "1",
+        "api_key": "test",
+        "unit_path": "path",
+        "noovo_client_id": "1",
+        "parent": "1",
         "image": "/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
-        "domain": "orgdomain5"
+        "domain": "currikistudio",
+        "self_registration": true,
+        "gcr_project_visibility": true,
+        "gcr_playlist_visibility": false,
+        "gcr_activity_visibility": false,
+        "organization_role": "Administrator",
+        "organization_role_id": 1,
+        "projects_count": 4,
+        "suborganization_count": 5,
+        "users_count": 1,
+        "groups_count": 0,
+        "teams_count": 2,
+        "tos_type": "URL",
+        "tos_url": "https://curriki.org",
+        "tos_content": "Test content",
+        "privacy_policy_type": "Parent",
+        "privacy_policy_url": null,
+        "privacy_policy_content": null,
+        "branding": {
+            "primary_color": "#515151",
+            "secondary_color": "#515151",
+            "tertiary_color": "#515151",
+            "primary_font_family": "open sans",
+            "secondary_font_family": "open sans"
+        }
     }
 }

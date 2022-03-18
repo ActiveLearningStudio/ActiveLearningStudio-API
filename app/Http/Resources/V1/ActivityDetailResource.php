@@ -26,12 +26,13 @@ class ActivityDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $response = [
             'id' => $this->id,
             'playlist' => new ActivityPlaylistResource($this->playlist),
             'title' => $this->title,
             'type' => $this->type,
             'content' => $this->content,
+            'description' => $this->description,
             'shared' => $this->shared,
             'order' => $this->order,
             'thumb_url' => $this->thumb_url,
@@ -44,8 +45,18 @@ class ActivityDetailResource extends JsonResource
             'minor_version' => $this->h5p_content->library->minor_version,
             'user_name' => $this->data['user_name'],
             'user_id' => $this->data['user_id'],
+            'source_type' => $this->source_type,
+            'source_url' => $this->source_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'source_type' => $this->source_type,
+            'source_url' => $this->source_url,
         ];
+
+        if ($this->resource->brightcoveData) {
+            $response['brightcoveData'] = $this->resource->brightcoveData;
+        }
+
+        return $response;
     }
 }

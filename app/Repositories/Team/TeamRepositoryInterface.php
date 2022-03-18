@@ -102,9 +102,10 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      *
      * @param $suborganization_id
      * @param $user_id
+     * @param $data
      * @return mixed
      */
-    public function getTeams($suborganization_id, $user_id);
+    public function getTeams($suborganization_id, $user_id, $data);
 
     /**
      * Get Organization Teams data
@@ -113,6 +114,15 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getOrgTeams($suborganization_id);
+
+    /**
+     * Get Organization Teams data for admin
+     *
+     * @param $data
+     * @param $suborganization_id
+     * @return mixed
+     */
+    public function getAdminTeams($data, $suborganization_id);
 
     /**
      * Get Team detail data
@@ -130,4 +140,10 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function fetchTeamUserPermissions($authenticatedUser, $team);
+    
+    /**
+     * CronJob topush curriki projects into Noovo 
+     * @return mixed
+     */
+    public function noovoIntegration();
 }

@@ -115,22 +115,16 @@ class SearchController extends Controller
         $data = $searchRequest->validated();
 
         $organization = $this->organizationRepository->find($data['organization_id']);
-        $this->authorize('advanceSearch', $organization);
 
         $data['organizationIds'] = [$data['organization_id']];
         $data['orgObj'] = $organization;
+        $data['indexing'] = [config('constants.indexing-approved')];
 
-        if ($data['searchType'] === 'showcase_projects') {
-            $data['indexing'] = [config('constants.indexing-approved')];
-        } elseif ($data['searchType'] === 'org_projects') {
-            if (!auth()->user()->hasPermissionTo('organization:view', $organization)) {
-                $data['searchType'] = 'org_projects_non_admin';
-            } else {
-                $data['searchType'] = 'org_projects_admin';
-            }
+        if ($data['searchType'] === 'org_projects') {
+            $data['searchType'] = 'org_projects_non_admin';
         }
 
-        $results = $this->activityRepository->advanceSearchForm($data);
+        $results = $this->activityRepository->advanceSearchForm($data, auth()->user()->id);
 
         return $results;
     }
@@ -175,14 +169,11 @@ class SearchController extends Controller
     {
         $data = $searchRequest->validated();
 
-        $organization = $this->organizationRepository->find($data['organization_id']);
-        $this->authorize('dashboardSearch', $organization);
-
         $data['userIds'] = [auth()->user()->id];
 
         $data['organizationIds'] = [$data['organization_id']];
 
-        $results = $this->activityRepository->advanceSearchForm($data);
+        $results = $this->activityRepository->advanceSearchForm($data, auth()->user()->id);
 
         return $results;
     }
