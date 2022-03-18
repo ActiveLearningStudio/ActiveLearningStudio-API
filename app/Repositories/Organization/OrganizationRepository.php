@@ -8,6 +8,7 @@ use App\Models\OrganizationRoleType;
 use App\Models\Pivots\GroupProjectUser;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\SsoLogin;
+use App\Models\TeamUserRole;
 use App\Models\UserLogin;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Repositories\BaseRepository;
@@ -607,21 +608,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             $user = $organization->users()->where('user_id', $data['user_id'])->first();
 
-            if (!isset($data['preserve_data']) || (isset($data['preserve_data']) && $data['preserve_data'] !== true)) {
-                TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
-                GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
-                UserLogin::where('user_id', $data['user_id'])->forceDelete();
-                $user->favoriteProjects()->detach();
-                $user->ssoLogin()->forceDelete();
-                $user->lmssetting()->forceDelete();
-            }
-
             // check if user exists to other organizations
             $userOrganizations = $user->organizations()->where('organization_id', '<>', $organization->id)->get();
 
             $organization->users()->detach($data['user_id']);
 
             if(count($userOrganizations) == 0) {
+                UserLogin::where('user_id', $data['user_id'])->forceDelete();
+                $user->favoriteProjects()->detach();
+                $user->lmssetting()->forceDelete();
+                $user->ssoLogin()->forceDelete();
+                $user->organizations()->detach();
+                TeamUserRole::where('user_id', $data['user_id'])->forceDelete();
+                TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                UserLogin::where('user_id', $data['user_id'])->forceDelete();
+                DB::table('user_team')->where('user_id', $data['user_id'])->delete();
+
                 $this->userRepository->forceDelete($user);
             }
 

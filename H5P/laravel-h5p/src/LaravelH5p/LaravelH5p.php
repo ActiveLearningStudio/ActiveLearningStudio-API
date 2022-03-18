@@ -179,7 +179,7 @@ class LaravelH5p
         $cid = 'cid-' . $content['id'];
         // Load H5P content from Repository
         $getH5pContent = new H5pContentRepository(new H5pContent());
-        
+
         // Check for library
         $record = $getH5pContent->getLibrary($content['id']);
         // Get Library Name
@@ -208,7 +208,7 @@ class LaravelH5p
                         $settings['loadedCss'][] = self::get_h5plibrary_url($url);
                     }
                 }
-                
+
                 if ($content['library']['name'] === 'H5P.BrightcoveInteractiveVideo') {
                     $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $content['id'])->first();
                     if ($brightcoveContentData) {
@@ -252,11 +252,11 @@ class LaravelH5p
      */
     private static function get_core_settings()
     {
-        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' . 
+        $contentUserDataUrl = config('app.url') . '/api/v1/h5p/ajax/content-user-data' .
         '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId';
         if (isset($_GET['gcuid']) && isset($_GET['submissionid'])) {
-            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' . 
-            '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId' . 
+            $contentUserDataUrl = config('app.url') . '/api/v1/google-classroom/h5p/ajax/content-user-data' .
+            '?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId' .
             '&gcuid=' . $_GET['gcuid'] . '&submissionid=' . $_GET['submissionid'];
         }
 
@@ -296,7 +296,7 @@ class LaravelH5p
     {
         $settings['loadedJs'] = array();
         $settings['loadedCss'] = array();
-        
+
         $settings['core'] = array(
             'styles' => array(),
             'scripts' => array(),
@@ -307,7 +307,7 @@ class LaravelH5p
             $brightcoveAPISetting = $brightcoveAPISettingRepository->getByAccountId($_GET['accountId']);
             array_push($settings['core']['styles'], config('app.url') . $brightcoveAPISetting->css_path);
         }
-        
+
         $settings['core']['styles'][] = self::get_laravelh5p_url('/css/laravel-h5p.css');
 
         foreach (H5PCore::$styles as $style) {
@@ -316,9 +316,8 @@ class LaravelH5p
         foreach (H5PCore::$scripts as $script) {
             $settings['core']['scripts'][] = self::get_h5pcore_url('/' . $script);
         }
-        if ($lib !== 'preview') {
-            $settings['core']['scripts'][] = self::get_h5peditor_url('/scripts/h5peditor-editor.js');
-        }
+
+        $settings['core']['scripts'][] = self::get_h5peditor_url('/scripts/h5peditor-editor.js');
         $settings['core']['scripts'][] = self::get_laravelh5p_url('/js/laravel-h5p.js');
         $settings['core']['scripts'][] = self::get_h5plibrary_url('/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9');
         $settings['core']['scripts'][] = self::get_h5plibrary_url('/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9');
@@ -460,7 +459,7 @@ class LaravelH5p
                 }
             }
         }*/
-        
+
         // Get preloaded user data for the current user
         if (isset($_GET['gcuid']) && isset($_GET['submissionid'])) {
             $results = DB::select("

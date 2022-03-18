@@ -14,7 +14,8 @@ class UpdateSmenticsH5pPersonalityQuiz extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PPersonalityQuizLibSubmitButtonSeeder::class
+            '--class' => H5PPersonalityQuizLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 

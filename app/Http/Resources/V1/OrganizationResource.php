@@ -85,6 +85,13 @@ class OrganizationResource extends JsonResource
             'privacy_policy_type' => $this->privacy_policy_type,
             'privacy_policy_url' => $this->privacy_policy_url,
             'privacy_policy_content' => $this->privacy_policy_content,
+            'branding' => [
+                'primary_color' => $this->primary_color,
+                'secondary_color' => $this->secondary_color,
+                'tertiary_color' => $this->tertiary_color,
+                'primary_font_family' => $this->primary_font_family,
+                'secondary_font_family' => $this->secondary_font_family,
+            ],
         ];
     }
 }

@@ -40,6 +40,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
                 });
                 $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');
                 $query->orWhere('tool_url', 'iLIKE', '%' . $data['query'] . '%');
+                $query->orWhere('tool_type', 'iLIKE', '%' . $data['query'] . '%');
             });
         }
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
@@ -129,6 +130,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
             "tool_url" => $ltiToolSetting->tool_url,
             "tool_domain" => $ltiToolSetting->tool_domain,
             "lti_version" => $ltiToolSetting->lti_version,
+            "tool_type" => $ltiToolSetting->tool_type,
             "tool_consumer_key" => $ltiToolSetting->tool_consumer_key,
             "tool_secret_key" => $ltiToolSetting->tool_secret_key,
             "tool_description" => $ltiToolSetting->tool_description,
@@ -137,5 +139,18 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
         ];
         $cloned_setting = $this->create($ltiToolSettingData);
         return $cloned_setting['id'];
+    }
+
+    /**
+     * @param $userId integer, $orgId integer $toolType string
+     * @return mixed
+     */
+    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $toolType)
+    {
+        try {
+            return $this->model->where([['user_id','=', $userId],['organization_id','=', $orgId],['tool_type','=', $toolType]])->first();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 }

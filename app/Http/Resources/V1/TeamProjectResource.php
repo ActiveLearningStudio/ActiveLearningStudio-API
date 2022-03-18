@@ -22,7 +22,9 @@ class TeamProjectResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'team_id' => $this->team_id,
             'users' => $this->users,
-            'gcr_project_visibility' => $this->organization->gcr_project_visibility,
+            'gcr_project_visibility' => (isset($this->organization->gcr_project_visibility)) ? 
+                                            $this->organization->gcr_project_visibility :
+                                            null,
         ];
     }
 }
