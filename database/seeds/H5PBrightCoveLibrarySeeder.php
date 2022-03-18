@@ -11,7 +11,7 @@ class H5PBrightCoveLibrarySeeder extends Seeder
      */
     public function run()
     {
-      $h5pImmersiveReaderLibParams = ['name' => "Brightcove Interactive Video"];
+      $h5pImmersiveReaderLibParams = ['name' => "H5P.BrightcoveInteractiveVideo"];
       $h5pImmersiveReaderLib = DB::table('h5p_libraries')->where($h5pImmersiveReaderLibParams)->first();
 
       if (empty($h5pImmersiveReaderLib)) {
@@ -22,7 +22,7 @@ class H5PBrightCoveLibrarySeeder extends Seeder
                           'major_version' => 1,
                           'minor_version' => 0,
                           'patch_version' => 0,
-                          'embed_types' => ' ',
+                          'embed_types' => 'div',
                           'runnable' => 1,
                           'restricted' => 0,
                           'fullscreen' => 1,
