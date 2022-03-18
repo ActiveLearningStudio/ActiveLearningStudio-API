@@ -865,10 +865,10 @@ class ProjectController extends Controller
 
     /**
      * Get the Projects by Ids
-     * 
-     * @urlParams 
-     * {"project_id": ["3024", "3025"]}
-     * 
+     *
+     * @param Request $request
+     * @param Project $project
+     *
      * @Response Projects
      */
     public function projectsByIds(Request $request,Project $project)

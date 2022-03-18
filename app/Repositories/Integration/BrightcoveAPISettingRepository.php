@@ -30,7 +30,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
     }
 
     /**
-     * To get list of brightcove account/setting   
+     * To get list of brightcove account/setting
      * @param  integer $suborganization
      * @return mixed
      * @throws GeneralException
@@ -140,13 +140,19 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
         foreach($videos as $video){
             if($video->activities->isNotEmpty()){
                 $user = User::where('id', $video->activities->pluck("user_id")->implode(","))->first();
-                array_push($title, (object)["title"=> $video->activities->pluck("title")->implode(","), 
+                array_push($title, (object)["title"=> $video->activities->pluck("title")->implode(","),
                     "user_id" => $user->first_name." ".$user->last_name ]);
             }
         }
         return $title;
     }
 
+    /**
+     * Delete Brightcove Api setting
+     * @param $id
+     * return mixed
+     * @throws GeneralException
+     */
     public function destroy($id)
     {
         try {
@@ -209,7 +215,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
 
     /**
      * To get record by setting id
-     * @param integer $suborganization, $id
+     * @param $id
      * @return mixed
      * @throws GeneralException
      */
