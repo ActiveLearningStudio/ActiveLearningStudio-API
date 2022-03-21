@@ -339,6 +339,14 @@ class H5pController extends Controller
         }
 
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+        
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $activity->brightcoveData = $brightcoveData;
+        }
         return response([
             'h5p_activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);
