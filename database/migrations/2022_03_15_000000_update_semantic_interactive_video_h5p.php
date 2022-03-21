@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class UpdateDragQuestionSemanticsIntoH5pLibraries extends Migration
+class UpdateSemanticInteractiveVideoH5p extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +12,7 @@ class UpdateDragQuestionSemanticsIntoH5pLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PDragQuestionLibSubmitButtonSeeder::class,
+            '--class' => UpdateSemanticInteractiveVideoSeeder::class,
             '--force' => true
         ]);
     }

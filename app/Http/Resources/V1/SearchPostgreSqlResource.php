@@ -26,6 +26,7 @@ class SearchPostgreSqlResource extends JsonResource
             'favored' => $this->when(isset($this->favored), $this->favored),
             'model' => $this->entity,
             'created_at' => $this->created_at,
+            'team_name' => $this->when(isset($this->team_name), $this->team_name),
             'user' => [
                 "email" => $this->email,
                 "first_name" => $this->first_name,
