@@ -40,7 +40,7 @@ class ExtractXAPIJSONController extends Controller
                 ->offset($offset)
                 ->limit($limit)
                 ->where('voided', false)
-                ->where('id', '>', $max_statement_id)
+                // ->where('id', '>', $max_statement_id)
                 ->orderby('id', 'ASC')
                 ->get();
 
@@ -146,13 +146,20 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['submission_id'] = $groupingInfo['submission'];
                 $insertData['attempt_id'] = $groupingInfo['attempt'];
 
-                $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
-                $publisherData = $googleClassroom->fetchPublisherData($glassAltCourseId);
-                if ($publisherData) {
-                    $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
-                    $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
+                //organization id of which this activity belongs to
+                if (isset($project->organization_id)) {
+                    $insertData['activity_org_id'] = $project->organization_id;
                 }
-                
+                if (!empty($definition)) {
+                    $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
+                    //Only fetching teacher_email_id of gclass_api_data column as in each respective case (LTI DL, Publishing from CS) email of publisher is already being stored
+                    $publisherData = $googleClassroom->fetchPublisherData($glassAltCourseId);
+                    if ($publisherData) {
+                        $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
+                        $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
+                    }
+                }
+
                 // Extract information from object.definition.extensions
                 if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                     $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);

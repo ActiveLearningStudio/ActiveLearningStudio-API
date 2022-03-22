@@ -28,7 +28,7 @@ class AddOrgANDpublisherToLrsStatementsDataTable extends Migration
     public function down()
     {
         Schema::table('lrs_statements_data', function (Blueprint $table) {
-            //
+            $table->dropColumn(['activity_org_id', 'publisher_id', 'publisher_org_id']);
         });
     }
 }
