@@ -40,7 +40,7 @@ class ExtractXAPIJSONController extends Controller
                 ->offset($offset)
                 ->limit($limit)
                 ->where('voided', false)
-                // ->where('id', '>', $max_statement_id)
+                ->where('id', '>', $max_statement_id)
                 ->orderby('id', 'ASC')
                 ->get();
 
