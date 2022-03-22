@@ -150,20 +150,19 @@ class ExtractXAPIJSONController extends Controller
                 if (isset($project->organization_id)) {
                     $insertData['activity_org_id'] = $project->organization_id;
                 }
-                if (!empty($definition)) {
+
+                // Extract information from object.definition.extensions
+                if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
+                    $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
+                    $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
+
                     //Only fetching teacher_email_id of gclass_api_data column as in each respective case (LTI DL, Publishing from CS) email of publisher is already being stored
                     $publisherData = $googleClassroom->fetchPublisherData($glassAltCourseId);
                     if ($publisherData) {
                         $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
                         $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
                     }
-                }
-
-                // Extract information from object.definition.extensions
-                if ($target->getObjectType() === 'Activity' && !empty($definition)) {
-                    $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
-                    $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
 
                     if (empty($glassAltCourseId)) {
                         $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_NAME);
