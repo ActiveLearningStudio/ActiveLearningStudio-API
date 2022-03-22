@@ -41,6 +41,10 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
                 ->orWhere('lti_client_id', 'iLIKE', '%' . $data['query'] . '%')
                 ->orWhere('site_name', 'iLIKE', '%' . $data['query'] . '%');
         }
+
+        if (isset($data['filter']) && $data['filter'] !== '') {
+            $query = $query->where('lms_name', $data['filter']);
+        }
         return $query->with('organization')->paginate($perPage);
     }
 
