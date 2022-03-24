@@ -799,7 +799,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                         
                         $return_res = [
                             "success"=> true,
-                            "message" => "Project has been imported successfully"
+                            "message" => "Project has been imported successfully",
+                            "project_id" => $cloned_project->id
                         ];
                         return json_encode($return_res);
                     }
