@@ -96,7 +96,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                     $export_file = $projectRepository->exportProject($this->user, $project);
                     \Log::Info($export_file);
                     $file_info = array(
-                        "filename" => $project->name . uniqid(),
+                        "filename" => str_replace(' ', '-', strtolower($project->name)) . uniqid(),
                         "description"=> $project->description,
                         "url"=> url(Storage::url('exports/'.basename($export_file))),
                         "md5sum"=> md5_file($export_file)
