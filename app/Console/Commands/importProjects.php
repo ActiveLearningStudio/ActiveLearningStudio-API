@@ -108,10 +108,6 @@ class importProjects extends Command
                     $this->info($responseReturn);
                 }
 
-                
-                
-                
-
             }
         }
         
