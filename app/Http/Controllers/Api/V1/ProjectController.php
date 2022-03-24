@@ -798,7 +798,7 @@ class ProjectController extends Controller
 
     public function importProject(ProjectUploadImportRequest $projectUploadImportRequest, Organization $suborganization)
     {
-        $this->authorize('import', [Project::class, $suborganization]);
+        //$this->authorize('import', [Project::class, $suborganization]);
 
         $projectUploadImportRequest->validated();
         $path = $projectUploadImportRequest->file('project')->store('public/imports');
