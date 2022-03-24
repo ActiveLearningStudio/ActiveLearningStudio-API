@@ -494,6 +494,7 @@ class AuthController extends Controller
             $response = json_decode($curl_request->getBody(), true);
             if ($curl_request->getStatusCode() === 200 && !isset($response['error'])) {
                 $response = $response;
+                $response['info']['client_id'] = config('services.stemuli.client');
                 return $this->stemuliSsoLogin($request->ip(), $response['info']);
             } else {
                 $response = $response['error'];
@@ -512,21 +513,111 @@ class AuthController extends Controller
     {
         try {
             if ($info) {
-                $result['user_email'] = $info['email'];
-                $result['first_name'] = $info['firstName'];
-                $result['last_name'] = $info['lastName'];
-                $result['tool_platform'] = 'stemuli';
-                $result['user_key'] = $info['email'];
-                $result['tool_consumer_instance_name'] = '';
-                $result['tool_consumer_instance_guid'] = '';
-                $result['custom_stemuli_school'] = '';
-                return $this->createUpdateSsoUser($ip, $result, 'stemuli');
+                $user = User::with(['lmssetting' => function($query) use ($info) {
+                    $query->where('lti_client_id', $info['client_id']);
+                }])->where('email', $info['email'])->first();
+
+                if (!$user) {
+                    $password = Str::random(10);
+                    $user = $this->userRepository->create([
+                        'first_name' => $info['first_name'],
+                        'last_name' => $info['last_name'],
+                        'email' => $info['email'],
+                        'password' => Hash::make($password),
+                        'remember_token' => Str::random(64),
+                        'email_verified_at' => now(),
+                    ]);
+                    if ($user) {
+                        $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $info['client_id']);
+                        //if default LMS setting not exist!
+                        if (!$default_lms_setting) {
+                            return response([
+                                'errors' => ['Unable to find default LMS setting with your client id.'],
+                            ], 404);
+                        }
+                        $default_lms_setting = $default_lms_setting->toArray();
+                        $default_lms_setting['lms_login_id'] = $user['email'];
+                        $user->lmssetting()->create($default_lms_setting);
+
+                        $user->ssoLogin()->create([
+                            'user_id' => $user->id,
+                            'provider' => 'stemuli',
+                            'uniqueid' => $info['email'],
+                            'tool_consumer_instance_name' => '',
+                            'tool_consumer_instance_guid' => '',
+                            'custom_school' => '',
+                        ]);
+                        $user['user_organization'] = $user->lmssetting[0]->organization;
+
+                        $organization = $this->organizationRepository->find($user['user_organization']['id']);
+                        if ($organization) {
+                            if($default_lms_setting['role_id']) {
+                                $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
+                            } else {
+                                $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                                $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                            }
+                        }
+                    }
+                } else {
+                    if (sizeof($user->lmssetting) > 0) {
+                        $user['user_organization'] = $user->lmssetting[0]->organization;
+                    } else {
+                        $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $info['client_id']);
+                        //if default LMS setting not exist!
+                        if (!$default_lms_setting) {
+                            return response([
+                                'errors' => ['Unable to find default LMS setting with your client id.'],
+                            ], 404);
+                        }
+                        $default_lms_setting = $default_lms_setting->toArray();
+                        $default_lms_setting['lms_login_id'] = $user['email'];
+                        $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
+
+                        $organization = $this->organizationRepository->find($newly_created_setting->id);
+                        if ($organization) {
+                            if($default_lms_setting['role_id']) {
+                                $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
+                            } else {
+                                $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
+                                $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
+                            }
+                        }
+                    }
+
+                    $sso_login = $user->ssoLogin()->where([
+                        'user_id' => $user->id,
+                        'provider' => 'stemuli',
+                        'tool_consumer_instance_guid' => ''
+                    ])->first();
+
+                    if (!$sso_login) {
+                        $user->ssoLogin()->create([
+                            'user_id' => $user->id,
+                            'provider' => 'stemuli',
+                            'uniqueid' => $info['email'],
+                            'tool_consumer_instance_name' => '',
+                            'tool_consumer_instance_guid' => '',
+                            'custom_school' => '',
+                        ]);
+                    }
+                }
+
+                $accessToken = $user->createToken('auth_token')->accessToken;
+
+                $this->userLoginRepository->create(['user_id' => $user->id, 'ip_address' => $ip]);
+
+                $data['user'] = $user->toArray();
+                $data['access_token'] = $accessToken;
+                $build_request_data = json_encode($data);
+                $user_info = base64_encode($build_request_data);
+                return redirect()->away(config('app.front_end_url') . '/sso/dologin/' . $user_info);
             }
             return response([
                 'errors' => ['Unable to login with SSO. Info is empty'],
             ], 400);
         } catch (\Exception $e) {
-            \Log::error($e->getLine() ."/". $e->getMessage());
+            \Log::error($e->getLine() . "/" . $e->getMessage());
             return response([
                 'errors' => ['Unable to login with SSO.'],
             ], 400);

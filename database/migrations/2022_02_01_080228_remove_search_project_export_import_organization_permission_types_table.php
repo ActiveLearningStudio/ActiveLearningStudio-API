@@ -12,7 +12,8 @@ class RemoveSearchProjectExportImportOrganizationPermissionTypesTable extends Mi
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => OrganizationPermissionTypeRemovalSeeder::class
+            '--class' => OrganizationPermissionTypeRemovalSeeder::class,
+            '--force' => true
         ]);
     }
 
