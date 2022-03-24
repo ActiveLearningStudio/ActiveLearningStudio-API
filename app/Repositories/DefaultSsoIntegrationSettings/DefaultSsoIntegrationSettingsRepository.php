@@ -46,7 +46,10 @@ class DefaultSsoIntegrationSettingsRepository extends BaseRepository implements 
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
             $query = $query->orderBy($data['order_by_column'], $orderByType);
         }
-        
+
+        if (isset($data['filter']) && $data['filter'] !== '') {
+            $query = $query->where('lms_name', $data['filter']);
+        }
         return $query->with('organization')->paginate($perPage)->withQueryString();
     }
 
