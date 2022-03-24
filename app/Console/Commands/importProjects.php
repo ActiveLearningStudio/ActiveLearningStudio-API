@@ -37,7 +37,7 @@ class importProjects extends Command
 
     /**
      * Create a new command instance.
-     *
+     * @param LmsSettingRepositoryInterface $lmsSettingRepository
      * @return void
      */
     public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository)
@@ -71,7 +71,7 @@ class importProjects extends Command
         $this->info($response);
         $encodedResponse = json_decode($response,true);
 
-        // // map-device-lti-client-id
+        // map-device-lti-client-id
         
         $lms_settings = LmsSetting::where('lti_client_id',config('constants.map-device-lti-client-id'))->first();
         
