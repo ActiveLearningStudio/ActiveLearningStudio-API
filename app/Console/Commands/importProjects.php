@@ -49,7 +49,7 @@ class importProjects extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return object
      */
     public function handle(ProjectRepositoryInterface $projectRepository)
     {
@@ -75,7 +75,7 @@ class importProjects extends Command
         
         $lms_settings = LmsSetting::where('lti_client_id',config('constants.map-device-lti-client-id'))->first();
         
-        if(empty($lms_settings)) {
+        if (empty($lms_settings)) {
             $responseReturn =  response([
                 'errors' => ['Missing or Invalid LTI CLient ID'],
             ], 500);
@@ -83,11 +83,11 @@ class importProjects extends Command
             return $this->info($responseReturn);
         }
 
-        if(isset($encodedResponse['project_id']) && !empty($encodedResponse['project_id'])) {
+        if (isset($encodedResponse['project_id']) && !empty($encodedResponse['project_id'])) {
             // Code for Moodle Import
             $playlists = Playlist::where('project_id',$encodedResponse['project_id'])->get();
             
-            foreach($playlists as $playlist) {
+            foreach ($playlists as $playlist) {
                 // Publish playlist into moodle
                 $lmsSetting = $this->lmsSettingRepository->find($lms_settings->id);
                 $counter = 0;
@@ -101,7 +101,7 @@ class importProjects extends Command
                         'data' => json_decode($outcome),
                     ], 200);
                     $this->info($responseReturn);
-                }else{
+                } else {
                     $responseReturn =  response([
                         'errors' => ['Failed to send playlist to Moodle.'],
                     ], 500);
