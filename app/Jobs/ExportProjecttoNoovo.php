@@ -96,7 +96,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                     $export_file = $projectRepository->exportProject($this->user, $project);
                     \Log::Info($export_file);
                     $file_info = array(
-                        "filename" => $project->name ,
+                        "filename" => $project->name . uniqid(),
                         "description"=> $project->description,
                         "url"=> url(Storage::url('exports/'.basename($export_file))),
                         "md5sum"=> md5_file($export_file)
@@ -112,9 +112,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                     );
                 \Log::info($post);
                 // Uploads files into Noovo CMS
-
-
-
+                
                 if (count($post['files']) > 0) {
                     $upload_file_result = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
                     $decoded_upload_result = json_decode($upload_file_result);
@@ -129,9 +127,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                 
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
-            
             $this->createLog($project_ids, $e->getMessage(), 0);
-            
         }
     }
 
