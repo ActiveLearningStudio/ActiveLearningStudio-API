@@ -156,28 +156,25 @@ class ExtractXAPIJSONController extends Controller
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
                     $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
                     $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
-
-                    //Only fetching teacher_email_id of gclass_api_data column as in each respective case (LTI DL, Publishing from CS) email of publisher is already being stored
-                    if (empty($glassAltCourseId)) {
-                        $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
-                    }
-                    if ($glassAltCourseId) {
-                        $publisherData = $googleClassroom->fetchPublisherData($glassAltCourseId);
-                        if ($publisherData) {
-                            $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
-                            $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
-                        }
-                    }
-
+                    $gclassAltCourseIdForPublisher = $glassAltCourseId;
                     if (empty($glassAltCourseId)) {
                         $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_NAME);
                         $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
+                        $gclassAltCourseIdForPublisher = $glassAltCourseId;
                         // CANVAS: Need to make this alt course id URL unique; appending class id to the domain URL
                         // Only if API domain is available, only then we save the 'alternate URL', else we keep it blank.
                         if (!empty($glassAltCourseId)) {
                             $glassAltCourseId .= '/' . $groupingInfo['class'];
                         }
                         $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_CODE);
+                    }
+                    //Only fetching teacher_email_id of gclass_api_data column as in each respective case (LTI DL, Publishing from CS) email of publisher is already being stored
+                    if ($glassAltCourseId) {
+                        $publisherData = $googleClassroom->fetchPublisherData($gclassAltCourseIdForPublisher);
+                        if ($publisherData) {
+                            $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
+                            $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
+                        }
                     }
                     $chapterName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_NAME);
                     $chapterIndex = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_INDEX);
