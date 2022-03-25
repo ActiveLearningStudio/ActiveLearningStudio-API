@@ -25,9 +25,11 @@ class ExtractXAPIJSONController extends Controller
      * @param  ActivityRepositoryInterface  $activityRepository
      * @param  LRSStatementsDataRepositoryInterface  $lrsStatementsRepository
      * @param  LRSStatementsSummaryDataRepositoryInterface  $lrsStatementsSummaryDataRepositoryInterface
+     * @param  GoogleClassroomRepositoryInterface  $googleClassroom
      * @return void
      */
-    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface, GoogleClassroomRepositoryInterface $googleClassroom)
+    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface,
+    GoogleClassroomRepositoryInterface $googleClassroom)
     {
         $max_statement_id = $lrsStatementsRepository->findMaxByField('statement_id');
         if (!$max_statement_id) {
