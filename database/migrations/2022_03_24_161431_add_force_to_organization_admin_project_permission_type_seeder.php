@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddOrganizationAdminProjectPermissionTypeSeeder extends Migration
+class AddForceToOrganizationAdminProjectPermissionTypeSeeder extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,8 @@ class AddOrganizationAdminProjectPermissionTypeSeeder extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => OrganizationAdminProjectPermissionTypeSeeder::class
+            '--class' => OrganizationAdminProjectPermissionTypeSeeder::class,
+            '--force' => true
         ]);
     }
 
