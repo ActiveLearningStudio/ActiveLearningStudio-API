@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command(SendDailyUsage::class)->dailyAt('0:00');
         $schedule->command(SendDailyUsage::class)->everyFourHours();
-        $schedule->command(PushNoovo::class)->everyMinute()->withoutOverlapping()->runInBackground(); // temporarily commented until final decision
+        //$schedule->command(PushNoovo::class)->everyMinute()->withoutOverlapping()->runInBackground(); // temporarily commented until final decision
         $schedule->command(DeleteExportedProjects::class)->daily()->runInBackground();
     }
 
