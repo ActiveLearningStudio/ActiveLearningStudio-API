@@ -16,4 +16,11 @@ interface GoogleClassroomRepositoryInterface extends EloquentRepositoryInterface
      * @param $course
      */
     public function saveCourseShareToGcClass($course);
+
+    /**
+     * Get teacher_email to fetch the id of teacher/publisher
+     *
+     * @param string $glassAltCourseId
+     */
+    public function fetchPublisherData($glassAltCourseId);
 }

@@ -5,6 +5,7 @@ namespace App;
 use App\Models\Activity;
 use App\Models\DeepRelations\HasManyDeep;
 use App\Models\DeepRelations\HasRelationships;
+use App\Models\OrganizationUserRole;
 use App\Models\Traits\GlobalScope;
 use App\Notifications\MailResetPasswordNotification;
 use App\Notifications\VerifyEmailNotification;
@@ -188,6 +189,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function organizations()
     {
         return $this->belongsToMany('App\Models\Organization', 'organization_user_roles')->using('App\Models\OrganizationUserRole')->withPivot('organization_role_type_id')->withTimestamps();
+    }
+
+    /**
+     * The organization that belong to the user.
+     */
+    public function publisherOrg()
+    {
+        return $this->hasOne(OrganizationUserRole::class, 'user_id', 'id');
     }
 
     /**
