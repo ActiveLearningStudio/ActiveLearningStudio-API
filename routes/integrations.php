@@ -25,6 +25,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::group(['prefix' => 'kaltura'], function () {
             Route::post('get-media-entry-list', 'CurrikiInteractiveVideoIntegration\Kaltura\KalturaGeneratedAPIClientController@getMediaEntryList');
         });
+
+        // Vimeo API For Video Integration
+        Route::group(['prefix' => 'vimeo'], function () {
+            Route::post('get-my-video-list', 'Integration\VimeoAPIClientController@getMyVideosList');
+        });
     });
     
 
