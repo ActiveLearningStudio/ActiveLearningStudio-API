@@ -812,5 +812,5 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         }
         return false;
     }
-    
+
 }
