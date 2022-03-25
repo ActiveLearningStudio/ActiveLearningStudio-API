@@ -48,6 +48,10 @@ class LmsSettingRepository extends BaseRepository
             $query = $query->orderBy($data['order_by_column'], $orderByType);
         }
 
+        if (isset($data['filter']) && $data['filter'] !== '') {
+            $query = $query->where('lms_name', $data['filter']);
+        }
+
         return $query->with(['user', 'organization'])
                      ->where('organization_id', $suborganization->id)
                      ->paginate($perPage)->withQueryString();

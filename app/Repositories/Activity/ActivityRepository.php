@@ -812,6 +812,35 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     storage_path('app/public/h5p/content/'.$new_content_id)
                 );
 
+        
+        // Move Content to editor Folder
+
+        $destinationEditorFolderPath = $extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . $old_content_id;
+        
+        // Move editor images
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/images/'),
+            storage_path('app/public/h5p/editor/images/')
+        );
+
+        // Move editor audios
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/audios/'),
+            storage_path('app/public/h5p/editor/audios/')
+        );
+
+        // Move editor videos
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/videos/'),
+            storage_path('app/public/h5p/editor/videos/')
+        );
+
+        // Move editor files
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/files/'),
+            storage_path('app/public/h5p/editor/files/')
+        );
+
         $activity['h5p_content_id'] = $new_content_id;
 
         if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {

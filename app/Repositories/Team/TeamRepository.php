@@ -579,7 +579,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             $export_file = $this->projectRepository->exportProject($user, $project);
                             \Log::Info($export_file);
                             $file_info = array(
-                                "filename" => str_replace(' ', '-', strtolower($project->name)),
+                                "filename" => str_replace(' ', '-', strtolower($project->name))  . uniqid(),
                                 "description"=> $project->description,
                                 "url"=> url(Storage::url('exports/'.basename($export_file))),
                                 "md5sum"=> md5_file($export_file)
@@ -601,10 +601,10 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             $decoded_upload_result = json_decode($upload_file_result);
                             if ($decoded_upload_result->result === "Failed") {
                                 $this->createLog($organization, $team, $project_ids, $decoded_upload_result->description, 0);
-                                return false;
+                                continue;
                             }
                             $this->createLog($organization, $team, $project_ids, 'Projects Transfer Successful', 1);
-                            return false;
+                            continue;
                         }
         
                         
