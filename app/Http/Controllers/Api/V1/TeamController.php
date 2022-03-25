@@ -50,6 +50,7 @@ class TeamController extends Controller
      * @param UserRepositoryInterface $userRepository
      * @param ProjectRepositoryInterface $projectRepository
      * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+     * @param NoovoCMSService $noovoCMSService
      * @param LmsSettingRepositoryInterface $lmsSettingRepository
      */
     public function __construct(
