@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\App;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\H5pOrganizationResource;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Models\H5pBrightCoveVideoContents;
 
 /**
  * @group 11. Google Classroom
@@ -505,13 +506,23 @@ class GoogleClassroomController extends Controller
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
         $user_data = null;
+        
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+        
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+        }
 
         return response([
             'h5p' => $h5p_data,
             'activity' => new ActivityResource($activity),
             'playlist' => new PlaylistResource($activity->playlist),
             'organization' => new H5pOrganizationResource($activity->playlist->project->organization),
+            'brightcoveData' => $brightcoveData,
         ], 200);
     }
 
