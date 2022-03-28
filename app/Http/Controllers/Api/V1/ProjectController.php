@@ -877,7 +877,12 @@ class ProjectController extends Controller
         $projects = $project->with(['playlists','playlists.activities'])->find($request->project_id);
         $projects->map(function($project){
             $project->playlist_count = $project->playlists->count();
-            $project->activities_count = $project->playlists->pluck('activities')->count();
+            $count = 0;
+            $activities = $project->playlists->pluck('activities');
+            foreach($activities as $activity){
+                $count += $activity->count();
+            }
+            $project->activities_count = $count;
         });
         return response()->json([
             "projects" => $projects
