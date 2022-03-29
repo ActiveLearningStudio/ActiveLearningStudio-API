@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class GoogleClassroom extends Model
@@ -36,5 +37,13 @@ class GoogleClassroom extends Model
         'calendar_id',
         'curriki_teacher_email',
     ];
+
+    /**
+     * Get the user_id for the teacher
+     */
+    public function publisherUser()
+    {
+        return $this->hasOne(User::class, 'email' , 'curriki_teacher_email');
+    }
 
 }

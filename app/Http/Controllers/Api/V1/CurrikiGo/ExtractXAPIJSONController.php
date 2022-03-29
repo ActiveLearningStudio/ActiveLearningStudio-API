@@ -10,6 +10,7 @@ use App\Repositories\LRSStatementsSummaryData\LRSStatementsSummaryDataRepository
 use App\Services\LearnerRecordStoreService;
 use Illuminate\Support\Facades\DB;
 use App\CurrikiGo\LRS\InteractionFactory;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 
 /**
  * @group 16. XAPI
@@ -24,9 +25,11 @@ class ExtractXAPIJSONController extends Controller
      * @param  ActivityRepositoryInterface  $activityRepository
      * @param  LRSStatementsDataRepositoryInterface  $lrsStatementsRepository
      * @param  LRSStatementsSummaryDataRepositoryInterface  $lrsStatementsSummaryDataRepositoryInterface
+     * @param  GoogleClassroomRepositoryInterface  $googleClassroom
      * @return void
      */
-    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface)
+    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface,
+    GoogleClassroomRepositoryInterface $googleClassroom)
     {
         $max_statement_id = $lrsStatementsRepository->findMaxByField('statement_id');
         if (!$max_statement_id) {
@@ -144,12 +147,17 @@ class ExtractXAPIJSONController extends Controller
                 //added submitted_id and attempt_id column for new summary page 
                 $insertData['submission_id'] = $groupingInfo['submission'];
                 $insertData['attempt_id'] = $groupingInfo['attempt'];
+
+                //organization id of which this activity belongs to
+                if (isset($project->organization_id)) {
+                    $insertData['activity_org_id'] = $project->organization_id;
+                }
+
                 // Extract information from object.definition.extensions
                 if ($target->getObjectType() === 'Activity' && !empty($definition)) {
                     $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ALTERNATE_COURSE_ID);
                     $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_GCLASS_ENROLLMENT_CODE);
                     $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_COURSE_NAME);
-
                     if (empty($glassAltCourseId)) {
                         $courseName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_NAME);
                         $glassAltCourseId = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_DOMAIN_URL);
@@ -160,7 +168,14 @@ class ExtractXAPIJSONController extends Controller
                         }
                         $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_CODE);
                     }
-
+                    //Only fetching teacher_email_id of gclass_api_data column as in each respective case (LTI DL, Publishing from CS) email of publisher is already being stored
+                    if ($glassAltCourseId) {
+                        $publisherData = $googleClassroom->fetchPublisherData($glassAltCourseId);
+                        if ($publisherData) {
+                            $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
+                            $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
+                        }
+                    }
                     $chapterName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_NAME);
                     $chapterIndex = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_INDEX);
                     $referrer = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_REFERRER);

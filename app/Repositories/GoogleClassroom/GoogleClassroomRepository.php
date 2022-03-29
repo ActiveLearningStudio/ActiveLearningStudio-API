@@ -72,4 +72,15 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
 
         return $response;
     }
+
+    /**
+     * Get teacher_email to fetch the id of teacher/publisher 
+     *
+     * @param $glassAltCourseId
+     * @return Response
+     */
+    public function fetchPublisherData($glassAltCourseId)
+    {
+        return $response  = $this->model->where('alternate_link', $glassAltCourseId)->with('publisherUser.publisherOrg')->first();
+    }
 }
