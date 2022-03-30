@@ -821,7 +821,7 @@ class UserController extends Controller
         }
 
         return response([
-            'errors' => ['Not a valid token or user dontexist.'],
+            'errors' => ['Not a valid token or user dont exist.'],
         ], 500);
     }
 
