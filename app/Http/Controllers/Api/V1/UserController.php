@@ -794,7 +794,7 @@ class UserController extends Controller
         
         $user_id = get_user_id_by_token($param);
         $user = User::find($user_id);
-        if($user) {
+        if ($user) {
             $notification_detail = $user->notifications()->find($notification_id);
             
             if ($notification_detail) {
