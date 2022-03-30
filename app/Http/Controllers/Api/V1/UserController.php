@@ -785,31 +785,43 @@ class UserController extends Controller
      */
     public function downloadExport(Request $request, $notification_id)
     {
-        $notification_detail = auth()->user()->notifications()->find($notification_id);
-        if ($notification_detail) {
-            $data = $notification_detail->data;
-           
-            if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
-                if (isset($data['file_name'])) {
-                   $file_path = storage_path('app/public/exports/'.$data['file_name']);
-                   if (!empty($data['file_name']) && file_exists($file_path)) {
-                        return response()->download($file_path, basename($file_path)); 
-                   }
-                   return response([
+        $param = $request->get('token');
+        if (empty($param)) {
+            return response([
+                'errors' => ['Authentication Failed'],
+            ], 500);
+        }
+        
+        $user_id = get_user_id_by_token($param);
+        $user = User::find($user_id);
+        if($user) {
+            $notification_detail = $user->notifications()->find($notification_id);
+            
+            if ($notification_detail) {
+                $data = $notification_detail->data;
+            
+                if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
+                    if (isset($data['file_name'])) {
+                    $file_path = storage_path('app/public/exports/'.$data['file_name']);
+                    if (!empty($data['file_name']) && file_exists($file_path)) {
+                            return response()->download($file_path, basename($file_path)); 
+                    }
+                    return response([
+                            'errors' => ['Link has expired.'],
+                        ], 500);
+                    }
+                    return response([
                         'errors' => ['Link has expired.'],
                     ], 500);
                 }
                 return response([
-                    'errors' => ['Link has expired.'],
+                    'errors' => ['Not an export notification.'],
                 ], 500);
             }
-            return response([
-                'errors' => ['Not an export notification.'],
-            ], 500);
         }
 
         return response([
-            'errors' => ['Notification with provided id does not exists.'],
+            'errors' => ['Not a valid token or user dontexist.'],
         ], 500);
     }
 
