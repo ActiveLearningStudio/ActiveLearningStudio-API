@@ -26,6 +26,8 @@ class SearchAuthorTagRequest extends FormRequest
         return [
             'size' => 'integer|max:255|nullable',
             'query' => 'string|max:255|nullable',
+            'order_by_column' => 'nullable|in:order,name',
+            'order_by_type' => 'nullable|in:asc,desc,ASC,DESC',
         ];
     }
 }

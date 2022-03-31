@@ -30,7 +30,7 @@ class UpdateSubjectRequest extends FormRequest
         $subject = $this->route('subject');
 
         return [
-            'name' => 'required|string|max:255|unique:subjects,name,' . $subject->id,
+            'name' => 'required|string|max:255',
             'order' => 'integer|max:2147483647',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];

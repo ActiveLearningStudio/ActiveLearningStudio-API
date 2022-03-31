@@ -28,7 +28,7 @@ class StoreAuthorTagRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:author_tags,name',
+            'name' => 'required|string|max:255',
             'order' => 'integer|max:2147483647',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];
