@@ -27,21 +27,21 @@ class ActivityLayoutRepository extends BaseRepository implements ActivityLayoutR
     public function getAll($suborganization, $data)
     {
         $query = $this->model;
-        
+
         if (isset($data['query']) && $data['query'] !== '') {
             $query = $query->where('title', 'iLIKE', '%' . $data['query'] . '%');
         }
 
         if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
-            return $query->orderBy('order', 'ASC')->get();
+            return $query->where('organization_id', $suborganization->id)->orderBy('order', 'ASC')->get();
         }
 
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
         {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'asc';
-            $query->orderBy($data['order_by_column'], $orderByType);
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
         } else {
-            $query->orderBy('order', 'asc');
+            $query = $query->orderBy('order', 'asc');
         }
 
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');

@@ -27,10 +27,8 @@ class UpdateEducationLevelRequest extends FormRequest
      */
     public function rules()
     {
-        $educationlevel = $this->route('education_level');
-
         return [
-            'name' => 'required|string|max:255|unique:education_levels,name,' . $educationlevel->id,
+            'name' => 'required|string|max:255',
             'order' => 'integer|max:2147483647',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];
