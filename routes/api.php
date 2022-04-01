@@ -25,6 +25,7 @@ Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail
 Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->name('verification.resend');
+Route::get('users/notifications/{notification}/download-export/', 'Api\V1\UserController@downloadExport');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 
@@ -49,7 +50,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/notifications', 'UserController@listNotifications');
         Route::get('users/notifications/export-list', 'UserController@exportProjectList');
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
-        Route::get('users/notifications/{notification}/download-export/', 'UserController@downloadExport');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
         Route::post('users/search', 'UserController@getAllUsers');
@@ -174,6 +174,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
             Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
             Route::any('ajax/reader/finish', 'MobileAppAjaxController@finish')->name('h5p.ajax.reader-finish');
+            Route::any('ajax/reader/getScore', 'MobileAppAjaxController@getScores')->name('h5p.ajax.reader-getScore');
         });
 
         // Elasticsearch
