@@ -22,6 +22,7 @@ class Organization extends Model
         'description',
         'domain',
         'image',
+        'favicon',
         'parent_id',
         'self_registration',
         'account_id',

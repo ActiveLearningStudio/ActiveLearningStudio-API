@@ -4,7 +4,8 @@
             "id": 1,
             "name": "Curriki Studio",
             "description": "Curriki Studio, default organization.",
-            "image": null,
+            "image": "/storage/organizations/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
+            "favicon": "/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
             "domain": "currikistudio"
         }
     ]
