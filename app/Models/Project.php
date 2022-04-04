@@ -35,7 +35,8 @@ class Project extends Model
         'order',
         'status',
         'organization_id',
-        'organization_visibility_type_id'
+        'organization_visibility_type_id',
+        'team_id'
     ];
 
     /**
