@@ -40,7 +40,7 @@ class ActivityTypeController extends Controller
      * Get a list of the activity types.
      *
      * @responseFile responses/activity-type/activity-types.json
-     *
+     * @param Request $request
      * @return Response
      */
     public function index(Request $request)

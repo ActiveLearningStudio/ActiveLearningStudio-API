@@ -39,12 +39,14 @@ class EducationLevelController extends Controller
      *
      * @param SearchEducationLevelRequest $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function index(SearchEducationLevelRequest $request, Organization $suborganization)
     {
-        return  EducationLevelResource::collection($this->educationLevelRepository->getAll($suborganization, $request->all()));
+        return  EducationLevelResource::collection(
+            $this->educationLevelRepository->getAll($suborganization, $request->all())
+        );
     }
 
     /**
@@ -65,7 +67,7 @@ class EducationLevelController extends Controller
      *
      * @param StoreEducationLevelRequest $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreEducationLevelRequest $request, Organization $suborganization)
@@ -95,7 +97,7 @@ class EducationLevelController extends Controller
      *
      * @param Organization $suborganization
      * @param EducationLevel $educationLevel
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, EducationLevel $educationLevel)
@@ -131,10 +133,11 @@ class EducationLevelController extends Controller
      * @param UpdateEducationLevelRequest $request
      * @param Organization $suborganization
      * @param EducationLevel $educationLevel
-     * 
+     *
      * @return Response
      */
-    public function update(UpdateEducationLevelRequest $request, Organization $suborganization, EducationLevel $educationLevel)
+    public function update(UpdateEducationLevelRequest $request,
+        Organization $suborganization, EducationLevel $educationLevel)
     {
         $data = $request->validated();
         $isUpdated = $this->educationLevelRepository->update($data, $educationLevel->id);
@@ -169,7 +172,7 @@ class EducationLevelController extends Controller
      *
      * @param Organization $suborganization
      * @param EducationLevel $educationLevel
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, EducationLevel $educationLevel)
@@ -179,7 +182,7 @@ class EducationLevelController extends Controller
                 'message' => 'Invalid education level or organization',
             ], 400);
         }
-        
+
         $isDeleted = $this->educationLevelRepository->delete($educationLevel->id);
 
         if ($isDeleted) {

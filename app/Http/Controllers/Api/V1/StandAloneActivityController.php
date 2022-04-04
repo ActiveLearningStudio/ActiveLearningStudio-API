@@ -234,7 +234,8 @@ class StandAloneActivityController extends Controller
      * @param Activity $standAloneActivity
      * @return Response
      */
-    public function update(ActivityEditRequest $request, Organization $suborganization, Activity $standAloneActivity)
+    public function update(ActivityEditRequest $request, Organization $suborganization,
+        Activity $standAloneActivity)
     {
         $validated = $request->validated();
 
@@ -378,7 +379,7 @@ class StandAloneActivityController extends Controller
         if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
             $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
             $brightcoveData = [
-                'videoId' => $brightcoveContentData->brightcove_video_id, 
+                'videoId' => $brightcoveContentData->brightcove_video_id,
                 'accountId' => $bcAPISettingRepository->account_id,
                 'apiSettingId' => $brightcoveContentData->brightcove_api_setting_id
             ];
@@ -422,14 +423,14 @@ class StandAloneActivityController extends Controller
         }
 
         return \DB::transaction(function () use ($standAloneActivity) {
-        
+
             // Implement Command Design Pattern to access Update Brightcove Video API
             $bcVideoContentsRow = H5pBrightCoveVideoContents::where('h5p_content_id', $standAloneActivity->h5p_content_id)->first();
             if ($bcVideoContentsRow) {
                 $bcAPISetting = $this->bcAPISettingRepository->find($bcVideoContentsRow->brightcove_api_setting_id);
                 $bcAPIClient = new Client($bcAPISetting);
                 $bcInstance = new UpdateVideoTags($bcAPIClient);
-                $bcInstance->fetch($bcAPISetting, $bcVideoContentsRow->brightcove_video_id, 'curriki', true);    
+                $bcInstance->fetch($bcAPISetting, $bcVideoContentsRow->brightcove_video_id, 'curriki', true);
             } else {
                 return response([
                     'message' => 'Failed to remove brightcove video tags.',
@@ -445,7 +446,7 @@ class StandAloneActivityController extends Controller
             return response([
                 'errors' => ['Failed to delete interactive video.'],
             ], 500);
-        
+
         });
     }
 
