@@ -404,7 +404,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                   });
 
         if (isset($data['query']) && $data['query'] !== '') {
-            $query->where('name', 'iLIKE', '%' .$data['query']. '%');
+            $query->where('name', 'iLIKE', '%' . $data['query'] . '%');
         }
 
         return $query->whereOrganizationId($suborganization_id)->get();

@@ -216,4 +216,15 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      * @return Model
      */
     public function duplicateRole($organization, $roleName);
+
+    /**
+     * Assign default activity contents to organization
+     *
+     * @param $organization_id
+     * @param $parent_id
+     *
+     * @return bool
+     */
+    public function assignDefaultActivityContents($organization_id, $parent_id);
+
 }
