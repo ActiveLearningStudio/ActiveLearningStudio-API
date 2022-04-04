@@ -39,12 +39,14 @@ class AuthorTagController extends Controller
      *
      * @param SearchAuthorTagRequest $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function index(SearchAuthorTagRequest $request, Organization $suborganization)
     {
-        return  AuthorTagResource::collection($this->authorTagRepository->getAll($suborganization, $request->all()));
+        return  AuthorTagResource::collection(
+            $this->authorTagRepository->getAll($suborganization, $request->all())
+        );
     }
 
     /**
@@ -65,7 +67,7 @@ class AuthorTagController extends Controller
      *
      * @param StoreAuthorTagRequest $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreAuthorTagRequest $request, Organization $suborganization)
@@ -95,7 +97,7 @@ class AuthorTagController extends Controller
      *
      * @param Organization $suborganization
      * @param AuthorTag $authorTag
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, AuthorTag $authorTag)
@@ -131,10 +133,11 @@ class AuthorTagController extends Controller
      * @param UpdateAuthorTagRequest $request
      * @param Organization $suborganization
      * @param AuthorTag $authorTag
-     * 
+     *
      * @return Response
      */
-    public function update(UpdateAuthorTagRequest $request, Organization $suborganization, AuthorTag $authorTag)
+    public function update(UpdateAuthorTagRequest $request, Organization $suborganization,
+        AuthorTag $authorTag)
     {
         $data = $request->validated();
         $isUpdated = $this->authorTagRepository->update($data, $authorTag->id);
@@ -169,7 +172,7 @@ class AuthorTagController extends Controller
      *
      * @param Organization $suborganization
      * @param AuthorTag $authorTag
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, AuthorTag $authorTag)
@@ -179,7 +182,7 @@ class AuthorTagController extends Controller
                 'message' => 'Invalid author tag or organization',
             ], 400);
         }
-        
+
         $isDeleted = $this->authorTagRepository->delete($authorTag->id);
 
         if ($isDeleted) {
