@@ -78,16 +78,18 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $assigned_users = [];
             $valid_users = [];
 
-            foreach ($data['users'] as $user) {
-                $con_user = $this->userRepository->find($user['id']);
-                $note = array_key_exists('note', $user) ? $user['note'] : '';
-                if ($con_user) {
-                    $team->users()->attach($con_user, ['team_role_type_id' => $user['role_id']]);
-                    $valid_users[] = $con_user;
-                    $assigned_users[] = [
-                        'user' => $con_user,
-                        'note' => $note
-                    ];
+            if (isset($data['users'])) {
+                foreach ($data['users'] as $user) {
+                    $con_user = $this->userRepository->find($user['id']);
+                    $note = array_key_exists('note', $user) ? $user['note'] : '';
+                    if ($con_user) {
+                        $team->users()->attach($con_user, ['team_role_type_id' => $user['role_id']]);
+                        $valid_users[] = $con_user;
+                        $assigned_users[] = [
+                            'user' => $con_user,
+                            'note' => $note
+                        ];
+                    }
                 }
             }
 
@@ -540,30 +542,30 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
     /**
-     * CronJob topush curriki projects into Noovo 
+     * CronJob topush curriki projects into Noovo
      * @return mixed
      */
     public function noovoIntegration()
     {
         // Fetch all organization having noovo client id
         $organizations = Organization::with('teams')->whereNotNull('noovo_client_id')->get();
-        
+
         foreach ($organizations as $organization) {
 
             $teams = $organization->teams;
-            
+
             foreach ($teams as $team) {
                 if (empty($team->noovo_group_title)) continue;
-                
+
                 $projects = $team->projects()->get(); // Get all associated projects of a team
                 if ($projects) {
 
                     $user = User::find(config('import-mapped-device.user_id'));
-                    
+
                     try {
-               
+
                         $upload_file_ids = [];
-        
+
                         $post = [];
                         $post['target_company'] = array(
                             'company_name' => $organization->noovo_client_id,
@@ -572,7 +574,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                         $files_arr = [];
                         $project_ids = [];
                         foreach ($projects as $project) {
-                            $projectStatus = $this->checkProjectAlreadyMoved($project->id, $team->noovo_group_title, $team->id); 
+                            $projectStatus = $this->checkProjectAlreadyMoved($project->id, $team->noovo_group_title, $team->id);
                             if ($projectStatus) continue;
 
                             // Create the zip archive of folder
@@ -587,15 +589,15 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             array_push($files_arr, $file_info);
                             array_push($project_ids, $project->id);
                         }
-        
+
                         $post['files'] = $files_arr;
                         $post['filelist'] = array(
                                             "name" => $team->name ." Projects-" . uniqid(),
                                             "description" => $team->name ." Projects"
                                             );
-                        \Log::info($post); 
+                        \Log::info($post);
                         \Log::info(count($post['files']));
-        
+
                         if (count($post['files']) > 0) {
                             $upload_file_result = $this->noovoCMSService->uploadMultipleFilestoNoovo($post);
                             $decoded_upload_result = json_decode($upload_file_result);
@@ -606,17 +608,17 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                             $this->createLog($organization, $team, $project_ids, 'Projects Transfer Successful', 1);
                             continue;
                         }
-        
-                        
-                        
+
+
+
                     } catch (\Exception $e) {
                         \Log::error($e->getMessage());
-                        
+
                         $this->createLog($organization, $team, $project_ids, $e->getMessage(), 0);
                     }
                 }
             }
-            
+
         }
     }
 
@@ -644,8 +646,8 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
      * @param integer $project_id
      * @param string $group_title
      * @param integer $team_id
-     * 
-     * @return bool 
+     *
+     * @return bool
      */
     private function checkProjectAlreadyMoved(int $project_id, string $group_title, int $team_id)
     {

@@ -270,15 +270,17 @@ class TeamController extends Controller
         $data = $teamRequest->validated();
         $data['bearerToken'] = $bearerToken;
 
-        foreach ($data['users'] as $user) {
-            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
-            if (!$exist_user_id) {
-                return response([
-                    'errors' =>
-                    ['Team not created,
-                    ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
-                    ],
-                ], 500);
+        if (isset($data['users'])) {
+            foreach ($data['users'] as $user) {
+                $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+                if (!$exist_user_id) {
+                    return response([
+                        'errors' =>
+                        ['Team not created,
+                        ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
+                        ],
+                    ], 500);
+                }
             }
         }
 
@@ -904,25 +906,25 @@ class TeamController extends Controller
      */
     public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team, Project $project)
     {
-        
+
         $grade_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'education_level_id');
         $subject_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'subject_id');
-        
+
         if (empty($grade_name) || empty($subject_name)) {
             return response([
                 'message' =>  "Education Level id and Subject Id should not be empty for first activity of first playlist.",
             ], 500);
         }
-        
+
         if (empty($suborganization->noovo_client_id) ||  empty($team->noovo_group_title)) {
             return response([
                 'message' =>  "Noovo Client id or group id is missing.",
             ], 500);
         }
-        
+
         if ($project) {
             ExportProjecttoNoovo::dispatch(auth()->user(), $project,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
-        
+
             return response([
                 'message' =>  "Your request to push projects to noovo has been received and is being processed.",
             ], 200);
@@ -931,7 +933,7 @@ class TeamController extends Controller
         return response([
             'message' =>  "No Project to Export.",
         ], 500);
-    
+
     }
 
 }
