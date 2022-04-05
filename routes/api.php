@@ -26,6 +26,7 @@ Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->name('verification.resend');
 Route::get('users/notifications/{notification}/download-export/', 'Api\V1\UserController@downloadExport');
+Route::post('ckeditor/uploadFile/', 'Api\V1\CkEditorFileManagerController@uploadFile');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 
