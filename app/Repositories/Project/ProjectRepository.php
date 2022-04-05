@@ -9,6 +9,7 @@ use App\Models\Playlist;
 use App\Models\Project;
 use App\User;
 use App\Models\Organization;
+use App\Models\Team;
 use App\Repositories\BaseRepository;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
@@ -57,7 +58,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $projectObj = $this->model->find($id);
 
         if (
-            isset($attributes['organization_visibility_type_id']) && 
+            isset($attributes['organization_visibility_type_id']) &&
             $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
         ) {
             $attributes['indexing'] = config('constants.indexing-requested');
@@ -627,11 +628,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $zip = new ZipArchive;
 
         $project_dir_name = 'projects-'.uniqid();
-        
+
         // Add Grade level of first activity on project manifest
         $organizationName = Organization::where('id', $project->organization_id)->value('name');
-        
-        
+
+
         $project['org_name'] = $organizationName;
         $project['grade_name'] = $this->getActivityGrade($project->id, 'education_level_id');
         $project['subject_name'] = $this->getActivityGrade($project->id, 'subject_id');
@@ -801,7 +802,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     if ($method_source !== "command") {
                         unlink($source_file); // Deleted the storage zip file
                     } else {
-                        
+
                         $return_res = [
                             "success"=> true,
                             "message" => "Project has been imported successfully",
@@ -998,6 +999,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
             $project = $authenticatedUser->projects()->create($data, $role);
 
+            // to attach a project directly from team
+            if (isset($data['team_id'])) {
+                $team = Team::findOrFail($data['team_id']);
+                $team->projects()->attach($project);
+            }
+
             return $project;
         });
     }
@@ -1026,7 +1033,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         \Log::info($projectId);
         $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->value('id');
         \Log::info($playlistId);
-        
+
         $activity = Activity::where('playlist_id', $playlistId)->orderBy('order','asc')->limit(1)->value($activityParam);
         \Log::info($activity);
         return $activity;
