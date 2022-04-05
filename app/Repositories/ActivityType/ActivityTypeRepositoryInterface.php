@@ -9,5 +9,10 @@ use Illuminate\Support\Collection;
 
 interface ActivityTypeRepositoryInterface extends EloquentRepositoryInterface
 {
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function getAll($data);
 
 }

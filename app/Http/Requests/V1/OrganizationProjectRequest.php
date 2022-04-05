@@ -34,6 +34,9 @@ class OrganizationProjectRequest extends FormRequest
             'updated_from' => 'date_format:Y-m-d',
             'updated_to' => 'date_format:Y-m-d',
             'author_id' => 'integer|exists:users,id',
+            'order_by_column' => 'string|in:name,created_at',
+            'order_by_type' => 'string|in:asc,desc',
+            'size' => 'integer|max:100',
         ];
     }
 
@@ -44,6 +47,8 @@ class OrganizationProjectRequest extends FormRequest
             'exclude_starter.in' => 'Indexing should be true',
             'starter_project.in' => 'Indexing should be true or false',
             'shared.boolean' => 'Shared status should be 1 or 0',
+            'order_by_column.in' => 'The selected order by column should be name OR created_at only',
+            'order_by_type.in' => 'The selected order by type should be asc OR desc only',
         ];
     }
 }

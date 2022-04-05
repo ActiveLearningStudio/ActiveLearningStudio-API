@@ -24,7 +24,7 @@ class SuborganizationUploadFaviconRequest extends FormRequest
     public function rules()
     {
         return [
-            'favicon' => 'required|mimes:jpg,jpeg,png,ico|max:4096',
+            'favicon' => 'required|mimes:jpg,jpeg,png,ico,svg|max:4096',
         ];
     }
 }

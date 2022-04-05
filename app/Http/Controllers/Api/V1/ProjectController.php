@@ -90,7 +90,13 @@ class ProjectController extends Controller
      * Get All Organization Projects
      *
      * Get a list of the projects of an organization.
+     * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam query string Query to search suborganization against Example: Vivensity
+     * @bodyParam size integer size to show per page records Example: 10
+     * @bodyParam order_by_column string to sort data with specific column Example: name
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * 
      * @responseFile responses/project/projects.json
      *
      * @return Response

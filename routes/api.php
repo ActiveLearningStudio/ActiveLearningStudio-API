@@ -139,7 +139,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::apiResource('playlists.activities', 'ActivityController');
 
-        Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
+        Route::apiResource('suborganizations/{suborganization}/activity-layouts', 'ActivityLayoutController');
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
@@ -234,6 +234,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
+        Route::post('activity-layouts/upload-thumb', 'ActivityLayoutController@uploadImage');
+        Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
+        // subjects
+        Route::apiResource('suborganizations/{suborganization}/subjects', 'SubjectController');
+        // education levels
+        Route::apiResource('suborganizations/{suborganization}/education-levels', 'EducationLevelController');
+        // author tags
+        Route::apiResource('suborganizations/{suborganization}/author-tags', 'AuthorTagController');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions
