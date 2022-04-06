@@ -28,6 +28,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Jobs\ExportProjecttoNoovo;
 use App\Services\NoovoCMSService;
+use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 /**
  * @group 14. Team
  *
@@ -41,6 +42,7 @@ class TeamController extends Controller
     private $userRepository;
     private $projectRepository;
     private $noovoCMSService;
+    private $lmsSettingRepository;
     /**
      * TeamController constructor.
      *
@@ -48,18 +50,22 @@ class TeamController extends Controller
      * @param UserRepositoryInterface $userRepository
      * @param ProjectRepositoryInterface $projectRepository
      * @param InvitedTeamUserRepositoryInterface $invitedTeamUserRepository
+     * @param NoovoCMSService $noovoCMSService
+     * @param LmsSettingRepositoryInterface $lmsSettingRepository
      */
     public function __construct(
         TeamRepositoryInterface $teamRepository,
         UserRepositoryInterface $userRepository,
         ProjectRepositoryInterface $projectRepository,
-        NoovoCMSService $noovoCMSService
+        NoovoCMSService $noovoCMSService,
+        LmsSettingRepositoryInterface $lmsSettingRepository
     )
     {
         $this->teamRepository = $teamRepository;
         $this->userRepository = $userRepository;
         $this->projectRepository = $projectRepository;
         $this->noovoCMSService = $noovoCMSService;
+        $this->lmsSettingRepository = $lmsSettingRepository;
     }
 
     /**
@@ -264,15 +270,17 @@ class TeamController extends Controller
         $data = $teamRequest->validated();
         $data['bearerToken'] = $bearerToken;
 
-        foreach ($data['users'] as $user) {
-            $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
-            if (!$exist_user_id) {
-                return response([
-                    'errors' =>
-                    ['Team not created,
-                    ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
-                    ],
-                ], 500);
+        if (isset($data['users'])) {
+            foreach ($data['users'] as $user) {
+                $exist_user_id = $suborganization->users()->where('user_id', $user['id'])->first();
+                if (!$exist_user_id) {
+                    return response([
+                        'errors' =>
+                        ['Team not created,
+                        ' . $user['email'] . ' must be added in ' . $suborganization->name . ' organization first.'
+                        ],
+                    ], 500);
+                }
             }
         }
 
@@ -893,22 +901,30 @@ class TeamController extends Controller
      * @param Request $request
      * @param $suborganization
      * @param Team $team
+     * @param Team $project
      * @return Response
      */
-    public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team)
+    public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team, Project $project)
     {
-        
-        $projects = $team->projects()->get(); // Get all associated projects of a team
+
+        $grade_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'education_level_id');
+        $subject_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'subject_id');
+
+        if (empty($grade_name) || empty($subject_name)) {
+            return response([
+                'message' =>  "Education Level id and Subject Id should not be empty for first activity of first playlist.",
+            ], 500);
+        }
 
         if (empty($suborganization->noovo_client_id) ||  empty($team->noovo_group_title)) {
             return response([
                 'message' =>  "Noovo Client id or group id is missing.",
             ], 500);
         }
-        
-        if ($projects) {
-            ExportProjecttoNoovo::dispatch(auth()->user(), $projects,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
-        
+
+        if ($project) {
+            ExportProjecttoNoovo::dispatch(auth()->user(), $project,  $this->noovoCMSService, $team, $suborganization)->delay(now()->addSecond());
+
             return response([
                 'message' =>  "Your request to push projects to noovo has been received and is being processed.",
             ], 200);
@@ -917,7 +933,7 @@ class TeamController extends Controller
         return response([
             'message' =>  "No Project to Export.",
         ], 500);
-    
+
     }
 
 }

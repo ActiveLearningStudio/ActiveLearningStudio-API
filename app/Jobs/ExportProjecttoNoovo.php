@@ -28,7 +28,7 @@ class ExportProjecttoNoovo implements ShouldQueue
     /**
      * @var string
     */
-    protected $projects;
+    protected $project;
 
     /**
      * @var object
@@ -51,10 +51,11 @@ class ExportProjecttoNoovo implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(User $user, $projects, $noovoCMSService, Team $team, Organization $suborganization)
+    public function __construct(User $user, Project $project, $noovoCMSService, Team $team, Organization $suborganization)
     {
+        
        $this->user = $user;
-        $this->projects = $projects;
+        $this->project = $project;
         $this->noovoCMSService = $noovoCMSService;
         $this->team = $team;
         $this->suborganization = $suborganization;
@@ -84,26 +85,19 @@ class ExportProjecttoNoovo implements ShouldQueue
                 );
                 $files_arr = [];
                 $project_ids = [];
-                foreach ($this->projects as $project) {
-
-                    $projectStatus = $this->checkProjectAlreadyMoved($project->id, $this->team->noovo_group_title, $this->team->id); 
-                    
-                    if ($projectStatus) {
-                        continue;
-                    } 
-                   
-                    // Create the zip archive of folder
-                    $export_file = $projectRepository->exportProject($this->user, $project);
-                    \Log::Info($export_file);
-                    $file_info = array(
-                        "filename" => str_replace(' ', '-', strtolower($project->name)) . uniqid(),
-                        "description"=> $project->description,
-                        "url"=> url(Storage::url('exports/'.basename($export_file))),
-                        "md5sum"=> md5_file($export_file)
-                    );
-                    array_push($files_arr, $file_info);
-                    array_push($project_ids, $project->id);
-                }
+                
+                // Create the zip archive of folder
+                $export_file = $projectRepository->exportProject($this->user, $this->project);
+                \Log::Info($export_file);
+                $file_info = array(
+                    "filename" => str_replace(' ', '-', strtolower($this->project->name)) . uniqid(),
+                    "description"=> $this->project->description,
+                    "url"=> url(Storage::url('exports/'.basename($export_file))),
+                    "md5sum"=> md5_file($export_file)
+                );
+                array_push($files_arr, $file_info);
+                array_push($project_ids, $this->project->id);
+                
 
                 $post['files'] = $files_arr;
                 $post['filelist'] = array(
@@ -120,7 +114,7 @@ class ExportProjecttoNoovo implements ShouldQueue
                         $this->createLog($project_ids, $decoded_upload_result->description, 0);
                         return false;
                     }
-                    $this->createLog($project_ids, 'Projects Transfer Successful', 1);
+                    $this->createLog($project_ids, 'Project Transfer Successful', 1);
                     return false;
                 }
 

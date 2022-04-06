@@ -28,6 +28,7 @@ class ProjectRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'thumb_url' => 'required',
             'organization_visibility_type_id' => 'required|exists:organization_visibility_types,id',
+            'team_id' => 'nullable|exists:teams,id',
         ];
     }
 }

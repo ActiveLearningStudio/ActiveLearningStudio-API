@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddOrganizationAdminProjectPermissionTypeSeeder extends Migration
+class UpdateQuestionSetSemanticToCreateCurrikiSettings extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,8 @@ class AddOrganizationAdminProjectPermissionTypeSeeder extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => OrganizationAdminProjectPermissionTypeSeeder::class
+            '--class' => H5PQuestionSetLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
@@ -23,6 +24,6 @@ class AddOrganizationAdminProjectPermissionTypeSeeder extends Migration
      */
     public function down()
     {
-        //
+       //
     }
 }

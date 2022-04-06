@@ -2,12 +2,17 @@
 
 namespace App\Repositories\Organization;
 
+use App\Models\Activity;
+use App\Models\ActivityLayout;
+use App\Models\ActivityType;
+use App\Models\EducationLevel;
 use App\Models\Organization;
 use App\Models\OrganizationPermissionType;
 use App\Models\OrganizationRoleType;
 use App\Models\Pivots\GroupProjectUser;
 use App\Models\Pivots\TeamProjectUser;
 use App\Models\SsoLogin;
+use App\Models\Subject;
 use App\Models\TeamUserRole;
 use App\Models\UserLogin;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
@@ -69,15 +74,21 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $parentIds[] = $organization->id;
         }
 
-        return $this->model
+        $query =  $this->model
             ->with(['parent', 'admins'])
             ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
             ->whereIn('parent_id', $parentIds)
             ->when($data['query'] ?? null, function ($query) use ($data) {
                 $query->where('name', 'ilike', '%' . $data['query'] . '%');
                 return $query;
-            })
-            ->paginate($perPage)->withQueryString();
+            });
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -209,6 +220,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 if (isset($userRoles)) {
                     $suborganization->users()->sync($userRoles);
                 }
+
+                $this->assignDefaultActivityContents($suborganization->id, $organization->id);
+
                 DB::commit();
             }
 
@@ -657,6 +671,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $organizationUsers = $organizationUsers->wherePivot('organization_role_type_id', $data['role']);
         }
 
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $organizationUsers = $organizationUsers->orderBy($data['order_by_column'], $orderByType);
+        }
+
         return $organizationUsers->withCount([
             'projects' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
@@ -672,7 +691,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $query->where('email', 'like', '%' . str_replace("_", "\_", strtolower($data['query'])) . '%');
                 return $query;
             })
-            ->paginate($perPage);
+            ->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -843,4 +862,77 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         return false;
     }
+
+    /**
+     * Assign default activity contents to organization
+     *
+     * @param $organization_id
+     * @param $parent_id
+     *
+     * @return bool
+     */
+    public function assignDefaultActivityContents($organization_id, $parent_id)
+    {
+        // assign subjects
+        $parentSubjects = Subject::where('organization_id', $parent_id)->get();
+
+        foreach ($parentSubjects as $parentSubject) {
+            $subject = [
+                'name' => $parentSubject->name,
+                'order' => $parentSubject->order,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            Subject::insertOrIgnore($subject);
+        }
+
+        // assign education levels
+        $parentEducationLevels = EducationLevel::where('organization_id', $parent_id)->get();
+
+        foreach ($parentEducationLevels as $parentEducationLevel) {
+            $educationLevel = [
+                'name' => $parentEducationLevel->name,
+                'order' => $parentEducationLevel->order,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            EducationLevel::insertOrIgnore($educationLevel);
+        }
+
+        // assign activity layouts
+        $parentActivityLayouts = ActivityLayout::where('organization_id', $parent_id)->get();
+
+        foreach ($parentActivityLayouts as $parentActivityLayout) {
+            $activityLayout = [
+                'title' => $parentActivityLayout->title,
+                'description' => $parentActivityLayout->description,
+                'type' => $parentActivityLayout->type,
+                'h5pLib' => $parentActivityLayout->h5pLib,
+                'order' => $parentActivityLayout->order,
+                'image' => $parentActivityLayout->image,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            ActivityLayout::insertOrIgnore($activityLayout);
+        }
+
+        // assign activity types
+        $parentActivityTypes = ActivityType::where('organization_id', $parent_id)->get();
+
+        foreach ($parentActivityTypes as $parentActivityType) {
+            $activityType = [
+                'title' => $parentActivityType->title,
+                'order' => $parentActivityType->order,
+                'image' => $parentActivityType->image,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            ActivityType::insertOrIgnore($activityType);
+        }
+    }
+    
 }

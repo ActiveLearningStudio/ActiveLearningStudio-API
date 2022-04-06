@@ -19,6 +19,7 @@ use App\Http\Requests\V1\SuborganizationShowMemberOptionsRequest;
 use App\Http\Requests\V1\SuborganizationDeleteUserRequest;
 use App\Http\Requests\V1\SuborganizationGetUsersRequest;
 use App\Http\Requests\V1\SuborganizationUpdateRole;
+use App\Http\Requests\V1\SuborganizationUploadFaviconRequest;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
 use App\Http\Resources\V1\UserResource;
 use Illuminate\Support\Facades\Storage;
@@ -58,7 +59,10 @@ class SuborganizationController extends Controller
      * Get a list of the suborganizations for a user's default organization.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @bodyParam query string required Query to search suborganization against Example: Vivensity
+     * @bodyParam query string Query to search suborganization against Example: Vivensity
+     * @bodyParam size integer size to show per page records Example: 10
+     * @bodyParam order_by_column string to sort data with specific column Example: name
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/suborganizations.json
      *
@@ -111,6 +115,39 @@ class SuborganizationController extends Controller
     }
 
     /**
+     * Upload Favicon
+     *
+     * Upload favicon for a suborganization
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam favicon required image to upload Example: (binary)
+     *
+     * @response {
+     *   "faviconUrl": "/storage/organizations/favicon/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid favicon."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUploadFaviconRequest $suborganizationUploadFaviconRequest
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function uploadFavicon(SuborganizationUploadFaviconRequest $suborganizationUploadFaviconRequest, Organization $suborganization)
+    {
+        $this->authorize('uploadThumb', $suborganization);
+
+        $path = $suborganizationUploadFaviconRequest->file('favicon')->store('/public/organizations/favicon');
+
+        return response([
+            'faviconUrl' => Storage::url($path),
+        ], 200);
+    }
+
+    /**
      * Create Suborganization
      *
      * Create a new suborganization for a user's default organization.
@@ -119,6 +156,7 @@ class SuborganizationController extends Controller
      * @bodyParam description string required Description of a suborganization Example: This is a test suborganization.
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
+     * @bodyParam favicon string Favicon path of a suborganization Example: /storage/organizations/favicon/jlvKGDV1XjzIzfNrm1PyNwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
@@ -199,6 +237,7 @@ class SuborganizationController extends Controller
      * @bodyParam description string required Description of a suborganization Example: This is a test suborganization.
      * @bodyParam domain string required Domain of a suborganization Example: oldcampus
      * @bodyParam image string required Image path of a suborganization Example: /storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg
+     * @bodyParam favicon string Favicon path of a suborganization Example: /storage/organizations/favicon/jlvKGDV1XjzIzfNrm1PyNwLoQj6OMjV.jpeg
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
@@ -601,6 +640,8 @@ class SuborganizationController extends Controller
      * @bodyParam query string Query to search suborganization users against Example: Leo
      * @bodyParam size int Number of items to be displayed "per page" Example: 1
      * @bodyParam role int Organization role type id to filter by Example: 1
+     * @bodyParam order_by_column string to sort data with specific column Example: name
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/organization-users.json
      *
