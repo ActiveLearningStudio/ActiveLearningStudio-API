@@ -35,7 +35,11 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
             return $query->orderBy('order', 'ASC')->get();
         }
-
+        if (isset($data['filter']) && $data['filter'] !== '') {
+            $query = $query->whereHas('activityType', function ($qry) use ($data) {
+                $qry->where('id',$data['filter']);
+            });
+        }
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         if (isset($data['order_by_column']) && $data['order_by_column'] === 'order') {
