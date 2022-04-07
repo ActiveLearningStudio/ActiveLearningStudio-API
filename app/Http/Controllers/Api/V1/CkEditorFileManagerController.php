@@ -23,6 +23,7 @@ class CkEditorFileManagerController extends Controller
      *
      * @param Request $request
      *
+     * @bodyParam upload file of type doc/docx/pdf/txt
      * @responseFile responses/ckeditor/upload-file.json
      *
      * @response 404 {
@@ -39,14 +40,14 @@ class CkEditorFileManagerController extends Controller
     {
         $validator = Validator::make($request->all(), 
               [ 
-              'file' => 'required|mimes:doc,docx,pdf,txt|max:2048',
+              'upload' => 'required|mimes:doc,docx,pdf,txt|max:2048',
              ]);   
  
         if ($validator->fails()) {          
             return response()->json(['error'=>$validator->errors()], 401);                        
          } 
 
-        if ($files = $request->file('file')) {
+        if ($files = $request->file('upload')) {
              
             //store file into ckeditor folder
             $file = $request->file->store('public/ckeditor');
