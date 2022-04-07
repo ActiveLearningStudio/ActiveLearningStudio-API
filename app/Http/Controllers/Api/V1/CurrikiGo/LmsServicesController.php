@@ -96,8 +96,15 @@ class LmsServicesController extends Controller
         }
 
         $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
-        $canvasClient = new Client($lmsSetting);
-        $saveData = new SaveTeacherData($canvasClient);
-        return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
+        if ($lmsSetting->lms_name === 'canvas') {
+            $canvasClient = new Client($lmsSetting);
+            $saveData = new SaveTeacherData($canvasClient);
+            return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
+        } else {
+            return response(
+                ['message' => "This LMS do not support the API to save teacher data!"],
+                200
+            );
+        }
     }
 }
