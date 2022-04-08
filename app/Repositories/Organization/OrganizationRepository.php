@@ -603,7 +603,24 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 } else {
                     TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationTeam->users()->detach($data['user_id']);
-                    resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
+
+                    $allTeamUsers = $organizationTeam->users()->wherePivot('user_id', '<>', $data['user_id'])->get();
+
+                    if (count($allTeamUsers) > 0) {
+                        $allTeamUserIds = [];
+                        foreach ($allTeamUsers as $allTeamUserRow) {
+                            $allTeamUserIds[] = $allTeamUserRow->id;
+                        }
+
+                        if (!in_array($authenticatedUser->id, $allTeamUserIds)) {
+                            $organizationTeam->original_user = $data['user_id'];
+                            $organizationTeam->save();
+                            $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
+                        }
+
+                    } else {
+                        resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
+                    }
                 }
             }
 
@@ -934,5 +951,5 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             ActivityType::insertOrIgnore($activityType);
         }
     }
-    
+
 }
