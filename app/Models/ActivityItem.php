@@ -25,6 +25,7 @@ class ActivityItem extends Model
         'type',
         'h5pLib',
         'image',
+        'organization_id'
     ];
 
     /**

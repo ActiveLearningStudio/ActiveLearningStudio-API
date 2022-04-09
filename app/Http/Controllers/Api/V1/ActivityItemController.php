@@ -7,6 +7,7 @@ use App\Http\Requests\V1\StoreActivityItem;
 use App\Http\Requests\V1\UpdateActivityItem;
 use App\Http\Resources\V1\ActivityItemResource;
 use App\Models\ActivityItem;
+use App\Models\Organization;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use Illuminate\Http\Request;
@@ -63,11 +64,14 @@ class ActivityItemController extends Controller
      *
      * @responseFile responses/activity-item/activity-items.json
      *
+     * @param Request $request
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
-    public function getItems(Request $request)
+    public function getItems(Request $request, Organization $suborganization)
     {
-        return  ActivityItemResource::collection($this->activityItemRepository->getAll($request->all()));
+        return  ActivityItemResource::collection($this->activityItemRepository->getAll($suborganization, $request->all()));
     }
 
     /**
@@ -153,9 +157,11 @@ class ActivityItemController extends Controller
      * }
      *
      * @param Request $request
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
-    public function store(StoreActivityItem $request)
+    public function store(StoreActivityItem $request, Organization $suborganization)
     {
         $data = $request->validated();
         $activityItem = $this->activityItemRepository->create($data);
@@ -180,10 +186,12 @@ class ActivityItemController extends Controller
      *
      * @responseFile responses/activity-item/activity-item.json
      *
+     * @param Organization $suborganization
      * @param ActivityItem $activityItem
+     * 
      * @return Response
      */
-    public function show(ActivityItem $activityItem)
+    public function show(Organization $suborganization, ActivityItem $activityItem)
     {
         return response([
             'activityItem' => new ActivityItemResource($activityItem),
@@ -219,10 +227,12 @@ class ActivityItemController extends Controller
      * }
      *
      * @param Request $request
+     * @param Organization $suborganization
      * @param ActivityItem $activityItem
+     * 
      * @return Response
      */
-    public function update(UpdateActivityItem $request, ActivityItem $activityItem)
+    public function update(UpdateActivityItem $request, Organization $suborganization, ActivityItem $activityItem)
     {
         $data = $request->validated();
         $is_updated = $this->activityItemRepository->update($activityItem->id, $data);
@@ -255,11 +265,19 @@ class ActivityItemController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param ActivityItem $activityItem
+     * 
      * @return Response
      */
-    public function destroy(ActivityItem $activityItem)
+    public function destroy(Organization $suborganization, ActivityItem $activityItem)
     {
+        if ($suborganization->id !== $activityItem->organization_id) {
+            return response([
+                'message' => 'Invalid activituy item or organization',
+            ], 400);
+        }
+
         $is_deleted = $this->activityItemRepository->delete($activityItem->id);
 
         if ($is_deleted) {

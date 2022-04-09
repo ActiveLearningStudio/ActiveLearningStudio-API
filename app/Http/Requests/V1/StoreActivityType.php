@@ -31,7 +31,8 @@ class StoreActivityType extends FormRequest
         return [
             'title' => 'required|max:255',
             'image' => 'required',
-            'order' => 'required|integer|max:2147483647'
+            'order' => 'integer|max:2147483647',
+            'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];
     }
 }
