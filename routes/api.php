@@ -144,9 +144,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
-        Route::apiResource('activity-types', 'ActivityTypeController');
+        Route::apiResource('suborganizations/{suborganization}/activity-types', 'ActivityTypeController');
 
-        Route::apiResource('activity-items', 'ActivityItemController');
+        Route::apiResource('suborganizations/{suborganization}/activity-items', 'ActivityItemController');
 
         Route::get('users/{user}/metrics', 'UserMetricsController@show')->name('metrics.user');
         Route::get('users/{user}/membership', 'UserMembershipController@show')->name('membership.show');
@@ -232,7 +232,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
         Route::apiResource('queue-monitor', 'QueueMonitorController');
         // activity items
-        Route::get('get-activity-items', 'ActivityItemController@getItems');
+        Route::get('suborganizations/{suborganization}/get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
         Route::post('activity-layouts/upload-thumb', 'ActivityLayoutController@uploadImage');
