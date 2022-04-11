@@ -8,7 +8,6 @@ use App\Http\Requests\V1\UpdateActivityType;
 use App\Http\Resources\V1\ActivityTypeItemResource;
 use App\Http\Resources\V1\ActivityTypeResource;
 use App\Models\ActivityType;
-use App\Models\Organization;
 use App\Repositories\ActivityType\ActivityTypeRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -41,15 +40,12 @@ class ActivityTypeController extends Controller
      * Get a list of the activity types.
      *
      * @responseFile responses/activity-type/activity-types.json
-     * 
      * @param Request $request
-     * @param Organization $suborganization
-     * 
      * @return Response
      */
-    public function index(Request $request, Organization $suborganization)
+    public function index(Request $request)
     {
-        return  ActivityTypeResource::collection($this->activityTypeRepository->getAll($suborganization, $request->all()));
+        return  ActivityTypeResource::collection($this->activityTypeRepository->getAll($request->all()));
     }
 
     /**
@@ -119,11 +115,9 @@ class ActivityTypeController extends Controller
      * }
      *
      * @param Request $request
-     * @param Organization $suborganization
-     * 
      * @return Response
      */
-    public function store(StoreActivityType $request, Organization $suborganization)
+    public function store(StoreActivityType $request)
     {
         $data = $request->validated();
         $activityType = $this->activityTypeRepository->create($data);
@@ -148,12 +142,10 @@ class ActivityTypeController extends Controller
      *
      * @responseFile responses/activity-type/activity-type.json
      *
-     * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
      * @return Response
      */
-    public function show(Organization $suborganization, ActivityType $activityType)
+    public function show(ActivityType $activityType)
     {
         return response([
             'activityType' => new ActivityTypeResource($activityType),
@@ -198,12 +190,10 @@ class ActivityTypeController extends Controller
      * }
      *
      * @param Request $request
-     * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
      * @return Response
      */
-    public function update(UpdateActivityType $request, Organization $suborganization, ActivityType $activityType)
+    public function update(UpdateActivityType $request, ActivityType $activityType)
     {
         $data = $request->validated();
         $is_updated = $this->activityTypeRepository->update($activityType->id, $data);
@@ -236,19 +226,11 @@ class ActivityTypeController extends Controller
      *   ]
      * }
      *
-     * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
      * @return Response
      */
-    public function destroy(Organization $suborganization, ActivityType $activityType)
+    public function destroy(ActivityType $activityType)
     {
-        if ($suborganization->id !== $activityType->organization_id) {
-            return response([
-                'message' => 'Invalid activituy type or organization',
-            ], 400);
-        }
-
         $is_deleted = $this->activityTypeRepository->delete($activityType->id);
 
         if ($is_deleted) {
