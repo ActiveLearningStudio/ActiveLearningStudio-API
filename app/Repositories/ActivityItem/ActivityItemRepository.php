@@ -21,12 +21,10 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
     }
 
     /**
-     * @param $suborganization
      * @param $data
-     * 
      * @return mixed
      */
-    public function getAll($suborganization, $data)
+    public function getAll($data)
     {
         $query = $this->model;
         // if specific index projects requested
@@ -35,7 +33,7 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         }
 
         if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
-            return $query->where('organization_id', $suborganization->id)->orderBy('order', 'ASC')->get();
+            return $query->orderBy('order', 'ASC')->get();
         }
         if (isset($data['filter']) && $data['filter'] !== '') {
             $query = $query->whereHas('activityType', function ($qry) use ($data) {
@@ -51,7 +49,7 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
             $query = $query->orderBy('order', 'ASC');
         }
 
-        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**

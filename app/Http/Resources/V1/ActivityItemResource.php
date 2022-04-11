@@ -29,7 +29,6 @@ class ActivityItemResource extends JsonResource
             'demo_video_id' => $this->demo_video_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'organization_id' => $this->organization_id,
         ];
     }
 }
