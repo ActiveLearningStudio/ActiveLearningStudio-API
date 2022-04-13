@@ -3,8 +3,10 @@
 namespace App\Repositories\Organization;
 
 use App\Models\Activity;
+use App\Models\ActivityItem;
 use App\Models\ActivityLayout;
 use App\Models\ActivityType;
+use App\Models\AuthorTag;
 use App\Models\EducationLevel;
 use App\Models\Organization;
 use App\Models\OrganizationPermissionType;
@@ -949,6 +951,41 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             ];
 
             ActivityType::insertOrIgnore($activityType);
+        }
+
+        // assign activity items
+        $parentActivityItems = ActivityItem::where('organization_id', $parent_id)->get();
+
+        foreach ($parentActivityItems as $parentActivityItem) {
+            $activityItem = [
+                'title' => $parentActivityItem->title,
+                'order' => $parentActivityItem->order,
+                'image' => $parentActivityItem->image,
+                'description' => $parentActivityItem->description,
+                'activity_type_id' => $parentActivityItem->activity_type_id,
+                'type' => $parentActivityItem->type,
+                'h5pLib' => $parentActivityItem->h5pLib,
+                'created_at' => now(),
+                'demo_activity_id' => $parentActivityItem->demo_activity_id,
+                'demo_video_id' => $parentActivityItem->demo_video_id,
+                'organization_id' => $organization_id,
+            ];
+
+            ActivityItem::insertOrIgnore($activityItem);
+        }
+
+        // assign autor tags
+        $parentAuthorTags = AuthorTag::where('organization_id', $parent_id)->get();
+
+        foreach ($parentAuthorTags as $parentAuthorTag) {
+            $authorTag = [
+                'name' => $parentAuthorTag->name,
+                'order' => $parentAuthorTag->order,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            AuthorTag::insertOrIgnore($authorTag);
         }
     }
 
