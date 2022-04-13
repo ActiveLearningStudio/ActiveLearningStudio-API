@@ -23,7 +23,7 @@ class DefaultActivityLayoutSeeder extends Seeder
         $questionnaireImg = 'mtBeC6w0OY8JM4cgPetzBafE6iUPry3omWrsPS6k.png';
 
         $organizations = DB::table('organizations')->pluck('id');
-        $activityLayouts = '';
+
 
         foreach ($organizations as $key => $organization) {
 
@@ -47,6 +47,7 @@ class DefaultActivityLayoutSeeder extends Seeder
                 $this->copyImage($questionnaireImg);
             }
 
+            $activityLayouts = '';
             $activityLayouts = [
                 [
                     'organization_id' => $organization,
