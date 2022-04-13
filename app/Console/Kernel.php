@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command(SendDailyUsage::class)->dailyAt('0:00');
-        $schedule->command(SendDailyUsage::class)->everyFourHours();
+        // $schedule->command(SendDailyUsage::class)->everyFourHours();
         $schedule->command(PushNoovo::class)->everyMinute()->withoutOverlapping()->runInBackground();
         $schedule->command(DeleteExportedProjects::class)->daily()->runInBackground();
     }
