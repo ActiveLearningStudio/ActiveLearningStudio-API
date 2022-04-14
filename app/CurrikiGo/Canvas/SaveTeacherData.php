@@ -57,6 +57,7 @@ class SaveTeacherData
                     $teacherInfo->name = $courseData->name;
                     $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;
                     $teacherInfo->curriki_teacher_email = $record->email;
+                    $teacherInfo->curriki_teacher_org = $data->organizarion_from_lmsSettings;
                     $response[] = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
                 }
             }

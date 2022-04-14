@@ -10,12 +10,18 @@ use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Models\CurrikiGo\LmsSetting;
+use App\CurrikiGo\Canvas\Client;
+use App\CurrikiGo\Canvas\SaveTeacherData;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
 use App\Models\Project;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
+use App\Services\SaveStudentdataService;
 use App\User;
+use stdClass;
 
 /**
  * @group 9. LMS Settings
@@ -53,16 +59,42 @@ class LmsController extends Controller
      * @responseFile responses/project/projects.json
      *
      * @param Request $request
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @param UserRepositoryInterface $userRepository
      * @return Response
      */
     // TODO: need to update
-    public function projects(Request $request)
+    public function projects(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository, UserRepositoryInterface $userRepository)
     {
         if ($request->mode === 'browse') {
             $validator = Validator::make($request->all(), [
                 'lti_client_id' => 'required',
                 'user_email' => 'required|email',
+                'course_id' => 'required',
+                'api_domain_url' => 'required',
             ]);
+
+            // format data to make compatible with saveData function
+            $data = new stdClass();
+            $data->issuerClient = $request->lti_client_id;
+            $data->courseId = $request->course_id;
+            $data->customApiDomainUrl = $request->api_domain_url;
+
+            if (config('student-data.save_student_data') && $request->isLearner) {
+                $data->studentId = $request->studentId;
+                $data->customPersonNameGiven = $request->customPersonNameGiven;
+                $data->customPersonNameFamily = $request->customPersonNameFamily;
+                $service = new SaveStudentdataService();
+                $service->saveStudentData($data);
+            }
+
+            $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
+            if ($lmsSetting) {
+                $data->organizarion_from_lmsSettings = $lmsSetting->organization_id;
+                $canvasClient = new Client($lmsSetting);
+                $saveData = new SaveTeacherData($canvasClient);
+                $saveData->saveData($data, $googleClassroomRepository, $userRepository);
+            }
 
             if ($validator->fails()) {
                 $messages = $validator->messages();
