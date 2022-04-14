@@ -19,7 +19,7 @@ class DefaultActivityItemSeeder extends Seeder
         $itemsArray = [
             'AudioRecorder' => [
                 'Record your voice and play back or download a .wav file of your recording.',
-                '1',
+                'Audio changed',
                 'H5P.AudioRecorder 1.0',
                 '768',
                 'https://www.youtube-nocookie.com/embed/O73hIb7yxLg',
@@ -28,7 +28,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'InteractiveVideo' => [
                 'Add multiple interactions to any video',
-                '4',
+                'Multimedia',
                 'H5P.InteractiveVideo 1.21',
                 '755',
                 'https://www.youtube-nocookie.com/embed/7FnoeS8fxXg',
@@ -36,7 +36,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'BranchingScenario' => [
                 'Create adaptive scenarios for the learner',
-                '4',
+                'Multimedia',
                 'H5P.BranchingScenario 1.1',
                 '759',
                 'https://www.youtube-nocookie.com/embed/6sOoeu_NUU4',
@@ -45,7 +45,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ImmersiveReader' => [
                 "Read text documents with Microsoft's Immersive Reader",
-                '4',
+                'Multimedia',
                 'H5P.ImmersiveReader 1.0',
                 '181321',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -54,7 +54,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Accordion' => [
                 'An activity that creates accessible (WAI-ARIA enabled) accordions',
-                '2',
+                'Informational',
                 'H5P.Accordion 1.0',
                 '763',
                 'https://www.youtube-nocookie.com/embed/dVDFwhy93Vc',
@@ -63,7 +63,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Agamotto' => [
                 'Learners compare and explore a sequence of images interactively',
-                '3',
+                'Photo / Images',
                 'H5P.Agamotto 1.5',
                 '745',
                 'https://www.youtube-nocookie.com/embed/5o9sGAVjnUc',
@@ -72,7 +72,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'AdvancedFillInTheBlanks' => [
                 'Fill in missing words with advanced feedback options',
-                '5',
+                'Questions',
                 'H5P.AdvancedBlanks 1.0',
                 '729',
                 'https://www.youtube-nocookie.com/embed/f1yuOIUsVHA',
@@ -81,7 +81,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Dictation' => [
                 'A tool to create dictation exercises',
-                '1',
+                'Audio changed',
                 'H5P.Dictation 1.0',
                 '767',
                 'https://www.youtube-nocookie.com/embed/JLYtQpB0JmY',
@@ -90,7 +90,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Collage' => [
                 'Set up multiple photos in a custom layout',
-                '3',
+                'Photo / Images',
                 'H5P.Collage 0.3',
                 '744',
                 'https://www.youtube-nocookie.com/embed/TaV_Dj3kous',
@@ -99,7 +99,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'DialogCards' => [
                 'Create great interactive language learning resources',
-                '2',
+                'Informational',
                 'H5P.Dialogcards 1.8',
                 '732',
                 'https://www.youtube-nocookie.com/embed/Fh5zrkWgAjk',
@@ -108,7 +108,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'GeoGebra3D' => [
                 'GeoGebra 3D',
-                '6',
+                'Mathematics',
                 'H5P.GeoGebra3d 1.0',
                 '181321',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -117,7 +117,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ArithmeticQuiz' => [
                 'Time based arithmetic exam builder',
-                '6',
+                'Mathematics',
                 'H5P.ArithmeticQuiz 1.1',
                 '730',
                 'https://www.youtube-nocookie.com/embed/Z61BUoL6k1Y',
@@ -126,7 +126,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Chart' => [
                 'Create pie and bar charts',
-                '4',
+                'Multimedia',
                 'H5P.Chart 1.2',
                 '756',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -135,7 +135,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'GeoGebraGeometry' => [
                 'GeoGebra Geometry',
-                '6',
+                'Mathematics',
                 'H5P.GeoGebraGeometry 1.0',
                 '181321',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -145,7 +145,7 @@ class DefaultActivityItemSeeder extends Seeder
 
             'DragDrop' => [
                 'Create many forms of drag and drop interactions',
-                '3',
+                'Photo / Images',
                 'H5P.DragQuestion 1.13',
                 '753',
                 'https://www.youtube-nocookie.com/embed/S_4qMIN2hoE',
@@ -154,7 +154,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'SpokenAnswers' => [
                 'Voice recognition activity that the learner can answered with their own voice.',
-                '1',
+                'Audio changed',
                 'H5P.SpeakTheWords 1.3',
                 '769',
                 'https://www.youtube-nocookie.com/embed/lgzsJDcMvPI',
@@ -163,7 +163,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ColumnLayout' => [
                 'Stack multiple interactions in a column layout',
-                '4',
+                'Multimedia',
                 'H5P.Column 1.11',
                 '760',
                 'https://www.youtube-nocookie.com/embed/ngXSzWNYzU4',
@@ -172,7 +172,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'DocumentationTool' => [
                 'Create guides for structured writing processes / Form.',
-                '2',
+                'Informational',
                 'H5P.DocumentationTool 1.8',
                 '765',
                 'https://www.youtube-nocookie.com/embed/0pVTe7ooaW8',
@@ -181,7 +181,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'CoursePresentation' => [
                 'Add multiple interactions into a slide presentation',
-                '4',
+                'Multimedia',
                 'H5P.CoursePresentation 1.22',
                 '758',
                 'https://www.youtube-nocookie.com/embed/b1_-JJWKh3w',
@@ -190,7 +190,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Essay' => [
                 'Create interactive essays with instant feedback',
-                '5',
+                'Questions',
                 'H5P.Essay 1.2',
                 '735',
                 'https://www.youtube-nocookie.com/embed/d6WhXexBVnI',
@@ -199,7 +199,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'IframeEmbedder' => [
                 'Create an interactive activity from an existing JavaScript application',
-                '2',
+                'Informational',
                 'H5P.IFrameEmbed 1.0',
                 '764',
                 'https://www.youtube-nocookie.com/embed/T_jP_G4nYoY',
@@ -208,7 +208,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'GeoGebraGraphing' => [
                 'GeoGebra Graphing',
-                '6',
+                'Mathematics',
                 'H5P.GeoGebraGraphing 1.0',
                 '181321',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -217,7 +217,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'FlashCards' => [
                 'Create stylish and intuitive flashcards that pair images to questions',
-                '3',
+                'Photo / Images',
                 'H5P.Flashcards 1.5',
                 '749',
                 'https://www.youtube-nocookie.com/embed/vgco6i3B-yc',
@@ -226,7 +226,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'MathColumn' => [
                 'Math Column',
-                '6',
+                'Mathematics',
                 'H5P.CurrikiMathColumn 1.0',
                 '181321',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -235,7 +235,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Summary' => [
                 'Create challenges where the learner chooses statements to reach the correct conclusion.',
-                '2',
+                'Informational',
                 'H5P.Summary 1.10',
                 '762',
                 'https://www.youtube-nocookie.com/embed/EuXbu4Y4EkU',
@@ -244,7 +244,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ImpressivePresentation' => [
                 'Create interactive 3D presentations',
-                '4',
+                'Multimedia',
                 'H5P.ImpressPresentation 1.0',
                 '181321',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -253,7 +253,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'GuessTheAnswer' => [
                 'Create challenges where the user guesses the answer based on a picture',
-                '3',
+                'Photo / Images',
                 'H5P.GuessTheAnswer 1.4',
                 '750',
                 'https://www.youtube-nocookie.com/embed/csMLYiMX2zs',
@@ -262,7 +262,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'FillInTheBlanks' => [
                 'Create a task with  missing words the learner has to provide',
-                '5',
+                'Questions',
                 'H5P.Blanks 1.12',
                 '742',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -271,7 +271,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ImageHotspot' => [
                 'Add hotspots to images that reveal text, images or videos when clicked',
-                '3',
+                'Photo / Images',
                 'H5P.ImageHotspots 1.8',
                 '743',
                 'https://www.youtube-nocookie.com/embed/5XFXY5pYG-M',
@@ -280,7 +280,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'MarkTheWords' => [
                 'Create a word highlighting activity',
-                '5',
+                'Questions',
                 'H5P.MarkTheWords 1.9',
                 '731',
                 'https://www.youtube-nocookie.com/embed/A5B2Py-o1jI',
@@ -289,7 +289,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'DocumentsEmbed' => [
                 'Embed documents with preview from different sources i.e google docs, sheets, or any public URL.',
-                '2',
+                'Informational',
                 'H5P.DocumentsUpload 1.0',
                 '43161',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -298,7 +298,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ImagePairing' => [
                 'Interactive image matching game',
-                '3',
+                'Photo / Images',
                 'H5P.ImagePair 1.4',
                 '746',
                 'https://www.youtube-nocookie.com/embed/LdbtfHFGq5w',
@@ -307,7 +307,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Timeline' => [
                 'Create a multimedia timeline of events',
-                '4',
+                'Multimedia',
                 'H5P.Timeline 1.1',
                 '757',
                 'https://www.youtube-nocookie.com/embed/7JTpDzRgoW4',
@@ -316,7 +316,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ImageJuxtaposition' => [
                 'Activity where the learner compare two images interactively',
-                '3',
+                'Photo / Images',
                 'H5P.ImageJuxtaposition 1.4',
                 '748',
                 'https://www.youtube-nocookie.com/embed/aNUWJRoCSOY',
@@ -325,7 +325,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'VirtualTour' => [
                 'Add questions, texts and interactions to multiple 360 environments',
-                '4',
+                'Multimedia',
                 'H5P.ThreeImage 0.3',
                 '761',
                 'https://www.youtube-nocookie.com/embed/cZbxGLBOo9M',
@@ -334,7 +334,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'PersonalityQuiz' => [
                 'Build your own personality quiz',
-                '5',
+                'Questions',
                 'H5P.PersonalityQuiz 1.0',
                 '739',
                 'https://www.youtube-nocookie.com/embed/zY8CTNn5LVA',
@@ -343,7 +343,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ImageSequencing' => [
                 'Reorder images and place them in their correct sequence',
-                '3',
+                'Photo / Images',
                 'H5P.ImageSequencing 1.1',
                 '752',
                 'https://www.youtube-nocookie.com/embed/zrNAd3VMfyQ',
@@ -352,7 +352,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'SingleChoiceSet' => [
                 'Create questions with one correct answer',
-                '5',
+                'Questions',
                 'H5P.SingleChoiceSet 1.11',
                 '740',
                 'https://www.youtube-nocookie.com/embed/mufRBzsqZEw',
@@ -361,7 +361,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'ImageSlider' => [
                 'Create attractive image slide shows',
-                '3',
+                'Photo / Images',
                 'H5P.ImageSlider 1.0',
                 '747',
                 'https://www.youtube-nocookie.com/embed/CE5SyvPvjxU',
@@ -370,7 +370,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'TrueFalse' => [
                 'Create classic true and false questions',
-                '5',
+                'Questions',
                 'H5P.TrueFalse 1.6',
                 '738',
                 'https://www.youtube-nocookie.com/embed/pbjfPVykP1M',
@@ -379,7 +379,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'MemoryGame' => [
                 'Create a classic image pairing game',
-                '3',
+                'Photo / Images',
                 'H5P.MemoryGame 1.3',
                 '754',
                 'https://www.youtube-nocookie.com/embed/4FhblZzRh8c',
@@ -388,7 +388,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Questionnaire' => [
                 'Receive feedback through an interactive questionnaire',
-                '5',
+                'Questions',
                 'H5P.Questionnaire 1.2',
                 '741',
                 'https://www.youtube-nocookie.com/embed/zh3cXnEmLxg',
@@ -397,7 +397,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'FindtheHotspot' => [
                 'Create an image-based test where the learner is to find the correct spots on an image.',
-                '3',
+                'Photo / Images',
                 'H5P.ImageHotspotQuestion 1.8',
                 '751',
                 'https://www.youtube-nocookie.com/embed/Go6mE7mLNU8',
@@ -406,7 +406,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'Quiz' => [
                 'Create an assessment with multiple question types',
-                '5',
+                'Questions',
                 'H5P.QuestionSet 1.17',
                 '736',
                 'https://www.youtube-nocookie.com/embed/t0vsfxiq1zk',
@@ -415,7 +415,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'DragText' => [
                 'Create a text based drag and drop activity',
-                '5',
+                'Questions',
                 'H5P.DragText 1.8',
                 '737',
                 'https://www.youtube-nocookie.com/embed/UMbgmnXD5co',
@@ -424,7 +424,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'WordFind' => [
                 'Create a word find game based on your selection of words',
-                '5',
+                'Questions',
                 'H5P.FindTheWords 1.4',
                 '734',
                 'https://www.youtube-nocookie.com/embed/gx7a8FBvkUM',
@@ -433,7 +433,7 @@ class DefaultActivityItemSeeder extends Seeder
             ],
             'InteractiveBook' => [
                 'Interactive Book',
-                '4',
+                'Multimedia',
                 'H5P.InteractiveBook 1.2',
                 '181321',
                 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
@@ -448,6 +448,7 @@ class DefaultActivityItemSeeder extends Seeder
         foreach ($organizations as $key => $organization) {
 
             $activity_items = [];
+            $activityTypes = DB::table('activity_types')->whereOrganizationId($organization)->pluck('id', 'title');
 
             foreach ($itemsArray as $itemKey => $itemRow) {
 
@@ -459,7 +460,7 @@ class DefaultActivityItemSeeder extends Seeder
                     'title' => $this->makeTitle($itemKey),
                     'image' => $storageURL . $itemRow[5],
                     'description' => $itemRow[0],
-                    'activity_type_id' => $itemRow[1],
+                    'activity_type_id' => $activityTypes[$itemRow[1]],
                     'h5pLib' => $itemRow[2],
                     'demo_activity_id' => $itemRow[3],
                     'demo_video_id' => $itemRow[4],
