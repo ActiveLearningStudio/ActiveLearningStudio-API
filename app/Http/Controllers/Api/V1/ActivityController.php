@@ -173,13 +173,13 @@ class ActivityController extends Controller
             $activity = $playlist->activities()->create($attributes);
 
             if ($activity) {
-                if (isset($data['subject_id']) && $data['subject_id'][0] !== NULL) {
+                if (isset($data['subject_id']) && isset($data['subject_id'][0])) {
                     $activity->subjects()->attach($data['subject_id']);
                 }
-                if (isset($data['education_level_id']) && $data['education_level_id'][0] !== NULL) {
+                if (isset($data['education_level_id']) && isset($data['education_level_id'][0])) {
                     $activity->educationLevels()->attach($data['education_level_id']);
                 }
-                if (isset($data['author_tag_id']) && $data['author_tag_id'][0] !== NULL) {
+                if (isset($data['author_tag_id']) && isset($data['author_tag_id'][0])) {
                     $activity->authorTags()->attach($data['author_tag_id']);
                 }
 
@@ -287,13 +287,13 @@ class ActivityController extends Controller
             $is_updated = $this->activityRepository->update($attributes, $activity->id);
 
             if ($is_updated) {
-                if (isset($validated['subject_id']) && $validated['subject_id'][0] !== NULL) {
+                if (isset($validated['subject_id'])) {
                     $activity->subjects()->sync($validated['subject_id']);
                 }
-                if (isset($validated['education_level_id']) && $validated['education_level_id'][0] !== NULL) {
+                if (isset($validated['education_level_id'])) {
                     $activity->educationLevels()->sync($validated['education_level_id']);
                 }
-                if (isset($validated['author_tag_id']) && $validated['author_tag_id'][0] !== NULL) {
+                if (isset($validated['author_tag_id'])) {
                     $activity->authorTags()->sync($validated['author_tag_id']);
                 }
 
