@@ -47,6 +47,7 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
             $data['guardians_enabled'] = isset($course->guardiansEnabled) ? $course->guardiansEnabled : 0;
             $data['calendar_id'] = isset($course->calendarId) ? $course->calendarId : '';
             $data['curriki_teacher_email'] = isset($course->curriki_teacher_email) ? $course->curriki_teacher_email : auth()->user()->email;
+            $data['curriki_teacher_org'] = isset($course->curriki_teacher_org) ? $course->curriki_teacher_org : '';
 
             if ($item = $this->model->create($data)) {
                 return $item;

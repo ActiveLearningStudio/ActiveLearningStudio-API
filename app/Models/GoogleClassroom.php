@@ -36,6 +36,7 @@ class GoogleClassroom extends Model
         'guardians_enabled',
         'calendar_id',
         'curriki_teacher_email',
+        'curriki_teacher_org'
     ];
 
     /**
