@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @bodyParam name string required Author Tag name. Example: Audio
@@ -27,8 +28,17 @@ class UpdateAuthorTagRequest extends FormRequest
      */
     public function rules()
     {
+        $authorTag = $this->route('author_tag');
+
         return [
-            'name' => 'required|string|max:255',
+            'name' =>  [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('author_tags')->ignore($authorTag->id)->where(function ($query) use($authorTag) {
+                    return $query->where('organization_id', $authorTag->organization_id);
+                })
+            ],
             'order' => 'integer|max:2147483647',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];

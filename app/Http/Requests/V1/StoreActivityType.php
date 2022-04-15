@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @bodyParam title string required Activity Item Title. Example: Audio
@@ -28,8 +29,17 @@ class StoreActivityType extends FormRequest
      */
     public function rules()
     {
+        $organizationId = request('organization_id');
+
         return [
-            'title' => 'required|max:255',
+            'title' =>  [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('activity_types')->where(function ($query) use($organizationId) {
+                    return $query->where('organization_id', $organizationId);
+                })
+            ],
             'image' => 'required',
             'order' => 'integer|max:2147483647',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
