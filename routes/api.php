@@ -144,9 +144,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
-        Route::apiResource('activity-types', 'ActivityTypeController');
+        Route::apiResource('suborganizations/{suborganization}/activity-types', 'ActivityTypeController');
 
-        Route::apiResource('activity-items', 'ActivityItemController');
+        Route::apiResource('suborganizations/{suborganization}/activity-items', 'ActivityItemController');
 
         Route::get('users/{user}/metrics', 'UserMetricsController@show')->name('metrics.user');
         Route::get('users/{user}/membership', 'UserMembershipController@show')->name('membership.show');
@@ -232,7 +232,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
         Route::apiResource('queue-monitor', 'QueueMonitorController');
         // activity items
-        Route::get('get-activity-items', 'ActivityItemController@getItems');
+        Route::get('suborganizations/{suborganization}/get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
         Route::post('activity-layouts/upload-thumb', 'ActivityLayoutController@uploadImage');
@@ -292,7 +292,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // default Sso Integration Setting
         Route::apiResource('organizations/{organization}/default-sso-settings', 'DefaultSsoIntegrationSettingsController');
         Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
-        Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
     // public route for get user's shared projects
@@ -312,6 +311,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
     Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
+    Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments

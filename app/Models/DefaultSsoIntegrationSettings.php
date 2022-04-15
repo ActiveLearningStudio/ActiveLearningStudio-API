@@ -25,8 +25,10 @@ class DefaultSsoIntegrationSettings extends Model
         'lti_client_id',
         'organization_id',
         'guid',
-        'published',
         'role_id',
+        'project_visibility',
+        'playlist_visibility',
+        'activity_visibility',
     ];
     /**
      * Get the organization for Default SSO Integration

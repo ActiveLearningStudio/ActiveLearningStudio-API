@@ -33,8 +33,10 @@ class UpdateDefaultSsoSettingsRequest extends FormRequest
             'lms_access_secret' => 'required_with:lms_access_key|max:255',
             'description' => 'nullable|max:255',
             'organization_id' => 'required|exists:organizations,id',
-            'published' => 'nullable|boolean',
             'role_id' => 'required|integer|exists:organization_role_types,id',
+            'project_visibility' => 'nullable|boolean',
+            'playlist_visibility' => 'nullable|boolean',
+            'activity_visibility' => 'nullable|boolean',
         ];
     }
 }
