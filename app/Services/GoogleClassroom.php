@@ -280,7 +280,8 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @return array
      * @throws GeneralException
      */
-    public function createProjectAsCourse(Project $project, $courseId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository, $publisherOrg)
+    public function createProjectAsCourse(Project $project, $courseId = null,
+    GoogleClassroomRepositoryInterface $googleClassroomRepository, $publisherOrg)
     {
         if (!$this->gc_classwork) {
             throw new GeneralException("GcClasswork repository object is required");
