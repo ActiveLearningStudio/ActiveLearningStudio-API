@@ -89,7 +89,7 @@ class LmsController extends Controller
             }
 
             $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
-            if ($lmsSetting) {
+            if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
                 $data->organizarion_from_lmsSettings = $lmsSetting->organization_id;
                 $canvasClient = new Client($lmsSetting);
                 $saveData = new SaveTeacherData($canvasClient);
