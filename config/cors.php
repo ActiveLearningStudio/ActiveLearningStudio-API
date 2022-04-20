@@ -1,5 +1,13 @@
 <?php
+$allowed_cors = explode(",", env('APP_ALLOWED_URL'));
 
+$input = $_SERVER['HTTP_HOST'];
+$domain = array_filter($allowed_cors, function ($item) use ($input) {
+    if (stripos($item, $input) !== false) {
+        return true;
+    }
+    return false;
+});
 return [
 
     /*
@@ -19,7 +27,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'], // [env('APP_ALLOWED_URL', '*')],
+    'allowed_origins' => [$domain[0], env('FRONT_END_URL')],
 
     'allowed_origins_patterns' => [],
 
