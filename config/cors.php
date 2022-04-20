@@ -1,5 +1,5 @@
 <?php
-$allowed_cors = explode("," env('APP_ALLOWED_URL'));
+$allowed_cors = explode(",", env('APP_ALLOWED_URL'));
 
 $input = $_SERVER['HTTP_HOST'];
 $domain = array_filter($allowed_cors, function ($item) use ($input) {
