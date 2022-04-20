@@ -38,7 +38,7 @@ class ActivityTypeRepository extends BaseRepository implements ActivityTypeRepos
             return $query->where('organization_id', $suborganization->id)->orderBy('order', 'ASC')->get();
         }
         
-        if (isset($data['order_by_column']) && $data['order_by_column'] === 'order') {
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
             $query = $query->orderBy($data['order_by_column'], $orderByType);
         } else {
