@@ -27,7 +27,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [$domain, env('FRONT_END_URL')],
+    'allowed_origins' => [$domain[0], env('FRONT_END_URL')],
 
     'allowed_origins_patterns' => [],
 
