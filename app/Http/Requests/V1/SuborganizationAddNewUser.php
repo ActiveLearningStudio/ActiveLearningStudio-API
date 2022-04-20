@@ -35,6 +35,8 @@ class SuborganizationAddNewUser extends FormRequest
             'organization_type' => 'string',
             'website' => 'string',
             'address' => 'string',
+            'send_email' => 'nullable|boolean',
+            'message' => 'nullable|required_if:send_email,true|max:500',
         ];
     }
 }

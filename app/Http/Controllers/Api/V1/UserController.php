@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\ExportedProjectsResource;
 use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
+use App\Notifications\NewUserNotification;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -235,6 +236,10 @@ class UserController extends Controller
             $user = $this->userRepository->create(Arr::except($data, ['role_id']));
             $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
 
+            if (isset($data['send_email']) && $data['send_email'] === true) {
+                $user->notify(new NewUserNotification($data['message']));
+            }
+            
             return response([
                 'user' => new UserResource($this->userRepository->find($user->id)),
                 'message' => 'User has been created successfully.',
