@@ -8,7 +8,7 @@ $domain_arr = array_filter($allowed_cors, function ($item) use ($input) {
     }
     return false;
 });
-$domain = isset($domain_arr[0])? $domain_arr[0] : null;
+$domain = isset($domain_arr[0])? $domain_arr[0] : "http://localhost:3000";
 return [
 
     /*
@@ -28,7 +28,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [$domain, "http://localhost:3000"],
+    'allowed_origins' => [$domain],
 
     'allowed_origins_patterns' => [],
 
