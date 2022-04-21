@@ -1,13 +1,15 @@
 <?php
 $allowed_cors = explode(",", env('APP_ALLOWED_URL'));
 
-$input = $_SERVER['HTTP_HOST'];
-$domain = array_filter($allowed_cors, function ($item) use ($input) {
+$input = isset($_SERVER["HTTP_HOST"]) ? $_SERVER['HTTP_HOST'] : isset($_SERVER['FRONT_END_URL']) ? $_SERVER["FRONT_END_URL"] : "";
+$domain_arr = array_filter($allowed_cors, function ($item) use ($input) {
     if (stripos($item, $input) !== false) {
         return true;
     }
     return false;
 });
+$domain = isset($domain_arr[0])? $domain_arr[0] : "http://localhost:3000";
+
 return [
 
     /*
@@ -27,7 +29,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [$domain[0], "http://localhost:3000"],
+    'allowed_origins' => [$domain],
 
     'allowed_origins_patterns' => [],
 
