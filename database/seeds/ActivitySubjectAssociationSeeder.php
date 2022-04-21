@@ -36,6 +36,9 @@ class ActivitySubjectAssociationSeeder extends Seeder
             if (isset($subjectList[$activity->subject_id][$activity->sav_organization_id])) {
                $subject_id = $subjectList[$activity->subject_id][$activity->sav_organization_id];
             } else {
+                if (!isset($subjectList[$activity->subject_id][$activity->organization_id])) {
+                    continue;
+                }
                 $subject_id = $subjectList[$activity->subject_id][$activity->organization_id]; 
             }
 
