@@ -49,7 +49,6 @@ class ActivitySubjectAssociationSeeder extends Seeder
             ];
         }
 
-        DB::table('activity_subject')->truncate();
         DB::table('activity_subject')->insertOrIgnore($activitiesSubjectInsertArray);
     }
 }

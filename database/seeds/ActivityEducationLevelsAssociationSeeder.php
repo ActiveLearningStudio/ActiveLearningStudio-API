@@ -50,7 +50,6 @@ class ActivityEducationLevelsAssociationSeeder extends Seeder
             ];
         }
 
-        DB::table('activity_education_level')->truncate();
         DB::table('activity_education_level')->insertOrIgnore($activitiesSubjectInsertArray);
     }
 }
