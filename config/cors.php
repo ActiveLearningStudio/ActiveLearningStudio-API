@@ -28,7 +28,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [$domain[0], "http://localhost:3000"],
+    'allowed_origins' => [$domain, "http://localhost:3000"],
 
     'allowed_origins_patterns' => [],
 
