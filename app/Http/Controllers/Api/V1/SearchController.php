@@ -88,8 +88,9 @@ class SearchController extends Controller
      * @queryParam userIds Array of user ids to match. Example: [1]
      * @queryParam startDate Start date for search by date range. Example: 2020-04-30 00:00:00
      * @queryParam endDate End date for search by date range. Example: 2020-04-30 23:59:59
-     * @queryParam subjectIds Array of subject ids to match. Example: ['ComputerScience']
-     * @queryParam educationLevelIds Array of education level ids to match. Example: ['Preschool (Ages 0-4)']
+     * @queryParam subjectIds Array of subject ids to match. Example: [1]
+     * @queryParam educationLevelIds Array of education level ids to match. Example: [1]
+     * @queryParam authorTagsIds Array of author tags ids to match. Example: [1]
      * @queryParam h5pLibraries Array of h5p libraries to match. Example: ['H5P.InteractiveVideo 1.21']
      * @queryParam model Index to filter by. Example: activities
      * @queryParam sort Field to sort by. Example: created_at
@@ -140,8 +141,9 @@ class SearchController extends Controller
      * @queryParam  indexing Indexing requested, approved or not approved. Example: [3]
      * @queryParam  startDate Start date for search by date range. Example: 2020-04-30 00:00:00
      * @queryParam  endDate End date for search by date range. Example: 2020-04-30 23:59:59
-     * @queryParam  subjectIds Array of subject ids to match. Example: ['ComputerScience']
-     * @queryParam  educationLevelIds Array of education level ids to match. Example: ['Preschool (Ages 0-4)']
+     * @queryParam  subjectIds Array of subject ids to match. Example: [1]
+     * @queryParam  educationLevelIds Array of education level ids to match. Example: [1]
+     * @queryParam  authorTagsIds Array of author tags ids to match. Example: [1]
      * @queryParam  h5pLibraries Array of h5p libraries to match. Example: ['H5P.InteractiveVideo 1.21']
      * @queryParam  model Index to filter by. Example: activities
      * @queryParam  sort Field to sort by. Example: created_at
