@@ -27,6 +27,7 @@ class Cors
                 }
                 return false;
             });
+            $url = reset($domain_arr);
         } 
         
         
@@ -35,7 +36,7 @@ class Cors
         header('Access-Control-Allow-Methods: *');
 
         header("Access-Control-Allow-Headers: *");
-        // return response()->json(["test"=>json_encode($_SERVER["HTTP_REFERER"])]);
+        
         return $next($request);
     }
 }
