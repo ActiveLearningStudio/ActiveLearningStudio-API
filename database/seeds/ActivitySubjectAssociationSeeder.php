@@ -18,19 +18,35 @@ class ActivitySubjectAssociationSeeder extends Seeder
             $subjectList[$subject->name][$subject->organization_id] = $subject->id;
         }
 
-        $activities = DB::table('activities')->select('id', 'subject_id', 'organization_id')->whereNotNull('subject_id')->get();
+        $activities = DB::table('activities as a')
+                         ->select(
+                            'a.id',
+                            'a.subject_id',
+                            'a.organization_id as sav_organization_id',
+                            'proj.organization_id'
+                          )
+                         ->leftJoin('playlists as p', 'p.id', '=', 'a.playlist_id')
+                         ->leftJoin('projects as proj', 'proj.id', '=', 'p.project_id')
+                         ->whereNotNull('a.subject_id')
+                         ->get();
+        
         $activitiesSubjectInsertArray = [];
 
         foreach ($activities as $activity) {
-            if (isset($subjectList[$activity->subject_id][$activity->organization_id])) {
-                $activitiesSubjectInsertArray[] = [
-                    'activity_id' => $activity->id,
-                    'subject_id' => $subjectList[$activity->subject_id][$activity->organization_id],
-                    'created_at' => now(),
-                ];
+            if (isset($subjectList[$activity->subject_id][$activity->sav_organization_id])) {
+               $subject_id = $subjectList[$activity->subject_id][$activity->sav_organization_id];
+            } else {
+                $subject_id = $subjectList[$activity->subject_id][$activity->organization_id]; 
             }
+
+            $activitiesSubjectInsertArray[] = [
+                'activity_id' => $activity->id,
+                'subject_id' => $subject_id,
+                'created_at' => now(),
+            ];
         }
 
+        DB::table('activity_subject')->truncate();
         DB::table('activity_subject')->insertOrIgnore($activitiesSubjectInsertArray);
     }
 }
