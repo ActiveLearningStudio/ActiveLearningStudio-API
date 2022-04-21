@@ -37,6 +37,9 @@ class ActivityEducationLevelsAssociationSeeder extends Seeder
             if (isset($educationLevelsList[$activity->education_level_id][$activity->sav_organization_id])) {
                 $education_level_id = $educationLevelsList[$activity->education_level_id][$activity->sav_organization_id];
             } else {
+                if (!isset($educationLevelsList[$activity->education_level_id][$activity->organization_id])) {
+                    continue;
+                }
                 $education_level_id = $educationLevelsList[$activity->education_level_id][$activity->organization_id];
             }
 
