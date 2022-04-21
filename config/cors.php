@@ -1,7 +1,7 @@
 <?php
 $allowed_cors = explode(",", env('APP_ALLOWED_URL'));
 
-$input = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']) : "";
+$input = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "";
 $domain_arr = array_filter($allowed_cors, function ($item) use ($input) {
     if (stripos($item, $input) !== false) {
         return true;
