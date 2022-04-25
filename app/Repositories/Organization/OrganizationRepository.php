@@ -584,18 +584,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         try {
             DB::beginTransaction();
 
-            foreach ($organizationProjects as $organizationProject) {
-                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
-                    $organizationProject->original_user = $data['user_id'];
-                    $organizationProject->save();
-                    $organizationProject->users()->detach($data['user_id']);
-                    $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
-                } else {
-                    $organizationProject->users()->detach($data['user_id']);
-                    $this->projectRepository->forceDelete($organizationProject);
-                }
-            }
-
             foreach ($organizationTeams as $organizationTeam) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
                     $organizationTeam->original_user = $data['user_id'];
@@ -605,6 +593,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 } else {
                     TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationTeam->users()->detach($data['user_id']);
+                    $organizationTeam->projects()->detach();
 
                     $allTeamUsers = $organizationTeam->users()->wherePivot('user_id', '<>', $data['user_id'])->get();
 
@@ -636,6 +625,18 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationGroup->users()->detach($data['user_id']);
                     resolve(GroupRepositoryInterface::class)->forceDelete($organizationGroup);
+                }
+            }
+
+            foreach ($organizationProjects as $organizationProject) {
+                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                    $organizationProject->original_user = $data['user_id'];
+                    $organizationProject->save();
+                    $organizationProject->users()->detach($data['user_id']);
+                    $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                } else {
+                    $organizationProject->users()->detach($data['user_id']);
+                    $this->projectRepository->forceDelete($organizationProject);
                 }
             }
 
