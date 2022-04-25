@@ -602,8 +602,15 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
                     } else {
                         TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
-                        Project::where('team_id', $organizationTeam->id)->forceDelete();
+                        $teamProjects = Project::where('team_id', $organizationTeam->id)->pluck('id')->toArray();
+                        if (count($teamProjects) > 0) {
+                            DB::table('user_project')
+                            ->where('user_id', $data['user_id'])
+                            ->whereIn('project_id', $teamProjects)
+                            ->delete();
+                        }
                         $organizationTeam->projects()->detach();
+                        Project::where('team_id', $organizationTeam->id)->forceDelete();
                         resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
                     }
                 }
