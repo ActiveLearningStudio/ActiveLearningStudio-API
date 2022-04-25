@@ -66,4 +66,39 @@ class CkEditorFileManagerController extends Controller
             echo $response;
         }
     }
+
+    /**
+     * Browse files from ckeditor folder
+     *
+     * @param Request $request
+     *
+     * @responseFile responses/ckeditor/browse-file.json
+     *
+     * @response 200 {
+     *   "success": [
+     *     "list of files."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return string
+     * 
+     */
+    public function browseFiles(Request $request)
+    {
+        $path = storage_path('app/public/ckeditor');
+        $filesInFolder = File::allFiles($path);
+        $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+        $return_html = "";
+        
+        foreach ($filesInFolder as $key => $path) {
+            $files = pathinfo($path);
+            $allMedia[] = $files['basename'];
+            $fileUrl =  url(Storage::url('ckeditor/' . basename($files['basename'])));
+
+            $return_html .= "<a  onclick='window.opener.CKEDITOR.tools.callFunction( $CKEditorFuncNum, \"$fileUrl\" );window.close();'>".$files['basename']."</a><br>";
+          }
+         
+          echo $return_html;
+    }
 }
