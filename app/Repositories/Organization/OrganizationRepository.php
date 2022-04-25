@@ -569,20 +569,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function removeUser($authenticatedUser, $organization, $data)
     {
-        $organizationProjects = $organization->projects()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
-        $organizationTeams = $organization->teams()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
-        $organizationGroups = $organization->groups()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
         try {
             DB::beginTransaction();
+
+            $organizationTeams = $organization->teams()->whereHas('users', function (Builder $query) use ($data) {
+                $query->where('id', '=', $data['user_id']);
+            })->get();
 
             foreach ($organizationTeams as $organizationTeam) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
@@ -615,6 +607,10 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 }
             }
 
+            $organizationGroups = $organization->groups()->whereHas('users', function (Builder $query) use ($data) {
+                $query->where('id', '=', $data['user_id']);
+            })->get();
+
             foreach ($organizationGroups as $organizationGroup) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
                     $organizationGroup->original_user = $data['user_id'];
@@ -628,6 +624,10 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 }
             }
 
+            $organizationProjects = $organization->projects()->whereHas('users', function (Builder $query) use ($data) {
+                $query->where('id', '=', $data['user_id']);
+            })->get();
+
             foreach ($organizationProjects as $organizationProject) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
                     $organizationProject->original_user = $data['user_id'];
@@ -636,23 +636,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
                 } else {
                     $organizationProject->users()->detach($data['user_id']);
-
-                    $allProjectUsers = $organizationProject->users()->wherePivot('user_id', '<>', $data['user_id'])->get();
-
-                    if (count($allProjectUsers) > 0) {
-                        $allProjectUserIds = [];
-                        foreach ($allProjectUserIds as $allProjectUserRow) {
-                            $allProjectUserIds[] = $allProjectUserRow->id;
-                        }
-
-                        if (!in_array($authenticatedUser->id, $allProjectUserIds)) {
-                            $organizationProject->original_user = $data['user_id'];
-                            $organizationProject->save();
-                            $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
-                        }
-                    } else {
-                        $this->projectRepository->forceDelete($organizationProject);
-                    }
+                    $this->projectRepository->forceDelete($organizationProject);
                 }
             }
 
