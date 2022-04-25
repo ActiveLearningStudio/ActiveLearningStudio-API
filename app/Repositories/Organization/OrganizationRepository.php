@@ -13,6 +13,7 @@ use App\Models\OrganizationPermissionType;
 use App\Models\OrganizationRoleType;
 use App\Models\Pivots\GroupProjectUser;
 use App\Models\Pivots\TeamProjectUser;
+use App\Models\Project;
 use App\Models\SsoLogin;
 use App\Models\Subject;
 use App\Models\TeamUserRole;
@@ -601,6 +602,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
                     } else {
                         TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                        Project::where('team_id', $organizationTeam->id)->forceDelete();
                         $organizationTeam->projects()->detach();
                         resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
                     }
@@ -624,9 +626,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 }
             }
 
-            $organizationProjects = $organization->projects()->whereHas('users', function (Builder $query) use ($data) {
-                $query->where('id', '=', $data['user_id']);
-            })->get();
+            $organizationProjects = $organization->projects()
+                                    ->whereHas('users', function (Builder $query) use ($data) {
+                                        $query->where('id', '=', $data['user_id']);
+                                    })
+                                    ->whereNull('team_id')->get();
 
             foreach ($organizationProjects as $organizationProject) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
