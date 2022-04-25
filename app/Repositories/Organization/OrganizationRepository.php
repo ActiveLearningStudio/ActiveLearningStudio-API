@@ -588,6 +588,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
                     $allTeamUsers = $organizationTeam->users()->wherePivot('user_id', '<>', $data['user_id'])->get();
 
+                    $teamProjects = Project::where('team_id', $organizationTeam->id)->pluck('id')->toArray();
+
                     if (count($allTeamUsers) > 0) {
                         $allTeamUserIds = [];
                         foreach ($allTeamUsers as $allTeamUserRow) {
@@ -599,10 +601,15 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                             $organizationTeam->save();
                             $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
                         }
+                        if (count($teamProjects) > 0) {
+                            DB::table('user_project')
+                            ->where('user_id', $data['user_id'])
+                            ->whereIn('project_id', $teamProjects)
+                            ->delete();
+                        }
 
                     } else {
                         TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
-                        $teamProjects = Project::where('team_id', $organizationTeam->id)->pluck('id')->toArray();
                         if (count($teamProjects) > 0) {
                             DB::table('user_project')
                             ->where('user_id', $data['user_id'])
