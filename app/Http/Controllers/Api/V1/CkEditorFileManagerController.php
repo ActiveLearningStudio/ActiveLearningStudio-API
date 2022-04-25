@@ -74,12 +74,6 @@ class CkEditorFileManagerController extends Controller
      *
      * @responseFile responses/ckeditor/browse-file.json
      *
-     * @response 200 {
-     *   "success": [
-     *     "list of files."
-     *   ]
-     * }
-     *
      * @param Request $request
      * @return string
      * 
