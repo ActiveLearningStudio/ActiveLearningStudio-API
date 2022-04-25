@@ -39,16 +39,27 @@ class CkEditorFileManagerController extends Controller
     public function uploadFile(Request $request)
     {
         if($request->hasFile('upload')) {
+            
+            $validator = Validator::make($request->all(), 
+                                        [ 
+                                            'upload' => 'required|mimes:doc,docx,pdf,xlsx',
+                                        ]);   
+ 
+            if ($validator->fails()) {          
+                    return response()->json(['error'=>$validator->errors()], 401);                        
+            }
             $originName = $request->file('upload')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
             $extension = $request->file('upload')->getClientOriginalExtension();
-            $fileName = $fileName.'_'.time().'.'.$extension;
+            $fileName = $fileName.'_'.time() . '.' . $extension;
         
             $request->file('upload')->move(storage_path('app/public/ckeditor'), $fileName);
         
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
             $url = url(Storage::url('ckeditor/' . basename($fileName)));
-            $msg = 'Image uploaded successfully'; 
+            
+            $url = str_replace('storage', 'api/storage', $url);
+            $msg = 'Document uploaded successfully'; 
             $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
                
             @header('Content-type: text/html; charset=utf-8'); 

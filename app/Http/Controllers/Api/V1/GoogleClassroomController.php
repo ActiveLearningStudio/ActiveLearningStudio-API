@@ -192,9 +192,10 @@ class GoogleClassroomController extends Controller
             $data = $copyProjectRequest->validated();
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
+            $publisherOrg = $data['publisher_org'] ?? 0;
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $course = $service->createProjectAsCourse($project, $courseId, $googleClassroomRepository);
+            $course = $service->createProjectAsCourse($project, $courseId, $googleClassroomRepository, $publisherOrg);
 
             return response([
                 'course' => $course,
@@ -601,10 +602,11 @@ class GoogleClassroomController extends Controller
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
             $topicId = $data['topic_id'] ?? 0;
+            $publisherOrg = $data['publisher_org'] ?? 0;
 
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $publishedPlaylist = $service->publishPlaylistAsTopic($project, $playlist, $courseId, $topicId, $googleClassroomRepository);
+            $publishedPlaylist = $service->publishPlaylistAsTopic($project, $playlist, $courseId, $topicId, $googleClassroomRepository, $publisherOrg);
 
             return response([
                 'course' => $publishedPlaylist,
@@ -665,10 +667,12 @@ class GoogleClassroomController extends Controller
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
             $topicId = $data['topic_id'] ?? 0;
+            $topicId = $data['topic_id'] ?? 0;
+            $publisherOrg = $data['publisher_org'] ?? 0;
 
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $publishedActivity = $service->publishActivityAsAssignment($project, $playlist, $activity, $courseId, $topicId, $googleClassroomRepository);
+            $publishedActivity = $service->publishActivityAsAssignment($project, $playlist, $activity, $courseId, $topicId, $googleClassroomRepository, $publisherOrg);
 
             return response([
                 'course' => $publishedActivity,

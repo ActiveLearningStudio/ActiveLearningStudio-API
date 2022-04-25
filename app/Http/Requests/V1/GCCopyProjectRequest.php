@@ -25,7 +25,8 @@ class GCCopyProjectRequest extends FormRequest
     {
         return [
             'course_id' => 'sometimes|integer',
-            'access_token' => 'nullable'
+            'access_token' => 'nullable',
+            'publisher_org' => 'int|nullable'
         ];
     }
 }

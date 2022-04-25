@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @bodyParam name string required Education Level name. Example: Special Education
@@ -27,8 +28,17 @@ class UpdateEducationLevelRequest extends FormRequest
      */
     public function rules()
     {
+        $educationLevel = $this->route('education_level');
+
         return [
-            'name' => 'required|string|max:255',
+            'name' =>  [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('education_levels')->ignore($educationLevel->id)->where(function ($query) use($educationLevel) {
+                    return $query->where('organization_id', $educationLevel->organization_id);
+                })
+            ],
             'order' => 'integer|max:2147483647',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];

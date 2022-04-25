@@ -168,12 +168,12 @@ class ExtractXAPIJSONController extends Controller
                         }
                         $glassEnrollmentCode = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_LMS_COURSE_CODE);
                     }
-                    //Only fetching teacher_email_id of gclass_api_data column as in each respective case (LTI DL, Publishing from CS) email of publisher is already being stored
+                    // Only fetching teacher_email_id of gclass_api_data column as in each respective case (LTI DL, Publishing from CS) email of publisher is already being stored
                     if ($glassAltCourseId) {
                         $publisherData = $googleClassroom->fetchPublisherData($glassAltCourseId);
                         if ($publisherData) {
                             $insertData['publisher_id'] = $publisherData['publisherUser']['id'];
-                            $insertData['publisher_org_id'] = $publisherData['publisherUser']['publisherOrg']['organization_id'];
+                            $insertData['publisher_org_id'] = $publisherData['curriki_teacher_org'];
                         }
                     }
                     $chapterName = $service->getExtensionValueFromList($definition, LearnerRecordStoreService::EXTENSION_H5P_CHAPTER_NAME);
@@ -185,6 +185,12 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['chapter_name'] = (!empty($chapterName) ? $chapterName : 0);
                     $insertData['chapter_index'] = $chapterIndex;
                     $insertData['referrer'] = $referrer;
+
+                    // Saving publisherId and publisherOrg in shared links case
+                    if ($referrer != null) {
+                        $insertData['publisher_id'] = $project->users[0]->id;
+                        $insertData['publisher_org_id'] = $project->organization_id;
+                    }
                 }
 
                 $interactionFactory = new InteractionFactory();

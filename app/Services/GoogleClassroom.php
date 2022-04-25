@@ -276,10 +276,12 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param Project $project
      * @param int|null $courseId The id of the course
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @param $publisherOrg
      * @return array
      * @throws GeneralException
      */
-    public function createProjectAsCourse(Project $project, $courseId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    public function createProjectAsCourse(Project $project, $courseId = null,
+    GoogleClassroomRepositoryInterface $googleClassroomRepository, $publisherOrg)
     {
         if (!$this->gc_classwork) {
             throw new GeneralException("GcClasswork repository object is required");
@@ -302,6 +304,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             $course = $this->createCourse($courseData);
         }
 
+        $course->curriki_teacher_org = $publisherOrg;
         $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         $return = GCCourseResource::make($course)->resolve();
 
@@ -401,11 +404,12 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param string|null $courseId
      * @param string|null $topicId
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @param $publisherOrg
      * @return array
      * @throws GeneralException
      */
     public function publishPlaylistAsTopic(Project $project, Playlist $playlist, $courseId = null,
-        $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+        $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository, $publisherOrg)
     {
         if (!$this->gc_classwork) {
             throw new GeneralException("GcClasswork repository object is required");
@@ -427,6 +431,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             $course = $this->createCourse($courseData);
         }
 
+        $course->curriki_teacher_org = $publisherOrg;
         //Storing publisher data
         $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         $return = GCCourseResource::make($course)->resolve();
@@ -507,11 +512,12 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @param string|null $courseId
      * @param string|null $topicId
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @param $publisherOrg
      * @return array
      * @throws GeneralException
      */
     public function publishActivityAsAssignment(Project $project, Playlist $playlist, Activity $activity, $courseId = null,
-        $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository)
+        $topicId = null, GoogleClassroomRepositoryInterface $googleClassroomRepository, $publisherOrg)
     {
         if (!$this->gc_classwork) {
             throw new GeneralException("GcClasswork repository object is required");
@@ -533,6 +539,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             $course = $this->createCourse($courseData);
         }
 
+        $course->curriki_teacher_org = $publisherOrg;
         // Storing publisher data
         $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($course);
         $return = GCCourseResource::make($course)->resolve();

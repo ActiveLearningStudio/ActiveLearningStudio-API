@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @bodyParam title string required Activity Item Title. Example: Audio
@@ -28,8 +29,16 @@ class UpdateActivityLayout extends FormRequest
      */
     public function rules()
     {
+        $activityLayout = $this->route('activity_layout');
+
         return [
-            'title' => 'string|max:255',
+            'title' =>  [
+                'string',
+                'max:255',
+                Rule::unique('activity_layouts')->ignore($activityLayout->id)->where(function ($query) use($activityLayout) {
+                    return $query->where('organization_id', $activityLayout->organization_id);
+                })
+            ],
             'description' => 'string',
             'order' => 'integer|max:2147483647',
             'type' => 'sometimes',

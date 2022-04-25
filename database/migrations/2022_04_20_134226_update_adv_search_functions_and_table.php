@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class RecreateAdvSearchFunctionsAndTable extends Migration
+class UpdateAdvSearchFunctionsAndTable extends Migration
 {
     /**
      * Run the migrations.
@@ -47,8 +47,9 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
             indexing smallint,
             organization_visibility_type_id bigint,
             h5plib text COLLATE pg_catalog."default",
-            subject_id text COLLATE pg_catalog."default",
-            education_level_id text COLLATE pg_catalog."default",
+            subject_id bigint,
+            education_level_id bigint,
+            author_tag_id bigint,
             organization_name character varying(255) COLLATE pg_catalog."default",
             org_description character varying(255) COLLATE pg_catalog."default",
             org_image character varying(255) COLLATE pg_catalog."default",
@@ -73,7 +74,7 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
         AS $BODY$
         select 1 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
-                , null as h5pLib,null as subject_id,null as education_level_id,o.name as organization_name,o.description as org_description,o.image as org_image,
+                , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,
                 case when t.name is null then null::varchar else t.name end as team_name, 0 as standalone_activity_user_id,null::boolean as favored
                  from projects p
                  left join user_project up
@@ -90,7 +91,7 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
                 
                 select 2 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
-                , null as h5pLib,null as subject_id,null as education_level_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,0 as standalone_activity_user_id, null::boolean as favored
+                , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,0 as standalone_activity_user_id, null::boolean as favored
                  from projects p
                  left join user_project up
                  on p.id=up.project_id
@@ -106,7 +107,7 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
                 
                 select 1 as priority,'Playlist' as entity,pr.organization_id as org_id,p.id as entity_id,u.id as user_id, p.project_id as project_id,
                 p.id as playlist_id,u.first_name,u.last_name,u.email,p.title as name,null as description,pr.thumb_url,p.created_at,p.deleted_at,
-                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,null as subject_id,null as education_level_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name, 0 as standalone_activity_user_id,null::boolean as favored
+                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name, 0 as standalone_activity_user_id,null::boolean as favored
                 from playlists p
                 left join projects pr
                 on p.project_id=pr.id
@@ -124,8 +125,11 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
                 select 1 as priority,'Activity' as entity,pr.organization_id as org_id,a.id as entity_id,u.id as user_id, pr.id as project_id,
                 a.playlist_id as playlist_id,u.first_name,u.last_name,u.email,a.title as name,null as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,pr.indexing,pr.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , a. subject_id,a.education_level_id ,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,a.user_id as standalone_activity_user_id, null::boolean as favored
+                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,a.user_id as standalone_activity_user_id, null::boolean as favored
                 from activities a 
+                 left join activity_subject acts on a.id=acts.activity_id
+                 left join activity_education_level ael on a.id=ael.activity_id
+                 left join activity_author_tag aat on a.id=aat.activity_id
                  left join h5p_contents hc on a.h5p_content_id=hc.id
                  left join h5p_libraries hl on hc.library_id=hl.id
                  left join playlists p on a.playlist_id=p.id
@@ -156,7 +160,7 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
                 (
                 select 1 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
-                , null as h5pLib,null as subject_id,null as education_level_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,0 as standalone_activity_user_id
+                , null as h5pLib,0 as subject_id,0 as education_level_id,0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,0 as standalone_activity_user_id
                  from projects p
                  left join user_project up
                  on p.id=up.project_id
@@ -171,7 +175,7 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
                 
                 select 2 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
-                , null as h5pLib,null as subject_id,null as education_level_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name, 0 as standalone_activity_user_id
+                , null as h5pLib,0 as subject_id,0 as education_level_id,0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name, 0 as standalone_activity_user_id
                  from projects p
                  left join user_project up
                  on p.id=up.project_id
@@ -193,7 +197,7 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
                 (
                 select 1 as priority,'Playlist' as entity,pr.organization_id as org_id,p.id as entity_id,u.id as user_id, p.project_id as project_id,
                 p.id as playlist_id,u.first_name,u.last_name,u.email,p.title as name,null as description,pr.thumb_url,p.created_at,p.deleted_at,
-                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,null as subject_id,null as education_level_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,0 as standalone_activity_user_id
+                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id,0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,0 as standalone_activity_user_id
                 from playlists p
                 left join projects pr
                 on p.project_id=pr.id
@@ -216,8 +220,11 @@ class RecreateAdvSearchFunctionsAndTable extends Migration
                 select 1 as priority,'Activity' as entity,pr.organization_id as org_id,a.id as entity_id,u.id as user_id, pr.id as project_id,
                 a.playlist_id as playlist_id,u.first_name,u.last_name,u.email,a.title as name,null as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,pr.indexing,pr.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , a. subject_id,a.education_level_id ,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,a.user_id as standalone_activity_user_id
+                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,case when t.name is null then null::varchar else t.name end as team_name,a.user_id as standalone_activity_user_id
                 from activities a 
+                 left join activity_subject acts on a.id=acts.activity_id
+                 left join activity_education_level ael on a.id=ael.activity_id
+                 left join activity_author_tag aat on a.id=aat.activity_id
                  left join h5p_contents hc on a.h5p_content_id=hc.id
                  left join h5p_libraries hl on hc.library_id=hl.id
                  left join playlists p on a.playlist_id=p.id
