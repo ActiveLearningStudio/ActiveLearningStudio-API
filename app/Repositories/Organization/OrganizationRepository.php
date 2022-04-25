@@ -636,7 +636,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
                 } else {
                     $organizationProject->users()->detach($data['user_id']);
-                    $this->projectRepository->forceDelete($organizationProject);
+
+                    $allProjectUsers = $organizationProject->users()->wherePivot('user_id', '<>', $data['user_id'])->get();
+
+                    if (count($allProjectUsers) > 0) {
+                        $allProjectUserIds = [];
+                        foreach ($allProjectUserIds as $allProjectUserRow) {
+                            $allProjectUserIds[] = $allProjectUserRow->id;
+                        }
+
+                        if (!in_array($authenticatedUser->id, $allProjectUserIds)) {
+                            $organizationProject->original_user = $data['user_id'];
+                            $organizationProject->save();
+                            $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                        }
+                    } else {
+                        $this->projectRepository->forceDelete($organizationProject);
+                    }
                 }
             }
 
