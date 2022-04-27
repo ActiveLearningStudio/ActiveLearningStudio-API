@@ -662,6 +662,26 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                                                                 $activity->title . '/' . $activity->title . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
 
+                // Export Subject 
+                $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activity->title . '/activity_subject.json';
+                
+                Storage::disk('public')->put($activitySubjectJsonFile, $activity->subjects);
+
+                // Export Education level
+
+                $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activity->title . '/activity_education_level.json';
+                
+                Storage::disk('public')->put($activityEducationLevelJsonFile, $activity->educationLevels);
+
+                // Export Author
+
+                $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activity->title . '/activity_author_tag.json';
+                
+                Storage::disk('public')->put($activityAuthorTagJsonFile, $activity->authorTags);
+
                 $decoded_content = json_decode($activity->h5p_content,true);
 
                 $decoded_content['library_title'] = DB::table('h5p_libraries')
