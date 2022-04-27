@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Activity;
+use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
 use App\Models\ActivityType;
 use App\Models\DefaultSsoIntegrationSettings;
@@ -13,6 +14,7 @@ use App\Models\Organization;
 use App\Models\Team;
 use App\Policies\ActivityItemPolicy;
 use App\Policies\ActivityPolicy;
+use App\Policies\IndependentActivityPolicy;
 use App\Policies\ActivityTypePolicy;
 use App\Policies\DefaultSsoIntegrationSettingsPolicy;
 use App\Policies\GroupPolicy;
@@ -44,6 +46,7 @@ class AuthServiceProvider extends ServiceProvider
         Group::class => GroupPolicy::class,
         Team::class => TeamPolicy::class,
         DefaultSsoIntegrationSettings::class => DefaultSsoIntegrationSettingsPolicy::class,
+        IndependentActivity::class => IndependentActivityPolicy::class,
     ];
 
     /**

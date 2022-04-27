@@ -91,6 +91,17 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/get-groups', 'GroupController@getOrgGroups');
         Route::apiResource('suborganization.groups', 'GroupController');
 
+        //Independent Activity Layouts
+        Route::apiResource('suborganization.independent-activities', 'IndependentActivityController');
+        Route::post('independent-activities/upload-thumb', 'IndependentActivityController@uploadThumb');
+        Route::get('independent-activities/{independent_activity}/detail', 'IndependentActivityController@detail');
+        Route::get('independent-activities/{independent_activity}/h5p', 'IndependentActivityController@h5p');
+        Route::get('independent-activities/{independent_activity}/h5p-resource-settings', 'IndependentActivityController@getH5pResourceSettings');
+        Route::get('independent-activities/{independent_activity}/share', 'IndependentActivityController@share');
+        Route::get('independent-activities/{independent_activity}/remove-share', 'IndependentActivityController@removeShare');
+        Route::get('suborganization/{suborganization}/independent-activities/{independent_activity}/search-preview', 'IndependentActivityController@searchPreview');
+        Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/clone', 'IndependentActivityController@clone');
+
         //Projects
         Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
 
@@ -298,8 +309,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::post('projects/shared', 'UserController@sharedProjects');
 
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
+    Route::get('independent-activities/{independent_activity}/h5p-resource-settings-shared', 'IndependentActivityController@getH5pResourceSettingsShared');
     // H5P Activity public route
     Route::get('h5p/activity/{activity}/visibility/{visibility}', 'H5pController@showByActivity');
+    Route::get('h5p/independent-activity/{independent_activity}/visibility/{visibility}', 'H5pController@showByIndependentActivity');
     // Route to support H5P Editor's core js library file upload with 'new XMLHttpRequest()'
     Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name('h5p.ajax.files');
     // H5P export public route for H5P toolbar and cloning

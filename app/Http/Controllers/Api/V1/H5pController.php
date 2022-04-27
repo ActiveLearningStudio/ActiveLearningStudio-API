@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use H5pCore;
 use App\Models\Activity;
+use App\Models\IndependentActivity;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Djoudi\LaravelH5p\LaravelH5p;
@@ -16,6 +17,7 @@ use Djoudi\LaravelH5p\Events\H5pEvent;
 use App\Models\H5pBrightCoveVideoContents;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use App\Http\Resources\V1\H5pActivityResource;
+use App\Http\Resources\V1\IndependentH5pActivityResource;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Validation\ValidationException;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
@@ -350,6 +352,61 @@ class H5pController extends Controller
         
         return response([
             'h5p_activity' => new H5pActivityResource($activity, $h5p_data),
+        ], 200);
+    }
+
+    /**
+     * Get H5P based on Independent Activity
+     *
+     * @urlParam independent_activity required The Id of an independent activity Example: 1
+     * @urlParam visibility The status of visibility
+     *
+     * @responseFile responses/independent-h5p-activity.json
+     *
+     * @param IndependentActivity $independent_activity
+     * @param $visibility
+     *
+     * @return Response
+     */
+    public function showByIndependentActivity(IndependentActivity $independent_activity, $visibility = null)
+    {
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor();
+        $content = $h5p->load_content($independent_activity->h5p_content_id);
+        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+        $user = Auth::user();
+
+        if ($user && is_null($visibility)) {
+            // create event dispatch
+            event(new H5pEvent(
+                'content',
+                NULL,
+                $content['id'],
+                $content['title'],
+                $content['library']['name'],
+                $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+            ));
+            $user_data = $user->only(['id', 'name', 'email']);
+        } else {
+            $user_data = null;
+        }
+
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $independent_activity->h5p_content_id)->first();
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $independent_activity->brightcoveData = $brightcoveData;
+        }
+
+        return response([
+            'independent_h5p_activity' => new IndependentH5pActivityResource($independent_activity, $h5p_data),
         ], 200);
     }
 

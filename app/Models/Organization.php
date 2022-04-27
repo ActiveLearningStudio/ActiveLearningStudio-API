@@ -154,4 +154,12 @@ class Organization extends Model
     {
         return $this->belongsToMany('App\Models\OrganizationRoleType', 'organization_user_roles');
     }
+
+    /**
+     * Get the independent activities for the organization
+     */
+    public function independentActivities()
+    {
+        return $this->hasMany('App\Models\IndependentActivity', 'organization_id');
+    }
 }
