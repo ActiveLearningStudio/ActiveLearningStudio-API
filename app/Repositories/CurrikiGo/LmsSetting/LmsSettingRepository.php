@@ -8,6 +8,7 @@ use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use Illuminate\Support\Collection;
 use App\Models\Playlist;
 use App\Models\Activity;
+use App\Http\Resources\V1\ActivityResource;
 
 
 class LmsSettingRepository extends BaseRepository implements LmsSettingRepositoryInterface
@@ -40,13 +41,16 @@ class LmsSettingRepository extends BaseRepository implements LmsSettingRepositor
      */
     public function getActivityGrade($projectId, $activityParam)
     {
-        \Log::info($projectId);
-        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->value('id');
-        \Log::info($playlistId);
+        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
         
-        $activity = Activity::where('playlist_id', $playlistId)->orderBy('order','asc')->limit(1)->value($activityParam);
-        \Log::info($activity);
-        return $activity;
+        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
+        
+        $resource = new ActivityResource($activity);
+
+        if ($resource->$activityParam->first()) {
+            return $resource->$activityParam->first()->value('name');
+        }
+        return null;
 
     }
 }
