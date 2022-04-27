@@ -27,6 +27,7 @@ Route::post('verify-email', 'Auth\VerificationController@verify')->name('verific
 Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->name('verification.resend');
 Route::get('users/notifications/{notification}/download-export/', 'Api\V1\UserController@downloadExport');
 Route::post('ckeditor/uploadFile/', 'Api\V1\CkEditorFileManagerController@uploadFile');
+Route::get('ckeditor/browseFiles/', 'Api\V1\CkEditorFileManagerController@browseFiles');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 
@@ -155,9 +156,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
-        Route::apiResource('activity-types', 'ActivityTypeController');
+        Route::apiResource('suborganizations/{suborganization}/activity-types', 'ActivityTypeController');
 
-        Route::apiResource('activity-items', 'ActivityItemController');
+        Route::apiResource('suborganizations/{suborganization}/activity-items', 'ActivityItemController');
 
         Route::get('users/{user}/metrics', 'UserMetricsController@show')->name('metrics.user');
         Route::get('users/{user}/membership', 'UserMembershipController@show')->name('membership.show');
@@ -243,7 +244,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
         Route::apiResource('queue-monitor', 'QueueMonitorController');
         // activity items
-        Route::get('get-activity-items', 'ActivityItemController@getItems');
+        Route::get('suborganizations/{suborganization}/get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
         Route::post('activity-layouts/upload-thumb', 'ActivityLayoutController@uploadImage');

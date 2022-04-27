@@ -54,7 +54,7 @@ class GetAPITokenCommand implements Command
         $response = Http::post($apiUrl . $requestParam);
         if ($response->status() == 200) {
             $result = $response->json();
-            return array('Authorization' => ' Bearer ' . $result['access_token'], 'Content-Type: ' => 'application/json');
+            return array('Authorization' => ' Bearer ' . $result['access_token']);
         }
         throw new GeneralException('Brightcove api token not found.Please try later!');
     }

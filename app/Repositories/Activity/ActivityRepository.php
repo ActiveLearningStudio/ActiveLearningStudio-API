@@ -331,13 +331,18 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
-            $dataSubjectIds = implode("','", $data['subjectIds']);
-            $queryWhere[] = "subject_id IN ('" . $dataSubjectIds . "')";
+            $dataSubjectIds = implode(",", $data['subjectIds']);
+            $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
-            $dataEducationLevelIds = implode("','", $data['educationLevelIds']);
-            $queryWhere[] = "education_level_id IN ('" . $dataEducationLevelIds . "')";
+            $dataEducationLevelIds = implode(",", $data['educationLevelIds']);
+            $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
+        }
+
+        if (isset($data['authorTagsIds']) && !empty($data['authorTagsIds'])) {
+            $dataAuthorTagsIds = implode(",", $data['authorTagsIds']);
+            $queryWhere[] = "author_tag_id IN (" . $dataAuthorTagsIds . ")";
         }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {

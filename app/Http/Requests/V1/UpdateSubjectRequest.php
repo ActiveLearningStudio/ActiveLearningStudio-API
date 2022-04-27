@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @bodyParam name string required Subject Name. Example: Math
@@ -30,7 +31,14 @@ class UpdateSubjectRequest extends FormRequest
         $subject = $this->route('subject');
 
         return [
-            'name' => 'required|string|max:255',
+            'name' =>  [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('subjects')->ignore($subject->id)->where(function ($query) use($subject) {
+                    return $query->where('organization_id', $subject->organization_id);
+                })
+            ],
             'order' => 'integer|max:2147483647',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
         ];

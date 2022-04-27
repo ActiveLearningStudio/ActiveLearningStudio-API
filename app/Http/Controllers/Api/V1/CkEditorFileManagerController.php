@@ -39,6 +39,15 @@ class CkEditorFileManagerController extends Controller
     public function uploadFile(Request $request)
     {
         if($request->hasFile('upload')) {
+            
+            $validator = Validator::make($request->all(), 
+                                        [ 
+                                            'upload' => 'required|mimes:doc,docx,pdf,xlsx',
+                                        ]);   
+ 
+            if ($validator->fails()) {          
+                    return response()->json(['error'=>$validator->errors()], 401);                        
+            }
             $originName = $request->file('upload')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
             $extension = $request->file('upload')->getClientOriginalExtension();
@@ -50,11 +59,40 @@ class CkEditorFileManagerController extends Controller
             $url = url(Storage::url('ckeditor/' . basename($fileName)));
             
             $url = str_replace('storage', 'api/storage', $url);
-            $msg = 'Image uploaded successfully'; 
+            $msg = 'Document uploaded successfully'; 
             $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
                
             @header('Content-type: text/html; charset=utf-8'); 
             echo $response;
         }
+    }
+
+    /**
+     * Browse files from ckeditor folder
+     *
+     * @param Request $request
+     *
+     * @responseFile responses/ckeditor/browse-file.json
+     *
+     * @param Request $request
+     * @return string
+     * 
+     */
+    public function browseFiles(Request $request)
+    {
+        $path = storage_path('app/public/ckeditor');
+        $filesInFolder = File::allFiles($path);
+        $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+        $return_html = "";
+        
+        foreach ($filesInFolder as $key => $path) {
+            $files = pathinfo($path);
+            $allMedia[] = $files['basename'];
+            $fileUrl =  url(Storage::url('ckeditor/' . basename($files['basename'])));
+
+            $return_html .= "<a  onclick='window.opener.CKEDITOR.tools.callFunction( $CKEditorFuncNum, \"$fileUrl\" );window.close();'>".$files['basename']."</a><br>";
+          }
+         
+          echo $return_html;
     }
 }
