@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Models\Subject;
+use App\Models\EducationLevel;
+use App\Models\AuthorTag;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -868,6 +871,61 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $cloned_activity = $this->create($activity);
 
+        // Import Activity Subjects
+
+        $subjectContent = file_get_contents(
+            storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
+                                                $activity_dir . '/activity_subject.json'));
+        $subjects = json_decode($subjectContent,true);
+        \Log::info($subjects);
+        foreach ($subjects as $subject) {
+
+            $recSubject = Subject::firstOrCreate(['name' => $subject['name']]);
+
+            $newSubject['activity_id'] = $cloned_activity->id;
+            $newSubject['subject_id'] = $recSubject->id;
+            $newSubject['created_at'] = date('Y-m-d H:i:s');
+            $newSubject['updated_at'] = date('Y-m-d H:i:s');
+            
+            DB::table('activity_subject')->insert($newSubject);
+        }
+
+        // Import Activity Education-Level
+
+        $educationLevelContent = file_get_contents(
+            storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
+                                                $activity_dir . '/activity_education_level.json'));
+        $educationLevels = json_decode($educationLevelContent,true);
+        \Log::info($educationLevels);
+        foreach ($educationLevels as $educationLevel) {
+
+            $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name']]);
+
+            $newEducationLevel['activity_id'] = $cloned_activity->id;
+            $newEducationLevel['education_level_id'] = $recEducationLevel->id;
+            $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
+            $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
+            
+            DB::table('activity_education_level')->insert($newEducationLevel);
+        }
+
+        // Import Activity Author-Tag
+
+        $authorTagContent = file_get_contents(
+            storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
+                                                $activity_dir . '/activity_author_tag.json'));
+        $authorTags = json_decode($authorTagContent,true);
+        \Log::info($authorTags);
+        foreach ($authorTags as $authorTag) {
+            $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name']]);
+            $newauthorTag['activity_id'] = $cloned_activity->id;
+            $newauthorTag['author_tag_id'] = $recAuthorTag->id;
+            $newauthorTag['created_at'] = date('Y-m-d H:i:s');
+            $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
+            
+            DB::table('activity_author_tag')->insert($newauthorTag);
+        }
+        
     }
 
 
