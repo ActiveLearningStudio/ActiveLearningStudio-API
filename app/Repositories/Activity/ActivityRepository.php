@@ -909,7 +909,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             DB::table('activity_education_level')->insert($newEducationLevel);
         }
 
-
         // Import Activity Author-Tag
 
         $authorTagContent = file_get_contents(
