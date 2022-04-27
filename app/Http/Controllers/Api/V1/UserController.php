@@ -233,8 +233,25 @@ class UserController extends Controller
 
         return \DB::transaction(function () use ($suborganization, $data) {
 
-            $user = $this->userRepository->create(Arr::except($data, ['role_id']));
-            $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
+            $userObject = $this->userRepository->findByField('email', $data['email']);
+            if ($userObject) {
+                $user = $this->userRepository->update(Arr::except($data, [
+                                                    'role_id',
+                                                    'email_verified_at',
+                                                    'remember_token',
+                                                    'email',
+                                                    'send_email',
+                                                    'message'
+                                                ]), $userObject->id);
+                $user = $userObject;
+                                                
+            } else {
+                $user = $this->userRepository->create(Arr::except($data, ['role_id']));
+            }
+
+            if (!$suborganization->users()->where('user_id', $user->id)->exists()) {
+                $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
+            } 
 
             if (isset($data['send_email']) && $data['send_email'] === true) {
                 $user->notify(new NewUserNotification($data['message']));
