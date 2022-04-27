@@ -89,7 +89,7 @@ class CkEditorFileManagerController extends Controller
             $files = pathinfo($path);
             $allMedia[] = $files['basename'];
             $fileUrl =  url(Storage::url('ckeditor/' . basename($files['basename'])));
-
+            $fileUrl = str_replace('storage', 'api/storage', $fileUrl);
             $return_html .= "<a  onclick='window.opener.CKEDITOR.tools.callFunction( $CKEditorFuncNum, \"$fileUrl\" );window.close();'>".$files['basename']."</a><br>";
           }
          
