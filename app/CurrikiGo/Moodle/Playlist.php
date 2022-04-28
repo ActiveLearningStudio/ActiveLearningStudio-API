@@ -63,7 +63,7 @@ class Playlist
         $resource = new ActivityResource($activity);
 
         // Get First Subject Category
-        if ($resource->$activityParam[0]) {
+        if ($resource->$activityParam->isNotEmpty()) { 
             return $resource->$activityParam[0]->name;
         }
         return null;
