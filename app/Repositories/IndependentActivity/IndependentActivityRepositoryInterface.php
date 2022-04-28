@@ -34,4 +34,23 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * @return int
      */
     public function getOrder($organizationId);
+
+    /**
+     * Create model in storage
+     *
+     * @param $authenticatedUser
+     * @param $suborganization
+     * @param $data
+     * @return Model
+     */
+    public function createIndependentActivity($authenticatedUser, $suborganization, $data);
+
+    /**
+     * Get user independent activity ids in org
+     *
+     * @param $authenticatedUser
+     * @param $organization
+     * @return array
+     */
+    public function getUserIndependentActivityIdsInOrganization($authenticatedUser, $organization);
 }

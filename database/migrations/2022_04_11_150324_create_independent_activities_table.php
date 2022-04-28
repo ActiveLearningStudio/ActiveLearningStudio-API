@@ -24,14 +24,9 @@ class CreateIndependentActivitiesTable extends Migration
             $table->unsignedBigInteger('h5p_content_id')->nullable();
             $table->foreign('h5p_content_id')->references('id')->on('h5p_contents');
             $table->string('thumb_url')->nullable()->default(null);
-            $table->string('subject_id')->nullable()->default(null);
-            $table->string('education_level_id')->nullable()->default(null);
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('organization_id')->nullable()->default(null);
-            $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->unsignedBigInteger('organization_visibility_type_id')->nullable()->default(null);
-            $table->foreign('organization_visibility_type_id')->references('id')->on('organization_visibility_types');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('organization_id')->constrained();
+            $table->foreignId('organization_visibility_type_id')->constrained();
             $table->mediumText('description')->nullable();
             $table->string('source_type')->nullable();
             $table->string('source_url')->nullable();

@@ -44,6 +44,20 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      */
     public function update(array $attributes, $id)
     {
+        $independentActivityObj = $this->model->find($id);
+
+        if (
+            isset($attributes['organization_visibility_type_id']) &&
+            $independentActivityObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
+        ) {
+            $attributes['indexing'] = config('constants.indexing-requested');
+            $attributes['status'] = config('constants.status-finished');
+
+            if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
+                $attributes['status'] = config('constants.status-draft');
+            }
+        }
+
         return $this->model->where('id', $id)->update($attributes);
     }
 
@@ -334,5 +348,67 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                 $this->chown_r($item->getPathname());
             }
         }
+    }
+
+    /**
+     * Create model in storage
+     *
+     * @param $authenticatedUser
+     * @param $suborganization
+     * @param $data
+     * @return Model
+     */
+    public function createIndependentActivity($authenticatedUser, $suborganization, $data)
+    {
+        $data['order'] = 0;
+        $data['organization_id'] = $suborganization->id;
+
+        $authenticatedUserOrgIndependentActivityIdsString = $this->getUserIndependentActivityIdsInOrganization($authenticatedUser, $suborganization);
+
+        return DB::transaction(function () use ($authenticatedUser, $data, $authenticatedUserOrgIndependentActivityIdsString) {
+
+            if (!empty($authenticatedUserOrgIndependentActivityIdsString)) {
+                // update order's
+                $query = 'UPDATE "independent_activities" SET "order" = "order" + 1 WHERE "id" IN (' . $authenticatedUserOrgIndependentActivityIdsString . ')';
+                $affectedIndependentActivitiesCount = DB::update($query);
+            }
+
+            $attributes = Arr::except($data, ['subject_id', 'education_level_id', 'author_tag_id']);
+            $independentActivity = $authenticatedUser->independentActivities()->create($attributes);
+
+            if ($independentActivity) {
+                if (isset($data['subject_id'])) {
+                    $independentActivity->subjects()->attach($data['subject_id']);
+                }
+                if (isset($data['education_level_id'])) {
+                    $independentActivity->educationLevels()->attach($data['education_level_id']);
+                }
+                if (isset($data['author_tag_id'])) {
+                    $independentActivity->authorTags()->attach($data['author_tag_id']);
+                }
+
+                return $independentActivity;
+            }
+        });
+    }
+
+    /**
+     * Get user independent activity ids in org
+     *
+     * @param $authenticatedUser
+     * @param $organization
+     * @return array
+     */
+    public function getUserIndependentActivityIdsInOrganization($authenticatedUser, $organization)
+    {
+        $authenticatedUserOrgIndependentActivityIds = $authenticatedUser
+                                        ->independentActivities()
+                                        ->where('organization_id', $organization->id)
+                                        ->pluck('id')
+                                        ->all();
+
+        $authenticatedUserOrgIndependentActivityIdsString = implode(",", $authenticatedUserOrgIndependentActivityIds);
+
+        return $authenticatedUserOrgIndependentActivityIdsString;
     }
 }

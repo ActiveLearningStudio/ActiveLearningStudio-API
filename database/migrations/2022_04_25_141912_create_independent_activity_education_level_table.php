@@ -15,10 +15,8 @@ class CreateIndependentActivityEducationLevelTable extends Migration
     {
         Schema::create('independent_activity_education_level', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('independent_activity_id');
-            $table->foreign('independent_activity_id')->references('id')->on('independent_activities');
-            $table->unsignedBigInteger('education_level_id');
-            $table->foreign('education_level_id')->references('id')->on('education_levels');
+            $table->foreignId('independent_activity_id')->constrained();
+            $table->foreignId('education_level_id')->constrained();
             $table->unique(['independent_activity_id', 'education_level_id']);
             $table->timestamps();
             $table->softDeletes();
