@@ -142,7 +142,8 @@ class IndependentActivity extends Model
      * Maps the indexing integer value and returns the text
      * @return string|null
      */
-    public function getIndexingTextAttribute(){
+    public function getIndexingTextAttribute()
+    {
         return self::$indexing[$this->indexing] ?? 'NOT REQUESTED';
     }
 
@@ -150,7 +151,8 @@ class IndependentActivity extends Model
      * Maps the status value and returns the text
      * @return string|null
      */
-    public function getStatusTextAttribute(){
+    public function getStatusTextAttribute()
+    {
         return self::$status[$this->status] ?? null;
     }
 }
