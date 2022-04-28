@@ -33,7 +33,7 @@ class SearchRequest extends FormRequest
             'endDate' => 'date|after_or_equal:startDate',
             'userIds' => 'array|exists:App\User,id',
             'author' => 'string|max:255',
-            'h5pLibraries' => 'array|exists:App\Models\ActivityItem,h5pLib',
+            'h5pLibraries' => 'array',
             'subjectIds' => 'array|exists:App\Models\Subject,id',
             'educationLevelIds' => 'array|exists:App\Models\EducationLevel,id',
             'authorTagsIds' => 'array|exists:App\Models\AuthorTag,id',
