@@ -151,35 +151,19 @@ class IndependentActivityController extends Controller
         $this->authorize('create', [IndependentActivity::class, $suborganization]);
 
         $data = $request->validated();
+        $authenticatedUser = auth()->user();
 
-        $data['order'] = $this->independentActivityRepository->getOrder($suborganization->id) + 1;
+        $independentActivity = $this->independentActivityRepository->createIndependentActivity($authenticatedUser, $suborganization, $data);
 
-        return \DB::transaction(function () use ($data, $suborganization) {
-
-            $attributes = Arr::except($data, ['subject_id', 'education_level_id', 'author_tag_id']);
-            $activity = $suborganization->independentActivities()->create($attributes);
-
-            if ($activity) {
-                if (isset($data['subject_id'])) {
-                    $activity->subjects()->attach($data['subject_id']);
-                }
-                if (isset($data['education_level_id'])) {
-                    $activity->educationLevels()->attach($data['education_level_id']);
-                }
-                if (isset($data['author_tag_id'])) {
-                    $activity->authorTags()->attach($data['author_tag_id']);
-                }
-
-                return response([
-                    'independent-activity' => new IndependentActivityResource($activity),
-                ], 201);
-            }
-
+        if ($independentActivity) {
             return response([
-                'errors' => ['Could not create independent activity. Please try again later.'],
-            ], 500);
+                'independent-activity' => new IndependentActivityResource($independentActivity),
+            ], 201);
+        }
 
-        });
+        return response([
+            'errors' => ['Could not create independent activity. Please try again later.'],
+        ], 500);
     }
 
     /**
@@ -234,6 +218,7 @@ class IndependentActivityController extends Controller
      * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
      * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
      * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
+     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
      *
      * @responseFile responses/independent-activity/independent-activity.json
      *

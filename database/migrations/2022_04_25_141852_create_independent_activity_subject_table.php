@@ -15,10 +15,8 @@ class CreateIndependentActivitySubjectTable extends Migration
     {
         Schema::create('independent_activity_subject', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('independent_activity_id');
-            $table->foreign('independent_activity_id')->references('id')->on('independent_activities');
-            $table->unsignedBigInteger('subject_id');
-            $table->foreign('subject_id')->references('id')->on('subjects');
+            $table->foreignId('independent_activity_id')->constrained();
+            $table->foreignId('subject_id')->constrained();
             $table->unique(['independent_activity_id', 'subject_id']);
             $table->timestamps();
             $table->softDeletes();

@@ -41,6 +41,7 @@ class IndependentActivityEditRequest extends FormRequest
             'author_tag_id.*' => 'integer|distinct|exists:author_tags,id,deleted_at,NULL',
             'source_type' => 'nullable|string',
             'source_url' => 'nullable|string',
+            'organization_visibility_type_id' => 'required|integer|exists:organization_visibility_types,id',
         ];
     }
 }

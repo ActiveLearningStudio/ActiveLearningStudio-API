@@ -39,6 +39,12 @@ class IndependentActivity extends Model
     ];
 
     /**
+     * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
+     */
+    public static $status = [1 => 'DRAFT' , 2 => 'FINISHED'];
+    public static $indexing = [1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'];
+
+    /**
      * Cascade on delete the IndependentActivity
      */
     public static function boot()
@@ -130,5 +136,23 @@ class IndependentActivity extends Model
     public function organization()
     {
         return $this->belongsTo('App\Models\Organization');
+    }
+
+    /**
+     * Maps the indexing integer value and returns the text
+     * @return string|null
+     */
+    public function getIndexingTextAttribute()
+    {
+        return self::$indexing[$this->indexing] ?? 'NOT REQUESTED';
+    }
+
+    /**
+     * Maps the status value and returns the text
+     * @return string|null
+     */
+    public function getStatusTextAttribute()
+    {
+        return self::$status[$this->status] ?? null;
     }
 }

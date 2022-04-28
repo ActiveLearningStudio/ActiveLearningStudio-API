@@ -305,4 +305,12 @@ class User extends Authenticatable implements MustVerifyEmail
         $userRepository = resolve(UserRepositoryInterface::class);
         return $userRepository->hasTeamPermissionTo($this, $permission, $team);
     }
+
+    /**
+     * Get the independent activities for the user.
+     */
+    public function independentActivities()
+    {
+        return $this->hasMany('App\Models\IndependentActivity');
+    }
 }

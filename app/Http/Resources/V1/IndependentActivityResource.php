@@ -32,6 +32,11 @@ class IndependentActivityResource extends JsonResource
             'author_tags' => AuthorTagResource::collection($this->authorTags),
             'source_type' => $this->source_type,
             'source_url' => $this->source_url,
+            'organization_visibility_type_id' => $this->organization_visibility_type_id,
+            'status' => $this->status,
+            'status_text' => $this->status_text,
+            'indexing' => $this->indexing,
+            'indexing_text' => $this->indexing_text,
         ];
 
         // Feature added after the fact for optimization
