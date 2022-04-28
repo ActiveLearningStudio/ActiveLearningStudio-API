@@ -47,8 +47,9 @@ class LmsSettingRepository extends BaseRepository implements LmsSettingRepositor
         
         $resource = new ActivityResource($activity);
 
-        if ($resource->$activityParam->first()) {
-            return $resource->$activityParam->first()->value('name');
+        // Get first category
+        if ($resource->$activityParam[0]) {
+            return $resource->$activityParam[0]->name;
         }
         return null;
 

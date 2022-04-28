@@ -7,6 +7,7 @@ use App\Models\Playlist as PlaylistModel;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Activity;
+use App\Http\Resources\V1\ActivityResource;
 
 class Playlist
 {
@@ -26,8 +27,8 @@ class Playlist
         // Add Grade level of first activity on project manifest
         $organizationName = Organization::where('id', $organizationId)->value('name');
         
-        $grade_name = $this->getActivityGrade($playlist->project_id, 'education_level_id');
-        $subject_name = $this->getActivityGrade($playlist->project_id, 'subject_id');
+        $grade_name = $this->getActivityGrade($playlist->project_id, 'educationLevels');
+        $subject_name = $this->getActivityGrade($playlist->project_id, 'subjects');
         
         $web_service_token = $this->lmsSetting->lms_access_token;
         $lms_host = $this->lmsSetting->lms_url;
@@ -55,13 +56,17 @@ class Playlist
 
     private function getActivityGrade($projectId, $activityParam)
     {
-        \Log::info($projectId);
-        $playlistId = PlaylistModel::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->value('id');
-        \Log::info($playlistId);
+        $playlistId = PlaylistModel::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
         
-        $activity = Activity::where('playlist_id', $playlistId)->orderBy('order','asc')->limit(1)->value($activityParam);
-        \Log::info($activity);
-        return $activity;
+        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
+        
+        $resource = new ActivityResource($activity);
+
+        // Get First Subject Category
+        if ($resource->$activityParam[0]) {
+            return $resource->$activityParam[0]->name;
+        }
+        return null;
 
     }
 }
