@@ -46,11 +46,12 @@ class LmsSettingRepository extends BaseRepository implements LmsSettingRepositor
         $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
         
         $resource = new ActivityResource($activity);
-
+        
         // Get first category
-        if ($resource->$activityParam[0]) {
+        if ($resource->$activityParam->isNotEmpty()) { 
             return $resource->$activityParam[0]->name;
         }
+        
         return null;
 
     }

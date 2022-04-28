@@ -791,7 +791,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                     $project = json_decode($project_json,true);
                     unset($project['id'], $project['organization_id'],
-                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
+                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at'], $project['team_id']);
 
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
@@ -1058,7 +1058,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $resource = new ActivityResource($activity);
         
         // Get first Category
-        if ($resource->$activityParam[0]) {
+        if ($resource->$activityParam->isNotEmpty()) { 
             return $resource->$activityParam[0]->name;
         }
         return null;
