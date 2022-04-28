@@ -13,6 +13,7 @@ use App\Models\OrganizationPermissionType;
 use App\Models\OrganizationRoleType;
 use App\Models\Pivots\GroupProjectUser;
 use App\Models\Pivots\TeamProjectUser;
+use App\Models\Project;
 use App\Models\SsoLogin;
 use App\Models\Subject;
 use App\Models\TeamUserRole;
@@ -569,32 +570,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function removeUser($authenticatedUser, $organization, $data)
     {
-        $organizationProjects = $organization->projects()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
-        $organizationTeams = $organization->teams()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
-        $organizationGroups = $organization->groups()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
         try {
             DB::beginTransaction();
 
-            foreach ($organizationProjects as $organizationProject) {
-                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
-                    $organizationProject->original_user = $data['user_id'];
-                    $organizationProject->save();
-                    $organizationProject->users()->detach($data['user_id']);
-                    $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
-                } else {
-                    $organizationProject->users()->detach($data['user_id']);
-                    $this->projectRepository->forceDelete($organizationProject);
-                }
-            }
+            $organizationTeams = $organization->teams()->whereHas('users', function (Builder $query) use ($data) {
+                $query->where('id', '=', $data['user_id']);
+            })->get();
 
             foreach ($organizationTeams as $organizationTeam) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
@@ -603,10 +584,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationTeam->users()->detach($data['user_id']);
                     $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
                 } else {
-                    TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationTeam->users()->detach($data['user_id']);
 
                     $allTeamUsers = $organizationTeam->users()->wherePivot('user_id', '<>', $data['user_id'])->get();
+
+                    $teamProjects = Project::where('team_id', $organizationTeam->id)->pluck('id')->toArray();
 
                     if (count($allTeamUsers) > 0) {
                         $allTeamUserIds = [];
@@ -619,12 +601,31 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                             $organizationTeam->save();
                             $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
                         }
+                        if (count($teamProjects) > 0) {
+                            DB::table('user_project')
+                            ->where('user_id', $data['user_id'])
+                            ->whereIn('project_id', $teamProjects)
+                            ->delete();
+                        }
 
                     } else {
+                        TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                        if (count($teamProjects) > 0) {
+                            DB::table('user_project')
+                            ->where('user_id', $data['user_id'])
+                            ->whereIn('project_id', $teamProjects)
+                            ->delete();
+                        }
+                        $organizationTeam->projects()->detach();
+                        Project::where('team_id', $organizationTeam->id)->forceDelete();
                         resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
                     }
                 }
             }
+
+            $organizationGroups = $organization->groups()->whereHas('users', function (Builder $query) use ($data) {
+                $query->where('id', '=', $data['user_id']);
+            })->get();
 
             foreach ($organizationGroups as $organizationGroup) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
@@ -636,6 +637,24 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationGroup->users()->detach($data['user_id']);
                     resolve(GroupRepositoryInterface::class)->forceDelete($organizationGroup);
+                }
+            }
+
+            $organizationProjects = $organization->projects()
+                                    ->whereHas('users', function (Builder $query) use ($data) {
+                                        $query->where('id', '=', $data['user_id']);
+                                    })
+                                    ->whereNull('team_id')->get();
+
+            foreach ($organizationProjects as $organizationProject) {
+                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                    $organizationProject->original_user = $data['user_id'];
+                    $organizationProject->save();
+                    $organizationProject->users()->detach($data['user_id']);
+                    $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                } else {
+                    $organizationProject->users()->detach($data['user_id']);
+                    $this->projectRepository->forceDelete($organizationProject);
                 }
             }
 

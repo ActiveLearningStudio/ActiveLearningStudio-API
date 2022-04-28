@@ -907,8 +907,8 @@ class TeamController extends Controller
     public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team, Project $project)
     {
 
-        $grade_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'education_level_id');
-        $subject_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'subject_id');
+        $grade_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'educationLevels');
+        $subject_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'subjects');
 
         if (empty($grade_name) || empty($subject_name)) {
             return response([
