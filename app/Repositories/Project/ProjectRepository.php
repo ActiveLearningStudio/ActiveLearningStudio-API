@@ -25,6 +25,7 @@ use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\App;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Resources\V1\ActivityResource;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -634,8 +635,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
 
         $project['org_name'] = $organizationName;
-        $project['grade_name'] = $this->getActivityGrade($project->id, 'education_level_id');
-        $project['subject_name'] = $this->getActivityGrade($project->id, 'subject_id');
+        $project['grade_name'] = $this->getActivityGrade($project->id, 'educationLevels');
+        $project['subject_name'] = $this->getActivityGrade($project->id, 'subjects');
         Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
 
         $project_thumbanil = "";
@@ -1050,13 +1051,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     private function getActivityGrade($projectId, $activityParam)
     {
-        \Log::info($projectId);
-        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->value('id');
-        \Log::info($playlistId);
-
-        $activity = Activity::where('playlist_id', $playlistId)->orderBy('order','asc')->limit(1)->value($activityParam);
-        \Log::info($activity);
-        return $activity;
+        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
+        
+        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
+        
+        $resource = new ActivityResource($activity);
+        
+        // Get first Category
+        if ($resource->$activityParam[0]) {
+            return $resource->$activityParam[0]->name;
+        }
+        return null;
 
     }
 }

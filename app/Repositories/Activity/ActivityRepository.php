@@ -872,7 +872,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $cloned_activity = $this->create($activity);
 
         // Import Activity Subjects
-
+        $projectOrganizationId = Project::where('id',$playlist->project_id)->value('organization_id');
+        
         $subjectContent = file_get_contents(
             storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
                                                 $activity_dir . '/activity_subject.json'));
@@ -880,7 +881,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         \Log::info($subjects);
         foreach ($subjects as $subject) {
 
-            $recSubject = Subject::firstOrCreate(['name' => $subject['name']]);
+            $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
 
             $newSubject['activity_id'] = $cloned_activity->id;
             $newSubject['subject_id'] = $recSubject->id;
@@ -892,6 +893,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         // Import Activity Education-Level
 
+        
+
         $educationLevelContent = file_get_contents(
             storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
                                                 $activity_dir . '/activity_education_level.json'));
@@ -899,7 +902,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         \Log::info($educationLevels);
         foreach ($educationLevels as $educationLevel) {
 
-            $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name']]);
+            $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
 
             $newEducationLevel['activity_id'] = $cloned_activity->id;
             $newEducationLevel['education_level_id'] = $recEducationLevel->id;
@@ -917,7 +920,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $authorTags = json_decode($authorTagContent,true);
         \Log::info($authorTags);
         foreach ($authorTags as $authorTag) {
-            $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name']]);
+            $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
             $newauthorTag['activity_id'] = $cloned_activity->id;
             $newauthorTag['author_tag_id'] = $recAuthorTag->id;
             $newauthorTag['created_at'] = date('Y-m-d H:i:s');
