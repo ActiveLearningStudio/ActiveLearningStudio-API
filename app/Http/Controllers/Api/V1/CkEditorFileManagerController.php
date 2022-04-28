@@ -83,16 +83,22 @@ class CkEditorFileManagerController extends Controller
         $path = storage_path('app/public/ckeditor');
         $filesInFolder = File::allFiles($path);
         $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-        $return_html = "";
+        $return_html = "<table border='1' align='center' style='border-collapse: collapse;margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);'><tr><th>Name</th><th>Created At</th><th>Action</th></tr>";
         
         foreach ($filesInFolder as $key => $path) {
+            
             $files = pathinfo($path);
+            
             $allMedia[] = $files['basename'];
             $fileUrl =  url(Storage::url('ckeditor/' . basename($files['basename'])));
-
-            $return_html .= "<a  onclick='window.opener.CKEDITOR.tools.callFunction( $CKEditorFuncNum, \"$fileUrl\" );window.close();'>".$files['basename']."</a><br>";
+            $fileUrl = str_replace('storage', 'api/storage', $fileUrl);
+            $return_html .= "<tr><td> ".$files['basename']." </td><td>" . date('Y-m-d H:i:s', $path->getATime()) . "</td><td><a href='' onclick='window.opener.CKEDITOR.tools.callFunction( $CKEditorFuncNum, \"$fileUrl\" );window.close();'>Select</a></td></tr>";
           }
-         
+          $return_html .= "</table>";
           echo $return_html;
     }
 }

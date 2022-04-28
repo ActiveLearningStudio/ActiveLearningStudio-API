@@ -25,6 +25,7 @@ use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\App;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Resources\V1\ActivityResource;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -634,8 +635,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
 
         $project['org_name'] = $organizationName;
-        $project['grade_name'] = $this->getActivityGrade($project->id, 'education_level_id');
-        $project['subject_name'] = $this->getActivityGrade($project->id, 'subject_id');
+        $project['grade_name'] = $this->getActivityGrade($project->id, 'educationLevels');
+        $project['subject_name'] = $this->getActivityGrade($project->id, 'subjects');
         Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
 
         $project_thumbanil = "";
@@ -661,6 +662,26 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $activity_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                                 $activity->title . '/' . $activity->title . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
+
+                // Export Subject 
+                $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activity->title . '/activity_subject.json';
+                
+                Storage::disk('public')->put($activitySubjectJsonFile, $activity->subjects);
+
+                // Export Education level
+
+                $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activity->title . '/activity_education_level.json';
+                
+                Storage::disk('public')->put($activityEducationLevelJsonFile, $activity->educationLevels);
+
+                // Export Author
+
+                $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activity->title . '/activity_author_tag.json';
+                
+                Storage::disk('public')->put($activityAuthorTagJsonFile, $activity->authorTags);
 
                 $decoded_content = json_decode($activity->h5p_content,true);
 
@@ -770,7 +791,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                     $project = json_decode($project_json,true);
                     unset($project['id'], $project['organization_id'],
-                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
+                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at'], $project['team_id']);
 
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
@@ -1030,13 +1051,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     private function getActivityGrade($projectId, $activityParam)
     {
-        \Log::info($projectId);
-        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->value('id');
-        \Log::info($playlistId);
-
-        $activity = Activity::where('playlist_id', $playlistId)->orderBy('order','asc')->limit(1)->value($activityParam);
-        \Log::info($activity);
-        return $activity;
+        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
+        
+        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
+        
+        $resource = new ActivityResource($activity);
+        
+        // Get first Category
+        if ($resource->$activityParam->isNotEmpty()) { 
+            return $resource->$activityParam[0]->name;
+        }
+        return null;
 
     }
 }
