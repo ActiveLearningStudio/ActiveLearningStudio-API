@@ -34,7 +34,7 @@ class SearchRequest extends FormRequest
             'userIds' => 'array',
             'userIds.*' => 'int|exists:App\User,id',
             'author' => 'string|max:255',
-            'h5pLibraries' => 'array|exists:App\Models\ActivityItem,h5pLib',
+            'h5pLibraries' => 'array',
             'subjectIds' => 'array',
             'subjectIds.*' => 'int|exists:App\Models\Subject,id',
             'educationLevelIds' => 'array',
