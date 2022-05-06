@@ -903,7 +903,6 @@ class SuborganizationController extends Controller
      * Get Media Sources
      *
      * Get the media sources for image and videos.
-     *
      * 
      * @return Response
      */
@@ -930,6 +929,7 @@ class SuborganizationController extends Controller
      *
      * @param SuborganizationUpdateMediaSource $request
      * @param Organization $suborganization
+     * 
      * @return Response
      */
     public function updateMediaSource(SuborganizationUpdateMediaSource $request, Organization $suborganization)
