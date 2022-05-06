@@ -189,7 +189,7 @@ class SuborganizationController extends Controller
         $data = $request->validated();
 
         $organization = $this->organizationRepository->find($data['parent_id']);
-        //$this->authorize('create', $organization);
+        $this->authorize('create', $organization);
 
         $authenticatedUser = auth()->user();
 
