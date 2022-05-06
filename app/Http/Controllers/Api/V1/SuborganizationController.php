@@ -18,10 +18,12 @@ use App\Http\Requests\V1\SuborganizationUploadThumbRequest;
 use App\Http\Requests\V1\SuborganizationShowMemberOptionsRequest;
 use App\Http\Requests\V1\SuborganizationDeleteUserRequest;
 use App\Http\Requests\V1\SuborganizationGetUsersRequest;
+use App\Http\Requests\V1\SuborganizationUpdateMediaSource;
 use App\Http\Requests\V1\SuborganizationUpdateRole;
 use App\Http\Requests\V1\SuborganizationUploadFaviconRequest;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
 use App\Http\Resources\V1\UserResource;
+use App\Models\MediaSource;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Organization;
 use App\Models\OrganizationRoleType;
@@ -187,7 +189,7 @@ class SuborganizationController extends Controller
         $data = $request->validated();
 
         $organization = $this->organizationRepository->find($data['parent_id']);
-        $this->authorize('create', $organization);
+        //$this->authorize('create', $organization);
 
         $authenticatedUser = auth()->user();
 
@@ -879,5 +881,70 @@ class SuborganizationController extends Controller
         return response([
             'userHasPermission' => auth()->user()->hasPermissionTo($data['permission'], $suborganization),
         ], 200);
+    }
+
+    /**
+     * Get Organization Media Sources
+     *
+     * Get the media sources of specific organization for image and videos .
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
+     * @return Response
+     */
+    public function OrganizationmediaSource(Organization $suborganization)
+    {
+        return response([
+            'mediaSources' => $suborganization->mediaSources()->get(),
+        ], 200);
+    }
+
+    /**
+     * Get Media Sources
+     *
+     * Get the media sources for image and videos.
+     *
+     * 
+     * @return Response
+     */
+    public function mediaSources()
+    {
+        return response([
+            'mediaSources' => MediaSource::get()->groupBy('media_type'),
+        ], 200);
+    }
+
+    /**
+     * Update Suborganization Media Sources
+     *
+     * Update the media sources for specified suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam media_source_ids array required Ids of a media source type Example: 1
+  
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update Media sources."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateMediaSource $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function updateMediaSource(SuborganizationUpdateMediaSource $request, Organization $suborganization)
+    {
+        $result = $suborganization->mediaSources()->sync($request->media_source_ids);
+
+        if ($result) {
+            return response([
+                'message' => 'Media sources has been updated successfully.',
+                'mediaSources' => $suborganization->mediaSources()->get(),
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update media source.'],
+        ], 500);
     }
 }

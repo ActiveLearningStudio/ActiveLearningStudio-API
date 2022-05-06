@@ -225,6 +225,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 }
 
                 $this->assignDefaultActivityContents($suborganization->id, $organization->id);
+                $this->assignDefaultMediaSources($suborganization, $organization);
 
                 DB::commit();
             }
@@ -1006,6 +1007,21 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             AuthorTag::insertOrIgnore($authorTag);
         }
+    }
+
+    /**
+     * Assign default media sources to organization
+     *
+     * @param $subOrganization
+     * @param $parentOrganization
+     *
+     * @return bool
+     */
+    public function assignDefaultMediaSources($subOrganization, $parentOrganization)
+    {
+        $parentMediaSources = $parentOrganization->mediaSources()->pluck('media_source_id');
+
+        $subOrganization->mediaSources()->sync($parentMediaSources);
     }
 
 }
