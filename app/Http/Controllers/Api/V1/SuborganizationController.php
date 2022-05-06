@@ -890,6 +890,8 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * 
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
     public function OrganizationmediaSource(Organization $suborganization)
