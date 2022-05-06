@@ -208,6 +208,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             'index'
         ]);
         Route::get('suborganizations/{suborganization}/index', 'SuborganizationController@index')->name('suborganizations.index');
+        Route::get('suborganizations/{suborganization}/media-sources', 'SuborganizationController@organizationMediaSource')->name('organization-media-sources');
+        Route::put('suborganizations/{suborganization}/update-media-sources', 'SuborganizationController@updateMediaSource')->name('update-media-sources');
+        Route::get('media-sources', 'SuborganizationController@mediaSources')->name('media-sources');
 
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');

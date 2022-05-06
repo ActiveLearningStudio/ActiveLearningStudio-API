@@ -154,4 +154,12 @@ class Organization extends Model
     {
         return $this->belongsToMany('App\Models\OrganizationRoleType', 'organization_user_roles');
     }
+
+    /**
+     * Get the media sources for the organization.
+     */
+    public function mediaSources()
+    {
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources');
+    }
 }
