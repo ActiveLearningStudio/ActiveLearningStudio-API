@@ -194,12 +194,12 @@ class LmsController extends Controller
      *
      * Get a list of teams that belong to the same LMS/LTI settings
      *
-     * @bodyParam userEmail required The email of a user: quo
+     * @bodyParam user_email required The email of a user Example: somebody@somewhere.com
      * @bodyParam lti_client_id required The Id of a lti client Example: 12
      *
-     * @responseFile responses/organization/organizations.json
+     * @responseFile responses/team/teams.json
      *
-     * @param OrganizationSearchRequest $request
+     * @param TeamsSearchRequest $request
      * @return Response
      */
     public function teams(TeamsSearchRequest $request)
