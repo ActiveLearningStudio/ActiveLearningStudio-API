@@ -14,11 +14,11 @@ class DefaultOrganizationMediaSourceSeeder extends Seeder
     public function run()
     {
         $organizations = DB::table('organizations')->pluck('id');
-        
+
         $imageSources = DB::table('media_sources')
                            ->whereMediaType('Image')
                            ->whereIn('name', ['My device', 'Pexels'])
-                           ->pluck('id', 'name');
+                           ->pluck('id');
 
         $videoSources = DB::table('media_sources')
                           ->whereMediaType('Video')
@@ -51,10 +51,10 @@ class DefaultOrganizationMediaSourceSeeder extends Seeder
 
                 $organizationMedias[] = $organizationMedia;
             }
-            
+
             DB::table('organization_media_sources')->insertOrIgnore($organizationMedias);
         }
 
     }
-    
+
 }
