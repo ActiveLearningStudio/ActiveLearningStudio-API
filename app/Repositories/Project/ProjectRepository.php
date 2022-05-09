@@ -659,27 +659,29 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             ;
             foreach($activites as $activity) {
 
+                $activityTitle = str_replace('/', '-', $activity->title);
+
                 $activity_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                $activity->title . '/' . $activity->title . '.json';
+                                                                $activityTitle . '/' . $activityTitle . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
 
                 // Export Subject 
                 $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                    $activity->title . '/activity_subject.json';
+                                                                    $activityTitle . '/activity_subject.json';
                 
                 Storage::disk('public')->put($activitySubjectJsonFile, $activity->subjects);
 
                 // Export Education level
 
                 $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                    $activity->title . '/activity_education_level.json';
+                                                                    $activityTitle . '/activity_education_level.json';
                 
                 Storage::disk('public')->put($activityEducationLevelJsonFile, $activity->educationLevels);
 
                 // Export Author
 
                 $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                    $activity->title . '/activity_author_tag.json';
+                                                                    $activityTitle . '/activity_author_tag.json';
                 
                 Storage::disk('public')->put($activityAuthorTagJsonFile, $activity->authorTags);
 
@@ -695,7 +697,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                                                                         ->value('minor_version');
 
                 $content_json_file = '/exports/'.$project_dir_name.'/playlists/' . $title . '/activities/' .
-                                                                $activity->title.'/' . $activity->h5p_content_id . '.json';
+                                                                $activityTitle.'/' . $activity->h5p_content_id . '.json';
                 Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
 
                 if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
@@ -703,12 +705,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
                     if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
                         $activity_thumbanil_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                            $activity->title . '/' . basename($activity_thumbanil);
+                                                                            $activityTitle . '/' . basename($activity_thumbanil);
                         Storage::disk('public')->put($activity_thumbanil_file, file_get_contents($activity_thumbanil));
                     }
                 }
                 $exported_content_dir_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                                    $activity->title . '/' . $activity->h5p_content_id;
+                                                                                    $activityTitle . '/' . $activity->h5p_content_id;
                 $exported_content_dir = storage_path($exported_content_dir_path);
                 \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), $exported_content_dir );
             }
