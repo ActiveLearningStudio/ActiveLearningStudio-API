@@ -17,6 +17,7 @@ class CreateMediaSourcesTable extends Migration
             $table->id();
             $table->string('name');
             $table->enum('media_type', ['Video', 'Image']);
+            $table->unique(['name', 'media_type']);
             $table->timestamps();
             $table->softDeletes();
         });
