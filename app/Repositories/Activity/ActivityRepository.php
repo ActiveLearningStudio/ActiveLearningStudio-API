@@ -11,6 +11,8 @@ use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
 use App\Http\Resources\V1\SearchPostgreSqlResource;
 use App\Repositories\User\UserRepository;
@@ -29,6 +31,8 @@ use App\Models\AuthorTag;
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
     private $h5pElasticsearchFieldRepository;
+    private $subjectRepository;
+    private $educationLevelRepository;
     private $client;
 
     /**
@@ -36,12 +40,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      *
      * @param Activity $model
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
+     * @param SubjectRepositoryInterface $subjectRepository
+     * @param EducationLevelRepositoryInterface $educationLevelRepository
      */
-    public function __construct(Activity $model, H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository)
+    public function __construct(
+        Activity $model,
+        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
+        SubjectRepositoryInterface $subjectRepository,
+        EducationLevelRepositoryInterface $educationLevelRepository
+    )
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->educationLevelRepository = $educationLevelRepository;
     }
 
     /**
@@ -334,12 +347,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
-            $dataSubjectIds = implode(",", $data['subjectIds']);
+            $subjectIdsWithMatchingName = $this->subjectRepository->getSubjectIdsWithMatchingName($data['subjectIds']);
+            $dataSubjectIds = implode(",", $subjectIdsWithMatchingName);
             $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
-            $dataEducationLevelIds = implode(",", $data['educationLevelIds']);
+            $educationLevelIdsWithMatchingName = $this->educationLevelRepository->getEducationLevelIdsWithMatchingName($data['educationLevelIds']);
+            $dataEducationLevelIds = implode(",", $educationLevelIdsWithMatchingName);
             $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
         }
 
