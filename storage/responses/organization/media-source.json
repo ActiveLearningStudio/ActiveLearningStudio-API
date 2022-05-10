@@ -1,0 +1,80 @@
+{
+    "mediaSources": {
+        "Video": [
+            {
+                "id": 1,
+                "name": "My device",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 2,
+                "name": "YouTube",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 3,
+                "name": "Kaltura",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 4,
+                "name": "Safari Montage",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 5,
+                "name": "BrightCove",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 6,
+                "name": "Vimeo",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            }
+        ],
+        "Image": [
+            {
+                "id": 7,
+                "name": "My device",
+                "media_type": "Image",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 8,
+                "name": "Pexels",
+                "media_type": "Image",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 9,
+                "name": "Safari Montage",
+                "media_type": "Image",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            }
+        ]
+    }
+}

@@ -889,15 +889,17 @@ class SuborganizationController extends Controller
      * Get the media sources of specific organization for image and videos .
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * 
+     *
+     * @responseFile responses/organization/organization-media-source.json
+     *
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
-    public function OrganizationmediaSource(Organization $suborganization)
+    public function OrganizationMediaSource(Organization $suborganization)
     {
         return response([
-            'mediaSources' => $suborganization->mediaSources()->get(),
+            'mediaSources' => $suborganization->mediaSources,
         ], 200);
     }
 
@@ -905,7 +907,9 @@ class SuborganizationController extends Controller
      * Get Media Sources
      *
      * Get the media sources for image and videos.
-     * 
+     *
+     * @responseFile responses/organization/media-source.json
+     *
      * @return Response
      */
     public function mediaSources()
@@ -922,7 +926,13 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam media_source_ids array required Ids of a media source type Example: 1
-  
+     *
+     * @responseFile responses/organization/update-media-source.json
+     *
+     * @response {
+     *    'message' => 'Media sources has been updated successfully.',
+     * }
+     *
      * @response 500 {
      *   "errors": [
      *     "Failed to update Media sources."
@@ -931,7 +941,7 @@ class SuborganizationController extends Controller
      *
      * @param SuborganizationUpdateMediaSource $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function updateMediaSource(SuborganizationUpdateMediaSource $request, Organization $suborganization)
@@ -941,7 +951,7 @@ class SuborganizationController extends Controller
         if ($result) {
             return response([
                 'message' => 'Media sources has been updated successfully.',
-                'mediaSources' => $suborganization->mediaSources()->get(),
+                'mediaSources' => $suborganization->mediaSources,
             ], 200);
         }
 
