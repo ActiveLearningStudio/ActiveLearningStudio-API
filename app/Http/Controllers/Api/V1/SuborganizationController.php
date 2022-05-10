@@ -899,7 +899,7 @@ class SuborganizationController extends Controller
     public function OrganizationMediaSource(Organization $suborganization)
     {
         return response([
-            'mediaSources' => $suborganization->mediaSources()->get(),
+            'mediaSources' => $suborganization->mediaSources,
         ], 200);
     }
 
@@ -951,7 +951,7 @@ class SuborganizationController extends Controller
         if ($result) {
             return response([
                 'message' => 'Media sources has been updated successfully.',
-                'mediaSources' => $suborganization->mediaSources()->get(),
+                'mediaSources' => $suborganization->mediaSources,
             ], 200);
         }
 
