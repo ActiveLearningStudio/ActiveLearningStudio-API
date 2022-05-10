@@ -227,4 +227,14 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      */
     public function assignDefaultActivityContents($organization_id, $parent_id);
 
+     /**
+     * Assign default media sources to organization
+     *
+     * @param $subOrganization
+     * @param $parentOrganization
+     *
+     * @return bool
+     */
+    public function assignDefaultMediaSources($subOrganization, $parentOrganization);
+
 }

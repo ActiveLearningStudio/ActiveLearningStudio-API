@@ -13,4 +13,11 @@ interface EducationLevelRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getAll($suborganization, $data);
+
+    /**
+     * @param $educationLevelIds
+     *
+     * @return mixed
+     */
+    public function getEducationLevelIdsWithMatchingName($educationLevelIds);
 }

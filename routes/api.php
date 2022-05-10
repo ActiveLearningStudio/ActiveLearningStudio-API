@@ -219,6 +219,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             'index'
         ]);
         Route::get('suborganizations/{suborganization}/index', 'SuborganizationController@index')->name('suborganizations.index');
+        Route::get('suborganizations/{suborganization}/media-sources', 'SuborganizationController@organizationMediaSource')->name('organization-media-sources');
+        Route::put('suborganizations/{suborganization}/update-media-sources', 'SuborganizationController@updateMediaSource')->name('update-media-sources');
+        Route::get('media-sources', 'SuborganizationController@mediaSources')->name('media-sources');
 
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
@@ -325,6 +328,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
     Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
+    Route::get('go/lms/teams', 'CurrikiGo\LmsController@teams');
     Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');

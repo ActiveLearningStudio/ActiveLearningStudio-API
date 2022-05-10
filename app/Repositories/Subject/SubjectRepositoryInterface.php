@@ -12,4 +12,11 @@ interface SubjectRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getAll($data, $suborganization);
+
+    /**
+     * @param $subjectIds
+     *
+     * @return mixed
+     */
+    public function getSubjectIdsWithMatchingName($subjectIds);
 }

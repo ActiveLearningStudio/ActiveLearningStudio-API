@@ -11,6 +11,8 @@ use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
 use App\Http\Resources\V1\SearchPostgreSqlResource;
 use App\Repositories\User\UserRepository;
@@ -29,6 +31,8 @@ use App\Models\AuthorTag;
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
     private $h5pElasticsearchFieldRepository;
+    private $subjectRepository;
+    private $educationLevelRepository;
     private $client;
 
     /**
@@ -36,12 +40,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      *
      * @param Activity $model
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
+     * @param SubjectRepositoryInterface $subjectRepository
+     * @param EducationLevelRepositoryInterface $educationLevelRepository
      */
-    public function __construct(Activity $model, H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository)
+    public function __construct(
+        Activity $model,
+        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
+        SubjectRepositoryInterface $subjectRepository,
+        EducationLevelRepositoryInterface $educationLevelRepository
+    )
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->educationLevelRepository = $educationLevelRepository;
     }
 
     /**
@@ -334,12 +347,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
-            $dataSubjectIds = implode(",", $data['subjectIds']);
+            $subjectIdsWithMatchingName = $this->subjectRepository->getSubjectIdsWithMatchingName($data['subjectIds']);
+            $dataSubjectIds = implode(",", $subjectIdsWithMatchingName);
             $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
-            $dataEducationLevelIds = implode(",", $data['educationLevelIds']);
+            $educationLevelIdsWithMatchingName = $this->educationLevelRepository->getEducationLevelIdsWithMatchingName($data['educationLevelIds']);
+            $dataEducationLevelIds = implode(",", $educationLevelIdsWithMatchingName);
             $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
         }
 
@@ -874,62 +889,64 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         // Import Activity Subjects
         $projectOrganizationId = Project::where('id',$playlist->project_id)->value('organization_id');
         
-        $subjectContent = file_get_contents(
-            storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
-                                                $activity_dir . '/activity_subject.json'));
-        $subjects = json_decode($subjectContent,true);
-        \Log::info($subjects);
-        foreach ($subjects as $subject) {
-
-            $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
-
-            $newSubject['activity_id'] = $cloned_activity->id;
-            $newSubject['subject_id'] = $recSubject->id;
-            $newSubject['created_at'] = date('Y-m-d H:i:s');
-            $newSubject['updated_at'] = date('Y-m-d H:i:s');
-            
-            DB::table('activity_subject')->insert($newSubject);
+        $activitySubjectPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+                                                                '/activities/' . $activity_dir . '/activity_subject.json');
+        if (file_exists($activitySubjectPath)) {
+            $subjectContent = file_get_contents($activitySubjectPath);
+            $subjects = json_decode($subjectContent,true);
+            \Log::info($subjects);
+            foreach ($subjects as $subject) {
+    
+                $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
+    
+                $newSubject['activity_id'] = $cloned_activity->id;
+                $newSubject['subject_id'] = $recSubject->id;
+                $newSubject['created_at'] = date('Y-m-d H:i:s');
+                $newSubject['updated_at'] = date('Y-m-d H:i:s');
+                
+                DB::table('activity_subject')->insert($newSubject);
+            }
         }
-
+        
         // Import Activity Education-Level
 
-        
-
-        $educationLevelContent = file_get_contents(
-            storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
-                                                $activity_dir . '/activity_education_level.json'));
-        $educationLevels = json_decode($educationLevelContent,true);
-        \Log::info($educationLevels);
-        foreach ($educationLevels as $educationLevel) {
-
-            $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
-
-            $newEducationLevel['activity_id'] = $cloned_activity->id;
-            $newEducationLevel['education_level_id'] = $recEducationLevel->id;
-            $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
-            $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
-            
-            DB::table('activity_education_level')->insert($newEducationLevel);
+        $activtyEducationPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
+                                                                    $activity_dir . '/activity_education_level.json');
+        if (file_exists($activtyEducationPath)) {
+            $educationLevelContent = file_get_contents($activtyEducationPath);
+            $educationLevels = json_decode($educationLevelContent,true);
+            \Log::info($educationLevels);
+            foreach ($educationLevels as $educationLevel) {
+    
+                $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
+    
+                $newEducationLevel['activity_id'] = $cloned_activity->id;
+                $newEducationLevel['education_level_id'] = $recEducationLevel->id;
+                $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
+                $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
+                
+                DB::table('activity_education_level')->insert($newEducationLevel);
+            }
         }
 
         // Import Activity Author-Tag
 
-        $authorTagContent = file_get_contents(
-            storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
-                                                $activity_dir . '/activity_author_tag.json'));
-        $authorTags = json_decode($authorTagContent,true);
-        \Log::info($authorTags);
-        foreach ($authorTags as $authorTag) {
-            $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
-            $newauthorTag['activity_id'] = $cloned_activity->id;
-            $newauthorTag['author_tag_id'] = $recAuthorTag->id;
-            $newauthorTag['created_at'] = date('Y-m-d H:i:s');
-            $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
-            
-            DB::table('activity_author_tag')->insert($newauthorTag);
+        $authorTagPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+                                                            '/activities/' . $activity_dir . '/activity_author_tag.json');
+        if (file_exists($authorTagPath)) {
+            $authorTagContent = file_get_contents($authorTagPath);
+            $authorTags = json_decode($authorTagContent,true);
+            \Log::info($authorTags);
+            foreach ($authorTags as $authorTag) {
+                $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
+                $newauthorTag['activity_id'] = $cloned_activity->id;
+                $newauthorTag['author_tag_id'] = $recAuthorTag->id;
+                $newauthorTag['created_at'] = date('Y-m-d H:i:s');
+                $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
+                
+                DB::table('activity_author_tag')->insert($newauthorTag);
+            }
         }
-        
     }
-
 
 }

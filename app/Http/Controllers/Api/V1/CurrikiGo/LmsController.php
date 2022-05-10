@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\V1\CurrikiGo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CurrikiGo\OrganizationSearchRequest;
+use App\Http\Requests\V1\CurrikiGo\TeamsSearchRequest;
 use App\Http\Resources\V1\ProjectPublicResource;
+use App\Http\Resources\V1\TeamResource;
 use App\Http\Resources\V1\SearchResource;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\Activity\ActivityRepositoryInterface;
@@ -187,4 +189,33 @@ class LmsController extends Controller
         ], 400);
     }
     
+    /**
+     * Get teams based on LMS/LTI settings
+     *
+     * Get a list of teams that belong to the same LMS/LTI settings
+     *
+     * @bodyParam user_email required The email of a user Example: somebody@somewhere.com
+     * @bodyParam lti_client_id required The Id of a lti client Example: 12
+     *
+     * @responseFile responses/team/teams.json
+     *
+     * @param TeamsSearchRequest $request
+     * @return Response
+     */
+    public function teams(TeamsSearchRequest $request)
+    {
+        $verifyValidCall = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->count();
+        if ($verifyValidCall) {
+            $user = User::where('email', $request->input('user_email'))->first();
+            $teams = TeamResource::collection($user->teams()->get());
+            
+            return response([
+                'teams' => $teams,
+            ], 200);
+        }
+        return response([
+            'teams' => [],
+        ], 400);
+    }
+
 }
