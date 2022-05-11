@@ -203,8 +203,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             });
         }
         
-        return $query->where('type', 'App\Notifications\ProjectExportNotification')
-                                ->where('created_at', '>=', $date)->paginate($perPage)->appends(request()->query());
+        $query =  $query->where('type', 'App\Notifications\ProjectExportNotification');
+        $query =  $query->where('created_at', '>=', $date);
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+        
+        return  $query->paginate($perPage)->withQueryString();
     }
 
     public function getFirstUser()

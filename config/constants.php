@@ -4,6 +4,7 @@ return [
     'curriki-tsugi-host' => env('CURRIKI_TSUGI_HOST'),
     'front-url' => env('FRONT_END_URL'),
     'curriki-demo-email' => env('CURRIKI_DEMO_EMAIL'),
+    'map-device-lti-client-id' => env('MAP_DEVICE_LTI_CLIENT_ID'),
     'users' => [
         'sample-file' => 'sample/users-import-sample.csv'
     ],

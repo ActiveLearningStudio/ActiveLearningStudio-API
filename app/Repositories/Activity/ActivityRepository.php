@@ -11,6 +11,8 @@ use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
 use App\Http\Resources\V1\SearchPostgreSqlResource;
 use App\Repositories\User\UserRepository;
@@ -22,10 +24,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Models\Subject;
+use App\Models\EducationLevel;
+use App\Models\AuthorTag;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
     private $h5pElasticsearchFieldRepository;
+    private $subjectRepository;
+    private $educationLevelRepository;
     private $client;
 
     /**
@@ -33,12 +40,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      *
      * @param Activity $model
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
+     * @param SubjectRepositoryInterface $subjectRepository
+     * @param EducationLevelRepositoryInterface $educationLevelRepository
      */
-    public function __construct(Activity $model, H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository)
+    public function __construct(
+        Activity $model,
+        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
+        SubjectRepositoryInterface $subjectRepository,
+        EducationLevelRepositoryInterface $educationLevelRepository
+    )
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->educationLevelRepository = $educationLevelRepository;
     }
 
     /**
@@ -331,13 +347,20 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
-            $dataSubjectIds = implode("','", $data['subjectIds']);
-            $queryWhere[] = "subject_id IN ('" . $dataSubjectIds . "')";
+            $subjectIdsWithMatchingName = $this->subjectRepository->getSubjectIdsWithMatchingName($data['subjectIds']);
+            $dataSubjectIds = implode(",", $subjectIdsWithMatchingName);
+            $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
-            $dataEducationLevelIds = implode("','", $data['educationLevelIds']);
-            $queryWhere[] = "education_level_id IN ('" . $dataEducationLevelIds . "')";
+            $educationLevelIdsWithMatchingName = $this->educationLevelRepository->getEducationLevelIdsWithMatchingName($data['educationLevelIds']);
+            $dataEducationLevelIds = implode(",", $educationLevelIdsWithMatchingName);
+            $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
+        }
+
+        if (isset($data['authorTagsIds']) && !empty($data['authorTagsIds'])) {
+            $dataAuthorTagsIds = implode(",", $data['authorTagsIds']);
+            $queryWhere[] = "author_tag_id IN (" . $dataAuthorTagsIds . ")";
         }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
@@ -510,6 +533,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'shared' => $activity->shared,
         ];
         $cloned_activity = $this->create($activity_data);
+
+        if ($cloned_activity && count($activity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($activity->subjects);
+        }
+        if ($cloned_activity && count($activity->educationLevels) > 0) {
+            $cloned_activity->educationLevels()->attach($activity->educationLevels);
+        }
+        if ($cloned_activity && count($activity->authorTags) > 0) {
+            $cloned_activity->authorTags()->attach($activity->authorTags);
+        }
+
         return $cloned_activity['id'];
     }
 
@@ -548,6 +582,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             'organization_id' => $activity->organization_id,
         ];
         $cloned_activity = $this->create($activity_data);
+
+        if ($cloned_activity && count($activity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($activity->subjects);
+        }
+        if ($cloned_activity && count($activity->educationLevels) > 0) {
+            $cloned_activity->educationLevels()->attach($activity->educationLevels);
+        }
+        if ($cloned_activity && count($activity->authorTags) > 0) {
+            $cloned_activity->authorTags()->attach($activity->authorTags);
+        }
+
         return $cloned_activity['id'];
     }
 
@@ -790,6 +835,35 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     storage_path('app/public/h5p/content/'.$new_content_id)
                 );
 
+        
+        // Move Content to editor Folder
+
+        $destinationEditorFolderPath = $extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . $old_content_id;
+        
+        // Move editor images
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/images/'),
+            storage_path('app/public/h5p/editor/images/')
+        );
+
+        // Move editor audios
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/audios/'),
+            storage_path('app/public/h5p/editor/audios/')
+        );
+
+        // Move editor videos
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/videos/'),
+            storage_path('app/public/h5p/editor/videos/')
+        );
+
+        // Move editor files
+        \File::copyDirectory(
+            storage_path($destinationEditorFolderPath . '/files/'),
+            storage_path('app/public/h5p/editor/files/')
+        );
+
         $activity['h5p_content_id'] = $new_content_id;
 
         if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
@@ -812,7 +886,67 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         $cloned_activity = $this->create($activity);
 
-    }
+        // Import Activity Subjects
+        $projectOrganizationId = Project::where('id',$playlist->project_id)->value('organization_id');
+        
+        $activitySubjectPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+                                                                '/activities/' . $activity_dir . '/activity_subject.json');
+        if (file_exists($activitySubjectPath)) {
+            $subjectContent = file_get_contents($activitySubjectPath);
+            $subjects = json_decode($subjectContent,true);
+            \Log::info($subjects);
+            foreach ($subjects as $subject) {
+    
+                $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
+    
+                $newSubject['activity_id'] = $cloned_activity->id;
+                $newSubject['subject_id'] = $recSubject->id;
+                $newSubject['created_at'] = date('Y-m-d H:i:s');
+                $newSubject['updated_at'] = date('Y-m-d H:i:s');
+                
+                DB::table('activity_subject')->insert($newSubject);
+            }
+        }
+        
+        // Import Activity Education-Level
 
+        $activtyEducationPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
+                                                                    $activity_dir . '/activity_education_level.json');
+        if (file_exists($activtyEducationPath)) {
+            $educationLevelContent = file_get_contents($activtyEducationPath);
+            $educationLevels = json_decode($educationLevelContent,true);
+            \Log::info($educationLevels);
+            foreach ($educationLevels as $educationLevel) {
+    
+                $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
+    
+                $newEducationLevel['activity_id'] = $cloned_activity->id;
+                $newEducationLevel['education_level_id'] = $recEducationLevel->id;
+                $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
+                $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
+                
+                DB::table('activity_education_level')->insert($newEducationLevel);
+            }
+        }
+
+        // Import Activity Author-Tag
+
+        $authorTagPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+                                                            '/activities/' . $activity_dir . '/activity_author_tag.json');
+        if (file_exists($authorTagPath)) {
+            $authorTagContent = file_get_contents($authorTagPath);
+            $authorTags = json_decode($authorTagContent,true);
+            \Log::info($authorTags);
+            foreach ($authorTags as $authorTag) {
+                $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
+                $newauthorTag['activity_id'] = $cloned_activity->id;
+                $newauthorTag['author_tag_id'] = $recAuthorTag->id;
+                $newauthorTag['created_at'] = date('Y-m-d H:i:s');
+                $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
+                
+                DB::table('activity_author_tag')->insert($newauthorTag);
+            }
+        }
+    }
 
 }

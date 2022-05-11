@@ -2,12 +2,20 @@
 
 namespace App\Repositories\Organization;
 
+use App\Models\Activity;
+use App\Models\ActivityItem;
+use App\Models\ActivityLayout;
+use App\Models\ActivityType;
+use App\Models\AuthorTag;
+use App\Models\EducationLevel;
 use App\Models\Organization;
 use App\Models\OrganizationPermissionType;
 use App\Models\OrganizationRoleType;
 use App\Models\Pivots\GroupProjectUser;
 use App\Models\Pivots\TeamProjectUser;
+use App\Models\Project;
 use App\Models\SsoLogin;
+use App\Models\Subject;
 use App\Models\TeamUserRole;
 use App\Models\UserLogin;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
@@ -69,15 +77,21 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $parentIds[] = $organization->id;
         }
 
-        return $this->model
+        $query =  $this->model
             ->with(['parent', 'admins'])
             ->withCount(['projects', 'children', 'users', 'groups', 'teams'])
             ->whereIn('parent_id', $parentIds)
             ->when($data['query'] ?? null, function ($query) use ($data) {
                 $query->where('name', 'ilike', '%' . $data['query'] . '%');
                 return $query;
-            })
-            ->paginate($perPage)->withQueryString();
+            });
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -209,6 +223,10 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 if (isset($userRoles)) {
                     $suborganization->users()->sync($userRoles);
                 }
+
+                $this->assignDefaultActivityContents($suborganization->id, $organization->id);
+                $this->assignDefaultMediaSources($suborganization, $organization);
+
                 DB::commit();
             }
 
@@ -553,32 +571,12 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function removeUser($authenticatedUser, $organization, $data)
     {
-        $organizationProjects = $organization->projects()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
-        $organizationTeams = $organization->teams()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
-        $organizationGroups = $organization->groups()->whereHas('users', function (Builder $query) use ($data) {
-            $query->where('id', '=', $data['user_id']);
-        })->get();
-
         try {
             DB::beginTransaction();
 
-            foreach ($organizationProjects as $organizationProject) {
-                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
-                    $organizationProject->original_user = $data['user_id'];
-                    $organizationProject->save();
-                    $organizationProject->users()->detach($data['user_id']);
-                    $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
-                } else {
-                    $organizationProject->users()->detach($data['user_id']);
-                    $this->projectRepository->forceDelete($organizationProject);
-                }
-            }
+            $organizationTeams = $organization->teams()->whereHas('users', function (Builder $query) use ($data) {
+                $query->where('id', '=', $data['user_id']);
+            })->get();
 
             foreach ($organizationTeams as $organizationTeam) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
@@ -587,11 +585,48 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $organizationTeam->users()->detach($data['user_id']);
                     $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
                 } else {
-                    TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationTeam->users()->detach($data['user_id']);
-                    resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
+
+                    $allTeamUsers = $organizationTeam->users()->wherePivot('user_id', '<>', $data['user_id'])->get();
+
+                    $teamProjects = Project::where('team_id', $organizationTeam->id)->pluck('id')->toArray();
+
+                    if (count($allTeamUsers) > 0) {
+                        $allTeamUserIds = [];
+                        foreach ($allTeamUsers as $allTeamUserRow) {
+                            $allTeamUserIds[] = $allTeamUserRow->id;
+                        }
+
+                        if (!in_array($authenticatedUser->id, $allTeamUserIds)) {
+                            $organizationTeam->original_user = $data['user_id'];
+                            $organizationTeam->save();
+                            $organizationTeam->users()->attach($authenticatedUser->id, ['team_role_type_id' => 1]);
+                        }
+                        if (count($teamProjects) > 0) {
+                            DB::table('user_project')
+                            ->where('user_id', $data['user_id'])
+                            ->whereIn('project_id', $teamProjects)
+                            ->delete();
+                        }
+
+                    } else {
+                        TeamProjectUser::where('user_id', $data['user_id'])->forceDelete();
+                        if (count($teamProjects) > 0) {
+                            DB::table('user_project')
+                            ->where('user_id', $data['user_id'])
+                            ->whereIn('project_id', $teamProjects)
+                            ->delete();
+                        }
+                        $organizationTeam->projects()->detach();
+                        Project::where('team_id', $organizationTeam->id)->forceDelete();
+                        resolve(TeamRepositoryInterface::class)->forceDelete($organizationTeam);
+                    }
                 }
             }
+
+            $organizationGroups = $organization->groups()->whereHas('users', function (Builder $query) use ($data) {
+                $query->where('id', '=', $data['user_id']);
+            })->get();
 
             foreach ($organizationGroups as $organizationGroup) {
                 if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
@@ -603,6 +638,24 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     GroupProjectUser::where('user_id', $data['user_id'])->forceDelete();
                     $organizationGroup->users()->detach($data['user_id']);
                     resolve(GroupRepositoryInterface::class)->forceDelete($organizationGroup);
+                }
+            }
+
+            $organizationProjects = $organization->projects()
+                                    ->whereHas('users', function (Builder $query) use ($data) {
+                                        $query->where('id', '=', $data['user_id']);
+                                    })
+                                    ->whereNull('team_id')->get();
+
+            foreach ($organizationProjects as $organizationProject) {
+                if (isset($data['preserve_data']) && $data['preserve_data'] == true) {
+                    $organizationProject->original_user = $data['user_id'];
+                    $organizationProject->save();
+                    $organizationProject->users()->detach($data['user_id']);
+                    $organizationProject->users()->attach($authenticatedUser->id, ['role' => 'owner']);
+                } else {
+                    $organizationProject->users()->detach($data['user_id']);
+                    $this->projectRepository->forceDelete($organizationProject);
                 }
             }
 
@@ -657,6 +710,11 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $organizationUsers = $organizationUsers->wherePivot('organization_role_type_id', $data['role']);
         }
 
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $organizationUsers = $organizationUsers->orderBy($data['order_by_column'], $orderByType);
+        }
+
         return $organizationUsers->withCount([
             'projects' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
@@ -672,7 +730,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 $query->where('email', 'like', '%' . str_replace("_", "\_", strtolower($data['query'])) . '%');
                 return $query;
             })
-            ->paginate($perPage);
+            ->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -843,4 +901,127 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
         return false;
     }
+
+    /**
+     * Assign default activity contents to organization
+     *
+     * @param $organization_id
+     * @param $parent_id
+     *
+     * @return bool
+     */
+    public function assignDefaultActivityContents($organization_id, $parent_id)
+    {
+        // assign subjects
+        $parentSubjects = Subject::where('organization_id', $parent_id)->get();
+
+        foreach ($parentSubjects as $parentSubject) {
+            $subject = [
+                'name' => $parentSubject->name,
+                'order' => $parentSubject->order,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            Subject::insertOrIgnore($subject);
+        }
+
+        // assign education levels
+        $parentEducationLevels = EducationLevel::where('organization_id', $parent_id)->get();
+
+        foreach ($parentEducationLevels as $parentEducationLevel) {
+            $educationLevel = [
+                'name' => $parentEducationLevel->name,
+                'order' => $parentEducationLevel->order,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            EducationLevel::insertOrIgnore($educationLevel);
+        }
+
+        // assign activity layouts
+        $parentActivityLayouts = ActivityLayout::where('organization_id', $parent_id)->get();
+
+        foreach ($parentActivityLayouts as $parentActivityLayout) {
+            $activityLayout = [
+                'title' => $parentActivityLayout->title,
+                'description' => $parentActivityLayout->description,
+                'type' => $parentActivityLayout->type,
+                'h5pLib' => $parentActivityLayout->h5pLib,
+                'order' => $parentActivityLayout->order,
+                'image' => $parentActivityLayout->image,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            ActivityLayout::insertOrIgnore($activityLayout);
+        }
+
+        // assign activity types
+        $parentActivityTypes = ActivityType::where('organization_id', $parent_id)->get();
+
+        foreach ($parentActivityTypes as $parentActivityType) {
+            $activityType = [
+                'title' => $parentActivityType->title,
+                'order' => $parentActivityType->order,
+                'image' => $parentActivityType->image,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            ActivityType::insertOrIgnore($activityType);
+        }
+
+        // assign activity items
+        $parentActivityItems = ActivityItem::where('organization_id', $parent_id)->get();
+
+        foreach ($parentActivityItems as $parentActivityItem) {
+            $activityItem = [
+                'title' => $parentActivityItem->title,
+                'order' => $parentActivityItem->order,
+                'image' => $parentActivityItem->image,
+                'description' => $parentActivityItem->description,
+                'activity_type_id' => $parentActivityItem->activity_type_id,
+                'type' => $parentActivityItem->type,
+                'h5pLib' => $parentActivityItem->h5pLib,
+                'created_at' => now(),
+                'demo_activity_id' => $parentActivityItem->demo_activity_id,
+                'demo_video_id' => $parentActivityItem->demo_video_id,
+                'organization_id' => $organization_id,
+            ];
+
+            ActivityItem::insertOrIgnore($activityItem);
+        }
+
+        // assign autor tags
+        $parentAuthorTags = AuthorTag::where('organization_id', $parent_id)->get();
+
+        foreach ($parentAuthorTags as $parentAuthorTag) {
+            $authorTag = [
+                'name' => $parentAuthorTag->name,
+                'order' => $parentAuthorTag->order,
+                'created_at' => now(),
+                'organization_id' => $organization_id,
+            ];
+
+            AuthorTag::insertOrIgnore($authorTag);
+        }
+    }
+
+    /**
+     * Assign default media sources to organization
+     *
+     * @param $subOrganization
+     * @param $parentOrganization
+     *
+     * @return bool
+     */
+    public function assignDefaultMediaSources($subOrganization, $parentOrganization)
+    {
+        $parentMediaSources = $parentOrganization->mediaSources()->pluck('media_source_id');
+
+        $subOrganization->mediaSources()->sync($parentMediaSources);
+    }
+
 }

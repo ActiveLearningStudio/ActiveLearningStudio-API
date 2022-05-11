@@ -47,6 +47,7 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
             $data['guardians_enabled'] = isset($course->guardiansEnabled) ? $course->guardiansEnabled : 0;
             $data['calendar_id'] = isset($course->calendarId) ? $course->calendarId : '';
             $data['curriki_teacher_email'] = isset($course->curriki_teacher_email) ? $course->curriki_teacher_email : auth()->user()->email;
+            $data['curriki_teacher_org'] = isset($course->curriki_teacher_org) ? $course->curriki_teacher_org : '';
 
             if ($item = $this->model->create($data)) {
                 return $item;
@@ -71,5 +72,16 @@ class GoogleClassroomRepository extends BaseRepository implements GoogleClassroo
         ])->first();
 
         return $response;
+    }
+
+    /**
+     * Get teacher_email to fetch the id of teacher/publisher 
+     *
+     * @param $glassAltCourseId
+     * @return Response
+     */
+    public function fetchPublisherData($glassAltCourseId)
+    {
+        return $response  = $this->model->where('alternate_link', $glassAltCourseId)->with('publisherUser.publisherOrg')->first();
     }
 }
