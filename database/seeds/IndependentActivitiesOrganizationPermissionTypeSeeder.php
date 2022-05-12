@@ -46,5 +46,17 @@ class IndependentActivitiesOrganizationPermissionTypeSeeder extends Seeder
             'display_name' => 'Duplicate Independent Activity',
             'feature' => 'Independent Activity'
         ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:export',
+            'display_name' => 'Export Independent Activity',
+            'feature' => 'Independent Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:import',
+            'display_name' => 'Export Independent Activity',
+            'feature' => 'Independent Activity'
+        ]);
     }
 }

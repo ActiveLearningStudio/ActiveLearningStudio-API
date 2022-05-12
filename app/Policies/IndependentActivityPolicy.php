@@ -149,4 +149,28 @@ class IndependentActivityPolicy
 
         return $user->hasPermissionTo('independent-activity:duplicate', $independentActivity->organization);
     }
+
+    /**
+     * Determine whether the user can export the activity.
+     *
+     * @param User $user
+     * @param IndependentActivity $independentActivity
+     * @return mixed
+     */
+    public function export(User $user, IndependentActivity $independentActivity)
+    {
+        return $user->hasPermissionTo('independent-activity:export', $independentActivity->organization);
+    }
+
+    /**
+     * Determine whether the user can import the activity.
+     *
+     * @param User $user
+     * @param IndependentActivity $independentActivity
+     * @return mixed
+     */
+    public function import(User $user, IndependentActivity $independentActivity)
+    {
+        return $user->hasPermissionTo('independent-activity:import', $independentActivity->organization);
+    }
 }
