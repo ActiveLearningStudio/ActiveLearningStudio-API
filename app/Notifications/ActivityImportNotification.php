@@ -54,7 +54,7 @@ class ActivityImportNotification extends Notification
     {
         return (new MailMessage)
                     ->greeting('Hello '. $this->userName . '!')
-                    ->line('Your import of Activity ['.$this->activityTitle.'] has been completed. Please log back into <a href="'.url('/').'">CurrikiStudio</a> and navigate to My Projects to access your shiny new project!')
+                    ->line('Your import of Activity ['.$this->activityTitle.'] has been completed. Please log back into <a href="'.url('/').'">CurrikiStudio</a> and navigate to Independent Activities section to access your shiny new project!')
                     ->line('Thank you for using our application!');
     }
 

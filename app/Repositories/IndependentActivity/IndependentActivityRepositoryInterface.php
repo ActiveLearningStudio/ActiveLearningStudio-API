@@ -62,7 +62,7 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
     public function getAll($data, $suborganization);
 
     /**
-     * To export independent activi and associated playlists
+     * To export independent activity 
      *
      * @param $authUser
      * @param IndependentActivity $independent_activity
@@ -72,7 +72,7 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
     public function exportIndependentActivity($authUser, IndependentActivity $independent_activity);
 
     /**
-     * To import project and associated playlists
+     * To import independent activity 
      *
      * @param $authUser
      * @param $path

@@ -23,7 +23,7 @@ class ExportIndependentActivity implements ShouldQueue
     protected $user;
 
     /**
-     * @var Project
+     * @var independent_activity
      */
     protected $independent_activity;
 

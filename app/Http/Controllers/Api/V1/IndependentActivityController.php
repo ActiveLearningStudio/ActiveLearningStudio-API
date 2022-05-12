@@ -778,8 +778,8 @@ class IndependentActivityController extends Controller
      */
     public function exportIndependentActivity(Request $request, Organization $suborganization, IndependentActivity $independent_activity)
     {
-        //$this->authorize('export', $independent_activity);
-        // pushed cloning of project in background
+        $this->authorize('export', $independent_activity);
+        // pushed cloning of activity in background
         ExportIndependentActivity::dispatch(auth()->user(), $independent_activity)->delay(now()->addSecond());
 
         return response([
@@ -791,7 +791,8 @@ class IndependentActivityController extends Controller
     /**
      * Import Independent Activity
      *
-     * Import the specified independenta ctivity of a user.
+     * Import the specified independent activity of a user.
+     * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @param independent_activity 
      * @response {
@@ -803,7 +804,7 @@ class IndependentActivityController extends Controller
 
     public function importIndependentActivity(IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest, Organization $suborganization)
     {
-        //$this->authorize('import', $independent_activity);
+        $this->authorize('import', $independent_activity);
 
         $IndependentActivityUploadImportRequest->validated();
         $path = $IndependentActivityUploadImportRequest->file('independent_activity')->store('public/imports');

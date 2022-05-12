@@ -509,8 +509,6 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         $activity_dir_name = 'independent_activity-'.uniqid();
 
-        // Add Grade level of first activity on project manifest
-        $organizationName = Organization::where('id', $independent_activity->organization_id)->value('name');
         $activityTitle = str_replace('/', '-', $independent_activity->title);
 
         $activity_json_file = '/exports/' . $activity_dir_name .  '/activity.json';
@@ -590,10 +588,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         // Zip archive will be created only after closing object
         $zip->close();
-        // Remove project folder after creation of zip
+        // Remove independent activity folder after creation of zip
         $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
 
-        // Remove project folder after creation of zip
+        // Remove independent activity folder after creation of zip
         $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
 
         return storage_path('app/public/exports/' . $fileName);
@@ -792,7 +790,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                         $return_res = [
                             "success"=> true,
-                            "message" => "Project has been imported successfully",
+                            "message" => "Independent Activity has been imported successfully",
                             "project_id" => $cloned_activity->id
                         ];
                         return json_encode($return_res);
