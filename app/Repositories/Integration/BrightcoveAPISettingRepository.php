@@ -30,7 +30,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
     }
 
     /**
-     * To get list of brightcove account/setting
+     * To get list of brightcove account/setting   
      * @param  integer $suborganization
      * @return mixed
      * @throws GeneralException
@@ -138,31 +138,26 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
     {
         $title = [];
         foreach($videos as $video){
-            if($video->activities->isNotEmpty()){
-                $user = User::where('id', $video->activities->pluck("user_id")->implode(","))->first();
-                array_push($title, (object)["title"=> $video->activities->pluck("title")->implode(","),
-                    "user_id" => $user->first_name." ".$user->last_name ]);
-            }
+            $user = User::where('id', $video->activities[0]['user_id'])->first();
+            array_push($title, (object)["title"=> $video->activities[0]['title'], 
+                "user_name" => $user->first_name." ".$user->last_name ]);
         }
         return $title;
     }
 
-    /**
-     * Delete Brightcove Api setting
-     * @param $id
-     * return mixed
-     * @throws GeneralException
-     */
-    public function destroy($id)
+    public function destroy($id, $orgId)
     {
         try {
-            $videos = H5pBrightCoveVideoContents::with(['activities'])->whereHas('activities')->where('brightcove_api_setting_id', $id)->get();
+            $videos = H5pBrightCoveVideoContents::with('activities')->whereHas('activities', function ($query) use($orgId) {
+                    $query->where('organization_id', $orgId)
+                          ->where('user_id', '>', 0);
+                })->where('brightcove_api_setting_id', $id)->get();
             if($videos->isNotEmpty()){
                 $title = $this->getTitleList($videos);
                 if($title !== null){
                     $deleteMessage = "";
                     foreach($title as $videoTitle){
-                        $deleteMessage .= "'".$videoTitle->title."'".' created by '."'".$videoTitle->user_id."'. ";
+                        $deleteMessage .= "'".$videoTitle->title."'".' created by '."'".$videoTitle->user_name."'. ";
                     }
                     throw new GeneralException("Cannot delete! This API settings has following Videos: ".$deleteMessage);
                 }
@@ -215,7 +210,7 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
 
     /**
      * To get record by setting id
-     * @param $id
+     * @param integer $suborganization, $id
      * @return mixed
      * @throws GeneralException
      */

@@ -339,6 +339,15 @@ class H5pController extends Controller
         }
 
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+        
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+            $activity->brightcoveData = $brightcoveData;
+        }
+        
         return response([
             'h5p_activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);
@@ -573,12 +582,11 @@ class H5pController extends Controller
             // Make it possible to disable file extension check
             $core->disableFileCheck = (filter_input(INPUT_POST, 'h5p_disable_file_check', FILTER_VALIDATE_BOOLEAN) ? TRUE : FALSE);
         }
-
         // Move so core can validate the file extension.
+        // dd($_FILES['h5p_file']);
         rename($_FILES['h5p_file']['tmp_name'], $interface->getUploadedH5pPath());
-
+       
         $skipContent = ($content === NULL);
-
         if ($validator->isValidPackage($skipContent, $only_upgrade)) {
             $tmpDir = $interface->getUploadedH5pFolderPath();
 

@@ -25,6 +25,9 @@ Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail
 Route::post('reset-password', 'Auth\ResetPasswordController@resetPass');
 Route::post('verify-email', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('verify-email/resend', 'Auth\VerificationController@resendEmail')->name('verification.resend');
+Route::get('users/notifications/{notification}/download-export/', 'Api\V1\UserController@downloadExport');
+Route::post('ckeditor/uploadFile/', 'Api\V1\CkEditorFileManagerController@uploadFile');
+Route::get('ckeditor/browseFiles/', 'Api\V1\CkEditorFileManagerController@browseFiles');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 
@@ -49,7 +52,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/notifications', 'UserController@listNotifications');
         Route::get('users/notifications/export-list', 'UserController@exportProjectList');
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
-        Route::get('users/notifications/{notification}/download-export/', 'UserController@downloadExport');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
         Route::post('users/search', 'UserController@getAllUsers');
@@ -104,7 +106,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/share', 'ProjectController@share');
         Route::post('suborganization/{suborganization}/projects/{project}/clone', 'ProjectController@clone');
         Route::post('suborganization/{suborganization}/projects/{project}/export', 'ProjectController@exportProject');
-        Route::post('suborganization/{suborganization}/teams/{team}/export-projects-to-noovo', 'TeamController@exportProjecttoNoovo');
+        Route::post('suborganization/{suborganization}/teams/{team}/projects/{project}/export-projects-to-noovo', 'TeamController@exportProjecttoNoovo');
         Route::post('suborganization/{suborganization}/projects/{project}/export-noovo', 'ProjectController@exportNoovoProject');
         Route::post('suborganization/{suborganization}/projects/import', 'ProjectController@importProject');
 
@@ -113,7 +115,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
         Route::apiResource('suborganization.projects', 'ProjectController');
-        
+
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
         Route::apiResource('projects.playlists', 'PlaylistController');
@@ -139,13 +141,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
         Route::apiResource('playlists.activities', 'ActivityController');
 
-        Route::get('activity-layouts', 'ActivityItemController@activityLayouts');
+        Route::apiResource('suborganizations/{suborganization}/activity-layouts', 'ActivityLayoutController');
         Route::post('get-whiteboard', 'WhiteboardController@getWhiteboard');
 
         Route::get('activity-types/{activityType}/items', 'ActivityTypeController@items');
-        Route::apiResource('activity-types', 'ActivityTypeController');
+        Route::apiResource('suborganizations/{suborganization}/activity-types', 'ActivityTypeController');
 
-        Route::apiResource('activity-items', 'ActivityItemController');
+        Route::apiResource('suborganizations/{suborganization}/activity-items', 'ActivityItemController');
 
         Route::get('users/{user}/metrics', 'UserMetricsController@show')->name('metrics.user');
         Route::get('users/{user}/membership', 'UserMembershipController@show')->name('membership.show');
@@ -174,6 +176,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/content-user-data', 'H5pController@contentUserData')->name('h5p.ajax.content-user-data');
             Route::any('h5p-result/my', '\Djoudi\LaravelH5p\Http\Controllers\H5PResultController@my')->name("h5p.result.my");
             Route::any('ajax/reader/finish', 'MobileAppAjaxController@finish')->name('h5p.ajax.reader-finish');
+            Route::any('ajax/reader/getScore', 'MobileAppAjaxController@getScores')->name('h5p.ajax.reader-getScore');
         });
 
         // Elasticsearch
@@ -191,6 +194,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganizations/{suborganization}/roles', 'SuborganizationController@getRoles')->name('suborganizations.get-roles');
         Route::get('suborganizations/{suborganization}/role/{roleId}', 'SuborganizationController@getRoleDetail')->name('suborganizations.get-role-detail');
         Route::post('suborganizations/{suborganization}/upload-thumb', 'SuborganizationController@uploadThumb');
+        Route::post('suborganizations/{suborganization}/upload-favicon', 'SuborganizationController@uploadFavicon');
         Route::get('suborganizations/{suborganization}/member-options', 'SuborganizationController@showMemberOptions')->name('suborganizations.member-options');
         Route::get('suborganizations/{suborganization}/users', 'SuborganizationController@getUsers')->name('suborganizations.get-users');
         Route::post('suborganizations/{suborganization}/add-user', 'SuborganizationController@addUser')->name('suborganizations.add-user');
@@ -204,6 +208,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             'index'
         ]);
         Route::get('suborganizations/{suborganization}/index', 'SuborganizationController@index')->name('suborganizations.index');
+        Route::get('suborganizations/{suborganization}/media-sources', 'SuborganizationController@organizationMediaSource')->name('organization-media-sources');
+        Route::put('suborganizations/{suborganization}/update-media-sources', 'SuborganizationController@updateMediaSource')->name('update-media-sources');
+        Route::get('media-sources', 'SuborganizationController@mediaSources')->name('media-sources');
 
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
@@ -229,9 +236,17 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('queue-monitor/jobs/forget/{job}', 'QueueMonitorController@forgetJob');
         Route::apiResource('queue-monitor', 'QueueMonitorController');
         // activity items
-        Route::get('get-activity-items', 'ActivityItemController@getItems');
+        Route::get('suborganizations/{suborganization}/get-activity-items', 'ActivityItemController@getItems');
         Route::post('activity-types/upload-thumb', 'ActivityTypeController@uploadImage');
         Route::post('activity-items/upload-thumb', 'ActivityItemController@uploadImage');
+        Route::post('activity-layouts/upload-thumb', 'ActivityLayoutController@uploadImage');
+        Route::post('activity-types/upload-css', 'ActivityTypeController@uploadCss');
+        // subjects
+        Route::apiResource('suborganizations/{suborganization}/subjects', 'SubjectController');
+        // education levels
+        Route::apiResource('suborganizations/{suborganization}/education-levels', 'EducationLevelController');
+        // author tags
+        Route::apiResource('suborganizations/{suborganization}/author-tags', 'AuthorTagController');
         /*********************** ENDED NEW ADMIN PANEL ROUTES ************************/
 
         // Permissions
@@ -281,7 +296,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // default Sso Integration Setting
         Route::apiResource('organizations/{organization}/default-sso-settings', 'DefaultSsoIntegrationSettingsController');
         Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
-        Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
     // public route for get user's shared projects
@@ -301,6 +315,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
     Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
+    Route::get('go/lms/teams', 'CurrikiGo\LmsController@teams');
+    Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments
