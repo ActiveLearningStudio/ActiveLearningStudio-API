@@ -26,6 +26,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
 use App\Models\Organization;
+use App\Jobs\ExportIndependentActivity;
+use App\Jobs\ImportIndependentActivity;
+use App\Http\Requests\V1\IndependentActivityUploadImportRequest;
 
 /**
  * @group 5. Independent Activity
@@ -753,6 +756,64 @@ class IndependentActivityController extends Controller
         return response([
             'h5p' => $h5p_data,
             'activity' => new IndependentActivityResource($independent_activity),
+        ], 200);
+    }
+
+    /**
+     * Export Independent Activity
+     *
+     * Export the specified activity of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam independent_activity required The Id of a independent_activity Example: 1
+     *
+     * @response {
+     *   "message": "Your request to export independent Activity [title] has been received and is being processed."
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param IndependentActivity $independent_activity
+     * @return Response
+     */
+    public function exportIndependentActivity(Request $request, Organization $suborganization, IndependentActivity $independent_activity)
+    {
+        $this->authorize('export', $independent_activity);
+        // pushed cloning of activity in background
+        ExportIndependentActivity::dispatch(auth()->user(), $independent_activity)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to export independent Activity [$independent_activity->title] has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Import Independent Activity
+     *
+     * Import the specified independent activity of a user.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @param independent_activity 
+     * @response {
+     *   "message": "Your request to import independent activity has been received and is being processed."
+     * }
+     *
+     * @return Response
+     */
+
+    public function importIndependentActivity(IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest, Organization $suborganization)
+    {
+        $this->authorize('import', $independent_activity);
+
+        $IndependentActivityUploadImportRequest->validated();
+        $path = $IndependentActivityUploadImportRequest->file('independent_activity')->store('public/imports');
+
+        ImportIndependentActivity::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to import independent activity has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
 }

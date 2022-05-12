@@ -102,6 +102,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('independent-activities/{independent_activity}/remove-share', 'IndependentActivityController@removeShare');
         Route::get('suborganization/{suborganization}/independent-activities/{independent_activity}/search-preview', 'IndependentActivityController@searchPreview');
         Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/clone', 'IndependentActivityController@clone');
+        Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/export', 'IndependentActivityController@exportIndependentActivity');
+        Route::post('suborganization/{suborganization}/independent-activities/import', 'IndependentActivityController@importIndependentActivity');
 
         //Projects
         Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
