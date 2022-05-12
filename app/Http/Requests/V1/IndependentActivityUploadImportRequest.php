@@ -25,7 +25,7 @@ class IndependentActivityUploadImportRequest extends FormRequest
     {
        
         return [
-            'activity' => 'required|mimes:zip',
+            'independent_activity' => 'required|mimes:zip',
         ];
     }
 }

@@ -13,7 +13,7 @@ use App\User;
 use App\Notifications\ActivityExportNotification;
 
 
-class exportIndependentActivity implements ShouldQueue
+class ExportIndependentActivity implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

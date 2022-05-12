@@ -20,17 +20,17 @@ class ActivityImportNotification extends Notification
     /**
      * @var string
      */
-    public $projectName;
+    public $activityTitle;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($userName, $projectName)
+    public function __construct($userName, $activityTitle)
     {
         $this->userName = $userName;
-        $this->projectName = $projectName;
+        $this->activityTitle = $activityTitle;
     }
 
     /**
@@ -54,8 +54,7 @@ class ActivityImportNotification extends Notification
     {
         return (new MailMessage)
                     ->greeting('Hello '. $this->userName . '!')
-                    ->line('Your import of Activity ['.$this->projectName.'] has been completed. Please log back into <a href="'.url('/').'">CurrikiStudio</a> and navigate to My Projects to access your shiny new project!')
-                    
+                    ->line('Your import of Activity ['.$this->activityTitle.'] has been completed. Please log back into <a href="'.url('/').'">CurrikiStudio</a> and navigate to My Projects to access your shiny new project!')
                     ->line('Thank you for using our application!');
     }
 
@@ -68,7 +67,7 @@ class ActivityImportNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'message' => "Activity [$this->projectName] has been imported successfully.",
+            'message' => "Activity [$this->activityTitle] has been imported successfully.",
         ];
     }
 

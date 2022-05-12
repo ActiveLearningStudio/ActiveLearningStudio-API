@@ -507,29 +507,29 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     {
         $zip = new ZipArchive;
 
-        $project_dir_name = 'independent_activity-'.uniqid();
+        $activity_dir_name = 'independent_activity-'.uniqid();
 
         // Add Grade level of first activity on project manifest
         $organizationName = Organization::where('id', $independent_activity->organization_id)->value('name');
         $activityTitle = str_replace('/', '-', $independent_activity->title);
 
-        $activity_json_file = '/exports/' . $project_dir_name .  '/activity.json';
+        $activity_json_file = '/exports/' . $activity_dir_name .  '/activity.json';
         Storage::disk('public')->put($activity_json_file, $independent_activity);
 
         // Export Subject 
-        $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/activity_subject.json';
+        $activitySubjectJsonFile = '/exports/' . $activity_dir_name . '/activity_subject.json';
         
         Storage::disk('public')->put($activitySubjectJsonFile, $independent_activity->subjects);
 
         // Export Education level
 
-        $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/activity_education_level.json';
+        $activityEducationLevelJsonFile = '/exports/' . $activity_dir_name . '/activity_education_level.json';
         
         Storage::disk('public')->put($activityEducationLevelJsonFile, $independent_activity->educationLevels);
 
         // Export Author
 
-        $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/activity_author_tag.json';
+        $activityAuthorTagJsonFile = '/exports/' . $activity_dir_name . '/activity_author_tag.json';
         
         Storage::disk('public')->put($activityAuthorTagJsonFile, $independent_activity->authorTags);
 
@@ -544,30 +544,27 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                                                                 ->where('id', $decoded_content['library_id'])
                                                                 ->value('minor_version');
 
-        $content_json_file = '/exports/'.$project_dir_name . '/' . $independent_activity->h5p_content_id . '.json';
+        $content_json_file = '/exports/'.$activity_dir_name . '/' . $independent_activity->h5p_content_id . '.json';
         Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
 
         if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
             $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $independent_activity->thumb_url)));
             $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
             if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
-                $activity_thumbanil_file = '/exports/' . $project_dir_name . '/' . basename($activity_thumbanil);
+                $activity_thumbanil_file = '/exports/' . $activity_dir_name . '/' . basename($activity_thumbanil);
                 Storage::disk('public')->put($activity_thumbanil_file, file_get_contents($activity_thumbanil));
             }
         }
-        $exported_content_dir_path = 'app/public/exports/' . $project_dir_name . '/' . $independent_activity->h5p_content_id;
+        $exported_content_dir_path = 'app/public/exports/' . $activity_dir_name . '/' . $independent_activity->h5p_content_id;
         $exported_content_dir = storage_path($exported_content_dir_path);
         \File::copyDirectory( storage_path('app/public/h5p/content/'.$independent_activity->h5p_content_id), $exported_content_dir );
     
-
-        
-
         // Get real path for our folder
-        $rootPath = storage_path('app/public/exports/'.$project_dir_name);
+        $rootPath = storage_path('app/public/exports/'.$activity_dir_name);
 
         // Initialize archive object
         $zip = new ZipArchive();
-        $fileName = $project_dir_name.'.zip';
+        $fileName = $activity_dir_name.'.zip';
         $zip->open(storage_path('app/public/exports/'.$fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Create recursive directory iterator
@@ -594,10 +591,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         // Zip archive will be created only after closing object
         $zip->close();
         // Remove project folder after creation of zip
-        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name));
+        $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
 
         // Remove project folder after creation of zip
-        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name));
+        $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
 
         return storage_path('app/public/exports/' . $fileName);
     }
@@ -681,10 +678,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                                 storage_path($extracted_folder . '/' . $old_content_id),
                                 storage_path('app/public/h5p/content/'.$new_content_id)
                             );
-
-
+                    
                     // Move Content to editor Folder
-
                     $destinationEditorFolderPath = $extracted_folder . $old_content_id;
 
                     // Move editor images

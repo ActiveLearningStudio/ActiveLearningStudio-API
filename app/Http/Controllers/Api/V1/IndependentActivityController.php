@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
 use App\Models\Organization;
-use App\Jobs\exportIndependentActivity;
+use App\Jobs\ExportIndependentActivity;
 use App\Jobs\ImportIndependentActivity;
 use App\Http\Requests\V1\IndependentActivityUploadImportRequest;
 
@@ -765,7 +765,7 @@ class IndependentActivityController extends Controller
      * Export the specified activity of a user.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam activity required The Id of a activity Example: 1
+     * @urlParam independent_activity required The Id of a independent_activity Example: 1
      *
      * @response {
      *   "message": "Your request to export independent Activity [title] has been received and is being processed."
@@ -778,9 +778,9 @@ class IndependentActivityController extends Controller
      */
     public function exportIndependentActivity(Request $request, Organization $suborganization, IndependentActivity $independent_activity)
     {
-        $this->authorize('export', $independent_activity);
+        //$this->authorize('export', $independent_activity);
         // pushed cloning of project in background
-        exportIndependentActivity::dispatch(auth()->user(), $independent_activity)->delay(now()->addSecond());
+        ExportIndependentActivity::dispatch(auth()->user(), $independent_activity)->delay(now()->addSecond());
 
         return response([
             'message' =>  "Your request to export independent Activity [$independent_activity->title] has been received and is being processed. <br>
@@ -789,30 +789,24 @@ class IndependentActivityController extends Controller
     }
 
     /**
-     * Import Activity
+     * Import Independent Activity
      *
-     * Import the specified activity of a user.
-     *
-     * @urlParam IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest 
-     * 
+     * Import the specified independenta ctivity of a user.
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     *
+     * @param independent_activity 
      * @response {
-     *   "message": "Your request to import project has been received and is being processed."
+     *   "message": "Your request to import independent activity has been received and is being processed."
      * }
      *
-     * @param IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest
-     * @param Organization $suborganization
-     * @param Project $project
      * @return Response
      */
 
     public function importIndependentActivity(IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest, Organization $suborganization)
     {
-        $this->authorize('import', $independent_activity);
+        //$this->authorize('import', $independent_activity);
 
         $IndependentActivityUploadImportRequest->validated();
-        $path = $IndependentActivityUploadImportRequest->file('activity')->store('public/imports');
+        $path = $IndependentActivityUploadImportRequest->file('independent_activity')->store('public/imports');
 
         ImportIndependentActivity::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
 

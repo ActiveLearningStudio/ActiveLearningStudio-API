@@ -27,7 +27,7 @@ class ActivityExportNotification extends Notification
     /**
      * @var string
      */
-    public $projectName;
+    public $activityTitle;
 
     /**
      * Create a new notification instance.
@@ -35,11 +35,11 @@ class ActivityExportNotification extends Notification
      *
      * @return void
      */
-    public function __construct($path, $userName, $projectName)
+    public function __construct($path, $userName, $activityTitle)
     {
         $this->path = basename($path);
         $this->userName = $userName;
-        $this->projectName = $projectName;
+        $this->activityTitle = $activityTitle;
     }
 
     /**
@@ -78,11 +78,11 @@ class ActivityExportNotification extends Notification
     {
         $file_path = url(Storage::url('exports/' . basename($this->path)));
 
-        $message = "Activity [$this->projectName] has been exported successfully. 
+        $message = "Activity [$this->activityTitle] has been exported successfully. 
                     Please <a href='$file_path' target='_blank'>Click Here</a> to download the exported file";
         return [
             'message' => $message,
-            'project' => $this->projectName,
+            'project' => $this->activityTitle,
             'link' => $file_path,
             'file_name' => basename($this->path),
         ];

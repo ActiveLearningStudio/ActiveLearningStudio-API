@@ -8,7 +8,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
-use App\Models\Project;
 use App\User;
 use App\Notifications\ActivityImportNotification;
 
@@ -51,9 +50,9 @@ class ImportIndependentActivity implements ShouldQueue
     public function handle(IndependentActivityRepositoryInterface $independentActivityRepository)
     {
         try {
-            $projectName = $independentActivityRepository->importIndependentActivity($this->user, $this->path, $this->organization_id);
+            $activityTitle = $independentActivityRepository->importIndependentActivity($this->user, $this->path, $this->organization_id);
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
-            $this->user->notify(new ActivityImportNotification($userName, $projectName));
+            $this->user->notify(new ActivityImportNotification($userName, $activityTitle));
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }
