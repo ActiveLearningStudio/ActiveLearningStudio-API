@@ -976,13 +976,20 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         // assign activity items
         $parentActivityItems = ActivityItem::where('organization_id', $parent_id)->get();
 
+        $newActivityTypes = DB::table('activity_types')->whereOrganizationId($organization_id)->pluck('id', 'title');
+        $swapActivityTypes = DB::table('activity_types')->whereOrganizationId($parent_id)->pluck('title', 'id');
+
         foreach ($parentActivityItems as $parentActivityItem) {
+
+            $activityTypeName = $swapActivityTypes[$parentActivityItem->activity_type_id];
+            $activityTypeId = $newActivityTypes[$activityTypeName];
+
             $activityItem = [
                 'title' => $parentActivityItem->title,
                 'order' => $parentActivityItem->order,
                 'image' => $parentActivityItem->image,
                 'description' => $parentActivityItem->description,
-                'activity_type_id' => $parentActivityItem->activity_type_id,
+                'activity_type_id' => $activityTypeId,
                 'type' => $parentActivityItem->type,
                 'h5pLib' => $parentActivityItem->h5pLib,
                 'created_at' => now(),
