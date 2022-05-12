@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\IndependentActivityCreateRequest;
 use App\Http\Requests\V1\IndependentActivityEditRequest;
+use App\Http\Requests\V1\OrganizationIndependentActivityRequest;
 use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\IndependentActivityDetailResource;
 use App\Http\Resources\V1\H5pIndependentActivityResource;
@@ -75,9 +76,40 @@ class IndependentActivityController extends Controller
     {
         $this->authorize('viewAny', [IndependentActivity::class, $suborganization]);
 
+        $authenticated_user = auth()->user();
+
         return response([
-            'independent-activities' => IndependentActivityResource::collection($suborganization->independentActivities),
+            'independent-activities' => IndependentActivityResource::collection(
+                $authenticated_user->independentActivities()
+                                    ->where('organization_id', $suborganization->id)
+                                    ->orderBy('order', 'asc')
+                                    ->get()
+            ),
         ], 200);
+    }
+
+    /**
+     * Get All Organization Independent Activities
+     *
+     * Get a list of the independent activities of an organization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam query string Query to search independent activity against Example: Video
+     * @bodyParam size integer size to show per page records Example: 10
+     * @bodyParam order_by_column string to sort data with specific column Example: title
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     *
+     * @responseFile responses/independent-activity/independent-activities.json
+     *
+     * @param OrganizationIndependentActivityRequest $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function getOrgIndependentActivities(OrganizationIndependentActivityRequest $request, Organization $suborganization)
+    {
+        $this->authorize('viewAny', [IndependentActivity::class, $suborganization]);
+
+        return  IndependentActivityResource::collection($this->independentActivityRepository->getAll($request->all(), $suborganization));
     }
 
     /**

@@ -416,6 +416,86 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     }
 
     /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getAll($data, $suborganization)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting independent activity listing with search
+        if ($q) {
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('title', 'iLIKE', '%' .$q. '%')
+                    ->orWhereHas('user', function ($qry) use ($q) {
+                        $qry->where('email', 'iLIKE', '%' .$q. '%');
+                    });
+            });
+        }
+
+        // if all indexed independent activities requested
+        if (isset($data['indexing']) && $data['indexing'] === '0') {
+            $query = $query->whereIn('indexing', [1, 2, 3]);
+        }
+
+        // if specific index independent activities requested
+        if (isset($data['indexing']) && $data['indexing'] !== '0') {
+            $query = $query->where('indexing', $data['indexing']);
+        }
+
+        // filter by author
+        if (isset($data['author_id'])) {
+            $query = $query->where(function($qry) use ($data) {
+                        $qry->WhereHas('user', function ($qry) use ($data) {
+                            $qry->where('id', $data['author_id']);
+                        });
+                     });
+        }
+
+        // filter by shared status
+        if (isset($data['shared'])) {
+            $query = $query->where('shared', $data['shared']);
+        }
+
+        // filter by date created
+        if (isset($data['created_from']) && isset($data['created_to'])) {
+            $query = $query->whereBetween('created_at', [$data['created_from'], $data['created_to']]);
+        }
+
+        if (isset($data['created_from']) && !isset($data['created_to'])) {
+            $query = $query->whereDate('created_at', '>=', $data['created_from']);
+        }
+
+        if (isset($data['created_to']) && !isset($data['created_from'])) {
+            $query = $query->whereDate('created_to', '<=', $data['created_to']);
+        }
+
+        // filter by date updated
+        if (isset($data['updated_from']) && isset($data['updated_to'])) {
+            $query = $query->whereBetween('updated_at', [$data['updated_from'], $data['updated_to']]);
+        }
+
+        if (isset($data['updated_from']) && !isset($data['updated_to'])) {
+            $query = $query->whereDate('updated_at', '>=', $data['updated_from']);
+        }
+
+        if (isset($data['updated_to']) && !isset($data['updated_from'])) {
+            $query = $query->whereDate('updated_at', '<=', $data['updated_to']);
+        }
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
+    }
+
+     /**
      * To export project and associated playlists
      *
      * @param $authUser

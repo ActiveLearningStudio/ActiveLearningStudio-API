@@ -55,6 +55,13 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
     public function getUserIndependentActivityIdsInOrganization($authenticatedUser, $organization);
 
     /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getAll($data, $suborganization);
+
+    /**
      * To export independent activi and associated playlists
      *
      * @param $authUser
