@@ -76,6 +76,10 @@ COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
+RUN echo "192.168.100.1 learn.noovo.co" >> /etc/hosts
+RUN echo "192.168.100.1 lms.noovo.co" >> /etc/hosts
+RUN echo "192.168.100.1 tsugi.noovo.co" >> /etc/hosts
+RUN echo "192.168.100.1 trax.noovo.co" >> /etc/hosts
 
 COPY ./entrypoint.map.sh ./
 RUN chmod +x /var/www/html/entrypoint.map.sh
