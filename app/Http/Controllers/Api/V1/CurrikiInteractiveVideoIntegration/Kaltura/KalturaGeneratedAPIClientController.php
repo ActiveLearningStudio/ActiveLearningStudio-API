@@ -35,7 +35,8 @@ class KalturaGeneratedAPIClientController extends Controller
      *
      * @param KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF, KalturaFilterPager $kFP
      */
-    public function __construct(KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF, KalturaFilterPager $kFP, LtiToolSettingRepository $ltiToolSettingRepository)
+    public function __construct(KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF,
+        KalturaFilterPager $kFP, LtiToolSettingRepository $ltiToolSettingRepository)
     {
         $this->kalturaConfiguration = $kC;
         $this->kalturaClient = $kClient;
@@ -45,10 +46,10 @@ class KalturaGeneratedAPIClientController extends Controller
     }
 
     /**
-     * Method       getMediaEntryList  
+     * Method       getMediaEntryList
      * Description  Use Kaltura Session to get the api token
      * Purpose      To get those media list, which do not have any 'Entitlement Enforcement/Permission Category'
-     * Usage        Inside H5p Curriki Interactive Video 
+     * Usage        Inside H5p Curriki Interactive Video
      * @param       Request $request
      * @return      string token
      * @throws GeneralException
@@ -62,7 +63,7 @@ class KalturaGeneratedAPIClientController extends Controller
           'searchText'
       ]);
       $auth = \Auth::user();
-      if ( $auth && $auth->id && isset($getParam['organization_id']) && $getParam['organization_id'] > 0 ) {
+      if ($auth && $auth->id && isset($getParam['organization_id']) && $getParam['organization_id'] > 0 ) {
         $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserOrgAndToolType($auth->id, $getParam['organization_id'], 'kaltura');
         // Credentials For Kaltura Session
         if ($ltiRowResult) {
@@ -79,7 +80,7 @@ class KalturaGeneratedAPIClientController extends Controller
         $expiry = config('kaltura.expiry');
         $privileges = '*';
         // $sessionType mean Kaltura Session Type. It may be 0 or 2, 0 for user and 2 for admin (https://www.kaltura.com/api_v3/testmeDoc/enums/KalturaSessionType.html)
-        $sessionType = config('kaltura.session_type'); 
+        $sessionType = config('kaltura.session_type');
 
         $pageSize = $getParam['pageSize'];
         $pageIndex = $getParam['pageIndex'];
@@ -112,5 +113,5 @@ class KalturaGeneratedAPIClientController extends Controller
       }
       throw new GeneralException('Unable to get the record. Require field organization_id, pageSize, pageIndex, searchText!');
     }
-    
+
 }
