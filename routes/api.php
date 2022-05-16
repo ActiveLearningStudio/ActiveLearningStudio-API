@@ -232,6 +232,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // independent-activities
         Route::get('suborganizations/{suborganization}/independent-activities', 'IndependentActivityController@getOrgIndependentActivities')->name('suborganizations.get-independent-activities');
+        Route::get('independent-activities/{independent_activity}/indexes/{index}', 'IndependentActivityController@updateIndex');
 
         // lms-settings
         Route::apiResource('suborganizations/{suborganization}/lms-settings', 'LmsSettingsController');

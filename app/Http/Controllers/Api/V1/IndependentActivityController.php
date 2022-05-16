@@ -816,5 +816,32 @@ class IndependentActivityController extends Controller
                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
-}
 
+    /**
+     * Independent Activity Indexing
+     *
+     * Modify the index value of an independent activity.
+     *
+     * @urlParam independent_activity required The Id of a independent_activity Example: 1
+     * @urlParam index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
+     *
+     * @response {
+     *   "message": "Library status changed successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Invalid index value provided."
+     *   ]
+     * }
+     *
+     * @param IndependentActivity $independent_activity
+     * @param $index
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function updateIndex(IndependentActivity $independent_activity, $index)
+    {
+        return response(['message' => $this->independentActivityRepository->updateIndex($independent_activity, $index)], 200);
+    }
+}
