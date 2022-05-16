@@ -169,8 +169,8 @@ class IndependentActivityPolicy
      * @param IndependentActivity $independentActivity
      * @return mixed
      */
-    public function import(User $user, IndependentActivity $independentActivity)
+    public function import(User $user, Organization $organization)
     {
-        return $user->hasPermissionTo('independent-activity:import', $independentActivity->organization);
+        return $user->hasPermissionTo('independent-activity:import', $organization);
     }
 }
