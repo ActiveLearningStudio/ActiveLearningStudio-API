@@ -815,4 +815,20 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             throw new GeneralException('Unable to import the activity, please try again later!');
         }
     }
+
+    /**
+     * Update Indexes for independent activities and related models
+     * @param $independentActivity
+     * @param $index
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateIndex($independentActivity, $index): string
+    {
+        if (! isset($this->model::$indexing[$index])){
+            throw new GeneralException('Invalid Library value provided.');
+        }
+        $independentActivity->update(['indexing' => $index]);
+        return 'Library status changed successfully!';
+    }
 }

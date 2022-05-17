@@ -80,4 +80,13 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * @throws GeneralException
      */
     public function importIndependentActivity($authUser, $path, $suborganization_id, $method_source="API");
+
+    /**
+     * Update Indexes for independent activities and related models
+     * @param $independentActivity
+     * @param $index
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateIndex($independentActivity, $index);
 }
