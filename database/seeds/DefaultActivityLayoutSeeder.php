@@ -65,7 +65,7 @@ class DefaultActivityLayoutSeeder extends Seeder
                     'type' => 'h5p',
                     'h5pLib' => 'H5P.Column 1.13',
                     'order' => 0,
-                    'image' => $storageURL . $InteractiveVideoImg,
+                    'image' => $storageURL . $columnLayoutImg,
                 ],
                 [
                     'organization_id' => $organization,
@@ -74,7 +74,7 @@ class DefaultActivityLayoutSeeder extends Seeder
                     'type' => 'h5p',
                     'h5pLib' => 'H5P.InteractiveBook 1.3',
                     'order' => 0,
-                    'image' => $storageURL . $InteractiveVideoImg,
+                    'image' => $storageURL . $interactiveBookImg,
                 ],
                 [
                     'organization_id' => $organization,
@@ -83,7 +83,7 @@ class DefaultActivityLayoutSeeder extends Seeder
                     'type' => 'h5p',
                     'h5pLib' => 'H5P.CoursePresentation 1.22',
                     'order' => 0,
-                    'image' => $storageURL . $InteractiveVideoImg,
+                    'image' => $storageURL . $coursePresentationImg,
                 ],
                 [
                     'organization_id' => $organization,
@@ -92,7 +92,7 @@ class DefaultActivityLayoutSeeder extends Seeder
                     'type' => 'h5p',
                     'h5pLib' => 'H5P.Questionnaire 1.3',
                     'order' => 0,
-                    'image' => $storageURL . $InteractiveVideoImg,
+                    'image' => $storageURL . $questionnaireImg,
                 ]
             ];
 
