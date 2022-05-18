@@ -16,9 +16,9 @@ class ExportedIndependentActivitiesResource extends JsonResource
      */
     public function toArray($request)
     {
-        if(!isset($this->data['file_name'])) return; // skip if file_name param not exist in table
+        if (!isset($this->data['file_name'])) return; // skip if file_name param not exist in table
 
-        if(!file_exists(storage_path('app/public/exports/' . $this->data['file_name']))) return; // skip if file not exist in directory
+        if (!file_exists(storage_path('app/public/exports/' . $this->data['file_name']))) return; // skip if file not exist in directory
         
         return [
             'id' => $this->id,
