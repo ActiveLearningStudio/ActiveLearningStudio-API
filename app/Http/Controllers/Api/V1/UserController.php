@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\ExportedProjectsResource;
+use App\Http\Resources\V1\ExportedIndependentActivitiesResource;
 use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
 use App\Notifications\NewUserNotification;
@@ -769,8 +770,26 @@ class UserController extends Controller
      */
     public function exportProjectList(Request $request)
     {
-        
         return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all()), 200);
+    }
+    
+
+    /**
+     * Get All User Export list
+     *
+     * Get a list of the users exported project
+     *  
+     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @queryParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     * 
+     * @responseFile responses/notifications/export-notifications.json
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function exportIndependentActivitiesList(Request $request)
+    {
+        return ExportedIndependentActivitiesResource::collection($this->userRepository->getUsersExportIndependentActivitiesList($request->all()), 200);
     }
 
     /**
@@ -822,7 +841,7 @@ class UserController extends Controller
             if ($notification_detail) {
                 $data = $notification_detail->data;
             
-                if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
+                if ($notification_detail->type === "App\Notifications\ProjectExportNotification" || $notification_detail->type === "App\Notifications\ActivityExportNotification") { 
                     if (isset($data['file_name'])) {
                     $file_path = storage_path('app/public/exports/'.$data['file_name']);
                     if (!empty($data['file_name']) && file_exists($file_path)) {
