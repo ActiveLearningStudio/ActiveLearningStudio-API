@@ -28,7 +28,6 @@ class IndependentActivityEditRequest extends FormRequest
             'type' => 'required|string|max:255',
             'content' => 'required|string|max:255',
             'description' => 'string|max:500',
-            'data' => 'required',
             'order' => 'integer|max:2147483647',
             'shared' => 'boolean',
             'h5p_content_id' => 'integer',

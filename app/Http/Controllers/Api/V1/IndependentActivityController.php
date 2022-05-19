@@ -305,8 +305,10 @@ class IndependentActivityController extends Controller
                     $independent_activity->authorTags()->sync($validated['author_tag_id']);
                 }
 
-                // H5P meta is in 'data' index of the payload.
-                $this->update_h5p($validated['data'], $independent_activity->h5p_content_id);
+                if (isset($validated['data'])) {
+                    // H5P meta is in 'data' index of the payload.
+                    $this->update_h5p($validated['data'], $independent_activity->h5p_content_id);
+                }
 
                 $updated_independent_activity = new IndependentActivityResource($this->independentActivityRepository->find($independent_activity->id));
 
