@@ -365,7 +365,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $dataUserIds = implode("','", $data['userIds']);
-            $queryWhere[] = "user_id IN (" . $dataUserIds . ")";
+            $queryWhere[] = "user_id IN ('" . $dataUserIds . "')";
         }
 
         if (isset($data['author']) && !empty($data['author'])) {
