@@ -41,7 +41,7 @@ class SearchRequest extends FormRequest
             'educationLevelIds.*' => 'int|exists:App\Models\EducationLevel,id',
             'authorTagsIds' => 'array',
             'authorTagsIds.*' => 'int|exists:App\Models\AuthorTag,id',
-            'model' => 'in:activities,playlists,projects',
+            'model' => 'in:independent_activities,activities,playlists,projects',
             'sort' => 'in:created_at',
             'order' => 'in:asc,desc',
             'from' => 'integer',
