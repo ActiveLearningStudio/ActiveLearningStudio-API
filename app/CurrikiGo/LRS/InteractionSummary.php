@@ -190,6 +190,9 @@ abstract class InteractionSummary
                 ];
                 $summary['duration'] = xAPIFormatDuration($result->getDuration());
                 $summary['raw-duration'] = xAPIFormatDuration($result->getDuration(), false);
+            } else if(!empty($this->getLibrary()) && $this->getLibrary() == 'PersonalityQuiz' && $result->getDuration()) {
+                $summary['duration'] = xAPIFormatDuration($result->getDuration());
+                $summary['raw-duration'] = xAPIFormatDuration($result->getDuration(), false);
             } else {
                 $summary['score'] = [
                     'raw' => 0,

@@ -25,7 +25,8 @@ class PublishPlaylistRequest extends FormRequest
     {
         return [
             'setting_id' => 'required|exists:lms_settings,id',
-            'counter' => 'sometimes|integer'
+            'counter' => 'sometimes|integer',
+            'publisher_org' => 'int|nullable'
         ];
     }
 }

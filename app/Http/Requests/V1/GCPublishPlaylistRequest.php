@@ -25,7 +25,8 @@ class GCPublishPlaylistRequest extends FormRequest
     {
         return [
             'course_id' => 'string|nullable',
-            'topic_id' => 'string|nullable'
+            'topic_id' => 'string|nullable',
+            'publisher_org' => 'int|nullable'
         ];
     }
 }

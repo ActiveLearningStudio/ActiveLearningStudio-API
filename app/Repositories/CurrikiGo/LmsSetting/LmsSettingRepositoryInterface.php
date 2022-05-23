@@ -15,4 +15,12 @@ interface LmsSettingRepositoryInterface extends EloquentRepositoryInterface
      * @param int $user_id
      */
     public function fetchAllByUserId($user_id);
+    
+    /**
+     * @param integer $projectId
+     * @param string $activityParam
+     * 
+     * @return string
+     */
+    public function getActivityGrade($projectId, $activityParam);
 }

@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\ExportedProjectsResource;
 use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
+use App\Notifications\NewUserNotification;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -232,9 +233,30 @@ class UserController extends Controller
 
         return \DB::transaction(function () use ($suborganization, $data) {
 
-            $user = $this->userRepository->create(Arr::except($data, ['role_id']));
-            $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
+            $userObject = $this->userRepository->findByField('email', $data['email']);
+            if ($userObject) {
+                $user = $this->userRepository->update(Arr::except($data, [
+                                                    'role_id',
+                                                    'email_verified_at',
+                                                    'remember_token',
+                                                    'email',
+                                                    'send_email',
+                                                    'message'
+                                                ]), $userObject->id);
+                $user = $userObject;
+                                                
+            } else {
+                $user = $this->userRepository->create(Arr::except($data, ['role_id']));
+            }
 
+            if (!$suborganization->users()->where('user_id', $user->id)->exists()) {
+                $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
+            } 
+
+            if (isset($data['send_email']) && $data['send_email'] === true) {
+                $user->notify(new NewUserNotification($data['message']));
+            }
+            
             return response([
                 'user' => new UserResource($this->userRepository->find($user->id)),
                 'message' => 'User has been created successfully.',
@@ -785,31 +807,43 @@ class UserController extends Controller
      */
     public function downloadExport(Request $request, $notification_id)
     {
-        $notification_detail = auth()->user()->notifications()->find($notification_id);
-        if ($notification_detail) {
-            $data = $notification_detail->data;
-           
-            if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
-                if (isset($data['file_name'])) {
-                   $file_path = storage_path('app/public/exports/'.$data['file_name']);
-                   if (!empty($data['file_name']) && file_exists($file_path)) {
-                        return response()->download($file_path, basename($file_path)); 
-                   }
-                   return response([
+        $param = $request->get('token');
+        if (empty($param)) {
+            return response([
+                'errors' => ['Authentication Failed'],
+            ], 500);
+        }
+        
+        $user_id = get_user_id_by_token($param);
+        $user = User::find($user_id);
+        if ($user) {
+            $notification_detail = $user->notifications()->find($notification_id);
+            
+            if ($notification_detail) {
+                $data = $notification_detail->data;
+            
+                if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
+                    if (isset($data['file_name'])) {
+                    $file_path = storage_path('app/public/exports/'.$data['file_name']);
+                    if (!empty($data['file_name']) && file_exists($file_path)) {
+                            return response()->download($file_path, basename($file_path)); 
+                    }
+                    return response([
+                            'errors' => ['Link has expired.'],
+                        ], 500);
+                    }
+                    return response([
                         'errors' => ['Link has expired.'],
                     ], 500);
                 }
                 return response([
-                    'errors' => ['Link has expired.'],
+                    'errors' => ['Not an export notification.'],
                 ], 500);
             }
-            return response([
-                'errors' => ['Not an export notification.'],
-            ], 500);
         }
 
         return response([
-            'errors' => ['Notification with provided id does not exists.'],
+            'errors' => ['Not a valid token or user dont exist.'],
         ], 500);
     }
 

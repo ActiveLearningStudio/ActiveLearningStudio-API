@@ -21,10 +21,12 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
     }
 
     /**
+     * @param $suborganization
      * @param $data
+     * 
      * @return mixed
      */
-    public function getAll($data)
+    public function getAll($suborganization, $data)
     {
         $query = $this->model;
         // if specific index projects requested
@@ -33,12 +35,23 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         }
 
         if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
-            return $query->orderBy('order', 'ASC')->get();
+            return $query->where('organization_id', $suborganization->id)->orderBy('order', 'ASC')->get();
         }
-
+        if (isset($data['filter']) && $data['filter'] !== '') {
+            $query = $query->whereHas('activityType', function ($qry) use ($data) {
+                $qry->where('id',$data['filter']);
+            });
+        }
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
-        return $query->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+        if (isset($data['order_by_column']) && $data['order_by_column'] === 'order') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
 
     /**

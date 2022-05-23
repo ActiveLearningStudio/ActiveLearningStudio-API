@@ -69,4 +69,23 @@ class MobileAppAjaxController extends Controller
         \H5PCore::ajaxSuccess();
         exit;
     }
+
+    public function getScores(Request $request){
+        $content_id = $request->input('contentId');
+        $email = $request->input('email');
+        if (!$content_id) {
+            H5PCore::ajaxError('Invalid content');
+            exit;
+        }
+
+        $rs = DB::select("
+            SELECT *
+			FROM mobile_app_h5p_results
+			WHERE email = ?
+			AND content_id = ?
+        ", [$email, $content_id]);
+
+        return response()->json($rs);
+    }
+
 }

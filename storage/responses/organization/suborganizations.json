@@ -10,6 +10,7 @@
             "noovo_client_id": "1",
             "parent": "1",
             "image": "/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
+            "favicon": "/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
             "domain": "currikistudio",
             "self_registration": true,
             "gcr_project_visibility": true,

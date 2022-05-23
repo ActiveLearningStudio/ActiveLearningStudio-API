@@ -35,6 +35,8 @@ use Illuminate\Support\Facades\App;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\H5pOrganizationResource;
 use App\Http\Resources\V1\PlaylistResource;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 
 /**
  * @group 11. Google Classroom
@@ -55,9 +57,10 @@ class GoogleClassroomController extends Controller
      *
      * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository, BrightcoveAPISettingRepository $brightcoveAPISettingRepository)
     {
         $this->userRepository = $userRepository;
+        $this->bcAPISettingRepository = $brightcoveAPISettingRepository;
     }
 
     /**
@@ -189,9 +192,10 @@ class GoogleClassroomController extends Controller
             $data = $copyProjectRequest->validated();
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
+            $publisherOrg = $data['publisher_org'] ?? 0;
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $course = $service->createProjectAsCourse($project, $courseId, $googleClassroomRepository);
+            $course = $service->createProjectAsCourse($project, $courseId, $googleClassroomRepository, $publisherOrg);
 
             return response([
                 'course' => $course,
@@ -507,11 +511,20 @@ class GoogleClassroomController extends Controller
         $user_data = null;
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
 
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
+        }
+
         return response([
             'h5p' => $h5p_data,
             'activity' => new ActivityResource($activity),
             'playlist' => new PlaylistResource($activity->playlist),
             'organization' => new H5pOrganizationResource($activity->playlist->project->organization),
+            'brightcoveData' => $brightcoveData,
         ], 200);
     }
 
@@ -589,10 +602,11 @@ class GoogleClassroomController extends Controller
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
             $topicId = $data['topic_id'] ?? 0;
+            $publisherOrg = $data['publisher_org'] ?? 0;
 
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $publishedPlaylist = $service->publishPlaylistAsTopic($project, $playlist, $courseId, $topicId, $googleClassroomRepository);
+            $publishedPlaylist = $service->publishPlaylistAsTopic($project, $playlist, $courseId, $topicId, $googleClassroomRepository, $publisherOrg);
 
             return response([
                 'course' => $publishedPlaylist,
@@ -653,10 +667,12 @@ class GoogleClassroomController extends Controller
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
             $topicId = $data['topic_id'] ?? 0;
+            $topicId = $data['topic_id'] ?? 0;
+            $publisherOrg = $data['publisher_org'] ?? 0;
 
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $publishedActivity = $service->publishActivityAsAssignment($project, $playlist, $activity, $courseId, $topicId, $googleClassroomRepository);
+            $publishedActivity = $service->publishActivityAsAssignment($project, $playlist, $activity, $courseId, $topicId, $googleClassroomRepository, $publisherOrg);
 
             return response([
                 'course' => $publishedActivity,

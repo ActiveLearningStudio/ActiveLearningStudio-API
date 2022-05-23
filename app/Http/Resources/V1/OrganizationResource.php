@@ -63,6 +63,7 @@ class OrganizationResource extends JsonResource
             'users' =>  UserResource::collection($this->whenLoaded('users')),
             'admins' =>  UserResource::collection($this->whenLoaded('admins')),
             'image' => $this->image,
+            'favicon' => $this->favicon,
             'domain' => $this->domain,
             'self_registration' => $this->self_registration,
             'gcr_project_visibility' => $this->gcr_project_visibility,
