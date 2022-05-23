@@ -59,7 +59,7 @@ class CreateCompositeUniqueIndexOnOrganizationRoleTypesTable extends Migration
                                         AND organization_id = " . $organization_id . "
                                     ");
 
-                                $res = DB::table("organization_user_roles")->insertOrIgnore(
+                                DB::table("organization_user_roles")->insertOrIgnore(
                                     [
                                         'organization_id' => $organization_id,
                                         'user_id' => $userRole->user_id,
