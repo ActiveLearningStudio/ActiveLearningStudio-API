@@ -787,9 +787,9 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function exportIndependentActivitiesList(Request $request)
-    {
-        return ExportedIndependentActivitiesResource::collection($this->userRepository->getUsersExportIndependentActivitiesList($request->all()), 200);
+    public function exportIndependentActivitiesList(Organization $suborganization, Request $request)
+    {      
+        return ExportedIndependentActivitiesResource::collection($this->userRepository->getUsersExportIndependentActivitiesList($suborganization, $request->all()), 200);
     }
 
     /**

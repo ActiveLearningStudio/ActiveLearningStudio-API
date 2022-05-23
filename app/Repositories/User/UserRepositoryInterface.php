@@ -66,5 +66,5 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @param $data
      * @return mixed
      */
-    public function getUsersExportIndependentActivitiesList($data);
+    public function getUsersExportIndependentActivitiesList($suborganization, $data);
 }

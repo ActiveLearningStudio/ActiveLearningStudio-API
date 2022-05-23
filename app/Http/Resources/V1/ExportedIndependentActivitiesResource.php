@@ -27,7 +27,8 @@ class ExportedIndependentActivitiesResource extends JsonResource
             ->format(config('constants.default-date-format')),
             'will_expire_on'=> Carbon::parse($this->created_at)->addDays(config('constants.default-exported-independent-activities-days-limit'))
             ->format(config('constants.default-date-format')),
-            'link'=>isset($this->data['link']) ? $this->data['link'] : ""
+            'link'=>isset($this->data['link']) ? $this->data['link'] : "",
+            'organization_id' => $this->organization_id
 
         ];
     }

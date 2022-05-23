@@ -49,7 +49,7 @@ class ExportIndependentActivity implements ShouldQueue
             $export_file = $independentActivityRepository->exportIndependentActivity($this->user, $this->independent_activity);
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
            \Log::info($export_file);
-            $this->user->notify(new ActivityExportNotification($export_file, $userName, $this->independent_activity->title));
+            $this->user->notify(new ActivityExportNotification($export_file, $userName, $this->independent_activity->title, $this->independent_activity->organization_id));
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }

@@ -219,7 +219,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param $data
      * @return mixed
      */
-    public function getUsersExportIndependentActivitiesList($data)
+    public function getUsersExportIndependentActivitiesList($suborganization, $data)
     {
         $days_limit = isset($data['days_limit']) ? $data['days_limit'] : config('constants.default-exported-independent-activities-days-limit');
         
@@ -237,6 +237,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         
         $query =  $query->where('type', 'App\Notifications\ActivityExportNotification');
         $query =  $query->where('created_at', '>=', $date);
+        $query =  $query->where('organization_id', $suborganization->id);
 
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';

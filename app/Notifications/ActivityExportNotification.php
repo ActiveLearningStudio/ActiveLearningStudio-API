@@ -30,16 +30,22 @@ class ActivityExportNotification extends Notification
     public $activityTitle;
 
     /**
+     * @var string
+     */
+    public $organizationId;
+
+    /**
      * Create a new notification instance.
      * 
      *
      * @return void
      */
-    public function __construct($path, $userName, $activityTitle)
+    public function __construct($path, $userName, $activityTitle, $organizationId)
     {
         $this->path = basename($path);
         $this->userName = $userName;
         $this->activityTitle = $activityTitle;
+        $this->organizationId = $organizationId;
     }
 
     /**
@@ -77,14 +83,19 @@ class ActivityExportNotification extends Notification
     public function toDatabase($notifiable)
     {
         $file_path = url(Storage::url('exports/' . basename($this->path)));
-
+        \Log::info($this->id);
         $message = "Activity [$this->activityTitle] has been exported successfully. 
                     Please <a href='$file_path' target='_blank'>Click Here</a> to download the exported file";
+                    
+        \DB::table('notifications')
+                    ->where('id', $this->id)
+                    ->update(['organization_id' => $this->organizationId]);
         return [
             'message' => $message,
             'project' => $this->activityTitle,
             'link' => $file_path,
             'file_name' => basename($this->path),
+            'organization_id' => $this->organizationId,
         ];
     }
 
