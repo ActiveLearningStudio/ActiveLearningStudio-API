@@ -54,13 +54,12 @@ class CreateCompositeUniqueIndexOnOrganizationRoleTypesTable extends Migration
 
                                 DB::delete("DELETE FROM organization_user_roles
                                         WHERE organization_role_type_id IN(
-                                                                        " . $duplicatedRoleType->id . " ,
-                                                                        " . $originalRoleType[0]->id . "
+                                                                        " . $duplicatedRoleType->id . "
                                                                     )
                                         AND organization_id = " . $organization_id . "
                                     ");
 
-                                DB::table("organization_user_roles")->insertOrIgnore(
+                                $res = DB::table("organization_user_roles")->insertOrIgnore(
                                     [
                                         'organization_id' => $organization_id,
                                         'user_id' => $userRole->user_id,
@@ -83,8 +82,7 @@ class CreateCompositeUniqueIndexOnOrganizationRoleTypesTable extends Migration
 
                                 DB::delete("DELETE FROM organization_role_permissions
                                         WHERE organization_role_type_id IN(
-                                                                        " . $duplicatedRoleType->id . " ,
-                                                                        " . $originalRoleType[0]->id . "
+                                                                        " . $duplicatedRoleType->id . "
                                                                     )
                                     ");
 
