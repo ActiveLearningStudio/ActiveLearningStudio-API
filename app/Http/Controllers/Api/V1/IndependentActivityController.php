@@ -806,7 +806,7 @@ class IndependentActivityController extends Controller
 
     public function importIndependentActivity(IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest, Organization $suborganization)
     {
-        $this->authorize('import', $suborganization);
+        $this->authorize('import', [IndependentActivity::class, $suborganization]);
 
         $IndependentActivityUploadImportRequest->validated();
         $path = $IndependentActivityUploadImportRequest->file('independent_activity')->store('public/imports');
