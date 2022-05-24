@@ -6,15 +6,7 @@ if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage
 
 php /var/www/html/artisan migrate --force
 
-#New Relilc
-nr_enabled=$(cat /var/www/html/.env | grep ENABLE_NR);
-
-
-if [ "$nr_enabled" -eq "1" ]; then
-  sh /var/www/cartx-ecomm/newrelic-php5-9.20.0.310-linux/newrelic-install install
-  sed -i -e "s/newrelic.appname =.*/newrelic.appname = \"\Laravel API\"/" /usr/local/etc/php/conf.d/newrelic.ini
-fi
-
+sh /var/www/newrelic-php5-9.20.0.310-linux/newrelic-install install
 git clone -b develop https://github.com/ActiveLearningStudio/H5P.Distribution.git /tmp/h5p-dist
 
 cp -rf /tmp/h5p-dist/* /var/www/html/storage/app/public/h5p/

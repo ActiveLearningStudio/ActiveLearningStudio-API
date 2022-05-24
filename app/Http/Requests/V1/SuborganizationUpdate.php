@@ -31,7 +31,8 @@ class SuborganizationUpdate extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'domain' => ['required', 'alpha_dash', 'min:2', 'max:255', 'unique:organizations,domain,' . $suborganization->id, new Lowercase],
-            'image' => 'required',
+            'image' => 'required|max:255',
+            'favicon' => 'nullable|max:255',
             'admins' => 'array|exists:App\User,id',
             'users' => 'array',
             'users.*.user_id' => 'required_with:users.*.role_id|integer|exists:App\User,id',
@@ -72,8 +73,8 @@ class SuborganizationUpdate extends FormRequest
     public function messages()
     {
         return [
-            'tos_type.in' => 'tos_type should be Parent, URL OR Content',
-            'privacy_policy_type.in' => 'privacy_policy_type should be Parent, URL OR Content',
+            'tos_type.in' => 'The ToS type should be Parent, URL OR Content',
+            'privacy_policy_type.in' => 'The privacy policy type should be Parent, URL OR Content',
         ];
     }
 }

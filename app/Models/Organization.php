@@ -22,6 +22,7 @@ class Organization extends Model
         'description',
         'domain',
         'image',
+        'favicon',
         'parent_id',
         'self_registration',
         'account_id',
@@ -152,5 +153,13 @@ class Organization extends Model
     public function userRoles()
     {
         return $this->belongsToMany('App\Models\OrganizationRoleType', 'organization_user_roles');
+    }
+
+    /**
+     * Get the media sources for the organization.
+     */
+    public function mediaSources()
+    {
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources');
     }
 }

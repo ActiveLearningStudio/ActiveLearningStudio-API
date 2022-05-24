@@ -8,6 +8,8 @@ use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\User;
+use App\Models\Organization;
+use App\Models\Team;
 use App\Repositories\BaseRepository;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
@@ -23,6 +25,7 @@ use RecursiveDirectoryIterator;
 use Illuminate\Support\Facades\App;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Resources\V1\ActivityResource;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -56,7 +59,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $projectObj = $this->model->find($id);
 
         if (
-            isset($attributes['organization_visibility_type_id']) && 
+            isset($attributes['organization_visibility_type_id']) &&
             $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
         ) {
             $attributes['indexing'] = config('constants.indexing-requested');
@@ -515,7 +518,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->whereDate('updated_at', '<=', $data['updated_to']);
         }
 
-        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->appends(request()->query());
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -621,6 +629,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $zip = new ZipArchive;
 
         $project_dir_name = 'projects-'.uniqid();
+
+        // Add Grade level of first activity on project manifest
+        $organizationName = Organization::where('id', $project->organization_id)->value('name');
+
+
+        $project['org_name'] = $organizationName;
+        $project['grade_name'] = $this->getActivityGrade($project->id, 'educationLevels');
+        $project['subject_name'] = $this->getActivityGrade($project->id, 'subjects');
         Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
 
         $project_thumbanil = "";
@@ -643,9 +659,31 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             ;
             foreach($activites as $activity) {
 
+                $activityTitle = str_replace('/', '-', $activity->title);
+
                 $activity_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                $activity->title . '/' . $activity->title . '.json';
+                                                                $activityTitle . '/' . $activityTitle . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
+
+                // Export Subject 
+                $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activityTitle . '/activity_subject.json';
+                
+                Storage::disk('public')->put($activitySubjectJsonFile, $activity->subjects);
+
+                // Export Education level
+
+                $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activityTitle . '/activity_education_level.json';
+                
+                Storage::disk('public')->put($activityEducationLevelJsonFile, $activity->educationLevels);
+
+                // Export Author
+
+                $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                                                                    $activityTitle . '/activity_author_tag.json';
+                
+                Storage::disk('public')->put($activityAuthorTagJsonFile, $activity->authorTags);
 
                 $decoded_content = json_decode($activity->h5p_content,true);
 
@@ -659,7 +697,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                                                                         ->value('minor_version');
 
                 $content_json_file = '/exports/'.$project_dir_name.'/playlists/' . $title . '/activities/' .
-                                                                $activity->title.'/' . $activity->h5p_content_id . '.json';
+                                                                $activityTitle.'/' . $activity->h5p_content_id . '.json';
                 Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
 
                 if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
@@ -667,12 +705,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
                     if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
                         $activity_thumbanil_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                            $activity->title . '/' . basename($activity_thumbanil);
+                                                                            $activityTitle . '/' . basename($activity_thumbanil);
                         Storage::disk('public')->put($activity_thumbanil_file, file_get_contents($activity_thumbanil));
                     }
                 }
                 $exported_content_dir_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                                    $activity->title . '/' . $activity->h5p_content_id;
+                                                                                    $activityTitle . '/' . $activity->h5p_content_id;
                 $exported_content_dir = storage_path($exported_content_dir_path);
                 \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), $exported_content_dir );
             }
@@ -755,7 +793,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
                     $project = json_decode($project_json,true);
                     unset($project['id'], $project['organization_id'],
-                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at']);
+                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at'], $project['team_id']);
 
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
@@ -787,10 +825,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     if ($method_source !== "command") {
                         unlink($source_file); // Deleted the storage zip file
                     } else {
-                        
+
                         $return_res = [
                             "success"=> true,
-                            "message" => "Project has been imported successfully"
+                            "message" => "Project has been imported successfully",
+                            "project_id" => $cloned_project->id
                         ];
                         return json_encode($return_res);
                     }
@@ -983,6 +1022,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
             $project = $authenticatedUser->projects()->create($data, $role);
 
+            // to attach a project directly from team
+            if (isset($data['team_id'])) {
+                $team = Team::findOrFail($data['team_id']);
+                $team->projects()->attach($project);
+            }
+
             return $project;
         });
     }
@@ -1004,5 +1049,21 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $authenticatedUserOrgProjectIdsString = implode(",", $authenticatedUserOrgProjectIds);
 
         return $authenticatedUserOrgProjectIdsString;
+    }
+
+    private function getActivityGrade($projectId, $activityParam)
+    {
+        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
+        
+        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
+        
+        $resource = new ActivityResource($activity);
+        
+        // Get first Category
+        if ($resource->$activityParam->isNotEmpty()) { 
+            return $resource->$activityParam[0]->name;
+        }
+        return null;
+
     }
 }

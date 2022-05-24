@@ -145,7 +145,7 @@ class BrightcoveAPISettingsController extends Controller
      */
     public function destroy(Organization $suborganization, $id)
     {
-        return response(['message' => $this->bcAPISettingRepository->destroy($id)], 200);
+        return response(['message' => $this->bcAPISettingRepository->destroy($id, $suborganization->id)], 200);
     }
 
     /**

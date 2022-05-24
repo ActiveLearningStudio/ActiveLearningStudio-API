@@ -10,10 +10,12 @@ use Illuminate\Support\Collection;
 interface ActivityItemRepositoryInterface extends EloquentRepositoryInterface
 {
     /**
+     * @param $suborganization
      * @param $data
+     * 
      * @return mixed
      */
-    public function getAll($data);
+    public function getAll($suborganization, $data);
 
     /**
      * @return mixed
