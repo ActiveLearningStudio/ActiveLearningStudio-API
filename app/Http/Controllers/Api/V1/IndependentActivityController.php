@@ -15,6 +15,7 @@ use App\Models\ActivityItem;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
+use App\Services\CurrikiGo\LMSIntegrationServiceInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Http\Request;
@@ -47,16 +48,19 @@ class IndependentActivityController extends Controller
      * @param IndependentActivityRepositoryInterface $independentActivityRepository
      * @param H5pContentRepositoryInterface $h5pContentRepository
      * @param ActivityItemRepositoryInterface $activityItemRepository
+     * @param LMSIntegrationServiceInterface $lms,
      */
     public function __construct(
         IndependentActivityRepositoryInterface $independentActivityRepository,
         H5pContentRepositoryInterface $h5pContentRepository,
-        ActivityItemRepositoryInterface $activityItemRepository
+        ActivityItemRepositoryInterface $activityItemRepository,
+        LMSIntegrationServiceInterface $lms
     )
     {
         $this->independentActivityRepository = $independentActivityRepository;
         $this->h5pContentRepository = $h5pContentRepository;
         $this->activityItemRepository = $activityItemRepository;
+        $this->lms = $lms;
     }
 
     /**
@@ -760,6 +764,20 @@ class IndependentActivityController extends Controller
             'activity' => new IndependentActivityResource($independent_activity),
         ], 200);
     }
+
+    /**
+     * Download XApi File
+     *
+     * This is an API for to download the XAPI zip for the attempted independent activity
+     * 
+     * @urlParam independent_activity required id, title, slug of an independent_activity
+     * 
+     * @return download file download for the independent activity XAPI zip download
+     */
+    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
+        return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
+    }
+}
 
     /**
      * Export Independent Activity
