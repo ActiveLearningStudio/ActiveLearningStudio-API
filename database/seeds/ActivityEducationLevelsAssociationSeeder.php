@@ -30,7 +30,7 @@ class ActivityEducationLevelsAssociationSeeder extends Seeder
                          ->leftJoin('projects as proj', 'proj.id', '=', 'p.project_id')
                          ->whereNotNull('a.education_level_id')
                          ->get();
-       
+
         $activitiesSubjectInsertArray = [];
 
         foreach ($activities as $activity) {
@@ -43,13 +43,14 @@ class ActivityEducationLevelsAssociationSeeder extends Seeder
                 $education_level_id = $educationLevelsList[$activity->education_level_id][$activity->organization_id];
             }
 
-            $activitiesSubjectInsertArray[] = [
+            $activitiesSubjectInsertArray = [
                 'activity_id' => $activity->id,
                 'education_level_id' => $education_level_id,
                 'created_at' => now(),
             ];
+
+            DB::table('activity_education_level')->insertOrIgnore($activitiesSubjectInsertArray);
         }
 
-        DB::table('activity_education_level')->insertOrIgnore($activitiesSubjectInsertArray);
     }
 }
