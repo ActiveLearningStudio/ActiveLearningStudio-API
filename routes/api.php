@@ -306,6 +306,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
+    Route::get('go/independent_activity/getxapifile/{activity}', 'IndependentActivityController@getXAPIFileForIndepActivity');
     // public route for get user's shared projects
     Route::post('projects/shared', 'UserController@sharedProjects');
 
