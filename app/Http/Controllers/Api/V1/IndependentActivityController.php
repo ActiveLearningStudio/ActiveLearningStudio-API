@@ -768,10 +768,11 @@ class IndependentActivityController extends Controller
     /**
      * Download XApi File
      *
-     * @urlParam request
+     * This is an API for to download the XAPI zip for the attempted independent activity
+     * 
      * @urlParam independent_activity required id, title, slug of an independent_activity
      * 
-     * @return download file download for the independent activity XAPI download
+     * @return download file download for the independent activity XAPI zip download
      */
     public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
         return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
