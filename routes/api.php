@@ -51,6 +51,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/me', 'UserController@me');
         Route::get('users/notifications', 'UserController@listNotifications');
         Route::get('users/notifications/export-list', 'UserController@exportProjectList');
+        Route::get('suborganization/{suborganization}/users/notifications/export-list-independent-activities', 'UserController@exportIndependentActivitiesList');
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
@@ -102,6 +103,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('independent-activities/{independent_activity}/remove-share', 'IndependentActivityController@removeShare');
         Route::get('suborganization/{suborganization}/independent-activities/{independent_activity}/search-preview', 'IndependentActivityController@searchPreview');
         Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/clone', 'IndependentActivityController@clone');
+        Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/export', 'IndependentActivityController@exportIndependentActivity');
+        Route::post('suborganization/{suborganization}/independent-activities/import', 'IndependentActivityController@importIndependentActivity');
 
         //Projects
         Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
@@ -219,11 +222,19 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             'index'
         ]);
         Route::get('suborganizations/{suborganization}/index', 'SuborganizationController@index')->name('suborganizations.index');
+        Route::get('suborganizations/{suborganization}/media-sources', 'SuborganizationController@organizationMediaSource')->name('organization-media-sources');
+        Route::put('suborganizations/{suborganization}/update-media-sources', 'SuborganizationController@updateMediaSource')->name('update-media-sources');
+        Route::get('media-sources', 'SuborganizationController@mediaSources')->name('media-sources');
 
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
         Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
+
+        // independent-activities
+        Route::get('suborganizations/{suborganization}/independent-activities', 'IndependentActivityController@getOrgIndependentActivities')->name('suborganizations.get-independent-activities');
+        Route::get('independent-activities/{independent_activity}/indexes/{index}', 'IndependentActivityController@updateIndex');
+
         // lms-settings
         Route::apiResource('suborganizations/{suborganization}/lms-settings', 'LmsSettingsController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
@@ -326,6 +337,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('go/lms/project/{project}', 'CurrikiGo\LmsController@project');
     Route::post('go/lms/activities', 'CurrikiGo\LmsController@activities');
     Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
+    Route::get('go/lms/teams', 'CurrikiGo\LmsController@teams');
     Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');

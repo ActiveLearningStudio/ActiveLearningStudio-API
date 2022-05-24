@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use ZipArchive;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 
 class IndependentActivityRepository extends BaseRepository implements IndependentActivityRepositoryInterface
 {
@@ -410,5 +413,422 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $authenticatedUserOrgIndependentActivityIdsString = implode(",", $authenticatedUserOrgIndependentActivityIds);
 
         return $authenticatedUserOrgIndependentActivityIdsString;
+    }
+
+    /**
+     * @param $data
+     * @param $suborganization
+     * @return mixed
+     */
+    public function getAll($data, $suborganization)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting independent activity listing with search
+        if ($q) {
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('title', 'iLIKE', '%' .$q. '%')
+                    ->orWhereHas('user', function ($qry) use ($q) {
+                        $qry->where('email', 'iLIKE', '%' .$q. '%');
+                    });
+            });
+        }
+
+        // if all indexed independent activities requested
+        if (isset($data['indexing']) && $data['indexing'] === '0') {
+            $query = $query->whereIn('indexing', [1, 2, 3]);
+        }
+
+        // if specific index independent activities requested
+        if (isset($data['indexing']) && $data['indexing'] !== '0') {
+            $query = $query->where('indexing', $data['indexing']);
+        }
+
+        // filter by author
+        if (isset($data['author_id'])) {
+            $query = $query->where(function($qry) use ($data) {
+                        $qry->WhereHas('user', function ($qry) use ($data) {
+                            $qry->where('id', $data['author_id']);
+                        });
+                     });
+        }
+
+        // filter by shared status
+        if (isset($data['shared'])) {
+            $query = $query->where('shared', $data['shared']);
+        }
+
+        // filter by date created
+        if (isset($data['created_from']) && isset($data['created_to'])) {
+            $query = $query->whereBetween('created_at', [$data['created_from'], $data['created_to']]);
+        }
+
+        if (isset($data['created_from']) && !isset($data['created_to'])) {
+            $query = $query->whereDate('created_at', '>=', $data['created_from']);
+        }
+
+        if (isset($data['created_to']) && !isset($data['created_from'])) {
+            $query = $query->whereDate('created_to', '<=', $data['created_to']);
+        }
+
+        // filter by date updated
+        if (isset($data['updated_from']) && isset($data['updated_to'])) {
+            $query = $query->whereBetween('updated_at', [$data['updated_from'], $data['updated_to']]);
+        }
+
+        if (isset($data['updated_from']) && !isset($data['updated_to'])) {
+            $query = $query->whereDate('updated_at', '>=', $data['updated_from']);
+        }
+
+        if (isset($data['updated_to']) && !isset($data['updated_from'])) {
+            $query = $query->whereDate('updated_at', '<=', $data['updated_to']);
+        }
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
+    }
+
+     /**
+     * To export project and associated playlists
+     *
+     * @param $authUser
+     * @param IndependentActivity $independent_activity
+     * @param int $suborganization_id
+     * @throws GeneralException
+     */
+    public function exportIndependentActivity($authUser, IndependentActivity $independent_activity)
+    {
+        $zip = new ZipArchive;
+
+        $activity_dir_name = 'independent_activity-'.uniqid();
+
+        $activityTitle = str_replace('/', '-', $independent_activity->title);
+
+        $activity_json_file = '/exports/' . $activity_dir_name .  '/activity.json';
+        Storage::disk('public')->put($activity_json_file, $independent_activity);
+
+        // Export Subject 
+        $activitySubjectJsonFile = '/exports/' . $activity_dir_name . '/activity_subject.json';
+        
+        Storage::disk('public')->put($activitySubjectJsonFile, $independent_activity->subjects);
+
+        // Export Education level
+
+        $activityEducationLevelJsonFile = '/exports/' . $activity_dir_name . '/activity_education_level.json';
+        
+        Storage::disk('public')->put($activityEducationLevelJsonFile, $independent_activity->educationLevels);
+
+        // Export Author
+
+        $activityAuthorTagJsonFile = '/exports/' . $activity_dir_name . '/activity_author_tag.json';
+        
+        Storage::disk('public')->put($activityAuthorTagJsonFile, $independent_activity->authorTags);
+
+        $decoded_content = json_decode($independent_activity->h5p_content,true);
+
+        $decoded_content['library_title'] = DB::table('h5p_libraries')
+                                                            ->where('id', $decoded_content['library_id'])->value('name');
+        $decoded_content['library_major_version'] = DB::table('h5p_libraries')
+                                                                ->where('id', $decoded_content['library_id'])
+                                                                ->value('major_version');
+        $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
+                                                                ->where('id', $decoded_content['library_id'])
+                                                                ->value('minor_version');
+
+        $content_json_file = '/exports/'.$activity_dir_name . '/' . $independent_activity->h5p_content_id . '.json';
+        Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
+
+        if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
+            $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $independent_activity->thumb_url)));
+            $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
+            if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
+                $activity_thumbanil_file = '/exports/' . $activity_dir_name . '/' . basename($activity_thumbanil);
+                Storage::disk('public')->put($activity_thumbanil_file, file_get_contents($activity_thumbanil));
+            }
+        }
+        $exported_content_dir_path = 'app/public/exports/' . $activity_dir_name . '/' . $independent_activity->h5p_content_id;
+        $exported_content_dir = storage_path($exported_content_dir_path);
+        \File::copyDirectory( storage_path('app/public/h5p/content/'.$independent_activity->h5p_content_id), $exported_content_dir );
+    
+        // Get real path for our folder
+        $rootPath = storage_path('app/public/exports/'.$activity_dir_name);
+
+        // Initialize archive object
+        $zip = new ZipArchive();
+        $fileName = $activity_dir_name.'.zip';
+        $zip->open(storage_path('app/public/exports/'.$fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        // Create recursive directory iterator
+        /** @var SplFileInfo[] $files */
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file)
+        {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir())
+            {
+                // Get real and relative path for current file
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
+
+                // Add current file to archive
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        // Zip archive will be created only after closing object
+        $zip->close();
+        // Remove independent activity folder after creation of zip
+        $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
+
+        // Remove independent activity folder after creation of zip
+        $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
+
+        return storage_path('app/public/exports/' . $fileName);
+    }
+
+    /**
+     * To Deleted the directory recurcively
+     *
+     * @param $dir
+     */
+    private function rrmdir($dir) {
+        if (is_dir($dir)) {
+          $objects = scandir($dir);
+          foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+              if (filetype($dir . "/" . $object) == "dir") $this->rrmdir($dir . "/" . $object); else unlink($dir . "/" . $object);
+            }
+          }
+          reset($objects);
+          rmdir($dir);
+        }
+     }
+
+     /**
+     * To import project and associated playlists
+     *
+     * @param $authUser
+     * @param $path
+     * @param int $suborganization_id
+     * @throws GeneralException
+     */
+    public function importIndependentActivity($authUser, $path, $suborganization_id, $method_source="API")
+    {
+        try {
+
+            $zip = new ZipArchive;
+            $source_file = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
+
+            if ($method_source === "command") {
+                $source_file = $path;
+            }
+
+            if ($zip->open($source_file) === TRUE) {
+                $extracted_folder = "app/public/imports/activity-".uniqid();
+                $zip->extractTo(storage_path($extracted_folder.'/'));
+                $zip->close();
+            }else {
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import Activity."
+                ];
+                return json_encode($return_res);
+            }
+            return DB::transaction(function () use ($extracted_folder, $suborganization_id, $authUser, $source_file, $method_source) {
+                if (file_exists(storage_path($extracted_folder.'/activity.json'))) {
+                    
+                    $activity_json = file_get_contents(storage_path($extracted_folder . '/activity.json'));
+                    $activity = json_decode($activity_json,true);
+
+                    $old_content_id = $activity['h5p_content_id'];
+
+                    unset($activity["id"], $activity["playlist_id"], $activity["created_at"], $activity["updated_at"], $activity["h5p_content_id"]);
+
+                    $content_json = file_get_contents(
+                                            storage_path($extracted_folder . '/' . $old_content_id . '.json'));
+                    $h5p_content = json_decode($content_json,true);
+                    $h5p_content['library_id'] = DB::table('h5p_libraries')
+                                                        ->where('name', $h5p_content['library_title'])
+                                                        ->where('major_version',$h5p_content['library_major_version'])
+                                                        ->where('minor_version',$h5p_content['library_minor_version'])
+                                                        ->value('id');
+
+                    unset($h5p_content["id"], $h5p_content["user_id"], $h5p_content["created_at"], $h5p_content["updated_at"],
+                                                $h5p_content['library_title'], $h5p_content['library_major_version'], $h5p_content['library_minor_version']);
+
+                    $h5p_content['user_id'] = $authUser->id;
+
+                    $new_content = DB::table('h5p_contents')->insert($h5p_content);
+                    $new_content_id = DB::getPdo()->lastInsertId();
+
+                    \File::copyDirectory(
+                                storage_path($extracted_folder . '/' . $old_content_id),
+                                storage_path('app/public/h5p/content/'.$new_content_id)
+                            );
+                    
+                    // Move Content to editor Folder
+                    $destinationEditorFolderPath = $extracted_folder . $old_content_id;
+
+                    // Move editor images
+                    \File::copyDirectory(
+                        storage_path($destinationEditorFolderPath . '/images/'),
+                        storage_path('app/public/h5p/editor/images/')
+                    );
+
+                    // Move editor audios
+                    \File::copyDirectory(
+                        storage_path($destinationEditorFolderPath . '/audios/'),
+                        storage_path('app/public/h5p/editor/audios/')
+                    );
+
+                    // Move editor videos
+                    \File::copyDirectory(
+                        storage_path($destinationEditorFolderPath . '/videos/'),
+                        storage_path('app/public/h5p/editor/videos/')
+                    );
+
+                    // Move editor files
+                    \File::copyDirectory(
+                        storage_path($destinationEditorFolderPath . '/files/'),
+                        storage_path('app/public/h5p/editor/files/')
+                    );
+
+                    $activity['h5p_content_id'] = $new_content_id;
+
+                    if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
+                        $activitiy_thumbnail_path = storage_path(
+                                                        $extracted_folder . '/' . basename($activity['thumb_url'])
+                                                    );
+                        if(file_exists($activitiy_thumbnail_path)) {
+                            $ext = pathinfo(basename($activity['thumb_url']), PATHINFO_EXTENSION);
+                            $new_image_name = uniqid() . '.' . $ext;
+                            $destination_file = storage_path('app/public/activities/'.$new_image_name);
+                            $source_file = $extracted_folder . '/' . basename($activity['thumb_url']);
+                            \File::copy(
+                                storage_path($source_file), $destination_file
+                                );
+                            $activity['thumb_url'] = "/storage/activities/" . $new_image_name;
+                        }
+                    }
+
+                    $cloned_activity = $this->create($activity);
+
+                    // Import Activity Subjects
+                    $projectOrganizationId = $activity['organization_id'];
+
+                    $activitySubjectPath = storage_path($extracted_folder . '/activity_subject.json');
+                    if (file_exists($activitySubjectPath)) {
+                        $subjectContent = file_get_contents($activitySubjectPath);
+                        $subjects = json_decode($subjectContent,true);
+                        \Log::info($subjects);
+                        foreach ($subjects as $subject) {
+
+                            $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
+
+                            $newSubject['activity_id'] = $cloned_activity->id;
+                            $newSubject['subject_id'] = $recSubject->id;
+                            $newSubject['created_at'] = date('Y-m-d H:i:s');
+                            $newSubject['updated_at'] = date('Y-m-d H:i:s');
+                            
+                            DB::table('independent_activity_subject')->insert($newSubject);
+                        }
+                    }
+
+                    // Import Activity Education-Level
+
+                    $activtyEducationPath = storage_path($extracted_folder . '/activity_education_level.json');
+                    if (file_exists($activtyEducationPath)) {
+                        $educationLevelContent = file_get_contents($activtyEducationPath);
+                        $educationLevels = json_decode($educationLevelContent,true);
+                        \Log::info($educationLevels);
+                        foreach ($educationLevels as $educationLevel) {
+
+                            $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
+
+                            $newEducationLevel['activity_id'] = $cloned_activity->id;
+                            $newEducationLevel['education_level_id'] = $recEducationLevel->id;
+                            $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
+                            $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
+                            
+                            DB::table('independent_activity_education_level')->insert($newEducationLevel);
+                        }
+                    }
+
+                    // Import Activity Author-Tag
+
+                    $authorTagPath = storage_path($extracted_folder . '/activity_author_tag.json');
+                    if (file_exists($authorTagPath)) {
+                        $authorTagContent = file_get_contents($authorTagPath);
+                        $authorTags = json_decode($authorTagContent,true);
+                        \Log::info($authorTags);
+                        foreach ($authorTags as $authorTag) {
+                            $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
+                            $newauthorTag['activity_id'] = $cloned_activity->id;
+                            $newauthorTag['author_tag_id'] = $recAuthorTag->id;
+                            $newauthorTag['created_at'] = date('Y-m-d H:i:s');
+                            $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
+                            
+                            DB::table('independent_activity_author_tag')->insert($newauthorTag);
+                        }
+                    }
+                    $this->rrmdir(storage_path($extracted_folder)); // Deleted the storage extracted directory
+
+                    if ($method_source !== "command") {
+                        unlink($source_file); // Deleted the storage zip file
+                    } else {
+
+                        $return_res = [
+                            "success"=> true,
+                            "message" => "Independent Activity has been imported successfully",
+                            "project_id" => $cloned_activity->id
+                        ];
+                        return json_encode($return_res);
+                    }
+
+                    return $activity['title'];
+                }
+            });
+
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            if ($method_source === "command") {
+                $return_res = [
+                    "success"=> false,
+                    "message" => "Unable to import the activity, please try again later!"
+                ];
+                return(json_encode($return_res));
+            }
+
+            throw new GeneralException('Unable to import the activity, please try again later!');
+        }
+    }
+
+    /**
+     * Update Indexes for independent activities and related models
+     * @param $independentActivity
+     * @param $index
+     * @return string
+     * @throws GeneralException
+     */
+    public function updateIndex($independentActivity, $index): string
+    {
+        if (! isset($this->model::$indexing[$index])){
+            throw new GeneralException('Invalid Library value provided.');
+        }
+        $independentActivity->update(['indexing' => $index]);
+        return 'Library status changed successfully!';
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\IndependentActivityCreateRequest;
 use App\Http\Requests\V1\IndependentActivityEditRequest;
+use App\Http\Requests\V1\OrganizationIndependentActivityRequest;
 use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\IndependentActivityDetailResource;
 use App\Http\Resources\V1\H5pIndependentActivityResource;
@@ -26,6 +27,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use H5pCore;
 use App\Models\Organization;
+use App\Jobs\ExportIndependentActivity;
+use App\Jobs\ImportIndependentActivity;
+use App\Http\Requests\V1\IndependentActivityUploadImportRequest;
 
 /**
  * @group 5. Independent Activity
@@ -76,9 +80,40 @@ class IndependentActivityController extends Controller
     {
         $this->authorize('viewAny', [IndependentActivity::class, $suborganization]);
 
+        $authenticated_user = auth()->user();
+
         return response([
-            'independent-activities' => IndependentActivityResource::collection($suborganization->independentActivities),
+            'independent-activities' => IndependentActivityResource::collection(
+                $authenticated_user->independentActivities()
+                                    ->where('organization_id', $suborganization->id)
+                                    ->orderBy('order', 'asc')
+                                    ->get()
+            ),
         ], 200);
+    }
+
+    /**
+     * Get All Organization Independent Activities
+     *
+     * Get a list of the independent activities of an organization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam query string Query to search independent activity against Example: Video
+     * @bodyParam size integer size to show per page records Example: 10
+     * @bodyParam order_by_column string to sort data with specific column Example: title
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     *
+     * @responseFile responses/independent-activity/independent-activities.json
+     *
+     * @param OrganizationIndependentActivityRequest $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function getOrgIndependentActivities(OrganizationIndependentActivityRequest $request, Organization $suborganization)
+    {
+        $this->authorize('viewAny', [IndependentActivity::class, $suborganization]);
+
+        return  IndependentActivityResource::collection($this->independentActivityRepository->getAll($request->all(), $suborganization));
     }
 
     /**
@@ -274,8 +309,10 @@ class IndependentActivityController extends Controller
                     $independent_activity->authorTags()->sync($validated['author_tag_id']);
                 }
 
-                // H5P meta is in 'data' index of the payload.
-                $this->update_h5p($validated['data'], $independent_activity->h5p_content_id);
+                if (isset($validated['data'])) {
+                    // H5P meta is in 'data' index of the payload.
+                    $this->update_h5p($validated['data'], $independent_activity->h5p_content_id);
+                }
 
                 $updated_independent_activity = new IndependentActivityResource($this->independentActivityRepository->find($independent_activity->id));
 
@@ -740,3 +777,89 @@ class IndependentActivityController extends Controller
     }
 }
 
+    /**
+     * Export Independent Activity
+     *
+     * Export the specified activity of a user.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam independent_activity required The Id of a independent_activity Example: 1
+     *
+     * @response {
+     *   "message": "Your request to export independent Activity [title] has been received and is being processed."
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param IndependentActivity $independent_activity
+     * @return Response
+     */
+    public function exportIndependentActivity(Request $request, Organization $suborganization, IndependentActivity $independent_activity)
+    {
+        $this->authorize('export', $independent_activity);
+        // pushed cloning of activity in background
+        ExportIndependentActivity::dispatch(auth()->user(), $independent_activity)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to export independent Activity [$independent_activity->title] has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Import Independent Activity
+     *
+     * Import the specified independent activity of a user.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @param independent_activity 
+     * @response {
+     *   "message": "Your request to import independent activity has been received and is being processed."
+     * }
+     *
+     * @return Response
+     */
+
+    public function importIndependentActivity(IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest, Organization $suborganization)
+    {
+        $this->authorize('import', [IndependentActivity::class, $suborganization]);
+
+        $IndependentActivityUploadImportRequest->validated();
+        $path = $IndependentActivityUploadImportRequest->file('independent_activity')->store('public/imports');
+
+        ImportIndependentActivity::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to import independent activity has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Independent Activity Indexing
+     *
+     * Modify the index value of an independent activity.
+     *
+     * @urlParam independent_activity required The Id of a independent_activity Example: 1
+     * @urlParam index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
+     *
+     * @response {
+     *   "message": "Library status changed successfully!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Invalid index value provided."
+     *   ]
+     * }
+     *
+     * @param IndependentActivity $independent_activity
+     * @param $index
+     * @return Application|ResponseFactory|Response
+     * @throws GeneralException
+     */
+    public function updateIndex(IndependentActivity $independent_activity, $index)
+    {
+        return response(['message' => $this->independentActivityRepository->updateIndex($independent_activity, $index)], 200);
+    }
+}

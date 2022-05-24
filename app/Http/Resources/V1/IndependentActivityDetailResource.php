@@ -50,6 +50,7 @@ class IndependentActivityDetailResource extends JsonResource
             'updated_at' => $this->updated_at,
             'source_type' => $this->source_type,
             'source_url' => $this->source_url,
+            'organization_visibility_type_id' => $this->organization_visibility_type_id,
         ];
 
         if ($this->resource->brightcoveData) {

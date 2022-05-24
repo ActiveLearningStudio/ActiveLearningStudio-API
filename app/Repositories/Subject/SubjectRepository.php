@@ -47,4 +47,15 @@ class SubjectRepository extends BaseRepository implements SubjectRepositoryInter
 
         return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
+
+    /**
+     * @param $subjectIds
+     *
+     * @return mixed
+     */
+    public function getSubjectIdsWithMatchingName($subjectIds)
+    {
+        $subjectNames = $this->model->whereIn('id', $subjectIds)->pluck('name');
+        return $this->model->whereIn('name', $subjectNames)->pluck('id')->toArray();
+    }
 }

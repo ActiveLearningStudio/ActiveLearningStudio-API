@@ -156,10 +156,18 @@ class Organization extends Model
     }
 
     /**
+     * Get the media sources for the organization.
+     */
+    public function mediaSources()
+    {
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources');
+    }
+
+    /**
      * Get the independent activities for the organization
      */
     public function independentActivities()
     {
         return $this->hasMany('App\Models\IndependentActivity', 'organization_id');
-    }
+    } 
 }

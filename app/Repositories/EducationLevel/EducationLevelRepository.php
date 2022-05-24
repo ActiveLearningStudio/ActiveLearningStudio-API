@@ -47,4 +47,15 @@ class EducationLevelRepository extends BaseRepository implements EducationLevelR
 
         return $query->where('organization_id', $suborganization->id)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
     }
+
+    /**
+     * @param $educationLevelIds
+     *
+     * @return mixed
+     */
+    public function getEducationLevelIdsWithMatchingName($educationLevelIds)
+    {
+        $educationLevelNames = $this->model->whereIn('id', $educationLevelIds)->pluck('name');
+        return $this->model->whereIn('name', $educationLevelNames)->pluck('id')->toArray();
+    }
 }
