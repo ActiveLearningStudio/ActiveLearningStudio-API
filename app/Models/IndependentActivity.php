@@ -23,8 +23,6 @@ class IndependentActivity extends Model
         'is_public',
         'h5p_content_id',
         'thumb_url',
-        'subject_id',
-        'education_level_id',
         'user_id',
         'organization_id',
         'organization_visibility_type_id',
