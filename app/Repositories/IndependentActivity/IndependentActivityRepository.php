@@ -4,6 +4,8 @@ namespace App\Repositories\IndependentActivity;
 
 use App\Models\IndependentActivity;
 use App\Models\Organization;
+use App\Models\Playlist;
+use App\Models\Activity;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
@@ -830,5 +832,54 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
         $independentActivity->update(['indexing' => $index]);
         return 'Library status changed successfully!';
+    }
+
+    /**
+     * Update Indexes for independent activities and related models
+     * @param $independentActivity
+     * @param $playlist
+     * @param $token
+     * @return string
+     * 
+     */
+    public function copyToPlaylist( $independentActivity, $playlist, $token)
+    {
+        $h5p_content = $independentActivity->h5p_content;
+        if ($h5p_content) {
+            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        }
+        $newH5pContent = $h5p_content->id ?? null;
+
+        // copy the content data if exist
+        $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
+
+        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $activity_data = [
+            'title' => $independentActivity->title,
+            'type' => $independentActivity->type,
+            'content' => $independentActivity->content,
+            'playlist_id' => $playlist->id,
+            'order' => $this->getOrder($playlist->id) + 1,
+            'h5p_content_id' => $newH5pContent, // set if new h5pContent created
+            'thumb_url' => $new_thumb_url,
+            'subject_id' => $independentActivity->subject_id,
+            'education_level_id' => $independentActivity->education_level_id,
+            'shared' => 0,
+        ];
+        $cloned_activity = Activity::create($activity_data);
+
+        if ($cloned_activity && count($activity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($activity->subjects);
+        }
+        if ($cloned_activity && count($activity->educationLevels) > 0) {
+            $cloned_activity->educationLevels()->attach($activity->educationLevels);
+        }
+        if ($cloned_activity && count($activity->authorTags) > 0) {
+            $cloned_activity->authorTags()->attach($activity->authorTags);
+        }
+
+        return $cloned_activity['id'];
     }
 }
