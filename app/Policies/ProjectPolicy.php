@@ -44,7 +44,7 @@ class ProjectPolicy
             $r = false;
             $orgs = $project->organization->org_tree;
             foreach ($orgs as $orgId) {
-                $r = $user->hasPermissionTo('project:view', Organization::find($ordId));
+                $r = $user->hasPermissionTo('project:view', Organization::find($orgId));
                 if ($r)
                     break;
             }
