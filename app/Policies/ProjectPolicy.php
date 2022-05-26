@@ -64,11 +64,7 @@ class ProjectPolicy
 
         if ($project->organizationVisibilityType->name === 'private') {
             // is the user the owner of the project?
-            if ($user->id === $project->original_user) {
-                return true;
-            }
-
-            return false;
+            return $project->users->contains($user);
         }
     }
 
