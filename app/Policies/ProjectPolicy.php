@@ -34,11 +34,41 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project)
     {
-        $team = $project->team;
-        if ($team) {
-            return $user->hasTeamPermissionTo('team:view-project', $team);
-        } else {
-            return $user->hasPermissionTo('project:view', $project->organization);
+        if ($project->organizationVisibilityType->name === 'public') {
+            return true;
+        }
+
+        if ($project->organizationVisibilityType->name === 'global') {
+            // get ancestors and children orgs. The project is visible in all these
+            // does the user have view rights to any of these?
+            $r = false;
+            $orgs = $project->organization->org_tree;
+            foreach ($orgs as $orgId) {
+                $r = $user->hasPermissionTo('project:view', Organization::find($ordId));
+                if ($r)
+                    break;
+            }
+            return $r;
+        }
+
+        if ($project->organizationVisibilityType->name === 'protected') {
+            // does the user have view rights to the particular org?
+            // use team permissions instead if the project belongs to a team
+            $team = $project->team;
+            if ($team) {
+                return $user->hasTeamPermissionTo('team:view-project', $team);
+            } else {
+                return $user->hasPermissionTo('project:view', $project->organization);
+            }
+        }
+
+        if ($project->organizationVisibilityType->name === 'private') {
+            // is the user the owner of the project?
+            if ($user->id === $project->original_user) {
+                return true;
+            }
+
+            return false;
         }
     }
 

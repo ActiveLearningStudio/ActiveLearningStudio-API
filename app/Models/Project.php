@@ -114,6 +114,14 @@ class Project extends Model
     }
 
     /**
+     * Get the Organization visibility type for the project (private, protected, global, public)
+     */
+    public function organizationVisibilityType()
+    {
+        return $this->belongsTo('App\Models\OrganizationVisibilityType', 'organization_visibility_type_id');
+    }
+
+    /**
      * Cascade on delete the project
      */
     public static function boot()
