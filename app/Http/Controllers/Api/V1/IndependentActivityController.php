@@ -71,27 +71,26 @@ class IndependentActivityController extends Controller
      * Get a list of independent activities
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam query string Query to search independent activity against Example: Video
+     * @bodyParam size integer size to show per page records Example: 10
+     * @bodyParam order_by_column string to sort data with specific column Example: title
+     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/independent-activity/independent-activities.json
      *
+     * @param OrganizationIndependentActivityRequest $request
      * @param Organization $suborganization
      * @return Response
      * @throws AuthorizationException
      */
-    public function index(Organization $suborganization)
+    public function index(OrganizationIndependentActivityRequest $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [IndependentActivity::class, $suborganization]);
 
         $authenticated_user = auth()->user();
 
-        return response([
-            'independent-activities' => IndependentActivityResource::collection(
-                $authenticated_user->independentActivities()
-                                    ->where('organization_id', $suborganization->id)
-                                    ->orderBy('order', 'asc')
-                                    ->get()
-            ),
-        ], 200);
+        return  IndependentActivityResource::collection($this->independentActivityRepository->getAuthUserIndependentActivities($request->all(), $suborganization, $authenticated_user));
+
     }
 
     /**

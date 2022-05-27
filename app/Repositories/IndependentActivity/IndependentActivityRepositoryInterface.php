@@ -57,6 +57,14 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
     /**
      * @param $data
      * @param $suborganization
+     * @param $authUser
+     * @return mixed
+     */
+    public function getAuthUserIndependentActivities($data, $suborganization, $authUser);
+
+    /**
+     * @param $data
+     * @param $suborganization
      * @return mixed
      */
     public function getAll($data, $suborganization);
