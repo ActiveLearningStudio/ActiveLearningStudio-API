@@ -89,4 +89,14 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * @throws GeneralException
      */
     public function updateIndex($independentActivity, $index);
+
+    /**
+     * Copy Exisiting independentent activity into a playlist
+     * @param $independentActivity
+     * @param $playlist
+     * @param $token
+     * @return string
+     * 
+     */
+    public function copyToPlaylist( $independentActivity, $playlist, $token);
 }

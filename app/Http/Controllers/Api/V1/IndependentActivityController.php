@@ -10,8 +10,10 @@ use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\IndependentActivityDetailResource;
 use App\Http\Resources\V1\H5pIndependentActivityResource;
 use App\Jobs\CloneIndependentActivity;
+use App\Jobs\CopyIndependentActivityIntoPlaylist;
 use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
+use App\Models\Playlist;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
@@ -862,5 +864,46 @@ class IndependentActivityController extends Controller
     public function updateIndex(IndependentActivity $independent_activity, $index)
     {
         return response(['message' => $this->independentActivityRepository->updateIndex($independent_activity, $index)], 200);
+    }
+
+    /**
+     * Copy Independent Activity into Playlist
+     *
+     * Clone the specified independent activity of an suborganization and link with a playlist.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam independent_activity required The Id of a independent activity Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     *
+     * @response {
+     *   "message": "Independent Activity is being copied in background!"
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Not a Public Independent Activity."
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to copy independent activity."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param IndependentActivity $independent_activity
+     * @param Playlist $playlist
+     * @return Response
+     */
+    public function copyIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, IndependentActivity $independent_activity, Playlist $playlist)
+    {
+        CopyIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
+
+        return response([
+            "message" => "Your request to add independent activity [$independent_activity->title] into playlist [$playlist->title] has been 
+            received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
     }
 }
