@@ -91,7 +91,7 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
     public function updateIndex($independentActivity, $index);
 
     /**
-     * Update Indexes for independent activities and related models
+     * Copy Exisiting independentent activity into a playlist
      * @param $independentActivity
      * @param $playlist
      * @param $token
