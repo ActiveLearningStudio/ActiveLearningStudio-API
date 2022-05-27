@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Models\IndependentActivity;
 use App\Models\Organization;
-use App\Models\playlist;
+use App\Models\Playlist;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
