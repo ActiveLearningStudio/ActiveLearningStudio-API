@@ -73,7 +73,7 @@ class CopyIndependentActivityIntoPlaylist implements ShouldQueue
     )
     {
         try {
-            $independentActivityRepository->copyToPlaylist($this->organization, $this->independentActivity,$this->playlist, $this->token);
+            $independentActivityRepository->copyToPlaylist($this->independentActivity, $this->playlist, $this->token);
             $message = "Your request to add independent activity [" . $this->independentActivity->title . "] into 
                             playlist [" . $this->playlist->title . "] has been completed and available";
             $user_id = $userRepository->parseToken($this->token);

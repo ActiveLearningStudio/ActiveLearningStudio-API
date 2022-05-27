@@ -835,14 +835,14 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     }
 
     /**
-     * Update Indexes for independent activities and related models
+     * Copy Exisiting independentent activity into a playlist
      * @param $independentActivity
      * @param $playlist
      * @param $token
      * @return string
      * 
      */
-    public function copyToPlaylist( $independentActivity, $playlist, $token)
+    public function copyToPlaylist($independentActivity, $playlist, $token)
     {
         $h5p_content = $independentActivity->h5p_content;
         if ($h5p_content) {
@@ -864,20 +864,19 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
             'thumb_url' => $new_thumb_url,
-            'subject_id' => $independentActivity->subject_id,
-            'education_level_id' => $independentActivity->education_level_id,
             'shared' => 0,
         ];
+        
         $cloned_activity = Activity::create($activity_data);
 
-        if ($cloned_activity && count($activity->subjects) > 0) {
-            $cloned_activity->subjects()->attach($activity->subjects);
+        if ($cloned_activity && count($independentActivity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($independentActivity->subjects);
         }
-        if ($cloned_activity && count($activity->educationLevels) > 0) {
-            $cloned_activity->educationLevels()->attach($activity->educationLevels);
+        if ($cloned_activity && count($independentActivity->educationLevels) > 0) {
+            $cloned_activity->educationLevels()->attach($independentActivity->educationLevels);
         }
-        if ($cloned_activity && count($activity->authorTags) > 0) {
-            $cloned_activity->authorTags()->attach($activity->authorTags);
+        if ($cloned_activity && count($independentActivity->authorTags) > 0) {
+            $cloned_activity->authorTags()->attach($independentActivity->authorTags);
         }
 
         return $cloned_activity['id'];
