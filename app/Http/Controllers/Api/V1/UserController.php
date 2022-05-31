@@ -764,11 +764,11 @@ class UserController extends Controller
      * 
      * @responseFile responses/notifications/export-notifications.json
      *
-     * @param Organization $suborganization
      * @param Request $request
+     * @param Organization $suborganization
      * @return Response
      */
-    public function exportProjectList(Organization $suborganization, Request $request)
+    public function exportProjectList(Request $request, Organization $suborganization)
     {
         
         return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all(), $suborganization), 200);

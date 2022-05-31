@@ -30,7 +30,7 @@ class ProjectExportNotification extends Notification
     public $projectName;
 
     /**
-     * @var int
+     * @var integer
      */
     public $organizationId;
     
