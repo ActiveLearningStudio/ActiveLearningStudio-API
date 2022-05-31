@@ -798,7 +798,7 @@ class IndependentActivityController extends Controller
      */
     public function exportIndependentActivity(Request $request, Organization $suborganization, IndependentActivity $independent_activity)
     {
-        //$this->authorize('export', $independent_activity);
+        $this->authorize('export', $independent_activity);
         // pushed cloning of activity in background
         ExportIndependentActivity::dispatch(auth()->user(), $independent_activity, $suborganization)->delay(now()->addSecond());
 
