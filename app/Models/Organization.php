@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\GlobalScope;
 use App\Models\DeepRelations\HasManyDeep;
 use App\Models\DeepRelations\HasRelationships;
+use Illuminate\Support\Arr;
+use DB;
 
 class Organization extends Model
 {
@@ -164,10 +166,69 @@ class Organization extends Model
     }
 
     /**
+     * Get organization IDs for the full tree (ancestors and children) of this org
+     */
+    public function getOrgTreeAttribute()
+    {
+        $results = DB::select( DB::raw("
+            WITH RECURSIVE child_orgs AS (
+                SELECT 
+                    o1.id, o1.parent_id, o1.name 
+                FROM 
+                    organizations o1 
+                WHERE 
+                    o1.deleted_at IS NULL AND
+                    o1.id = :thisOrgId
+                
+                UNION ALL
+                
+                SELECT 
+                    o2.id, o2.parent_id, o2.name 
+                FROM
+                    organizations o2
+                JOIN
+                    child_orgs co
+                ON 
+                    co.id = o2.parent_id 
+                WHERE
+                    o2.deleted_at IS NULL
+            ), parent_orgs AS (
+                SELECT 
+                    o3.id, o3.parent_id, o3.name 
+                FROM 
+                    organizations o3 
+                WHERE 
+                    o3.deleted_at IS NULL AND
+                    o3.id = :thisOrgId
+                
+                UNION ALL
+                
+                SELECT 
+                    o4.id, o4.parent_id, o4.name 
+                FROM
+                    organizations o4
+                JOIN
+                    parent_orgs po
+                ON 
+                    po.parent_id = o4.id
+                WHERE
+                    o4.deleted_at IS NULL
+            )
+
+            SELECT DISTINCT * FROM child_orgs
+
+            UNION ALL
+
+            SELECT DISTINCT * FROM parent_orgs
+        "), array('thisOrgId' => $this->id));
+        return Arr::pluck($results, 'id');
+    }
+
+    /**
      * Get the independent activities for the organization
      */
     public function independentActivities()
     {
         return $this->hasMany('App\Models\IndependentActivity', 'organization_id');
-    } 
+    }
 }

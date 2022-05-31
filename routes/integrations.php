@@ -38,4 +38,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/get-bc-account-list', 'Integration\BrightcoveAPIClientController@getAccountList');        
         Route::post('get-bc-videos-list', 'Integration\BrightcoveAPIClientController@getVideosList');
     });
+
+    // Get video direct url for interactive video
+    Route::group(['prefix' => 'video'], function () {
+        Route::post('get-direct-url', 'Integration\VideoDirectUrlController@getDirectUrl');
+    });
 });

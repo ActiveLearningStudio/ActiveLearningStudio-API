@@ -40,7 +40,7 @@ class GetMyVideoListCommand implements Command
     public function execute()
     {
         $apiUrl = config('vimeo.base_url') . '/me/videos?' . http_build_query($this->getParam);
-        $authHeaders = array('Authorization' => ' Bearer ' . $this->setting->tool_secret_key, 'Content-Type: ' => 'application/json');
+        $authHeaders = array('Authorization' => ' Bearer ' . $this->setting->tool_secret_key);
         $response = Http::withHeaders($authHeaders)->get($apiUrl);
         if ($response->status() == 200) {
             return $response->json();

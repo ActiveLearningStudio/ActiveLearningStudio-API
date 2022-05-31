@@ -4,6 +4,8 @@ namespace App\Repositories\IndependentActivity;
 
 use App\Models\IndependentActivity;
 use App\Models\Organization;
+use App\Models\Playlist;
+use App\Models\Activity;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
@@ -413,6 +415,87 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $authenticatedUserOrgIndependentActivityIdsString = implode(",", $authenticatedUserOrgIndependentActivityIds);
 
         return $authenticatedUserOrgIndependentActivityIdsString;
+    }
+
+    /**
+     * @param $data
+     * @param $suborganization
+     * @param $authUser
+     * @return mixed
+     */
+    public function getAuthUserIndependentActivities($data, $suborganization, $authUser)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting independent activity listing with search
+        if ($q) {
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('title', 'iLIKE', '%' .$q. '%')
+                    ->orWhereHas('user', function ($qry) use ($q) {
+                        $qry->where('email', 'iLIKE', '%' .$q. '%');
+                    });
+            });
+        }
+
+        // if all indexed independent activities requested
+        if (isset($data['indexing']) && $data['indexing'] === '0') {
+            $query = $query->whereIn('indexing', [1, 2, 3]);
+        }
+
+        // if specific index independent activities requested
+        if (isset($data['indexing']) && $data['indexing'] !== '0') {
+            $query = $query->where('indexing', $data['indexing']);
+        }
+
+        // filter by author
+        if (isset($data['author_id'])) {
+            $query = $query->where(function($qry) use ($data) {
+                        $qry->WhereHas('user', function ($qry) use ($data) {
+                            $qry->where('id', $data['author_id']);
+                        });
+                     });
+        }
+
+        // filter by shared status
+        if (isset($data['shared'])) {
+            $query = $query->where('shared', $data['shared']);
+        }
+
+        // filter by date created
+        if (isset($data['created_from']) && isset($data['created_to'])) {
+            $query = $query->whereBetween('created_at', [$data['created_from'], $data['created_to']]);
+        }
+
+        if (isset($data['created_from']) && !isset($data['created_to'])) {
+            $query = $query->whereDate('created_at', '>=', $data['created_from']);
+        }
+
+        if (isset($data['created_to']) && !isset($data['created_from'])) {
+            $query = $query->whereDate('created_to', '<=', $data['created_to']);
+        }
+
+        // filter by date updated
+        if (isset($data['updated_from']) && isset($data['updated_to'])) {
+            $query = $query->whereBetween('updated_at', [$data['updated_from'], $data['updated_to']]);
+        }
+
+        if (isset($data['updated_from']) && !isset($data['updated_to'])) {
+            $query = $query->whereDate('updated_at', '>=', $data['updated_from']);
+        }
+
+        if (isset($data['updated_to']) && !isset($data['updated_from'])) {
+            $query = $query->whereDate('updated_at', '<=', $data['updated_to']);
+        }
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+
+        return $query->where('organization_id', $suborganization->id)->where('user_id', $authUser->id)->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -830,5 +913,53 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
         $independentActivity->update(['indexing' => $index]);
         return 'Library status changed successfully!';
+    }
+
+    /**
+     * Copy Exisiting independentent activity into a playlist
+     * @param $independentActivity
+     * @param $playlist
+     * @param $token
+     * @return string
+     * 
+     */
+    public function copyToPlaylist($independentActivity, $playlist, $token)
+    {
+        $h5p_content = $independentActivity->h5p_content;
+        if ($h5p_content) {
+            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        }
+        $newH5pContent = $h5p_content->id ?? null;
+
+        // copy the content data if exist
+        $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
+
+        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $activity_data = [
+            'title' => $independentActivity->title,
+            'type' => $independentActivity->type,
+            'content' => $independentActivity->content,
+            'playlist_id' => $playlist->id,
+            'order' => $this->getOrder($playlist->id) + 1,
+            'h5p_content_id' => $newH5pContent, // set if new h5pContent created
+            'thumb_url' => $new_thumb_url,
+            'shared' => 0,
+        ];
+        
+        $cloned_activity = Activity::create($activity_data);
+
+        if ($cloned_activity && count($independentActivity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($independentActivity->subjects);
+        }
+        if ($cloned_activity && count($independentActivity->educationLevels) > 0) {
+            $cloned_activity->educationLevels()->attach($independentActivity->educationLevels);
+        }
+        if ($cloned_activity && count($independentActivity->authorTags) > 0) {
+            $cloned_activity->authorTags()->attach($independentActivity->authorTags);
+        }
+
+        return $cloned_activity['id'];
     }
 }

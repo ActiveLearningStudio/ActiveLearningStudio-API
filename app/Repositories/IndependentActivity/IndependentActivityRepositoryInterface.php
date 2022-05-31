@@ -57,6 +57,14 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
     /**
      * @param $data
      * @param $suborganization
+     * @param $authUser
+     * @return mixed
+     */
+    public function getAuthUserIndependentActivities($data, $suborganization, $authUser);
+
+    /**
+     * @param $data
+     * @param $suborganization
      * @return mixed
      */
     public function getAll($data, $suborganization);
@@ -89,4 +97,14 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * @throws GeneralException
      */
     public function updateIndex($independentActivity, $index);
+
+    /**
+     * Copy Exisiting independentent activity into a playlist
+     * @param $independentActivity
+     * @param $playlist
+     * @param $token
+     * @return string
+     * 
+     */
+    public function copyToPlaylist( $independentActivity, $playlist, $token);
 }

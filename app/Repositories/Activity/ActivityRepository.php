@@ -284,7 +284,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
         $queryWhere[] = "deleted_at IS NULL";
         $queryWhere[] = "(standalone_activity_user_id IS NULL OR standalone_activity_user_id = 0)";
-        $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity', 'independent_activities' => 'Independent Activity'];
+        $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity'];
 
         if (isset($data['startDate']) && !empty($data['startDate'])) {
            $queryWhere[] = "created_at >= '" . $data['startDate'] . "'::date";
@@ -365,7 +365,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $dataUserIds = implode("','", $data['userIds']);
-            $queryWhere[] = "user_id IN (" . $dataUserIds . ")";
+            $queryWhere[] = "user_id IN ('" . $dataUserIds . "')";
         }
 
         if (isset($data['author']) && !empty($data['author'])) {

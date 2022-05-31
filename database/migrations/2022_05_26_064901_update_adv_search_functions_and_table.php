@@ -139,22 +139,6 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                  left join organizations o on pr.organization_id=o.id
                  left join teams t on pr.team_id=t.id
                  where lower(a.title) like concat(concat('%',lower(_text)),'%')
-                 
-                 union all
-                 
-                         select 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null as project_id,
-                null as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
-                a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0 as standalone_activity_user_id, null::boolean as favored
-                from independent_activities a 
-                 left join activity_subject acts on a.id=acts.activity_id
-                 left join activity_education_level ael on a.id=ael.activity_id
-                 left join activity_author_tag aat on a.id=aat.activity_id
-                 left join h5p_contents hc on a.h5p_content_id=hc.id
-                 left join h5p_libraries hl on hc.library_id=hl.id
-                 left join users u on a.user_id=u.id
-                 left join organizations o on a.organization_id=o.id
-                 where lower(a.title) like concat(concat('%',lower(_text)),'%')
         $BODY$
         EOL;
 
@@ -230,9 +214,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where user_id=_uid)sq2
                 on
                 sq1.project_id=sq2.pid
-                
                 union all
-                
                 select sq1.*, case when sq2.pid is not null then TRUE else FALSE end as favored from
                 (
                 select 1 as priority,'Activity' as entity,pr.organization_id as org_id,a.id as entity_id,u.id as user_id, pr.id as project_id,
@@ -258,26 +240,6 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where user_id=_uid)sq2
                 on
                 sq1.project_id=sq2.pid
-                
-                union all 
-                
-                
-                
-                select 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null as project_id,
-                null as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
-                a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0 as standalone_activity_user_id, FALSE  as favored
-                from independent_activities a 
-                  left join activity_subject acts on a.id=acts.activity_id
-                 left join activity_education_level ael on a.id=ael.activity_id
-                 left join activity_author_tag aat on a.id=aat.activity_id
-                 left join h5p_contents hc on a.h5p_content_id=hc.id
-                 left join h5p_libraries hl on hc.library_id=hl.id
-                 left join users u on a.user_id=u.id
-                 left join organizations o on a.organization_id=o.id
-                 where lower(a.title) like concat(concat('%',lower(_text)),'%')
-                 
-                 
         $BODY$
         EOL;
 
