@@ -77,7 +77,7 @@ class LMSIntegrationService implements LMSIntegrationServiceInterface
 	* @return string
 	*/
 	public function getXAPIFileForIndepActivity(IndependentActivity $independent_activity)
-	{
+	{print_r($independent_activity);die('---');
 		$filename = 'storage/xapifiles/' . 'indep-activity-' . Str::slug($independent_activity->id, '-') . '.zip';
 		$url = config('app.front_end_url') . '/independent_activity/'.$independent_activity->id . '/shared';
 		$html = view('api.xapihtml', ['url' => $url, 'title' => $independent_activity->title])->render();
