@@ -800,7 +800,7 @@ class IndependentActivityController extends Controller
     {
         $this->authorize('export', $independent_activity);
         // pushed cloning of activity in background
-        ExportIndependentActivity::dispatch(auth()->user(), $independent_activity)->delay(now()->addSecond());
+        ExportIndependentActivity::dispatch(auth()->user(), $independent_activity, $suborganization)->delay(now()->addSecond());
 
         return response([
             'message' =>  "Your request to export independent Activity [$independent_activity->title] has been received and is being processed. <br>
