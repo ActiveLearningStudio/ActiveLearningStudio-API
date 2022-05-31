@@ -187,7 +187,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param $data
      * @return mixed
      */
-    public function getUsersExportProjectList($data)
+    public function getUsersExportProjectList($data, $suborganization)
     {
         $days_limit = isset($data['days_limit']) ? $data['days_limit'] : config('constants.default-exported-projects-days-limit');
         
@@ -205,6 +205,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         
         $query =  $query->where('type', 'App\Notifications\ProjectExportNotification');
         $query =  $query->where('created_at', '>=', $date);
+        $query =  $query->where('organization_id', $suborganization->id);
 
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';

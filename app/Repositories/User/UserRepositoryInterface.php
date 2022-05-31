@@ -59,5 +59,5 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @param $days_limit
      * @return array
      */
-    public function getUsersExportProjectList($days_limit);
+    public function getUsersExportProjectList($days_limit, $suborganization);
 }

@@ -767,10 +767,10 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function exportProjectList(Request $request)
+    public function exportProjectList(Organization $suborganization, Request $request)
     {
         
-        return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all()), 200);
+        return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all(), $suborganization), 200);
     }
 
     /**
