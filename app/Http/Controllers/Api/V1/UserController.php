@@ -764,6 +764,7 @@ class UserController extends Controller
      * 
      * @responseFile responses/notifications/export-notifications.json
      *
+     * @param Organization $suborganization
      * @param Request $request
      * @return Response
      */

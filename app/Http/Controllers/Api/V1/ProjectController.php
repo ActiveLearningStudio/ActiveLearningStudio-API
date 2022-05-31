@@ -774,7 +774,7 @@ class ProjectController extends Controller
      */
     public function exportProject(Request $request, Organization $suborganization, Project $project)
     {
-        //$this->authorize('export', [Project::class, $suborganization]);
+        $this->authorize('export', [Project::class, $suborganization]);
         // pushed cloning of project in background
         ExportProject::dispatch(auth()->user(), $project, $suborganization)->delay(now()->addSecond());
 

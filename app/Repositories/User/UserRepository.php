@@ -185,6 +185,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * To get exported project list of last 10 days
      * @param $data
+     * @param $suborganization
      * @return mixed
      */
     public function getUsersExportProjectList($data, $suborganization)

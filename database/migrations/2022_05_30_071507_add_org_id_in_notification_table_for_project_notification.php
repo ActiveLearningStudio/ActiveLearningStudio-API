@@ -13,7 +13,7 @@ class AddOrgIdInNotificationTableForProjectNotification extends Migration
      */
     public function up()
     {
-        if(!Schema::hasColumn('notifications', 'organization_id')) {
+        if (!Schema::hasColumn('notifications', 'organization_id')) {
             Schema::table('notifications', function (Blueprint $table) {
                 $table->unsignedBigInteger('organization_id')->nullable()->after('notifiable_id');
             });
