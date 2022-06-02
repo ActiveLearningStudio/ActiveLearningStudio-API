@@ -20,7 +20,7 @@ class DefaultActivityLayoutSeeder extends Seeder
         $columnLayoutImg = 'EdE8yAybW0I4IlU8qpEZqrkIdlaou3CDcBAj1M4D.png';
         $interactiveBookImg = 'CeOAsd4QYEvpgoQpfjrVicxthAP6lM2G7LaTRFyd.png';
         $coursePresentationImg = 'rF2Vdw0bT3T7Fx85FZ7pvvZgzr0ka6DLKFLkVnVT.png';
-        $questionnaireImg = 'mtBeC6w0OY8JM4cgPetzBafE6iUPry3omWrsPS6k.png';
+        $quizImg = 'Id6BxSkmuVvZBOHNl9Wd5WUfITh4qFq2DEMO6bOJ.png';
 
         $organizations = DB::table('organizations')->pluck('id');
 
@@ -43,8 +43,8 @@ class DefaultActivityLayoutSeeder extends Seeder
                 $this->copyImage($coursePresentationImg);
             }
 
-            if (!File::exists($localURL . $questionnaireImg)) {
-                $this->copyImage($questionnaireImg);
+            if (!File::exists($localURL . $quizImg)) {
+                $this->copyImage($quizImg);
             }
 
             $activityLayouts = '';
@@ -87,12 +87,12 @@ class DefaultActivityLayoutSeeder extends Seeder
                 ],
                 [
                     'organization_id' => $organization,
-                    'title' => 'Questionnaire',
+                    'title' => 'Quiz',
                     'description' => '',
                     'type' => 'h5p',
-                    'h5pLib' => 'H5P.Questionnaire 1.3',
+                    'h5pLib' => 'H5P.QuestionSet 1.17',
                     'order' => 0,
-                    'image' => $storageURL . $questionnaireImg,
+                    'image' => $storageURL . $quizImg,
                 ]
             ];
 
