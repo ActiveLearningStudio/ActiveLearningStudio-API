@@ -687,16 +687,13 @@ class GoogleClassroomController extends Controller
 
 
     /**
-     * To Publish independent activity To Google Classroom under a specific topic
+     * Publish independent activity To Google Classroom
+     * To Publish independent activity To Google Classroom under a specific class or specific classwork
      *
      * @urlParam activity required The Id of a independentActivity. Example: 11
      * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
-     * @bodyParam string course_id (The Google Classroom course id)
-     * @bodyParam string topic_id (The Google Classroom topic id)
-     * @param IndependentActivity $activity
-     * @param GCPublishActivityRequest $publishActivityRequest
-     * @param GcClassworkRepositoryInterface $gcClassworkRepository
-     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     * @bodyParam string course_id (The Google Classroom course id Example: 532068611011)
+     * @bodyParam string topic_id (The Google Classroom topic id Example: 532103337862)
      *
      * @responseFile responses/google-classroom/google-classroom-publish-activity.json
      *
@@ -711,10 +708,15 @@ class GoogleClassroomController extends Controller
      *     "Failed to copy publish."
      *   ]
      * }
+     *
+     * @param IndependentActivity $independent_activity
+     * @param GCPublishActivityRequest $publishActivityRequest
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
      * @return Response
      * @throws \Exception
      */
-    public function publishIndependentActivityToGoogleClassroom(IndependentActivity $activity,
+    public function publishIndependentActivityToGoogleClassroom(IndependentActivity $independent_activity,
         GCPublishActivityRequest $publishActivityRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
         GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
@@ -727,7 +729,7 @@ class GoogleClassroomController extends Controller
 
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
-            $publishedActivity = $service->publishIndependentActivityAsAssignment($activity, $courseId, $topicId,
+            $publishedActivity = $service->publishIndependentActivityAsAssignment($independent_activity, $courseId, $topicId,
                 $googleClassroomRepository, $publisherOrg);
 
             return response([

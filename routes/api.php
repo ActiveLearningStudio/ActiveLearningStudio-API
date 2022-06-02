@@ -310,7 +310,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 'GoogleClassroomController@publishPlaylistToGoogleClassroom');
             Route::post('projects/{project}/playlists/{playlist}/activities/{activity}/publish',
                 'GoogleClassroomController@publishActivityToGoogleClassroom');
-            Route::post('activities/{activity}/publish',
+            Route::post('activities/{independent_activity}/publish',
                 'GoogleClassroomController@publishIndependentActivityToGoogleClassroom');
         });
 
