@@ -688,10 +688,10 @@ class GoogleClassroomController extends Controller
 
     /**
      * Publish independent activity To Google Classroom
-     * 
+     *
      * To Publish independent activity To Google Classroom under a specific class or specific classwork
      *
-     * @urlParam activity required The Id of a independentActivity. Example: 11
+     * @urlParam independent_activity required The Id of a independentActivity. Example: 11
      * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
      * @bodyParam string course_id (The Google Classroom course id Example: 532068611011)
      * @bodyParam string topic_id (The Google Classroom topic id Example: 532103337862)

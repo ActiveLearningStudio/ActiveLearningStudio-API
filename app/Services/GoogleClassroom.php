@@ -788,9 +788,10 @@ class GoogleClassroom implements GoogleClassroomInterface
 
     /**
      * It will create independent activity as an assignment.
+     * 
      * If a course and/or topic already exist, then the activity will be created in that.
      *
-     * @param IndependentActivity $activity
+     * @param IndependentActivity $independent_activity
      * @param string|null $courseId
      * @param string|null $topicId
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
@@ -798,7 +799,7 @@ class GoogleClassroom implements GoogleClassroomInterface
      * @return array
      * @throws GeneralException
      */
-    public function publishIndependentActivityAsAssignment(IndependentActivity $activity, $courseId = null, $topicId = null,
+    public function publishIndependentActivityAsAssignment(IndependentActivity $independent_activity, $courseId = null, $topicId = null,
         GoogleClassroomRepositoryInterface $googleClassroomRepository, $publisherOrg)
     {
         if (!$this->gc_classwork) {
@@ -811,9 +812,9 @@ class GoogleClassroom implements GoogleClassroomInterface
             $course = $this->getCourse($courseId);
         } else {
             $courseData = [
-                'name' => $activity->title,
-                'descriptionHeading' => $activity->description,
-                'description' => $activity->description,
+                'name' => $independent_activity->title,
+                'descriptionHeading' => $independent_activity->description,
+                'description' => $independent_activity->description,
                 'room' => '1', // optional
                 'ownerId' => 'me',
                 'courseState' => self::COURSE_CREATE_STATE
@@ -836,7 +837,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             // Check for duplicate topic here..
             $topicData = [
                 'courseId' => $course->id,
-                'name' => $activity->title
+                'name' => $independent_activity->title
             ];
             $topic = $this->getOrCreateTopic($topicData);
         }
@@ -844,11 +845,11 @@ class GoogleClassroom implements GoogleClassroomInterface
         $return['topics'][$count] = GCTopicResource::make($topic)->resolve();
 
 
-        if (!empty($activity->title)) {
+        if (!empty($independent_activity->title)) {
             // Make an assignment URL with context of
             // classroom id, user id (teacher), and the h5p activity id
             $userId = auth()->user()->id;
-            $activityLink = '/gclass/launch/' . $userId . '/' . $course->id . '/' . $activity->id;
+            $activityLink = '/gclass/launch/' . $userId . '/' . $course->id . '/' . $independent_activity->id;
 
             // We need to save the classwork id in the database, and also need to retrieve it later.
             // So we make a dummy insertion in the database, and append the id in the link.
@@ -866,8 +867,8 @@ class GoogleClassroom implements GoogleClassroomInterface
                 $courseWorkData = [
                     'course_id' => $course->id,
                     'topic_id' => $topic->topicId,
-                    'activity_id' => $activity->id,
-                    'activity_title' => $activity->title,
+                    'activity_id' => $independent_activity->id,
+                    'activity_title' => $independent_activity->title,
                     'activity_link' => $frontURL . $activityLink
                 ];
                 $courseWork = $this->createCourseWork($courseWorkData);
