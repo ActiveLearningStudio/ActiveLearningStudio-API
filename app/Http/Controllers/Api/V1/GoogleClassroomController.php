@@ -650,7 +650,7 @@ class GoogleClassroomController extends Controller
      *   ]
      * }
      * @return Response
-     w @throws \Exception
+     * @throws \Exception
      */
     public function publishActivityToGoogleClassroom(Project $project, Playlist $playlist, Activity $activity,
         GCPublishActivityRequest $publishActivityRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
