@@ -22,6 +22,7 @@ use App\Http\Resources\V1\GCSubmissionResource;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
+use App\Models\IndependentActivity;
 use App\Models\GcClasswork;
 use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -252,7 +253,7 @@ class GoogleClassroomController extends Controller
                     // Get the student's submission...
                     $submissions = $service->getStudentSubmissions($courseId, $classwork->classwork_id);
                     $firstSubmission = $submissions[0];
-                    
+
                     // Save student Data for VIV if check is enabled
                     if (config('student-data.save_student_data')) {
                         $service->saveStudentData($studentRes);
@@ -558,7 +559,7 @@ class GoogleClassroomController extends Controller
 
     /**
      * To Publish playlist To Google Classroom
-     * 
+     *
      * @urlParam project required The Id of a project. Example: 9
      * @urlParam playlist required The Id of a playlist. Example: 10
      * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
@@ -569,7 +570,7 @@ class GoogleClassroomController extends Controller
      * @param GCPublishPlaylistRequest $publishPlaylistRequest
      * @param GcClassworkRepositoryInterface $gcClassworkRepository
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
-     * 
+     *
      * @responseFile responses/google-classroom/google-classroom-publish-playlist.json
      *
      * @response  403 {
@@ -621,7 +622,7 @@ class GoogleClassroomController extends Controller
 
     /**
      * To Publish activity To Google Classroom under a specific topic
-     * 
+     *
      * @urlParam project required The Id of a project. Example: 9
      * @urlParam playlist required The Id of a playlist. Example: 10
      * @urlParam activity required The Id of a activity. Example: 11
@@ -634,7 +635,7 @@ class GoogleClassroomController extends Controller
      * @param GCPublishActivityRequest $publishActivityRequest
      * @param GcClassworkRepositoryInterface $gcClassworkRepository
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
-     * 
+     *
      * @responseFile responses/google-classroom/google-classroom-publish-activity.json
      *
      * @response  403 {
@@ -649,7 +650,7 @@ class GoogleClassroomController extends Controller
      *   ]
      * }
      * @return Response
-     * @throws \Exception
+     w @throws \Exception
      */
     public function publishActivityToGoogleClassroom(Project $project, Playlist $playlist, Activity $activity,
         GCPublishActivityRequest $publishActivityRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
@@ -667,12 +668,74 @@ class GoogleClassroomController extends Controller
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
             $courseId = $data['course_id'] ?? 0;
             $topicId = $data['topic_id'] ?? 0;
-            $topicId = $data['topic_id'] ?? 0;
             $publisherOrg = $data['publisher_org'] ?? 0;
 
             $service = new GoogleClassroom($accessToken);
             $service->setGcClassworkObject($gcClassworkRepository);
             $publishedActivity = $service->publishActivityAsAssignment($project, $playlist, $activity, $courseId, $topicId, $googleClassroomRepository, $publisherOrg);
+
+            return response([
+                'course' => $publishedActivity,
+            ], 200);
+        } catch (\Google_Service_Exception $ex) {
+            return response([
+                'errors' => [$ex->getMessage()],
+            ], 500);
+        }
+
+    }
+
+
+    /**
+     * To Publish independent activity To Google Classroom under a specific topic
+     *
+     * @urlParam activity required The Id of a independentActivity. Example: 11
+     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
+     * @bodyParam string course_id (The Google Classroom course id)
+     * @bodyParam string topic_id (The Google Classroom topic id)
+     * @param IndependentActivity $activity
+     * @param GCPublishActivityRequest $publishActivityRequest
+     * @param GcClassworkRepositoryInterface $gcClassworkRepository
+     * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
+     *
+     * @responseFile responses/google-classroom/google-classroom-publish-activity.json
+     *
+     * @response  403 {
+     *   "errors": [
+     *     "Forbidden. You are trying to share other user's project."
+     *   ]
+     * }
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "Failed to copy publish."
+     *   ]
+     * }
+     * @return Response
+     * @throws \Exception
+     */
+    public function publishIndependentActivityToGoogleClassroom(IndependentActivity $activity,
+        GCPublishActivityRequest $publishActivityRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
+        GoogleClassroomRepositoryInterface $googleClassroomRepository)
+    {
+//        $authUser = auth()->user();
+//        if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {
+//            return response([
+//                'errors' => ['Forbidden. You are trying to share other user\'s activity.'],
+//            ], 403);
+//        }
+
+        try {
+            $data = $publishActivityRequest->validated();
+            $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
+            $courseId = $data['course_id'] ?? 0;
+            $topicId = $data['topic_id'] ?? 0;
+            $publisherOrg = $data['publisher_org'] ?? 0;
+
+            $service = new GoogleClassroom($accessToken);
+            $service->setGcClassworkObject($gcClassworkRepository);
+            $publishedActivity = $service->publishIndependentActivityAsAssignment($activity, $courseId, $topicId,
+                $googleClassroomRepository, $publisherOrg);
 
             return response([
                 'course' => $publishedActivity,

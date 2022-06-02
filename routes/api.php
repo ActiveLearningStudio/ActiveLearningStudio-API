@@ -310,6 +310,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 'GoogleClassroomController@publishPlaylistToGoogleClassroom');
             Route::post('projects/{project}/playlists/{playlist}/activities/{activity}/publish',
                 'GoogleClassroomController@publishActivityToGoogleClassroom');
+            Route::post('activities/{activity}/publish',
+                'GoogleClassroomController@publishIndependentActivityToGoogleClassroom');
         });
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
