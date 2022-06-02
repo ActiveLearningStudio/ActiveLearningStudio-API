@@ -718,13 +718,6 @@ class GoogleClassroomController extends Controller
         GCPublishActivityRequest $publishActivityRequest, GcClassworkRepositoryInterface $gcClassworkRepository,
         GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
-//        $authUser = auth()->user();
-//        if (Gate::forUser($authUser)->denies('publish-to-lms', $project)) {
-//            return response([
-//                'errors' => ['Forbidden. You are trying to share other user\'s activity.'],
-//            ], 403);
-//        }
-
         try {
             $data = $publishActivityRequest->validated();
             $accessToken = (isset($data['access_token']) && !empty($data['access_token']) ? $data['access_token'] : null);
