@@ -688,6 +688,7 @@ class GoogleClassroomController extends Controller
 
     /**
      * Publish independent activity To Google Classroom
+     * 
      * To Publish independent activity To Google Classroom under a specific class or specific classwork
      *
      * @urlParam activity required The Id of a independentActivity. Example: 11
