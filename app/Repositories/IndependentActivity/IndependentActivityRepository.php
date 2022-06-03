@@ -292,6 +292,9 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'subject_id' => $independentActivity->subject_id,
             'education_level_id' => $independentActivity->education_level_id,
             'shared' => $independentActivity->shared,
+            'user_id' => get_user_id_by_token($token),
+            'organization_id' => $organization->id,
+            'organization_visibility_type_id' => config('constants.private-organization-visibility-type-id'),
         ];
         $cloned_activity = $this->create($independent_activity_data);
 
