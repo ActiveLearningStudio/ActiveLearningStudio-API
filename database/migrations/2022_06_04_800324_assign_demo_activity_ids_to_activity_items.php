@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class AssignQuizActivityLayout extends Migration
+class AssignDemoActivityIdsToActivityItems extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +12,7 @@ class AssignQuizActivityLayout extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => AssignQuizActivityLayoutSeeder::class,
+            '--class' => DemoActivityIdsAssociationForActivityItems::class,
             '--force' => true
         ]);
     }

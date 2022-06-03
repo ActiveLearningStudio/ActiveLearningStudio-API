@@ -24,28 +24,27 @@ class DefaultActivityLayoutSeeder extends Seeder
 
         $organizations = DB::table('organizations')->pluck('id');
 
+        if (!File::exists($localURL . $InteractiveVideoImg)) {
+            $this->copyImage($InteractiveVideoImg);
+        }
+
+        if (!File::exists($localURL . $columnLayoutImg)) {
+            $this->copyImage($columnLayoutImg);
+        }
+
+        if (!File::exists($localURL . $interactiveBookImg)) {
+            $this->copyImage($interactiveBookImg);
+        }
+
+        if (!File::exists($localURL . $coursePresentationImg)) {
+            $this->copyImage($coursePresentationImg);
+        }
+
+        if (!File::exists($localURL . $quizImg)) {
+            $this->copyImage($quizImg);
+        }
 
         foreach ($organizations as $key => $organization) {
-
-            if (!File::exists($localURL . $InteractiveVideoImg)) {
-                $this->copyImage($InteractiveVideoImg);
-            }
-
-            if (!File::exists($localURL . $columnLayoutImg)) {
-                $this->copyImage($columnLayoutImg);
-            }
-
-            if (!File::exists($localURL . $interactiveBookImg)) {
-                $this->copyImage($interactiveBookImg);
-            }
-
-            if (!File::exists($localURL . $coursePresentationImg)) {
-                $this->copyImage($coursePresentationImg);
-            }
-
-            if (!File::exists($localURL . $quizImg)) {
-                $this->copyImage($quizImg);
-            }
 
             $activityLayouts = '';
             $activityLayouts = [

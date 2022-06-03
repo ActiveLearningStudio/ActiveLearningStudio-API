@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DemoActivityIDsAssociationSeeder extends Seeder
+class DemoActivityIdsAssociationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,8 +13,8 @@ class DemoActivityIDsAssociationSeeder extends Seeder
     {
         return DB::transaction(function () {
 
-            $sampleProjectName = 'Activity Sampler';
-            $demoUserEmail = 'demo@currikistudio.org';
+            $sampleProjectName = config('constants.curriki-sample-project');
+            $demoUserEmail = config('constants.curriki-demo-user-email');
             $organizationId = DB::table('organizations')->where('domain', 'currikistudio')->value('id');
 
             $layoutVideoIDs = [
@@ -30,15 +30,12 @@ class DemoActivityIDsAssociationSeeder extends Seeder
             $demoActivities = DB::table('activities as a')
                                 ->select(
                                     'a.id as demo_activity_id',
-                                    'a.title as activity_title',
-                                    'proj.name',
-                                    'u.email',
-                                    'u.id as user_id'
+                                    'a.title as activity_title'
                             )
-                            ->leftJoin('playlists as p', 'p.id', '=', 'a.playlist_id')
-                            ->leftJoin('projects as proj', 'proj.id', '=', 'p.project_id')
-                            ->leftJoin('user_project as up', 'up.project_id', '=', 'proj.id')
-                            ->leftJoin('users as u', 'u.id', '=', 'up.user_id')
+                            ->join('playlists as p', 'p.id', '=', 'a.playlist_id')
+                            ->join('projects as proj', 'proj.id', '=', 'p.project_id')
+                            ->join('user_project as up', 'up.project_id', '=', 'proj.id')
+                            ->join('users as u', 'u.id', '=', 'up.user_id')
                             ->where('u.email', $demoUserEmail)
                             ->where('proj.organization_id', $organizationId)
                             ->where('proj.name', $sampleProjectName)
