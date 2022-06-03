@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class AssignDemoActivityIdsToActivityLayout extends Migration
 {
@@ -14,7 +12,7 @@ class AssignDemoActivityIdsToActivityLayout extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => DemoActivityIDsAssociationSeeder::class,
+            '--class' => DemoActivityIdsAssociationSeeder::class,
             '--force' => true
         ]);
     }
