@@ -452,6 +452,10 @@ class DefaultActivityItemSeeder extends Seeder
 
             foreach ($itemsArray as $itemKey => $itemRow) {
 
+                if (!isset($activityTypes[$itemRow[1]]) || !isset($activityTypes[$itemRow[5]])) {
+                    continue;
+                }
+
                 if (!File::exists($localURL . $itemRow[5])) {
                     $this->copyImage($itemRow[5]);
                 }

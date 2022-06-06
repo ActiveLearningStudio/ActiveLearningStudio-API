@@ -48,23 +48,23 @@ class DemoActivityIdsAssociationForActivityItems extends Seeder
                             ->where('proj.organization_id', $organizationId)
                             ->where('proj.name', $sampleProjectName)
                             ->get();
-            $activityList = [];
+
             foreach ($demoActivities as $activity) {
 
                 if (in_array($activity->activity_title, $itemsNameList)) {
                     $activityItems[$activity->activity_title] = $activity->demo_activity_id;
+                } else if (strtolower($activity->activity_title) === 'coming soon!') {
+                    $activityItems['comingSoon'] = $activity->demo_activity_id;
                 }
-
-                $activityList[] = $activity->activity_title;
             }
-
-            // $comingSoonAvtivities = array_diff($itemsNameList, $activityList);
 
             $allActivityItems = DB::table('activity_items')->select('id', 'title')->get();
             $currentDate = now();
-
+            $comingSoonID = (isset($activityItems['comingSoon'])) ? $activityItems['comingSoon'] : 0;
+          
             foreach ($allActivityItems as $activityItem) {
-                $demoActivityID = 0;
+                
+                $demoActivityID = $comingSoonID;
                 $demoVideoID = 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs';
 
                 if (isset($activityItems[$activityItem->title])) {
@@ -73,7 +73,7 @@ class DemoActivityIdsAssociationForActivityItems extends Seeder
                 if (isset($layoutVideoIDs[$activityItem->title])) {
                     $demoVideoID = $layoutVideoIDs[$activityItem->title];
                 }
-
+                
                 DB::table('activity_items')
                     ->where('id', $activityItem->id)
                     ->update([
