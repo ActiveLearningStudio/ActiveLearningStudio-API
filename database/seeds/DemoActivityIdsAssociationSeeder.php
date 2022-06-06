@@ -23,6 +23,7 @@ class DemoActivityIdsAssociationSeeder extends Seeder
                 'Course Presentation' => 'https://www.youtube-nocookie.com/embed/b1_-JJWKh3w',
                 'Interactive Book' => 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
                 'Quiz' => 'https://www.youtube-nocookie.com/embed/t0vsfxiq1zk',
+                'Coming Soon' => 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs',
             ];
 
             $layouts = [];
@@ -44,7 +45,8 @@ class DemoActivityIdsAssociationSeeder extends Seeder
                                     'Column Layout',
                                     'Interactive Book',
                                     'Course Presentation',
-                                    'Quiz'
+                                    'Quiz',
+                                    'Coming Soon!'
                             ])
                             ->get();
 
@@ -60,6 +62,8 @@ class DemoActivityIdsAssociationSeeder extends Seeder
                     $layouts['Course Presentation'] = $activity->demo_activity_id;
                 } else if ($activity->activity_title === 'Quiz') {
                     $layouts['Quiz'] = $activity->demo_activity_id;
+                } else if ($activity->activity_title === 'Coming Soon!') {
+                    $layouts['Coming Soon'] = $activity->demo_activity_id;
                 }
             }
 
@@ -75,9 +79,11 @@ class DemoActivityIdsAssociationSeeder extends Seeder
                             ->get();
 
             $currentDate = now();
+            $comingSoonID = (isset($layouts['Coming Soon'])) ? $layouts['Coming Soon'] : 0;
 
             foreach ($allLayouts as $layout) {
-                $demoActivityID = 0;
+                
+                $demoActivityID = $comingSoonID;
                 $demoVideoID = 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs';
 
                 if (isset($layouts[$layout->title])) {
