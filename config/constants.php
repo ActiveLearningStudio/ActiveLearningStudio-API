@@ -3,9 +3,8 @@ return [
     'h5p-api-url' => env('H5P_API_URL'),
     'curriki-tsugi-host' => env('CURRIKI_TSUGI_HOST'),
     'front-url' => env('FRONT_END_URL'),
-    'curriki-demo-email' => env('CURRIKI_DEMO_EMAIL'),
-    'curriki-sample-project' => 'Activity Sampler',
-    'curriki-demo-user-email' => 'demo@currikistudio.org',
+    'curriki-demo-email' => env('CURRIKI_DEMO_EMAIL', 'demo@currikistudio.org'),
+    'curriki-sample-project' => env('CURRIKI_SAMPLE_PROJECT', 'Activity Sampler'),
     'map-device-lti-client-id' => env('MAP_DEVICE_LTI_CLIENT_ID'),
     'users' => [
         'sample-file' => 'sample/users-import-sample.csv'

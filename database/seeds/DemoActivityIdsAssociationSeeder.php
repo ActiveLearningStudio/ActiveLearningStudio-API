@@ -16,7 +16,7 @@ class DemoActivityIdsAssociationSeeder extends Seeder
             $sampleProjectName = config('constants.curriki-sample-project');
             $demoUserEmail = config('constants.curriki-demo-user-email');
             $organizationId = DB::table('organizations')->where('domain', 'currikistudio')->value('id');
-
+dd( $sampleProjectName );
             $layoutVideoIDs = [
                 'Interactive Video' => 'https://www.youtube-nocookie.com/embed/7FnoeS8fxXg',
                 'Column Layout' => 'https://www.youtube-nocookie.com/embed/ngXSzWNYzU4',
@@ -82,7 +82,7 @@ class DemoActivityIdsAssociationSeeder extends Seeder
             $comingSoonID = (isset($layouts['Coming Soon'])) ? $layouts['Coming Soon'] : 0;
 
             foreach ($allLayouts as $layout) {
-                
+
                 $demoActivityID = $comingSoonID;
                 $demoVideoID = 'https://www.youtube-nocookie.com/embed/F0P53KBqYSs';
 
