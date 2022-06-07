@@ -452,7 +452,7 @@ class DefaultActivityItemSeeder extends Seeder
 
             foreach ($itemsArray as $itemKey => $itemRow) {
 
-                if (!isset($activityTypes[$itemRow[1]]) || !isset($activityTypes[$itemRow[5]])) {
+                if (!isset($activityTypes[$itemRow[1]])) {
                     continue;
                 }
 
