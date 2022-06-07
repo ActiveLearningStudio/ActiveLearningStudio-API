@@ -12,7 +12,7 @@ class AssignDemoActivityIdsToActivityItems extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => DemoActivityIdsAssociationForActivityItems::class,
+            '--class' => DemoActivityIdsAssociationForActivityItemsSeeder::class,
             '--force' => true
         ]);
     }

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DemoActivityIdsAssociationForActivityItems extends Seeder
+class DemoActivityIdsAssociationForActivityItemsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -28,7 +28,7 @@ class DemoActivityIdsAssociationForActivityItems extends Seeder
         }
 
         $sampleProjectName = config('constants.curriki-sample-project');
-        $demoUserEmail = config('constants.curriki-demo-user-email');
+        $demoUserEmail = config('constants.curriki-demo-email');
         $organizationId = DB::table('organizations')->where('domain', 'currikistudio')->value('id');
 
         $activityItems = [];
