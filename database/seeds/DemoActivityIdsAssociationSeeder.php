@@ -47,7 +47,11 @@ class DemoActivityIdsAssociationSeeder extends Seeder
                                 'Coming Soon!'
                         ])
                         ->get();
+<<<<<<< HEAD
                         
+=======
+
+>>>>>>> d16b7a92bb0bb1d59f4f761849e0c2a267dd4398
         foreach ($demoActivities as $activity) {
 
             if ($activity->activity_title === 'Interactive Video') {
