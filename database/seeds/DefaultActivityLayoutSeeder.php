@@ -16,7 +16,7 @@ class DefaultActivityLayoutSeeder extends Seeder
         $localURL = public_path('storage/activity-items/');
         $storageURL = '/storage/activity-items/';
 
-        $InteractiveVideoImg = 'mfzc7dF8GW4NToalg6X4WRt4maHZSu5r8lXPjBbj.png';
+        $interactiveVideoImg = 'mfzc7dF8GW4NToalg6X4WRt4maHZSu5r8lXPjBbj.png';
         $columnLayoutImg = 'EdE8yAybW0I4IlU8qpEZqrkIdlaou3CDcBAj1M4D.png';
         $interactiveBookImg = 'CeOAsd4QYEvpgoQpfjrVicxthAP6lM2G7LaTRFyd.png';
         $coursePresentationImg = 'rF2Vdw0bT3T7Fx85FZ7pvvZgzr0ka6DLKFLkVnVT.png';
@@ -24,8 +24,8 @@ class DefaultActivityLayoutSeeder extends Seeder
 
         $organizations = DB::table('organizations')->pluck('id');
 
-        if (!File::exists($localURL . $InteractiveVideoImg)) {
-            $this->copyImage($InteractiveVideoImg);
+        if (!File::exists($localURL . $interactiveVideoImg)) {
+            $this->copyImage($interactiveVideoImg);
         }
 
         if (!File::exists($localURL . $columnLayoutImg)) {
@@ -55,7 +55,7 @@ class DefaultActivityLayoutSeeder extends Seeder
                     'type' => 'h5p',
                     'h5pLib' => 'H5P.InteractiveVideo 1.22',
                     'order' => 0,
-                    'image' => $storageURL . $InteractiveVideoImg,
+                    'image' => $storageURL . $interactiveVideoImg,
                 ],
                 [
                     'organization_id' => $organization,
