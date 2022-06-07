@@ -496,6 +496,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
             $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
         }
 
         return $query->where('organization_id', $suborganization->id)->where('user_id', $authUser->id)->paginate($perPage)->withQueryString();
