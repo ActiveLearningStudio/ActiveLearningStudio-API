@@ -12,7 +12,7 @@ class DemoActivityIdsAssociationSeeder extends Seeder
     public function run()
     {
         $sampleProjectName = config('constants.curriki-sample-project');
-        $demoUserEmail = config('constants.curriki-demo-user-email');
+        $demoUserEmail = config('constants.curriki-demo-email');
         $organizationId = DB::table('organizations')->where('domain', 'currikistudio')->value('id');
 
         $layoutVideoIDs = [
@@ -47,7 +47,7 @@ class DemoActivityIdsAssociationSeeder extends Seeder
                                 'Coming Soon!'
                         ])
                         ->get();
-
+                        
         foreach ($demoActivities as $activity) {
 
             if ($activity->activity_title === 'Interactive Video') {
