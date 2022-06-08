@@ -452,6 +452,10 @@ class DefaultActivityItemSeeder extends Seeder
 
             foreach ($itemsArray as $itemKey => $itemRow) {
 
+                if (!isset($activityTypes[$itemRow[1]])) {
+                    continue;
+                }
+
                 if (!File::exists($localURL . $itemRow[5])) {
                     $this->copyImage($itemRow[5]);
                 }
@@ -507,6 +511,9 @@ class DefaultActivityItemSeeder extends Seeder
         }
         if ($input === 'DragDrop') {
             return 'Drag & Drop';
+        }
+        if ($input === 'GeoGebra3D') {
+            return 'Geo Gebra 3D';
         }
 
         $pattern = '!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!';
