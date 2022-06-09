@@ -18,13 +18,23 @@ class AddJqueryDragQuestionH5P extends Seeder
 
             $h5pJQueryUiParams = ['name' => "jQuery.ui", "major_version" => 1, "minor_version" => 10];
             $h5pJqueryUiLib = DB::table('h5p_libraries')->where($h5pJQueryUiParams)->first();
-            $h5pJqueryUiLibId = $h5pJqueryUiLib->id;
+            if (!empty($h5pJqueryUiLib)) {
 
-            DB::table('h5p_libraries_libraries')->insert([
-                'library_id' => $h5pFibLib->id,
-                'required_library_id' => $h5pJqueryUiLibId,
-                'dependency_type' => 'preloaded'
-            ]);
+                $h5pJqueryUiLibId = $h5pJqueryUiLib->id;
+
+                $h5pJQueryUiLibParams = ['library_id' => $h5pFibLib->id,'required_library_id' => $h5pJqueryUiLibId,'dependency_type' => 'preloaded'];
+                $h5pJqueryUiLibMap = DB::table('h5p_libraries_libraries')->where($h5pJQueryUiLibParams)->first();
+                if(empty($h5pJqueryUiLibMap)) {
+                    
+                    DB::table('h5p_libraries_libraries')->insert([
+                        'library_id' => $h5pFibLib->id,
+                        'required_library_id' => $h5pJqueryUiLibId,
+                        'dependency_type' => 'preloaded'
+                    ]);
+                }
+               
+            }
+            
         }
 
     }
