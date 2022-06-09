@@ -3,7 +3,8 @@ return [
     'h5p-api-url' => env('H5P_API_URL'),
     'curriki-tsugi-host' => env('CURRIKI_TSUGI_HOST'),
     'front-url' => env('FRONT_END_URL'),
-    'curriki-demo-email' => env('CURRIKI_DEMO_EMAIL'),
+    'curriki-demo-email' => env('CURRIKI_DEMO_EMAIL', 'demo@currikistudio.org'),
+    'curriki-sample-project' => env('CURRIKI_SAMPLE_PROJECT', 'Activity Sampler'),
     'map-device-lti-client-id' => env('MAP_DEVICE_LTI_CLIENT_ID'),
     'users' => [
         'sample-file' => 'sample/users-import-sample.csv'
@@ -36,7 +37,7 @@ return [
     "tool-consumer-description" => env('LTI_TOOL_CONSUMER_DESCRIPTION', 'curriki studio'),
     'tool-consumer-family-code' => env('LTI_TOOL_CONSUMER_FAMILY', 'currkistudio'),
     'tool-consumer-version' => env('LTI_TOOL_CONSUMER_VERSION', '1.0.0'),
-    
+
     /*
      |--------------------------------------------------------------------------
      | SERVER PROXY
