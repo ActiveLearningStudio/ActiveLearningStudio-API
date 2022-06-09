@@ -92,12 +92,6 @@ class H5PAddDragQuestionLibrarySeeder extends Seeder
             'required_library_id' => $h5pJoubelUILibId,
             'dependency_type' => 'preloaded'
         ]);
-        DB::table('h5p_libraries_libraries')->insert([
-            'library_id' => $h5pFibLibId,
-            'required_library_id' => $h5pJTextUtilitiesLibId,
-            'dependency_type' => 'preloaded'
-        ]);
-
 
         DB::table('h5p_libraries_libraries')->insert([
             'library_id' => $h5pFibLibId,
