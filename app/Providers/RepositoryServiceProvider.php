@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Activity\ActivityRepository;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use App\Repositories\IndependentActivity\IndependentActivityRepository;
+use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepository;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\ActivityLayout\ActivityLayoutRepositoryInterface;
@@ -115,6 +117,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(EducationLevelRepositoryInterface::class, EducationLevelRepository::class);
         $this->app->bind(AuthorTagRepositoryInterface::class, AuthorTagRepository::class);
         $this->app->bind(ActivityLayoutRepositoryInterface::class, ActivityLayoutRepository::class);
+        $this->app->bind(IndependentActivityRepositoryInterface::class, IndependentActivityRepository::class);
     }
 
     /**

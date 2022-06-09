@@ -396,7 +396,7 @@ class H5PAddDragQuestionLibrarySeeder extends Seeder
     }
 
     private function getSemantics() {
-       return '[
+        return '[
             {
               "name": "scoreShow",
               "type": "text",
