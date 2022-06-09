@@ -37,7 +37,8 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
             return $query->where('organization_id', $suborganization->id)
                          ->orderBy('order', 'ASC')
-                         ->orderBy('title', 'ASC')->get();
+                         ->orderBy('title', 'ASC')
+                         ->get();
         }
         if (isset($data['filter']) && $data['filter'] !== '') {
             $query = $query->whereHas('activityType', function ($qry) use ($data) {
