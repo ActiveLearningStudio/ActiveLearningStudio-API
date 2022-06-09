@@ -223,4 +223,12 @@ class Organization extends Model
         "), array('thisOrgId' => $this->id));
         return Arr::pluck($results, 'id');
     }
+
+    /**
+     * Get the independent activities for the organization
+     */
+    public function independentActivities()
+    {
+        return $this->hasMany('App\Models\IndependentActivity', 'organization_id');
+    }
 }
