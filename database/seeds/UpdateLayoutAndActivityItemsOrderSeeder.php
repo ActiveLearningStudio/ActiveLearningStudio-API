@@ -19,19 +19,13 @@ class UpdateLayoutAndActivityItemsOrderSeeder extends Seeder
             'Interactive Book' => 5,
         ];
 
-        $layouts = DB::table('activity_layouts')->select('id', 'title', 'order')->get();
-
-        foreach ($layouts as $layout) {
-
-            if(isset($layoutOrder[$layout->title])) {
-
-                DB::table('activity_layouts')
-                    ->where('id', $layout->id)
-                    ->update([
-                        'order' => $layoutOrder[$layout->title],
-                    ]);
-                    
-            }
+        foreach ($layoutOrder as $title => $order) {
+            DB::table('activity_layouts')
+                ->where('title', $title)
+                ->update([
+                    'order' => $order
+                ]);
         }
+    
     }
 }
