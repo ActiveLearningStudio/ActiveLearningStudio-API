@@ -12,7 +12,7 @@ class AddJqueryDragquestionH5p extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => AddJqueryDragQuestionH5P::class,
+            '--class' => AddJqueryDragQuestionH5PSeeder::class,
             '--force' => true
         ]);
     }

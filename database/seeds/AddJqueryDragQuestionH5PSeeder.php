@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class AddJqueryDragQuestionH5P extends Seeder
+class AddJqueryDragQuestionH5PSeeder extends Seeder
 {
     /**
      * Run the database seeds.
