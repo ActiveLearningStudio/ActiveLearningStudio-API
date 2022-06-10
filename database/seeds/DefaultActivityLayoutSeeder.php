@@ -16,36 +16,35 @@ class DefaultActivityLayoutSeeder extends Seeder
         $localURL = public_path('storage/activity-items/');
         $storageURL = '/storage/activity-items/';
 
-        $InteractiveVideoImg = 'mfzc7dF8GW4NToalg6X4WRt4maHZSu5r8lXPjBbj.png';
+        $interactiveVideoImg = 'mfzc7dF8GW4NToalg6X4WRt4maHZSu5r8lXPjBbj.png';
         $columnLayoutImg = 'EdE8yAybW0I4IlU8qpEZqrkIdlaou3CDcBAj1M4D.png';
         $interactiveBookImg = 'CeOAsd4QYEvpgoQpfjrVicxthAP6lM2G7LaTRFyd.png';
         $coursePresentationImg = 'rF2Vdw0bT3T7Fx85FZ7pvvZgzr0ka6DLKFLkVnVT.png';
-        $questionnaireImg = 'mtBeC6w0OY8JM4cgPetzBafE6iUPry3omWrsPS6k.png';
+        $quizImg = 'Id6BxSkmuVvZBOHNl9Wd5WUfITh4qFq2DEMO6bOJ.png';
 
         $organizations = DB::table('organizations')->pluck('id');
 
+        if (!File::exists($localURL . $interactiveVideoImg)) {
+            $this->copyImage($interactiveVideoImg);
+        }
+
+        if (!File::exists($localURL . $columnLayoutImg)) {
+            $this->copyImage($columnLayoutImg);
+        }
+
+        if (!File::exists($localURL . $interactiveBookImg)) {
+            $this->copyImage($interactiveBookImg);
+        }
+
+        if (!File::exists($localURL . $coursePresentationImg)) {
+            $this->copyImage($coursePresentationImg);
+        }
+
+        if (!File::exists($localURL . $quizImg)) {
+            $this->copyImage($quizImg);
+        }
 
         foreach ($organizations as $key => $organization) {
-
-            if (!File::exists($localURL . $InteractiveVideoImg)) {
-                $this->copyImage($InteractiveVideoImg);
-            }
-
-            if (!File::exists($localURL . $columnLayoutImg)) {
-                $this->copyImage($columnLayoutImg);
-            }
-
-            if (!File::exists($localURL . $interactiveBookImg)) {
-                $this->copyImage($interactiveBookImg);
-            }
-
-            if (!File::exists($localURL . $coursePresentationImg)) {
-                $this->copyImage($coursePresentationImg);
-            }
-
-            if (!File::exists($localURL . $questionnaireImg)) {
-                $this->copyImage($questionnaireImg);
-            }
 
             $activityLayouts = '';
             $activityLayouts = [
@@ -56,7 +55,7 @@ class DefaultActivityLayoutSeeder extends Seeder
                     'type' => 'h5p',
                     'h5pLib' => 'H5P.InteractiveVideo 1.22',
                     'order' => 0,
-                    'image' => $storageURL . $InteractiveVideoImg,
+                    'image' => $storageURL . $interactiveVideoImg,
                 ],
                 [
                     'organization_id' => $organization,
@@ -87,12 +86,12 @@ class DefaultActivityLayoutSeeder extends Seeder
                 ],
                 [
                     'organization_id' => $organization,
-                    'title' => 'Questionnaire',
+                    'title' => 'Quiz',
                     'description' => '',
                     'type' => 'h5p',
-                    'h5pLib' => 'H5P.Questionnaire 1.3',
+                    'h5pLib' => 'H5P.QuestionSet 1.17',
                     'order' => 0,
-                    'image' => $storageURL . $questionnaireImg,
+                    'image' => $storageURL . $quizImg,
                 ]
             ];
 
