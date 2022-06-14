@@ -68,10 +68,10 @@ class CreateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
             ROWS 1000
         
         AS $BODY$
-                select 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null as project_id,
-                null as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
+        select 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
+                null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0 as standalone_activity_user_id, null::boolean as favored
+                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored
                 from independent_activities a 
                  left join activity_subject acts on a.id=acts.activity_id
                  left join activity_education_level ael on a.id=ael.activity_id
@@ -99,10 +99,10 @@ class CreateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         
         AS $BODY$
                 
-                select 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null as project_id,
-                null as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
+                select 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
+                null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0 as standalone_activity_user_id, FALSE  as favored
+                , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0::bigint as standalone_activity_user_id, FALSE  as favored
                 from independent_activities a 
                   left join activity_subject acts on a.id=acts.activity_id
                  left join activity_education_level ael on a.id=ael.activity_id
