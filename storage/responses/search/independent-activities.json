@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "thumb_url": null,
+            "title": "title",
+            "created_at": "2022-04-27 23:51:58",
+            "user": {
+                "email": "abby@curriki.org",
+                "first_name": "Abby",
+                "id": 3,
+                "last_name": "_"
+            },
+            "organization": {
+                "id": 1,
+                "name": "org name 1",
+                "description": "org description 1",
+                "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg"
+            }
+        }
+    ],
+    "meta": {
+        "total": 1
+    }
+}
