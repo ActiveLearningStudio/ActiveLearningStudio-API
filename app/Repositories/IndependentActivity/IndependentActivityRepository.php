@@ -10,6 +10,7 @@ use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Http\Resources\V1\SearchPostgreSqlResource;
+use App\Http\Resources\V1\SearchIndependentActivityResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -81,23 +82,22 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $queryFrom = 0;
         $querySize = 10;
 
-        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
+        if (isset($data['searchType']) && $data['searchType'] === 'showcase_activities') {
             $organization = $data['orgObj'];
             $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advSearch(:user_id, :query_text)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:user_id, :query_text)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:user_id, :query_text)';
 
             $queryParams['user_id'] = $authUser;
         } else {
-            $query = 'SELECT * FROM advSearch(:query_text)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text)';
         }
 
-        $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
         $queryWhere[] = "deleted_at IS NULL";
-        $queryWhere[] = "(standalone_activity_user_id IS NULL OR standalone_activity_user_id = 0)";
-        $modelMapping = ['projects' => 'Project', 'playlists' => 'Playlist', 'activities' => 'Activity', 'independent_activities' => 'Independent Activity'];
 
         if (isset($data['startDate']) && !empty($data['startDate'])) {
            $queryWhere[] = "created_at >= '" . $data['startDate'] . "'::date";
@@ -110,19 +110,19 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         if (isset($data['searchType']) && !empty($data['searchType'])) {
             $dataSearchType = $data['searchType'];
             if (
-                $dataSearchType === 'my_projects'
-                || $dataSearchType === 'org_projects_admin'
-                || $dataSearchType === 'org_projects_non_admin'
+                $dataSearchType === 'my_activities'
+                || $dataSearchType === 'org_activities_admin'
+                || $dataSearchType === 'org_activities_non_admin'
             ) {
                 if (isset($data['organizationIds']) && !empty($data['organizationIds'])) {
                     $dataOrganizationIds = implode(',', $data['organizationIds']);
                     $queryWhere[] = "org_id IN (" . $dataOrganizationIds . ")";
                 }
 
-                if ($dataSearchType === 'org_projects_non_admin') {
+                if ($dataSearchType === 'org_activities_non_admin') {
                     $queryWhere[] = "organization_visibility_type_id NOT IN (" . config('constants.private-organization-visibility-type-id') . ")";
                 }
-            } elseif ($dataSearchType === 'showcase_projects') {
+            } elseif ($dataSearchType === 'showcase_activities') {
                 // Get all public items
                 $organizationIdsShouldQueries[] = "organization_visibility_type_id IN (" . config('constants.public-organization-visibility-type-id') . ")";
 
@@ -160,18 +160,25 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
-            $dataSubjectIds = implode("','", $data['subjectIds']);
-            $queryWhere[] = "subject_id IN ('" . $dataSubjectIds . "')";
+            $subjectIdsWithMatchingName = $this->subjectRepository->getSubjectIdsWithMatchingName($data['subjectIds']);
+            $dataSubjectIds = implode(",", $subjectIdsWithMatchingName);
+            $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
-            $dataEducationLevelIds = implode("','", $data['educationLevelIds']);
-            $queryWhere[] = "education_level_id IN ('" . $dataEducationLevelIds . "')";
+            $educationLevelIdsWithMatchingName = $this->educationLevelRepository->getEducationLevelIdsWithMatchingName($data['educationLevelIds']);
+            $dataEducationLevelIds = implode(",", $educationLevelIdsWithMatchingName);
+            $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
+        }
+
+        if (isset($data['authorTagsIds']) && !empty($data['authorTagsIds'])) {
+            $dataAuthorTagsIds = implode(",", $data['authorTagsIds']);
+            $queryWhere[] = "author_tag_id IN (" . $dataAuthorTagsIds . ")";
         }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
             $dataUserIds = implode("','", $data['userIds']);
-            $queryWhere[] = "user_id IN (" . $dataUserIds . ")";
+            $queryWhere[] = "user_id IN ('" . $dataUserIds . "')";
         }
 
         if (isset($data['author']) && !empty($data['author'])) {
@@ -209,11 +216,6 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             $queryWhere[] = "description NOT LIKE '%" . $data['negativeQuery'] . "%'";
         }
 
-        if (isset($data['model']) && !empty($data['model'])) {
-            $dataModel = $modelMapping[$data['model']];
-            $queryWhere[] = "entity IN ('" . $dataModel . "')";
-        }
-
         if (isset($data['from']) && !empty($data['from'])) {
             $queryFrom = $data['from'];
         }
@@ -224,16 +226,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         if (!empty($queryWhere)) {
             $queryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
-            $countQuery = $query;
             $query = $query . $queryWhereStr;
-
-            if (isset($data['model']) && !empty($data['model'])) {
-                unset($queryWhere[count($queryWhere) - 1]);
-            }
-            
-            $countQueryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
-            $countQuery = $countQuery . $countQueryWhereStr;
-            $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
+            $countsQuery = $countsQuery . $queryWhereStr;
         }
 
         $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
@@ -241,16 +235,9 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $results = DB::select($query, $queryParams);
         $countResults = DB::select($countsQuery, $queryParams);
 
-        if (isset($countResults)) {
-            foreach ($countResults as $countResult) {
-                $modelMappingKey = array_search($countResult->entity, $modelMapping);
-                $counts[$modelMappingKey] = $countResult->count;
-            }
-        }
+        $meta['total'] = $countResults[0]->total;
 
-        $counts['total'] = array_sum($counts);
-
-        return (SearchPostgreSqlResource::collection($results))->additional(['meta' => $counts]);
+        return (SearchIndependentActivityResource::collection($results))->additional(['meta' => $meta]);
     }
 
     /**
