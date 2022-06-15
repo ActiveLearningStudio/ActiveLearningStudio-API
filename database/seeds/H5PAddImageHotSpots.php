@@ -55,20 +55,106 @@ class H5PAddImageHotSpots extends Seeder
 
         $h5pTransitionParams = ['name' => "H5P.Transition", "major_version" => 1, "minor_version" => 0];
         $h5pTransitionLib = DB::table('h5p_libraries')->where($h5pTransitionParams)->first();
+
+        if(empty($h5pTransitionLib)) {
+          $h5pTransitionLibId = DB::table('h5p_libraries')->insertGetId([
+              'name' => 'H5P.Transition',
+              'title' => 'Transition',
+              'major_version' => 1,
+              'minor_version' => 0,
+              'patch_version' => 4,
+              'embed_types' => '',
+              'runnable' => 0,
+              'restricted' => 0,
+              'fullscreen' => 0,
+              'preloaded_js' => 'transition.js',
+              'preloaded_css' => '',
+              'drop_library_css' => '',
+              'semantics' => '',
+              'tutorial_url' => ' ',
+              'has_icon' => 0
+          ]);
+      } else {
         $h5pTransitionLibId = $h5pTransitionLib->id;
+      }
 
         // Editor Dependencies
         $h5pEditorImageCoordinateSelectorParams = ['name' => "H5PEditor.ImageCoordinateSelector", "major_version" => 1, "minor_version" => 2];
         $h5pEditorImageCoordinateSelectorLib = DB::table('h5p_libraries')->where($h5pEditorImageCoordinateSelectorParams)->first();
+        
+
+        if(empty($h5pEditorImageCoordinateSelectorLib)) {
+          $h5pEditorImageCoordinateSelectorLibId = DB::table('h5p_libraries')->insertGetId([
+              'name' => 'H5PEditor.ImageCoordinateSelector',
+              'title' => 'ImageCoordinateSelector',
+              'major_version' => 1,
+              'minor_version' => 2,
+              'patch_version' => 5,
+              'embed_types' => '',
+              'runnable' => 0,
+              'restricted' => 0,
+              'fullscreen' => 0,
+              'preloaded_js' => 'scripts/image-coordinate-selector.js',
+              'preloaded_css' => 'styles/image-coordinate-selector.css',
+              'drop_library_css' => '',
+              'semantics' => '',
+              'tutorial_url' => ' ',
+              'has_icon' => 0
+          ]);
+      } else {
         $h5pEditorImageCoordinateSelectorLibId = $h5pEditorImageCoordinateSelectorLib->id;
+      }
 
         $h5pEditorColorSelectorParams = ['name' => "H5PEditor.ColorSelector", "major_version" => 1, "minor_version" => 3];
         $h5pEditorColorSelectorLib = DB::table('h5p_libraries')->where($h5pEditorColorSelectorParams)->first();
+
+        if(empty($h5pEditorColorSelectorLib)) {
+          $h5pEditorColorSelectorLibId = DB::table('h5p_libraries')->insertGetId([
+              'name' => 'H5PEditor.ColorSelector',
+              'title' => 'H5P color selector',
+              'major_version' => 1,
+              'minor_version' => 3,
+              'patch_version' => 1,
+              'embed_types' => '',
+              'runnable' => 0,
+              'restricted' => 0,
+              'fullscreen' => 0,
+              'preloaded_js' => 'scripts/spectrum.js,scripts/color-selector.js',
+              'preloaded_css' => 'styles/spectrum.css,styles/color-selector.css',
+              'drop_library_css' => '',
+              'semantics' => '',
+              'tutorial_url' => ' ',
+              'has_icon' => 0
+          ]);
+      } else {
         $h5pEditorColorSelectorLibId = $h5pEditorColorSelectorLib->id;
+      }
+
 
         $h5pEditorShowWhenParams = ['name' => "H5PEditor.ShowWhen", "major_version" => 1, "minor_version" => 0];
         $h5pEditorShowWhenLib = DB::table('h5p_libraries')->where($h5pEditorShowWhenParams)->first();
+        if(empty($h5pEditorShowWhenLib)) {
+          $h5pEditorShowWhenLibId = DB::table('h5p_libraries')->insertGetId([
+              'name' => 'H5PEditor.ShowWhen',
+              'title' => 'H5P ShowWhen',
+              'major_version' => 1,
+              'minor_version' => 0,
+              'patch_version' => 5,
+              'embed_types' => '',
+              'runnable' => 0,
+              'restricted' => 0,
+              'fullscreen' => 0,
+              'preloaded_js' => 'h5p-show-when.js',
+              'preloaded_css' => 'h5p-show-when.css',
+              'drop_library_css' => '',
+              'semantics' => '',
+              'tutorial_url' => ' ',
+              'has_icon' => 0
+          ]);
+      } else {
         $h5pEditorShowWhenLibId = $h5pEditorShowWhenLib->id;
+      }
+
 
 
         DB::table('h5p_libraries_libraries')->insert([
