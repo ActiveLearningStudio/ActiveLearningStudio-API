@@ -21,6 +21,7 @@ class SearchIndependentActivityResource extends JsonResource
             'thumb_url' => $this->thumb_url,
             'title' => $this->name,
             'description' => $this->when(isset($this->description), $this->description),
+            'activity_type' => $this->activity_title,
             'created_at' => $this->created_at,
             'user' => [
                 "email" => $this->email,

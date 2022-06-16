@@ -1,0 +1,869 @@
+{
+    "independent-activity": {
+        "id": 1,
+        "title": "Taurus 10 Jun 2022 edited",
+        "type": "h5p",
+        "content": "place_holder",
+        "description": null,
+        "shared": false,
+        "order": 7,
+        "thumb_url": "https://images.pexels.com/photos/420233/pexels-photo-420233.jpeg?auto=compress&cs=tinysrgb&dpr=1&fit=crop&h=200&w=280",
+        "subject_id": null,
+        "education_level_id": null,
+        "h5p": {
+            "settings": {
+                "baseUrl": "https://dev.currikistudio.org/api",
+                "url": "https://dev.currikistudio.org/api/storage/h5p",
+                "postUserStatistics": true,
+                "ajax": {
+                    "setFinished": "https://dev.currikistudio.org/api/api/v1/h5p/ajax/finish",
+                    "contentUserData": "https://dev.currikistudio.org/api/api/v1/h5p/ajax/content-user-data?content_id=:contentId&data_type=:dataType&sub_content_id=:subContentId"
+                },
+                "saveFreq": 7,
+                "siteUrl": "https://dev.currikistudio.org/api",
+                "l10n": {
+                    "H5P": {
+                        "fullscreen": "Fullscreen",
+                        "disableFullscreen": "Disable fullscreen",
+                        "download": "Download",
+                        "copyrights": "Rights of use",
+                        "embed": "Embed",
+                        "reuseDescription": "Reuse this content.",
+                        "size": "Size",
+                        "showAdvanced": "Show advanced",
+                        "hideAdvanced": "Hide advanced",
+                        "advancedHelp": "Include this script on your website if you want dynamic sizing of the embedded content:",
+                        "copyrightInformation": "Rights of use",
+                        "close": "Close",
+                        "title": "Title",
+                        "author": "Author",
+                        "year": "Year",
+                        "source": "Source",
+                        "license": "License",
+                        "thumbnail": "Thumbnail",
+                        "noCopyrights": "No copyright information available for this content.",
+                        "downloadDescription": "Download this content as a H5P file.",
+                        "copyrightsDescription": "View copyright information for this content.",
+                        "embedDescription": "View the embed code for this content.",
+                        "h5pDescription": "Visit H5P.org to check out more cool content.",
+                        "contentChanged": "This content has changed since you last used it.",
+                        "startingOver": "You'll be starting over.",
+                        "confirmDialogHeader": "Confirm action",
+                        "confirmDialogBody": "Please confirm that you wish to proceed. This action is not reversible.",
+                        "cancelLabel": "Cancel",
+                        "confirmLabel": "Confirm",
+                        "reuse": "Reuse",
+                        "reuseContent": "Reuse Content"
+                    }
+                },
+                "hubIsEnabled": false,
+                "reportingIsEnabled": true,
+                "user": {
+                    "name": "Abby tester test",
+                    "mail": "abby@curriki.org"
+                },
+                "editor": {
+                    "filesPath": "https://dev.currikistudio.org/api/storage/h5p/editor",
+                    "fileIcon": {
+                        "path": "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/images/binary-file.png",
+                        "width": 50,
+                        "height": 50
+                    },
+                    "ajaxPath": "https://dev.currikistudio.org/api/api/v1/h5p/ajax/",
+                    "libraryUrl": "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/",
+                    "copyrightSemantics": {
+                        "name": "copyright",
+                        "type": "group",
+                        "label": "Copyright information",
+                        "fields": [
+                            {
+                                "name": "title",
+                                "type": "text",
+                                "label": "Title",
+                                "placeholder": "La Gioconda",
+                                "optional": true
+                            },
+                            {
+                                "name": "author",
+                                "type": "text",
+                                "label": "Author",
+                                "placeholder": "Leonardo da Vinci",
+                                "optional": true
+                            },
+                            {
+                                "name": "year",
+                                "type": "text",
+                                "label": "Year(s)",
+                                "placeholder": "1503 - 1517",
+                                "optional": true
+                            },
+                            {
+                                "name": "source",
+                                "type": "text",
+                                "label": "Source",
+                                "placeholder": "http://en.wikipedia.org/wiki/Mona_Lisa",
+                                "optional": true,
+                                "regexp": {
+                                    "pattern": "^http[s]?://.+",
+                                    "modifiers": "i"
+                                }
+                            },
+                            {
+                                "name": "license",
+                                "type": "select",
+                                "label": "License",
+                                "default": "U",
+                                "options": [
+                                    {
+                                        "value": "U",
+                                        "label": "Undisclosed"
+                                    },
+                                    {
+                                        "value": "CC BY",
+                                        "label": "Attribution",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-SA",
+                                        "label": "Attribution-ShareAlike",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-ND",
+                                        "label": "Attribution-NoDerivs",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-NC",
+                                        "label": "Attribution-NonCommercial",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-NC-SA",
+                                        "label": "Attribution-NonCommercial-ShareAlike",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "CC BY-NC-ND",
+                                        "label": "Attribution-NonCommercial-NoDerivs",
+                                        "versions": [
+                                            {
+                                                "value": "4.0",
+                                                "label": "4.0 International"
+                                            },
+                                            {
+                                                "value": "3.0",
+                                                "label": "3.0 Unported"
+                                            },
+                                            {
+                                                "value": "2.5",
+                                                "label": "2.5 Generic"
+                                            },
+                                            {
+                                                "value": "2.0",
+                                                "label": "2.0 Generic"
+                                            },
+                                            {
+                                                "value": "1.0",
+                                                "label": "1.0 Generic"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "GNU GPL",
+                                        "label": "General Public License",
+                                        "versions": [
+                                            {
+                                                "value": "v3",
+                                                "label": "Version 3"
+                                            },
+                                            {
+                                                "value": "v2",
+                                                "label": "Version 2"
+                                            },
+                                            {
+                                                "value": "v1",
+                                                "label": "Version 1"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "PD",
+                                        "label": "Public Domain",
+                                        "versions": [
+                                            {
+                                                "value": "-",
+                                                "label": "-"
+                                            },
+                                            {
+                                                "value": "CC0 1.0",
+                                                "label": "CC0 1.0 Universal"
+                                            },
+                                            {
+                                                "value": "CC PDM",
+                                                "label": "Public Domain Mark"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "value": "C",
+                                        "label": "Copyright"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "version",
+                                "type": "select",
+                                "label": "License Version",
+                                "options": []
+                            }
+                        ]
+                    },
+                    "metadataSemantics": [
+                        {
+                            "name": "title",
+                            "type": "text",
+                            "label": "Title",
+                            "placeholder": "La Gioconda"
+                        },
+                        {
+                            "name": "license",
+                            "type": "select",
+                            "label": "License",
+                            "default": "U",
+                            "options": [
+                                {
+                                    "value": "U",
+                                    "label": "Undisclosed"
+                                },
+                                {
+                                    "type": "optgroup",
+                                    "label": "Creative Commons",
+                                    "options": [
+                                        {
+                                            "value": "CC BY",
+                                            "label": "Attribution (CC BY)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-SA",
+                                            "label": "Attribution-ShareAlike (CC BY-SA)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-ND",
+                                            "label": "Attribution-NoDerivs (CC BY-ND)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-NC",
+                                            "label": "Attribution-NonCommercial (CC BY-NC)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-NC-SA",
+                                            "label": "Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC BY-NC-ND",
+                                            "label": "Attribution-NonCommercial-NoDerivs (CC BY-NC-ND)",
+                                            "versions": [
+                                                {
+                                                    "value": "4.0",
+                                                    "label": "4.0 International"
+                                                },
+                                                {
+                                                    "value": "3.0",
+                                                    "label": "3.0 Unported"
+                                                },
+                                                {
+                                                    "value": "2.5",
+                                                    "label": "2.5 Generic"
+                                                },
+                                                {
+                                                    "value": "2.0",
+                                                    "label": "2.0 Generic"
+                                                },
+                                                {
+                                                    "value": "1.0",
+                                                    "label": "1.0 Generic"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "value": "CC0 1.0",
+                                            "label": "Public Domain Dedication (CC0)"
+                                        },
+                                        {
+                                            "value": "CC PDM",
+                                            "label": "Public Domain Mark (PDM)"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "value": "GNU GPL",
+                                    "label": "General Public License v3"
+                                },
+                                {
+                                    "value": "PD",
+                                    "label": "Public Domain"
+                                },
+                                {
+                                    "value": "ODC PDDL",
+                                    "label": "Public Domain Dedication and Licence"
+                                },
+                                {
+                                    "value": "C",
+                                    "label": "Copyright"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "licenseVersion",
+                            "type": "select",
+                            "label": "License Version",
+                            "options": [
+                                {
+                                    "value": "4.0",
+                                    "label": "4.0 International"
+                                },
+                                {
+                                    "value": "3.0",
+                                    "label": "3.0 Unported"
+                                },
+                                {
+                                    "value": "2.5",
+                                    "label": "2.5 Generic"
+                                },
+                                {
+                                    "value": "2.0",
+                                    "label": "2.0 Generic"
+                                },
+                                {
+                                    "value": "1.0",
+                                    "label": "1.0 Generic"
+                                }
+                            ],
+                            "optional": true
+                        },
+                        {
+                            "name": "yearFrom",
+                            "type": "number",
+                            "label": "Years (from)",
+                            "placeholder": "1991",
+                            "min": "-9999",
+                            "max": "9999",
+                            "optional": true
+                        },
+                        {
+                            "name": "yearTo",
+                            "type": "number",
+                            "label": "Years (to)",
+                            "placeholder": "1992",
+                            "min": "-9999",
+                            "max": "9999",
+                            "optional": true
+                        },
+                        {
+                            "name": "source",
+                            "type": "text",
+                            "label": "Source",
+                            "placeholder": "https://",
+                            "optional": true
+                        },
+                        {
+                            "name": "authors",
+                            "type": "list",
+                            "field": {
+                                "name": "author",
+                                "type": "group",
+                                "fields": [
+                                    {
+                                        "label": "Author's name",
+                                        "name": "name",
+                                        "optional": true,
+                                        "type": "text"
+                                    },
+                                    {
+                                        "name": "role",
+                                        "type": "select",
+                                        "label": "Author's role",
+                                        "default": "Author",
+                                        "options": [
+                                            {
+                                                "value": "Author",
+                                                "label": "Author"
+                                            },
+                                            {
+                                                "value": "Editor",
+                                                "label": "Editor"
+                                            },
+                                            {
+                                                "value": "Licensee",
+                                                "label": "Licensee"
+                                            },
+                                            {
+                                                "value": "Originator",
+                                                "label": "Originator"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "licenseExtras",
+                            "type": "text",
+                            "widget": "textarea",
+                            "label": "License Extras",
+                            "optional": true,
+                            "description": "Any additional information about the license"
+                        },
+                        {
+                            "name": "changes",
+                            "type": "list",
+                            "field": {
+                                "name": "change",
+                                "type": "group",
+                                "label": "Changelog",
+                                "fields": [
+                                    {
+                                        "name": "date",
+                                        "type": "text",
+                                        "label": "Date",
+                                        "optional": true
+                                    },
+                                    {
+                                        "name": "author",
+                                        "type": "text",
+                                        "label": "Changed by",
+                                        "optional": true
+                                    },
+                                    {
+                                        "name": "log",
+                                        "type": "text",
+                                        "widget": "textarea",
+                                        "label": "Description of change",
+                                        "placeholder": "Photo cropped, text changed, etc.",
+                                        "optional": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "authorComments",
+                            "type": "text",
+                            "widget": "textarea",
+                            "label": "Author comments",
+                            "description": "Comments for the editor of the content (This text will not be published as a part of copyright info)",
+                            "optional": true
+                        },
+                        {
+                            "name": "contentType",
+                            "type": "text",
+                            "widget": "none"
+                        },
+                        {
+                            "name": "defaultLanguage",
+                            "type": "text",
+                            "widget": "none"
+                        }
+                    ],
+                    "assets": {
+                        "css": [
+                            "https://dev.currikistudio.org/api/storage/h5p/laravel-h5p/css/laravel-h5p.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-confirmation-dialog.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-core-button.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/libs/darkroom.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/h5p-hub-client.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/fonts.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/application.css",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/styles/css/libs/zebra_datepicker.min.css"
+                        ],
+                        "js": [
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/jquery.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-event-dispatcher.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api-event.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-content-type.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-confirmation-dialog.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-action-bar.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/request-queue.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.9",
+                            "https://dev.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p-editor.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5p-hub-client.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-semantic-structure.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library-selector.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-fullscreen-bar.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-form.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-text.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-html.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-number.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-textarea.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-file-uploader.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-file.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-image.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-image-popup.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-av.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-group.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-boolean.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-list.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-list-editor.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-library-list-cache.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-select.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-selector-hub.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-selector-legacy.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-dimensions.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-coordinates.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-none.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata-author-widget.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-metadata-changelog-widget.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/scripts/h5peditor-pre-save.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/ckeditor/ckeditor.js",
+                            "https://dev.currikistudio.org/api/storage/h5p/h5p-editor/language/en.js"
+                        ]
+                    },
+                    "deleteMessage": "laravel-h5p.content.destoryed",
+                    "apiVersion": {
+                        "majorVersion": 1,
+                        "minorVersion": 24
+                    }
+                },
+                "loadedJs": [],
+                "loadedCss": [],
+                "core": {
+                    "styles": [
+                        "https://dev.currikistudio.org/api/storage/h5p/laravel-h5p/css/laravel-h5p.css",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p.css",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-confirmation-dialog.css",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/styles/h5p-core-button.css"
+                    ],
+                    "scripts": [
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/jquery.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-event-dispatcher.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api-event.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-x-api.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-content-type.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-confirmation-dialog.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-action-bar.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/request-queue.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/laravel-h5p/js/laravel-h5p.js",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.9",
+                        "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.9"
+                    ]
+                },
+                "contents": {
+                    "cid-54166": {
+                        "library": "H5P.CoursePresentation 1.22",
+                        "jsonContent": "{\"presentation\":{\"slides\":[{\"elements\":[{\"x\":29.956427015250547,\"y\":29.999999999999996,\"width\":40,\"height\":40,\"action\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Taurus 10 Jun 2022<\\/p>\\n\"},\"subContentId\":\"efa0c7bc-871b-4f2f-a79f-1ff2f3a3a88e\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Taurus 10 Jun 2022\"}},\"alwaysDisplayComments\":false,\"backgroundOpacity\":0,\"displayAsButton\":false,\"buttonSize\":\"big\",\"goToSlideType\":\"specified\",\"invisible\":false,\"solution\":\"\"}],\"slideBackgroundSelector\":{}}],\"keywordListEnabled\":true,\"globalBackgroundSelector\":{},\"keywordListAlwaysShow\":false,\"keywordListAutoHide\":false,\"keywordListOpacity\":90},\"override\":{\"activeSurface\":false,\"hideSummarySlide\":false,\"summarySlideSolutionButton\":true,\"summarySlideRetryButton\":true,\"enablePrintButton\":false,\"social\":{\"showFacebookShare\":false,\"facebookShare\":{\"url\":\"@currentpageurl\",\"quote\":\"I scored @score out of @maxScore on a task at @currentpageurl.\"},\"showTwitterShare\":false,\"twitterShare\":{\"statement\":\"I scored @score out of @maxScore on a task at @currentpageurl.\",\"url\":\"@currentpageurl\",\"hashtags\":\"h5p, course\"},\"showGoogleShare\":false,\"googleShareUrl\":\"@currentpageurl\"}},\"l10n\":{\"slide\":\"Slide\",\"score\":\"Score\",\"yourScore\":\"Your Score\",\"maxScore\":\"Max Score\",\"total\":\"Total\",\"totalScore\":\"Total Score\",\"showSolutions\":\"Show solutions\",\"retry\":\"Retry\",\"exportAnswers\":\"Export text\",\"hideKeywords\":\"Hide sidebar navigation menu\",\"showKeywords\":\"Show sidebar navigation menu\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\",\"prevSlide\":\"Previous slide\",\"nextSlide\":\"Next slide\",\"currentSlide\":\"Current slide\",\"lastSlide\":\"Last slide\",\"solutionModeTitle\":\"Exit solution mode\",\"solutionModeText\":\"Solution Mode\",\"summaryMultipleTaskText\":\"Multiple tasks\",\"scoreMessage\":\"You achieved:\",\"shareFacebook\":\"Share on Facebook\",\"shareTwitter\":\"Share on Twitter\",\"shareGoogle\":\"Share on Google+\",\"summary\":\"Summary\",\"solutionsButtonTitle\":\"Show comments\",\"printTitle\":\"Print\",\"printIngress\":\"How would you like to print this presentation?\",\"printAllSlides\":\"Print all slides\",\"printCurrentSlide\":\"Print current slide\",\"noTitle\":\"No title\",\"accessibilitySlideNavigationExplanation\":\"Use left and right arrow to change slide in that direction whenever canvas is selected.\",\"accessibilityCanvasLabel\":\"Presentation canvas. Use left and right arrow to move between slides.\",\"containsNotCompleted\":\"@slideName contains not completed interaction\",\"containsCompleted\":\"@slideName contains completed interaction\",\"slideCount\":\"Slide @index of @total\",\"containsOnlyCorrect\":\"@slideName only has correct answers\",\"containsIncorrectAnswers\":\"@slideName has incorrect answers\",\"shareResult\":\"Share Result\",\"accessibilityTotalScore\":\"You got @score of @maxScore points in total\",\"accessibilityEnteredFullscreen\":\"Entered fullscreen\",\"accessibilityExitedFullscreen\":\"Exited fullscreen\"}}",
+                        "fullScreen": 1,
+                        "exportUrl": "https://dev.currikistudio.org/api/api/v1/h5p/export/54166",
+                        "embedCode": "<iframe src=\"https://dev.currikistudio.org/h5p/embed/54166\" width=\":w\" height=\":h\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>",
+                        "resizeCode": "<script src=\"https://dev.currikistudio.org/api/storage/h5p/h5p-core/js/h5p-resizer.js\" charset=\"UTF-8\"></script>",
+                        "url": "http://dev.currikistudio.org/h5p/embed/54166",
+                        "title": "Taurus 10 Jun 2022",
+                        "displayOptions": {
+                            "frame": true,
+                            "export": true,
+                            "embed": true,
+                            "copyright": false,
+                            "icon": true,
+                            "copy": false
+                        },
+                        "contentUserData": [
+                            {
+                                "state": "{}"
+                            }
+                        ],
+                        "metadata": {
+                            "title": "Taurus 10 Jun 2022",
+                            "license": "U"
+                        },
+                        "scripts": [
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.AdvancedText-1.1/text.js?ver=1.1.11",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/Tether-1.0/scripts/tether.min.js?ver=1.0.2",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/Drop-1.0/js/drop.min.js?ver=1.0.2",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.Transition-1.0/transition.js?ver=1.0.4",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-help-dialog.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-message-dialog.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progress-circle.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-simple-rounded-button.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-speech-bubble.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-throbber.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-tip.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-slider.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-score-bar.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-progressbar.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/js/joubel-ui.js?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.CoursePresentation-1.22/dist/h5p-course-presentation.js?ver=1.22.2"
+                        ],
+                        "styles": [
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.AdvancedText-1.1/text.css?ver=1.1.11",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/FontAwesome-4.5/h5p-font-awesome.min.css?ver=4.5.4",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.FontIcons-1.0/styles/h5p-font-icons.css?ver=1.0.6",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/Tether-1.0/styles/tether.min.css?ver=1.0.2",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/Drop-1.0/css/drop-theme-arrows-bounce.min.css?ver=1.0.2",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-help-dialog.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-message-dialog.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-progress-circle.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-simple-rounded-button.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-speech-bubble.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-tip.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-slider.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-score-bar.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-progressbar.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-ui.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.JoubelUI-1.3/css/joubel-icon.css?ver=1.3.10",
+                            "https://dev.currikistudio.org/api/storage/h5p/libraries/H5P.CoursePresentation-1.22/dist/h5p-course-presentation.css?ver=1.22.2"
+                        ]
+                    }
+                }
+            },
+            "user": {
+                "id": 3,
+                "name": "Abby tester test",
+                "email": "abby@curriki.org"
+            },
+            "embed_code": "<div class=\"h5p-iframe-wrapper\"><iframe id=\"h5p-iframe-54166\" class=\"h5p-iframe\" data-content-id=\"54166\" style=\"height: 1px\" src=\"about:blank\" frameBorder=\"0\" scrolling=\"no\"></iframe></div>"
+        },
+        "created_at": "2022-06-10T01:49:20.000000Z",
+        "updated_at": "2022-06-10T01:58:23.000000Z"
+    }
+}
