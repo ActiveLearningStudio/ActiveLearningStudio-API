@@ -445,7 +445,7 @@ class IndependentActivityController extends Controller
      *
      * @urlParam independent_activity required The Id of a independent activity Example: 1
      *
-     * @responseFile responses/independent-activity/independent-activity-shared.json
+     * @responseFile responses/independent-activity/independent-activity.json
      *
      * @response 500 {
      *   "errors": [
