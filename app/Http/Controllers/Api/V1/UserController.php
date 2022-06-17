@@ -784,7 +784,7 @@ class UserController extends Controller
      * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
      * @queryParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
      * 
-     * @responseFile responses/notifications/export-notifications.json
+     * @responseFile responses/notifications/independent-activity-export-notifications.json
      *
      * @param Request $request
      * @return Response
