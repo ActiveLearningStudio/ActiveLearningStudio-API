@@ -187,7 +187,7 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['referrer'] = $referrer;
 
                     // Saving publisherId and publisherOrg in shared links case
-                    if ($referrer != null) {
+                    if ($referrer != null && !empty($project)) {
                         $insertData['publisher_id'] = $project->users[0]->id;
                         $insertData['publisher_org_id'] = $project->organization_id;
                     }
