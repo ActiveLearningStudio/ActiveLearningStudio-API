@@ -23,7 +23,7 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
     /**
      * @param $suborganization
      * @param $data
-     * 
+     *
      * @return mixed
      */
     public function getAll($suborganization, $data)
@@ -54,7 +54,10 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
             $query = $query->orderBy('order', 'ASC');
         }
 
-        return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
+        return $query->where('organization_id', $suborganization->id)
+                     ->orderBy('order', 'ASC')
+                     ->orderBy('title', 'ASC')
+                     ->paginate($perPage)->withQueryString();
     }
 
     /**
