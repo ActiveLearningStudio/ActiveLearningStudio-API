@@ -953,8 +953,6 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 'image' => $parentActivityLayout->image,
                 'created_at' => now(),
                 'organization_id' => $organization_id,
-                'demo_activity_id' => $parentActivityLayout->demo_activity_id,
-                'demo_video_id' => $parentActivityLayout->demo_video_id,
             ];
 
             ActivityLayout::insertOrIgnore($activityLayout);
