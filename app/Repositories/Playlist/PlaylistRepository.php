@@ -142,12 +142,12 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             $plist['project']['playlists'][$count++] = $list;
         }
 
-        foreach ($playlist->activities as $act) {
+        foreach ($playlist->activities->sortBy('order') as $act) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $editor = $h5p::$h5peditor;
             $content = $h5p->load_content($act->h5p_content_id);
-            $library = $content['library'] ? $content['library']['name'] : '';
+            $library = isset($content['library']) ? $content['library']['name'] : '';
 
             $plistActivity = [];
             $plistActivity['id'] = $act->id;
@@ -156,7 +156,8 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
             $plistActivity['title'] = $act->title;
             $plistActivity['library_name'] = $library;
             $plistActivity['created_at'] = $act->created_at;
-            $plistActivity['shared'] = isset($act->shared) ? $act->shared : false;
+            $plistActivity['shared'] = $act->shared;
+            $plistActivity['order'] = $act->order;
             $plistActivity['thumb_url'] = $act->thumb_url;
 
             $plist['activities'][] = $plistActivity;
@@ -209,15 +210,15 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
     public function playlistImport(Project $project, $authUser, $extracted_folder, $playlist_dir="")
     {
         $playlist_json = file_get_contents(storage_path($extracted_folder . '/playlists/'.$playlist_dir.'/'.$playlist_dir.'.json'));
-        
+
         $playlist = json_decode($playlist_json,true);
 
         unset($playlist['id'], $playlist['project_id']);
-        
+
         $cloned_playlist = $project->playlists()->create($playlist); // create playlist
         if (file_exists(storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/'))) {
             $activitity_directories = scandir(storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/'));
-        
+
             for ($j=0; $j<count($activitity_directories); $j++) { // loop through all activities
                 if($activitity_directories[$j] == '.' || $activitity_directories[$j] == '..') continue;
                 $cloned_activity = $this->activityRepository->importActivity($cloned_playlist, $authUser, $playlist_dir, $activitity_directories[$j], $extracted_folder);
@@ -254,7 +255,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         //if project is indexed then all shared/unshared playlists will be visible. if not indexed then only shared playlists will be visible
         $playlists->when($project->indexing != Config::get('constants.indexing-approved'), function ($q){
             return $q->where('shared', true);
-        }); 
+        });
 
         return $playlists = $playlists->get();
     }

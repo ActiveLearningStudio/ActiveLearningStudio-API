@@ -294,6 +294,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $plistActivity['id'] = $activity->id;
                 $plistActivity['type'] = $activity->type;
                 $plistActivity['title'] = $activity->title;
+                $plistActivity['order'] = $activity->order;
                 $plistActivity['library_name'] = $h5pContent ? $h5pContent->library_name : null;
                 $plistActivity['thumb_url'] = $activity->thumb_url;
                 $plist['activities'][] = $plistActivity;
@@ -665,24 +666,24 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                                                                 $activityTitle . '/' . $activityTitle . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
 
-                // Export Subject 
+                // Export Subject
                 $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                                     $activityTitle . '/activity_subject.json';
-                
+
                 Storage::disk('public')->put($activitySubjectJsonFile, $activity->subjects);
 
                 // Export Education level
 
                 $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                                     $activityTitle . '/activity_education_level.json';
-                
+
                 Storage::disk('public')->put($activityEducationLevelJsonFile, $activity->educationLevels);
 
                 // Export Author
 
                 $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                                     $activityTitle . '/activity_author_tag.json';
-                
+
                 Storage::disk('public')->put($activityAuthorTagJsonFile, $activity->authorTags);
 
                 $decoded_content = json_decode($activity->h5p_content,true);
@@ -1054,13 +1055,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     private function getActivityGrade($projectId, $activityParam)
     {
         $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
-        
+
         $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
-        
+
         $resource = new ActivityResource($activity);
-        
+
         // Get first Category
-        if ($resource->$activityParam->isNotEmpty()) { 
+        if ($resource->$activityParam->isNotEmpty()) {
             return $resource->$activityParam[0]->name;
         }
         return null;
