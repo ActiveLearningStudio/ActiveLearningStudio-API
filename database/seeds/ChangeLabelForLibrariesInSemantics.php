@@ -93,7 +93,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
         }
 
         //H5P.InteractiveBook-1.2
-        $h5pInteractiveBookTwoLibParams = ['name' => "H5P.InteractiveBookTwo", "major_version" =>1, "minor_version" => 2];
+        $h5pInteractiveBookTwoLibParams = ['name' => "H5P.InteractiveBook", "major_version" =>1, "minor_version" => 2];
         $h5pInteractiveBookTwoLib = DB::table('h5p_libraries')->where($h5pInteractiveBookTwoLibParams)->first();
         if ($h5pInteractiveBookTwoLib) {
             DB::table('h5p_libraries')->where($h5pInteractiveBookTwoLibParams)->update([
@@ -107,6 +107,69 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
         if ($h5pImageJuxtapositionLib) {
             DB::table('h5p_libraries')->where($h5pImageJuxtapositionLibParams)->update([
                 'semantics' => $this->updatedImageJuxtapositionSemantics()
+            ]);
+        }
+
+        //H5P.AdvancedBlanks-1.0 
+        $h5pAdvancedBlanksLibParams = ['name' => "H5P.AdvancedBlanks", "major_version" =>1, "minor_version" => 0];
+        $h5pAdvancedBlanksLib = DB::table('h5p_libraries')->where($h5pAdvancedBlanksLibParams)->first();
+        if ($h5pAdvancedBlanksLib) {
+            DB::table('h5p_libraries')->where($h5pAdvancedBlanksLibParams)->update([
+                'semantics' => $this->updatedAdvancedBlanksSemantics()
+            ]);
+        }
+
+        //H5P.Dialogcards-1.8 
+        $h5pDialogcardsLibParams = ['name' => "H5P.Dialogcards", "major_version" =>1, "minor_version" => 8];
+        $h5pDialogcardsLib = DB::table('h5p_libraries')->where($h5pDialogcardsLibParams)->first();
+        if ($h5pDialogcardsLib) {
+            DB::table('h5p_libraries')->where($h5pDialogcardsLibParams)->update([
+                'semantics' => $this->updatedDialogcardsSemantics()
+            ]);
+        }
+
+        //H5P.Dictation-1.0
+        $h5pDictationLibParams = ['name' => "H5P.Dictation", "major_version" =>1, "minor_version" => 0];
+        $h5pDictationLib = DB::table('h5p_libraries')->where($h5pDictationLibParams)->first();
+        if ($h5pDictationLib) {
+            DB::table('h5p_libraries')->where($h5pDictationLibParams)->update([
+                'semantics' => $this->updatedDictationSemantics()
+            ]);
+        }
+        
+        //H5P.DragQuestion-1.14
+        $h5pDragQuestionLibParams = ['name' => "H5P.DragQuestion", "major_version" =>1, "minor_version" => 14];
+        $h5pDragQuestionLib = DB::table('h5p_libraries')->where($h5pDragQuestionLibParams)->first();
+        if ($h5pDragQuestionLib) {
+            DB::table('h5p_libraries')->where($h5pDragQuestionLibParams)->update([
+                'semantics' => $this->updatedDragQuestionSemantics()
+            ]);
+        }
+
+        //H5P.Blanks-1.14
+        $h5pBlanksTwoLibParams = ['name' => "H5P.Blanks", "major_version" =>1, "minor_version" => 14];
+        $h5pBlanksTwoLib = DB::table('h5p_libraries')->where($h5pBlanksTwoLibParams)->first();
+        if ($h5pBlanksTwoLib) {
+            DB::table('h5p_libraries')->where($h5pBlanksTwoLibParams)->update([
+                'semantics' => $this->updatedBlanksTwoSemantics()
+            ]);
+        }
+
+        //H5P.MarkTheWords-1.11
+        $h5pMarkTheWordsLibParams = ['name' => "H5P.MarkTheWords", "major_version" =>1, "minor_version" => 11];
+        $h5pMarkTheWordsLib = DB::table('h5p_libraries')->where($h5pMarkTheWordsLibParams)->first();
+        if ($h5pMarkTheWordsLib) {
+            DB::table('h5p_libraries')->where($h5pMarkTheWordsLibParams)->update([
+                'semantics' => $this->updatedMarkTheWordsSemantics()
+            ]);
+        }
+
+        //H5P.TrueFalse-1.8
+        $h5pTrueFalseLibParams = ['name' => "H5P.TrueFalse", "major_version" =>1, "minor_version" => 8];
+        $h5pTrueFalseLib = DB::table('h5p_libraries')->where($h5pTrueFalseLibParams)->first();
+        if ($h5pTrueFalseLib) {
+            DB::table('h5p_libraries')->where($h5pTrueFalseLibParams)->update([
+                'semantics' => $this->updatedTrueFalseSemantics()
             ]);
         }
     }
@@ -337,7 +400,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
                 "name": "behaviour",
                 "type": "group",
                 "importance": "low",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "fields": [
                 {
                     "name": "defaultTableOfContents",
@@ -782,7 +845,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
               "name": "behaviour",
               "type": "group",
               "importance": "low",
-              "label": "Behavior settings",
+              "label": "Behaviour settings",
               "fields": [
                 {
                   "name": "defaultTableOfContents",
@@ -1467,7 +1530,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "behaviour",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "description": "These options will let you control how the task behaves.",
                 "optional": true,
@@ -2079,7 +2142,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "behaviour",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "description": "These options will let you control how the task behaves.",
                 "optional": true,
@@ -2612,7 +2675,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "behaviour",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "description": "These options will let you control how the task behaves.",
                 "fields": [
@@ -3141,7 +3204,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "behaviour",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "description": "These options will let you control how the task behaves.",
                 "optional": true,
@@ -3474,7 +3537,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "behaviour",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "description": "These options will let you control how the task behaves.",
                 "optional": true,
@@ -3831,7 +3894,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "behaviour",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "description": "These options will let you control how the task behaves.",
                 "fields": [
@@ -4912,7 +4975,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "override",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "optional": true,
                 "fields": [
@@ -6083,7 +6146,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
             {
                 "name": "override",
                 "type": "group",
-                "label": "Behavior settings",
+                "label": "Behaviour settings",
                 "importance": "low",
                 "optional": true,
                 "fields": [
@@ -6530,5 +6593,3704 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
                 ]
             }
             ]';
+    }
+
+    //H5P.AdvancedBlanks-1.0 
+    private function updatedAdvancedBlanksSemantics() { 
+        return '[
+            {
+              "name": "media",
+              "type": "group",
+              "label": "Media",
+              "importance": "medium",
+              "fields": [
+                {
+                  "name": "type",
+                  "type": "library",
+                  "label": "Type",
+                  "options": [
+                    "H5P.Image 1.1",
+                    "H5P.Video 1.5"
+                  ],
+                  "optional": true,
+                  "description": "Optional media to display above the question."
+                }
+              ]
+            },
+            {
+              "name": "content",
+              "type": "group",
+              "label": "Blank content",
+              "importance": "medium",
+              "expanded": true,
+              "fields": [
+                {
+                  "label": "Task description",
+                  "importance": "high",
+                  "name": "task",
+                  "type": "text",
+                  "widget": "html",
+                  "default": "Fill in the missing words.",
+                  "description": "A guide telling the user how to answer this task.",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "u",
+                    "a",
+                    "ul",
+                    "ol",
+                    "h1",
+                    "h2",
+                    "h3",
+                    "hr"
+                  ]
+                },
+                {
+                  "name": "blanksText",
+                  "type": "text",
+                  "widget": "html",
+                  "label": "Text with blanks",
+                  "importance": "high",
+                  "enterMode": "p",
+                  "important": {
+                    "description": "<ul><li>Blanks must be marked with __________ (three or more underscores).</li><li>Do not put the solutions into the text.</li></ul>",
+                    "example": "I have _________ wanted to visit Norway."
+                  },
+                  "description": "",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "u",
+                    "strike",
+                    "ul",
+                    "ol",
+                    "table",
+                    "h1",
+                    "h2",
+                    "h3",
+                    "hr",
+                    "sub",
+                    "sup"
+                  ],
+                  "font": {
+                    "size": true,
+                    "family": true,
+                    "color": true,
+                    "background": true
+                  }
+                },
+                {
+                  "name": "blanksList",
+                  "type": "list",
+                  "label": "Blanks used in the text",
+                  "importance": "high",
+                  "entity": "blank",
+                  "min": 1,
+                  "widgets": [
+                    {
+                      "name": "VerticalTabs",
+                      "label": "Default"
+                    }
+                  ],
+                  "field": {
+                    "name": "blankGroup",
+                    "type": "group",
+                    "label": "Blank",
+                    "fields": [
+                      {
+                        "name": "correctAnswerText",
+                        "type": "text",
+                        "label": "Correct answer",
+                        "description": "You can separate alternative answers with a slash (/)."
+                      },
+                      {
+                        "name": "hint",
+                        "type": "text",
+                        "label": "Hint",
+                        "optional": true
+                      },
+                      {
+                        "name": "incorrectAnswersList",
+                        "type": "list",
+                        "label": "Incorrect answers",
+                        "entity": "incorrect answer",
+                        "optional": true,
+                        "min": 0,
+                        "field": {
+                          "name": "incorrectAnswerGroup",
+                          "type": "group",
+                          "label": "Incorrect answer",
+                          "description": "You can separate alternative answers with a slash (/).",
+                          "fields": [
+                            {
+                              "name": "incorrectAnswerText",
+                              "type": "text",
+                              "label": "Incorrect answer text"
+                            },
+                            {
+                              "name": "incorrectAnswerFeedback",
+                              "type": "text",
+                              "label": "Feedback",
+                              "optional": true,
+                              "description": "The feedback should help the user find the correct answer and ideally be tailored to the answer the user has entered.",
+                              "widget": "html",
+                              "tags": [
+                                "strong",
+                                "em",
+                                "u",
+                                "a",
+                                "ul",
+                                "ol",
+                                "sub",
+                                "sup"
+                              ]
+                            },
+                            {
+                              "name": "showHighlight",
+                              "type": "boolean",
+                              "label": "Show highlight in the text when feedback is shown",
+                              "description": "Put !! before and after a piece of text to mark it as a highlight. (e.g. This is !!a highlight!!)",
+                              "default": false,
+                              "optional": false
+                            },
+                            {
+                              "name": "highlight",
+                              "type": "select",
+                              "label": "Highlight position relative to blank:",
+                              "widget": "showWhen",
+                              "showWhen": {
+                                "rules": [
+                                  {
+                                    "field": "showHighlight",
+                                    "equals": true
+                                  }
+                                ]
+                              },
+                              "options": [
+                                {
+                                  "value": -1,
+                                  "label": "- 1 (right before the blank)"
+                                },
+                                {
+                                  "value": -2,
+                                  "label": "- 2 (two highlights before the blank)"
+                                },
+                                {
+                                  "value": -3,
+                                  "label": "- 3 (three highlights before the blank)"
+                                },
+                                {
+                                  "value": 1,
+                                  "label": "+ 1 (right after the blank)"
+                                },
+                                {
+                                  "value": 2,
+                                  "label": "+ 2 (two highlights after the blank)"
+                                },
+                                {
+                                  "value": 3,
+                                  "label": "+ 3 (three highlights after the blank)"
+                                }
+                              ],
+                              "default": -1
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "snippets",
+              "type": "group",
+              "label": "Snippets",
+              "importance": "medium",
+              "fields": [
+                {
+                  "name": "list",
+                  "type": "list",
+                  "label": "Snippet list",
+                  "importance": "high",
+                  "description": "Snippets are texts that can be reused in feedback texts by inserting @snippetname into the it.",
+                  "entity": "snippet",
+                  "optional": true,
+                  "min": 0,
+                  "field": {
+                    "name": "snippetGroup",
+                    "type": "group",
+                    "label": "Snippet",
+                    "fields": [
+                      {
+                        "name": "snippetName",
+                        "type": "text",
+                        "label": "Name",
+                        "description": "You can only use letters and numbers for the snippet name.",
+                        "regexp": {
+                          "pattern": "^[\\w\\d]*$"
+                        }
+                      },
+                      {
+                        "name": "snippetText",
+                        "type": "text",
+                        "label": "Text",
+                        "widget": "html",
+                        "tags": [
+                          "strong",
+                          "em",
+                          "u",
+                          "a",
+                          "ul",
+                          "ol",
+                          "sub",
+                          "sup"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "overallFeedback",
+              "type": "group",
+              "label": "Overall Feedback",
+              "importance": "low",
+              "expanded": true,
+              "fields": [
+                {
+                  "name": "overallFeedback",
+                  "type": "list",
+                  "widgets": [
+                    {
+                      "name": "RangeList",
+                      "label": "Default"
+                    }
+                  ],
+                  "importance": "high",
+                  "label": "Define custom feedback for any score range",
+                  "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+                  "entity": "range",
+                  "min": 1,
+                  "defaultNum": 1,
+                  "optional": true,
+                  "field": {
+                    "name": "overallFeedback",
+                    "type": "group",
+                    "importance": "low",
+                    "fields": [
+                      {
+                        "name": "from",
+                        "type": "number",
+                        "label": "Score Range",
+                        "min": 0,
+                        "max": 100,
+                        "default": 0,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "to",
+                        "type": "number",
+                        "min": 0,
+                        "max": 100,
+                        "default": 100,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "feedback",
+                        "type": "text",
+                        "label": "Feedback for defined score range",
+                        "importance": "low",
+                        "placeholder": "Fill in the feedback",
+                        "optional": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "behaviour",
+              "type": "group",
+              "label": "Behaviour settings",
+              "importance": "low",
+              "description": "These options will let you control how the task behaves.",
+              "optional": false,
+              "fields": [
+                {
+                  "name": "mode",
+                  "type": "select",
+                  "label": "Answer mode",
+                  "description": "Indicates in what way the user gives answers.",
+                  "optional": false,
+                  "options": [
+                    {
+                      "value": "selection",
+                      "label": "The users selects from options."
+                    },
+                    {
+                      "value": "typing",
+                      "label": "The users types in the answers."
+                    }
+                  ],
+                  "default": "typing"
+                },
+                {
+                  "name": "selectAlternatives",
+                  "type": "select",
+                  "label": "Alternatives offered for selection",
+                  "optional": false,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "mode",
+                        "equals": "selection"
+                      }
+                    ]
+                  },
+                  "options": [
+                    {
+                      "value": "alternatives",
+                      "label": "The incorrect answers entered for the blank"
+                    },
+                    {
+                      "value": "all",
+                      "label": "The correct answers of all other blanks"
+                    }
+                  ],
+                  "default": "alternatives"
+                },
+                {
+                  "name": "selectAlternativeRestriction",
+                  "type": "number",
+                  "label": "Maximum number of alternatives of other blanks offered for selection",
+                  "description": "Enter 0 to set no limit.",
+                  "min": 0,
+                  "step": 1,
+                  "default": 5,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "mode",
+                        "equals": "selection"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "spellingErrorBehaviour",
+                  "type": "select",
+                  "label": "Behaviour when user makes a spelling error",
+                  "importance": "low",
+                  "options": [
+                    {
+                      "value": "accept",
+                      "label": "Accept it as a correct answer"
+                    },
+                    {
+                      "value": "warn",
+                      "label": "Warn the user about the error"
+                    },
+                    {
+                      "value": "mistake",
+                      "label": "Consider it a regular mistake"
+                    }
+                  ],
+                  "default": "mistake",
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "mode",
+                        "equals": "typing"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "caseSensitive",
+                  "importance": "low",
+                  "type": "boolean",
+                  "default": false,
+                  "label": "Case sensitive",
+                  "description": "If enabled, capitalization that is different from the solution is considered an error.",
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "mode",
+                        "equals": "typing"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Automatically check answers after input",
+                  "importance": "low",
+                  "name": "autoCheck",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true
+                },
+                {
+                  "label": "Enable \"Show solutions\" button",
+                  "importance": "low",
+                  "name": "enableSolutionsButton",
+                  "type": "boolean",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "label": "Require all fields to be answered before the solution can be viewed",
+                  "importance": "low",
+                  "name": "showSolutionsRequiresInput",
+                  "type": "boolean",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "label": "Enable \"Retry\"",
+                  "importance": "low",
+                  "name": "enableRetry",
+                  "type": "boolean",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "name": "enableCheckButton",
+                  "type": "boolean",
+                  "label": "Enable \"Check\" button",
+                  "widget": "none",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "label": "Disable image zooming for question image",
+                  "importance": "low",
+                  "name": "disableImageZooming",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true
+                },
+                {
+                  "label": "Show confirmation dialog on \"Check\"",
+                  "importance": "low",
+                  "name": "confirmCheckDialog",
+                  "type": "boolean",
+                  "description": "This options is not compatible with the \"Automatically check answers after input\" option",
+                  "default": false
+                },
+                {
+                  "label": "Show confirmation dialog on \"Retry\"",
+                  "importance": "low",
+                  "name": "confirmRetryDialog",
+                  "type": "boolean",
+                  "default": false
+                }
+              ]
+            },
+            {
+              "name": "currikisettings",
+              "type": "group",
+              "label": "Curriki settings",
+              "importance": "low",
+              "description": "These options will let you control how the curriki studio behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "label": "Do not Show Submit Button",
+                  "importance": "low",
+                  "name": "disableSubmitButton",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
+                },
+                {
+                  "label": "Placeholder",
+                  "importance": "low",
+                  "name": "placeholder",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option is a place holder. will be used in future"
+                },
+                {
+                  "label": "Curriki Localization",
+                  "description": "Here you can edit settings or translate texts used in curriki settings",
+                  "importance": "low",
+                  "name": "currikil10n",
+                  "type": "group",
+                  "fields": [
+                    {
+                      "label": "Text for \"Submit\" button",
+                      "name": "submitAnswer",
+                      "type": "text",
+                      "default": "Submit",
+                      "optional": true
+                    },
+                    {
+                      "label": "Text for \"Placeholder\" button",
+                      "importance": "low",
+                      "name": "placeholderButton",
+                      "type": "text",
+                      "default": "Placeholder",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Text for \"Show solutions\" button",
+              "name": "showSolutions",
+              "type": "text",
+              "default": "Show solution",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Retry\" button",
+              "importance": "low",
+              "name": "tryAgain",
+              "type": "text",
+              "default": "Retry",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Check\" button",
+              "importance": "low",
+              "name": "checkAnswer",
+              "type": "text",
+              "default": "Check",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Not filled out\" message",
+              "importance": "low",
+              "name": "notFilledOut",
+              "type": "text",
+              "default": "Please fill in all blanks to view solution",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Tip icon label",
+              "importance": "low",
+              "name": "tipLabel",
+              "type": "text",
+              "default": "Tip",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Spelling mistake warning",
+              "description": "This is the message shown to users when they make a spelling mistake. Insert @mistake to show them what they did wrong.",
+              "importance": "low",
+              "name": "spellingMistakeWarning",
+              "type": "text",
+              "default": "Check your spelling: @mistake",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Check confirmation dialog",
+              "importance": "low",
+              "name": "confirmCheck",
+              "type": "group",
+              "common": true,
+              "fields": [
+                {
+                  "label": "Header text",
+                  "importance": "low",
+                  "name": "header",
+                  "type": "text",
+                  "default": "Finish?"
+                },
+                {
+                  "label": "Body text",
+                  "importance": "low",
+                  "name": "body",
+                  "type": "text",
+                  "default": "Are you sure you wish to finish?",
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "u"
+                  ]
+                },
+                {
+                  "label": "Cancel button label",
+                  "importance": "low",
+                  "name": "cancelLabel",
+                  "type": "text",
+                  "default": "Cancel"
+                },
+                {
+                  "label": "Confirm button label",
+                  "importance": "low",
+                  "name": "confirmLabel",
+                  "type": "text",
+                  "default": "Finish"
+                }
+              ]
+            },
+            {
+              "label": "Retry confirmation dialog",
+              "importance": "low",
+              "name": "confirmRetry",
+              "type": "group",
+              "common": true,
+              "fields": [
+                {
+                  "label": "Header text",
+                  "importance": "low",
+                  "name": "header",
+                  "type": "text",
+                  "default": "Retry?"
+                },
+                {
+                  "label": "Body text",
+                  "importance": "low",
+                  "name": "body",
+                  "type": "text",
+                  "default": "Are you sure you wish to retry?",
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "u"
+                  ]
+                },
+                {
+                  "label": "Cancel button label",
+                  "importance": "low",
+                  "name": "cancelLabel",
+                  "type": "text",
+                  "default": "Cancel"
+                },
+                {
+                  "label": "Confirm button label",
+                  "importance": "low",
+                  "name": "confirmLabel",
+                  "type": "text",
+                  "default": "Confirm"
+                }
+              ]
+            },
+            {
+              "name": "scoreBarLabel",
+              "type": "text",
+              "label": "Textual representation of the score bar for those using a readspeaker",
+              "default": "You got :num out of :total points",
+              "importance": "low",
+              "common": true
+            }
+          ]';
+    }
+
+    //H5P.Dialogcards-1.8 
+    private function updatedDialogcardsSemantics() { 
+        return '[
+            {
+              "name": "title",
+              "type": "text",
+              "widget": "html",
+              "label": "Heading",
+              "importance": "high",
+              "optional": true,
+              "tags": [
+                "p",
+                "br",
+                "strong",
+                "em",
+                "code"
+              ]
+            },
+            {
+              "name": "mode",
+              "type": "select",
+              "label": "Mode",
+              "description": "Mode of presenting the dialog cards",
+              "importance": "medium",
+              "options": [
+                {
+                  "value": "normal",
+                  "label": "Normal"
+                },
+                {
+                  "value": "repetition",
+                  "label": "Repetition"
+                }
+              ],
+              "default": "normal"
+            },
+            {
+              "name": "description",
+              "type": "text",
+              "widget": "html",
+              "label": "Task description",
+              "importance": "medium",
+              "default": "",
+              "optional": true,
+              "tags": [
+                "p",
+                "br",
+                "strong",
+                "em",
+                "code"
+              ]
+            },
+            {
+              "name": "dialogs",
+              "type": "list",
+              "importance": "high",
+              "widgets": [
+                {
+                  "name": "VerticalTabs",
+                  "label": "Default"
+                }
+              ],
+              "label": "Dialogs",
+              "entity": "dialog",
+              "min": 1,
+              "defaultNum": 1,
+              "field": {
+                "name": "question",
+                "type": "group",
+                "label": "Question",
+                "importance": "high",
+                "fields": [
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "widget": "html",
+                    "tags": [
+                      "p",
+                      "br",
+                      "strong",
+                      "em",
+                      "code"
+                    ],
+                    "label": "Text",
+                    "importance": "high",
+                    "description": "Hint for the first part of the dialogue"
+                  },
+                  {
+                    "name": "answer",
+                    "type": "text",
+                    "widget": "html",
+                    "tags": [
+                      "p",
+                      "br",
+                      "strong",
+                      "em",
+                      "code"
+                    ],
+                    "label": "Answer",
+                    "importance": "high",
+                    "description": "Hint for the second part of the dialogue"
+                  },
+                  {
+                    "name": "image",
+                    "type": "image",
+                    "label": "Image",
+                    "importance": "high",
+                    "optional": true,
+                    "description": "Optional image for the card. (The card may use just an image, just a text or both)"
+                  },
+                  {
+                    "name": "imageAltText",
+                    "type": "text",
+                    "label": "Alternative text for the image",
+                    "importance": "high",
+                    "optional": true
+                  },
+                  {
+                    "name": "audio",
+                    "type": "audio",
+                    "label": "Audio files",
+                    "importance": "low",
+                    "optional": true
+                  },
+                  {
+                    "name": "tips",
+                    "type": "group",
+                    "label": "Tips",
+                    "importance": "low",
+                    "fields": [
+                      {
+                        "name": "front",
+                        "type": "text",
+                        "label": "Tip for text",
+                        "importance": "low",
+                        "optional": true,
+                        "description": "Tip for the first part of the dialogue"
+                      },
+                      {
+                        "name": "back",
+                        "type": "text",
+                        "label": "Tip for answer",
+                        "importance": "low",
+                        "optional": true,
+                        "description": "Tip for the second part of the dialogue"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "name": "behaviour",
+              "type": "group",
+              "label": "Behaviour settings",
+              "importance": "low",
+              "description": "These options will let you control how the task behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "name": "enableRetry",
+                  "type": "boolean",
+                  "label": "Enable \"Retry\" button",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "name": "disableBackwardsNavigation",
+                  "type": "boolean",
+                  "label": "Disable backwards navigation",
+                  "importance": "low",
+                  "description": "This option will only allow you to move forward with Dialog Cards",
+                  "optional": true,
+                  "default": false,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "../mode",
+                        "equals": "normal"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "scaleTextNotCard",
+                  "type": "boolean",
+                  "label": "Scale the text to fit inside the card",
+                  "importance": "low",
+                  "description": "Unchecking this option will make the card adapt its size to the size of the text",
+                  "default": false
+                },
+                {
+                  "name": "randomCards",
+                  "type": "boolean",
+                  "label": "Randomize cards",
+                  "importance": "low",
+                  "description": "Enable to randomize the order of cards on display.",
+                  "default": false,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "../mode",
+                        "equals": "normal"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "maxProficiency",
+                  "type": "number",
+                  "label": "Maximum proficiency level",
+                  "importance": "low",
+                  "default": 5,
+                  "min": 3,
+                  "max": 7,
+                  "optional": true,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "../mode",
+                        "equals": "repetition"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "quickProgression",
+                  "type": "boolean",
+                  "label": "Allow quick progression",
+                  "description": "If activated, learners can decide to indicate that they know a card without turning it",
+                  "importance": "low",
+                  "default": false,
+                  "optional": true,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "../mode",
+                        "equals": "repetition"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "label": "Text for the turn button",
+              "importance": "low",
+              "name": "answer",
+              "type": "text",
+              "default": "Turn",
+              "common": true
+            },
+            {
+              "label": "Text for the next button",
+              "importance": "low",
+              "type": "text",
+              "name": "next",
+              "default": "Next",
+              "common": true
+            },
+            {
+              "name": "prev",
+              "type": "text",
+              "label": "Text for the previous button",
+              "importance": "low",
+              "default": "Previous",
+              "common": true
+            },
+            {
+              "name": "retry",
+              "type": "text",
+              "label": "Text for the retry button",
+              "importance": "low",
+              "default": "Retry",
+              "common": true
+            },
+            {
+              "name": "correctAnswer",
+              "type": "text",
+              "label": "Text for the \"correct answer\" button",
+              "importance": "low",
+              "default": "I got it right!",
+              "common": true
+            },
+            {
+              "name": "incorrectAnswer",
+              "type": "text",
+              "label": "Text for the \"incorrect answer\" button",
+              "importance": "low",
+              "default": "I got it wrong",
+              "common": true
+            },
+            {
+              "name": "round",
+              "type": "text",
+              "label": "Text for \"Round\" message below cards and on the summary screen",
+              "description": "@round will be replaced by the number of the current round",
+              "importance": "low",
+              "default": "Round @round",
+              "common": true
+            },
+            {
+              "name": "cardsLeft",
+              "type": "text",
+              "label": "Text for \"Cards left\" message",
+              "description": "@number will be replaced by the number of cards left in this round",
+              "importance": "low",
+              "default": "Cards left: @number",
+              "common": true
+            },
+            {
+              "name": "nextRound",
+              "type": "text",
+              "label": "Text for the \"next round\" button",
+              "description": "@round will be replaced by the round number",
+              "importance": "low",
+              "default": "Proceed to round @round",
+              "common": true
+            },
+            {
+              "name": "startOver",
+              "type": "text",
+              "label": "Text for the \"Start over\" button",
+              "importance": "low",
+              "default": "Start over",
+              "common": true
+            },
+            {
+              "name": "showSummary",
+              "type": "text",
+              "label": "Text for the \"show summary\" button",
+              "importance": "low",
+              "default": "Next",
+              "common": true
+            },
+            {
+              "name": "summary",
+              "type": "text",
+              "label": "Title text for the summary page",
+              "importance": "low",
+              "default": "Summary",
+              "common": true
+            },
+            {
+              "name": "summaryCardsRight",
+              "type": "text",
+              "label": "Text for \"Cards you got right:\"",
+              "importance": "low",
+              "default": "Cards you got right:",
+              "common": true
+            },
+            {
+              "name": "summaryCardsWrong",
+              "type": "text",
+              "label": "Text for \"Cards you got wrong:\"",
+              "importance": "low",
+              "default": "Cards you got wrong:",
+              "common": true
+            },
+            {
+              "name": "summaryCardsNotShown",
+              "type": "text",
+              "label": "Text for \"Cards not shown:\"",
+              "importance": "low",
+              "default": "Cards in pool not shown:",
+              "common": true
+            },
+            {
+              "name": "summaryOverallScore",
+              "type": "text",
+              "label": "Text for \"Overall Score\"",
+              "importance": "low",
+              "default": "Overall Score",
+              "common": true
+            },
+            {
+              "name": "summaryCardsCompleted",
+              "type": "text",
+              "label": "Text for \"Cards completed\"",
+              "importance": "low",
+              "default": "Cards you have completed learning:",
+              "common": true
+            },
+            {
+              "name": "summaryCompletedRounds",
+              "type": "text",
+              "label": "Text for \"Completed rounds:\"",
+              "importance": "low",
+              "default": "Completed rounds:",
+              "common": true
+            },
+            {
+              "name": "summaryAllDone",
+              "type": "text",
+              "label": "Message when all cards have been learned proficiently",
+              "description": "@cards will be replaced by the number of all cards in the pool. @max will be replaced by the maximum proficiency level - 1.",
+              "importance": "low",
+              "default": "Well done! You got all @cards cards correct @max times in a row!",
+              "common": true
+            },
+            {
+              "name": "progressText",
+              "type": "text",
+              "label": "Progress text",
+              "importance": "low",
+              "description": "Available variables are @card and @total.",
+              "default": "Card @card of @total",
+              "common": true
+            },
+            {
+              "name": "cardFrontLabel",
+              "type": "text",
+              "label": "Label for card text",
+              "importance": "low",
+              "description": "Used for accessibility by assistive technologies",
+              "default": "Card front",
+              "common": true
+            },
+            {
+              "name": "cardBackLabel",
+              "type": "text",
+              "label": "Label for card back",
+              "importance": "low",
+              "description": "Used for accessibility by assistive technologies",
+              "default": "Card back",
+              "common": true
+            },
+            {
+              "name": "tipButtonLabel",
+              "type": "text",
+              "label": "Label for the show tip button",
+              "importance": "low",
+              "default": "Show tip",
+              "common": true
+            },
+            {
+              "name": "audioNotSupported",
+              "type": "text",
+              "label": "Audio not supported message",
+              "importance": "low",
+              "common": true,
+              "default": "Your browser does not support this audio"
+            },
+            {
+              "name": "confirmStartingOver",
+              "type": "group",
+              "label": "Confirm starting over dialog",
+              "importance": "low",
+              "common": true,
+              "fields": [
+                {
+                  "name": "header",
+                  "type": "text",
+                  "label": "Header text",
+                  "importance": "low",
+                  "default": "Start over?"
+                },
+                {
+                  "name": "body",
+                  "type": "text",
+                  "label": "Body text",
+                  "importance": "low",
+                  "default": "All progress will be lost. Are you sure you want to start over?",
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "u",
+                    "code"
+                  ]
+                },
+                {
+                  "name": "cancelLabel",
+                  "type": "text",
+                  "label": "Cancel button label",
+                  "importance": "low",
+                  "default": "Cancel"
+                },
+                {
+                  "name": "confirmLabel",
+                  "type": "text",
+                  "label": "Confirm button label",
+                  "importance": "low",
+                  "default": "Start over"
+                }
+              ]
+            }
+          ]';
+    }
+
+    //H5P.Dictation-1.0
+    private function updatedDictationSemantics() { 
+        return '[
+            {
+              "name": "media",
+              "type": "group",
+              "label": "Media",
+              "importance": "medium",
+              "fields": [
+                {
+                  "name": "type",
+                  "type": "library",
+                  "label": "Type",
+                  "importance": "medium",
+                  "options": [
+                    "H5P.Image 1.1",
+                    "H5P.Video 1.5"
+                  ],
+                  "optional": true,
+                  "description": "Optional media to display above the question."
+                },
+                {
+                  "name": "disableImageZooming",
+                  "type": "boolean",
+                  "label": "Disable image zooming",
+                  "importance": "low",
+                  "default": false,
+                  "optional": true,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "type",
+                        "equals": "H5P.Image 1.1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "taskDescription",
+              "label": "Task description",
+              "type": "text",
+              "widget": "html",
+              "importance": "high",
+              "description": "Describe your task here.",
+              "placeholder": "Please listen carefully and write what you hear.",
+              "enterMode": "div",
+              "tags": [
+                "strong",
+                "em",
+                "u",
+                "a",
+                "ul",
+                "ol",
+                "h2",
+                "h3",
+                "hr",
+                "pre",
+                "code"
+              ]
+            },
+            {
+              "name": "sentences",
+              "label": "Sentences",
+              "importance": "high",
+              "type": "list",
+              "widgets": [
+                {
+                  "name": "VerticalTabs",
+                  "label": "Default"
+                }
+              ],
+              "min": 1,
+              "entity": "Sentence",
+              "field": {
+                "name": "sentence",
+                "type": "group",
+                "label": "Sentence",
+                "fields": [
+                  {
+                    "name": "description",
+                    "type": "text",
+                    "label": "Description",
+                    "description": "You can optionally put a simple description above the text input field, useful e.g. for dialogues.",
+                    "importance": "medium",
+                    "optional": true
+                  },
+                  {
+                    "name": "sample",
+                    "type": "audio",
+                    "label": "Sound sample",
+                    "description": "Sentence spoken in normal speed",
+                    "importance": "medium",
+                    "widgetExtensions": ["AudioRecorder"]
+                  },
+                  {
+                    "name": "sampleAlternative",
+                    "type": "audio",
+                    "label": "Sound sample slow",
+                    "description": "Sentence spoken in slow speed",
+                    "importance": "medium",
+                    "optional": true,
+                    "widgetExtensions": ["AudioRecorder"]
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text",
+                    "description": "Text that should be written. You can add alternate spellings to a word by adding a vertical line (|) behind followed by an alternative.",
+                    "importance": "medium",
+                    "maxLength": 1000
+                  }
+                ]
+              }
+            },
+            {
+              "name": "overallFeedback",
+              "type": "group",
+              "label": "Overall Feedback",
+              "importance": "low",
+              "expanded": true,
+              "fields": [
+                {
+                  "name": "overallFeedback",
+                  "type": "list",
+                  "widgets": [
+                    {
+                      "name": "RangeList",
+                      "label": "Default"
+                    }
+                  ],
+                  "importance": "high",
+                  "label": "Define custom feedback for any score range",
+                  "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+                  "entity": "range",
+                  "min": 1,
+                  "defaultNum": 1,
+                  "optional": true,
+                  "field": {
+                    "name": "overallFeedback",
+                    "type": "group",
+                    "importance": "low",
+                    "fields": [
+                      {
+                        "name": "from",
+                        "type": "number",
+                        "label": "Score Range",
+                        "min": 0,
+                        "max": 100,
+                        "default": 0,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "to",
+                        "type": "number",
+                        "min": 0,
+                        "max": 100,
+                        "default": 100,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "feedback",
+                        "type": "text",
+                        "label": "Feedback for defined score range",
+                        "importance": "low",
+                        "placeholder": "Fill in the feedback",
+                        "optional": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "behaviour",
+              "type": "group",
+              "label": "Behaviour settings",
+              "importance": "low",
+              "description": "These options will let you control how the task behaves.",
+              "fields": [
+                {
+                  "name": "tries",
+                  "type": "number",
+                  "label": "Maximum tries",
+                  "description": "Will limit the number of times the samples for each sentence can be listened to.",
+                  "optional": true,
+                  "min": 1
+                },
+                {
+                  "name": "triesAlternative",
+                  "type": "number",
+                  "label": "Maximum tries for slow speed",
+                  "description": "Will limit the number of times the slow samples for each sentence can be listened to.",
+                  "optional": true,
+                  "min": 1
+                },
+                {
+                  "name": "ignorePunctuation",
+                  "type": "boolean",
+                  "label": "Ignore Punctuation marks",
+                  "description": "If checked, punctuation marks will not be considerd for scoring.",
+                  "optional": false,
+                  "default": true
+                },
+                {
+                  "name": "customTypoDisplay",
+                  "type": "boolean",
+                  "label": "Custom typo display",
+                  "description": "If checked, typos will be displayed in a custom style distinguishing them from clear mistakes.",
+                  "default": true,
+                  "optional": false
+                },
+                {
+                  "name": "typoFactor",
+                  "type": "select",
+                  "label": "Value of typos",
+                  "description": "Determine to which extent typing errors (word with 3-9 characters: up to 1 mistake, word with more than 9 characters: up to 2 mistakes) count as a real mistake.",
+                  "options": [
+                      {
+                        "value": "100",
+                        "label": "100 %"
+                      },
+                      {
+                        "value": "50",
+                        "label": "50 %"
+                      },
+                      {
+                        "value": "0",
+                        "label": "0 %"
+                      }
+                    ],
+                  "default": "50"
+                },
+                {
+                  "name": "alternateSolution",
+                  "type": "select",
+                  "label": "Presentation of alternate solutions",
+                  "description": "Define which alternatives should be presented for wrong or missing words in the solution.",
+                  "options": [
+                    {
+                      "value": "first",
+                      "label": "Show only first alternative"
+                    },
+                    {
+                      "value": "all",
+                      "label": "Show all alternatives"
+                    }
+                  ],
+                  "default": "first"
+                },
+                {
+                  "name": "overrideRTL",
+                  "type": "select",
+                  "label": "Writing direction",
+                  "description": "Set whether the sentences language is right-to-left or left-to-right.",
+                  "options": [
+                    {
+                      "value": "auto",
+                      "label": "Automatic detection"
+                    },
+                    {
+                      "value": "on",
+                      "label": "Right-to-left"
+                    },
+                    {
+                      "value": "off",
+                      "label": "Left-to-right"
+                    }
+                  ],
+                  "default": "auto"
+                },
+                {
+                  "name": "autosplit",
+                  "type": "boolean",
+                  "label": "Splitting of characters",
+                  "description": "Activate if particular characters (e.g. Chinese Han characters) should be split into separate words automatically.",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "enableRetry",
+                  "label": "Enable \"Retry\"",
+                  "type": "boolean",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "name": "enableSolution",
+                  "label": "Enable \"Show solution\" button",
+                  "type": "boolean",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "name": "l10n",
+              "type": "group",
+              "common": true,
+              "label": "User interface",
+              "importance": "low",
+              "fields": [
+                {
+                  "name": "generalFeedback",
+                  "type": "text",
+                  "label": "General feedback",
+                  "description": "You can use several placeholders that will be replaced with the adequate number: @matches = number of matches, @total = total mistakes, @capped = capped total mistakes, @wrong = wrong words, @added = additional words, @missing = missing words, @typo = typing errors",
+                  "importance": "low",
+                  "default": "You have made @total mistake(s)."
+                },
+                {
+                  "name": "checkAnswer",
+                  "type": "text",
+                  "label": "Text for \"Check\" button",
+                  "importance": "low",
+                  "default": "Check"
+                },
+                {
+                  "name": "tryAgain",
+                  "label": "Text for \"Retry\" button",
+                  "type": "text",
+                  "importance": "low",
+                  "default": "Retry"
+                },
+                {
+                  "name": "showSolution",
+                  "type": "text",
+                  "label": "Text for \"Show solution\" button",
+                  "importance": "low",
+                  "default": "Show solution"
+                },
+                {
+                  "name": "audioNotSupported",
+                  "type": "text",
+                  "label": "Audio not supported message",
+                  "importance": "low",
+                  "default": "Your browser does not support this audio."
+                }
+              ]
+            },
+            {
+              "name": "a11y",
+              "type": "group",
+              "common": true,
+              "label": "Readspeaker",
+              "importance": "low",
+              "fields": [
+                {
+                  "name": "play",
+                  "type": "text",
+                  "label": "Play button",
+                  "importance": "low",
+                  "default": "Play"
+                },
+                {
+                  "name": "playSlowly",
+                  "type": "text",
+                  "label": "Play slowly button",
+                  "importance": "low",
+                  "default": "Play slowly"
+                },
+                {
+                  "name": "triesLeft",
+                  "type": "text",
+                  "label": "Tries left (text for readspeakers and hover text)",
+                  "description": "@number will be replaced by the current number of tries left.",
+                  "importance": "low",
+                  "default": "Number of tries left: @number"
+                },
+                {
+                  "name": "infinite",
+                  "type": "text",
+                  "label": "Infinite (text for readspeakers and hover text)",
+                  "importance": "low",
+                  "default": "infinite"
+                },
+                {
+                  "name": "enterText",
+                  "type": "text",
+                  "label": "Enter text field",
+                  "importance": "low",
+                  "default": "Enter what you have heard."
+                },
+                {
+                  "name": "yourResult",
+                  "type": "text",
+                  "label": "Your result",
+                  "description": "@score will be replaced by the number of points. @total will be replaced by the maximum possible points.",
+                  "importance": "low",
+                  "default": "You got @score out of @total points"
+                },
+                {
+                  "name": "solution",
+                  "type": "text",
+                  "label": "Solution",
+                  "importance": "low",
+                  "default": "Solution"
+                },
+                {
+                  "name": "sentence",
+                  "type": "text",
+                  "label": "Sentence",
+                  "importance": "low",
+                  "default": "Sentence"
+                },
+                {
+                  "name": "item",
+                  "type": "text",
+                  "label": "Item",
+                  "importance": "low",
+                  "default": "Item"
+                },
+                {
+                  "name": "correct",
+                  "type": "text",
+                  "label": "Correct",
+                  "importance": "low",
+                  "default": "correct"
+                },
+                {
+                  "name": "wrong",
+                  "type": "text",
+                  "label": "Wrong",
+                  "importance": "low",
+                  "default": "wrong"
+                },
+                {
+                  "name": "typo",
+                  "type": "text",
+                  "label": "Small mistake",
+                  "importance": "low",
+                  "default": "small mistake"
+                },
+                {
+                  "name": "missing",
+                  "type": "text",
+                  "label": "Missing word or symbol",
+                  "importance": "low",
+                  "default": "missing"
+                },
+                {
+                  "name": "added",
+                  "type": "text",
+                  "label": "Added word or symbol",
+                  "importance": "low",
+                  "default": "added"
+                },
+                {
+                  "name": "shouldHaveBeen",
+                  "type": "text",
+                  "label": "CorrectSolution",
+                  "importance": "low",
+                  "default": "Should have been"
+                },
+                {
+                  "name": "or",
+                  "type": "text",
+                  "label": "Or",
+                  "importance": "low",
+                  "default": "or"
+                },
+                {
+                  "name": "point",
+                  "type": "text",
+                  "label": "Point",
+                  "importance": "low",
+                  "default": "point"
+                },
+                {
+                  "name": "points",
+                  "type": "text",
+                  "label": "Points",
+                  "importance": "low",
+                  "default": "points"
+                },
+                {
+                  "name": "period",
+                  "type": "text",
+                  "label": "Period",
+                  "importance": "low",
+                  "default": "period"
+                },
+                {
+                  "name": "exclamationPoint",
+                  "type": "text",
+                  "label": "Exclamation point",
+                  "importance": "low",
+                  "default": "exclamation point"
+                },
+                {
+                  "name": "questionMark",
+                  "type": "text",
+                  "label": "Question mark",
+                  "importance": "low",
+                  "default": "question mark"
+                },
+                {
+                  "name": "comma",
+                  "type": "text",
+                  "label": "Comma",
+                  "importance": "low",
+                  "default": "comma"
+                },
+                {
+                  "name": "singleQuote",
+                  "type": "text",
+                  "label": "Single quote",
+                  "importance": "low",
+                  "default": "single quote"
+                },
+                {
+                  "name": "doubleQuote",
+                  "type": "text",
+                  "label": "Double quote",
+                  "importance": "low",
+                  "default": "double quote"
+                },
+                {
+                  "name": "colon",
+                  "type": "text",
+                  "label": "Colon",
+                  "importance": "low",
+                  "default": "colon"
+                },
+                {
+                  "name": "semicolon",
+                  "type": "text",
+                  "label": "Semicolon",
+                  "importance": "low",
+                  "default": "semicolon"
+                },
+                {
+                  "name": "plus",
+                  "type": "text",
+                  "label": "Plus",
+                  "importance": "low",
+                  "default": "plus"
+                },
+                {
+                  "name": "minus",
+                  "type": "text",
+                  "label": "Minus",
+                  "importance": "low",
+                  "default": "minus"
+                },
+                {
+                  "name": "asterisk",
+                  "type": "text",
+                  "label": "Asterisk",
+                  "importance": "low",
+                  "default": "asterisk"
+                },
+                {
+                  "name": "forwardSlash",
+                  "type": "text",
+                  "label": "Forward slash",
+                  "importance": "low",
+                  "default": "forward slash"
+                }
+              ]
+            }
+          ]';
+    }
+
+    //H5P.DragQuestion-1.14
+    private function updatedDragQuestionSemantics() { 
+        return '[
+            {
+              "name": "scoreShow",
+              "type": "text",
+              "label": "Check answer button",
+              "importance": "low",
+              "default": "Check",
+              "common": true
+            },
+            {
+              "name": "submitAnswers",
+              "type": "text",
+              "label": "Submit answer button",
+              "importance": "low",
+              "default": "Submit Answers",
+              "common": true
+            },
+            {
+              "name": "tryAgain",
+              "type": "text",
+              "label": "Retry button",
+              "importance": "low",
+              "default": "Retry",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Score explanation text",
+              "importance": "low",
+              "name": "scoreExplanation",
+              "type": "text",
+              "default": "Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.",
+              "common": true,
+              "optional": true
+            },
+            {
+              "name": "question",
+              "importance": "high",
+              "type": "group",
+              "widget": "wizard",
+              "fields": [
+                {
+                  "name": "settings",
+                  "type": "group",
+                  "label": "Settings",
+                  "importance": "high",
+                  "fields": [
+                    {
+                      "name": "background",
+                      "type": "image",
+                      "label": "Background image",
+                      "importance": "low",
+                      "optional": true,
+                      "description": "Optional. Select an image to use as background for your drag and drop task."
+                    },
+                    {
+                      "name": "size",
+                      "type": "group",
+                      "widget": "dimensions",
+                      "label": "Task size",
+                      "importance": "low",
+                      "description": "Specify how large (in px) the play area should be.",
+                      "default": {
+                        "width": 620,
+                        "height": 310,
+                        "field": "background"
+                      },
+                      "fields": [
+                        {
+                          "name": "width",
+                          "type": "number"
+                        },
+                        {
+                          "name": "height",
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "task",
+                  "type": "group",
+                  "widget": "dragQuestion",
+                  "label": "Task",
+                  "importance": "high",
+                  "description": "Start by placing your drop zones.<br/>Next, place your droppable elements and check off the appropriate drop zones.<br/>Last, edit your drop zone again and check off the correct answers.",
+                  "fields": [
+                    {
+                      "name": "elements",
+                      "type": "list",
+                      "label": "Elements",
+                      "importance": "high",
+                      "entity": "element",
+                      "field": {
+                        "type": "group",
+                        "label": "Element",
+                        "importance": "high",
+                        "fields": [
+                          {
+                            "name": "type",
+                            "type": "library",
+                            "description": "Choose the type of content you would like to add.",
+                            "importance": "medium",
+                            "options": [
+                              "H5P.AdvancedText 1.1",
+                              "H5P.Image 1.1"
+                            ]
+                          },
+                          {
+                            "name": "x",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "y",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "height",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "width",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "dropZones",
+                            "type": "select",
+                            "widget": "dynamicCheckboxes",
+                            "label": "Select drop zones",
+                            "importance": "high",
+                            "multiple": true
+                          },
+                          {
+                            "name": "backgroundOpacity",
+                            "type": "number",
+                            "label": "Background Opacity",
+                            "importance": "low",
+                            "min": 0,
+                            "max": 100,
+                            "step": 5,
+                            "default": 100,
+                            "optional": true
+                          },
+                          {
+                            "name": "multiple",
+                            "type": "boolean",
+                            "label": "Infinite number of element instances",
+                            "importance": "low",
+                            "description": "Clones this element so that it can be dragged to multiple drop zones.",
+                            "default": false
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "name": "dropZones",
+                      "type": "list",
+                      "label": "Drop Zones",
+                      "importance": "high",
+                      "entity": "Drop Zone",
+                      "field": {
+                        "type": "group",
+                        "label": "Drop Zone",
+                        "importance": "high",
+                        "fields": [
+                          {
+                            "name": "label",
+                            "type": "text",
+                            "widget": "html",
+                            "label": "Label",
+                            "importance": "medium",
+                            "enterMode": "div",
+                            "tags": [
+                              "strong",
+                              "em",
+                              "del",
+                              "code"
+                            ]
+                          },
+                          {
+                            "name": "showLabel",
+                            "type": "boolean",
+                            "label": "Show label",
+                            "importance": "low"
+                          },
+                          {
+                            "name": "x",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "y",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "height",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "width",
+                            "type": "number",
+                            "widget": "none"
+                          },
+                          {
+                            "name": "correctElements",
+                            "type": "select",
+                            "widget": "dynamicCheckboxes",
+                            "label": "Select correct elements",
+                            "importance": "low",
+                            "multiple": true
+                          },
+                          {
+                            "name": "backgroundOpacity",
+                            "type": "number",
+                            "label": "Background Opacity",
+                            "importance": "low",
+                            "min": 0,
+                            "max": 100,
+                            "step": 5,
+                            "default": 100,
+                            "optional": true
+                          },
+                          {
+                            "name": "tipsAndFeedback",
+                            "type": "group",
+                            "label": "Tips and feedback",
+                            "importance": "low",
+                            "optional": true,
+                            "fields": [
+                              {
+                                "name": "tip",
+                                "label": "Tip text",
+                                "importance": "low",
+                                "type": "text",
+                                "widget": "html",
+                                "tags": [
+                                  "p",
+                                  "br",
+                                  "strong",
+                                  "em",
+                                  "code"
+                                ],
+                                "optional": true
+                              },
+                              {
+                                "name": "feedbackOnCorrect",
+                                "type": "text",
+                                "label": "Message displayed on correct match",
+                                "importance": "low",
+                                "description": "Message will appear below the task on \"check\" if correct droppable is matched.",
+                                "optional": true
+                              },
+                              {
+                                "name": "feedbackOnIncorrect",
+                                "type": "text",
+                                "label": "Message displayed on incorrect match",
+                                "importance": "low",
+                                "description": "Message will appear below the task on \"check\" if the match is incorrect.",
+                                "optional": true
+                              }
+                            ]
+                          },
+                          {
+                            "name": "single",
+                            "type": "boolean",
+                            "label": "This drop zone can only contain one element",
+                            "description": "Make sure there is only one correct answer for this dropzone",
+                            "importance": "low",
+                            "default": false
+                          },
+                          {
+                            "name": "autoAlign",
+                            "type": "boolean",
+                            "label": "Enable Auto-Align",
+                            "importance": "low",
+                            "description": "Will auto-align all draggables dropped in this zone."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "overallFeedback",
+              "type": "group",
+              "label": "Overall Feedback",
+              "importance": "low",
+              "expanded": true,
+              "fields": [
+                {
+                  "name": "overallFeedback",
+                  "type": "list",
+                  "widgets": [
+                    {
+                      "name": "RangeList",
+                      "label": "Default"
+                    }
+                  ],
+                  "importance": "high",
+                  "label": "Define custom feedback for any score range",
+                  "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+                  "entity": "range",
+                  "min": 1,
+                  "defaultNum": 1,
+                  "optional": true,
+                  "field": {
+                    "name": "overallFeedback",
+                    "type": "group",
+                    "importance": "low",
+                    "fields": [
+                      {
+                        "name": "from",
+                        "type": "number",
+                        "label": "Score Range",
+                        "min": 0,
+                        "max": 100,
+                        "default": 0,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "to",
+                        "type": "number",
+                        "min": 0,
+                        "max": 100,
+                        "default": 100,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "feedback",
+                        "type": "text",
+                        "label": "Feedback for defined score range",
+                        "importance": "low",
+                        "placeholder": "Fill in the feedback",
+                        "optional": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "behaviour",
+              "type": "group",
+              "label": "Behaviour settings",
+              "importance": "low",
+              "description": "These options will let you control how the task behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "name": "enableRetry",
+                  "type": "boolean",
+                  "label": "Enable \"Retry\"",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "showSubmitAnswersButton",
+                  "type": "boolean",
+                  "label": "Enable \"Submit Answers\"",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "enableCheckButton",
+                  "type": "boolean",
+                  "label": "Enable \"Check\" button",
+                  "widget": "none",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "name": "singlePoint",
+                  "type": "boolean",
+                  "label": "Give one point for the whole task",
+                  "importance": "low",
+                  "description": "Disable to give one point for each draggable that is placed correctly.",
+                  "default": false
+                },
+                {
+                  "label": "Apply penalties",
+                  "name": "applyPenalties",
+                  "type": "boolean",
+                  "description": "Apply penalties for elements dropped in the wrong drop zones. This must be enabled when the same element(s) are able to be dropped into multiple drop zones, or if there is only one drop-zone. If this is not enabled, learners may match all items to all drop-zones and always receive a full score.",
+                  "default": true
+                },
+                {
+                  "name": "enableScoreExplanation",
+                  "type": "boolean",
+                  "label": "Enable score explanation",
+                  "description": "Display a score explanation to user when checking their answers (if the Apply penalties option has been selected).",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "singlePoint",
+                        "equals": false
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "backgroundOpacity",
+                  "type": "text",
+                  "label": "Background opacity for draggables",
+                  "importance": "low",
+                  "description": "If this field is set, it will override opacity set on all draggable elements. This should be a number between 0 and 100, where 0 means full transparency and 100 means no transparency",
+                  "optional": true
+                },
+                {
+                  "name": "dropZoneHighlighting",
+                  "type": "select",
+                  "label": "Drop Zone Highlighting",
+                  "importance": "low",
+                  "description": "Choose when to highlight drop zones.",
+                  "default": "dragging",
+                  "options": [
+                    {
+                      "value": "dragging",
+                      "label": "When dragging"
+                    },
+                    {
+                      "value": "always",
+                      "label": "Always"
+                    },
+                    {
+                      "value": "never",
+                      "label": "Never"
+                    }
+                  ]
+                },
+                {
+                  "name": "autoAlignSpacing",
+                  "type": "number",
+                  "label": "Spacing for Auto-Align (in px)",
+                  "importance": "low",
+                  "min": 0,
+                  "default": 2,
+                  "optional": true
+                },
+                {
+                  "name": "enableFullScreen",
+                  "label": "Enable FullScreen",
+                  "importance": "low",
+                  "type": "boolean",
+                  "description": "Check this option to enable the full screen button.",
+                  "default": false
+                },
+                {
+                  "name": "showScorePoints",
+                  "type": "boolean",
+                  "label": "Show score points",
+                  "description": "Show points earned for each answer. Not available when the Give one point for the whole task option is enabled.",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "showTitle",
+                  "type": "boolean",
+                  "label": "Show Title",
+                  "importance": "low",
+                  "description": "Uncheck this option if you do not want this title to be displayed. The title will only be displayed in summaries, statistics etc.",
+                  "default": true
+                }
+              ]
+            },
+            {
+              "name": "localize",
+              "type": "group",
+              "label": "Localize",
+              "common": true,
+              "fields": [
+                {
+                  "name": "fullscreen",
+                  "type": "text",
+                  "label": "Fullscreen label",
+                  "default": "Fullscreen"
+                },
+                {
+                  "name": "exitFullscreen",
+                  "type": "text",
+                  "label": "Exit fullscreen label",
+                  "default": "Exit fullscreen"
+                }
+              ]
+            },
+            {
+              "name": "grabbablePrefix",
+              "type": "text",
+              "label": "Grabbable prefix",
+              "importance": "low",
+              "default": "Grabbable {num} of {total}.",
+              "common": true
+            },
+            {
+              "name": "grabbableSuffix",
+              "type": "text",
+              "label": "Grabbable suffix",
+              "importance": "low",
+              "default": "Placed in dropzone {num}.",
+              "common": true
+            },
+            {
+              "name": "dropzonePrefix",
+              "type": "text",
+              "label": "Dropzone prefix",
+              "importance": "low",
+              "default": "Dropzone {num} of {total}.",
+              "common": true
+            },
+            {
+              "name": "noDropzone",
+              "type": "text",
+              "label": "No dropzone selection label",
+              "importance": "low",
+              "default": "No dropzone.",
+              "common": true
+            },
+            {
+              "name": "tipLabel",
+              "type": "text",
+              "label": "Label for show tip button",
+              "importance": "low",
+              "default": "Show tip.",
+              "common": true
+            },
+            {
+              "name": "tipAvailable",
+              "type": "text",
+              "label": "Label for tip available",
+              "importance": "low",
+              "default": "Tip available",
+              "common": true
+            },
+            {
+              "name": "correctAnswer",
+              "type": "text",
+              "label": "Label for correct answer",
+              "importance": "low",
+              "default": "Correct answer",
+              "common": true
+            },
+            {
+              "name": "wrongAnswer",
+              "type": "text",
+              "label": "Label for incorrect answer",
+              "importance": "low",
+              "default": "Wrong answer",
+              "common": true
+            },
+            {
+              "name": "feedbackHeader",
+              "type": "text",
+              "label": "Header for panel containing feedback for correct/incorrect answers",
+              "importance": "low",
+              "default": "Feedback",
+              "common": true
+            },
+            {
+              "name": "scoreBarLabel",
+              "type": "text",
+              "label": "Textual representation of the score bar for those using a readspeaker",
+              "default": "You got :num out of :total points",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "scoreExplanationButtonLabel",
+              "type": "text",
+              "label": "Textual representation of the score explanation button",
+              "default": "Show score explanation",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yCheck",
+              "type": "text",
+              "label": "Assistive technology label for \"Check\" button",
+              "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yRetry",
+              "type": "text",
+              "label": "Assistive technology label for \"Retry\" button",
+              "default": "Retry the task. Reset all responses and start the task over again.",
+              "importance": "low",
+              "common": true
+            }
+          ]';
+    }
+
+    //H5P.Blanks-1.14
+    private function updatedBlanksTwoSemantics() { 
+        return '[
+            {
+              "name": "media",
+              "type": "group",
+              "label": "Media",
+              "importance": "medium",
+              "fields": [
+                {
+                  "name": "type",
+                  "type": "library",
+                  "label": "Type",
+                  "options": [
+                    "H5P.Image 1.1",
+                    "H5P.Video 1.6",
+                    "H5P.Audio 1.5"
+                  ],
+                  "optional": true,
+                  "description": "Optional media to display above the question."
+                },
+                {
+                  "name": "disableImageZooming",
+                  "type": "boolean",
+                  "label": "Disable image zooming",
+                  "importance": "low",
+                  "default": false,
+                  "optional": true,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "type",
+                        "equals": "H5P.Image 1.1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "label": "Task description",
+              "importance": "high",
+              "name": "text",
+              "type": "text",
+              "widget": "html",
+              "default": "Fill in the missing words",
+              "description": "A guide telling the user how to answer this task.",
+              "enterMode": "p",
+              "tags": [
+                "strong",
+                "em",
+                "u",
+                "a",
+                "ul",
+                "ol",
+                "h2",
+                "h3",
+                "hr",
+                "pre",
+                "code"
+              ]
+            },
+            {
+              "name": "questions",
+              "type": "list",
+              "label": "Text blocks",
+              "importance": "high",
+              "entity": "text block",
+              "min": 1,
+              "max": 31,
+              "field": {
+                "name": "question",
+                "type": "text",
+                "widget": "html",
+                "label": "Line of text",
+                "importance": "high",
+                "placeholder": "Oslo is the capital of *Norway*.",
+                "description": "",
+                "important": {
+                  "description": "<ul><li>Blanks are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>Alternative answers are separated with a forward slash (/).</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li></ul>",
+                  "example": "H5P content may be edited using a *browser/web-browser:Something you use every day*."
+                },
+                "enterMode": "p",
+                "tags": [
+                  "strong",
+                  "em",
+                  "del",
+                  "u",
+                  "code"
+                ]
+              }
+            },
+            {
+              "name": "overallFeedback",
+              "type": "group",
+              "label": "Overall Feedback",
+              "importance": "low",
+              "expanded": true,
+              "fields": [
+                {
+                  "name": "overallFeedback",
+                  "type": "list",
+                  "widgets": [
+                    {
+                      "name": "RangeList",
+                      "label": "Default"
+                    }
+                  ],
+                  "importance": "high",
+                  "label": "Define custom feedback for any score range",
+                  "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+                  "entity": "range",
+                  "min": 1,
+                  "defaultNum": 1,
+                  "optional": true,
+                  "field": {
+                    "name": "overallFeedback",
+                    "type": "group",
+                    "importance": "low",
+                    "fields": [
+                      {
+                        "name": "from",
+                        "type": "number",
+                        "label": "Score Range",
+                        "min": 0,
+                        "max": 100,
+                        "default": 0,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "to",
+                        "type": "number",
+                        "min": 0,
+                        "max": 100,
+                        "default": 100,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "feedback",
+                        "type": "text",
+                        "label": "Feedback for defined score range",
+                        "importance": "low",
+                        "placeholder": "Fill in the feedback",
+                        "optional": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "label": "Text for \"Show solutions\" button",
+              "name": "showSolutions",
+              "type": "text",
+              "default": "Show solution",
+              "common": true
+            },
+            {
+              "label": "Text for \"Retry\" button",
+              "importance": "low",
+              "name": "tryAgain",
+              "type": "text",
+              "default": "Retry",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Check\" button",
+              "importance": "low",
+              "name": "checkAnswer",
+              "type": "text",
+              "default": "Check",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Submit\" button",
+              "importance": "low",
+              "name": "submitAnswer",
+              "type": "text",
+              "default": "Submit",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Not filled out\" message",
+              "importance": "low",
+              "name": "notFilledOut",
+              "type": "text",
+              "default": "Please fill in all blanks to view solution",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \":ans is correct\" message",
+              "importance": "low",
+              "name": "answerIsCorrect",
+              "type": "text",
+              "default": ":ans is correct",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \":ans is wrong\" message",
+              "importance": "low",
+              "name": "answerIsWrong",
+              "type": "text",
+              "default": ":ans is wrong",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Answered correctly\" message",
+              "importance": "low",
+              "name": "answeredCorrectly",
+              "type": "text",
+              "default": "Answered correctly",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Text for \"Answered incorrectly\" message",
+              "importance": "low",
+              "name": "answeredIncorrectly",
+              "type": "text",
+              "default": "Answered incorrectly",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Assistive technology label for solution",
+              "importance": "low",
+              "name": "solutionLabel",
+              "type": "text",
+              "default": "Correct answer:",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Assistive technology label for input field",
+              "importance": "low",
+              "name": "inputLabel",
+              "type": "text",
+              "description": "Use @num and @total to replace current cloze number and total cloze number",
+              "default": "Blank input @num of @total",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Assistive technology label for saying an input has a tip tied to it",
+              "importance": "low",
+              "name": "inputHasTipLabel",
+              "type": "text",
+              "default": "Tip available",
+              "common": true,
+              "optional": true
+            },
+            {
+              "label": "Tip icon label",
+              "importance": "low",
+              "name": "tipLabel",
+              "type": "text",
+              "default": "Tip",
+              "common": true,
+              "optional": true
+            },
+            {
+              "name": "behaviour",
+              "type": "group",
+              "label": "Behaviour settings",
+              "importance": "low",
+              "description": "These options will let you control how the task behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "label": "Enable \"Retry\"",
+                  "importance": "low",
+                  "name": "enableRetry",
+                  "type": "boolean",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "label": "Enable \"Show solution\" button",
+                  "importance": "low",
+                  "name": "enableSolutionsButton",
+                  "type": "boolean",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "name": "enableCheckButton",
+                  "type": "boolean",
+                  "label": "Enable \"Check\" button",
+                  "widget": "none",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "label": "Automatically check answers after input",
+                  "importance": "low",
+                  "name": "autoCheck",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true
+                },
+                {
+                  "name": "caseSensitive",
+                  "importance": "low",
+                  "type": "boolean",
+                  "default": true,
+                  "label": "Case sensitive",
+                  "description": "Makes sure the user input has to be exactly the same as the answer."
+                },
+                {
+                  "label": "Require all fields to be answered before the solution can be viewed",
+                  "importance": "low",
+                  "name": "showSolutionsRequiresInput",
+                  "type": "boolean",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "label": "Put input fields on separate lines",
+                  "importance": "low",
+                  "name": "separateLines",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true
+                },
+                {
+                  "label": "Show confirmation dialog on \"Check\"",
+                  "importance": "low",
+                  "name": "confirmCheckDialog",
+                  "type": "boolean",
+                  "description": "This options is not compatible with the \"Automatically check answers after input\" option",
+                  "default": false
+                },
+                {
+                  "label": "Show confirmation dialog on \"Retry\"",
+                  "importance": "low",
+                  "name": "confirmRetryDialog",
+                  "type": "boolean",
+                  "default": false
+                },
+                {
+                  "name": "acceptSpellingErrors",
+                  "type": "boolean",
+                  "label": "Accept minor spelling errors",
+                  "importance": "low",
+                  "description": "If activated, an answer will also count as correct with minor spelling errors (3-9 characters: 1 spelling error, more than 9 characters: 2 spelling errors)",
+                  "default": false,
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "name": "currikisettings",
+              "type": "group",
+              "label": "Curriki settings",
+              "importance": "low",
+              "description": "These options will let you control how the curriki studio behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "label": "Do not Show Submit Button",
+                  "importance": "low",
+                  "name": "disableSubmitButton",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
+                },
+                {
+                  "label": "Placeholder",
+                  "importance": "low",
+                  "name": "placeholder",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option is a place holder. will be used in future"
+                },
+                {
+                  "label": "Curriki Localization",
+                  "description": "Here you can edit settings or translate texts used in curriki settings",
+                  "importance": "low",
+                  "name": "currikil10n",
+                  "type": "group",
+                  "fields": [
+                    {
+                      "label": "Text for \"Submit\" button",
+                      "name": "submitAnswer",
+                      "type": "text",
+                      "default": "Submit",
+                      "optional": true
+                    },
+                    {
+                      "label": "Text for \"Placeholder\" button",
+                      "importance": "low",
+                      "name": "placeholderButton",
+                      "type": "text",
+                      "default": "Placeholder",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Check confirmation dialog",
+              "importance": "low",
+              "name": "confirmCheck",
+              "type": "group",
+              "common": true,
+              "fields": [
+                {
+                  "label": "Header text",
+                  "importance": "low",
+                  "name": "header",
+                  "type": "text",
+                  "default": "Finish ?"
+                },
+                {
+                  "label": "Body text",
+                  "importance": "low",
+                  "name": "body",
+                  "type": "text",
+                  "default": "Are you sure you wish to finish ?",
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "u",
+                    "code"
+                  ]
+                },
+                {
+                  "label": "Cancel button label",
+                  "importance": "low",
+                  "name": "cancelLabel",
+                  "type": "text",
+                  "default": "Cancel"
+                },
+                {
+                  "label": "Confirm button label",
+                  "importance": "low",
+                  "name": "confirmLabel",
+                  "type": "text",
+                  "default": "Finish"
+                }
+              ]
+            },
+            {
+              "label": "Retry confirmation dialog",
+              "importance": "low",
+              "name": "confirmRetry",
+              "type": "group",
+              "common": true,
+              "fields": [
+                {
+                  "label": "Header text",
+                  "importance": "low",
+                  "name": "header",
+                  "type": "text",
+                  "default": "Retry ?"
+                },
+                {
+                  "label": "Body text",
+                  "importance": "low",
+                  "name": "body",
+                  "type": "text",
+                  "default": "Are you sure you wish to retry ?",
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "u",
+                    "code"
+                  ]
+                },
+                {
+                  "label": "Cancel button label",
+                  "importance": "low",
+                  "name": "cancelLabel",
+                  "type": "text",
+                  "default": "Cancel"
+                },
+                {
+                  "label": "Confirm button label",
+                  "importance": "low",
+                  "name": "confirmLabel",
+                  "type": "text",
+                  "default": "Confirm"
+                }
+              ]
+            },
+            {
+              "name": "scoreBarLabel",
+              "type": "text",
+              "label": "Textual representation of the score bar for those using a readspeaker",
+              "default": "You got :num out of :total points",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yCheck",
+              "type": "text",
+              "label": "Assistive technology description for \"Check\" button",
+              "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yShowSolution",
+              "type": "text",
+              "label": "Assistive technology description for \"Show Solution\" button",
+              "default": "Show the solution. The task will be marked with its correct solution.",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yRetry",
+              "type": "text",
+              "label": "Assistive technology description for \"Retry\" button",
+              "default": "Retry the task. Reset all responses and start the task over again.",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yCheckingModeHeader",
+              "type": "text",
+              "label": "Assistive technology description for starting task",
+              "default": "Checking mode",
+              "importance": "low",
+              "common": true
+            }
+          ]';
+    }
+
+    //H5P.MarkTheWords-1.11
+    private function updatedMarkTheWordsSemantics() { 
+        return '[
+            {
+              "name": "media",
+              "type": "group",
+              "label": "Media",
+              "importance": "medium",
+              "fields": [
+                {
+                  "name": "type",
+                  "type": "library",
+                  "label": "Type",
+                  "importance": "medium",
+                  "options": [
+                    "H5P.Image 1.1",
+                    "H5P.Video 1.6",
+                    "H5P.Audio 1.5"
+                  ],
+                  "optional": true,
+                  "description": "Optional media to display above the question."
+                },
+                {
+                  "name": "disableImageZooming",
+                  "type": "boolean",
+                  "label": "Disable image zooming",
+                  "importance": "low",
+                  "default": false,
+                  "optional": true,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "type",
+                        "equals": "H5P.Image 1.1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "label": "Task description",
+              "importance": "high",
+              "name": "taskDescription",
+              "type": "text",
+              "widget": "html",
+              "description": "Describe how the user should solve the task.",
+              "placeholder": "Click on all the verbs in the text that follows.",
+              "enterMode": "p",
+              "tags": [
+                "strong",
+                "em",
+                "u",
+                "a",
+                "ul",
+                "ol",
+                "h2",
+                "h3",
+                "hr",
+                "pre",
+                "code"
+              ]
+            },
+            {
+              "label": "Textfield",
+              "importance": "high",
+              "name": "textField",
+              "type": "text",
+              "widget": "html",
+              "tags": [
+                "p",
+                "br",
+                "strong",
+                "em",
+                "code"
+              ],
+              "placeholder": "This is an answer: *answer*.",
+              "description": "",
+              "important": {
+                "description": "<ul><li>Correct words are marked with asterisks (*) before and after the word.</li><li>Asterisks can be added within marked words by adding another asterisk, *correctword*** =&gt; correctword*.</li><li>Only words may be marked as correct. Not phrases.</li></ul>",
+                "example": "The correct words are marked like this: *correctword*, an asterisk is written like this: *correctword***."
+              }
+            },
+            {
+              "name": "overallFeedback",
+              "type": "group",
+              "label": "Overall Feedback",
+              "importance": "low",
+              "expanded": true,
+              "fields": [
+                {
+                  "name": "overallFeedback",
+                  "type": "list",
+                  "widgets": [
+                    {
+                      "name": "RangeList",
+                      "label": "Default"
+                    }
+                  ],
+                  "importance": "high",
+                  "label": "Define custom feedback for any score range",
+                  "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+                  "entity": "range",
+                  "min": 1,
+                  "defaultNum": 1,
+                  "optional": true,
+                  "field": {
+                    "name": "overallFeedback",
+                    "type": "group",
+                    "importance": "low",
+                    "fields": [
+                      {
+                        "name": "from",
+                        "type": "number",
+                        "label": "Score Range",
+                        "min": 0,
+                        "max": 100,
+                        "default": 0,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "to",
+                        "type": "number",
+                        "min": 0,
+                        "max": 100,
+                        "default": 100,
+                        "unit": "%"
+                      },
+                      {
+                        "name": "feedback",
+                        "type": "text",
+                        "label": "Feedback for defined score range",
+                        "importance": "low",
+                        "placeholder": "Fill in the feedback",
+                        "optional": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "label": "Text for \"Check\" button",
+              "importance": "low",
+              "name": "checkAnswerButton",
+              "type": "text",
+              "default": "Check",
+              "common": true
+            },
+            {
+              "label": "Text for \"Submit\" button",
+              "importance": "low",
+              "name": "submitAnswerButton",
+              "type": "text",
+              "default": "Submit",
+              "common": true
+            },
+            {
+              "label": "Text for \"Retry\" button",
+              "importance": "low",
+              "name": "tryAgainButton",
+              "type": "text",
+              "default": "Retry",
+              "common": true
+            },
+            {
+              "label": "Text for \"Show solution\" button",
+              "importance": "low",
+              "name": "showSolutionButton",
+              "type": "text",
+              "default": "Show solution",
+              "common": true
+            },
+            {
+              "name": "behaviour",
+              "importance": "low",
+              "type": "group",
+              "label": "Behaviour settings",
+              "description": "These options will let you control how the task behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "name": "enableRetry",
+                  "type": "boolean",
+                  "label": "Enable \"Retry\"",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "enableSolutionsButton",
+                  "type": "boolean",
+                  "label": "Enable \"Show solution\" button",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "enableCheckButton",
+                  "type": "boolean",
+                  "label": "Enable \"Check\" button",
+                  "widget": "none",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "name": "showScorePoints",
+                  "type": "boolean",
+                  "label": "Show score points",
+                  "description": "Show points earned for each answer.",
+                  "importance": "low",
+                  "default": true
+                }
+              ]
+            },
+            {
+              "name": "currikisettings",
+              "type": "group",
+              "label": "Curriki settings",
+              "importance": "low",
+              "description": "These options will let you control how the curriki studio behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "label": "Do not Show Submit Button",
+                  "importance": "low",
+                  "name": "disableSubmitButton",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
+                },
+                {
+                  "label": "Placeholder",
+                  "importance": "low",
+                  "name": "placeholder",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option is a place holder. will be used in future"
+                },
+                {
+                  "label": "Curriki Localization",
+                  "description": "Here you can edit settings or translate texts used in curriki settings",
+                  "importance": "low",
+                  "name": "currikil10n",
+                  "type": "group",
+                  "fields": [
+                    {
+                      "label": "Text for \"Submit\" button",
+                      "name": "submitAnswer",
+                      "type": "text",
+                      "default": "Submit",
+                      "optional": true
+                    },
+                    {
+                      "label": "Text for \"Placeholder\" button",
+                      "importance": "low",
+                      "name": "placeholderButton",
+                      "type": "text",
+                      "default": "Placeholder",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Correct answer text",
+              "importance": "low",
+              "name": "correctAnswer",
+              "type": "text",
+              "default": "Correct!",
+              "description": "Text used to indicate that an answer is correct",
+              "common": true
+            },
+            {
+              "label": "Incorrect answer text",
+              "importance": "low",
+              "name": "incorrectAnswer",
+              "type": "text",
+              "default": "Incorrect!",
+              "description": "Text used to indicate that an answer is incorrect",
+              "common": true
+            },
+            {
+              "label": "Missed answer text",
+              "importance": "low",
+              "name": "missedAnswer",
+              "type": "text",
+              "default": "Answer not found!",
+              "description": "Text used to indicate that an answer is missing",
+              "common": true
+            },
+            {
+              "label": "Description for Display Solution",
+              "importance": "low",
+              "name": "displaySolutionDescription",
+              "type": "text",
+              "default": "Task is updated to contain the solution.",
+              "description": "This text tells the user that the tasks has been updated with the solution.",
+              "common": true
+            },
+            {
+              "name": "scoreBarLabel",
+              "type": "text",
+              "label": "Textual representation of the score bar for those using a readspeaker",
+              "default": "You got :num out of :total points",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yFullTextLabel",
+              "type": "text",
+              "label": "Label for the full readable text for assistive technologies",
+              "default": "Full readable text",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yClickableTextLabel",
+              "type": "text",
+              "label": "Label for the text where words can be marked for assistive technologies",
+              "default": "Full text where words can be marked",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11ySolutionModeHeader",
+              "type": "text",
+              "label": "Solution mode header for assistive technologies",
+              "default": "Solution mode",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yCheckingHeader",
+              "type": "text",
+              "label": "Checking mode header for assistive technologies",
+              "default": "Checking mode",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yCheck",
+              "type": "text",
+              "label": "Assistive technology description for \"Check\" button",
+              "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yShowSolution",
+              "type": "text",
+              "label": "Assistive technology description for \"Show Solution\" button",
+              "default": "Show the solution. The task will be marked with its correct solution.",
+              "importance": "low",
+              "common": true
+            },
+            {
+              "name": "a11yRetry",
+              "type": "text",
+              "label": "Assistive technology description for \"Retry\" button",
+              "default": "Retry the task. Reset all responses and start the task over again.",
+              "importance": "low",
+              "common": true
+            }
+          ]';
+    }
+
+    //H5P.TrueFalse-1.8
+    private function updatedTrueFalseSemantics() { 
+        return '[
+            {
+              "name": "media",
+              "type": "group",
+              "label": "Media",
+              "importance": "medium",
+              "fields": [
+                {
+                  "name": "type",
+                  "type": "library",
+                  "label": "Type",
+                  "importance": "medium",
+                  "options": [
+                    "H5P.Image 1.1",
+                    "H5P.Video 1.6",
+                    "H5P.Audio 1.5"
+                  ],
+                  "optional": true,
+                  "description": "Optional media to display above the question."
+                },
+                {
+                  "name": "disableImageZooming",
+                  "type": "boolean",
+                  "label": "Disable image zooming",
+                  "importance": "low",
+                  "default": false,
+                  "optional": true,
+                  "widget": "showWhen",
+                  "showWhen": {
+                    "rules": [
+                      {
+                        "field": "type",
+                        "equals": "H5P.Image 1.1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "question",
+              "type": "text",
+              "widget": "html",
+              "label": "Question",
+              "importance": "high",
+              "enterMode": "p",
+              "tags": [
+                "strong",
+                "em",
+                "sub",
+                "sup",
+                "h2",
+                "h3",
+                "pre",
+                "code"
+              ]
+            },
+            {
+              "name": "correct",
+              "type": "select",
+              "widget": "radioGroup",
+              "alignment": "horizontal",
+              "label": "Correct answer",
+              "importance": "high",
+              "options": [
+                {
+                  "value": "true",
+                  "label": "True"
+                },
+                {
+                  "value": "false",
+                  "label": "False"
+                }
+              ],
+              "default": "true"
+            },
+            {
+              "name": "l10n",
+              "type": "group",
+              "common": true,
+              "label": "User interface translations for True/False Questions",
+              "importance": "low",
+              "fields": [
+                {
+                  "name": "trueText",
+                  "type": "text",
+                  "label": "Label for true button",
+                  "importance": "low",
+                  "default": "True"
+                },
+                {
+                  "name": "falseText",
+                  "type": "text",
+                  "label": "Label for false button",
+                  "importance": "low",
+                  "default": "False"
+                },
+                {
+                  "label": "Text for \"Submit\" button",
+                  "importance": "low",
+                  "name": "submitAnswer",
+                  "type": "text",
+                  "default": "Submit",
+                  "optional": true
+                },
+                {
+                  "label": "Feedback text",
+                  "importance": "low",
+                  "name": "score",
+                  "type": "text",
+                  "default": "You got @score of @total points",
+                  "description": "Feedback text, variables available: @score and @total. Example: You got @score of @total possible points"
+                },
+                {
+                  "label": "Text for \"Check\" button",
+                  "importance": "low",
+                  "name": "checkAnswer",
+                  "type": "text",
+                  "default": "Check"
+                },
+                {
+                  "label": "Text for \"Submit\" button",
+                  "importance": "low",
+                  "name": "submitAnswer",
+                  "type": "text",
+                  "default": "Submit"
+                },
+                {
+                  "label": "Text for \"Show solution\" button",
+                  "importance": "low",
+                  "name": "showSolutionButton",
+                  "type": "text",
+                  "default": "Show solution"
+                },
+                {
+                  "label": "Text for \"Retry\" button",
+                  "importance": "low",
+                  "name": "tryAgain",
+                  "type": "text",
+                  "default": "Retry"
+                },
+                {
+                  "name": "wrongAnswerMessage",
+                  "type": "text",
+                  "label": "Wrong Answer",
+                  "importance": "low",
+                  "default": "Wrong answer"
+                },
+                {
+                  "name": "correctAnswerMessage",
+                  "type": "text",
+                  "label": "Correct Answer",
+                  "importance": "low",
+                  "default": "Correct answer"
+                },
+                {
+                  "name": "scoreBarLabel",
+                  "type": "text",
+                  "label": "Textual representation of the score bar for those using a readspeaker",
+                  "default": "You got :num out of :total points",
+                  "importance": "low"
+                },
+                {
+                  "name": "a11yCheck",
+                  "type": "text",
+                  "label": "Assistive technology description for \"Check\" button",
+                  "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+                  "importance": "low"
+                },
+                {
+                  "name": "a11yShowSolution",
+                  "type": "text",
+                  "label": "Assistive technology description for \"Show Solution\" button",
+                  "default": "Show the solution. The task will be marked with its correct solution.",
+                  "importance": "low"
+                },
+                {
+                  "name": "a11yRetry",
+                  "type": "text",
+                  "label": "Assistive technology description for \"Retry\" button",
+                  "default": "Retry the task. Reset all responses and start the task over again.",
+                  "importance": "low"
+                }
+              ]
+            },
+            {
+              "name": "behaviour",
+              "type": "group",
+              "label": "Behaviour settings",
+              "importance": "low",
+              "description": "These options will let you control how the task behaves.",
+              "fields": [
+                {
+                  "name": "enableRetry",
+                  "type": "boolean",
+                  "label": "Enable \"Retry\" button",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "enableSolutionsButton",
+                  "type": "boolean",
+                  "label": "Enable \"Show Solution\" button",
+                  "importance": "low",
+                  "default": true
+                },
+                {
+                  "name": "enableCheckButton",
+                  "type": "boolean",
+                  "label": "Enable \"Check\" button",
+                  "widget": "none",
+                  "importance": "low",
+                  "default": true,
+                  "optional": true
+                },
+                {
+                  "label": "Show confirmation dialog on \"Check\"",
+                  "importance": "low",
+                  "name": "confirmCheckDialog",
+                  "type": "boolean",
+                  "default": false
+                },
+                {
+                  "label": "Show confirmation dialog on \"Retry\"",
+                  "importance": "low",
+                  "name": "confirmRetryDialog",
+                  "type": "boolean",
+                  "default": false
+                },
+                {
+                  "label": "Automatically check answer",
+                  "importance": "low",
+                  "description": "Note that accessibility will suffer if enabling this option",
+                  "name": "autoCheck",
+                  "type": "boolean",
+                  "default": false
+                },
+                {
+                  "name": "feedbackOnCorrect",
+                  "label": "Feedback on correct answer",
+                  "importance": "low",
+                  "description": "This will override the default feedback text. Variables available: @score and @total",
+                  "type": "text",
+                  "maxLength": 2048,
+                  "optional": true
+                },
+                {
+                  "name": "feedbackOnWrong",
+                  "label": "Feedback on wrong answer",
+                  "importance": "low",
+                  "description": "This will override the default feedback text. Variables available: @score and @total",
+                  "type": "text",
+                  "maxLength": 2048,
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "name": "currikisettings",
+              "type": "group",
+              "label": "Curriki settings",
+              "importance": "low",
+              "description": "These options will let you control how the curriki studio behaves.",
+              "optional": true,
+              "fields": [
+                {
+                  "label": "Do not Show Submit Button",
+                  "importance": "low",
+                  "name": "disableSubmitButton",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option only applies to a standalone activity. The Submit button is required for grade passback to an LMS."
+                },
+                {
+                  "label": "Placeholder",
+                  "importance": "low",
+                  "name": "placeholder",
+                  "type": "boolean",
+                  "default": false,
+                  "optional": true,
+                  "description": "This option is a place holder. will be used in future"
+                },
+                {
+                  "label": "Curriki Localization",
+                  "description": "Here you can edit settings or translate texts used in curriki settings",
+                  "importance": "low",
+                  "name": "currikil10n",
+                  "type": "group",
+                  "fields": [
+                    {
+                      "label": "Text for \"Submit\" button",
+                      "name": "submitAnswer",
+                      "type": "text",
+                      "default": "Submit",
+                      "optional": true
+                    },
+                    {
+                      "label": "Text for \"Placeholder\" button",
+                      "importance": "low",
+                      "name": "placeholderButton",
+                      "type": "text",
+                      "default": "Placeholder",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Check confirmation dialog",
+              "importance": "low",
+              "name": "confirmCheck",
+              "type": "group",
+              "common": true,
+              "fields": [
+                {
+                  "label": "Header text",
+                  "importance": "low",
+                  "name": "header",
+                  "type": "text",
+                  "default": "Finish ?"
+                },
+                {
+                  "label": "Body text",
+                  "importance": "low",
+                  "name": "body",
+                  "type": "text",
+                  "default": "Are you sure you wish to finish ?",
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "u",
+                    "code"
+                  ]
+                },
+                {
+                  "label": "Cancel button label",
+                  "importance": "low",
+                  "name": "cancelLabel",
+                  "type": "text",
+                  "default": "Cancel"
+                },
+                {
+                  "label": "Confirm button label",
+                  "importance": "low",
+                  "name": "confirmLabel",
+                  "type": "text",
+                  "default": "Finish"
+                }
+              ]
+            },
+            {
+              "label": "Retry confirmation dialog",
+              "importance": "low",
+              "name": "confirmRetry",
+              "type": "group",
+              "common": true,
+              "fields": [
+                {
+                  "label": "Header text",
+                  "importance": "low",
+                  "name": "header",
+                  "type": "text",
+                  "default": "Retry ?"
+                },
+                {
+                  "label": "Body text",
+                  "importance": "low",
+                  "name": "body",
+                  "type": "text",
+                  "default": "Are you sure you wish to retry ?",
+                  "widget": "html",
+                  "enterMode": "p",
+                  "tags": [
+                    "strong",
+                    "em",
+                    "del",
+                    "u",
+                    "code"
+                  ]
+                },
+                {
+                  "label": "Cancel button label",
+                  "importance": "low",
+                  "name": "cancelLabel",
+                  "type": "text",
+                  "default": "Cancel"
+                },
+                {
+                  "label": "Confirm button label",
+                  "importance": "low",
+                  "name": "confirmLabel",
+                  "type": "text",
+                  "default": "Confirm"
+                }
+              ]
+            }
+          ]';
     }
 }
