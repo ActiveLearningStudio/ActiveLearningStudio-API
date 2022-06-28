@@ -318,7 +318,7 @@ class AddCoursePresentationSeeder extends Seeder
             'dependency_type' => 'preloaded'
         ]);
 
-        $h5pDragTextParams = ['name' => "H5P.DragText", "major_version" => 1, "minor_version" => 10];
+        $h5pDragTextParams = ['name' => "H5P.DragText", "major_version" => 1, "minor_version" => 8];
         $h5pDragTextParamsLib = DB::table('h5p_libraries')->where($h5pDragTextParams)->first();
         $h5pDragTextParamsLibId = $h5pDragTextParamsLib->id;
 
@@ -338,7 +338,7 @@ class AddCoursePresentationSeeder extends Seeder
             'dependency_type' => 'preloaded'
         ]);
 
-        $h5pDialogcardsParams = ['name' => "H5P.Dialogcards", "major_version" => 1, "minor_version" => 9];
+        $h5pDialogcardsParams = ['name' => "H5P.Dialogcards", "major_version" => 1, "minor_version" => 8];
         $h5pDialogcardsParamsLib = DB::table('h5p_libraries')->where($h5pDialogcardsParams)->first();
         $h5pDialogcardsParamsLibId = $h5pDialogcardsParamsLib->id;
 
