@@ -208,7 +208,7 @@ class AddCoursePresentationSeeder extends Seeder
             'dependency_type' => 'preloaded'
         ]);
 
-        $h5pAudioParams = ['name' => "H5P.Audio", "major_version" => 1, "minor_version" => 5];
+        $h5pAudioParams = ['name' => "H5P.Audio", "major_version" => 1, "minor_version" => 4];
         $h5pAudioParamsLib = DB::table('h5p_libraries')->where($h5pAudioParams)->first();
         $h5pAudioParamsLibId = $h5pAudioParamsLib->id;
 
