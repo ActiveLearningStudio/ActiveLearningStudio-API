@@ -395,7 +395,7 @@ class DefaultActivityItemSeeder extends Seeder
                 'mtBeC6w0OY8JM4cgPetzBafE6iUPry3omWrsPS6k.png',
 
             ],
-            'FindtheHotspot' => [
+            'FindTheHotspot' => [
                 'Create an image-based test where the learner is to find the correct spots on an image.',
                 'Photo / Images',
                 'H5P.ImageHotspotQuestion 1.8',
