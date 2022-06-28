@@ -90,6 +90,7 @@ class H5pController extends Controller
 
         // Prepare form
         $library = 0;
+        
         if ($request->get('machineName') && $request->get('majorVersion') && $request->get('minorVersion')) {
             $library = $request->get('machineName') . ' ' . $request->get('majorVersion') . '.' . $request->get('minorVersion');
         }
@@ -145,6 +146,7 @@ class H5pController extends Controller
         try {
             if ($request->get('action') === 'create') {
                 $content['library'] = $core->libraryFromString($request->get('library'));
+               
                 if (!$content['library']) {
                     throw new H5PException('Invalid library.');
                 }
@@ -161,6 +163,7 @@ class H5pController extends Controller
 
                 $content['params'] = $request->get('parameters');
                 $params = json_decode($content['params']);
+                
                 // $content['title'] = $params->metadata->title;
 
                 if ($params === NULL) {
@@ -169,7 +172,7 @@ class H5pController extends Controller
 
                 $content['params'] = json_encode($params->params);
                 $content['metadata'] = $params->metadata;
-
+                
                 // Trim title and check length
                 $trimmed_title = empty($content['metadata']->title) ? '' : trim($content['metadata']->title);
                 if ($trimmed_title === '') {
@@ -185,7 +188,7 @@ class H5pController extends Controller
                 
                 // Save new content
                 $content['id'] = $core->saveContent($content);
-
+            
                 // for Brightcove Interactive Videos
                 if ($content['library']['machineName'] === 'H5P.BrightcoveInteractiveVideo') {
                     $brightCoveVideoData['brightcove_video_id'] = $params->params->interactiveVideo->video->brightcoveVideoID;
@@ -226,7 +229,7 @@ class H5pController extends Controller
                     ], 422);
                 }
             }
-
+           
             if ($return_id) {
                 return response([
                     'success' => trans('laravel-h5p.content.created'),
@@ -498,6 +501,8 @@ class H5pController extends Controller
 
                 // Save new content
                 $core->saveContent($content);
+
+     
 
                 // Move images and find all content dependencies
                 $editor->processParameters($content['id'], $content['library'], $params->params, $oldLibrary, $oldParams);

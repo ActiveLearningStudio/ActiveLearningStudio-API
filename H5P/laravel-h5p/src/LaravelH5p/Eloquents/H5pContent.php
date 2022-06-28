@@ -2,8 +2,10 @@
 
 namespace Djoudi\LaravelH5p\Eloquents;
 
-use Illuminate\Database\Eloquent\Model;
+use id;
 use Illuminate\Support\Facades\DB;
+use App\Models\IndependentActivity;
+use Illuminate\Database\Eloquent\Model;
 
 class H5pContent extends Model
 {
@@ -48,6 +50,11 @@ class H5pContent extends Model
     public function library()
     {
         return $this->belongsTo(H5pLibrary::class, 'library_id');
+    }
+
+    public function independentActivity()
+    {
+        return $this->hasOne(IndependentActivity::class, 'h5p_content_id', 'id');
     }
 
 }

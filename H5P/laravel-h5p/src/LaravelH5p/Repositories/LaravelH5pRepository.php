@@ -435,7 +435,6 @@ class LaravelH5pRepository implements H5PFrameworkInterface
             'filtered' => '',
             'disable' => $content['disable']
         ));
-
         if (!isset($content['id'])) {
             // Insert new content
             $data['created_at'] = $current_date;;

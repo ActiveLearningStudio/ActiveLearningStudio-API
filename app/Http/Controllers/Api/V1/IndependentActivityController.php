@@ -32,6 +32,11 @@ use App\Models\Organization;
 use App\Jobs\ExportIndependentActivity;
 use App\Jobs\ImportIndependentActivity;
 use App\Http\Requests\V1\IndependentActivityUploadImportRequest;
+use Illuminate\Support\Facades\File;
+use ZipArchive;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
 
 /**
  * @group 5. Independent Activity
@@ -644,63 +649,171 @@ class IndependentActivityController extends Controller
         ], 200);
     }
 
-    /**
-     * Get H5P Resource Settings
-     *
-     * Get H5P Resource Settings for an independent activity
-     *
-     * @urlParam independent_activity required The Id of an independent activity Example: 1
-     *
-     * @responseFile responses/h5p/independent-h5p-resource-settings-open.json
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Independent Activity doesn't belong to this user."
-     *   ]
-     * }
-     *
-     * @param IndependentActivity $independent_activity
-     * @return Response
-     */
-    public function getH5pResourceSettings(IndependentActivity $independent_activity)
-    {
-        $this->authorize('view', $independent_activity);
+    //download inpendent activity
+    public function h5pActivity(Request $request){
 
-        if ($independent_activity->type === 'h5p') {
+            $h5pcontent = H5pContent::find($request->id);
+            $independent_activity = $h5pcontent->independentActivity;
+            $this->authorize('view', $independent_activity);
+            $zip = new ZipArchive;
+
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
-            $editor = $h5p::$h5peditor;
+            $settings = $h5p::get_editor($content = null, 'preview');
             $content = $h5p->load_content($independent_activity->h5p_content_id);
+            $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+            $embed = $h5p->get_embed($content, $settings);
+            $embed_code = $embed['embed'];
+            $settings = $embed['settings'];
+            $user = Auth::user();
+
+            // create event dispatch
+            event(new H5pEvent(
+                'content',
+                NULL,
+                $content['id'],
+                $content['title'],
+                $content['library']['name'],
+                $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+            ));
+            $user_data = $user->only(['id', 'name', 'email']);
+            $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+            $data[] = $h5p_data;
+            $data[] = $independent_activity;
+            Storage::disk('public')->put('/exports/'.$request->id.'/'.$request->id.'-h5p.json', json_encode($data));
+            
+            $rootPath = storage_path('app/public/exports/'.$request->id);
+            $zipFileName = $request->id.'.zip';
+
+            $zip->open(storage_path('app/public/exports/'.$request->id.'.zip'), ZipArchive::CREATE );
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($rootPath),
+                RecursiveIteratorIterator::LEAVES_ONLY
+            );
+        
+            foreach ($files as $name => $file)
+            {
+                // Skip directories (they would be added automatically)
+                if (!$file->isDir())
+                {
+                    // Get real and relative path for current file
+                    $filePath = $file->getRealPath();
+                    $relativePath = substr($filePath, strlen($rootPath) + 1);
+            
+                    // Add current file to archive
+                    $zip->addFile($filePath, $relativePath);
+                }
+            }
+            $zip->close();  
+            return url('storage/exports/'.$zipFileName);
+
         }
 
-        return response([
-            'h5p' => $content,
-            'independent-activity' => new IndependentActivityResource($independent_activity)
-        ], 200);
-    }
+        /**
+         * Get H5P Resource Settings
+         *
+         * Get H5P Resource Settings for an independent activity
+         *
+         * @urlParam independent_activity required The Id of an independent activity Example: 1
+         *
+         * @responseFile responses/h5p/independent-h5p-resource-settings-open.json
+         *
+         * @response 500 {
+         *   "errors": [
+         *     "Independent Activity doesn't belong to this user."
+         *   ]
+         * }
+         *
+         * @param IndependentActivity $independent_activity
+         * @return Response
+         */
+        public function getH5pResourceSettings(IndependentActivity $independent_activity)
+        {
+            $this->authorize('view', $independent_activity);
 
-    /**
-     * Get H5P Resource Settings (Shared)
-     *
-     * Get H5P Resource Settings for a shared independent activity
-     *
-     * @urlParam independent_activity required The Id of an independent activity
-     *
-     * @responseFile responses/h5p/independent-h5p-resource-settings-open.json
-     *
-     * @response 400 {
-     *   "errors": [
-     *     "Independent Activity not found."
-     *   ]
-     * }
-     *
-     * @param IndependentActivity $independent_activity
-     * @return Response
-     */
-    public function getH5pResourceSettingsShared(IndependentActivity $independent_activity)
-    {
-        // 3 is for indexing approved - see IndependentActivity Model @indexing property
-        if ($independent_activity->shared || ($independent_activity->indexing === (int)config('constants.indexing-approved'))) {
+            if ($independent_activity->type === 'h5p') {
+                $h5p = App::make('LaravelH5p');
+                $core = $h5p::$core;
+                $editor = $h5p::$h5peditor;
+                $content = $h5p->load_content($independent_activity->h5p_content_id);
+            }
+
+            return response([
+                'h5p' => $content,
+                'independent-activity' => new IndependentActivityResource($independent_activity)
+            ], 200);
+        }
+
+        /**
+         * Get H5P Resource Settings (Shared)
+         *
+         * Get H5P Resource Settings for a shared independent activity
+         *
+         * @urlParam independent_activity required The Id of an independent activity
+         *
+         * @responseFile responses/h5p/independent-h5p-resource-settings-open.json
+         *
+         * @response 400 {
+         *   "errors": [
+         *     "Independent Activity not found."
+         *   ]
+         * }
+         *
+         * @param IndependentActivity $independent_activity
+         * @return Response
+         */
+        public function getH5pResourceSettingsShared(IndependentActivity $independent_activity)
+        {
+            // 3 is for indexing approved - see IndependentActivity Model @indexing property
+            if ($independent_activity->shared || ($independent_activity->indexing === (int)config('constants.indexing-approved'))) {
+                $h5p = App::make('LaravelH5p');
+                $core = $h5p::$core;
+                $settings = $h5p::get_editor();
+                $content = $h5p->load_content($independent_activity->h5p_content_id);
+                $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+                $embed = $h5p->get_embed($content, $settings);
+                $embed_code = $embed['embed'];
+                $settings = $embed['settings'];
+                $user_data = null;
+                $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+
+                return response([
+                    'h5p' => $h5p_data,
+                    'independent-activity' => new IndependentActivityResource($independent_activity)
+                ], 200);
+            }
+
+            return response([
+                'errors' => ['Independent Activity not found.']
+            ], 400);
+        }
+
+        /**
+         * @uses One time script to populate all missing order number
+         */
+        public function populateOrderNumber()
+        {
+            $this->activityRepository->populateOrderNumber();
+        }
+
+        /**
+         * Get Independent Activity Search Preview
+         *
+         * Get the specified independent activity search preview.
+         *
+         * @urlParam suborganization required The Id of a suborganization Example: 1
+         * @urlParam independent_activity required The Id of an independent activity Example: 1
+         *
+         * @responseFile responses/h5p/independent-h5p-resource-settings-open.json
+         *
+         * @param Organization $suborganization
+         * @param IndependentActivity $independent_activity
+         * @return Response
+         */
+        public function searchPreview(Organization $suborganization, IndependentActivity $independent_activity)
+        {
+            $this->authorize('searchPreview', [$independent_activity, $suborganization]);
+
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();
@@ -714,195 +827,147 @@ class IndependentActivityController extends Controller
 
             return response([
                 'h5p' => $h5p_data,
-                'independent-activity' => new IndependentActivityResource($independent_activity)
+                'activity' => new IndependentActivityResource($independent_activity),
             ], 200);
         }
 
-        return response([
-            'errors' => ['Independent Activity not found.']
-        ], 400);
+        /**
+         * Download XApi File
+         *
+         * This is an API for to download the XAPI zip for the attempted independent activity
+         * 
+         * @urlParam independent_activity required id, title, slug of an independent_activity
+         * 
+         * @return download file download for the independent activity XAPI zip download
+         */
+        public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
+            return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
+        }
+
+        /**
+         * Export Independent Activity
+         *
+         * Export the specified activity of a user.
+         *
+         * @urlParam suborganization required The Id of a suborganization Example: 1
+         * @urlParam independent_activity required The Id of a independent_activity Example: 1
+         *
+         * @response {
+         *   "message": "Your request to export independent Activity [title] has been received and is being processed."
+         * }
+         *
+         * @param Request $request
+         * @param Organization $suborganization
+         * @param IndependentActivity $independent_activity
+         * @return Response
+         */
+        public function exportIndependentActivity(Request $request, Organization $suborganization, IndependentActivity $independent_activity)
+        {
+            $this->authorize('export', $independent_activity);
+            // pushed cloning of activity in background
+            ExportIndependentActivity::dispatch(auth()->user(), $independent_activity, $suborganization)->delay(now()->addSecond());
+
+            return response([
+                'message' =>  "Your request to export independent Activity [$independent_activity->title] has been received and is being processed. <br>
+                                You will be alerted in the notification section in the title bar when complete.",
+            ], 200);
+        }
+
+        /**
+         * Import Independent Activity
+         *
+         * Import the specified independent activity of a user.
+         * 
+         * @urlParam suborganization required The Id of a suborganization Example: 1
+         * @param independent_activity 
+         * @response {
+         *   "message": "Your request to import independent activity has been received and is being processed."
+         * }
+         *
+         * @return Response
+         */
+
+        public function importIndependentActivity(IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest, Organization $suborganization)
+        {
+            $this->authorize('import', [IndependentActivity::class, $suborganization]);
+
+            $IndependentActivityUploadImportRequest->validated();
+            $path = $IndependentActivityUploadImportRequest->file('independent_activity')->store('public/imports');
+
+            ImportIndependentActivity::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
+
+            return response([
+                'message' =>  "Your request to import independent activity has been received and is being processed. <br>
+                                You will be alerted in the notification section in the title bar when complete.",
+            ], 200);
+        }
+
+        /**
+         * Independent Activity Indexing
+         *
+         * Modify the index value of an independent activity.
+         *
+         * @urlParam independent_activity required The Id of a independent_activity Example: 1
+         * @urlParam index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
+         *
+         * @response {
+         *   "message": "Library status changed successfully!",
+         * }
+         *
+         * @response 500 {
+         *   "errors": [
+         *     "Invalid index value provided."
+         *   ]
+         * }
+         *
+         * @param IndependentActivity $independent_activity
+         * @param $index
+         * @return Application|ResponseFactory|Response
+         * @throws GeneralException
+         */
+        public function updateIndex(IndependentActivity $independent_activity, $index)
+        {
+            return response(['message' => $this->independentActivityRepository->updateIndex($independent_activity, $index)], 200);
+        }
+
+        /**
+         * Copy Independent Activity into Playlist
+         *
+         * Clone the specified independent activity of an suborganization and link with a playlist.
+         *
+         * @urlParam suborganization required The Id of a suborganization Example: 1
+         * @urlParam independent_activity required The Id of a independent activity Example: 1
+         * @urlParam playlist required The Id of a playlist Example: 1
+         *
+         * @response {
+         *   "message": "Independent Activity is being copied in background!"
+         * }
+         *
+         * @response 400 {
+         *   "errors": [
+         *     "Not a Public Independent Activity."
+         *   ]
+         * }
+         *
+         * @response 500 {
+         *   "errors": [
+         *     "Failed to copy independent activity."
+         *   ]
+         * }
+         *
+         * @param Request $request
+         * @param Organization $suborganization
+         * @param IndependentActivity $independent_activity
+         * @param Playlist $playlist
+         * @return Response
+         */
+        public function copyIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, IndependentActivity $independent_activity, Playlist $playlist)
+        {
+            CopyIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
+
+            return response([
+                "message" => "Your request to add independent activity [$independent_activity->title] into playlist [$playlist->title] has been 
+                received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
+            ], 200);
+        }
     }
-
-    /**
-     * @uses One time script to populate all missing order number
-     */
-    public function populateOrderNumber()
-    {
-        $this->activityRepository->populateOrderNumber();
-    }
-
-    /**
-     * Get Independent Activity Search Preview
-     *
-     * Get the specified independent activity search preview.
-     *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam independent_activity required The Id of an independent activity Example: 1
-     *
-     * @responseFile responses/h5p/independent-h5p-resource-settings-open.json
-     *
-     * @param Organization $suborganization
-     * @param IndependentActivity $independent_activity
-     * @return Response
-     */
-    public function searchPreview(Organization $suborganization, IndependentActivity $independent_activity)
-    {
-        $this->authorize('searchPreview', [$independent_activity, $suborganization]);
-
-        $h5p = App::make('LaravelH5p');
-        $core = $h5p::$core;
-        $settings = $h5p::get_editor();
-        $content = $h5p->load_content($independent_activity->h5p_content_id);
-        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
-        $embed = $h5p->get_embed($content, $settings);
-        $embed_code = $embed['embed'];
-        $settings = $embed['settings'];
-        $user_data = null;
-        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
-
-        return response([
-            'h5p' => $h5p_data,
-            'activity' => new IndependentActivityResource($independent_activity),
-        ], 200);
-    }
-
-    /**
-     * Download XApi File
-     *
-     * This is an API for to download the XAPI zip for the attempted independent activity
-     * 
-     * @urlParam independent_activity required id, title, slug of an independent_activity
-     * 
-     * @return download file download for the independent activity XAPI zip download
-     */
-    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
-        return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
-    }
-
-    /**
-     * Export Independent Activity
-     *
-     * Export the specified activity of a user.
-     *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam independent_activity required The Id of a independent_activity Example: 1
-     *
-     * @response {
-     *   "message": "Your request to export independent Activity [title] has been received and is being processed."
-     * }
-     *
-     * @param Request $request
-     * @param Organization $suborganization
-     * @param IndependentActivity $independent_activity
-     * @return Response
-     */
-    public function exportIndependentActivity(Request $request, Organization $suborganization, IndependentActivity $independent_activity)
-    {
-        $this->authorize('export', $independent_activity);
-        // pushed cloning of activity in background
-        ExportIndependentActivity::dispatch(auth()->user(), $independent_activity, $suborganization)->delay(now()->addSecond());
-
-        return response([
-            'message' =>  "Your request to export independent Activity [$independent_activity->title] has been received and is being processed. <br>
-                            You will be alerted in the notification section in the title bar when complete.",
-        ], 200);
-    }
-
-    /**
-     * Import Independent Activity
-     *
-     * Import the specified independent activity of a user.
-     * 
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @param independent_activity 
-     * @response {
-     *   "message": "Your request to import independent activity has been received and is being processed."
-     * }
-     *
-     * @return Response
-     */
-
-    public function importIndependentActivity(IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest, Organization $suborganization)
-    {
-        $this->authorize('import', [IndependentActivity::class, $suborganization]);
-
-        $IndependentActivityUploadImportRequest->validated();
-        $path = $IndependentActivityUploadImportRequest->file('independent_activity')->store('public/imports');
-
-        ImportIndependentActivity::dispatch(auth()->user(), Storage::url($path), $suborganization->id)->delay(now()->addSecond());
-
-        return response([
-            'message' =>  "Your request to import independent activity has been received and is being processed. <br>
-                            You will be alerted in the notification section in the title bar when complete.",
-        ], 200);
-    }
-
-    /**
-     * Independent Activity Indexing
-     *
-     * Modify the index value of an independent activity.
-     *
-     * @urlParam independent_activity required The Id of a independent_activity Example: 1
-     * @urlParam index required New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'. Example: 3
-     *
-     * @response {
-     *   "message": "Library status changed successfully!",
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Invalid index value provided."
-     *   ]
-     * }
-     *
-     * @param IndependentActivity $independent_activity
-     * @param $index
-     * @return Application|ResponseFactory|Response
-     * @throws GeneralException
-     */
-    public function updateIndex(IndependentActivity $independent_activity, $index)
-    {
-        return response(['message' => $this->independentActivityRepository->updateIndex($independent_activity, $index)], 200);
-    }
-
-    /**
-     * Copy Independent Activity into Playlist
-     *
-     * Clone the specified independent activity of an suborganization and link with a playlist.
-     *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam independent_activity required The Id of a independent activity Example: 1
-     * @urlParam playlist required The Id of a playlist Example: 1
-     *
-     * @response {
-     *   "message": "Independent Activity is being copied in background!"
-     * }
-     *
-     * @response 400 {
-     *   "errors": [
-     *     "Not a Public Independent Activity."
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Failed to copy independent activity."
-     *   ]
-     * }
-     *
-     * @param Request $request
-     * @param Organization $suborganization
-     * @param IndependentActivity $independent_activity
-     * @param Playlist $playlist
-     * @return Response
-     */
-    public function copyIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, IndependentActivity $independent_activity, Playlist $playlist)
-    {
-        CopyIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
-
-        return response([
-            "message" => "Your request to add independent activity [$independent_activity->title] into playlist [$playlist->title] has been 
-            received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
-        ], 200);
-    }
-}

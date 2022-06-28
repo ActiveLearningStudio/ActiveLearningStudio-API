@@ -107,6 +107,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/independent-activities/import', 'IndependentActivityController@importIndependentActivity');
         Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/playlist/{playlist}/copy-to-playlist', 'IndependentActivityController@copyIndependentActivityIntoPlaylist');
 
+        //download activity
+        Route::get('independent-activities/{id}/h5p-activity', 'IndependentActivityController@h5pActivity');
         //Projects
         Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
 
