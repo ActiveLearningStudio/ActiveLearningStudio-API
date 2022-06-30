@@ -51,7 +51,7 @@ class TeamPolicy
      * Determine whether the user can update the team.
      *
      * @param User $user
-     * @param Organization $suborganization
+     * @param Team $team
      * @return mixed
      */
     public function update(User $user, Team $team)
