@@ -54,9 +54,13 @@ class TeamPolicy
      * @param Organization $suborganization
      * @return mixed
      */
-    public function update(User $user, Organization $suborganization)
+    public function update(User $user, Team $team)
     {
-        return $user->hasPermissionTo('team:edit', $suborganization);
+        if ($user->hasTeamPermissionTo('team:edit', $team)) {
+            return true;
+        }
+
+        return $user->hasPermissionTo('team:edit', $team->organization);
     }
 
     /**
