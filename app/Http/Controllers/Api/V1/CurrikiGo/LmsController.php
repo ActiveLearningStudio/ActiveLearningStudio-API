@@ -90,16 +90,14 @@ class LmsController extends Controller
                 $service->saveStudentData($data);
             }
 
-            try {
-                $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
-                if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
-                    $data->organizarion_from_lmsSettings = $lmsSetting->organization_id;
-                    $canvasClient = new Client($lmsSetting);
-                    $saveData = new SaveTeacherData($canvasClient);
-                    $saveData->saveData($data, $googleClassroomRepository, $userRepository);
-                }
-            } catch (Exception $e) {}
-            
+            /*$lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
+            if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
+                $data->organizarion_from_lmsSettings = $lmsSetting->organization_id;
+                $canvasClient = new Client($lmsSetting);
+                $saveData = new SaveTeacherData($canvasClient);
+                $saveData->saveData($data, $googleClassroomRepository, $userRepository);
+            }*/
+
             if ($validator->fails()) {
                 $messages = $validator->messages();
                 return response(['error' => $messages], 400);
