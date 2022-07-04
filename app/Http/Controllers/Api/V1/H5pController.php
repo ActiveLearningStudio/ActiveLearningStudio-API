@@ -361,7 +361,7 @@ class H5pController extends Controller
      * @urlParam independent_activity required The Id of an independent activity Example: 1
      * @urlParam visibility The status of visibility
      *
-     * @responseFile responses/independent-h5p-activity.json
+     * @responseFile responses/h5p/independent-h5p-activity.json
      *
      * @param IndependentActivity $independent_activity
      * @param $visibility
