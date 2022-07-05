@@ -107,6 +107,7 @@ class LmsController extends Controller
                     $teacherInfo->curriki_teacher_email = $request->user_email;
                     $teacherInfo->curriki_teacher_org = $lmsSetting->organization_id;
                     $response[] = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
+                }
             }
 
             if ($validator->fails()) {
