@@ -277,3 +277,20 @@ if (!function_exists('formatDuration')) {
         return $formatted;
     }
 }
+
+if (!function_exists('getVideoMediaSourceIdsArray')) {
+    /**     
+     * Get video media sources ids array
+     * @return array
+     */
+    function getVideoMediaSourceIdsArray()
+    {
+        return [
+                    'youtube' => 2,
+                    'kaltura' => 3,
+                    'safari_montage' => 4,
+                    'brightcove' => 5,
+                    'vimeo' => 6
+               ];
+    }
+}

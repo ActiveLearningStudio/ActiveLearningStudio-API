@@ -32,7 +32,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-        $query = $this->model->with(['user', 'organization']);
+        $query = $this->model->with(['user', 'organization', 'mediaSources']);
         if (isset($data['query']) && $data['query'] !== '') {
             $query->where(function ($query) use ($data) {
                 $query = $query->whereHas('user', function ($qry) use ($data) {
@@ -146,13 +146,13 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     }
 
     /**
-     * @param $userId integer, $orgId integer $toolType string
+     * @param $userId integer, $orgId integer $mediaSourceId int
      * @return mixed
      */
-    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $toolType)
+    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $mediaSourceId)
     {
         try {
-            return $this->model->where([['user_id','=', $userId],['organization_id','=', $orgId],['tool_type','=', $toolType]])->first();
+            return $this->model->where([['user_id','=', $userId],['organization_id','=', $orgId],['media_source_id','=', $mediaSourceId]])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
