@@ -27,6 +27,7 @@ class ActivityCreateRequest extends FormRequest
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'content' => 'required|string|max:255',
+            'description' => 'string|max:500',
             'order' => 'integer|max:2147483647',
             'shared' => 'boolean',
             'h5p_content_id' => 'integer',
