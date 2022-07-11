@@ -74,6 +74,7 @@ class LmsController extends Controller
                 'user_email' => 'required|email',
                 'course_id' => 'required',
                 'api_domain_url' => 'required',
+                'course_name' => 'required'
             ]);
 
             // format data to make compatible with saveData function
@@ -92,10 +93,21 @@ class LmsController extends Controller
 
             $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
             if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
-                $data->organizarion_from_lmsSettings = $lmsSetting->organization_id;
-                $canvasClient = new Client($lmsSetting);
-                $saveData = new SaveTeacherData($canvasClient);
-                $saveData->saveData($data, $googleClassroomRepository, $userRepository);
+                $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $request->user_email);
+                $userExists = $userRepository->findByField('email', $request->user_email);
+                if (!$userExists) {
+                    $userExists = $userRepository->getFirstUser();
+                }
+                if (!$duplicateRecord) {
+                    $teacherInfo = new \stdClass();
+                    $teacherInfo->user_id = $userExists->id;
+                    $teacherInfo->id = $data->courseId;
+                    $teacherInfo->name = $request->course_name;
+                    $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;
+                    $teacherInfo->curriki_teacher_email = $request->user_email;
+                    $teacherInfo->curriki_teacher_org = $lmsSetting->organization_id;
+                    $response[] = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
+                }
             }
 
             if ($validator->fails()) {

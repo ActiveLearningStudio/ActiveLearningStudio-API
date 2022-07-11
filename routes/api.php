@@ -245,6 +245,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         // lti-tool-settings
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
         Route::post('suborganizations/{suborganization}/lti-tool-settings/{ltiToolSetting}/clone', 'LtiTool\LtiToolSettingsController@clone');
+        Route::get('suborganizations/{suborganization}/lti-tool-type', 'LtiTool\LtiToolSettingsController@getLTIToolTypeList');
 
         // brightcove-api-settings
         Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');

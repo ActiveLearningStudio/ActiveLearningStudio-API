@@ -48,8 +48,9 @@ class VimeoAPIClientController extends Controller
       ]);
 
       $auth = \Auth::user();
+      $mediaSourcesIds = getVideoMediaSourceIdsArray();
       if ( $auth && $auth->id && isset($getParam['organization_id']) && $getParam['organization_id'] > 0 ) {
-        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserOrgAndToolType($auth->id, $getParam['organization_id'], 'vimeo');
+        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserOrgAndToolType($auth->id, $getParam['organization_id'], $mediaSourcesIds['vimeo']);
         if ($ltiRowResult) {
             // Implement Command Design Pattern to access Vimeo API
             unset($getParam['organization_id']);
