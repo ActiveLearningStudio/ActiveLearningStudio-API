@@ -14,7 +14,7 @@ class H5PAddCPEditorLibrarySeeder extends Seeder
         $h5pEditorCoursePresentationParams = ['name' => "H5PEditor.CoursePresentation", "major_version" => 1, "minor_version" => 24];
         $h5pEditorh5pEditorCoursePresentationParamsLib = DB::table('h5p_libraries')->where($h5pEditorCoursePresentationParams)->first();
         $h5pEditorh5pEditorCoursePresentationParamsLibId = $h5pEditorh5pEditorCoursePresentationParamsLib->id;
-
+        //added en language
         DB::table('h5p_libraries_languages')->insert([
             'library_id' => $h5pEditorh5pEditorCoursePresentationParamsLibId,
             'language_code' => 'en',
