@@ -1029,6 +1029,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $team->projects()->attach($project);
             }
 
+            if ($project) {
+                $playlistData['title'] = 'playlist1';
+                $playlistData['order'] = 1;
+
+                $playlist = $project->playlists()->create($playlistData);
+            }
+
             return $project;
         });
     }
