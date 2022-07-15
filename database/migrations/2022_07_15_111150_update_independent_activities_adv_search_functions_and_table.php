@@ -74,9 +74,9 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
                 , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
                 from independent_activities a 
-                 left join activity_subject acts on a.id=acts.activity_id
-                 left join activity_education_level ael on a.id=ael.activity_id
-                 left join activity_author_tag aat on a.id=aat.activity_id
+                 left join independent_activity_subject acts on a.id=acts.independent_activity_id
+                 left join independent_activity_education_level ael on a.id=ael.independent_activity_id
+                 left join independent_activity_author_tag aat on a.id=aat.independent_activity_id
                  left join h5p_contents hc on a.h5p_content_id=hc.id
                  left join h5p_libraries hl on hc.library_id=hl.id
                  left join users u on a.user_id=u.id
@@ -91,9 +91,9 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
                 , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
                 from independent_activities a 
-                 left join activity_subject acts on a.id=acts.activity_id
-                 left join activity_education_level ael on a.id=ael.activity_id
-                 left join activity_author_tag aat on a.id=aat.activity_id
+                 left join independent_activity_subject acts on a.id=acts.independent_activity_id
+                 left join independent_activity_education_level ael on a.id=ael.independent_activity_id
+                 left join independent_activity_author_tag aat on a.id=aat.independent_activity_id
                  left join h5p_contents hc on a.h5p_content_id=hc.id
                  left join h5p_libraries hl on hc.library_id=hl.id
                  left join users u on a.user_id=u.id
@@ -124,9 +124,9 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
                 , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0::bigint as standalone_activity_user_id, FALSE  as favored,ai.title as activity_title
                 from independent_activities a 
-                  left join activity_subject acts on a.id=acts.activity_id
-                 left join activity_education_level ael on a.id=ael.activity_id
-                 left join activity_author_tag aat on a.id=aat.activity_id
+                 left join independent_activity_subject acts on a.id=acts.independent_activity_id
+                 left join independent_activity_education_level ael on a.id=ael.independent_activity_id
+                 left join independent_activity_author_tag aat on a.id=aat.independent_activity_id
                  left join h5p_contents hc on a.h5p_content_id=hc.id
                  left join h5p_libraries hl on hc.library_id=hl.id
                  left join users u on a.user_id=u.id
@@ -141,9 +141,9 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
                 , acts.subject_id,ael.education_level_id ,aat.author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null as team_name,0::bigint as standalone_activity_user_id, FALSE  as favored,ai.title as activity_title
                 from independent_activities a 
-                  left join activity_subject acts on a.id=acts.activity_id
-                 left join activity_education_level ael on a.id=ael.activity_id
-                 left join activity_author_tag aat on a.id=aat.activity_id
+                 left join independent_activity_subject acts on a.id=acts.independent_activity_id
+                 left join independent_activity_education_level ael on a.id=ael.independent_activity_id
+                 left join independent_activity_author_tag aat on a.id=aat.independent_activity_id
                  left join h5p_contents hc on a.h5p_content_id=hc.id
                  left join h5p_libraries hl on hc.library_id=hl.id
                  left join users u on a.user_id=u.id
