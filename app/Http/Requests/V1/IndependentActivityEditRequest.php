@@ -31,7 +31,7 @@ class IndependentActivityEditRequest extends FormRequest
             'order' => 'integer|max:2147483647',
             'shared' => 'boolean',
             'h5p_content_id' => 'integer',
-            'data' => 'required',
+            'data' => 'nullable',
             'thumb_url' => 'string',
             'subject_id' => 'array',
             'subject_id.*' => 'integer|distinct|exists:subjects,id,deleted_at,NULL',
