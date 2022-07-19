@@ -259,7 +259,12 @@ class LmsController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
         $user = User::where('email', $request->user_email)->first();
-        return  IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id));
+        if($user){
+            return  IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id));
+        }
+        return response([
+            'data' => [],
+        ], 400);
     }
 
 }
