@@ -644,6 +644,70 @@ class IndependentActivityController extends Controller
         ], 200);
     }
 
+    //download inpendent activity
+    public function h5pActivity(Request $request){
+
+        $h5pcontent = H5pContent::find($request->id);
+        $independent_activity = $h5pcontent->independentActivity;
+        $this->authorize('view', $independent_activity);
+        $zip = new ZipArchive;
+
+        $h5p = App::make('LaravelH5p');
+        $core = $h5p::$core;
+        $settings = $h5p::get_editor($content = null, 'preview');
+        $content = $h5p->load_content($independent_activity->h5p_content_id);
+        $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+        $embed = $h5p->get_embed($content, $settings);
+        $embed_code = $embed['embed'];
+        $settings = $embed['settings'];
+        $user = Auth::user();
+
+        // create event dispatch
+        event(new H5pEvent(
+            'content',
+            NULL,
+            $content['id'],
+            $content['title'],
+            $content['library']['name'],
+            $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
+        ));
+        $user_data = $user->only(['id', 'name', 'email']);
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+        $data[] = $h5p_data;
+        $data[] = $independent_activity;
+        Storage::disk('public')->put('/exports/'.$request->id.'/'.$request->id.'-h5p.json', json_encode($data));
+        
+        $rootPath = storage_path('app/public/exports/'.$request->id);
+        return response([
+            'url'=> url('storage/exports/'.$request->id.'/'.$request->id.'-h5p.json'),
+            'name'=> $request->id
+        ], 200);
+        $zipFileName = $request->id.'.zip';
+
+        $zip->open(storage_path('app/public/exports/'.$request->id.'.zip'), ZipArchive::CREATE );
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($rootPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+    
+        foreach ($files as $name => $file)
+        {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir())
+            {
+                // Get real and relative path for current file
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($rootPath) + 1);
+        
+                // Add current file to archive
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+        $zip->close();  
+        return url('storage/exports/'.$zipFileName);
+
+    }
+
     /**
      * Get H5P Resource Settings
      *
