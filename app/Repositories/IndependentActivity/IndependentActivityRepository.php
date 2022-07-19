@@ -969,6 +969,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     }
 
     /**
+     * Get indep-activities of a user who is launching the deeplink from another LMS
      * @param $data
      * @param $user
      * @return mixed
@@ -981,9 +982,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         // if simple request for getting independent activity listing with search
         if ($q) {
-            $query = $query->where(function ($qry) use ($q) {
-                $qry->where('title', 'iLIKE', '%' . $q . '%');
-            });
+            $query = $query->where('title', 'iLIKE', '%' . $q . '%');
         }
 
         return $query->where('user_id', $user)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
