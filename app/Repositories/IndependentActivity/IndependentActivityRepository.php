@@ -967,4 +967,26 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         return $cloned_activity['id'];
     }
+
+    /**
+     * @param $data
+     * @param $user
+     * @return mixed
+     */
+    public function independentActivities($data, $user)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting independent activity listing with search
+        if ($q) {
+            $query = $query->where(function ($qry) use ($q) {
+                $qry->where('title', 'iLIKE', '%' . $q . '%');
+            });
+        }
+
+        return $query->where('user_id', $user)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+    }
+    
 }

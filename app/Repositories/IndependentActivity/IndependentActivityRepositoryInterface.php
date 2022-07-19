@@ -107,4 +107,12 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * 
      */
     public function copyToPlaylist( $independentActivity, $playlist, $token);
+
+    /**
+     * get all independent activities of a user
+     * @param $user
+     * @return mixed
+     * 
+     */
+    public function independentActivities($data, $user);
 }

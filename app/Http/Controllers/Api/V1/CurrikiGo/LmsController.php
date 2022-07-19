@@ -14,7 +14,9 @@ use App\Http\Resources\V1\OrganizationResource;
 use App\Models\CurrikiGo\LmsSetting;
 use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\SaveTeacherData;
+use App\Http\Resources\V1\IndependentActivityResource;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
@@ -35,6 +37,7 @@ class LmsController extends Controller
     private $lmsSettingRepository;
     private $projectRepository;
     private $activityRepository;
+    private $independentActivityRepository;
 
     /**
      * LmsController constructor.
@@ -42,12 +45,15 @@ class LmsController extends Controller
      * @param $lmsSettingRepository LmsSettingRepositoryInterface
      * @param $projectRepository ProjectRepositoryInterface
      * @param $activityRepository ActivityRepositoryInterface
+     * @param $independentActivityRepository IndependentActivityRepositoryInterface
      */
-    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository, ActivityRepositoryInterface $activityRepository)
+    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository, ActivityRepositoryInterface $activityRepository, 
+    IndependentActivityRepositoryInterface $independentActivityRepository)
     {
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->projectRepository = $projectRepository;
         $this->activityRepository = $activityRepository;
+        $this->independentActivityRepository = $independentActivityRepository;
     }
 
     /**
@@ -228,6 +234,32 @@ class LmsController extends Controller
         return response([
             'teams' => [],
         ], 400);
+    }
+
+    /**
+     * Get independent Activity based on user_id of a user who launched the deeplink
+     *
+     * @bodyParam user_email required The email of a user Example: somebody@somewhere.com
+     * @bodyParam query is search-term Example: activity title
+     * @bodyParam size is for pagination
+     *
+     * @responseFile responses/independent-activity/independent-activity.json
+     *
+     * @param Request $request
+     */
+    public function independentActivities(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_email' => 'required|email',
+            'query' => 'string',
+            'size' => 'integer|max:100'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+        $user = User::where('email', $request->user_email)->first();
+        return  IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id));
     }
 
 }
