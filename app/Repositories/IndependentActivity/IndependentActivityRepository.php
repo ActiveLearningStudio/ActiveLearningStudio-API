@@ -967,4 +967,25 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         return $cloned_activity['id'];
     }
+
+    /**
+     * Get indep-activities of a user who is launching the deeplink from another LMS
+     * @param $data
+     * @param $user
+     * @return mixed
+     */
+    public function independentActivities($data, $user)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting independent activity listing with search
+        if ($q) {
+            $query = $query->where('title', 'iLIKE', '%' . $q . '%');
+        }
+
+        return $query->where('user_id', $user)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+    }
+    
 }
