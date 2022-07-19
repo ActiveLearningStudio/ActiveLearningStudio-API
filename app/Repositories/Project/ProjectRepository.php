@@ -325,11 +325,26 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $default_email
      * @return Project $projects
      */
-    public function fetchDefault($default_email)
+    public function fetchDefault($default_email, $data)
     {
-        return $this->model->whereHas('users', function ($query_user) use ($default_email) {
+        $query = $this->model->whereHas('users', function ($query_user) use ($default_email) {
             $query_user->where('email', $default_email);
-        })->get();
+        });
+
+        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+            return $query->orderBy('order', 'ASC')->get();
+        }
+
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($perPage)->withQueryString();
     }
 
     /**
@@ -1073,5 +1088,51 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
         return null;
 
+    }
+
+
+    public function getProjects($suborganization, $data) {
+
+        $authenticated_user = auth()->user();
+        $query = $authenticated_user->projects();
+
+        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+            return $query->where('organization_id', $suborganization->id)
+                ->whereNull('team_id')
+                ->orderBy('order', 'ASC')->get();
+        }
+
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->where('organization_id', $suborganization->id)->whereNull('team_id')->paginate($perPage)->withQueryString();
+    }
+
+    public function getFavoriteProjects($suborganization, $data) {
+
+        $authenticated_user = auth()->user();
+        $query = $authenticated_user->favoriteProjects();
+
+        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+            return $query->wherePivot('organization_id', $suborganization->id)
+                ->orderBy('order', 'ASC')->get();
+        }
+
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->wherePivot('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
 }

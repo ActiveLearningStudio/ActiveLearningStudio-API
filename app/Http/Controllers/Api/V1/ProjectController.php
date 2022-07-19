@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\V1\ProjectDefaultResource;
 use App\User;
 use App\Models\Project;
 use App\Models\Playlist;
@@ -53,50 +54,33 @@ class ProjectController extends Controller
     }
 
     /**
-     * Get All Projects
+     * Get All Projects of login user
      *
      * Get a list of the projects of a user.
-     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @param Request $request
+     * @param Organization $suborganization
      * @responseFile responses/project/projects.json
      *
      * @return Response
      */
-    public function index(Organization $suborganization)
+    public function index(Request $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [Project::class, $suborganization]);
 
-        $authenticated_user = auth()->user();
-/*
-        This returns all projects if the user is admin and breaks the frontend for that user given the number of projects
-        Something like it might be implemented in admin API but not here
-        if ($authenticated_user->isAdmin()) {
-            return response([
-                'projects' => ProjectResource::collection($this->projectRepository->all()),
-            ], 200);
-        }
-*/
-        return response([
-            'projects' => ProjectResource::collection(
-                                        $authenticated_user->projects()
-                                        ->where('organization_id', $suborganization->id)
-                                        ->whereNull('team_id')
-                                        ->orderBy('order', 'asc')
-                                        ->get()
-                                    ),
-        ], 200);
+        return ProjectResource::collection($this->projectRepository->getProjects($suborganization, $request->all()));
     }
 
     /**
      * Get All Organization Projects
      *
      * Get a list of the projects of an organization.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search suborganization against Example: Vivensity
      * @bodyParam size integer size to show per page records Example: 10
      * @bodyParam order_by_column string to sort data with specific column Example: name
      * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
-     * 
+     *
      * @responseFile responses/project/projects.json
      *
      * @return Response
@@ -229,14 +213,14 @@ class ProjectController extends Controller
      *
      * Get a list of the default projects.
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     *
+     * @param Request $request
+     * @param Organization $suborganization
      * @responseFile responses/project/projects-with-detail.json
      *
      * @return Response
      */
     // TODO: need to update documentation
-    public function default(Organization $suborganization)
+    public function default(Request $request, Organization $suborganization)
     {
         $default_email = config('constants.curriki-demo-email');
 
@@ -246,9 +230,7 @@ class ProjectController extends Controller
             ], 500);
         }
 
-        return response([
-            'projects' => $this->projectRepository->fetchDefault($default_email),
-        ], 200);
+        return  ProjectDefaultResource::collection($this->projectRepository->fetchDefault($default_email, $request->all()));
     }
 
     /**
@@ -730,29 +712,21 @@ class ProjectController extends Controller
     }
 
     /**
-     * Get All Favorite Projects
-     *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * Get All Favorite Projects of login user
      *
      * Get a list of the favorite projects of a user.
-     *
+     * @param Request $request
+     * @param Organization $suborganization
      * @responseFile responses/project/projects.json
      *
      * @return Response
      */
-    public function getFavorite(Organization $suborganization)
+    public function getFavorite(Request $request, Organization $suborganization)
     {
         $this->authorize('favorite', [Project::class, $suborganization]);
 
-        $authenticated_user = auth()->user();
+        return ProjectResource::collection($this->projectRepository->getFavoriteProjects($suborganization, $request->all()));
 
-        $favoriteProjects = $authenticated_user->favoriteProjects()
-                            ->wherePivot('organization_id', $suborganization->id)
-                            ->get();
-
-        return response([
-            'projects' => ProjectResource::collection($favoriteProjects),
-        ], 200);
     }
 
     /**

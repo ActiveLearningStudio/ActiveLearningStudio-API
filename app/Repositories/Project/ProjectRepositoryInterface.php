@@ -50,9 +50,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * To fetch recent public projects
      *
      * @param $default_email
+     * @param $request
      * @return Project $projects
      */
-    public function fetchDefault($default_email);
+    public function fetchDefault($default_email, $request);
 
     /**
      * To reorder the list of projects
