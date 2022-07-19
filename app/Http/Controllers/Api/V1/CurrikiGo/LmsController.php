@@ -14,6 +14,7 @@ use App\Http\Resources\V1\OrganizationResource;
 use App\Models\CurrikiGo\LmsSetting;
 use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\SaveTeacherData;
+use App\Http\Requests\V1\IndependentActivityForDeeplink;
 use App\Http\Resources\V1\IndependentActivityResource;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
@@ -47,8 +48,12 @@ class LmsController extends Controller
      * @param $activityRepository ActivityRepositoryInterface
      * @param $independentActivityRepository IndependentActivityRepositoryInterface
      */
-    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository, ActivityRepositoryInterface $activityRepository, 
-    IndependentActivityRepositoryInterface $independentActivityRepository)
+    public function __construct(
+        LmsSettingRepositoryInterface $lmsSettingRepository,
+        ProjectRepositoryInterface $projectRepository,
+        ActivityRepositoryInterface $activityRepository,
+        IndependentActivityRepositoryInterface $independentActivityRepository
+    )
     {
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->projectRepository = $projectRepository;
@@ -243,27 +248,24 @@ class LmsController extends Controller
      * @bodyParam query is search-term Example: activity title
      * @bodyParam size is for pagination
      *
-     * @responseFile responses/independent-activity/independent-activity.json
+     * @responseFile 200 responses/independent-activity/independent-activity.json
      *
+     * @response 400 {
+     *   "errors": [
+     *     "Could not find any independent activity. Please try again later."
+     *   ]
+     * }
+     * 
      * @param Request $request
      */
-    public function independentActivities(Request $request)
+    public function independentActivities(IndependentActivityForDeeplink $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_email' => 'required|email',
-            'query' => 'string',
-            'size' => 'integer|max:100'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
         $user = User::where('email', $request->user_email)->first();
         if($user){
             return  IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id));
         }
         return response([
-            'data' => [],
+            'data' => ['Could not find any independent activity. Please try again later.'],
         ], 400);
     }
 
