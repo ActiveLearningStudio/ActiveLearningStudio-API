@@ -14,7 +14,10 @@ use App\Http\Resources\V1\OrganizationResource;
 use App\Models\CurrikiGo\LmsSetting;
 use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\SaveTeacherData;
+use App\Http\Requests\V1\IndependentActivityForDeeplink;
+use App\Http\Resources\V1\IndependentActivityResource;
 use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Validator;
@@ -35,6 +38,7 @@ class LmsController extends Controller
     private $lmsSettingRepository;
     private $projectRepository;
     private $activityRepository;
+    private $independentActivityRepository;
 
     /**
      * LmsController constructor.
@@ -42,12 +46,19 @@ class LmsController extends Controller
      * @param $lmsSettingRepository LmsSettingRepositoryInterface
      * @param $projectRepository ProjectRepositoryInterface
      * @param $activityRepository ActivityRepositoryInterface
+     * @param $independentActivityRepository IndependentActivityRepositoryInterface
      */
-    public function __construct(LmsSettingRepositoryInterface $lmsSettingRepository, ProjectRepositoryInterface $projectRepository, ActivityRepositoryInterface $activityRepository)
+    public function __construct(
+        LmsSettingRepositoryInterface $lmsSettingRepository,
+        ProjectRepositoryInterface $projectRepository,
+        ActivityRepositoryInterface $activityRepository,
+        IndependentActivityRepositoryInterface $independentActivityRepository
+    )
     {
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->projectRepository = $projectRepository;
         $this->activityRepository = $activityRepository;
+        $this->independentActivityRepository = $independentActivityRepository;
     }
 
     /**
@@ -227,6 +238,34 @@ class LmsController extends Controller
         }
         return response([
             'teams' => [],
+        ], 400);
+    }
+
+    /**
+     * Get independent Activity based on user_id of a user who launched the deeplink
+     *
+     * @bodyParam user_email required The email of a user Example: somebody@somewhere.com
+     * @bodyParam query is search-term Example: activity title
+     * @bodyParam size is for pagination
+     *
+     * @responseFile 200 responses/independent-activity/independent-activity.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Could not find any independent activity. Please try again later."
+     *   ]
+     * }
+     * 
+     * @param Request $request
+     */
+    public function independentActivities(IndependentActivityForDeeplink $request)
+    {
+        $user = User::where('email', $request->user_email)->first();
+        if($user){
+            return  IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id));
+        }
+        return response([
+            'data' => ['Could not find any independent activity. Please try again later.'],
         ], 400);
     }
 
