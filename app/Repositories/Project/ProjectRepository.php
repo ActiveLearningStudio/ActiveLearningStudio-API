@@ -331,7 +331,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query_user->where('email', $default_email);
         });
 
-        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+//        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+        if (!isset($data['size'])) {
             return $query->orderBy('order', 'ASC')->get();
         }
 
@@ -1090,13 +1091,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     }
 
-
     public function getProjects($suborganization, $data) {
 
         $authenticated_user = auth()->user();
         $query = $authenticated_user->projects();
 
-        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+//        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+        if (!isset($data['size'])) {
             return $query->where('organization_id', $suborganization->id)
                 ->whereNull('team_id')
                 ->orderBy('order', 'ASC')->get();
@@ -1119,7 +1120,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $authenticated_user = auth()->user();
         $query = $authenticated_user->favoriteProjects();
 
-        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+//        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
+        if (!isset($data['size'])) {
             return $query->wherePivot('organization_id', $suborganization->id)
                 ->orderBy('order', 'ASC')->get();
         }
