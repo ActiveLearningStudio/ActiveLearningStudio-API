@@ -50,4 +50,9 @@ class H5pContent extends Model
         return $this->belongsTo(H5pLibrary::class, 'library_id');
     }
 
+    public function independentActivity()
+    {
+        return $this->hasOne(IndependentActivity::class, 'h5p_content_id', 'id');
+    }
+
 }

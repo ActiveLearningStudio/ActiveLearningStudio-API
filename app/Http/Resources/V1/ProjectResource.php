@@ -40,6 +40,7 @@ class ProjectResource extends JsonResource
             'team' => $this->team,
             'users' => $this->users,
             'gcr_project_visibility' => $this->organization->gcr_project_visibility,
+            'playlists' => $this->playlists,
         ];
     }
 }

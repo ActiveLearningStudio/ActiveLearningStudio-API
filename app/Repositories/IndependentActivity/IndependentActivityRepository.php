@@ -91,7 +91,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     {
         $counts = [];
         $organizationParentChildrenIds = [];
-        $queryParams['query_text'] = null;
+        $queryParams['query_text'] = '';
+        $queryParams['query_subject'] = '';
+        $queryParams['query_education'] = '';
+        $queryParams['query_tags'] = '';
         $queryFrom = 0;
         $querySize = 10;
 
@@ -101,13 +104,13 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advindependentactivitysearch(:user_id, :query_text)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:user_id, :query_text)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
 
             $queryParams['user_id'] = $authUser;
         } else {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
         }
 
         $queryWhere[] = "deleted_at IS NULL";
@@ -175,18 +178,18 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
             $subjectIdsWithMatchingName = $this->subjectRepository->getSubjectIdsWithMatchingName($data['subjectIds']);
             $dataSubjectIds = implode(",", $subjectIdsWithMatchingName);
-            $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
+            $queryParams['query_subject'] = "(" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
             $educationLevelIdsWithMatchingName = $this->educationLevelRepository->getEducationLevelIdsWithMatchingName($data['educationLevelIds']);
             $dataEducationLevelIds = implode(",", $educationLevelIdsWithMatchingName);
-            $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
+            $queryParams['query_education'] = "(" . $dataEducationLevelIds . ")";
         }
 
         if (isset($data['authorTagsIds']) && !empty($data['authorTagsIds'])) {
             $dataAuthorTagsIds = implode(",", $data['authorTagsIds']);
-            $queryWhere[] = "author_tag_id IN (" . $dataAuthorTagsIds . ")";
+            $queryParams['query_tags'] = "(" . $dataAuthorTagsIds . ")";
         }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
@@ -967,4 +970,25 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         return $cloned_activity['id'];
     }
+
+    /**
+     * Get indep-activities of a user who is launching the deeplink from another LMS
+     * @param $data
+     * @param $user
+     * @return mixed
+     */
+    public function independentActivities($data, $user)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting independent activity listing with search
+        if ($q) {
+            $query = $query->where('title', 'iLIKE', '%' . $q . '%');
+        }
+
+        return $query->where('user_id', $user)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+    }
+    
 }
