@@ -967,4 +967,42 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         return $cloned_activity['id'];
     }
+
+
+    /**
+     * Copy Exisiting independentent activity into a playlist
+     * @param $independentActivity
+     * @param $playlist
+     * @param $token
+     * @return string
+     * 
+     */
+    public function moveToPlaylist($independentActivity, $playlist, $token)
+    {
+        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $activity_data = [
+            'title' => $independentActivity->title,
+            'type' => $independentActivity->type,
+            'content' => $independentActivity->content,
+            'playlist_id' => $playlist->id,
+            'order' => $this->getOrder($playlist->id) + 1,
+            'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content 
+            'thumb_url' => $new_thumb_url,
+            'shared' => 0,
+        ];
+        
+        $cloned_activity = Activity::create($activity_data);
+        
+        if ($cloned_activity && count($independentActivity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($independentActivity->subjects);
+        }
+        if ($cloned_activity && count($independentActivity->educationLevels) > 0) {
+            $cloned_activity->educationLevels()->attach($independentActivity->educationLevels);
+        }
+        if ($cloned_activity && count($independentActivity->authorTags) > 0) {
+            $cloned_activity->authorTags()->attach($independentActivity->authorTags);
+        }
+        $this->delete($independentActivity->id); // Remove independent activity
+        return $cloned_activity['id'];
+    }
 }
