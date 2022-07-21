@@ -130,9 +130,9 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      */
     public function toggleStarter($project, $index);
 
-    /** 
+    /**
      * To export project and associated playlists
-     * 
+     *
      * @param $authUser
      * @param Project $project
      * @throws GeneralException
@@ -177,4 +177,22 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return array
      */
     public function getUserProjectIdsInOrganization($authenticatedUser, $organization);
+
+    /**
+     * Get user project ids in org
+     *
+     * @param $request
+     * @param $suborganization
+     * @return array
+     */
+    public function getFavoriteProjects($request, $suborganization);
+
+    /**
+     * Get All Favorite Projects of login user
+     *
+     * @param $request
+     * @param $suborganization
+     * @return array
+     */
+    public function getProjects($request, $suborganization);
 }

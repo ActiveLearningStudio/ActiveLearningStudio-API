@@ -1095,15 +1095,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         $authenticated_user = auth()->user();
         $query = $authenticated_user->projects();
+        $query = $query->whereNull('team_id')->where('organization_id', $suborganization->id);
 
-//        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
         if (!isset($data['size'])) {
-            return $query->where('organization_id', $suborganization->id)
-                ->whereNull('team_id')
-                ->orderBy('order', 'ASC')->get();
+            return $query->orderBy('order', 'ASC')->get();
         }
-
-        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         if (isset($data['order_by_column'])) {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
@@ -1112,21 +1108,18 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->orderBy('order', 'ASC');
         }
 
-        return $query->where('organization_id', $suborganization->id)->whereNull('team_id')->paginate($perPage)->withQueryString();
+        return $query->paginate($data['size'])->withQueryString();
     }
 
     public function getFavoriteProjects($suborganization, $data) {
 
         $authenticated_user = auth()->user();
         $query = $authenticated_user->favoriteProjects();
+        $query = $query->wherePivot('organization_id', $suborganization->id);
 
-//        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
         if (!isset($data['size'])) {
-            return $query->wherePivot('organization_id', $suborganization->id)
-                ->orderBy('order', 'ASC')->get();
+            return $query->orderBy('order', 'ASC')->get();
         }
-
-        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         if (isset($data['order_by_column'])) {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
@@ -1135,6 +1128,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->orderBy('order', 'ASC');
         }
 
-        return $query->wherePivot('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
+        return $query->paginate($data['size'])->withQueryString();
     }
 }

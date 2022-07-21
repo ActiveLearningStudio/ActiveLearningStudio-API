@@ -58,10 +58,10 @@ class ProjectController extends Controller
      *
      * Get a list of the projects of a user.
      * @param Request $request
-     * @param Organization $suborganization
-     * @responseFile responses/project/projects.json
-     *
+     * @urlParam Organization
      * @return Response
+     *
+     * @responseFile responses/project/projects.json
      */
     public function index(Request $request, Organization $suborganization)
     {
@@ -214,12 +214,11 @@ class ProjectController extends Controller
      * Get a list of the default projects.
      *
      * @param Request $request
-     * @param Organization $suborganization
+     * @urlParam Organization $suborganization
      * @responseFile responses/project/projects-with-detail.json
      *
      * @return Response
      */
-    // TODO: need to update documentation
     public function default(Request $request, Organization $suborganization)
     {
         $default_email = config('constants.curriki-demo-email');
@@ -716,10 +715,10 @@ class ProjectController extends Controller
      *
      * Get a list of the favorite projects of a user.
      * @param Request $request
-     * @param Organization $suborganization
-     * @responseFile responses/project/projects.json
-     *
+     * @urlParam Organization $suborganization
      * @return Response
+
+     * @responseFile responses/project/projects.json
      */
     public function getFavorite(Request $request, Organization $suborganization)
     {
@@ -734,17 +733,13 @@ class ProjectController extends Controller
      *
      * Export the specified project of a user.
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @param Request $request
+     * @urlParam Organization $suborganization
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
      *   "message": "Project is being cloned|duplicated in background!"
      * }
-     *
-     * @param Request $request
-     * @param Organization $suborganization
-     * @param Project $project
-     * @return Response
      */
     public function exportProject(Request $request, Organization $suborganization, Project $project)
     {
