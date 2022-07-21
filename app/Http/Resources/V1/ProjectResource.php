@@ -7,6 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectResource extends JsonResource
 {
+    public function __construct($resource)
+    {
+        parent::$wrap = 'projects';
+        $this->resource = $resource;
+    }
     /**
      * Transform the resource into an array.
      *
