@@ -17,11 +17,18 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar)");
         DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar)");
 
+        DB::statement("drop function IF EXISTS regexp_count(varchar, varchar)");
+
+        DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar,varchar,varchar,varchar)");
+        DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar,varchar,varchar,varchar)");
+
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dt");
+
+        DB::statement("drop table IF EXISTS advsearchIndependentActivity_dtnew");
 
 
         $independentActivityAdvsearchDtSql = <<<'EOL'
-        CREATE TABLE public.advsearchIndependentActivity_dt
+        CREATE TABLE public.advsearchIndependentActivity_dtnew
         (
             priority integer,
             entity text COLLATE pg_catalog."default",
@@ -49,7 +56,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
             organization_name character varying(255) COLLATE pg_catalog."default",
             org_description character varying(255) COLLATE pg_catalog."default",
             org_image character varying(255) COLLATE pg_catalog."default",
-            team_name character varying(255) COLLATE pg_catalog."default",
+            team_name text,
             standalone_activity_user_id bigint,
             favored boolean,
             activity_title character varying(255) COLLATE pg_catalog."default"
@@ -91,20 +98,20 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
         $independentActivityAdvSearchSql = <<<'EOL'
         CREATE OR REPLACE FUNCTION advindependentactivitysearch(_text character varying, _subject character varying, _education character varying, _tag character varying)
-        RETURNS SETOF advsearchindependentactivity_dt
+        RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText varchar(4000) := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(_text,'%'));
         vCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;
         lCnt integer :=1;
         lCntEducation integer :=1;
         lCntTag integer :=1;
-        query varchar(4000) := '';
-        cnd varchar(4000) := '  ';
-        joinTable varchar(1000) := '  ';
+        query  character varying := '';
+        cnd character varying := '  ';
+        joinTable character varying := '  ';
         begin
             if _subject != '' then 
                 cnd := ' and acts.subject_id in ' || _subject;
@@ -124,7 +131,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,o.image as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
@@ -136,7 +143,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,o.image as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
@@ -155,20 +162,20 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
         $independentActivityAdvsearchSqlOverloading = <<<'EOL'
         CREATE OR REPLACE FUNCTION advindependentactivitysearch(_uid integer,_text character varying, _subject character varying, _education character varying, _tag character varying)
-        RETURNS SETOF advsearchindependentactivity_dt
+        RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText varchar(4000) := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(_text,'%'));
         vCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;
         lCnt integer :=1;
         lCntEducation integer :=1;
         lCntTag integer :=1;
-        query varchar(4000) := '';
-        cnd varchar(4000) := '  ';
-        joinTable varchar(1000) := '  ';
+        query  character varying := '';
+        cnd character varying := '  ';
+        joinTable character varying := '  ';
         begin
             if _subject != '' then 
                 cnd := ' and acts.subject_id in ' || _subject;
@@ -188,7 +195,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,o.image as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
@@ -200,7 +207,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,o.image as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
@@ -224,9 +231,13 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
      */
     public function down()
     {
+        DB::statement("drop function IF EXISTS regexp_count(varchar, varchar)");
+
         DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar,varchar,varchar,varchar)");
         DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar,varchar,varchar,varchar)");
 
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dt");
+
+        DB::statement("drop table IF EXISTS advsearchIndependentActivity_dtnew");
     }
 }
