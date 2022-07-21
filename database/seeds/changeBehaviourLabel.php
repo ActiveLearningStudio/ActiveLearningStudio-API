@@ -275,7 +275,7 @@ class changeBehaviourLabel extends Seeder
           {
             "name": "behaviour",
             "type": "group",
-            "label": "Behavior settings.",
+            "label": "Behaviour settings.",
             "importance": "low",
             "description": "These options will let you control how the task behaves.",
             "optional": true,
@@ -702,7 +702,7 @@ class changeBehaviourLabel extends Seeder
           {
             "name": "behaviour",
             "type": "group",
-            "label": "Behavior settings",
+            "label": "Behaviour settings",
             "importance": "low",
             "description": "These options will let you control how the task behaves.",
             "optional": true,
@@ -1274,7 +1274,7 @@ class changeBehaviourLabel extends Seeder
           {
             "name": "behaviour",
             "type": "group",
-            "label": "Behavior settings",
+            "label": "Behaviour settings",
             "importance": "low",
             "description": "These options will let you control how the task behaves.",
             "optional": false,
