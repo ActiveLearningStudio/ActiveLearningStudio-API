@@ -58,7 +58,7 @@ class ProjectController extends Controller
      *
      * Get a list of the projects of a user.
      * @param Request $request
-     * @urlParam Organization
+     * @urlParam Organization $suborganization
      * @return Response
      *
      * @responseFile responses/project/projects.json
