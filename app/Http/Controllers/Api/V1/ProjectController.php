@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Requests\V1\GetProjectsRequest;
 use App\Http\Resources\V1\ProjectDefaultResource;
 use App\User;
 use App\Models\Project;
@@ -57,13 +58,18 @@ class ProjectController extends Controller
      * Get All Projects of login user
      *
      * Get a list of the projects of a user.
-     * @param Request $request
-     * @urlParam Organization $suborganization
+     *
+     * @urlParam required Organization $suborganization. Example: 1
+     * @queryParam optional GetProjectsRequest $request. Example: size, order_by_type, order_by_column8
+     * @response array
+     *
+     * @param GetProjectsRequest $request
+     * @param Organization $suborganization
      * @return Response
      *
      * @responseFile responses/project/projects.json
      */
-    public function index(Request $request, Organization $suborganization)
+    public function index(GetProjectsRequest $request, Organization $suborganization)
     {
         $this->authorize('viewAny', [Project::class, $suborganization]);
 
@@ -213,13 +219,17 @@ class ProjectController extends Controller
      *
      * Get a list of the default projects.
      *
-     * @param Request $request
+     * @urlParam required Organization $suborganization. Example: 1
+     * @queryParam optional GetProjectsRequest $request. Example: size, order_by_type, order_by_column8
+     * @response array
+     *
+     * @param GetProjectsRequest $request
      * @urlParam Organization $suborganization
      * @responseFile responses/project/projects-with-detail.json
      *
      * @return Response
      */
-    public function default(Request $request, Organization $suborganization)
+    public function default(GetProjectsRequest $request, Organization $suborganization)
     {
         $default_email = config('constants.curriki-demo-email');
 
@@ -720,7 +730,7 @@ class ProjectController extends Controller
 
      * @responseFile responses/project/projects.json
      */
-    public function getFavorite(Request $request, Organization $suborganization)
+    public function getFavorite(GetProjectsRequest $request, Organization $suborganization)
     {
         $this->authorize('favorite', [Project::class, $suborganization]);
 
@@ -740,6 +750,12 @@ class ProjectController extends Controller
      * @response {
      *   "message": "Project is being cloned|duplicated in background!"
      * }
+     *
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param Project $project
+     * @return Response
      */
     public function exportProject(Request $request, Organization $suborganization, Project $project)
     {

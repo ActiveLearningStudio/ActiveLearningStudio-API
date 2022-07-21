@@ -179,7 +179,7 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function getUserProjectIdsInOrganization($authenticatedUser, $organization);
 
     /**
-     * Get user project ids in org
+     * Get user Favorite projects
      *
      * @param $request
      * @param $suborganization
@@ -188,7 +188,7 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
     public function getFavoriteProjects($request, $suborganization);
 
     /**
-     * Get All Favorite Projects of login user
+     * Get All Projects of login user
      *
      * @param $request
      * @param $suborganization

@@ -331,12 +331,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query_user->where('email', $default_email);
         });
 
-//        if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
         if (!isset($data['size'])) {
             return $query->orderBy('order', 'ASC')->get();
         }
-
-        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
 
         if (isset($data['order_by_column'])) {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
@@ -345,7 +342,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->orderBy('order', 'ASC');
         }
 
-        return $query->paginate($perPage)->withQueryString();
+        return $query->paginate($data['size'])->withQueryString();
     }
 
     /**
@@ -1075,6 +1072,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $authenticatedUserOrgProjectIdsString;
     }
 
+    /**
+     * Get Activity Grade
+     *
+     * @param $projectId
+     * @param $activityParam
+     * @return response
+     */
     private function getActivityGrade($projectId, $activityParam)
     {
         $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
@@ -1091,6 +1095,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     }
 
+    /**
+     * Get login user Projects
+     *
+     * @param $suborganization
+     * @param $data
+     * @return response
+     */
     public function getProjects($suborganization, $data) {
 
         $authenticated_user = auth()->user();
@@ -1111,6 +1122,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $query->paginate($data['size'])->withQueryString();
     }
 
+    /**
+     * Get Favorite Projects
+     *
+     * @param $suborganization
+     * @param $data
+     * @return response
+     */
     public function getFavoriteProjects($suborganization, $data) {
 
         $authenticated_user = auth()->user();
