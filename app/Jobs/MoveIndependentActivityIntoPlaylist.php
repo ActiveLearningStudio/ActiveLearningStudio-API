@@ -76,8 +76,8 @@ class MoveIndependentActivityIntoPlaylist implements ShouldQueue
             $independentActivityRepository->moveToPlaylist($this->independentActivity, $this->playlist, $this->token);
             $message = "Your request to add independent activity [" . $this->independentActivity->title . "] into 
                             playlist [" . $this->playlist->title . "] has been completed and available";
-            $user_id = $userRepository->parseToken($this->token);
-            $user = User::find($user_id);
+            $userId = $userRepository->parseToken($this->token);
+            $user = User::find($userId);
             $userName = rtrim($user->first_name . ' ' . $user->last_name, ' ');
             $process = "Move Independent Activity into Playlist";
             $user->notify(new CloneNotification($message, $process, $userName));

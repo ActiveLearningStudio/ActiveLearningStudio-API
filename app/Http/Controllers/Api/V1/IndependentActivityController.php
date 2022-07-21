@@ -977,35 +977,39 @@ class IndependentActivityController extends Controller
      * Move the specified independent activity of an suborganization and link with a playlist.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @bodyParam ind_act query string comma seperated independent activities ids  Example: 1,2,3
      * @urlParam playlist required The Id of a playlist Example: 1
+     * @bodyParam indAct required query string comma seperated independent activities ids Example: 1,2,3
      *
      * @response {
-     *   "message": "Independent Activity is being copied in background!"
+     *   "message": "Your request to add independent activity into playlist [playlistTitle] has been received and is being processed.<br> You will be alerted in the notification section in the title bar when complete."
      * }
      *
      * @response 400 {
      *   "errors": [
-     *     "Not a Public Independent Activity."
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Failed to copy independent activity."
+     *     "Please provide indAct."
      *   ]
      * }
      *
      * @param Request $request
      * @param Organization $suborganization
-     * @param IndependentActivity $independent_activity
      * @param Playlist $playlist
      * @return Response
      */
     public function moveIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, Playlist $playlist)
     {
-        $ind_act = $request->get('ind_act');
-        $arr = explode(',',$ind_act); 
+        
+        $validator = Validator::make($request->all(), [
+            'indAct' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => ['Please provide indAct.']
+            ], 400);
+        }
+        
+        $indAct = $request->get('indAct');
+        $arr = explode(',',$indAct); 
         for ($i=0; $i < count($arr); $i++) {
             
             $independent_activity = IndependentActivity::find((int) $arr[$i]);
@@ -1014,7 +1018,7 @@ class IndependentActivityController extends Controller
         
 
         return response([
-            "message" => "Your request to add independent activity  into playlist [$playlist->title] has been 
+            "message" => "Your request to add independent activity into playlist [$playlist->title] has been 
             received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
