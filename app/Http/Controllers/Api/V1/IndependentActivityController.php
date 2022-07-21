@@ -11,6 +11,7 @@ use App\Http\Resources\V1\IndependentActivityDetailResource;
 use App\Http\Resources\V1\H5pIndependentActivityResource;
 use App\Jobs\CloneIndependentActivity;
 use App\Jobs\CopyIndependentActivityIntoPlaylist;
+use App\Jobs\MoveIndependentActivityIntoPlaylist;
 use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
 use App\Models\Playlist;
@@ -966,6 +967,58 @@ class IndependentActivityController extends Controller
 
         return response([
             "message" => "Your request to add independent activity [$independent_activity->title] into playlist [$playlist->title] has been 
+            received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Move Independent Activity into Playlist
+     *
+     * Move the specified independent activity of an suborganization and link with a playlist.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam playlist required The Id of a playlist Example: 1
+     * @bodyParam indAct required query string comma seperated independent activities ids Example: 1,2,3
+     *
+     * @response {
+     *   "message": "Your request to add independent activity into playlist [playlistTitle] has been received and is being processed.<br> You will be alerted in the notification section in the title bar when complete."
+     * }
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Please provide indAct."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @param Playlist $playlist
+     * @return Response
+     */
+    public function moveIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, Playlist $playlist)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'indAct' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'errors' => ['Please provide indAct.']
+            ], 400);
+        }
+        
+        $indAct = $request->get('indAct');
+        $arr = explode(',',$indAct); 
+        for ($i=0; $i < count($arr); $i++) {
+            
+            $independent_activity = IndependentActivity::find((int) $arr[$i]);
+            MoveIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
+        }
+        
+
+        return response([
+            "message" => "Your request to add independent activity into playlist [$playlist->title] has been 
             received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
