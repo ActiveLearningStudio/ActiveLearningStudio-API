@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddBrightcoveH5pLibrary extends Migration
+class AddBrightcoveEditorTranslation extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class AddBrightcoveH5pLibrary extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PAddBrightcoveLibrarySeeder::class,
+            '--class' => H5PAddBrightcoveEditorTranslationSeeder::class,
             '--force' => true
         ]);
     }
