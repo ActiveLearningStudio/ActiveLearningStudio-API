@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddBrightcoveH5pLibrary extends Migration
+class AddNewBrightcoveH5pLibrary extends Migration
 {
     /**
      * Run the migrations.
