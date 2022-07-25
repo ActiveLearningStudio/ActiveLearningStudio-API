@@ -235,10 +235,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param $lti_client_id
      * @return Project $project
+     * @param $searchTerm
      */
-    public function fetchByLtiClientAndEmail($lti_client_id, $user_email)
+    public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm)
     {
-        return $this->model->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
+        return $this->model->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
             $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
                 $query_lmssetting->where('lti_client_id', $lti_client_id);
                 $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
