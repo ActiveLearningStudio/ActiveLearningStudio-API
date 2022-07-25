@@ -33,6 +33,10 @@ use App\Models\Organization;
 use App\Jobs\ExportIndependentActivity;
 use App\Jobs\ImportIndependentActivity;
 use App\Http\Requests\V1\IndependentActivityUploadImportRequest;
+use Djoudi\LaravelH5p\Eloquents\H5pContent;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
 
 /**
  * @group 5. Independent Activity
@@ -677,7 +681,7 @@ class IndependentActivityController extends Controller
         $data[] = $h5p_data;
         $data[] = $independent_activity;
         Storage::disk('public')->put('/exports/'.$request->id.'/'.$request->id.'-h5p.json', json_encode($data));
-        
+
         $rootPath = storage_path('app/public/exports/'.$request->id);
         return response([
             'url'=> url('storage/exports/'.$request->id.'/'.$request->id.'-h5p.json'),
@@ -690,7 +694,7 @@ class IndependentActivityController extends Controller
             new RecursiveDirectoryIterator($rootPath),
             RecursiveIteratorIterator::LEAVES_ONLY
         );
-    
+
         foreach ($files as $name => $file)
         {
             // Skip directories (they would be added automatically)
@@ -699,12 +703,12 @@ class IndependentActivityController extends Controller
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
-        
+
                 // Add current file to archive
                 $zip->addFile($filePath, $relativePath);
             }
         }
-        $zip->close();  
+        $zip->close();
         return url('storage/exports/'.$zipFileName);
 
     }
@@ -835,9 +839,9 @@ class IndependentActivityController extends Controller
      * Download XApi File
      *
      * This is an API for to download the XAPI zip for the attempted independent activity
-     * 
+     *
      * @urlParam independent_activity required id, title, slug of an independent_activity
-     * 
+     *
      * @return download file download for the independent activity XAPI zip download
      */
     public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
@@ -877,9 +881,9 @@ class IndependentActivityController extends Controller
      * Import Independent Activity
      *
      * Import the specified independent activity of a user.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @param independent_activity 
+     * @param independent_activity
      * @response {
      *   "message": "Your request to import independent activity has been received and is being processed."
      * }
@@ -966,7 +970,7 @@ class IndependentActivityController extends Controller
         CopyIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
 
         return response([
-            "message" => "Your request to add independent activity [$independent_activity->title] into playlist [$playlist->title] has been 
+            "message" => "Your request to add independent activity [$independent_activity->title] into playlist [$playlist->title] has been
             received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
@@ -997,7 +1001,7 @@ class IndependentActivityController extends Controller
      */
     public function moveIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, Playlist $playlist)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'indAct' => 'required',
         ]);
@@ -1007,18 +1011,18 @@ class IndependentActivityController extends Controller
                 'errors' => ['Please provide indAct.']
             ], 400);
         }
-        
+
         $indAct = $request->get('indAct');
-        $arr = explode(',',$indAct); 
+        $arr = explode(',',$indAct);
         for ($i=0; $i < count($arr); $i++) {
-            
+
             $independent_activity = IndependentActivity::find((int) $arr[$i]);
             MoveIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
         }
-        
+
 
         return response([
-            "message" => "Your request to add independent activity into playlist [$playlist->title] has been 
+            "message" => "Your request to add independent activity into playlist [$playlist->title] has been
             received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
