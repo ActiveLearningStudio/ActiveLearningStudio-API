@@ -147,7 +147,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-                where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s where a.id is not null %s) )
+                where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s) )
                 
                 
                 union all
@@ -164,7 +164,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where p.id in  (select playlist_id from activities a %s where a.id is not null %s)
+                where p.id in  (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s)
                 
                 union all
                 
@@ -183,7 +183,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
                 where lower(a.title) like '%s'  %s
-                $s$,joinTable,cnd,joinTable,cnd,joinTable,_searchText,cnd);
+                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,_searchText,cnd);
                 
                 RETURN QUERY execute query;
             else 
@@ -310,7 +310,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-                where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s where a.id is not null %s) )
+                where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s) )
                 
                 
                 union all
@@ -327,7 +327,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where p.id in  (select playlist_id from activities a %s where a.id is not null %s)
+                where p.id in  (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s)
                 
                 union all
                 
@@ -352,7 +352,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where user_id=%s)sq2
                 on
                 sq1.project_id=sq2.pid
-                $s$,joinTable,cnd,joinTable,cnd,joinTable,_searchText,cnd,_uid);
+                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,_searchText,cnd,_uid);
                 
                 RETURN QUERY execute query;
             else 
