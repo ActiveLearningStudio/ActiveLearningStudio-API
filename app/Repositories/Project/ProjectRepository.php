@@ -331,7 +331,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $query = $this->model;
 
         if (isset($data['query']) && $data['query'] != '') {
-            $query = $query->where('name', 'iLIKE', '%' .$data['query']. '%')
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
                 ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
         }
         $query = $query->whereHas('users', function ($query_user) use ($default_email) {
@@ -1115,10 +1115,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $query = $authenticated_user->projects();
 
         if (isset($data['query']) && $data['query'] != '') {
-            $query = $query->where('name', 'iLIKE', '%' .$data['query']. '%')
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
                 ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
         }
-        
+
         $query = $query->whereNull('team_id')->where('organization_id', $suborganization->id);
 
         if (!isset($data['size'])) {
@@ -1148,7 +1148,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $query = $authenticated_user->favoriteProjects();
 
         if (isset($data['query']) && $data['query'] != '') {
-            $query = $query->where('name', 'iLIKE', '%' .$data['query']. '%')
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
                 ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
         }
 
