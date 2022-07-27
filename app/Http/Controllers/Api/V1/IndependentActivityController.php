@@ -202,7 +202,7 @@ class IndependentActivityController extends Controller
 
         if ($independentActivity) {
             return response([
-                'independent-activity' => new IndependentActivityResource($independentActivity),
+                'independent-activity' => new IndependentActivityResource($independentActivity->refresh()),
             ], 201);
         }
 
