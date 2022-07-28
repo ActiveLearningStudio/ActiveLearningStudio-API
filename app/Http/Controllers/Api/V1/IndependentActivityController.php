@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\IndependentActivityCreateRequest;
 use App\Http\Requests\V1\IndependentActivityEditRequest;
 use App\Http\Requests\V1\OrganizationIndependentActivityRequest;
+use App\Http\Requests\V1\MoveIndependentActivityIntoPlaylistRequest;
 use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\IndependentActivityDetailResource;
 use App\Http\Resources\V1\H5pIndependentActivityResource;
@@ -982,44 +983,34 @@ class IndependentActivityController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam playlist required The Id of a playlist Example: 1
-     * @bodyParam indAct required query string comma seperated independent activities ids Example: 1,2,3
+     * @bodyParam independentActivityIds array The Ids of independent activities Example: [1, 2]
      *
      * @response {
      *   "message": "Your request to add independent activity into playlist [playlistTitle] has been received and is being processed.<br> You will be alerted in the notification section in the title bar when complete."
      * }
      *
-     * @response 400 {
-     *   "errors": [
-     *     "Please provide indAct."
-     *   ]
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *      "independentActivityIds.0": [
+     *          "Activities that are moving to projects should have share disabled and library preference should be private."
+     *      ]
+     *   }
      * }
      *
-     * @param Request $request
+     * @param MoveIndependentActivityIntoPlaylistRequest $request
      * @param Organization $suborganization
      * @param Playlist $playlist
      * @return Response
      */
-    public function moveIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, Playlist $playlist)
+    public function moveIndependentActivityIntoPlaylist(MoveIndependentActivityIntoPlaylistRequest $request, Organization $suborganization, Playlist $playlist)
     {
+        $requestData = $request->validated();
 
-        $validator = Validator::make($request->all(), [
-            'indAct' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response([
-                'errors' => ['Please provide indAct.']
-            ], 400);
+        foreach ($requestData['independentActivityIds'] as $independentActivityId) {
+            $independentActivity = IndependentActivity::find($independentActivityId);
+            MoveIndependentActivityIntoPlaylist::dispatch($suborganization, $independentActivity, $playlist, $request->bearerToken())->delay(now()->addSecond());
         }
-
-        $indAct = $request->get('indAct');
-        $arr = explode(',',$indAct);
-        for ($i=0; $i < count($arr); $i++) {
-
-            $independent_activity = IndependentActivity::find((int) $arr[$i]);
-            MoveIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
-        }
-
 
         return response([
             "message" => "Your request to add independent activity into playlist [$playlist->title] has been
