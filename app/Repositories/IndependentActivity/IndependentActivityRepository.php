@@ -9,6 +9,8 @@ use App\Models\Activity;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use App\Http\Resources\V1\SearchPostgreSqlResource;
 use App\Http\Resources\V1\SearchIndependentActivityResource;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,6 +28,8 @@ use RecursiveDirectoryIterator;
 class IndependentActivityRepository extends BaseRepository implements IndependentActivityRepositoryInterface
 {
     private $h5pElasticsearchFieldRepository;
+    private $subjectRepository;
+    private $educationLevelRepository;
     private $client;
 
     /**
@@ -33,12 +37,21 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      *
      * @param IndependentActivity $model
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
+     * @param SubjectRepositoryInterface $subjectRepository
+     * @param EducationLevelRepositoryInterface $educationLevelRepository
      */
-    public function __construct(IndependentActivity $model, H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository)
+    public function __construct(
+        IndependentActivity $model,
+        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
+        SubjectRepositoryInterface $subjectRepository,
+        EducationLevelRepositoryInterface $educationLevelRepository
+    )
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->educationLevelRepository = $educationLevelRepository;
     }
 
     /**
@@ -78,7 +91,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     {
         $counts = [];
         $organizationParentChildrenIds = [];
-        $queryParams['query_text'] = null;
+        $queryParams['query_text'] = '';
+        $queryParams['query_subject'] = '';
+        $queryParams['query_education'] = '';
+        $queryParams['query_tags'] = '';
         $queryFrom = 0;
         $querySize = 10;
 
@@ -88,13 +104,13 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advindependentactivitysearch(:user_id, :query_text)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:user_id, :query_text)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
 
             $queryParams['user_id'] = $authUser;
         } else {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
         }
 
         $queryWhere[] = "deleted_at IS NULL";
@@ -162,18 +178,18 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
             $subjectIdsWithMatchingName = $this->subjectRepository->getSubjectIdsWithMatchingName($data['subjectIds']);
             $dataSubjectIds = implode(",", $subjectIdsWithMatchingName);
-            $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
+            $queryParams['query_subject'] = "(" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
             $educationLevelIdsWithMatchingName = $this->educationLevelRepository->getEducationLevelIdsWithMatchingName($data['educationLevelIds']);
             $dataEducationLevelIds = implode(",", $educationLevelIdsWithMatchingName);
-            $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
+            $queryParams['query_education'] = "(" . $dataEducationLevelIds . ")";
         }
 
         if (isset($data['authorTagsIds']) && !empty($data['authorTagsIds'])) {
             $dataAuthorTagsIds = implode(",", $data['authorTagsIds']);
-            $queryWhere[] = "author_tag_id IN (" . $dataAuthorTagsIds . ")";
+            $queryParams['query_tags'] = "(" . $dataAuthorTagsIds . ")";
         }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
@@ -191,8 +207,14 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
-            $dataH5pLibraries = implode("','", $data['h5pLibraries']);
-            $queryWhere[] = "h5plib IN ('" . $dataH5pLibraries . "')";
+            $data['h5pLibraries'] = array_map(
+                function($n) {
+                    return "h5plib LIKE '" . explode(" ",$n)[0] . "%'";
+                },
+                $data['h5pLibraries']
+            );
+            $queryWhereH5pLibraries = implode(' OR ', $data['h5pLibraries']);
+            $queryWhere[] = "(" . $queryWhereH5pLibraries . ")";
         }
 
         if (isset($data['indexing']) && !empty($data['indexing'])) {
@@ -954,4 +976,62 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         return $cloned_activity['id'];
     }
+
+    /**
+     * Get indep-activities of a user who is launching the deeplink from another LMS
+     * @param $data
+     * @param $user
+     * @return mixed
+     */
+    public function independentActivities($data, $user)
+    {
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = $this->model;
+        $q = $data['query'] ?? null;
+
+        // if simple request for getting independent activity listing with search
+        if ($q) {
+            $query = $query->where('title', 'iLIKE', '%' . $q . '%');
+        }
+
+        return $query->where('user_id', $user)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+    }
+
+     /**
+     * Copy Exisiting independentent activity into a playlist
+     * @param $independentActivity
+     * @param $playlist
+     * @param $token
+     * @return string
+     * 
+     */
+    public function moveToPlaylist($independentActivity, $playlist, $token)
+    {
+        $newThumbUrl = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $activity_data = [
+            'title' => $independentActivity->title,
+            'type' => $independentActivity->type,
+            'content' => $independentActivity->content,
+            'playlist_id' => $playlist->id,
+            'order' => $this->getOrder($playlist->id) + 1,
+            'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content 
+            'thumb_url' => $newThumbUrl,
+            'shared' => 0,
+        ];
+        
+        $cloned_activity = Activity::create($activity_data);
+        
+        if ($cloned_activity && count($independentActivity->subjects) > 0) {
+            $cloned_activity->subjects()->attach($independentActivity->subjects);
+        }
+        if ($cloned_activity && count($independentActivity->educationLevels) > 0) {
+            $cloned_activity->educationLevels()->attach($independentActivity->educationLevels);
+        }
+        if ($cloned_activity && count($independentActivity->authorTags) > 0) {
+            $cloned_activity->authorTags()->attach($independentActivity->authorTags);
+        }
+        $this->delete($independentActivity->id); // Remove independent activity
+        return $cloned_activity['id'];
+    }
+    
 }

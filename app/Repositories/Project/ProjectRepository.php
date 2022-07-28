@@ -235,10 +235,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param $lti_client_id
      * @return Project $project
+     * @param $searchTerm
      */
-    public function fetchByLtiClientAndEmail($lti_client_id, $user_email)
+    public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm)
     {
-        return $this->model->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
+        return $this->model->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
             $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
                 $query_lmssetting->where('lti_client_id', $lti_client_id);
                 $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
@@ -325,11 +326,30 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $default_email
      * @return Project $projects
      */
-    public function fetchDefault($default_email)
+    public function fetchDefault($default_email, $data)
     {
-        return $this->model->whereHas('users', function ($query_user) use ($default_email) {
+        $query = $this->model;
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+        }
+        $query = $query->whereHas('users', function ($query_user) use ($default_email) {
             $query_user->where('email', $default_email);
-        })->get();
+        });
+
+        if (!isset($data['size'])) {
+            return $query->orderBy('order', 'ASC')->get();
+        }
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($data['size'])->withQueryString();
     }
 
     /**
@@ -1029,6 +1049,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $team->projects()->attach($project);
             }
 
+            if ($project) {
+                $playlistData['title'] = 'playlist1';
+                $playlistData['order'] = 1;
+
+                $playlist = $project->playlists()->create($playlistData);
+            }
+
             return $project;
         });
     }
@@ -1052,6 +1079,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $authenticatedUserOrgProjectIdsString;
     }
 
+    /**
+     * Get Activity Grade
+     *
+     * @param $projectId
+     * @param $activityParam
+     * @return response
+     */
     private function getActivityGrade($projectId, $activityParam)
     {
         $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
@@ -1066,5 +1100,71 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
         return null;
 
+    }
+
+    /**
+     * Get login user Projects
+     *
+     * @param $suborganization
+     * @param $data
+     * @return response
+     */
+    public function getProjects($suborganization, $data) {
+
+        $authenticated_user = auth()->user();
+        $query = $authenticated_user->projects();
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+        }
+
+        $query = $query->whereNull('team_id')->where('organization_id', $suborganization->id);
+
+        if (!isset($data['size'])) {
+            return $query->orderBy('order', 'ASC')->get();
+        }
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($data['size'])->withQueryString();
+    }
+
+    /**
+     * Get Favorite Projects
+     *
+     * @param $suborganization
+     * @param $data
+     * @return response
+     */
+    public function getFavoriteProjects($suborganization, $data) {
+
+        $authenticated_user = auth()->user();
+        $query = $authenticated_user->favoriteProjects();
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+        }
+
+        $query = $query->wherePivot('organization_id', $suborganization->id);
+
+        if (!isset($data['size'])) {
+            return $query->orderBy('order', 'ASC')->get();
+        }
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($data['size'])->withQueryString();
     }
 }

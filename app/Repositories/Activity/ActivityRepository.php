@@ -264,7 +264,10 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     {
         $counts = [];
         $organizationParentChildrenIds = [];
-        $queryParams['query_text'] = null;
+        $queryParams['query_text'] = '';
+        $queryParams['query_subject'] = '';
+        $queryParams['query_education'] = '';
+        $queryParams['query_tags'] = '';
         $queryFrom = 0;
         $querySize = 10;
 
@@ -274,11 +277,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advSearch(:user_id, :query_text)';
+            $query = 'SELECT * FROM advSearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
 
             $queryParams['user_id'] = $authUser;
         } else {
-            $query = 'SELECT * FROM advSearch(:query_text)';
+            $query = 'SELECT * FROM advSearch(:query_text, :query_subject, :query_education, :query_tags)';
         }
 
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
@@ -349,18 +352,18 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         if (isset($data['subjectIds']) && !empty($data['subjectIds'])) {
             $subjectIdsWithMatchingName = $this->subjectRepository->getSubjectIdsWithMatchingName($data['subjectIds']);
             $dataSubjectIds = implode(",", $subjectIdsWithMatchingName);
-            $queryWhere[] = "subject_id IN (" . $dataSubjectIds . ")";
+            $queryParams['query_subject'] = "(" . $dataSubjectIds . ")";
         }
 
         if (isset($data['educationLevelIds']) && !empty($data['educationLevelIds'])) {
             $educationLevelIdsWithMatchingName = $this->educationLevelRepository->getEducationLevelIdsWithMatchingName($data['educationLevelIds']);
             $dataEducationLevelIds = implode(",", $educationLevelIdsWithMatchingName);
-            $queryWhere[] = "education_level_id IN (" . $dataEducationLevelIds . ")";
+            $queryParams['query_education'] = "(" . $dataEducationLevelIds . ")";
         }
 
         if (isset($data['authorTagsIds']) && !empty($data['authorTagsIds'])) {
             $dataAuthorTagsIds = implode(",", $data['authorTagsIds']);
-            $queryWhere[] = "author_tag_id IN (" . $dataAuthorTagsIds . ")";
+            $queryParams['query_tags'] = "(" . $dataAuthorTagsIds . ")";
         }
 
         if (isset($data['userIds']) && !empty($data['userIds'])) {
@@ -378,8 +381,14 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
-            $dataH5pLibraries = implode("','", $data['h5pLibraries']);
-            $queryWhere[] = "h5plib IN ('" . $dataH5pLibraries . "')";
+            $data['h5pLibraries'] = array_map(
+                                        function($n) {
+                                            return "h5plib LIKE '" . explode(" ",$n)[0] . "%'";
+                                        },
+                                        $data['h5pLibraries']
+                                    );
+            $queryWhereH5pLibraries = implode(' OR ', $data['h5pLibraries']);
+            $queryWhere[] = "(" . $queryWhereH5pLibraries . ")";
         }
 
         if (isset($data['indexing']) && !empty($data['indexing'])) {
