@@ -1132,7 +1132,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->orderBy('order', 'ASC');
         }
 
-        return $query->paginate($data['size'])->withQueryString();
+        return $query->whereHas('users', function (Builder $query) {
+            $query->where('id', auth()->user()->id);
+        })
+        ->paginate($data['size'])
+        ->withQueryString();
     }
 
     /**
