@@ -1115,8 +1115,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $query = $authenticated_user->projects();
 
         if (isset($data['query']) && $data['query'] != '') {
-            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+            $query = $query->where(function($qry) use ($data) {
+                $qry->where('name', 'iLIKE', '%' . $data['query'] . '%')
                 ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+            });
         }
 
         $query = $query->whereNull('team_id')->where('organization_id', $suborganization->id);
@@ -1132,11 +1134,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             $query = $query->orderBy('order', 'ASC');
         }
 
-        return $query->whereHas('users', function (Builder $query) {
-            $query->where('id', auth()->user()->id);
-        })
-        ->paginate($data['size'])
-        ->withQueryString();
+        return $query->paginate($data['size'])->withQueryString();
     }
 
     /**
