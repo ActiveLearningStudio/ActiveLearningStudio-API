@@ -1064,6 +1064,106 @@ class AuthController extends Controller
             ], 200);
         }
     }
+
+    /**
+     * Wordpress SSO
+     *
+     * 
+     *
+     * @param 
+     * @return Application|ResponseFactory|Response
+     * @throws \Throwable
+     */
+    public function wordpressSSO(Request $request)
+    {
+        // Getting user info from Wordpress
+        $client = new Client();
+        $data = array(
+            "grant_type" => "authorization_code",
+            "client_id" => '7PwnyVuYIWJtdKYIzvxBpo5wFAizj30F6WU8qFta',
+            "redirect_uri" => 'https://dev2.spiralcorp.net/wp-sso',
+            "code" => $request->code,
+            "client_secret"=> 'HbnONkZDvcTM7wdctq6clI7H9T3yQD3vPnAQzZmn'
+        );
+        $url = 'http://wptest.spiralcorp.net/oauth/token';
+        try {
+            $curl_request = $client->post($url,  array(
+                'form_params' => $data,
+                'Content-Type' => 'application/json',
+            ));
+            $authResponse = json_decode($curl_request->getBody(), true);
+        } catch (\Exception $e) {
+            return response([
+                'errors' => ['Unable to login with SSO.' . $e->getMessage()],
+            ], 400);
+        }
+
+        $url2 = 'http://wptest.spiralcorp.net/oauth/me/?access_token='.$authResponse['access_token'];
+        try {
+            $curl_request2 = $client->post($url2,  array('Content-Type' => 'application/json'));
+            $meResponse = json_decode($curl_request2->getBody(), true);
+        } catch (\Exception $e) {
+            return response([
+                'errors' => ['Unable to login with SSO.' . $e->getMessage()],
+            ], 400);
+        }
+
+        // Checking lms settings
+        $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $request->clientId);
+        if (!$default_lms_setting) {
+            return response([
+                'errors' => ['Unable to find default LMS setting with your client id.'],
+            ], 404);
+        }
+
+        $default_lms_setting = $default_lms_setting->toArray();
+        $default_lms_setting['lms_login_id'] = $meResponse['user_email'];
+
+        // Checking if user exists in studio
+        $user = User::where('email', $meResponse['user_email'])->first();
+
+        if (!$user) {
+            // Creating user
+            $password = Str::random(10);
+            $user = $this->userRepository->create([
+                'first_name' => $meResponse['display_name'],
+                'last_name' => $meResponse['display_name'],
+                'email' => $meResponse['user_email'],
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(64),
+                'email_verified_at' => now(),
+            ]);
+        }
+
+        // Checking if user has lms settings for this client id
+        $userLmsSetting = $user->lmssetting()->where('lti_client_id', $request->clientId)->first();
+
+        if(!$userLmsSetting) {
+            // Adding lms settings
+            $user->lmssetting()->create($default_lms_setting);
+
+            // Attaching user to organization with role
+            $org = $user->lmssetting[0]->organization;
+
+            if($default_lms_setting['role_id']) {
+                $org->users()->attach(
+                    $user, ['organization_role_type_id' => $default_lms_setting['role_id']]
+                );
+            } else {
+                $selfRegisteredRole = $org->roles()->where('name', 'self_registered')->first();
+                $org->users()->attach(
+                    $user, ['organization_role_type_id' => $selfRegisteredRole->id]
+                );
+            }
+        }
+
+        $user['user_organization'] = $user->lmssetting[0]->organization;
+
+        return [
+            'user' => $user,
+            'access_token' => $user->createToken('auth_token')->accessToken,
+        ];
+    }
 }
 
 

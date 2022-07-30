@@ -19,6 +19,7 @@ Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login'
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('login/sso', 'Auth\AuthController@ltiSsoLogin1p0');
 Route::post('login/lti-sso', 'Auth\AuthController@ltiSsoLogin');
+Route::post('login/wordpress-sso', 'Auth\AuthController@wordpressSSO');
 Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
 Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
