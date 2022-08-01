@@ -31,8 +31,6 @@ class ConvertActvityIntoIndependentActivity implements ShouldQueue
      */
     protected $organization;
 
-    
-
     /**
      * @var
      */

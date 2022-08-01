@@ -1055,32 +1055,32 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         // copy the content data if exist
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
 
-        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $newThumbUrl = clone_thumbnail($activity->thumb_url, "activities");
         $independentActivityData = [
             'title' => $activity->title,
             'type' => $activity->type,
             'content' => $activity->content,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
-            'thumb_url' => $new_thumb_url,
+            'thumb_url' => $newThumbUrl,
             'user_id' => get_user_id_by_token($token),
-            'shared' => $activity->shared,
+            'shared' => 0,
             'organization_id' => $organization->id,
             'organization_visibility_type_id' => config('constants.private-organization-visibility-type-id'),
         ];
         
-        $cloned_activity = $this->create($independentActivityData);
+        $clonedActivity = $this->create($independentActivityData);
 
-        if ($cloned_activity && count($activity->subjects) > 0) {
-            $cloned_activity->subjects()->attach($activity->subjects);
+        if ($clonedActivity && count($activity->subjects) > 0) {
+            $clonedActivity->subjects()->attach($activity->subjects);
         }
-        if ($cloned_activity && count($activity->educationLevels) > 0) {
-            $cloned_activity->educationLevels()->attach($activity->educationLevels);
+        if ($clonedActivity && count($activity->educationLevels) > 0) {
+            $clonedActivity->educationLevels()->attach($activity->educationLevels);
         }
-        if ($cloned_activity && count($activity->authorTags) > 0) {
-            $cloned_activity->authorTags()->attach($activity->authorTags);
+        if ($clonedActivity && count($activity->authorTags) > 0) {
+            $clonedActivity->authorTags()->attach($activity->authorTags);
         }
 
-        return $cloned_activity['id'];
+        return $clonedActivity['id'];
         
     }
     

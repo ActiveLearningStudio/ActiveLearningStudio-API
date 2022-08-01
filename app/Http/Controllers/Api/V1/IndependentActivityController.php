@@ -1023,25 +1023,17 @@ class IndependentActivityController extends Controller
     /**
      * Copy Activity into Independent Activity
      *
-     * copy the specified activity of an suborganization into an independent activity.
+     * Copy the specified activity of an suborganization into an independent activity.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activity required The Id of a activity Example: 1
      *
      * @response {
-     *   "message": "YYour request to copy activity [activity->title] into independent activity  has been received and is being processed.<br> You will be alerted in the notification section in the title bar when complete."
+     *   "message": "Your request to copy activity [activity->title] into independent activity has been received and is being processed.<br> You will be alerted in the notification section in the title bar when completed."
      * }
      *
-     * @response 422 {
-     *   "message": "The given data was invalid.",
-     *   "errors": {
-     *      "independentActivityIds.0": [
-     *          "Activities that are moving to projects should have share disabled and library preference should be private."
-     *      ]
-     *   }
-     * }
      *
-     * @param MoveIndependentActivityIntoPlaylistRequest $request
+     * @param Request $request
      * @param Organization $suborganization
      * @param Activity $activity
      * @return Response
@@ -1051,8 +1043,8 @@ class IndependentActivityController extends Controller
         ConvertActvityIntoIndependentActivity::dispatch($suborganization, $activity, $request->bearerToken())->delay(now()->addSecond());
 
         return response([
-            "message" => "Your request to copy activity [$activity->title] into independent activity  has been
-            received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
+            "message" => "Your request to copy activity [$activity->title] into independent activity has been
+            received and is being processed.<br> You will be alerted in the notification section in the title bar when completed.",
         ], 200);
     }
 }
