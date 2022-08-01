@@ -1033,5 +1033,55 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $this->delete($independentActivity->id); // Remove independent activity
         return $cloned_activity['id'];
     }
+
+    /**
+     * Copy Exisiting activity into an independentent Activity
+     * @param $organization
+     * @param $activity
+     * @param $token
+     * @return int
+     * 
+     */
+    public function convertIntoIndependentActivity($organization, $activity, $token)
+    {
+        $h5p_content = $activity->h5p_content;
+        if ($h5p_content) {
+            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        }
+        $newH5pContent = $h5p_content->id ?? null;
+
+        // copy the content data if exist
+        $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
+
+        $newThumbUrl = clone_thumbnail($activity->thumb_url, "activities");
+        $independentActivityData = [
+            'title' => $activity->title,
+            'type' => $activity->type,
+            'content' => $activity->content,
+            'h5p_content_id' => $newH5pContent, // set if new h5pContent created
+            'thumb_url' => $newThumbUrl,
+            'user_id' => get_user_id_by_token($token),
+            'shared' => 0,
+            'organization_id' => $organization->id,
+            'organization_visibility_type_id' => config('constants.private-organization-visibility-type-id'),
+        ];
+        
+        $clonedActivity = $this->create($independentActivityData);
+
+        if ($clonedActivity && count($activity->subjects) > 0) {
+            $clonedActivity->subjects()->attach($activity->subjects);
+        }
+        if ($clonedActivity && count($activity->educationLevels) > 0) {
+            $clonedActivity->educationLevels()->attach($activity->educationLevels);
+        }
+        if ($clonedActivity && count($activity->authorTags) > 0) {
+            $clonedActivity->authorTags()->attach($activity->authorTags);
+        }
+
+        return $clonedActivity['id'];
+        
+    }
     
 }
