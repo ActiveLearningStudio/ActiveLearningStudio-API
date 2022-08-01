@@ -114,17 +114,17 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
-                cnd := ' and acts.subject_id in ' || _subject;
+                cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join independent_activity_subject acts on a.id=acts.independent_activity_id ';
             end if;
 
             if _education != '' then 
-                cnd := ' and ael.education_level_id in ' || _education;
+                cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join independent_activity_education_level ael on a.id=ael.independent_activity_id ';
             end if;
 
             if _tag != '' then 
-                cnd := ' and aat.author_tag_id in ' || _tag ;
+                cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join independent_activity_author_tag aat on a.id=aat.independent_activity_id ';
             end if;
 
@@ -176,17 +176,17 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
-                cnd := ' and acts.subject_id in ' || _subject;
+                cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join independent_activity_subject acts on a.id=acts.independent_activity_id ';
             end if;
 
             if _education != '' then 
-                cnd := ' and ael.education_level_id in ' || _education;
+                cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join independent_activity_education_level ael on a.id=ael.independent_activity_id ';
             end if;
 
             if _tag != '' then 
-                cnd := ' and aat.author_tag_id in ' || _tag ;
+                cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join independent_activity_author_tag aat on a.id=aat.independent_activity_id ';
             end if;
 
