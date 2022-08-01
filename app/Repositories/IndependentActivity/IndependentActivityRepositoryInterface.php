@@ -124,4 +124,14 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * 
      */
     public function moveToPlaylist($independentActivity, $playlist, $token);
+
+    /**
+     * Copy Exisiting activity into an independentent Activity
+     * @param $organization
+     * @param $activity
+     * @param $token
+     * @return int
+     * 
+     */
+    public function convertIntoIndependentActivity($organization, $activity, $token);
 }

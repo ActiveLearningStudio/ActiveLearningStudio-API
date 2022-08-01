@@ -13,9 +13,11 @@ use App\Http\Resources\V1\H5pIndependentActivityResource;
 use App\Jobs\CloneIndependentActivity;
 use App\Jobs\CopyIndependentActivityIntoPlaylist;
 use App\Jobs\MoveIndependentActivityIntoPlaylist;
+use App\Jobs\ConvertActvityIntoIndependentActivity;
 use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
 use App\Models\Playlist;
+use App\Models\Activity;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
@@ -1014,6 +1016,42 @@ class IndependentActivityController extends Controller
 
         return response([
             "message" => "Your request to add independent activity into playlist [$playlist->title] has been
+            received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Copy Activity into Independent Activity
+     *
+     * copy the specified activity of an suborganization into an independent activity.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activity required The Id of a activity Example: 1
+     *
+     * @response {
+     *   "message": "YYour request to copy activity [activity->title] into independent activity  has been received and is being processed.<br> You will be alerted in the notification section in the title bar when complete."
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *      "independentActivityIds.0": [
+     *          "Activities that are moving to projects should have share disabled and library preference should be private."
+     *      ]
+     *   }
+     * }
+     *
+     * @param MoveIndependentActivityIntoPlaylistRequest $request
+     * @param Organization $suborganization
+     * @param Activity $activity
+     * @return Response
+     */
+    public function convertActvityIntoIndependentActivity(Request $request, Organization $suborganization, Activity $activity)
+    {
+        ConvertActvityIntoIndependentActivity::dispatch($suborganization, $activity, $request->bearerToken())->delay(now()->addSecond());
+
+        return response([
+            "message" => "Your request to copy activity [$activity->title] into independent activity  has been
             received and is being processed.<br> You will be alerted in the notification section in the title bar when complete.",
         ], 200);
     }
