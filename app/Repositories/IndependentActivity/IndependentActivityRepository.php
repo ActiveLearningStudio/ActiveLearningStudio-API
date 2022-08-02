@@ -290,7 +290,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             $this->model->where('organization_id', $independentActivity->organization_id)->where('order', '>', $independentActivity->order)->increment('order', 1);
         }
 
-        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "independent-activities");
         $independent_activity_data = [
             'title' => ($isDuplicate) ? $independentActivity->title . "-COPY" : $independentActivity->title,
             'type' => $independentActivity->type,
@@ -950,7 +950,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         // copy the content data if exist
         $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
 
-        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "independent-activities");
         $activity_data = [
             'title' => $independentActivity->title,
             'type' => $independentActivity->type,
@@ -1007,7 +1007,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      */
     public function moveToPlaylist($independentActivity, $playlist, $token)
     {
-        $newThumbUrl = clone_thumbnail($independentActivity->thumb_url, "activities");
+        $newThumbUrl = cloneIndependentActivityThumbnail($independentActivity->thumb_url, "independent-activities", "activities");
+        
         $activity_data = [
             'title' => $independentActivity->title,
             'type' => $independentActivity->type,
@@ -1055,7 +1056,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         // copy the content data if exist
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
 
-        $newThumbUrl = clone_thumbnail($activity->thumb_url, "activities");
+        $newThumbUrl = cloneIndependentActivityThumbnail($activity->thumb_url, "activities", "independent-activities");
+        \Log::info($newThumbUrl);
         $independentActivityData = [
             'title' => $activity->title,
             'type' => $activity->type,
@@ -1064,6 +1066,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'thumb_url' => $newThumbUrl,
             'user_id' => get_user_id_by_token($token),
             'shared' => 0,
+            'order' => $this->getOrder($organization->id) + 1,
             'organization_id' => $organization->id,
             'organization_visibility_type_id' => config('constants.private-organization-visibility-type-id'),
         ];
