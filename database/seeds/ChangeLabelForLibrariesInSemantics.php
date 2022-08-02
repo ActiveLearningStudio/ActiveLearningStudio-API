@@ -1665,7 +1665,7 @@ class ChangeLabelForLibrariesInSemantics extends Seeder
                 {
                     "name": "fullscreen",
                     "type": "text",
-                    "label": "Fullscreen label",s
+                    "label": "Fullscreen label",
                     "default": "Fullscreen"
                 },
                 {
