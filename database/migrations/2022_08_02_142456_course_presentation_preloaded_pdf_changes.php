@@ -14,6 +14,10 @@ class CoursePresentationPreloadedPdfChanges extends Migration
     public function up()
     {
         //
+        \Artisan::call('db:seed', [
+            '--class' => CoursePresentationPreloadedPdfChangesSeeder::class,
+            '--force' => true
+        ]);
     }
 
     /**
