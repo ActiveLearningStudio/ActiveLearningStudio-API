@@ -19,6 +19,8 @@ Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login'
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('login/sso', 'Auth\AuthController@ltiSsoLogin1p0');
 Route::post('login/lti-sso', 'Auth\AuthController@ltiSsoLogin');
+Route::post('login/wordpress-sso', 'Auth\AuthController@wordpressSSO');
+Route::get('login/wordpress-sso-settings/{clientId}', 'Auth\AuthController@getWordpressSSODefaultSettings');
 Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
 Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
@@ -107,6 +109,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/independent-activities/import', 'IndependentActivityController@importIndependentActivity');
         Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/playlist/{playlist}/copy-to-playlist', 'IndependentActivityController@copyIndependentActivityIntoPlaylist');
         Route::post('suborganization/{suborganization}/independent-activities/playlist/{playlist}/move-to-playlist', 'IndependentActivityController@moveIndependentActivityIntoPlaylist');
+        Route::post('suborganization/{suborganization}/independent-activities/activity/{activity}/copy-to-independent-activity', 'IndependentActivityController@convertActvityIntoIndependentActivity');
         Route::get('independent-activities/{id}/h5p-activity', 'IndependentActivityController@h5pActivity');
         //Projects
         Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');

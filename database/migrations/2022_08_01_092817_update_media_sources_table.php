@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class ChangeBehaviouralSemantics extends Migration
+class UpdateMediaSourcesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +11,8 @@ class ChangeBehaviouralSemantics extends Migration
      */
     public function up()
     {
-        //
         \Artisan::call('db:seed', [
-            '--class' => ChangeBehaviouralWordLibraries::class,
+            '--class' => UpdateMediaSourceSeeder::class,
             '--force' => true
         ]);
     }

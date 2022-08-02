@@ -114,42 +114,40 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
-                cnd := ' and acts.subject_id in ' || _subject;
+                cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join independent_activity_subject acts on a.id=acts.independent_activity_id ';
             end if;
 
             if _education != '' then 
-                cnd := ' and ael.education_level_id in ' || _education;
+                cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join independent_activity_education_level ael on a.id=ael.independent_activity_id ';
             end if;
 
             if _tag != '' then 
-                cnd := ' and aat.author_tag_id in ' || _tag ;
+                cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join independent_activity_author_tag aat on a.id=aat.independent_activity_id ';
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                left join activity_items ai on ai."h5pLib"=concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) and a.organization_id=ai.organization_id
                 where lower(a.title) like '%s'  %s  
                 union all
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                left join activity_items ai on ai."h5pLib"=concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) and a.organization_id=ai.organization_id
                 where lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
                 $s$,joinTable,_searchText,cnd,joinTable,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
@@ -178,42 +176,40 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
-                cnd := ' and acts.subject_id in ' || _subject;
+                cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join independent_activity_subject acts on a.id=acts.independent_activity_id ';
             end if;
 
             if _education != '' then 
-                cnd := ' and ael.education_level_id in ' || _education;
+                cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join independent_activity_education_level ael on a.id=ael.independent_activity_id ';
             end if;
 
             if _tag != '' then 
-                cnd := ' and aat.author_tag_id in ' || _tag ;
+                cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join independent_activity_author_tag aat on a.id=aat.independent_activity_id ';
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                left join activity_items ai on ai."h5pLib"=concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) and a.organization_id=ai.organization_id
                 where a.user_id = '%s' and lower(a.title) like '%s'  %s  
                 union all
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,ai.title as activity_title
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                left join activity_items ai on ai."h5pLib"=concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) and a.organization_id=ai.organization_id
                 where a.user_id = '%s' and lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
                 $s$,joinTable,_uid,_searchText,cnd,joinTable,_uid,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	

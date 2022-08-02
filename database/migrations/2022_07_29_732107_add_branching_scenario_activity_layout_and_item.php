@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class UpdateLibrariesSemantic extends Migration
+class AddBranchingScenarioActivityLayoutAndItem extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +11,8 @@ class UpdateLibrariesSemantic extends Migration
      */
     public function up()
     {
-        //
         \Artisan::call('db:seed', [
-            '--class' => UpdateLibrariesSemantics::class,
+            '--class' => AddBranchingScenarioActivityLayoutAndItemSeeder::class,
             '--force' => true
         ]);
     }

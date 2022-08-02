@@ -2,6 +2,7 @@
 
 namespace Djoudi\LaravelH5p\Eloquents;
 
+use App\Models\IndependentActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 

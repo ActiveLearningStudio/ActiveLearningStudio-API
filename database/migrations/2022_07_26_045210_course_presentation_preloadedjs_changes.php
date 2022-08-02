@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeBehaviouralLabelSemantics extends Migration
+class CoursePresentationPreloadedjsChanges extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class ChangeBehaviouralLabelSemantics extends Migration
     {
         //
         \Artisan::call('db:seed', [
-            '--class' => ChangeBehaviouralLabel::class,
+            '--class' => CoursePresentationPreloadedjsChangesSeeder::class,
             '--force' => true
         ]);
     }

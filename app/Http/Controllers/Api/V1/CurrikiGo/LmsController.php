@@ -79,88 +79,68 @@ class LmsController extends Controller
     // TODO: need to update
     public function projects(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository, UserRepositoryInterface $userRepository)
     {
-        if ($request->mode === 'browse') {
-            $validator = Validator::make($request->all(), [
-                'lti_client_id' => 'required',
-                'user_email' => 'required|email',
-                'course_id' => 'required',
-                'api_domain_url' => 'required',
-                'course_name' => 'required'
-            ]);
+        $validator = Validator::make($request->all(), [
+            'lti_client_id' => 'required',
+            'user_email' => 'required|email',
+            'course_id' => 'required',
+            'api_domain_url' => 'required',
+            'course_name' => 'required'
+        ]);
 
-            // format data to make compatible with saveData function
-            $data = new stdClass();
-            $data->issuerClient = $request->lti_client_id;
-            $data->courseId = $request->course_id;
-            $data->customApiDomainUrl = $request->api_domain_url;
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            return response(['error' => $messages], 400);
+        }
+        // format data to make compatible with saveData function
+        $data = new stdClass();
+        $data->issuerClient = $request->lti_client_id;
+        $data->courseId = $request->course_id;
+        $data->customApiDomainUrl = $request->api_domain_url;
 
-            if (config('student-data.save_student_data') && $request->isLearner) {
-                $data->studentId = $request->studentId;
-                $data->customPersonNameGiven = $request->customPersonNameGiven;
-                $data->customPersonNameFamily = $request->customPersonNameFamily;
-                $service = new SaveStudentdataService();
-                $service->saveStudentData($data);
-            }
-
-            $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
-            if(!$lmsSetting){
-                return response(['error' => 'Invalid Client Id'], 400);
-            }
-            $lms_organization_id = $lmsSetting->organization_id;
-
-            if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
-                $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $request->user_email);
-                $userExists = $userRepository->findByField('email', $request->user_email);
-                if (!$userExists) {
-                    $userExists = $userRepository->getFirstUser();
-                }
-                if (!$duplicateRecord) {
-                    $teacherInfo = new \stdClass();
-                    $teacherInfo->user_id = $userExists->id;
-                    $teacherInfo->id = $data->courseId;
-                    $teacherInfo->name = $request->course_name;
-                    $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;
-                    $teacherInfo->curriki_teacher_email = $request->user_email;
-                    $teacherInfo->curriki_teacher_org = $lmsSetting->organization_id;
-                    $response[] = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
-                }
-            }
-
-            if ($validator->fails()) {
-                $messages = $validator->messages();
-                return response(['error' => $messages], 400);
-            }
-
-            $projects = $this->projectRepository->fetchByLtiClientAndEmail(
-                $request->input('lti_client_id'),
-                $request->input('user_email'),
-                $lms_organization_id
-            );
-
-            return response([
-                'projects' => SearchResource::collection($projects),
-            ], 200);
+        if (config('student-data.save_student_data') && $request->isLearner) {
+            $data->studentId = $request->studentId;
+            $data->customPersonNameGiven = $request->customPersonNameGiven;
+            $data->customPersonNameFamily = $request->customPersonNameFamily;
+            $service = new SaveStudentdataService();
+            $service->saveStudentData($data);
         }
 
-        if ($request->mode === 'search') {
-            $request->validate([
-                'query' => 'string|max:255',
-                'from' => 'integer',
-                'subject' => 'string|max:255',
-                'org' => 'string|max:255',
-                'level' => 'string|max:255',
-                'start' => 'string|max:255',
-                'end' => 'string|max:255',
-                'author' => 'string|max:255',
-                'private' => 'in:0, 1, "Select all"',
-                'userEmail' => 'string|required|max:255',
-                'ltiClientId' => 'string|required',
-            ]);
-
-            return response([
-                'projects' => $this->activityRepository->ltiSearchForm($request),
-            ], 200);            
+        $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
+        if (!$lmsSetting) {
+            return response(['error' => 'Invalid Client Id'], 400);
         }
+        $lms_organization_id = $lmsSetting->organization_id;
+
+        if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
+            $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $request->user_email);
+            $userExists = $userRepository->findByField('email', $request->user_email);
+            if (!$userExists) {
+                $userExists = $userRepository->getFirstUser();
+            }
+            if (!$duplicateRecord) {
+                $teacherInfo = new \stdClass();
+                $teacherInfo->user_id = $userExists->id;
+                $teacherInfo->id = $data->courseId;
+                $teacherInfo->name = $request->course_name;
+                $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;
+                $teacherInfo->curriki_teacher_email = $request->user_email;
+                $teacherInfo->curriki_teacher_org = $lmsSetting->organization_id;
+                $response[] = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
+            }
+        }
+
+        //For new deeplink UI
+        $searchTerm = $request->search_keyword ?? null;
+        $projects = $this->projectRepository->fetchByLtiClientAndEmail(
+            $request->input('lti_client_id'),
+            $request->input('user_email'),
+            $searchTerm,
+            $lms_organization_id
+        );
+
+        return response([
+            'projects' => SearchResource::collection($projects),
+        ], 200);
     }
 
     public function project(Project $project) {

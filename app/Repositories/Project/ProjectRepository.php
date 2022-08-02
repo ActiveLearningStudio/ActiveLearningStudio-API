@@ -235,12 +235,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param $lti_client_id
      * @param $user_email
+     * @param $searchTerm
      * @param $lms_organization_id
      * @return Project $project
      */
-    public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $lms_organization_id)
+    public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm, $lms_organization_id)
     {
-        return $this->model->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
+        return $this->model->where('organization_id', $lms_organization_id)->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
             $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
                 $query_lmssetting->where('lti_client_id', $lti_client_id);
                 $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
@@ -329,7 +330,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function fetchDefault($default_email, $data)
     {
-        $query = $this->model->whereHas('users', function ($query_user) use ($default_email) {
+        $query = $this->model;
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+        }
+        $query = $query->whereHas('users', function ($query_user) use ($default_email) {
             $query_user->where('email', $default_email);
         });
 
@@ -1108,6 +1115,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         $authenticated_user = auth()->user();
         $query = $authenticated_user->projects();
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where(function($qry) use ($data) {
+                $qry->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+            });
+        }
+
         $query = $query->whereNull('team_id')->where('organization_id', $suborganization->id);
 
         if (!isset($data['size'])) {
@@ -1135,6 +1150,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         $authenticated_user = auth()->user();
         $query = $authenticated_user->favoriteProjects();
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+        }
+
         $query = $query->wherePivot('organization_id', $suborganization->id);
 
         if (!isset($data['size'])) {
