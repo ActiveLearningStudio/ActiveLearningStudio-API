@@ -300,6 +300,7 @@ if (!function_exists('cloneIndependentActivityThumbnail')) {
      *
      * @param type $thumbnail
      * @param type $source
+     * @param type $destination
      */
     function cloneIndependentActivityThumbnail($thumbnail, $source, $destination)
     {
