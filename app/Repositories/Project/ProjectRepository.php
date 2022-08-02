@@ -234,12 +234,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * To fetch project based on LMS settings lti client id and user email
      *
      * @param $lti_client_id
-     * @return Project $project
+     * @param $user_email
      * @param $searchTerm
+     * @param $lms_organization_id
+     * @return Project $project
      */
-    public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm)
+    public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm, $lms_organization_id)
     {
-        return $this->model->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
+        return $this->model->where('organization_id', $lms_organization_id)->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
             $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
                 $query_lmssetting->where('lti_client_id', $lti_client_id);
                 $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
