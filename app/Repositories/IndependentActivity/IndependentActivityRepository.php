@@ -1057,7 +1057,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
 
         $newThumbUrl = cloneIndependentActivityThumbnail($activity->thumb_url, "activities", "independent-activities");
-        \Log::info($newThumbUrl);
+        
         $independentActivityData = [
             'title' => $activity->title,
             'type' => $activity->type,

@@ -332,7 +332,7 @@ if (!function_exists('cloneIndependentActivityThumbnail')) {
                 ob_get_clean();
                 $newImageUrl = "/storage/" . $destination . "/" . $newImageName;
 
-                if($source == "independent-activities") {
+                if($source === "independent-activities") {
                     unlink($sourceFile);
                 }
             }
