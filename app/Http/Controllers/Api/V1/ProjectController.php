@@ -93,7 +93,7 @@ class ProjectController extends Controller
      */
     public function getOrgProjects(OrganizationProjectRequest $request, Organization $suborganization)
     {
-        $this->authorize('viewAny', [Project::class, $suborganization]);
+        $this->authorize('viewAnyByAuthor', [Project::class, $suborganization]);
 
         return  UserProjectResource::collection($this->projectRepository->getAll($request->all(), $suborganization));
     }
