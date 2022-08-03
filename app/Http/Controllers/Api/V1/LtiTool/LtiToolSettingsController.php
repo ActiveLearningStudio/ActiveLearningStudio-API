@@ -111,7 +111,6 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Update Lti Tool Setting
-     * Updates the lti_tool_types and lti_tool_types_config table in database.
      * @urlParam id required The Id of a lti_tool_settings table Example: 1
      * @response {
      *   "message": "Lti tool setting data updated successfully!",
@@ -152,7 +151,6 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Delete Lti Tool Setting
-     * Deletes the lti_tool_types table from database.
      * @urlParam id required The Id of a lti_tool_settings Example: 1
      * @response {
      *   "message": "Lti Tool setting deleted successfully!",
