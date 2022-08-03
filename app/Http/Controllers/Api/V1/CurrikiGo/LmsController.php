@@ -106,12 +106,10 @@ class LmsController extends Controller
         }
 
         $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
-        if (!$lmsSetting) {
-            return response(['error' => 'Invalid Client Id'], 400);
-        }
-        $lms_organization_id = $lmsSetting->organization_id;
+        $lms_organization_id = null;
 
         if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
+            $lms_organization_id = $lmsSetting->organization_id;
             $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $request->user_email);
             $userExists = $userRepository->findByField('email', $request->user_email);
             if (!$userExists) {
