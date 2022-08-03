@@ -2,10 +2,14 @@
 
 namespace App\Repositories\IndependentActivity;
 
+use App\Exceptions\GeneralException;
 use App\Models\IndependentActivity;
 use App\Models\Organization;
 use App\Models\Playlist;
 use App\Models\Activity;
+use App\Models\Subject;
+use App\Models\EducationLevel;
+use App\Models\AuthorTag;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
@@ -732,7 +736,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             }
 
             if ($zip->open($source_file) === TRUE) {
-                $extracted_folder = "app/public/imports/activity-".uniqid();
+                $extracted_folder = "app/public/imports/independent-activity-".uniqid();
                 $zip->extractTo(storage_path($extracted_folder.'/'));
                 $zip->close();
             }else {
@@ -810,12 +814,12 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                         if(file_exists($activitiy_thumbnail_path)) {
                             $ext = pathinfo(basename($activity['thumb_url']), PATHINFO_EXTENSION);
                             $new_image_name = uniqid() . '.' . $ext;
-                            $destination_file = storage_path('app/public/activities/'.$new_image_name);
+                            $destination_file = storage_path('app/public/independent-activities/'.$new_image_name);
                             $source_file = $extracted_folder . '/' . basename($activity['thumb_url']);
                             \File::copy(
                                 storage_path($source_file), $destination_file
                                 );
-                            $activity['thumb_url'] = "/storage/activities/" . $new_image_name;
+                            $activity['thumb_url'] = "/storage/independent-activities/" . $new_image_name;
                         }
                     }
 
@@ -833,7 +837,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                             $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
 
-                            $newSubject['activity_id'] = $cloned_activity->id;
+                            $newSubject['independent_activity_id'] = $cloned_activity->id;
                             $newSubject['subject_id'] = $recSubject->id;
                             $newSubject['created_at'] = date('Y-m-d H:i:s');
                             $newSubject['updated_at'] = date('Y-m-d H:i:s');
@@ -853,7 +857,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                             $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
 
-                            $newEducationLevel['activity_id'] = $cloned_activity->id;
+                            $newEducationLevel['independent_activity_id'] = $cloned_activity->id;
                             $newEducationLevel['education_level_id'] = $recEducationLevel->id;
                             $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
                             $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
@@ -871,7 +875,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                         \Log::info($authorTags);
                         foreach ($authorTags as $authorTag) {
                             $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
-                            $newauthorTag['activity_id'] = $cloned_activity->id;
+                            $newauthorTag['independent_activity_id'] = $cloned_activity->id;
                             $newauthorTag['author_tag_id'] = $recAuthorTag->id;
                             $newauthorTag['created_at'] = date('Y-m-d H:i:s');
                             $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
