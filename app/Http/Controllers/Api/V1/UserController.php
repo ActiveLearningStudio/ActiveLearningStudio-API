@@ -744,8 +744,8 @@ class UserController extends Controller
      *
      * Returns the paginated response of the users with basic reporting.
      *
-     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @queryParam query for getting the search records by name and email. Example: Test
+     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam query for getting the search records by name and email. Example: Test
      *
      * @responseFile responses/admin/user/users_report.json
      *
