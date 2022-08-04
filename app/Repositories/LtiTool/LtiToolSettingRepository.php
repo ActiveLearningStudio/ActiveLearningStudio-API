@@ -129,7 +129,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $token)
     {
         $ltiToolSettingData = [
-            "user_id" => get_user_id_by_token($token),
+            "user_id" => request('user_id'),
             "organization_id" => $subOrganization->id,
             "tool_name" => $ltiToolSetting->tool_name,
             "tool_url" => $ltiToolSetting->tool_url,
