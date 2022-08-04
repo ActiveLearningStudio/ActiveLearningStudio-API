@@ -81,10 +81,6 @@ class IndependentActivityPolicy
             return true;
         }
 
-        if ($user->hasPermissionTo('independent-activity:view-author', $independentActivity->organization)) {
-            return true;
-        }
-
         if ($user->hasPermissionTo('independent-activity:edit-author', $independentActivity->organization)) {
             return true;
         }
