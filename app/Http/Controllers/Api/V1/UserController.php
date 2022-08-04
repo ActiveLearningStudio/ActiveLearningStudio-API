@@ -762,7 +762,9 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @queryParam suborganization id of an organization. Example: 1
+     * @urlParam suborganization id of an organization. Example: 1
+     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/export-notifications.json
      *
@@ -772,6 +774,7 @@ class UserController extends Controller
      */
     public function exportProjectList(Request $request, Organization $suborganization)
     {
+
         return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all(), $suborganization), 200);
     }
 
@@ -781,7 +784,9 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @queryParam suborganization id of an organization. Example: 1
+     * @urlParam suborganization id of an organization. Example: 1
+     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/independent-activity-export-notifications.json
      *
