@@ -108,10 +108,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
-
-            $queryParams['user_id'] = $authUser;
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
         } else {
             $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
             $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
