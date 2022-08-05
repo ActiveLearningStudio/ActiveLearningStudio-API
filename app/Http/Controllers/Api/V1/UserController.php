@@ -228,8 +228,10 @@ class UserController extends Controller
         $this->authorize('addUser', $suborganization);
         $data = $addNewUserrequest->validated();
 
-        if (isset($data['password'])) {
+        if (isset($data['password']) && !is_null($data['password'])) {
             $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
         }
         $data['remember_token'] = Str::random(64);
         $data['email_verified_at'] = now();

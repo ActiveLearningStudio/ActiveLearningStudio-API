@@ -36,7 +36,7 @@ class SuborganizationAddNewUser extends FormRequest
                 Rule::requiredIf( function () use ($email){
                     return User::where('email', $email)->exists() === FALSE;
                 }),
-                'string',
+                'nullable',
                 new StrongPassword
             ],
             'role_id' => 'required|integer|exists:organization_role_types,id',
