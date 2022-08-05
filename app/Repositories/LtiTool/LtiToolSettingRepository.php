@@ -123,13 +123,13 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
      * To clone Lti Tool Setting
      * @param LtiToolSetting $ltiToolSetting
      * @param Organization $subOrganization
-     * @param string $token
+     * @param int $userId
      * @return int id
      */
-    public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $token)
+    public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $userId)
     {
         $ltiToolSettingData = [
-            "user_id" => request('user_id'),
+            "user_id" => $userId,
             "organization_id" => $subOrganization->id,
             "tool_name" => $ltiToolSetting->tool_name,
             "tool_url" => $ltiToolSetting->tool_url,
@@ -142,8 +142,8 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
             "tool_custom_parameter" => $ltiToolSetting->tool_custom_parameter,
             "tool_content_selection_url" => $ltiToolSetting->tool_content_selection_url
         ];
-        $cloned_setting = $this->create($ltiToolSettingData);
-        return $cloned_setting['id'];
+        $clonedSetting = $this->create($ltiToolSettingData);
+        return $clonedSetting['id'];
     }
 
     /**
