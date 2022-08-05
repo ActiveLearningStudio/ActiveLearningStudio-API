@@ -108,7 +108,7 @@ class LmsController extends Controller
         $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
         $lms_organization_id = null;
 
-        if ($lmsSetting && $lmsSetting->lms_name === 'canvas') {
+        if ($lmsSetting) {
             $lms_organization_id = $lmsSetting->organization_id;
             $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $request->user_email);
             $userExists = $userRepository->findByField('email', $request->user_email);
