@@ -29,66 +29,48 @@ class UpgradeH5pVersionsSeeder extends Seeder
             ]);
         }
 
+        $activityItems = [
+            [
+                'title' => 'Fill In The Blanks',
+                'currentH5pLib' => 'H5P.Blanks 1.12',
+                'newH5pLib' => 'H5P.Blanks 1.14',
+            ],
+            [
+                'title' => 'True & False',
+                'currentH5pLib' => 'H5P.TrueFalse 1.6',
+                'newH5pLib' => 'H5P.TrueFalse 1.8',
+            ],
+            [
+                'title' => 'Drag & Drop',
+                'currentH5pLib' => 'H5P.DragQuestion 1.13',
+                'newH5pLib' => 'H5P.DragQuestion 1.14',
+            ],
+            [
+                'title' => 'Mark The Words',
+                'currentH5pLib' => 'H5P.MarkTheWords 1.9',
+                'newH5pLib' => 'H5P.MarkTheWords 1.11',
+            ],
+            [
+                'title' => 'Dialog Cards',
+                'currentH5pLib' => 'H5P.Dialogcards 1.8',
+                'newH5pLib' => 'H5P.Dialogcards 1.9',
+            ],
+            [
+                'title' => 'Drag Text',
+                'currentH5pLib' => 'H5P.DragText 1.8',
+                'newH5pLib' => 'H5P.DragText 1.10',
+            ],
 
-        // update fill in the blanks 1.12 to 1.14 in activity items
-        $fillInTheBlanksActivityItemsParams = ['title' => 'Fill In The Blanks', 'h5pLib' => 'H5P.Blanks 1.12'];
-        $fillInTheBlanksActivityItems = DB::table('activity_items')->where($fillInTheBlanksActivityItemsParams)->first();
-        if ($fillInTheBlanksActivityItems) {
-            DB::table('activity_items')->where($fillInTheBlanksActivityItemsParams)->update([
-                'h5pLib' => 'H5P.Blanks 1.14',
-                'updated_at' => $currentDate
-            ]);
-        }
-
-        // update true false 1.6 to 1.8 in activity items
-        $trueFalseActivityItemsParams = ['title' => 'True & False', 'h5pLib' => 'H5P.TrueFalse 1.6'];
-        $trueFalseActivityItems = DB::table('activity_items')->where($trueFalseActivityItemsParams)->first();
-        if ($trueFalseActivityItems) {
-            DB::table('activity_items')->where($trueFalseActivityItemsParams)->update([
-                'h5pLib' => 'H5P.TrueFalse 1.8',
-                'updated_at' => $currentDate
-            ]);
-        }
-
-        // update Drag & Drop 1.13 to 1.14 in activity items
-        $dragDropActivityItemsParams = ['title' => 'Drag & Drop', 'h5pLib' => 'H5P.DragQuestion 1.13'];
-        $dragDropActivityItems = DB::table('activity_items')->where($dragDropActivityItemsParams)->first();
-        if ($dragDropActivityItems) {
-            DB::table('activity_items')->where($dragDropActivityItemsParams)->update([
-                'h5pLib' => 'H5P.DragQuestion 1.14',
-                'updated_at' => $currentDate
-            ]);
-        }
+        ];
 
 
-        // update Mark The Words 1.9 to 1.11 in activity items
-        $markTheWordsActivityItemsParams = ['title' => 'Mark The Words', 'h5pLib' => 'H5P.MarkTheWords 1.9'];
-        $markTheWordsActivityItems = DB::table('activity_items')->where($markTheWordsActivityItemsParams)->first();
-        if ($markTheWordsActivityItems) {
-            DB::table('activity_items')->where($markTheWordsActivityItemsParams)->update([
-                'h5pLib' => 'H5P.MarkTheWords 1.11',
-                'updated_at' => $currentDate
-            ]);
-        }
-
-        // update Dialog cards 1.8 to 1.9 in activity items
-        $dialogCardsActivityItemsParams = ['title' => 'Dialog Cards', 'h5pLib' => 'H5P.Dialogcards 1.8'];
-        $dialogCardsActivityItems = DB::table('activity_items')->where($dialogCardsActivityItemsParams)->first();
-        if ($dialogCardsActivityItems) {
-            DB::table('activity_items')->where($dialogCardsActivityItemsParams)->update([
-                'h5pLib' => 'H5P.Dialogcards 1.9',
-                'updated_at' => $currentDate
-            ]);
-        }
-
-        // update Drag Text 1.8 to 1.10 in activity items
-        $dragTextActivityItemsParams = ['title' => 'Drag Text', 'h5pLib' => 'H5P.DragText 1.8'];
-        $dragTexActivityItems = DB::table('activity_items')->where($dragTextActivityItemsParams)->first();
-        if ($dragTexActivityItems) {
-            DB::table('activity_items')->where($dragTextActivityItemsParams)->update([
-                'h5pLib' => 'H5P.DragText 1.10',
-                'updated_at' => $currentDate
-            ]);
+        foreach ($activityItems as $activityItem) {
+            DB::table('activity_items')
+                ->where(['title' => $activityItem['title'], 'h5pLib' => $activityItem['currentH5pLib']])
+                ->update([
+                    'h5pLib' => $activityItem['newH5pLib'],
+                    'updated_at' => $currentDate
+                ]);
         }
 
 
