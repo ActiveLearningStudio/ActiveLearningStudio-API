@@ -219,7 +219,7 @@ class LtiToolSettingsController extends Controller
             'user_id' => 'required|exists:users,id',
             'organization_id' => 'required|exists:organizations,id'
         ]);
-        CloneLtiToolSetting::dispatch($ltiToolSetting, $suborganization, $request->bearerToken())->delay(now()->addSecond());
+        CloneLtiToolSetting::dispatch($ltiToolSetting, $suborganization, $requestData['user_id'], $request->bearerToken())->delay(now()->addSecond());
         return response([
             "message" => "Your request to clone Lti Tool Setting [$ltiToolSetting->tool_name] has been received and is being processed. <br> 
             You will be alerted in the notification section in the title bar when complete.",

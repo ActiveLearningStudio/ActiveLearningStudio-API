@@ -12,9 +12,9 @@ interface LtiToolSettingInterface extends EloquentRepositoryInterface
      * To clone Lti Tool Setting
      * @param LtiToolSetting $ltiToolSetting
      * @param Organization $subOrganization
-     * @param $token
+     * @param $userId
      */
-    public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $token);
+    public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $userId);
     /**
      * @param $userId integer, $orgId integer $mediaSourceId int
      * @return mixed
