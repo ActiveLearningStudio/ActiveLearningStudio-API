@@ -277,3 +277,67 @@ if (!function_exists('formatDuration')) {
         return $formatted;
     }
 }
+
+if (!function_exists('getVideoMediaSourceIdsArray')) {
+    /**     
+     * Get video media sources ids array
+     * @return array
+     */
+    function getVideoMediaSourceIdsArray()
+    {
+        return [
+                    'youtube' => 2,
+                    'kaltura' => 3,
+                    'safari_montage' => 4,
+                    'brightcove' => 5,
+                    'vimeo' => 6
+               ];
+    }
+}
+
+if (!function_exists('cloneIndependentActivityThumbnail')) {
+    /**
+     *
+     * @param type $thumbnail
+     * @param type $source
+     * @param type $destination
+     */
+    function cloneIndependentActivityThumbnail($thumbnail, $source, $destination)
+    {
+        $newImageUrl = config('app.default_thumb_url');
+
+        if (!empty($thumbnail) && !empty($source)) {
+
+            if (filter_var($thumbnail, FILTER_VALIDATE_URL) !== false) {
+                return $thumbnail;
+            }
+
+            if (!file_exists('storage/app/public/' . $destination)) {
+                mkdir('storage/app/public/' . $destination, 0777, true);
+            }
+
+            $sourceFile = storage_path("app/public/" . (str_replace('/storage/', '', $thumbnail)));
+            if (file_exists($sourceFile)) {
+                $ext = pathinfo(basename($thumbnail), PATHINFO_EXTENSION);
+                $newImageName = uniqid() . '.' . $ext;
+                ob_start();
+                $subDestFile = str_replace(basename($thumbnail), $newImageName, str_replace($source, $destination, $sourceFile));
+                
+                $destinationFile = str_replace("uploads_tmp", $source, $subDestFile);
+                if (strpos($destinationFile, 'uploads') !== false) {
+                    $destinationFile = str_replace("uploads", $source, $destinationFile);
+                }
+                
+                \File::copy($sourceFile, $destinationFile);
+                ob_get_clean();
+                $newImageUrl = "/storage/" . $destination . "/" . $newImageName;
+
+                if($source === "independent-activities") {
+                    unlink($sourceFile);
+                }
+            }
+        }
+
+        return $newImageUrl;
+    }
+}

@@ -8,6 +8,7 @@ use App\Services\CurrikiGo\TalentLMS\TalentLMS;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
 use App\Models\Activity;
+use App\Models\IndependentActivity;
 
 /**
  * Generic LMS Integration Service
@@ -68,5 +69,24 @@ class LMSIntegrationService implements LMSIntegrationServiceInterface
 			->addString('tincan.xml', $xml)
 			->close();
 		return 'public/xapifiles/' . Str::slug($activity->title, '-') . '.zip';
+    }
+
+	/**
+	* Get XAPI file contents for individual activity
+	* 
+	* @return string
+	*/
+	public function getXAPIFileForIndepActivity(IndependentActivity $independent_activity)
+	{
+		$filename = 'storage/xapifiles/' . 'indep-activity-' . Str::slug($independent_activity->id, '-') . '.zip';
+		$url = config('app.front_end_url') . '/activity/'.$independent_activity->id . '/shared?type=ind';
+		$html = view('api.xapihtml', ['url' => $url, 'title' => $independent_activity->title])->render();
+		$xml = view('api.xapixml', ['id' => $url, 'title' => $independent_activity->title, 'description' => $independent_activity->content])->render();
+		$zipper = new \Madnest\Madzipper\Madzipper;
+		$zipper->zip($filename)
+			->addString('index.html', $html)
+			->addString('tincan.xml', $xml)
+			->close();
+		return 'public/xapifiles/' . 'indep-activity-' . Str::slug($independent_activity->id, '-') . '.zip';
     }
 }

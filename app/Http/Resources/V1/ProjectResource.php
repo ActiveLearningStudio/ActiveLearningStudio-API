@@ -7,6 +7,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectResource extends JsonResource
 {
+    public function __construct($resource)
+    {
+        parent::$wrap = 'projects';
+        $this->resource = $resource;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -35,6 +40,7 @@ class ProjectResource extends JsonResource
             'team' => $this->team,
             'users' => $this->users,
             'gcr_project_visibility' => $this->organization->gcr_project_visibility,
+            'playlists' => $this->playlists,
         ];
     }
 }

@@ -185,9 +185,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * To get exported project list of last 10 days
      * @param $data
+     * @param $suborganization
      * @return mixed
      */
-    public function getUsersExportProjectList($data)
+    public function getUsersExportProjectList($data, $suborganization)
     {
         $days_limit = isset($data['days_limit']) ? $data['days_limit'] : config('constants.default-exported-projects-days-limit');
         
@@ -205,6 +206,41 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         
         $query =  $query->where('type', 'App\Notifications\ProjectExportNotification');
         $query =  $query->where('created_at', '>=', $date);
+        $query =  $query->where('organization_id', $suborganization->id);
+
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        }
+        
+        return  $query->paginate($perPage)->withQueryString();
+    }
+
+    /**
+     * To get exported project list of last 10 days
+     * @param $suborganization
+     * @param $data
+     * @return mixed
+     */
+    public function getUsersExportIndependentActivitiesList($suborganization, $data)
+    {
+        $days_limit = isset($data['days_limit']) ? $data['days_limit'] : config('constants.default-exported-independent-activities-days-limit');
+        
+        $date = Carbon::now()->subDays($days_limit);
+
+        $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = auth()->user()->notifications();
+        $q = $data['query'] ?? null;
+        // if simple request for getting project listing with search
+        if ($q) {
+            $query = $query->where(function($qry) use ($q) {
+                $qry->where('data', 'iLIKE', '%' .$q. '%');
+            });
+        }
+        
+        $query =  $query->where('type', 'App\Notifications\ActivityExportNotification');
+        $query =  $query->where('created_at', '>=', $date);
+        $query =  $query->where('organization_id', $suborganization->id);
 
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '') {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';

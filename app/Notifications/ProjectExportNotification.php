@@ -30,16 +30,22 @@ class ProjectExportNotification extends Notification
     public $projectName;
 
     /**
+     * @var integer
+     */
+    public $organizationId;
+    
+    /**
      * Create a new notification instance.
      * 
      *
      * @return void
      */
-    public function __construct($path, $userName, $projectName)
+    public function __construct($path, $userName, $projectName, $organizationId)
     {
         $this->path = basename($path);
         $this->userName = $userName;
         $this->projectName = $projectName;
+        $this->organizationId = $organizationId;
     }
 
     /**
@@ -80,6 +86,10 @@ class ProjectExportNotification extends Notification
 
         $message = "Project [$this->projectName] has been exported successfully. 
                     Please <a href='$file_path' target='_blank'>Click Here</a> to download the exported file";
+
+        \DB::table('notifications')
+                    ->where('id', $this->id)
+                    ->update(['organization_id' => $this->organizationId]);
         return [
             'message' => $message,
             'project' => $this->projectName,

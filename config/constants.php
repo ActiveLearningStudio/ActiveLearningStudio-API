@@ -22,6 +22,7 @@ return [
     'member-role-id' => 3,
     'default-pagination-limit-recent-projects' => env('DEFAULT_PAGINATION_LIMIT_RECENT_PROJECTS', 5),
     'default-exported-projects-days-limit' => env('DEFAULT_EXPORTED_PROJECTS_DAYS_LIMIT', 10),
+    'default-exported-independent-activities-days-limit' => env('DEFAULT_EXPORTED_INDEPENDENT_ACTIVITIES_DAYS_LIMIT', 10),
     // for admin role
     'admin-role-id' => 1,
     'default-pagination-per-page' => env('DEFAULT_PAGINATION_PER_PAGE', 10),

@@ -26,6 +26,18 @@ class ProjectPolicy
     }
 
     /**
+     * Determine whether the "author" user can view any projects.
+     *
+     * @param User $user
+     * @param Organization $suborganization
+     * @return mixed
+     */
+    public function viewAnyByAuthor(User $user, Organization $suborganization)
+    {
+        return $user->hasPermissionTo('organization:view-all-project', $suborganization);
+    }
+
+    /**
      * Determine whether the user can view the project.
      *
      * @param User $user

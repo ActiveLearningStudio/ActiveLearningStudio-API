@@ -50,9 +50,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * To fetch recent public projects
      *
      * @param $default_email
+     * @param $request
      * @return Project $projects
      */
-    public function fetchDefault($default_email);
+    public function fetchDefault($default_email, $request);
 
     /**
      * To reorder the list of projects
@@ -129,9 +130,9 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      */
     public function toggleStarter($project, $index);
 
-    /** 
+    /**
      * To export project and associated playlists
-     * 
+     *
      * @param $authUser
      * @param Project $project
      * @throws GeneralException
@@ -176,4 +177,22 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      * @return array
      */
     public function getUserProjectIdsInOrganization($authenticatedUser, $organization);
+
+    /**
+     * Get user Favorite projects
+     *
+     * @param $request
+     * @param $suborganization
+     * @return array
+     */
+    public function getFavoriteProjects($request, $suborganization);
+
+    /**
+     * Get All Projects of login user
+     *
+     * @param $request
+     * @param $suborganization
+     * @return array
+     */
+    public function getProjects($request, $suborganization);
 }

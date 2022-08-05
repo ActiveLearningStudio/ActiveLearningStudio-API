@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\V1\ExportedProjectsResource;
+use App\Http\Resources\V1\ExportedIndependentActivitiesResource;
 use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
 use App\Notifications\NewUserNotification;
@@ -227,7 +228,11 @@ class UserController extends Controller
         $this->authorize('addUser', $suborganization);
         $data = $addNewUserrequest->validated();
 
-        $data['password'] = Hash::make($data['password']);
+        if (isset($data['password']) && !is_null($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
         $data['remember_token'] = Str::random(64);
         $data['email_verified_at'] = now();
 
@@ -244,19 +249,19 @@ class UserController extends Controller
                                                     'message'
                                                 ]), $userObject->id);
                 $user = $userObject;
-                                                
+
             } else {
                 $user = $this->userRepository->create(Arr::except($data, ['role_id']));
             }
 
             if (!$suborganization->users()->where('user_id', $user->id)->exists()) {
                 $suborganization->users()->attach($user->id, ['organization_role_type_id' => $data['role_id']]);
-            } 
+            }
 
             if (isset($data['send_email']) && $data['send_email'] === true) {
                 $user->notify(new NewUserNotification($data['message']));
             }
-            
+
             return response([
                 'user' => new UserResource($this->userRepository->find($user->id)),
                 'message' => 'User has been created successfully.',
@@ -741,8 +746,8 @@ class UserController extends Controller
      *
      * Returns the paginated response of the users with basic reporting.
      *
-     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @queryParam query for getting the search records by name and email. Example: Test
+     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam query for getting the search records by name and email. Example: Test
      *
      * @responseFile responses/admin/user/users_report.json
      *
@@ -758,19 +763,41 @@ class UserController extends Controller
      * Get All User Export list
      *
      * Get a list of the users exported project
-     *  
-     * @queryParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @queryParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
-     * 
+     *
+     * @urlParam suborganization id of an organization. Example: 1
+     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     *
      * @responseFile responses/notifications/export-notifications.json
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function exportProjectList(Request $request, Organization $suborganization)
+    {
+
+        return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all(), $suborganization), 200);
+    }
+
+
+    /**
+     * Get All User Export list
+     *
+     * Get a list of the users exported project
+     *
+     * @urlParam suborganization id of an organization. Example: 1
+     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     *
+     * @responseFile responses/notifications/independent-activity-export-notifications.json
      *
      * @param Request $request
      * @return Response
      */
-    public function exportProjectList(Request $request)
+    public function exportIndependentActivitiesList(Organization $suborganization, Request $request)
     {
-        
-        return ExportedProjectsResource::collection($this->userRepository->getUsersExportProjectList($request->all()), 200);
+        return ExportedIndependentActivitiesResource::collection($this->userRepository->getUsersExportIndependentActivitiesList($suborganization, $request->all()), 200);
     }
 
     /**
@@ -789,13 +816,13 @@ class UserController extends Controller
      *     "Notification with provided id does not exists."
      *   ]
      * }
-     * 
+     *
      *  @response 500 {
      *   "errors": [
      *     "Link has expired."
      *   ]
      * }
-     * 
+     *
      *  @response 500 {
      *   "errors": [
      *     "Not an export notification."
@@ -813,20 +840,20 @@ class UserController extends Controller
                 'errors' => ['Authentication Failed'],
             ], 500);
         }
-        
+
         $user_id = get_user_id_by_token($param);
         $user = User::find($user_id);
         if ($user) {
             $notification_detail = $user->notifications()->find($notification_id);
-            
+
             if ($notification_detail) {
                 $data = $notification_detail->data;
-            
-                if ($notification_detail->type === "App\Notifications\ProjectExportNotification") {
+
+                if ($notification_detail->type === "App\Notifications\ProjectExportNotification" || $notification_detail->type === "App\Notifications\ActivityExportNotification") {
                     if (isset($data['file_name'])) {
                     $file_path = storage_path('app/public/exports/'.$data['file_name']);
                     if (!empty($data['file_name']) && file_exists($file_path)) {
-                            return response()->download($file_path, basename($file_path)); 
+                            return response()->download($file_path, basename($file_path));
                     }
                     return response([
                             'errors' => ['Link has expired.'],

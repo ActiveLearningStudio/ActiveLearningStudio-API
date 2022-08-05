@@ -5,6 +5,7 @@ namespace App\Services\CurrikiGo;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Models\Project;
 use App\Models\Activity;
+use App\Models\IndependentActivity;
 
 /**
  * Interface for the Generic LMS Integration Service
@@ -46,4 +47,11 @@ interface LMSIntegrationServiceInterface
      * @return string
      */
     public function getXAPIFile(Activity $activity);
+
+    /**
+	* Get XAPI file contents for individual activity
+	* 
+	* @return string
+	*/
+	public function getXAPIFileForIndepActivity(IndependentActivity $independent_activity);
 }
