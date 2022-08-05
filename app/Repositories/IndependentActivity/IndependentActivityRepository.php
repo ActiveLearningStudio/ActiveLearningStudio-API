@@ -108,10 +108,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
-
-            $queryParams['user_id'] = $authUser;
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
         } else {
             $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
             $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
@@ -646,7 +644,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $content_json_file = '/exports/'.$activity_dir_name . '/' . $independent_activity->h5p_content_id . '.json';
         Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
 
-        if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
+        if (!empty($independent_activity->thumb_url) && filter_var($independent_activity->thumb_url, FILTER_VALIDATE_URL) == false) {
             $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $independent_activity->thumb_url)));
             $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
             if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {

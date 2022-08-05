@@ -111,7 +111,6 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Update Lti Tool Setting
-     * Updates the lti_tool_types and lti_tool_types_config table in database.
      * @urlParam id required The Id of a lti_tool_settings table Example: 1
      * @response {
      *   "message": "Lti tool setting data updated successfully!",
@@ -152,7 +151,6 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Delete Lti Tool Setting
-     * Deletes the lti_tool_types table from database.
      * @urlParam id required The Id of a lti_tool_settings Example: 1
      * @response {
      *   "message": "Lti Tool setting deleted successfully!",
@@ -198,7 +196,9 @@ class LtiToolSettingsController extends Controller
      */
     public function clone(Request $request, Organization $suborganization, LtiToolSetting $ltiToolSetting)
     {
-        $requestData = $request->all();
+        $requestData = $request->only([
+            'user_id'
+        ]);
         $requestData['tool_name'] = $ltiToolSetting->tool_name;
         $requestData['tool_url'] = $ltiToolSetting->tool_url;
         $requestData['lti_version'] = $ltiToolSetting->lti_version;
@@ -206,7 +206,6 @@ class LtiToolSettingsController extends Controller
         $requestData['tool_consumer_key'] = $ltiToolSetting->tool_consumer_key;
         $requestData['tool_secret_key'] = $ltiToolSetting->tool_secret_key;
         $requestData['tool_content_selection_url'] = $ltiToolSetting->tool_content_selection_url;
-        $requestData['user_id'] = $ltiToolSetting->user_id;
         $requestData['organization_id'] = $ltiToolSetting->organization_id;
         $request->merge($requestData);
         $validated = $request->validate([
