@@ -24,3 +24,11 @@
 # <IfModule mod_headers.c>
 #     Header set Access-Control-Allow-Origin "*"
 # </IfModule>
+
+<FilesMatch "\.(ttf|otf|eot|woff|woff2)$">
+    <IfModule mod_headers.c>
+        SetEnvIf Origin "http(s)?://(www\.)?(currikistudio.org|my.currikistudio.org)$" AccessControlAllowOrigin=$0
+        Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+        Header merge Vary Origin
+    </IfModule>
+</FilesMatch>
