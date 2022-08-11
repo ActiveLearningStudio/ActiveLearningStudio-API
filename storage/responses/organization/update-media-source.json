@@ -10,7 +10,8 @@
             "deleted_at": null,
             "pivot": {
                 "organization_id": 1,
-                "media_source_id": 1
+                "media_source_id": 1,
+                "h5p_library": "H5P.AudioRecorder 1.0"
             }
         },
         {
@@ -22,7 +23,8 @@
             "deleted_at": null,
             "pivot": {
                 "organization_id": 1,
-                "media_source_id": 7
+                "media_source_id": 7,
+                "h5p_library": "H5P.CoursePresentation 1.22"
             }
         }
     ]

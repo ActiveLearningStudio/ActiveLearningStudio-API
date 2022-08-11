@@ -3,8 +3,6 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\Lowercase;
-use Illuminate\Validation\Rule;
 
 class SuborganizationUpdateMediaSource extends FormRequest
 {
@@ -27,7 +25,8 @@ class SuborganizationUpdateMediaSource extends FormRequest
     {
         return [
             'media_source_ids' => 'nullable|array',
-            'media_source_ids.*' => 'required|exists:App\Models\MediaSource,id',
+            'media_source_ids.*.media_source_id' => 'required|exists:App\Models\MediaSource,id',
+            'media_source_ids.*.h5p_library' => 'nullable',
         ];
     }
 
