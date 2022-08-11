@@ -925,7 +925,7 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam media_source_ids array required Ids of a media source type Example: 1
-     * @bodyParam h5p_library string required name of H5p Library Example: H5P.AudioRecorder 1.0
+     * @bodyParam h5p_library string optional name of H5p Library Example: H5P.AudioRecorder 1.0
      *
      * @responseFile responses/organization/update-media-source.json
      *
