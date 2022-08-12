@@ -19,6 +19,8 @@ Route::post('admin/login', 'Auth\AuthController@adminLogin')->name('admin.login'
 Route::post('login/google', 'Auth\AuthController@loginWithGoogle');
 Route::post('login/sso', 'Auth\AuthController@ltiSsoLogin1p0');
 Route::post('login/lti-sso', 'Auth\AuthController@ltiSsoLogin');
+Route::post('login/wordpress-sso', 'Auth\AuthController@wordpressSSO');
+Route::get('login/wordpress-sso-settings/{clientId}', 'Auth\AuthController@getWordpressSSODefaultSettings');
 Route::get('oauth/{provider}/redirect', 'Auth\AuthController@oauthRedirect');
 Route::get('oauth/{provider}/callback', 'Auth\AuthController@oauthCallBack');
 Route::post('forgot-password', 'Auth\ForgotPasswordController@sendResetLinkEmail');
@@ -50,7 +52,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('subscribe', 'UserController@subscribe');
         Route::get('users/me', 'UserController@me');
         Route::get('users/notifications', 'UserController@listNotifications');
-        Route::get('users/notifications/export-list', 'UserController@exportProjectList');
+        Route::get('suborganization/{suborganization}/users/notifications/export-list', 'UserController@exportProjectList');
+        Route::get('suborganization/{suborganization}/users/notifications/export-list-independent-activities', 'UserController@exportIndependentActivitiesList');
         Route::get('users/notifications/read-all', 'UserController@readAllNotification');
         Route::post('users/notifications/{notification}/read', 'UserController@readNotification');
         Route::post('users/notifications/{notification}/delete', 'UserController@deleteNotification');
@@ -92,6 +95,22 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganization/{suborganization}/get-groups', 'GroupController@getOrgGroups');
         Route::apiResource('suborganization.groups', 'GroupController');
 
+        //Independent Activity Layouts
+        Route::apiResource('suborganization.independent-activities', 'IndependentActivityController');
+        Route::post('independent-activities/upload-thumb', 'IndependentActivityController@uploadThumb');
+        Route::get('independent-activities/{independent_activity}/detail', 'IndependentActivityController@detail');
+        Route::get('independent-activities/{independent_activity}/h5p', 'IndependentActivityController@h5p');
+        Route::get('independent-activities/{independent_activity}/h5p-resource-settings', 'IndependentActivityController@getH5pResourceSettings');
+        Route::get('independent-activities/{independent_activity}/share', 'IndependentActivityController@share');
+        Route::get('independent-activities/{independent_activity}/remove-share', 'IndependentActivityController@removeShare');
+        Route::get('suborganization/{suborganization}/independent-activities/{independent_activity}/search-preview', 'IndependentActivityController@searchPreview');
+        Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/clone', 'IndependentActivityController@clone');
+        Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/export', 'IndependentActivityController@exportIndependentActivity');
+        Route::post('suborganization/{suborganization}/independent-activities/import', 'IndependentActivityController@importIndependentActivity');
+        Route::post('suborganization/{suborganization}/independent-activities/{independent_activity}/playlist/{playlist}/copy-to-playlist', 'IndependentActivityController@copyIndependentActivityIntoPlaylist');
+        Route::post('suborganization/{suborganization}/independent-activities/playlist/{playlist}/move-to-playlist', 'IndependentActivityController@moveIndependentActivityIntoPlaylist');
+        Route::post('suborganization/{suborganization}/independent-activities/activity/{activity}/copy-to-independent-activity', 'IndependentActivityController@convertActvityIntoIndependentActivity');
+        Route::get('independent-activities/{id}/h5p-activity', 'IndependentActivityController@h5pActivity');
         //Projects
         Route::get('suborganization/{suborganization}/projects/{project}/search-preview', 'ProjectController@searchPreview');
 
@@ -114,7 +133,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganization/{suborganization}/projects/{project}/remove-share', 'ProjectController@removeShare');
         Route::post('suborganization/{suborganization}/projects/{project}/favorite', 'ProjectController@favorite');
         Route::get('suborganization/{suborganization}/team-projects', 'ProjectController@getTeamProjects');
-        Route::apiResource('suborganization.projects', 'ProjectController');
+        Route::apiResource('suborganization/{suborganization}/projects', 'ProjectController');
 
         Route::post('projects/{project}/playlists/reorder', 'PlaylistController@reorder');
         Route::post('projects/{project}/playlists/{playlist}/clone', 'PlaylistController@clone');
@@ -179,10 +198,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::any('ajax/reader/getScore', 'MobileAppAjaxController@getScores')->name('h5p.ajax.reader-getScore');
         });
 
-        // Elasticsearch
+        // Search
         Route::get('search', 'SearchController@search');
         Route::get('search/advanced', 'SearchController@advance');
         Route::get('search/dashboard', 'SearchController@dashboard');
+        Route::get('search/independent-activities', 'SearchController@independentActivities');
 
         // Suborganizations
         Route::get('suborganizations/{suborganization}/user-has-permission', 'SuborganizationController@userHasPermission')->name('suborganizations.user-has-permission');
@@ -216,12 +236,18 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
         Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
         Route::post('projects/starter/{flag}', 'ProjectController@toggleStarter');
+
+        // independent-activities
+        Route::get('suborganizations/{suborganization}/independent-activities', 'IndependentActivityController@getOrgIndependentActivities')->name('suborganizations.get-independent-activities');
+        Route::get('independent-activities/{independent_activity}/indexes/{index}', 'IndependentActivityController@updateIndex');
+
         // lms-settings
         Route::apiResource('suborganizations/{suborganization}/lms-settings', 'LmsSettingsController');
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         // lti-tool-settings
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
         Route::post('suborganizations/{suborganization}/lti-tool-settings/{ltiToolSetting}/clone', 'LtiTool\LtiToolSettingsController@clone');
+        Route::get('suborganizations/{suborganization}/lti-tool-type', 'LtiTool\LtiToolSettingsController@getLTIToolTypeList');
 
         // brightcove-api-settings
         Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');
@@ -290,6 +316,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 'GoogleClassroomController@publishPlaylistToGoogleClassroom');
             Route::post('projects/{project}/playlists/{playlist}/activities/{activity}/publish',
                 'GoogleClassroomController@publishActivityToGoogleClassroom');
+            Route::post('activities/{independent_activity}/publish',
+                'GoogleClassroomController@publishIndependentActivityToGoogleClassroom');
         });
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
@@ -298,12 +326,15 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('organizations/search', 'OrganizationController@searchOrganizationByName')->name('organizations.search');
     });
     Route::get('go/getxapifile/{activity}', 'CurrikiGo\LmsServicesController@getXAPIFile');
+    Route::get('go/independent_activity/getxapifile/{independent_activity}', 'IndependentActivityController@getXAPIFileForIndepActivity');
     // public route for get user's shared projects
     Route::post('projects/shared', 'UserController@sharedProjects');
     
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
+    Route::get('independent-activities/{independent_activity}/h5p-resource-settings-shared', 'IndependentActivityController@getH5pResourceSettingsShared');
     // H5P Activity public route
     Route::get('h5p/activity/{activity}/visibility/{visibility}', 'H5pController@showByActivity');
+    Route::get('h5p/independent-activity/{independent_activity}/visibility/{visibility}', 'H5pController@showByIndependentActivity');
     // Route to support H5P Editor's core js library file upload with 'new XMLHttpRequest()'
     Route::any('h5p/ajax/files', '\Djoudi\LaravelH5p\Http\Controllers\AjaxController@files')->name('h5p.ajax.files');
     // H5P export public route for H5P toolbar and cloning
@@ -317,6 +348,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
     Route::get('go/lms/teams', 'CurrikiGo\LmsController@teams');
     Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
+    Route::get('go/lms/independent-activities', 'CurrikiGo\LmsController@independentActivities');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments

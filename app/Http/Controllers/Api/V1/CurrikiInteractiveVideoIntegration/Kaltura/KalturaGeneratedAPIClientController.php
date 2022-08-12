@@ -63,8 +63,9 @@ class KalturaGeneratedAPIClientController extends Controller
           'searchText'
       ]);
       $auth = \Auth::user();
+      $mediaSourcesIds = getVideoMediaSourceIdsArray();
       if ($auth && $auth->id && isset($getParam['organization_id']) && $getParam['organization_id'] > 0 ) {
-        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserOrgAndToolType($auth->id, $getParam['organization_id'], 'kaltura');
+        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByUserOrgAndToolType($auth->id, $getParam['organization_id'], $mediaSourcesIds['kaltura']);
         // Credentials For Kaltura Session
         if ($ltiRowResult) {
           $secret = $ltiRowResult->tool_secret_key;

@@ -13,6 +13,12 @@ chmod 777 -R /var/www/html/storage &
 service cron start &
 
 php /var/www/html/artisan queue:work --timeout=0 &
+
+echo "192.168.100.1 learn.noovo.co" >> /etc/hosts
+echo "192.168.100.1 lms.noovo.co" >> /etc/hosts
+echo "192.168.100.1 tsugi.noovo.co" >> /etc/hosts
+echo "192.168.100.1 trax.noovo.co" >> /etc/hosts
+
 touch /var/www/html/health.ok
 
 

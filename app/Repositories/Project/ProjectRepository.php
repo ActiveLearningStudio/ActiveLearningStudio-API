@@ -234,11 +234,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * To fetch project based on LMS settings lti client id and user email
      *
      * @param $lti_client_id
+     * @param $user_email
+     * @param $searchTerm
+     * @param $lms_organization_id
      * @return Project $project
      */
-    public function fetchByLtiClientAndEmail($lti_client_id, $user_email)
+    public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm, $lms_organization_id)
     {
-        return $this->model->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
+        return $this->model->where('organization_id', $lms_organization_id)->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
             $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
                 $query_lmssetting->where('lti_client_id', $lti_client_id);
                 $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
@@ -294,6 +297,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $plistActivity['id'] = $activity->id;
                 $plistActivity['type'] = $activity->type;
                 $plistActivity['title'] = $activity->title;
+                $plistActivity['order'] = $activity->order;
                 $plistActivity['library_name'] = $h5pContent ? $h5pContent->library_name : null;
                 $plistActivity['thumb_url'] = $activity->thumb_url;
                 $plist['activities'][] = $plistActivity;
@@ -324,11 +328,30 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $default_email
      * @return Project $projects
      */
-    public function fetchDefault($default_email)
+    public function fetchDefault($default_email, $data)
     {
-        return $this->model->whereHas('users', function ($query_user) use ($default_email) {
+        $query = $this->model;
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+        }
+        $query = $query->whereHas('users', function ($query_user) use ($default_email) {
             $query_user->where('email', $default_email);
-        })->get();
+        });
+
+        if (!isset($data['size'])) {
+            return $query->orderBy('order', 'ASC')->get();
+        }
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($data['size'])->withQueryString();
     }
 
     /**
@@ -665,24 +688,24 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                                                                 $activityTitle . '/' . $activityTitle . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
 
-                // Export Subject 
+                // Export Subject
                 $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                                     $activityTitle . '/activity_subject.json';
-                
+
                 Storage::disk('public')->put($activitySubjectJsonFile, $activity->subjects);
 
                 // Export Education level
 
                 $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                                     $activityTitle . '/activity_education_level.json';
-                
+
                 Storage::disk('public')->put($activityEducationLevelJsonFile, $activity->educationLevels);
 
                 // Export Author
 
                 $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                                                                     $activityTitle . '/activity_author_tag.json';
-                
+
                 Storage::disk('public')->put($activityAuthorTagJsonFile, $activity->authorTags);
 
                 $decoded_content = json_decode($activity->h5p_content,true);
@@ -1028,6 +1051,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $team->projects()->attach($project);
             }
 
+            if ($project) {
+                $playlistData['title'] = 'playlist1';
+                $playlistData['order'] = 1;
+
+                $playlist = $project->playlists()->create($playlistData);
+            }
+
             return $project;
         });
     }
@@ -1051,19 +1081,94 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $authenticatedUserOrgProjectIdsString;
     }
 
+    /**
+     * Get Activity Grade
+     *
+     * @param $projectId
+     * @param $activityParam
+     * @return response
+     */
     private function getActivityGrade($projectId, $activityParam)
     {
         $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
-        
+
         $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
-        
+
         $resource = new ActivityResource($activity);
-        
+
         // Get first Category
-        if ($resource->$activityParam->isNotEmpty()) { 
+        if ($resource->$activityParam->isNotEmpty()) {
             return $resource->$activityParam[0]->name;
         }
         return null;
 
+    }
+
+    /**
+     * Get login user Projects
+     *
+     * @param $suborganization
+     * @param $data
+     * @return response
+     */
+    public function getProjects($suborganization, $data) {
+
+        $authenticated_user = auth()->user();
+        $query = $authenticated_user->projects();
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where(function($qry) use ($data) {
+                $qry->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+            });
+        }
+
+        $query = $query->whereNull('team_id')->where('organization_id', $suborganization->id);
+
+        if (!isset($data['size'])) {
+            return $query->orderBy('order', 'ASC')->get();
+        }
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($data['size'])->withQueryString();
+    }
+
+    /**
+     * Get Favorite Projects
+     *
+     * @param $suborganization
+     * @param $data
+     * @return response
+     */
+    public function getFavoriteProjects($suborganization, $data) {
+
+        $authenticated_user = auth()->user();
+        $query = $authenticated_user->favoriteProjects();
+
+        if (isset($data['query']) && $data['query'] != '') {
+            $query = $query->where('name', 'iLIKE', '%' . $data['query'] . '%')
+                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+        }
+
+        $query = $query->wherePivot('organization_id', $suborganization->id);
+
+        if (!isset($data['size'])) {
+            return $query->orderBy('order', 'ASC')->get();
+        }
+
+        if (isset($data['order_by_column'])) {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query = $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query = $query->orderBy('order', 'ASC');
+        }
+
+        return $query->paginate($data['size'])->withQueryString();
     }
 }

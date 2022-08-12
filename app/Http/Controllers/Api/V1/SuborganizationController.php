@@ -783,8 +783,7 @@ class SuborganizationController extends Controller
      */
     public function updateRole(SuborganizationUpdateRole $request, Organization $suborganization)
     {
-        // $this->authorize('updateRole', $suborganization);
-        //  have disable temporaily until frontend stuff is fully completed.
+        $this->authorize('updateRole', $suborganization);
         $data = $request->validated();
 
         $role = $suborganization->roles->where("id", $data['role_id']);

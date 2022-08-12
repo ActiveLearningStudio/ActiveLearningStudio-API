@@ -32,7 +32,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-        $query = $this->model->with(['user', 'organization']);
+        $query = $this->model->with(['user', 'organization', 'mediaSources']);
         if (isset($data['query']) && $data['query'] !== '') {
             $query->where(function ($query) use ($data) {
                 $query = $query->whereHas('user', function ($qry) use ($data) {
@@ -40,7 +40,6 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
                 });
                 $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');
                 $query->orWhere('tool_url', 'iLIKE', '%' . $data['query'] . '%');
-                $query->orWhere('tool_type', 'iLIKE', '%' . $data['query'] . '%');
             });
         }
         if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
@@ -49,8 +48,10 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
             $query->orderBy($data['order_by_column'], $orderByType);
         }
 
-        if (isset($data['filter']) && $data['filter'] !== '') {
-            $query = $query->where('tool_type', $data['filter']);
+        if (isset($data['filter']) && $data['filter'] > 0) {
+            $query = $query->whereHas('mediaSources', function ($qry) use ($data) {
+                $qry->where('id', $data['filter']);
+            });
         }
         return $query->where('organization_id', $suborganization->id)->paginate($perPage)->withQueryString();
     }
@@ -128,13 +129,13 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function clone(LtiToolSetting $ltiToolSetting, Organization $subOrganization, $token)
     {
         $ltiToolSettingData = [
-            "user_id" => get_user_id_by_token($token),
+            "user_id" => request('user_id'),
             "organization_id" => $subOrganization->id,
             "tool_name" => $ltiToolSetting->tool_name,
             "tool_url" => $ltiToolSetting->tool_url,
             "tool_domain" => $ltiToolSetting->tool_domain,
             "lti_version" => $ltiToolSetting->lti_version,
-            "tool_type" => $ltiToolSetting->tool_type,
+            "media_source_id" => $ltiToolSetting->media_source_id,
             "tool_consumer_key" => $ltiToolSetting->tool_consumer_key,
             "tool_secret_key" => $ltiToolSetting->tool_secret_key,
             "tool_description" => $ltiToolSetting->tool_description,
@@ -146,13 +147,13 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     }
 
     /**
-     * @param $userId integer, $orgId integer $toolType string
+     * @param $userId integer, $orgId integer $mediaSourceId int
      * @return mixed
      */
-    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $toolType)
+    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $mediaSourceId)
     {
         try {
-            return $this->model->where([['user_id','=', $userId],['organization_id','=', $orgId],['tool_type','=', $toolType]])->first();
+            return $this->model->where([['user_id','=', $userId],['organization_id','=', $orgId],['media_source_id','=', $mediaSourceId]])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

@@ -57,7 +57,7 @@ class LtiToolSettingsController extends Controller
     /**
      * Get Lti Tool Setting
      * Get the specified lti tool setting data.
-     * @urlParam lti_tool_types required The Id of a lti_tool_types table Example: 1
+     * @urlParam id required The Id of a lti_tool_settings table Example: 1
      * @urlParam Organization $suborganization
      * @responseFile responses/admin/lti-tool/lti-tool-settings
      * @return LtiToolSettingResource
@@ -67,12 +67,12 @@ class LtiToolSettingsController extends Controller
     public function show(Organization $suborganization, $id)
     {
         $setting = $this->ltiToolSettingRepository->find($id);
-        return new LtiToolSettingResource($setting->load('user', 'organization'));
+        return new LtiToolSettingResource($setting->load('user', 'organization', 'mediaSources'));
     }
 
     /**
      * Create Lti tool Setting
-     * Creates the new lms setting in database.     *
+     * Creates the new lti tool setting in database.     *
      * @response {
      *   "message": "Lti Tool Setting created successfully!",
      *   "data": ["Created Setting Data Array"]
@@ -95,7 +95,7 @@ class LtiToolSettingsController extends Controller
             'tool_name',
             'tool_url',
             'lti_version',
-            'tool_type',
+            'media_source_id',
             'tool_description',
             'tool_custom_parameter',
             'tool_consumer_key',
@@ -106,13 +106,12 @@ class LtiToolSettingsController extends Controller
         $data['tool_domain'] = $parse['host'];
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->create($data);
-        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization'))], 200);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
     }
 
     /**
      * Update Lti Tool Setting
-     * Updates the lti_tool_types and lti_tool_types_config table in database.
-     * @urlParam lti_tool_types required The Id of a lti_tool_types table Example: 1
+     * @urlParam id required The Id of a lti_tool_settings table Example: 1
      * @response {
      *   "message": "Lti tool setting data updated successfully!",
      *   "data": ["Updated Lti Tool setting data array"]
@@ -136,7 +135,7 @@ class LtiToolSettingsController extends Controller
             'tool_name',
             'tool_url',
             'lti_version',
-            'tool_type',
+            'media_source_id',
             'tool_description',
             'tool_custom_parameter',
             'tool_consumer_key',
@@ -147,13 +146,12 @@ class LtiToolSettingsController extends Controller
         $data['tool_domain'] = $parse['host'];
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->update($id, $data);
-        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization'))], 200);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
     }
 
     /**
      * Delete Lti Tool Setting
-     * Deletes the lti_tool_types table from database.
-     * @urlParam lti_tool_types required The Id of a lti_tool_types Example: 1
+     * @urlParam id required The Id of a lti_tool_settings Example: 1
      * @response {
      *   "message": "Lti Tool setting deleted successfully!",
      * }
@@ -198,22 +196,23 @@ class LtiToolSettingsController extends Controller
      */
     public function clone(Request $request, Organization $suborganization, LtiToolSetting $ltiToolSetting)
     {
-        $requestData = $request->all();
+        $requestData = $request->only([
+            'user_id'
+        ]);
         $requestData['tool_name'] = $ltiToolSetting->tool_name;
         $requestData['tool_url'] = $ltiToolSetting->tool_url;
         $requestData['lti_version'] = $ltiToolSetting->lti_version;
-        $requestData['tool_type'] = $ltiToolSetting->tool_type;
+        $requestData['media_source_id'] = $ltiToolSetting->media_source_id;
         $requestData['tool_consumer_key'] = $ltiToolSetting->tool_consumer_key;
         $requestData['tool_secret_key'] = $ltiToolSetting->tool_secret_key;
         $requestData['tool_content_selection_url'] = $ltiToolSetting->tool_content_selection_url;
-        $requestData['user_id'] = $ltiToolSetting->user_id;
         $requestData['organization_id'] = $ltiToolSetting->organization_id;
         $request->merge($requestData);
         $validated = $request->validate([
             'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
             'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
             'lti_version' => 'required|max:20',
-            'tool_type' => 'required|in:kaltura,safari_montage,other',
+            'media_source_id' => 'required|exists:media_sources,id',
             'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
             'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
             'tool_content_selection_url' => 'nullable|url|max:255',
@@ -225,5 +224,17 @@ class LtiToolSettingsController extends Controller
             "message" => "Your request to clone Lti Tool Setting [$ltiToolSetting->tool_name] has been received and is being processed. <br> 
             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
+    }
+
+    /**
+     * Get Tool Type For LTI Tool Settings
+     * @urlParam Organization $suborganization
+     * @responseFile responses/admin/lti-tool/lti-tool-settings
+     * @return LtiToolSettingResource
+     */
+    public function getLTIToolTypeList(Organization $suborganization)
+    {
+        $ltiToolType = $suborganization->mediaSources->where('media_type', 'Video');
+        return new LtiToolSettingResource($ltiToolType);
     }
 }

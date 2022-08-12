@@ -1,0 +1,36 @@
+{
+	"data": [
+		{
+			"id": "e66ce14f-e8c0-4fcd-8e9c-0a53453c6da0",
+			"project": "Test new Drag 1.14",
+			"created_at": "17-Jun-2022",
+			"will_expire_on": "27-Jun-2022",
+			"link": "storage/exports/independent_activity-62ac5c287b011.zip",
+			"organization_id": 1
+		},
+		{
+			"id": "e1ef3916-645e-40ed-81b3-0143d9fc19f6",
+			"project": "Taurus 10 Jun 2022 edited-COPY edited",
+			"created_at": "17-Jun-2022",
+			"will_expire_on": "27-Jun-2022",
+			"link": "storage/exports/independent_activity-62ac5c2566576.zip",
+			"organization_id": 1
+		}
+	],
+	
+    "links": {
+		"first": "suborganization/1/users/notifications/export-list-independent-activities?size=10&page=1",
+		"last": "suborganization/1/users/notifications/export-list-independent-activities?size=10&page=1",
+		"prev": null,
+		"next": null
+	},
+    "meta": {
+		"current_page": 1,
+		"from": 1,
+		"last_page": 1,
+		"path": "suborganization/1/users/notifications/export-list-independent-activities",
+		"per_page": "10",
+		"to": 2,
+		"total": 2
+	}
+}
