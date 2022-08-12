@@ -925,6 +925,7 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam media_source_ids array required Ids of a media source type Example: 1
+     * @bodyParam h5p_library string optional name of H5p Library Example: H5P.AudioRecorder 1.0
      *
      * @responseFile responses/organization/update-media-source.json
      *
@@ -945,7 +946,14 @@ class SuborganizationController extends Controller
      */
     public function updateMediaSource(SuborganizationUpdateMediaSource $request, Organization $suborganization)
     {
-        $result = $suborganization->mediaSources()->sync($request->media_source_ids);
+        $postData = [];
+        if (isset($request->media_source_ids)) {
+            foreach ($request->media_source_ids as $row) {
+                $postData[$row['media_source_id']] = ['h5p_library' => ($row['h5p_library']) ?: NULL];
+            }
+        }
+
+        $result = $suborganization->mediaSources()->sync($postData);
 
         if ($result) {
             return response([
