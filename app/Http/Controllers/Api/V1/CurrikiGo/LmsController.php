@@ -142,9 +142,9 @@ class LmsController extends Controller
     }
 
     public function project(Project $project) {
-            return response([
-                'project' => new ProjectPublicResource($project),
-            ], 200);
+        return response([
+            'project' => new ProjectPublicResource($project),
+        ], 200);
     }
 
     public function activities(Request $request)
@@ -186,7 +186,7 @@ class LmsController extends Controller
         if ($verifyValidCall) {
             $user = User::where('email', $request->input('userEmail'))->first();
             $organizations = OrganizationResource::collection($user->organizations()->with('parent')->get());
-            
+
             return response([
                 'organizations' => $organizations,
             ], 200);
@@ -195,7 +195,7 @@ class LmsController extends Controller
             'organizations' => [],
         ], 400);
     }
-    
+
     /**
      * Get teams based on LMS/LTI settings
      *
@@ -215,7 +215,7 @@ class LmsController extends Controller
         if ($verifyValidCall) {
             $user = User::where('email', $request->input('user_email'))->first();
             $teams = TeamResource::collection($user->teams()->get());
-            
+
             return response([
                 'teams' => $teams,
             ], 200);
@@ -239,7 +239,7 @@ class LmsController extends Controller
      *     "Could not find any independent activity. Please try again later."
      *   ]
      * }
-     * 
+     *
      * @param Request $request
      */
     public function independentActivities(IndependentActivityForDeeplink $request)
