@@ -236,8 +236,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
-            $queryWhere[] = "name NOT LIKE '%" . $data['negativeQuery'] . "%'";
-            $queryWhere[] = "description NOT LIKE '%" . $data['negativeQuery'] . "%'";
+            $queryWhere[] = "(name NOT LIKE '%" . $data['negativeQuery'] . "%' OR description NOT LIKE '%" . $data['negativeQuery'] . "%')";
         }
 
         if (isset($data['from']) && !empty($data['from'])) {
