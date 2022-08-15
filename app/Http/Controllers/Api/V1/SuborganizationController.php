@@ -949,7 +949,7 @@ class SuborganizationController extends Controller
         $postData = [];
         if (isset($request->media_source_ids)) {
             foreach ($request->media_source_ids as $row) {
-                $postData[$row['media_source_id']] = ['h5p_library' => ($row['h5p_library']) ?: NULL];
+                $postData[$row['media_source_id']] = ['h5p_library' => (isset($row['h5p_library']))? $row['h5p_library'] : NULL];
             }
         }
 
