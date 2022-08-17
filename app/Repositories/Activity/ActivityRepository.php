@@ -408,7 +408,13 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
-            $queryWhere[] = "(name NOT LIKE '%" . $data['negativeQuery'] . "%' OR description NOT LIKE '%" . $data['negativeQuery'] . "%')";
+            $queryWhere[] = "name NOT LIKE '%" . $data['negativeQuery'] . "%'";
+
+            $descriptionQuery = "(";
+            $descriptionQuery .= "description NOT LIKE '%" . $data['negativeQuery'] . "%'";
+            $descriptionQuery .= " OR description IS NULL";
+            $descriptionQuery .= ")";
+            $queryWhere[] = $descriptionQuery;
         }
 
         if (isset($data['model']) && !empty($data['model'])) {
