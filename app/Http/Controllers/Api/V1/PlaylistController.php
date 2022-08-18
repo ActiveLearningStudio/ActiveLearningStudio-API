@@ -104,7 +104,8 @@ class PlaylistController extends Controller
 
         $data = $playlistRequest->validated();
         $data['order'] = $this->playlistRepository->getOrder($project) + 1;
-
+        $data['shared'] = $project->shared;
+        
         $playlist = $project->playlists()->create($data);
 
         if ($playlist) {

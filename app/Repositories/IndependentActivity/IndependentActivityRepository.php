@@ -966,7 +966,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
             'thumb_url' => $new_thumb_url,
-            'shared' => 0,
+            'shared' => $playlist->project->shared,
         ];
         
         $cloned_activity = Activity::create($activity_data);
@@ -1024,7 +1024,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content 
             'thumb_url' => $newThumbUrl,
-            'shared' => 0,
+            'shared' => $playlist->project->shared,
         ];
         
         $cloned_activity = Activity::create($activity_data);

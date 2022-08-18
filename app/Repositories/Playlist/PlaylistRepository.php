@@ -106,6 +106,7 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         $play_list_data = [
             'title' => ($isDuplicate) ? $playlist->title."-COPY" : $playlist->title,
             'order' => ($isDuplicate) ? $playlist->order + 1 : $playlist->order,
+            'shared' => $project->shared,
         ];
 
         $cloned_playlist = $project->playlists()->create($play_list_data);
