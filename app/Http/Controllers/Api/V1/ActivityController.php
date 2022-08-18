@@ -166,6 +166,7 @@ class ActivityController extends Controller
         $data = $request->validated();
 
         $data['order'] = $this->activityRepository->getOrder($playlist->id) + 1;
+        $data['shared'] = Project::where('id', $playlist->project_id)->value('shared');
 
         return \DB::transaction(function () use ($data, $playlist) {
 

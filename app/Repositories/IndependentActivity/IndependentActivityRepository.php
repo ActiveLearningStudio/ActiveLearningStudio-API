@@ -7,6 +7,7 @@ use App\Models\IndependentActivity;
 use App\Models\Organization;
 use App\Models\Playlist;
 use App\Models\Activity;
+use App\Models\Project;
 use App\Models\Subject;
 use App\Models\EducationLevel;
 use App\Models\AuthorTag;
@@ -960,7 +961,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
             'thumb_url' => $new_thumb_url,
-            'shared' => 0,
+            'shared' => Project::where('id', $playlist->project_id)->value('shared'),
         ];
         
         $cloned_activity = Activity::create($activity_data);
@@ -1018,7 +1019,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content 
             'thumb_url' => $newThumbUrl,
-            'shared' => 0,
+            'shared' => Project::where('id', $playlist->project_id)->value('shared'),
         ];
         
         $cloned_activity = Activity::create($activity_data);
