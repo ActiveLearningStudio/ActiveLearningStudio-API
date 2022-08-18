@@ -7,7 +7,6 @@ use App\Models\IndependentActivity;
 use App\Models\Organization;
 use App\Models\Playlist;
 use App\Models\Activity;
-use App\Models\Project;
 use App\Models\Subject;
 use App\Models\EducationLevel;
 use App\Models\AuthorTag;
@@ -237,13 +236,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if (isset($data['negativeQuery']) && !empty($data['negativeQuery'])) {
-            $queryWhere[] = "lower(name) NOT LIKE lower('%" . $data['negativeQuery'] . "%')";
-
-            $descriptionQuery = "(";
-            $descriptionQuery .= "lower(description) NOT LIKE lower('%" . $data['negativeQuery'] . "%')";
-            $descriptionQuery .= " OR description IS NULL";
-            $descriptionQuery .= ")";
-            $queryWhere[] = $descriptionQuery;
+            $queryWhere[] = "(name NOT LIKE '%" . $data['negativeQuery'] . "%' OR description NOT LIKE '%" . $data['negativeQuery'] . "%')";
         }
 
         if (isset($data['from']) && !empty($data['from'])) {
@@ -967,7 +960,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
             'thumb_url' => $new_thumb_url,
-            'shared' => Project::where('id', $playlist->project_id)->value('shared'),
+            'shared' => $playlist->project->shared,
         ];
         
         $cloned_activity = Activity::create($activity_data);
@@ -1025,7 +1018,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content 
             'thumb_url' => $newThumbUrl,
-            'shared' => Project::where('id', $playlist->project_id)->value('shared'),
+            'shared' => $playlist->project->shared,
         ];
         
         $cloned_activity = Activity::create($activity_data);
