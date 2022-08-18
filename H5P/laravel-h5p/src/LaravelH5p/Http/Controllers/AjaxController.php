@@ -5,6 +5,7 @@ namespace Djoudi\LaravelH5p\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\LaravelH5p;
+use H5PContentValidator;
 use H5PCore;
 use H5PEditorEndpoints;
 use Illuminate\Http\Request;
@@ -74,9 +75,10 @@ class AjaxController extends Controller
         $machineName = $request->get('machineName');
         $majorVersion = $request->get('majorVersion');
         $minorVersion = $request->get('minorVersion');
+        $parameters = $request->get('parameters');
         $h5p = App::make('LaravelH5p');
 
-        $libraryData = $this->getLibraryData($machineName, $majorVersion, $minorVersion, $h5p);
+        $libraryData = $this->getLibraryData($machineName, $majorVersion, $minorVersion, $parameters, $h5p);
             // Log library load
             event(new H5pEvent(
                 'library',
@@ -86,7 +88,7 @@ class AjaxController extends Controller
                 $machineName,
                 $majorVersion . '.' . $minorVersion
             ));
-            H5PCore::ajaxSuccess($libraryData, TRUE);
+        H5PCore::ajaxSuccess($libraryData, TRUE);
 
     }
 
@@ -243,7 +245,7 @@ class AjaxController extends Controller
         return response()->json($request->all());
     }
 
-    private function getLibraryData($machineName, $majorVersion, $minorVersion, $h5p)
+    private function getLibraryData($machineName, $majorVersion, $minorVersion, $parameters, $h5p)
     {
         $core = $h5p::$core;
         $editorStorage = $h5p::$editorStorage;
@@ -257,8 +259,7 @@ class AjaxController extends Controller
             $libraryData->title = $library['title'];
 
 
-            $libraries = $this->findLibraryDependencies($machineName, $library, $core);
-
+            $libraries = $this->findLibraryDependencies($machineName, $library, $core, $parameters);
 
             // Temporarily disable asset aggregation
             $aggregateAssets = $core->aggregateAssets;
@@ -313,10 +314,22 @@ class AjaxController extends Controller
         return $libraryData;
     }
 
-    private function findLibraryDependencies($machineName, $library, $core)
+    private function findLibraryDependencies($machineName, $library, $core, $parameters)
     {
-        $dependencies = array();
-        $core->findLibraryDependencies($dependencies, $library);
+        // Validate and filter against main library semantics.
+        $validator = new H5PContentValidator($core->h5pF, $core);
+        $params = (object) array(
+            'library' => H5PCore::libraryToString($library),
+            'params' => json_decode(json_encode(json_decode($parameters)->params))
+        );
+
+        if (!$params->params) {
+            return NULL;
+        }
+
+        $validator->validateLibrary($params, (object) array('options' => array($params->library)));
+
+        $dependencies = $validator->getDependencies();
 
         // Load addons for wysiwyg editors
         if (in_array($machineName, self::$hasWYSIWYGEditor)) {
@@ -329,17 +342,12 @@ class AjaxController extends Controller
             }
         }
 
-        // add current library as dependency
-        $key = 'preloaded-' . $machineName;
-        $dependencies[$key]['weight'] = sizeof($dependencies)+1;
-        $dependencies[$key]['type'] = 'preloaded';
-        $dependencies[$key]['library'] = $library;
 
         // Order dependencies by weight
         $orderedDependencies = array();
         for ($i = 1, $s = count($dependencies); $i <= $s; $i++) {
             foreach ($dependencies as $dependency) {
-                if ($dependency['weight'] === $i) {
+                if ($dependency['weight'] === $i && $dependency['type'] === 'preloaded') {
                     $dependency['library']['id'] = $dependency['library']['libraryId'];
                     $orderedDependencies[$dependency['library']['libraryId']] = $dependency['library'];
                     break;
