@@ -5,10 +5,13 @@ namespace App\CurrikiGo\Canvas;
 use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\Commands\GetCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetModulesCommand;
+use App\CurrikiGo\Canvas\Commands\GetAssignmentGroupsCommand;
 use App\CurrikiGo\Canvas\Commands\GetModuleItemsCommand;
 use App\CurrikiGo\Canvas\Helpers\Course as CourseHelper;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+
+use function Doctrine\Common\Cache\Psr6\get;
 
 /**
  * Class for fetching courses from Canvas LMS
@@ -53,6 +56,7 @@ class Course
         
         $moduleItems = [];
         if ($course) {
+            $assignmentGroups = $this->canvasClient->run(new GetAssignmentGroupsCommand($course->id));
             $modules = $this->canvasClient->run(new GetModulesCommand($course->id, $moduleName));
             $module = CourseHelper::getModuleByName($modules, $moduleName);
             if ($module) {
@@ -61,9 +65,13 @@ class Course
                     $moduleItems[] = $item->title;
                 }
             }
-            return ['course' => $course->name, 'playlists' => $moduleItems];
+            return [
+                'course' => $course->name,
+                'playlists' => $moduleItems,
+                'assignment_groups' => $assignmentGroups
+            ];
         }
         
-        return ['course' => null, 'playlists' => []];        
+        return ['course' => null, 'playlists' => [], 'assignment_groups' => []];        
     }
 }

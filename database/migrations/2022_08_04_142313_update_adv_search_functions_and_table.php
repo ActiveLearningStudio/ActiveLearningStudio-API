@@ -105,7 +105,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(lower(_text),'%'));
         vCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;
@@ -282,7 +282,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(lower(_text),'%'));
         vCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;

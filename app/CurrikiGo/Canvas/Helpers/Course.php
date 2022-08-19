@@ -38,10 +38,10 @@ class Course
         $course = null;
         foreach ($list as $key => $item) {
             $pos = strpos(trim($item->sis_course_id), trim($sisId));
-            if ($pos !== false) {
+            // if ($pos !== false) {
                 $course = $item;
                 break;                
-            }
+            // }
         }
         return $course;
     }

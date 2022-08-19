@@ -162,7 +162,7 @@ class Organization extends Model
      */
     public function mediaSources()
     {
-        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources');
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')->withPivot('h5p_library');
     }
 
     /**
@@ -172,44 +172,44 @@ class Organization extends Model
     {
         $results = DB::select( DB::raw("
             WITH RECURSIVE child_orgs AS (
-                SELECT 
-                    o1.id, o1.parent_id, o1.name 
-                FROM 
-                    organizations o1 
-                WHERE 
+                SELECT
+                    o1.id, o1.parent_id, o1.name
+                FROM
+                    organizations o1
+                WHERE
                     o1.deleted_at IS NULL AND
                     o1.id = :thisOrgId
-                
+
                 UNION ALL
-                
-                SELECT 
-                    o2.id, o2.parent_id, o2.name 
+
+                SELECT
+                    o2.id, o2.parent_id, o2.name
                 FROM
                     organizations o2
                 JOIN
                     child_orgs co
-                ON 
-                    co.id = o2.parent_id 
+                ON
+                    co.id = o2.parent_id
                 WHERE
                     o2.deleted_at IS NULL
             ), parent_orgs AS (
-                SELECT 
-                    o3.id, o3.parent_id, o3.name 
-                FROM 
-                    organizations o3 
-                WHERE 
+                SELECT
+                    o3.id, o3.parent_id, o3.name
+                FROM
+                    organizations o3
+                WHERE
                     o3.deleted_at IS NULL AND
                     o3.id = :thisOrgId
-                
+
                 UNION ALL
-                
-                SELECT 
-                    o4.id, o4.parent_id, o4.name 
+
+                SELECT
+                    o4.id, o4.parent_id, o4.name
                 FROM
                     organizations o4
                 JOIN
                     parent_orgs po
-                ON 
+                ON
                     po.parent_id = o4.id
                 WHERE
                     o4.deleted_at IS NULL
