@@ -247,7 +247,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         // lti-tool-settings
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
-        Route::post('suborganizations/{suborganization}/lti-tool-settings/{ltiToolSetting}/clone', 'LtiTool\LtiToolSettingsController@clone');
         Route::get('suborganizations/{suborganization}/lti-tool-type', 'LtiTool\LtiToolSettingsController@getLTIToolTypeList');
 
         // brightcove-api-settings
