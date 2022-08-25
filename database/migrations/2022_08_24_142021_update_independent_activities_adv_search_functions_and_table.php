@@ -151,7 +151,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where lower(a.title) like '%s'  %s  
@@ -166,7 +166,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
-                $s$,joinTable,_searchText,cnd,joinTable,_h5p,_searchText,_searchText,cnd);
+                $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;
         $function$
@@ -227,7 +227,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where a.user_id = '%s' and lower(a.title) like '%s'  %s  
@@ -242,7 +242,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where a.user_id = '%s' and lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
-                $s$,joinTable,_uid,_searchText,cnd,joinTable,_h5p,_uid,_searchText,_searchText,cnd);
+                $s$,joinTable,h5p,_uid,_searchText,cnd,joinTable,h5p,_uid,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;
         $function$
