@@ -3,6 +3,7 @@
 namespace App\CurrikiGo\Canvas;
 
 use App\CurrikiGo\Canvas\Client;
+use App\CurrikiGo\Canvas\Commands\GetAllCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetModulesCommand;
 use App\CurrikiGo\Canvas\Commands\GetAssignmentGroupsCommand;
@@ -73,5 +74,40 @@ class Course
         }
         
         return ['course' => null, 'playlists' => [], 'assignment_groups' => []];        
+    }
+
+    /**
+     * Fetch all courses from Canvas LMS
+     * 
+     * @return array
+     */
+    public function fetchAllCourses()
+    {
+        $courses = $this->canvasClient->run(new GetAllCoursesCommand());
+        if ($courses) {
+            foreach ($courses as $key => $item) {
+                $moduleItems[$key]['id'] = $item->id;
+                $moduleItems[$key]['name'] = $item->name;
+            }
+        }
+        return $moduleItems;
+    }
+
+    /**
+     * Fetch assignmet groups from Canvas LMS
+     * 
+     * @param $courseId
+     * @return array
+     */
+    public function fetchAssignmentGroups($courseId)
+    {
+        $courses = $this->canvasClient->run(new GetAllCoursesCommand());
+        if ($courses) {
+            foreach ($courses as $key => $item) {
+                $moduleItems[$key]['id'] = $item->id;
+                $moduleItems[$key]['name'] = $item->name;
+            }
+        }
+        return $moduleItems;
     }
 }

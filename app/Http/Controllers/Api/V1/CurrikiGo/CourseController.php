@@ -15,6 +15,7 @@ use App\Models\Project;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request;
 
 /**
  * @group 10. CurrikiGo Course
@@ -76,6 +77,85 @@ class CourseController extends Controller
                 'project' => $outcome,
             ], 200);
         }
+
+        return response([
+            'errors' => ['You are not authorized to perform this action.'],
+        ], 403);
+    }
+
+    /**
+     * Fetch all Courses from Canvas
+     *
+     * @bodyParam setting_id int The Id of the LMS setting Example 1
+     *
+     * @responseFile responses/curriki-go/fetch-all-courses.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @param FetchCourseRequest $fetchRequest
+     * @return Response
+     */
+    public function fetchMyCoursesFromCanvas(FetchCourseRequest $fetchRequest)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($fetchRequest['setting_id']);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->fetchAllCourses();
+
+        return response([
+            'courses' => $outcome,
+        ], 200);
+
+
+        return response([
+            'errors' => ['You are not authorized to perform this action.'],
+        ], 403);
+    }
+
+    /**
+     * Fetch all Assignment groups of selected course from Canvas
+     *
+     * @bodyParam course_id int The Id of selected course
+     *
+     * @responseFile responses/curriki-go/fetch-assignment-groups.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @param $courseId
+     * @param Request $courseId
+     * @return Response $request
+     */
+    public function fetchAssignmentGroups($courseId, FetchCourseRequest $request)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($request['setting_id']);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->fetchAssignmentGroups($courseId);
+
+        return response([
+            'courses' => $outcome,
+        ], 200);
+
 
         return response([
             'errors' => ['You are not authorized to perform this action.'],
