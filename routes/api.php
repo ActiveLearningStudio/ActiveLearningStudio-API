@@ -287,6 +287,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             });
 
             Route::group(['prefix' => 'canvas'], function () {
+                Route::get('fetch-all-courses', 'CurrikiGo\CourseController@fetchMyCoursesFromCanvas');
+                Route::get('{courseId}/fetch-assignment-groups', 'CurrikiGo\CourseController@fetchAssignmentGroups');
                 Route::post('projects/{project}/playlists/{playlist}/publish', 'CurrikiGo\PublishController@playlistToCanvas');
                 Route::post('projects/{project}/fetch', 'CurrikiGo\CourseController@fetchFromCanvas');
             });
