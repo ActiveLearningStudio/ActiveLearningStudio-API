@@ -94,7 +94,7 @@ class H5PAddDragTextLibrarySeeder extends Seeder
         DB::table('h5p_libraries_libraries')->insert([
             'library_id' => $h5pDragTextLibId,
             'required_library_id' => $h5pQuestionLibId,
-            'dependency_type' => 'editor'
+            'dependency_type' => 'preloaded'
         ]);
 
 
@@ -453,8 +453,8 @@ class H5PAddDragTextLibrarySeeder extends Seeder
     "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula.",
     "description": "",
     "important": {
-      "description": "<ul><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use \'\\+\' for correct and \'\\-\' for incorrect feedback.</li></ul>",
-      "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+      "description": "<ul><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use + for correct and - for incorrect feedback.</li></ul>",
+      "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive + Correct! - Incorrect, try again!*"
     }
   },
   {

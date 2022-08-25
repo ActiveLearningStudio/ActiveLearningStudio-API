@@ -24,6 +24,17 @@ class IndependentActivityPolicy
         return $user->hasPermissionTo('independent-activity:view', $organization);
     }
 
+    /**
+     * Determine whether the "author" user can view any models.
+     *
+     * @param User $user
+     * @param Organization $organization
+     * @return mixed
+     */
+    public function viewAuthor(User $user, Organization $organization)
+    {
+        return $user->hasPermissionTo('independent-activity:view-author', $organization);
+    }
 
     /**
      * Determine whether the user can view the model.
@@ -34,6 +45,10 @@ class IndependentActivityPolicy
      */
     public function view(User $user, IndependentActivity $independentActivity)
     {
+        if ($user->hasPermissionTo('independent-activity:view-author', $independentActivity->organization)) {
+            return true;
+        }
+
         return $user->hasPermissionTo('independent-activity:view', $independentActivity->organization);
     }
 
@@ -46,6 +61,10 @@ class IndependentActivityPolicy
      */
     public function create(User $user, Organization $organization)
     {
+        if ($user->hasPermissionTo('independent-activity:edit-author', $organization)) {
+            return true;
+        }
+
         return $user->hasPermissionTo('independent-activity:create', $organization);
     }
 
@@ -62,6 +81,10 @@ class IndependentActivityPolicy
             return true;
         }
 
+        if ($user->hasPermissionTo('independent-activity:edit-author', $independentActivity->organization)) {
+            return true;
+        }
+
         return $user->hasPermissionTo('independent-activity:edit', $independentActivity->organization);
     }
 
@@ -74,6 +97,10 @@ class IndependentActivityPolicy
      */
     public function delete(User $user, IndependentActivity $independentActivity)
     {
+        if ($user->hasPermissionTo('independent-activity:edit-author', $independentActivity->organization)) {
+            return true;
+        }
+
         return $user->hasPermissionTo('independent-activity:delete', $independentActivity->organization);
     }
 
@@ -86,6 +113,10 @@ class IndependentActivityPolicy
      */
     public function share(User $user, IndependentActivity $independentActivity)
     {
+        if ($user->hasPermissionTo('independent-activity:edit-author', $independentActivity->organization)) {
+            return true;
+        }
+
         return $user->hasPermissionTo('independent-activity:share', $independentActivity->organization);
     }
 
@@ -100,6 +131,10 @@ class IndependentActivityPolicy
     public function searchPreview(User $user, IndependentActivity $independentActivity, Organization $organization)
     {
         if ($user->hasPermissionTo('organization:view', $organization)) {
+            return true;
+        }
+
+        if ($user->hasPermissionTo('independent-activity:view-author', $organization)) {
             return true;
         }
 
@@ -144,6 +179,10 @@ class IndependentActivityPolicy
             $independentActivity->indexing === (int)config('constants.indexing-approved')
             && $independentActivity->organization_visibility_type_id === (int)config('constants.public-organization-visibility-type-id')
         ) {
+            return true;
+        }
+
+        if ($user->hasPermissionTo('independent-activity:edit-author', $independentActivity->organization)) {
             return true;
         }
 

@@ -8,7 +8,6 @@ use App\Http\Requests\V1\LtiTool\StoreLtiToolSetting;
 use App\Http\Requests\V1\LtiTool\UpdateLtiToolSetting;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingCollection;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingResource;
-use App\Jobs\CloneLtiToolSetting;
 use App\Models\LtiTool\LtiToolSetting;
 use App\Models\Organization;
 use App\Repositories\LtiTool\LtiToolSettingRepository;
@@ -72,16 +71,7 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Create Lti tool Setting
-     * Creates the new lti tool setting in database.     *
-     * @response {
-     *   "message": "Lti Tool Setting created successfully!",
-     *   "data": ["Created Setting Data Array"]
-     * }
-     * @response 500 {
-     *   "errors": [
-     *     "Unable to create setting, please try again later!"
-     *   ]
-     * }
+     * Creates the new lti tool setting in database
      * @param StoreLtiToolSetting $request
      * @param Organization $suborganization
      * @return LtiToolSettingResource|Application|ResponseFactory|Response
@@ -111,17 +101,6 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Update Lti Tool Setting
-     * Updates the lti_tool_types and lti_tool_types_config table in database.
-     * @urlParam id required The Id of a lti_tool_settings table Example: 1
-     * @response {
-     *   "message": "Lti tool setting data updated successfully!",
-     *   "data": ["Updated Lti Tool setting data array"]
-     * }
-     * @response 500 {
-     *   "errors": [
-     *     "Unable to update Lti Tool setting, please try again later."
-     *   ]
-     * }
      * @param UpdateLtiToolSetting $request
      * @param Organization $suborganization
      * @param $id
@@ -152,16 +131,6 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Delete Lti Tool Setting
-     * Deletes the lti_tool_types table from database.
-     * @urlParam id required The Id of a lti_tool_settings Example: 1
-     * @response {
-     *   "message": "Lti Tool setting deleted successfully!",
-     * }
-     * @response 500 {
-     *   "errors": [
-     *     "Unable to delete Lti Tool setting, please try again later."
-     *   ]
-     * }
      * @param Organization $suborganization
      * @param $id
      * @return Application|Factory|View
@@ -170,61 +139,6 @@ class LtiToolSettingsController extends Controller
     public function destroy(Organization $suborganization, $id)
     {
         return response(['message' => $this->ltiToolSettingRepository->destroy($id)], 200);
-    }
-
-    /**
-     * Clone LTI tool setting
-     *
-     * Clone the specified Lti tool setting of a user.
-     *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam LtiToolSetting required The Id of a LtiToolSetting Example: 1
-     * @bodyParam user_id optional The Id of a user Example: 1
-     *
-     * @response {
-     *   "message": "Lti tool setting is being cloned in background!"
-     * }
-     *
-     * @response 400 {
-     *   "errors": [
-     *     "Unable to clone."
-     *   ]
-     * }
-     *
-     * @param Request $request
-     * @param Organization $suborganization
-     * @param LtiToolSetting $ltiToolSetting
-     * @return Response
-     */
-    public function clone(Request $request, Organization $suborganization, LtiToolSetting $ltiToolSetting)
-    {
-        $requestData = $request->all();
-        $requestData['tool_name'] = $ltiToolSetting->tool_name;
-        $requestData['tool_url'] = $ltiToolSetting->tool_url;
-        $requestData['lti_version'] = $ltiToolSetting->lti_version;
-        $requestData['media_source_id'] = $ltiToolSetting->media_source_id;
-        $requestData['tool_consumer_key'] = $ltiToolSetting->tool_consumer_key;
-        $requestData['tool_secret_key'] = $ltiToolSetting->tool_secret_key;
-        $requestData['tool_content_selection_url'] = $ltiToolSetting->tool_content_selection_url;
-        $requestData['user_id'] = $ltiToolSetting->user_id;
-        $requestData['organization_id'] = $ltiToolSetting->organization_id;
-        $request->merge($requestData);
-        $validated = $request->validate([
-            'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
-            'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
-            'lti_version' => 'required|max:20',
-            'media_source_id' => 'required|exists:media_sources,id',
-            'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
-            'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key,NULL,id,deleted_at,NULL,user_id,' . request('user_id'),
-            'tool_content_selection_url' => 'nullable|url|max:255',
-            'user_id' => 'required|exists:users,id',
-            'organization_id' => 'required|exists:organizations,id'
-        ]);
-        CloneLtiToolSetting::dispatch($ltiToolSetting, $suborganization, $request->bearerToken())->delay(now()->addSecond());
-        return response([
-            "message" => "Your request to clone Lti Tool Setting [$ltiToolSetting->tool_name] has been received and is being processed. <br> 
-            You will be alerted in the notification section in the title bar when complete.",
-        ], 200);
     }
 
     /**

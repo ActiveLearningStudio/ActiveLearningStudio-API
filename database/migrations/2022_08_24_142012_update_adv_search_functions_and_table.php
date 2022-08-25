@@ -26,6 +26,9 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
         DB::statement("drop function IF EXISTS advSearch(int,varchar,varchar,varchar,varchar)");
         DB::statement("drop function IF EXISTS advSearch(varchar,varchar,varchar,varchar)");
 
+        DB::statement("drop function IF EXISTS advSearch(int,varchar,varchar,varchar,varchar,varchar)");
+        DB::statement("drop function IF EXISTS advSearch(varchar,varchar,varchar,varchar,varchar)");
+
         DB::statement("drop table IF EXISTS advSearch_dt");
 
         DB::statement("drop table IF EXISTS advsearch_dtnew");
@@ -100,20 +103,23 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
 
 
         $advsearchSql = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advsearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying)
+        CREATE OR REPLACE FUNCTION public.advsearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
         RETURNS SETOF advsearch_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(lower(_text),'%'));
         vCnt INTEGER := 0;
+        hCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;
         lCnt integer :=1;
+        hlCnt integer :=1;
         lCntEducation integer :=1;
         lCntTag integer :=1;
         query  character varying := '';
         cnd character varying := '  ';
+        h5p character varying := '  ';
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
@@ -131,7 +137,19 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
             end if;
 
-            if _tag != '' or _education != '' or _subject != '' then
+
+            if _h5p != '' then 
+                select regexp_count(_h5p, ',') into hCnt ;
+                hCnt := hCnt;
+                h5p := ' and hl.name in  (''';
+                for hlCnt in 1..hCnt loop
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                end loop;
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
+                
+            end if;
+
+            if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
                 
                 query := format($s$ 
                 select distinct sq1.*, case when sq2.pid is not null then TRUE else FALSE end as favored from(
@@ -175,7 +193,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 from activities a  
                 %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join playlists p on a.playlist_id=p.id
                 left join projects pr on p.project_id=pr.id
                 left join user_project up on pr.id=up.project_id
@@ -189,7 +207,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where user_id=%s)sq2
                 on
                 sq1.project_id=sq2.pid
-                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,_searchText,cnd,_uid);
+                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,h5p,_searchText,cnd,_uid);
                 
                 RETURN QUERY execute query;
             else 
@@ -277,20 +295,23 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
 
 
         $advsearchSqlOverloading = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advsearch(_text character varying, _subject character varying, _education character varying, _tag character varying)
+        CREATE OR REPLACE FUNCTION public.advsearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
         RETURNS SETOF advsearch_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(lower(_text),'%'));
         vCnt INTEGER := 0;
+        hCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;
         lCnt integer :=1;
+        hlCnt integer :=1;
         lCntEducation integer :=1;
         lCntTag integer :=1;
         query  character varying := '';
         cnd character varying := '  ';
+        h5p character varying := '  ';
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
@@ -308,8 +329,20 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
             end if;
 
-            if _tag != '' or _education != '' or _subject != '' then
+
+            if _h5p != '' then 
+                select regexp_count(_h5p, ',') into hCnt ;
+                hCnt := hCnt;
+                h5p := ' and hl.name in  (''';
+                for hlCnt in 1..hCnt loop
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                end loop;
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
                 
+            end if;
+
+            if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
+                        
                 query := format($s$ 
                 
                 select 1 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,0::bigint as playlist_id,
@@ -352,7 +385,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 from activities a  
                 %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id  %s
                 left join playlists p on a.playlist_id=p.id
                 left join projects pr on p.project_id=pr.id
                 left join user_project up on pr.id=up.project_id
@@ -360,7 +393,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
                 where lower(a.title) like '%s'  %s
-                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,_searchText,cnd);
+                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,h5p,_searchText,cnd);
                 
                 RETURN QUERY execute query;
             else 

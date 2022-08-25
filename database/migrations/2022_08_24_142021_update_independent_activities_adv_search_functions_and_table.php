@@ -22,6 +22,9 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar,varchar,varchar,varchar)");
         DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar,varchar,varchar,varchar)");
 
+        DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar,varchar,varchar,varchar,varchar)");
+        DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar,varchar,varchar,varchar,varchar)");
+
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dt");
 
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dtnew");
@@ -97,20 +100,23 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
 
         $independentActivityAdvSearchSql = <<<'EOL'
-        CREATE OR REPLACE FUNCTION advindependentactivitysearch(_text character varying, _subject character varying, _education character varying, _tag character varying)
+        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
         RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(lower(_text),'%'));
         vCnt INTEGER := 0;
+        hCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;
         lCnt integer :=1;
+        hlCnt integer :=1;
         lCntEducation integer :=1;
         lCntTag integer :=1;
         query  character varying := '';
         cnd character varying := '  ';
+        h5p character varying := '  ';
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
@@ -127,6 +133,17 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join independent_activity_author_tag aat on a.id=aat.independent_activity_id ';
             end if;
+            
+                if _h5p != '' then 
+                select regexp_count(_h5p, ',') into hCnt ;
+                hCnt := hCnt;
+                h5p := ' and hl.name in  (''';
+                for hlCnt in 1..hCnt loop
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                end loop;
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
+                
+            end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
@@ -134,7 +151,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where lower(a.title) like '%s'  %s  
@@ -145,11 +162,11 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
-                $s$,joinTable,_searchText,cnd,joinTable,_searchText,_searchText,cnd);
+                $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;
         $function$
@@ -159,20 +176,23 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
 
         $independentActivityAdvsearchSqlOverloading = <<<'EOL'
-        CREATE OR REPLACE FUNCTION advindependentactivitysearch(_uid integer,_text character varying, _subject character varying, _education character varying, _tag character varying)
+        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
         RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(_text,'%'));
+        _searchText character varying := concat('%',concat(lower(_text),'%'));
         vCnt INTEGER := 0;
+        hCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
         vCntTag INTEGER := 0;
         lCnt integer :=1;
+        hlCnt integer :=1;
         lCntEducation integer :=1;
         lCntTag integer :=1;
         query  character varying := '';
         cnd character varying := '  ';
+        h5p character varying := '  ';
         joinTable character varying := '  ';
         begin
             if _subject != '' then 
@@ -189,6 +209,17 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join independent_activity_author_tag aat on a.id=aat.independent_activity_id ';
             end if;
+            
+            if _h5p != '' then 
+                select regexp_count(_h5p, ',') into hCnt ;
+                hCnt := hCnt;
+                h5p := ' and hl.name in  (''';
+                for hlCnt in 1..hCnt loop
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                end loop;
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
+                
+            end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
@@ -196,7 +227,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where a.user_id = '%s' and lower(a.title) like '%s'  %s  
@@ -207,11 +238,11 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,null::text as team_name,0::bigint as standalone_activity_user_id, null::boolean as favored,hl.title as activity_title
                 from independent_activities a 
                     %s     left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
                 where a.user_id = '%s' and lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
-                $s$,joinTable,_uid,_searchText,cnd,joinTable,_uid,_searchText,_searchText,cnd);
+                $s$,joinTable,h5p,_uid,_searchText,cnd,joinTable,h5p,_uid,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;
         $function$

@@ -93,7 +93,7 @@ class IndependentActivityController extends Controller
      */
     public function index(OrganizationIndependentActivityRequest $request, Organization $suborganization)
     {
-        $this->authorize('viewAny', [IndependentActivity::class, $suborganization]);
+        $this->authorize('viewAuthor', [IndependentActivity::class, $suborganization]);
 
         $authenticated_user = auth()->user();
 
