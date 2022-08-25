@@ -5,15 +5,24 @@ namespace Djoudi\LaravelH5p\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\LaravelH5p;
+use H5PContentValidator;
+use H5PCore;
 use H5PEditorEndpoints;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\GeneralException;
+use stdClass;
 
 class AjaxController extends Controller
 {
+    private static $hasWYSIWYGEditor = array(
+        'H5P.CoursePresentation',
+        'H5P.InteractiveVideo',
+        'H5P.DragQuestion'
+    );
+
     public function libraries(Request $request)
     {
         // headers for CORS
@@ -55,6 +64,32 @@ class AjaxController extends Controller
             $editor->ajax->action(H5PEditorEndpoints::LIBRARIES);
             exit;
         }
+    }
+
+    public function loadAllDependencies(Request $request)
+    {
+        // headers for CORS
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+
+        $machineName = $request->get('machineName');
+        $majorVersion = $request->get('majorVersion');
+        $minorVersion = $request->get('minorVersion');
+        $parameters = $request->get('parameters');
+        $h5p = App::make('LaravelH5p');
+
+        $libraryData = $this->getLibraryData($machineName, $majorVersion, $minorVersion, $parameters, $h5p);
+            // Log library load
+            event(new H5pEvent(
+                'library',
+                NULL,
+                NULL,
+                NULL,
+                $machineName,
+                $majorVersion . '.' . $minorVersion
+            ));
+        H5PCore::ajaxSuccess($libraryData, TRUE);
+
     }
 
     public function singleLibrary(Request $request)
@@ -208,5 +243,117 @@ class AjaxController extends Controller
     public function contentUserData(Request $request)
     {
         return response()->json($request->all());
+    }
+
+    private function getLibraryData($machineName, $majorVersion, $minorVersion, $parameters, $h5p)
+    {
+        $core = $h5p::$core;
+        $editorStorage = $h5p::$editorStorage;
+        $libraryData = new stdClass();
+        if ($machineName) {
+            $library = $core->loadLibrary($machineName, $majorVersion, $minorVersion);
+
+            // Include name and version in data object for convenience
+            $libraryData->name = $machineName;
+            $libraryData->version = (object)array('major' => $majorVersion, 'minor' => $minorVersion);
+            $libraryData->title = $library['title'];
+
+
+            $libraries = $this->findLibraryDependencies($machineName, $library, $core, $parameters);
+
+            // Temporarily disable asset aggregation
+            $aggregateAssets = $core->aggregateAssets;
+            $core->aggregateAssets = FALSE;
+
+            // Get list of JS and CSS files that belongs to the dependencies
+            $files = $core->getDependenciesFiles($libraries);
+            $editorStorage->alterLibraryFiles($files, $libraries);
+
+            // Restore asset aggregation setting
+            $core->aggregateAssets = $aggregateAssets;
+
+            // Create base URL
+            $url = $core->url;
+
+            // Javascripts
+            if (!empty($files['scripts'])) {
+                foreach ($files['scripts'] as $script) {
+                    if (preg_match('/:\/\//', $script->path) === 1) {
+                        // External file
+                        $libraryData->javascript[] = $script->path . $script->version;
+                    } else {
+                        // Local file
+                        $path = $url . $script->path;
+                        if (!isset($core->h5pD)) {
+                            $path .= $script->version;
+                        }
+                        $libraryData->javascript[] = $path;
+                    }
+                }
+            }
+
+            // Stylesheets
+            if (!empty($files['styles'])) {
+                foreach ($files['styles'] as $css) {
+                    if (preg_match('/:\/\//', $css->path) === 1) {
+                        // External file
+                        $libraryData->css[] = $css->path . $css->version;
+                    } else {
+                        // Local file
+                        $path = $url . $css->path;
+                        if (!isset($core->h5pD)) {
+                            $path .= $css->version;
+                        }
+                        $libraryData->css[] = $path;
+                    }
+                }
+            }
+
+
+        }
+        return $libraryData;
+    }
+
+    private function findLibraryDependencies($machineName, $library, $core, $parameters)
+    {
+        // Validate and filter against main library semantics.
+        $validator = new H5PContentValidator($core->h5pF, $core);
+        $params = (object) array(
+            'library' => H5PCore::libraryToString($library),
+            'params' => json_decode(json_encode(json_decode($parameters)->params))
+        );
+
+        if (!$params->params) {
+            return NULL;
+        }
+
+        $validator->validateLibrary($params, (object) array('options' => array($params->library)));
+
+        $dependencies = $validator->getDependencies();
+
+        // Load addons for wysiwyg editors
+        if (in_array($machineName, self::$hasWYSIWYGEditor)) {
+            $addons = $core->h5pF->loadAddons();
+            foreach ($addons as $addon) {
+                $key = 'editor-' . $addon['machineName'];
+                $dependencies[$key]['weight'] = sizeof($dependencies)+1;
+                $dependencies[$key]['type'] = 'editor';
+                $dependencies[$key]['library'] = $addon;
+            }
+        }
+
+
+        // Order dependencies by weight
+        $orderedDependencies = array();
+        for ($i = 1, $s = count($dependencies); $i <= $s; $i++) {
+            foreach ($dependencies as $dependency) {
+                if ($dependency['weight'] === $i && $dependency['type'] === 'preloaded') {
+                    $dependency['library']['id'] = $dependency['library']['libraryId'];
+                    $orderedDependencies[$dependency['library']['libraryId']] = $dependency['library'];
+                    break;
+                }
+            }
+        }
+        return $orderedDependencies;
     }
 }
