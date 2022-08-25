@@ -17,4 +17,3 @@ chmod 777 -R /var/www/html/storage &
 touch /var/www/html/health.ok
 
 apache2ctl -D FOREGROUND
-
