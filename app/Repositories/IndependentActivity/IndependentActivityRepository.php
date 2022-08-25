@@ -99,6 +99,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $queryParams['query_subject'] = '';
         $queryParams['query_education'] = '';
         $queryParams['query_tags'] = '';
+        $queryParams['query_h5p'] = '';
         $queryFrom = 0;
         $querySize = 10;
 
@@ -108,11 +109,11 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
         } else {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
         }
 
         $queryWhere[] = "deleted_at IS NULL";
@@ -209,14 +210,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
-            $data['h5pLibraries'] = array_map(
-                function($n) {
-                    return "h5plib LIKE '" . explode(" ",$n)[0] . "%'";
-                },
-                $data['h5pLibraries']
-            );
-            $queryWhereH5pLibraries = implode(' OR ', $data['h5pLibraries']);
-            $queryWhere[] = "(" . $queryWhereH5pLibraries . ")";
+            $dataH5pLibraries = implode('","', $data['h5pLibraries']);
+            $queryParams['query_h5p'] = '("' . $dataH5pLibraries . '")';
         }
 
         if (isset($data['indexing']) && !empty($data['indexing'])) {
