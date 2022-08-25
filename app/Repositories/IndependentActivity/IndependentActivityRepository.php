@@ -257,7 +257,6 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $query = $query . "LIMIT " . $querySize . " OFFSET " . $queryFrom;
 
         $results = DB::select($query, $queryParams);
-        // dd($query, $queryParams);
         $countResults = DB::select($countsQuery, $queryParams);
 
         $meta['total'] = $countResults[0]->total;
