@@ -906,6 +906,13 @@ class TeamController extends Controller
      */
     public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team, Project $project)
     {
+        $checkActivityCount = $this->teamRepository->checkActivityCount($project);
+        
+        if($checkActivityCount === 0) {
+            return response([
+                'message' =>  "No Activity Found.Please create atleast one activity.",
+            ], 500);
+        }
 
         $grade_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'educationLevels');
         $subject_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'subjects');
