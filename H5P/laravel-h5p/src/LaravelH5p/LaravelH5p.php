@@ -53,6 +53,7 @@ class LaravelH5p
     public static $contentvalidator = null;
     public static $export = null;
     public static $settings = null;
+    public static $editorStorage = null;
 
     public function __construct()
     {
@@ -69,7 +70,8 @@ class LaravelH5p
         self::$storage = new H5PStorage(self::$interface, self::$core);
         self::$contentvalidator = new H5PContentValidator(self::$interface, self::$core);
         self::$export = new H5PExport(self::$interface, self::$core);
-        self::$h5peditor = new H5peditor(self::$core, new EditorStorage(), new EditorAjaxRepository());
+        self::$editorStorage = new EditorStorage();
+        self::$h5peditor = new H5peditor(self::$core, self::$editorStorage, new EditorAjaxRepository());
         // self::$h5peditor = new H5peditor(self::$core, new EditorStorage(), new EditorAjaxRepository());
     }
 
