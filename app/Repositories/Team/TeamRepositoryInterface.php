@@ -146,4 +146,10 @@ interface TeamRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function noovoIntegration();
+
+    /**
+     * @param Project $project
+     * @return bool
+     */
+    public function checkActivityCount($project);
 }
