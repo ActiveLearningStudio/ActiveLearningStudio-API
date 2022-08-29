@@ -268,6 +268,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $queryParams['query_subject'] = '';
         $queryParams['query_education'] = '';
         $queryParams['query_tags'] = '';
+        $queryParams['query_h5p'] = '';
         $queryFrom = 0;
         $querySize = 10;
 
@@ -277,11 +278,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advSearch(:user_id, :query_text, :query_subject, :query_education, :query_tags)';
+            $query = 'SELECT * FROM advSearch(:user_id, :query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
 
             $queryParams['user_id'] = $authUser;
         } else {
-            $query = 'SELECT * FROM advSearch(:query_text, :query_subject, :query_education, :query_tags)';
+            $query = 'SELECT * FROM advSearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
         }
 
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
@@ -381,14 +382,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
-            $data['h5pLibraries'] = array_map(
-                                        function($n) {
-                                            return "h5plib LIKE '" . explode(" ",$n)[0] . "%'";
-                                        },
-                                        $data['h5pLibraries']
-                                    );
-            $queryWhereH5pLibraries = implode(' OR ', $data['h5pLibraries']);
-            $queryWhere[] = "(" . $queryWhereH5pLibraries . ")";
+            $dataH5pLibraries = implode('","', $data['h5pLibraries']);
+            $queryParams['query_h5p'] = '("' . $dataH5pLibraries . '")';
         }
 
         if (isset($data['indexing']) && !empty($data['indexing'])) {
