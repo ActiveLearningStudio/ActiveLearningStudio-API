@@ -141,12 +141,15 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-                h5p := ' and hl.name in  (''';
+            h5p := ' and hl.name in  (''';
+                if hCnt=0 then 
+                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                else
                 for hlCnt in 1..hCnt loop
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
                 end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
-                
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                end if;
             end if;
 
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
@@ -333,12 +336,15 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-                h5p := ' and hl.name in  (''';
+            h5p := ' and hl.name in  (''';
+                if hCnt=0 then 
+                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                else
                 for hlCnt in 1..hCnt loop
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
                 end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
-                
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                end if;
             end if;
 
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
