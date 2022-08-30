@@ -168,7 +168,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-                where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s) )
+                where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s 
+                left join h5p_contents hc on a.h5p_content_id=hc.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
+                where lower(a.title) like '%s' and a.id is not null %s) )
                 
                 
                 union all
@@ -185,7 +188,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where p.id in  (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s)
+                where p.id in  (select playlist_id from activities a %s
+                left join h5p_contents hc on a.h5p_content_id=hc.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
+                where lower(a.title) like '%s' and a.id is not null %s)
                 
                 union all
                 
@@ -203,14 +209,14 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where lower(a.title) like '%s'  %s
+                where hl.name is not null and lower(a.title) like '%s'  %s
                 )sq1
                 left join
                 (select distinct project_id as pid from user_favorite_project
                 where user_id=%s)sq2
                 on
-                sq1.project_id=sq2.pid
-                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,h5p,_searchText,cnd,_uid);
+                sq1.project_id=sq2.pid and h5pLib!=' .'
+                $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,_uid);
                 
                 RETURN QUERY execute query;
             else 
@@ -363,7 +369,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-                where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s) )
+                where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s 
+                left join h5p_contents hc on a.h5p_content_id=hc.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
+                where lower(a.title) like '%s' and a.id is not null %s) )
                 
                 
                 union all
@@ -380,7 +389,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where p.id in  (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s)
+                where p.id in  (select playlist_id from activities a %s
+                left join h5p_contents hc on a.h5p_content_id=hc.id
+                left join h5p_libraries hl on hc.library_id=hl.id %s
+                where lower(a.title) like '%s' and a.id is not null %s)
                 
                 union all
                 
@@ -398,8 +410,8 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where lower(a.title) like '%s'  %s
-                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,h5p,_searchText,cnd);
+                where hl.name is not null and lower(a.title) like '%s'  %s
+                $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd);
                 
                 RETURN QUERY execute query;
             else 
