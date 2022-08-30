@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
-use App\Jobs\CloneBrightcoveAPISetting;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Integration\BrightcoveAPISetting;
@@ -146,32 +145,6 @@ class BrightcoveAPISettingsController extends Controller
     public function destroy(Organization $suborganization, $id)
     {
         return response(['message' => $this->bcAPISettingRepository->destroy($id, $suborganization->id)], 200);
-    }
-
-    /**
-     * Clone Brightcove API Settings
-     * Clone the specified brightcove api settings of a user.
-     * @param Request $request
-     * @param Organization $suborganization
-     * @param BrightcoveAPISetting required The Id of a BrightcoveAPISetting Example: 1
-     * @bodyParam user_id optional The Id of a user Example: 1
-     * @response {
-     *   "message": "Brightcove API setting is being cloned in background!"
-     * }
-     * @response 400 {
-     *   "errors": [
-     *     "Unable to clone."
-     *   ]
-     * }
-     * @return Response
-     */
-    public function clone(Request $request, Organization $suborganization, BrightcoveAPISetting $brightcoveAPISetting)
-    {
-        CloneBrightcoveAPISetting::dispatch($brightcoveAPISetting, $suborganization, $request->bearerToken())->delay(now()->addSecond());
-        return response([
-            "message" => "Your request to clone Brightcove API Settings [$brightcoveAPISetting->account_name] has been received and is being processed. <br> 
-            You will be alerted in the notification section in the title bar when complete.",
-        ], 200);
     }
 
     /**
