@@ -15,7 +15,7 @@ class CreateUiModulesTable extends Migration
     {
         Schema::create('ui_modules', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->unique();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('ui_modules');
             $table->timestamps();
