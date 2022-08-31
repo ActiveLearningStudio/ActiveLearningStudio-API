@@ -105,7 +105,7 @@ class AjaxController extends Controller
             if ($brightcoveApiSettingId) {
                 $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
                 $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveApiSettingId);
-                array_push($libraryData['css'], config('app.url') . $brightcoveAPISetting->css_path);
+                $libraryData->css[] = config('app.url') . $brightcoveAPISetting->css_path;
             }
         }
         H5PCore::ajaxSuccess($libraryData, TRUE);
