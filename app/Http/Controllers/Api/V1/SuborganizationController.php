@@ -22,7 +22,9 @@ use App\Http\Requests\V1\SuborganizationUpdateMediaSource;
 use App\Http\Requests\V1\SuborganizationUpdateRole;
 use App\Http\Requests\V1\SuborganizationUploadFaviconRequest;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
+use App\Http\Resources\V1\AllowedOrganizationVisibilityTypeResource;
 use App\Http\Resources\V1\UserResource;
+use App\Models\AllowedOrganizationVisibilityType;
 use App\Models\MediaSource;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Organization;
@@ -162,6 +164,7 @@ class SuborganizationController extends Controller
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
+     * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
      * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
@@ -196,6 +199,7 @@ class SuborganizationController extends Controller
         $suborganization = $this->organizationRepository->createSuborganization($organization, $data, $authenticatedUser);
 
         if ($suborganization) {
+            $suborganization->allowedVisibilityTypes()->sync($data['visibility_type_id']);
             return response([
                 'suborganization' => new OrganizationResource($suborganization),
             ], 201);
@@ -243,6 +247,7 @@ class SuborganizationController extends Controller
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
+     * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
      * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
@@ -291,6 +296,7 @@ class SuborganizationController extends Controller
         $is_updated = $this->organizationRepository->update($suborganization, $data);
 
         if ($is_updated) {
+            $suborganization->allowedVisibilityTypes()->sync($data['visibility_type_id']);
             $authenticatedUser = auth()->user();
             $updated_suborganization = new OrganizationResource($this->organizationRepository->fetchOrganizationData($authenticatedUser, $suborganization));
 
