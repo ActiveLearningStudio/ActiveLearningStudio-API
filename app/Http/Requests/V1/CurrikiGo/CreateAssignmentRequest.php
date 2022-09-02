@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\CurrikiGo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PublishPlaylistRequest extends FormRequest
+class CreateAssignmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,9 @@ class PublishPlaylistRequest extends FormRequest
         return [
             'setting_id' => 'required|exists:lms_settings,id',
             'counter' => 'sometimes|integer',
-            'publisher_org' => 'int|nullable',
-            'creation_type' => 'required|in:modules,assignments'
+            'assignment_group_id' => 'required|integer',
+            'assignment_name' => 'required|string|max:255',
+            'curriki_activity_id' => 'required|integer'
         ];
     }
 }

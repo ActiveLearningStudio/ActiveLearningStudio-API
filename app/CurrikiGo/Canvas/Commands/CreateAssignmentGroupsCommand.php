@@ -7,7 +7,7 @@ use App\CurrikiGo\Canvas\Contracts\Command;
 /**
  * This class handles fetching Course details in Canvas LMS
  */
-class GetAssignmentGroupsCommand implements Command
+class CreateAssignmentGroupsCommand implements Command
 {
     /**
      * API URL
@@ -38,7 +38,7 @@ class GetAssignmentGroupsCommand implements Command
      *
      * @var array
      */
-    private $queryString;
+    private $AssignmentGroupName;
 
     /**
      * Creates an instance of the command class
@@ -47,10 +47,11 @@ class GetAssignmentGroupsCommand implements Command
      * @param string $queryString
      * @return void
      */
-    public function __construct($courseId)
+    public function __construct($courseId, $AssignmentGroupName)
     {
         $this->courseId = $courseId;
         $this->endpoint = config('constants.canvas_api_endpoints.assignment_groups');
+        $this->courseData = $this->prepareCourseData($AssignmentGroupName);
     }
 
     /**
@@ -62,13 +63,25 @@ class GetAssignmentGroupsCommand implements Command
     {
         $response = null;
         try {
-            $response = $this->httpClient->request('GET', $this->apiURL . '/courses/' . $this->courseId . '/' . $this->endpoint . '?per_page=1000', [
-                'headers' => ['Authorization' => "Bearer {$this->accessToken}"]
+            $response = $this->httpClient->request('POST', $this->apiURL . '/courses/' . $this->courseId . '/' . $this->endpoint, [
+                'headers' => ['Authorization' => "Bearer {$this->accessToken}"],
+                'json' => $this->courseData
             ])->getBody()->getContents();
             $response = json_decode($response);
         } catch (Exception $ex) {
         }
 
         return $response;
+    }
+
+    /**
+     * Prepare course data for API payload
+     * 
+     * @param array $data
+     * @return array
+     */
+    public function prepareCourseData($AssignmentGroupName)
+    {
+        return ["name" => $AssignmentGroupName];
     }
 }

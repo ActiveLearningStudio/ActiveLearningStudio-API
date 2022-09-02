@@ -48,7 +48,7 @@ class GetAllCoursesCommand implements Command
     {
         $response = null;
         try {
-            $url = $this->apiURL . '/courses';
+            $url = $this->apiURL . '/courses' . '?per_page=1000';
             $response = $this->httpClient->request('GET', $url, [
                 'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json']
             ])->getBody()->getContents();

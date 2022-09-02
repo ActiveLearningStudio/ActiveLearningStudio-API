@@ -10,6 +10,7 @@ use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\Course as CanvasCourse;
 use App\CurrikiGo\Moodle\Course as MoodleCourse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\CurrikiGo\CreateAssignmentGroupRequest;
 use App\Http\Requests\V1\CurrikiGo\FetchCourseRequest;
 use App\Models\Project;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
@@ -112,14 +113,19 @@ class CourseController extends Controller
         $canvasCourse = new CanvasCourse($canvasClient);
         $outcome = $canvasCourse->fetchAllCourses();
 
-        return response([
-            'courses' => $outcome,
-        ], 200);
-
-
-        return response([
-            'errors' => ['You are not authorized to perform this action.'],
-        ], 403);
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'Fetched all the courses',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'No Courses found',
+                'data' => $outcome,
+            ], 200);
+        }
     }
 
     /**
@@ -142,7 +148,7 @@ class CourseController extends Controller
      * }
      *
      * @param $courseId
-     * @param Request $courseId
+     * @param FetchCourseRequest $request
      * @return Response $request
      */
     public function fetchAssignmentGroups($courseId, FetchCourseRequest $request)
@@ -152,14 +158,64 @@ class CourseController extends Controller
         $canvasCourse = new CanvasCourse($canvasClient);
         $outcome = $canvasCourse->fetchAssignmentGroups($courseId);
 
-        return response([
-            'courses' => $outcome,
-        ], 200);
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'Fetched all assignment groups',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'No Assignments found',
+                'data' => $outcome,
+            ], 200);
+        }
+    }
 
+    /**
+     * Create Assignment groups of selected course from Canvas
+     *
+     * @bodyParam assignment_group's name string
+     *
+     * @responseFile responses/curriki-go/create-assignment-groups.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @param $courseId
+     * @param CreateAssignmentGroupRequest $courseId
+     * @return Response $request
+     */
+    public function createAssignmentGroups($courseId, CreateAssignmentGroupRequest $request)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($request['setting_id']);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->CreateAssignmentGroups($courseId, $request['assignment_group_name']);
 
-        return response([
-            'errors' => ['You are not authorized to perform this action.'],
-        ], 403);
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'New assignment group has been created successfully!',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'No Assignment Groups found',
+                'data' => $outcome,
+            ], 200);
+        }
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\CurrikiGo\Canvas;
 
 use App\CurrikiGo\Canvas\Client;
+use App\CurrikiGo\Canvas\Commands\CreateAssignmentCommand;
+use App\CurrikiGo\Canvas\Commands\CreateAssignmentGroupsCommand;
 use App\CurrikiGo\Canvas\Commands\GetAllCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetModulesCommand;
@@ -101,13 +103,40 @@ class Course
      */
     public function fetchAssignmentGroups($courseId)
     {
-        $courses = $this->canvasClient->run(new GetAllCoursesCommand());
-        if ($courses) {
-            foreach ($courses as $key => $item) {
+        $assignmentGroups = $this->canvasClient->run(new GetAssignmentGroupsCommand($courseId));
+        $moduleItems = [];
+        if ($assignmentGroups) {
+            foreach ($assignmentGroups as $key => $item) {
                 $moduleItems[$key]['id'] = $item->id;
                 $moduleItems[$key]['name'] = $item->name;
             }
         }
         return $moduleItems;
+    }
+
+    /**
+     * Create assignmet groups in Canvas LMS course
+     * 
+     * @param $courseId
+     * @param $AssignmentGroupName
+     * @return array
+     */
+    public function CreateAssignmentGroups($courseId, $AssignmentGroupName)
+    {
+        return $this->canvasClient->run(new CreateAssignmentGroupsCommand($courseId, $AssignmentGroupName));
+    }
+
+    /**
+     * Create assignmet in Canvas LMS course
+     * 
+     * @param $courseId
+     * @param $AssignmentGroupId
+     * @param $AssignmentName
+     * @param $currikiActivityId
+     * @return array
+     */
+    public function createActivity($courseId, $AssignmentGroupId, $AssignmentName, $currikiActivityId)
+    {
+        return $this->canvasClient->run(new CreateAssignmentCommand($courseId, $AssignmentGroupId, $AssignmentName, $currikiActivityId));
     }
 }
