@@ -2,16 +2,19 @@
 
 namespace Djoudi\LaravelH5p\Http\Controllers;
 
+use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Models\Integration\BrightcoveAPISetting;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 use Djoudi\LaravelH5p\Events\H5pEvent;
-use Djoudi\LaravelH5p\LaravelH5p;
+use H5PContentValidator;
 use H5PCore;
 use H5PEditorEndpoints;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Exceptions\GeneralException;
 use stdClass;
 
 class AjaxController extends Controller
@@ -74,9 +77,10 @@ class AjaxController extends Controller
         $machineName = $request->get('machineName');
         $majorVersion = $request->get('majorVersion');
         $minorVersion = $request->get('minorVersion');
+        $parameters = $request->get('parameters');
         $h5p = App::make('LaravelH5p');
 
-        $libraryData = $this->getLibraryData($machineName, $majorVersion, $minorVersion, $h5p->get_language(),'', $h5p->get_h5plibrary_url('', TRUE), '', $h5p);
+        $libraryData = $this->getLibraryData($machineName, $majorVersion, $minorVersion, $parameters, $h5p);
             // Log library load
             event(new H5pEvent(
                 'library',
@@ -86,7 +90,25 @@ class AjaxController extends Controller
                 $machineName,
                 $majorVersion . '.' . $minorVersion
             ));
-            H5PCore::ajaxSuccess($libraryData, TRUE);
+
+         // brightcove settings css
+        if ($machineName === 'H5P.BrightcoveInteractiveVideo') {
+            $brightcoveApiSettingId = $request->get('brightcoveApiSettingId');
+            $contentId = $request->get('contentId');
+            if (empty($brightcoveApiSettingId)) {
+                $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $contentId)->first();
+                if ($brightcoveContentData) {
+                    $brightcoveApiSettingId = $brightcoveContentData->brightcove_api_setting_id;
+                }
+            }
+
+            if ($brightcoveApiSettingId) {
+                $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveApiSettingId);
+                $libraryData->css[] = config('app.url') . $brightcoveAPISetting->css_path;
+            }
+        }
+        H5PCore::ajaxSuccess($libraryData, TRUE);
 
     }
 
@@ -243,9 +265,8 @@ class AjaxController extends Controller
         return response()->json($request->all());
     }
 
-    private function getLibraryData($machineName, $majorVersion, $minorVersion, $languageCode, $prefix = '', $fileDir = '', $defaultLanguage, $h5p)
+    private function getLibraryData($machineName, $majorVersion, $minorVersion, $parameters, $h5p)
     {
-        $h5peditor = $h5p::$h5peditor;
         $core = $h5p::$core;
         $editorStorage = $h5p::$editorStorage;
         $libraryData = new stdClass();
@@ -257,28 +278,15 @@ class AjaxController extends Controller
             $libraryData->version = (object)array('major' => $majorVersion, 'minor' => $minorVersion);
             $libraryData->title = $library['title'];
 
-            $libraryData->upgradesScript = $core->fs->getUpgradeScript($machineName, $majorVersion, $minorVersion);
-            if ($libraryData->upgradesScript !== NULL) {
-                // If valid add URL prefix
-                $libraryData->upgradesScript = $core->url . '' . $libraryData->upgradesScript;
-            }
 
-            $libraries = $this->findLibraryDependencies($machineName, $library, $core);
-            $libraryData->semantics = $core->loadLibrarySemantics($machineName, $majorVersion, $minorVersion);
-            $libraryData->language = $h5peditor->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $languageCode);
-            $libraryData->defaultLanguage = empty($defaultLanguage) ? NULL : $h5peditor->getLibraryLanguage($machineName, $majorVersion, $minorVersion, $defaultLanguage);
-            $libraryData->languages = $editorStorage->getAvailableLanguages($machineName, $majorVersion, $minorVersion);
-
+            $libraries = $this->findLibraryDependencies($machineName, $library, $core, $parameters);
 
             // Temporarily disable asset aggregation
             $aggregateAssets = $core->aggregateAssets;
             $core->aggregateAssets = FALSE;
-            // This is done to prevent files being loaded multiple times due to how
-            // the editor works.
 
             // Get list of JS and CSS files that belongs to the dependencies
             $files = $core->getDependenciesFiles($libraries);
-
             $editorStorage->alterLibraryFiles($files, $libraries);
 
             // Restore asset aggregation setting
@@ -321,34 +329,27 @@ class AjaxController extends Controller
                 }
             }
 
-            $translations = array();
-            // Add translations for libraries.
-            foreach ($libraries as $library) {
-                if (empty($library['semantics'])) {
-                    $translation = $h5peditor->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], $languageCode);
-
-                    // If translation was not found, and this is not the English one, try to load
-                    // the English translation
-                    if ($translation === NULL && $languageCode !== 'en') {
-                        $translation = $h5peditor->getLibraryLanguage($library['machineName'], $library['majorVersion'], $library['minorVersion'], 'en');
-                    }
-
-                    if ($translation !== NULL) {
-                        $translations[$library['machineName']] = json_decode($translation);
-                    }
-                }
-            }
-
-            $libraryData->translations = $translations;
 
         }
         return $libraryData;
     }
 
-    private function findLibraryDependencies($machineName, $library, $core)
+    private function findLibraryDependencies($machineName, $library, $core, $parameters)
     {
-        $dependencies = array();
-        $core->findLibraryDependencies($dependencies, $library);
+        // Validate and filter against main library semantics.
+        $validator = new H5PContentValidator($core->h5pF, $core);
+        $params = (object) array(
+            'library' => H5PCore::libraryToString($library),
+            'params' => json_decode(json_encode(json_decode($parameters)->params))
+        );
+
+        if (!$params->params) {
+            return NULL;
+        }
+
+        $validator->validateLibrary($params, (object) array('options' => array($params->library)));
+
+        $dependencies = $validator->getDependencies();
 
         // Load addons for wysiwyg editors
         if (in_array($machineName, self::$hasWYSIWYGEditor)) {
@@ -365,7 +366,7 @@ class AjaxController extends Controller
         $orderedDependencies = array();
         for ($i = 1, $s = count($dependencies); $i <= $s; $i++) {
             foreach ($dependencies as $dependency) {
-                if ($dependency['weight'] === $i) {
+                if ($dependency['weight'] === $i && $dependency['type'] === 'preloaded') {
                     $dependency['library']['id'] = $dependency['library']['libraryId'];
                     $orderedDependencies[$dependency['library']['libraryId']] = $dependency['library'];
                     break;

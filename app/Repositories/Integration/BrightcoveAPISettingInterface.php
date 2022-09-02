@@ -28,11 +28,4 @@ interface BrightcoveAPISettingInterface extends EloquentRepositoryInterface
      */
     public function getRowRecordByOrgId($suborganization, $id);
 
-    /**
-     * To clone Brightcove API Setting
-     * @param BrightcoveAPISetting $brightcoveAPISetting
-     * @param Organization $subOrganization
-     * @param $token
-     */
-    public function clone(BrightcoveAPISetting $brightcoveAPISetting, Organization $subOrganization, $token);
 }
