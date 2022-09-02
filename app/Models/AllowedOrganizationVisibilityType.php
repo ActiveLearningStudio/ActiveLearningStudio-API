@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 class AllowedOrganizationVisibilityType extends Model
 {
     /**
@@ -25,5 +23,6 @@ class AllowedOrganizationVisibilityType extends Model
     {
         return $this->belongsTo('App\Models\OrganizationVisibilityType', 'organization_visibility_type_id', 'id');
     }
+
 
 }
