@@ -329,7 +329,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('go/independent_activity/getxapifile/{independent_activity}', 'IndependentActivityController@getXAPIFileForIndepActivity');
     // public route for get user's shared projects
     Route::post('projects/shared', 'UserController@sharedProjects');
-
+    
     Route::get('activities/{activity}/h5p-resource-settings-shared', 'ActivityController@getH5pResourceSettingsShared');
     Route::get('independent-activities/{independent_activity}/h5p-resource-settings-shared', 'IndependentActivityController@getH5pResourceSettingsShared');
     // H5P Activity public route

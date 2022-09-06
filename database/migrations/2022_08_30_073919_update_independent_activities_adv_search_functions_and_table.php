@@ -137,12 +137,17 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-                h5p := ' and hl.name in  (''';
+            h5p := ' and hl.name in  (''';
+                
+                if hCnt=0 then 
+                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                else
                 for hlCnt in 1..hCnt loop
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
                 end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
-                
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                end if;
+            
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
@@ -154,7 +159,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where lower(a.title) like '%s'  %s  
+                where hl.title is not null and  lower(a.title) like '%s'  %s  
                 union all
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
@@ -165,7 +170,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
+                where hl.title is not null and  lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
                 $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;
@@ -213,12 +218,16 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-                h5p := ' and hl.name in  (''';
+            h5p := ' and hl.name in  (''';
+                
+                if hCnt=0 then 
+                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                else
                 for hlCnt in 1..hCnt loop
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
                 end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
-                
+                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                end if;
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
@@ -230,7 +239,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where a.user_id = '%s' and lower(a.title) like '%s'  %s  
+                where  hl.title is not null and  a.user_id = '%s' and lower(a.title) like '%s'  %s  
                 union all
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
@@ -241,7 +250,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where a.user_id = '%s' and lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
+                where hl.title is not null and  a.user_id = '%s' and lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
                 $s$,joinTable,h5p,_uid,_searchText,cnd,joinTable,h5p,_uid,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;

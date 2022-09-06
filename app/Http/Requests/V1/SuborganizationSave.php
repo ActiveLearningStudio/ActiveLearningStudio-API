@@ -31,6 +31,8 @@ class SuborganizationSave extends FormRequest
             'image' => 'required|max:255',
             'favicon' => 'nullable|max:255',
             'admins' => 'array|exists:App\User,id',
+            'visibility_type_id' => 'array|min:1|required',
+            'visibility_type_id.*' => 'integer|exists:App\Models\OrganizationVisibilityType,id',
             'users' => 'array',
             'users.*.user_id' => 'required_with:users.*.role_id|integer|exists:App\User,id',
             'users.*.role_id' => 'required_with:users.*.user_id|integer|exists:App\Models\OrganizationRoleType,id',
