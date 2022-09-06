@@ -30,6 +30,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::group(['prefix' => 'vimeo'], function () {
             Route::post('get-my-video-list', 'Integration\VimeoAPIClientController@getMyVideosList');
         });
+
+        // Komodo API For Video Integration
+        Route::group(['prefix' => 'komodo'], function () {
+            Route::post('get-my-video-list', 'Integration\KomodoAPIClientController@getMyVideosList');
+        });
     });
     
 
