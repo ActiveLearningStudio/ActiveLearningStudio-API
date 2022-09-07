@@ -78,6 +78,13 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
                 $query->orWhere('account_email', 'iLIKE', '%' . $data['query'] . '%');
             });
         }
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
+        {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query->orderBy('id', 'DESC');
+        }
         return $query->where('organization_id', $suborganization->id)->paginate($perPage);
     }
 
@@ -168,29 +175,6 @@ class BrightcoveAPISettingRepository extends BaseRepository implements Brightcov
             Log::error($e->getMessage());
         }
         throw new GeneralException($e->getMessage());
-    }
-
-    /**
-     * To clone Brightcove API Setting
-     * @param BrightcoveAPISetting $brightcoveAPISetting
-     * @param Organization $subOrganization
-     * @param string $token
-     * @return int id
-     */
-    public function clone(BrightcoveAPISetting $brightcoveAPISetting, Organization $subOrganization, $token)
-    {
-        $brightcoveAPISettingData = [
-            "user_id" => get_user_id_by_token($token),
-            "organization_id" => $subOrganization->id,
-            "account_id" => $brightcoveAPISetting->account_id,
-            "account_name" => $brightcoveAPISetting->account_name,
-            "account_email" => $brightcoveAPISetting->account_email,
-            "client_id" => $brightcoveAPISetting->client_id,
-            "client_secret" => $brightcoveAPISetting->client_secret,
-            "description" => $brightcoveAPISetting->description
-        ];
-        $clonedSetting = $this->create($brightcoveAPISettingData);
-        return $clonedSetting['id'];
     }
 
     /**

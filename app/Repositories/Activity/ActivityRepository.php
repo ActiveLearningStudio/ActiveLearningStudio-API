@@ -382,8 +382,8 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
-            $dataH5pLibraries = implode('","', $data['h5pLibraries']);
-            $queryParams['query_h5p'] = '("' . $dataH5pLibraries . '")';
+            $dataH5pLibraries = implode(",", $data['h5pLibraries']);
+            $queryParams['query_h5p'] = $dataH5pLibraries;
         }
 
         if (isset($data['indexing']) && !empty($data['indexing'])) {

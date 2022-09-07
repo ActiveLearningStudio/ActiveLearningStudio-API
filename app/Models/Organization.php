@@ -231,4 +231,12 @@ class Organization extends Model
     {
         return $this->hasMany('App\Models\IndependentActivity', 'organization_id');
     }
+
+    /**
+     * Get the allowed visibility types for the organization.
+     */
+    public function allowedVisibilityTypes()
+    {
+        return $this->belongsToMany('App\Models\OrganizationVisibilityType', 'allowed_organization_visibility_types');
+    }
 }

@@ -2,9 +2,12 @@
 
 namespace Djoudi\LaravelH5p\Http\Controllers;
 
+use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Models\Integration\BrightcoveAPISetting;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 use Djoudi\LaravelH5p\Events\H5pEvent;
-use Djoudi\LaravelH5p\LaravelH5p;
 use H5PContentValidator;
 use H5PCore;
 use H5PEditorEndpoints;
@@ -12,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Exceptions\GeneralException;
 use stdClass;
 
 class AjaxController extends Controller
@@ -88,6 +90,24 @@ class AjaxController extends Controller
                 $machineName,
                 $majorVersion . '.' . $minorVersion
             ));
+
+         // brightcove settings css
+        if ($machineName === 'H5P.BrightcoveInteractiveVideo') {
+            $brightcoveApiSettingId = $request->get('brightcoveApiSettingId');
+            $contentId = $request->get('contentId');
+            if (empty($brightcoveApiSettingId)) {
+                $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $contentId)->first();
+                if ($brightcoveContentData) {
+                    $brightcoveApiSettingId = $brightcoveContentData->brightcove_api_setting_id;
+                }
+            }
+
+            if ($brightcoveApiSettingId) {
+                $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveApiSettingId);
+                $libraryData->css[] = config('app.url') . $brightcoveAPISetting->css_path;
+            }
+        }
         H5PCore::ajaxSuccess($libraryData, TRUE);
 
     }

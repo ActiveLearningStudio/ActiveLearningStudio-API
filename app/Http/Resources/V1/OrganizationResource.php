@@ -93,6 +93,7 @@ class OrganizationResource extends JsonResource
                 'primary_font_family' => $this->primary_font_family,
                 'secondary_font_family' => $this->secondary_font_family,
             ],
+            'allowed_visibility_type_id' => OrganizationVisibilityTypeResource::collection($this->allowedVisibilityTypes)
         ];
     }
 }
