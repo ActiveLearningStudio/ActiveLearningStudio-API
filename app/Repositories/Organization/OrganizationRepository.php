@@ -33,12 +33,14 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
     private $userRepository;
     private $invitedOrganizationUserRepository;
     private $projectRepository;
+    private $uiOrganizationPermissionMappingRepository;
 
     /**
      * Organization Repository constructor.
@@ -52,12 +54,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
         Organization $model,
         UserRepositoryInterface $userRepository,
         InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
-        ProjectRepositoryInterface $projectRepository
+        ProjectRepositoryInterface $projectRepository,
+        UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository
     ) {
         $this->userRepository = $userRepository;
         parent::__construct($model);
         $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
         $this->projectRepository = $projectRepository;
+        $this->uiOrganizationPermissionMappingRepository = $uiOrganizationPermissionMappingRepository;
     }
 
     /**
@@ -448,6 +452,26 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         $role = OrganizationRoleType::find($data['role_id']);
         return $role->permissions()->sync($data['permissions']);
+    }
+
+    /**
+     * Update role UI permissions for particular organization
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function updateRoleUiPermissions($data)
+    {
+        $role = OrganizationRoleType::find($data['role_id']);
+        $organizationPermissionTypeIds = $this->uiOrganizationPermissionMappingRepository
+                                        ->getOrganizationPermissionTypeIds($data['permissions']);
+
+        DB::transaction(function () use ($role, $data, $organizationPermissionTypeIds) {
+            $role->uiModulePermissions()->sync($data['permissions']);
+            $role->permissions()->sync($organizationPermissionTypeIds);
+        });
+
+        return true;
     }
 
     /**
