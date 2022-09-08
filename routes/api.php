@@ -100,7 +100,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('independent-activities/upload-thumb', 'IndependentActivityController@uploadThumb');
         Route::get('independent-activities/{independent_activity}/detail', 'IndependentActivityController@detail');
         Route::get('independent-activities/{independent_activity}/h5p', 'IndependentActivityController@h5p');
-        Route::get('independent-activities/{independent_activity}/h5p-resource-settings', 'IndependentActivityController@getH5pResourceSettings');
         Route::get('independent-activities/{independent_activity}/share', 'IndependentActivityController@share');
         Route::get('independent-activities/{independent_activity}/remove-share', 'IndependentActivityController@removeShare');
         Route::get('suborganization/{suborganization}/independent-activities/{independent_activity}/search-preview', 'IndependentActivityController@searchPreview');
@@ -354,6 +353,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     // xAPI Statments
     Route::post('xapi/statements', 'XapiController@saveStatement');
     // Google Classroom Student workflow
+    Route::get('independent-activities/{independent_activity}/h5p-resource-settings', 'IndependentActivityController@getH5pResourceSettings');
     Route::group(['prefix' => 'google-classroom'], function () {
         Route::post('turnin/{classwork}', 'GoogleClassroomController@turnIn');
         Route::post('validate-summary-access', 'GoogleClassroomController@validateSummaryPageAccess');
