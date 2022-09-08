@@ -47,8 +47,8 @@ class Playlist
             "project_id" => $playlist->project_id,
             "tool_url" => config('constants.curriki-tsugi-host'),
             "org_name" => $organizationName,
-            "grade_name" => $grade_name,
-            "subject_name" => $subject_name
+            "grade_name" => $grade_name ? : "None",
+            "subject_name" => $subject_name ? : "None"
         ];
         $response = $this->client->request('GET', $web_service_url, ['query' => $rquest_params]);
         return $response;

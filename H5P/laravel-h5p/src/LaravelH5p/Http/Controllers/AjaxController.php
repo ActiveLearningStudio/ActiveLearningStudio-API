@@ -279,7 +279,7 @@ class AjaxController extends Controller
             $libraryData->title = $library['title'];
 
 
-            $libraries = $this->findLibraryDependencies($machineName, $library, $core, $parameters);
+            $libraries = $this->findLibraryDependencies($machineName, $library, $core, $parameters, $libraryData);
 
             // Temporarily disable asset aggregation
             $aggregateAssets = $core->aggregateAssets;
@@ -334,7 +334,7 @@ class AjaxController extends Controller
         return $libraryData;
     }
 
-    private function findLibraryDependencies($machineName, $library, $core, $parameters)
+    private function findLibraryDependencies($machineName, $library, $core, $parameters, $libraryData)
     {
         // Validate and filter against main library semantics.
         $validator = new H5PContentValidator($core->h5pF, $core);
@@ -349,6 +349,7 @@ class AjaxController extends Controller
 
         $validator->validateLibrary($params, (object) array('options' => array($params->library)));
 
+        $libraryData->filtered = json_encode($params->params);
         $dependencies = $validator->getDependencies();
 
         // Load addons for wysiwyg editors
