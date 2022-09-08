@@ -738,8 +738,6 @@ class IndependentActivityController extends Controller
      */
     public function getH5pResourceSettings(IndependentActivity $independent_activity)
     {
-        $this->authorize('view', $independent_activity);
-
         if ($independent_activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
