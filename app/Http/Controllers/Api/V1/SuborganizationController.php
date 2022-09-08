@@ -7,6 +7,7 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Resources\V1\OrganizationRoleResource;
 use App\Http\Resources\V1\OrganizationVisibilityTypeResource;
+use App\Http\Resources\V1\UiModuleResource;
 use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Requests\V1\SuborganizationUpdate;
 use App\Http\Requests\V1\SuborganizationAddUser;
@@ -20,6 +21,7 @@ use App\Http\Requests\V1\SuborganizationDeleteUserRequest;
 use App\Http\Requests\V1\SuborganizationGetUsersRequest;
 use App\Http\Requests\V1\SuborganizationUpdateMediaSource;
 use App\Http\Requests\V1\SuborganizationUpdateRole;
+use App\Http\Requests\V1\SuborganizationUpdateRoleUiPermissions;
 use App\Http\Requests\V1\SuborganizationUploadFaviconRequest;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
 use App\Http\Resources\V1\UserResource;
@@ -29,6 +31,7 @@ use App\Models\Organization;
 use App\Models\OrganizationUserRole;
 use App\Models\OrganizationVisibilityType;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\UiModule\UiModuleRepositoryInterface;
 
 /**
  * @authenticated
@@ -41,17 +44,24 @@ class SuborganizationController extends Controller
 {
     private $organizationRepository;
     private $userRepository;
+    private $uiModuleRepository;
 
     /**
      * SuborganizationController constructor.
      *
      * @param OrganizationRepositoryInterface $organizationRepository
      * @param UserRepositoryInterface $userRepository
+     * @param UiModuleRepositoryInterface $uiModuleRepository
      */
-    public function __construct(OrganizationRepositoryInterface $organizationRepository, UserRepositoryInterface $userRepository)
+    public function __construct(
+        OrganizationRepositoryInterface $organizationRepository,
+        UserRepositoryInterface $userRepository,
+        UiModuleRepositoryInterface $uiModuleRepository
+    )
     {
         $this->organizationRepository = $organizationRepository;
         $this->userRepository = $userRepository;
+        $this->uiModuleRepository = $uiModuleRepository;
     }
 
     /**
@@ -704,6 +714,31 @@ class SuborganizationController extends Controller
     }
 
     /**
+     * Get User Role UI Permissions For Suborganization
+     *
+     * Get detail of the user role UI permissions for suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam role required The Id of an organization role Example: 1
+     *
+     * @responseFile responses/organization/organization-role-ui-permissions.json
+     *
+     * @param Organization $suborganization
+     * @param OrganizationRoleType $role
+     * @return Response
+     */
+    public function getRoleUiPermissions(Organization $suborganization, OrganizationRoleType $role)
+    {
+        if ($role->organization_id === $suborganization->id) {
+            return UiModuleResource::collection($this->uiModuleRepository->getTopUIModules());
+        }
+
+        return response([
+            'errors' => ['Role detail not found.'],
+        ], 404);
+    }
+
+    /**
      * Get Visibility Types For Suborganization
      *
      * Get a list of the visibility types for suborganization.
@@ -806,6 +841,50 @@ class SuborganizationController extends Controller
 
         return response([
             'errors' => ['Failed to update role.'],
+        ], 500);
+    }
+
+    /**
+     * Update Suborganization Role UI Permissions
+     *
+     * Update role UI permissions for the specified suborganization
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam role_id integer required Id of a suborganization role Example: 1
+     * @bodyParam permissions array required Ids of the ui permissions to assign the role Example: [1, 2]
+     *
+     * @response {
+     *   "message": "Role UI permissions have been updated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update role UI permissions."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateRoleUiPermissions $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function updateRoleUiPermissions(
+        SuborganizationUpdateRoleUiPermissions $request,
+        Organization $suborganization
+    )
+    {
+        $this->authorize('updateRole', $suborganization);
+        $data = $request->validated();
+
+        $success = $this->organizationRepository->updateRoleUiPermissions($data);
+
+        if ($success) {
+            return response([
+                'message' => 'Role UI permissions have been updated successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update role UI permissions.'],
         ], 500);
     }
 
