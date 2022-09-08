@@ -7,6 +7,7 @@ use App\Http\Requests\V1\IndependentActivityCreateRequest;
 use App\Http\Requests\V1\IndependentActivityEditRequest;
 use App\Http\Requests\V1\OrganizationIndependentActivityRequest;
 use App\Http\Requests\V1\MoveIndependentActivityIntoPlaylistRequest;
+use App\Http\Resources\V1\H5pOrganizationResource;
 use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\IndependentActivityDetailResource;
 use App\Http\Resources\V1\H5pIndependentActivityResource;
@@ -14,6 +15,7 @@ use App\Jobs\CloneIndependentActivity;
 use App\Jobs\CopyIndependentActivityIntoPlaylist;
 use App\Jobs\MoveIndependentActivityIntoPlaylist;
 use App\Jobs\ConvertActvityIntoIndependentActivity;
+use App\Models\H5pBrightCoveVideoContents;
 use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
 use App\Models\Playlist;
@@ -741,13 +743,29 @@ class IndependentActivityController extends Controller
         if ($independent_activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
-            $editor = $h5p::$h5peditor;
+            $settings = $h5p::get_editor($content = null, 'preview');
             $content = $h5p->load_content($independent_activity->h5p_content_id);
+            $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+            $embed = $h5p->get_embed($content, $settings);
+            $embed_code = $embed['embed'];
+            $settings = $embed['settings'];
+            $user_data = null;
+            $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+        }
+
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $independent_activity->h5p_content_id)->first();
+
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
         }
 
         return response([
-            'h5p' => $content,
-            'independent-activity' => new IndependentActivityResource($independent_activity)
+            'h5p' => $h5p_data,
+            'activity' => new IndependentActivityResource($independent_activity),
+            'organization' => new H5pOrganizationResource($independent_activity->organization),
+            'brightcoveData' => $brightcoveData,
         ], 200);
     }
 
