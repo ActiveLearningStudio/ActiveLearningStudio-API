@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Organization;
 use App\Models\OrganizationUserRole;
 use App\Models\OrganizationVisibilityType;
+use App\Models\OrganizationRoleType;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UiModule\UiModuleRepositoryInterface;
 

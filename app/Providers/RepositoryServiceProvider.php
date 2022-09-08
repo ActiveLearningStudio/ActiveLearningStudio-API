@@ -77,6 +77,8 @@ use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeReposi
 use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
 use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepository;
+use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -124,6 +126,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(IndependentActivityRepositoryInterface::class, IndependentActivityRepository::class);
         $this->app->bind(UiOrganizationPermissionMappingRepositoryInterface::class, UiOrganizationPermissionMappingRepository::class);
         $this->app->bind(UiModuleRepositoryInterface::class, UiModuleRepository::class);
+        $this->app->bind(OrganizationRoleTypeRepositoryInterface::class, OrganizationRoleTypeRepository::class);
     }
 
     /**
