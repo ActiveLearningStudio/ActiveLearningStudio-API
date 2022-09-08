@@ -373,9 +373,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if (isset($data['author']) && !empty($data['author'])) {
-            $queryWhereAuthor[] = "first_name LIKE '%" . $data['author'] . "%'";
-            $queryWhereAuthor[] = "last_name LIKE '%" . $data['author'] . "%'";
-            $queryWhereAuthor[] = "email LIKE '%" . $data['author'] . "%'";
+            $queryWhereAuthor[] = "lower(first_name) LIKE lower('%" . $data['author'] . "%')";
+            $queryWhereAuthor[] = "lower(last_name) LIKE lower('%" . $data['author'] . "%')";
+            $queryWhereAuthor[] = "lower(email) LIKE lower('%" . $data['author'] . "%')";
 
             $queryWhereAuthor = implode(' OR ', $queryWhereAuthor);
             $queryWhere[] = "(" . $queryWhereAuthor . ")";
