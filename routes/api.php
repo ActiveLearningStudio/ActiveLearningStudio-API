@@ -100,7 +100,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('independent-activities/upload-thumb', 'IndependentActivityController@uploadThumb');
         Route::get('independent-activities/{independent_activity}/detail', 'IndependentActivityController@detail');
         Route::get('independent-activities/{independent_activity}/h5p', 'IndependentActivityController@h5p');
-        Route::get('independent-activities/{independent_activity}/h5p-resource-settings', 'IndependentActivityController@getH5pResourceSettings');
         Route::get('independent-activities/{independent_activity}/share', 'IndependentActivityController@share');
         Route::get('independent-activities/{independent_activity}/remove-share', 'IndependentActivityController@removeShare');
         Route::get('suborganization/{suborganization}/independent-activities/{independent_activity}/search-preview', 'IndependentActivityController@searchPreview');
@@ -211,9 +210,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganizations/{suborganization}/default-permissions', 'SuborganizationController@getDefaultPermissions')->name('suborganizations.get-default-permissions');
         Route::post('suborganizations/{suborganization}/add-role', 'SuborganizationController@addRole')->name('suborganizations.add-role');
         Route::put('suborganizations/{suborganization}/update-role', 'SuborganizationController@updateRole')->name('suborganizations.update-role');
+        Route::put('suborganizations/{suborganization}/update-role-ui-permissions', 'SuborganizationController@updateRoleUiPermissions')->name('suborganizations.update-role-ui-permissions');
         Route::get('suborganizations/visibility-types', 'SuborganizationController@getVisibilityTypes')->name('suborganizations.get-visibility-types');
         Route::get('suborganizations/{suborganization}/roles', 'SuborganizationController@getRoles')->name('suborganizations.get-roles');
         Route::get('suborganizations/{suborganization}/role/{roleId}', 'SuborganizationController@getRoleDetail')->name('suborganizations.get-role-detail');
+        Route::get('suborganizations/{suborganization}/role/{role}/permissions', 'SuborganizationController@getRoleUiPermissions')->name('suborganizations.get-role-permissions');
         Route::post('suborganizations/{suborganization}/upload-thumb', 'SuborganizationController@uploadThumb');
         Route::post('suborganizations/{suborganization}/upload-favicon', 'SuborganizationController@uploadFavicon');
         Route::get('suborganizations/{suborganization}/member-options', 'SuborganizationController@showMemberOptions')->name('suborganizations.member-options');
@@ -359,6 +360,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     // xAPI Statments
     Route::post('xapi/statements', 'XapiController@saveStatement');
     // Google Classroom Student workflow
+    Route::get('independent-activities/{independent_activity}/h5p-resource-settings', 'IndependentActivityController@getH5pResourceSettings');
     Route::group(['prefix' => 'google-classroom'], function () {
         Route::post('turnin/{classwork}', 'GoogleClassroomController@turnIn');
         Route::post('validate-summary-access', 'GoogleClassroomController@validateSummaryPageAccess');

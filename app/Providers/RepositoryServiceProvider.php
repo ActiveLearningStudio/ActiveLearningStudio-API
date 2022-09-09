@@ -6,6 +6,10 @@ use App\Repositories\Activity\ActivityRepository;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\IndependentActivity\IndependentActivityRepository;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
+use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepository;
+use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
+use App\Repositories\UiModule\UiModuleRepository;
+use App\Repositories\UiModule\UiModuleRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepository;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\ActivityLayout\ActivityLayoutRepositoryInterface;
@@ -73,6 +77,8 @@ use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeReposi
 use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
 use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepository;
+use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -118,6 +124,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AuthorTagRepositoryInterface::class, AuthorTagRepository::class);
         $this->app->bind(ActivityLayoutRepositoryInterface::class, ActivityLayoutRepository::class);
         $this->app->bind(IndependentActivityRepositoryInterface::class, IndependentActivityRepository::class);
+        $this->app->bind(UiOrganizationPermissionMappingRepositoryInterface::class, UiOrganizationPermissionMappingRepository::class);
+        $this->app->bind(UiModuleRepositoryInterface::class, UiModuleRepository::class);
+        $this->app->bind(OrganizationRoleTypeRepositoryInterface::class, OrganizationRoleTypeRepository::class);
     }
 
     /**
