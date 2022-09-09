@@ -14,7 +14,9 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
         $uiBackendPermissionMapping = [
             "Organiziations" => [
                 "Organiziation" => [
-                    "View" => [],
+                    "View" => [
+                        'organization:view'
+                    ],
                     "Edit" => [
                         'organization:edit',
                         'organization:delete',
@@ -90,7 +92,9 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-all-setting'
                     ],
                     "Edit" => [
-                        'organization:create-all-setting'
+                        'organization:create-all-setting',
+                        'organization:delete-all-setting',
+                        'organization:edit-all-setting'
                     ],
                     "None" => []
                 ],
