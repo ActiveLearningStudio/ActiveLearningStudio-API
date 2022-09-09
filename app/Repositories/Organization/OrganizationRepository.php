@@ -34,6 +34,7 @@ use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
+use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepositoryInterface;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
@@ -41,6 +42,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     private $invitedOrganizationUserRepository;
     private $projectRepository;
     private $uiOrganizationPermissionMappingRepository;
+    private $organizationRoleTypeRepository;
 
     /**
      * Organization Repository constructor.
@@ -49,19 +51,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      * @param UserRepositoryInterface $userRepository
      * @param InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
      * @param ProjectRepositoryInterface $projectRepository
+     * @param UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository
+     * @param OrganizationRoleTypeRepositoryInterface $organizationRoleTypeRepository
      */
     public function __construct(
         Organization $model,
         UserRepositoryInterface $userRepository,
         InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
         ProjectRepositoryInterface $projectRepository,
-        UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository
+        UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository,
+        OrganizationRoleTypeRepositoryInterface $organizationRoleTypeRepository
     ) {
         $this->userRepository = $userRepository;
         parent::__construct($model);
         $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
         $this->projectRepository = $projectRepository;
         $this->uiOrganizationPermissionMappingRepository = $uiOrganizationPermissionMappingRepository;
+        $this->organizationRoleTypeRepository = $organizationRoleTypeRepository;
     }
 
     /**
@@ -462,7 +468,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      */
     public function updateRoleUiPermissions($data)
     {
-        $role = OrganizationRoleType::find($data['role_id']);
+        $role = $this->organizationRoleTypeRepository->find($data['role_id']);
         $organizationPermissionTypeIds = $this->uiOrganizationPermissionMappingRepository
                                         ->getOrganizationPermissionTypeIds($data['permissions']);
 
