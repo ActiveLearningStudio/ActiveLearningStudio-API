@@ -5,6 +5,7 @@ namespace App\CurrikiGo\Canvas;
 use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\Commands\CreateAssignmentCommand;
 use App\CurrikiGo\Canvas\Commands\CreateAssignmentGroupsCommand;
+use App\CurrikiGo\Canvas\Commands\CreateCourseCommand;
 use App\CurrikiGo\Canvas\Commands\GetAllCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetCoursesCommand;
 use App\CurrikiGo\Canvas\Commands\GetModulesCommand;
@@ -124,6 +125,17 @@ class Course
     public function CreateAssignmentGroups($courseId, $AssignmentGroupName)
     {
         return $this->canvasClient->run(new CreateAssignmentGroupsCommand($courseId, $AssignmentGroupName));
+    }
+
+    /**
+     * Create new course groups in Canvas LMS course
+     * 
+     * @param $courseName
+     * @return string
+     */
+    public function createNewCourse($courseName)
+    {
+        return $this->canvasClient->run(new CreateCourseCommand($accountId = 'self', $courseName));
     }
 
     /**

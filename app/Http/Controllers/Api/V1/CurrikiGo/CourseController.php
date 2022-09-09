@@ -11,6 +11,7 @@ use App\CurrikiGo\Canvas\Course as CanvasCourse;
 use App\CurrikiGo\Moodle\Course as MoodleCourse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\CurrikiGo\CreateAssignmentGroupRequest;
+use App\Http\Requests\V1\CurrikiGo\CreateCourseRequest;
 use App\Http\Requests\V1\CurrikiGo\FetchCourseRequest;
 use App\Models\Project;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
@@ -213,6 +214,49 @@ class CourseController extends Controller
             return response([
                 'response_code' => 200,
                 'response_message' => 'No Assignment Groups found',
+                'data' => $outcome,
+            ], 200);
+        }
+    }
+
+    /**
+     * Create new course in Canvas
+     *
+     * @bodyParam course name string
+     *
+     * @responseFile responses/curriki-go/create-course-groups.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @return Response $request
+     */
+    public function createNewCourse(CreateCourseRequest $request)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($request->setting_id);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->createNewCourse($request->course_name);
+
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'New course has been created successfully!',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 500,
+                'response_message' => 'course creation failed',
                 'data' => $outcome,
             ], 200);
         }

@@ -169,12 +169,17 @@ class PublishController extends Controller
             $canvasClient = new Client($lmsSettings);
             $canvasPlaylist = new CanvasPlaylist($canvasClient);
             $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
-            $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter], $publishRequest->creation_type);
+            $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter], $publishRequest->creation_type, $publishRequest->canvas_course_id);
 
             if ($outcome) {
                 return response([
                     'playlist' => $outcome,
                 ], 200);
+            }
+            elseif($outcome == false){
+                return response([
+                    'errors' => ['Something went wrong while publishing.'],
+                ], 400);
             } else {
                 return response([
                     'errors' => ['Failed to send playlist to canvas.'],
