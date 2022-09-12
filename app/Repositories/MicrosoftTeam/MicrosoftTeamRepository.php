@@ -158,8 +158,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
                 // Logic is in progress
                 $postInput = [
-                    'link' => 'https://dev.currikistudio.org/activity/' . $activity->id . '/shared', // Need to discuss the link logic currently hardcoded
-                    
+                    'link' => config('constants.front-url') . '/activity/' . $activity->id . '/shared', // Need to discuss the link logic currently hardcoded
                     'displayName' => $activity->title,
                     'dueDateTime' => '2023-01-01T00:00:00Z',  // Need to discuss the due date logic currently hardcoded
                 ];
