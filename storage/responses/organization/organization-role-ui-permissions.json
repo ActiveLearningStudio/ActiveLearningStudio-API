@@ -1,0 +1,394 @@
+{
+    "data": [
+        {
+            "title": "Organiziations",
+            "ui_sub_modules": [
+                {
+                    "title": "Organiziation",
+                    "ui_module_permissions": [
+                        {
+                            "id": 1,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 2,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 3,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Projects",
+            "ui_sub_modules": [
+                {
+                    "title": "All Projects",
+                    "ui_module_permissions": [
+                        {
+                            "id": 4,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 5,
+                            "title": "Edit",
+                            "selected": true
+                        },
+                        {
+                            "id": 6,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Import/Export Projects",
+                    "ui_module_permissions": [
+                        {
+                            "id": 7,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 8,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 9,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Ref. Tables",
+            "ui_sub_modules": [
+                {
+                    "title": "Activity Types",
+                    "ui_module_permissions": [
+                        {
+                            "id": 10,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 11,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 12,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Activity Items",
+                    "ui_module_permissions": [
+                        {
+                            "id": 13,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 14,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 15,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Integrations",
+            "ui_sub_modules": [
+                {
+                    "title": "LMS Settings",
+                    "ui_module_permissions": [
+                        {
+                            "id": 16,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 17,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 18,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "LTI Tools",
+                    "ui_module_permissions": [
+                        {
+                            "id": 19,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 20,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 21,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "BrightCove",
+                    "ui_module_permissions": [
+                        {
+                            "id": 22,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 23,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 24,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Users",
+            "ui_sub_modules": [
+                {
+                    "title": "Manage Users",
+                    "ui_module_permissions": [
+                        {
+                            "id": 25,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 26,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 27,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Manage Roles",
+                    "ui_module_permissions": [
+                        {
+                            "id": 28,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 29,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 30,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Independent Activities",
+            "ui_sub_modules": [
+                {
+                    "title": "All Independent Activities",
+                    "ui_module_permissions": [
+                        {
+                            "id": 31,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 32,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 33,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Export/Import Activities",
+                    "ui_module_permissions": [
+                        {
+                            "id": 34,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 35,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 36,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Authoring",
+            "ui_sub_modules": [
+                {
+                    "title": "Project",
+                    "ui_module_permissions": [
+                        {
+                            "id": 37,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 38,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 39,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Playlist",
+                    "ui_module_permissions": [
+                        {
+                            "id": 40,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 41,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 42,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Activity",
+                    "ui_module_permissions": [
+                        {
+                            "id": 43,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 44,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 45,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Team",
+                    "ui_module_permissions": [
+                        {
+                            "id": 46,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 47,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 48,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Independent Activity",
+                    "ui_module_permissions": [
+                        {
+                            "id": 49,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 50,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 51,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "My Interactive Video",
+                    "ui_module_permissions": [
+                        {
+                            "id": 52,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 53,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
