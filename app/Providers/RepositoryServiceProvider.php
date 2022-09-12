@@ -73,6 +73,8 @@ use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeReposi
 use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
 use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
+use App\Repositories\MicrosoftTeam\MicrosoftTeamRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -118,6 +120,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AuthorTagRepositoryInterface::class, AuthorTagRepository::class);
         $this->app->bind(ActivityLayoutRepositoryInterface::class, ActivityLayoutRepository::class);
         $this->app->bind(IndependentActivityRepositoryInterface::class, IndependentActivityRepository::class);
+        $this->app->bind(MicrosoftTeamRepositoryInterface::class, MicrosoftTeamRepository::class);
     }
 
     /**

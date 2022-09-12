@@ -32,6 +32,7 @@ Route::post('ckeditor/uploadFile/', 'Api\V1\CkEditorFileManagerController@upload
 Route::get('ckeditor/browseFiles/', 'Api\V1\CkEditorFileManagerController@browseFiles');
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
+Route::get('microsoft-team/get-access-token', 'Api\V1\MicroSoftTeamController@getAccessToken');
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
@@ -319,6 +320,16 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::post('activities/{independent_activity}/publish',
                 'GoogleClassroomController@publishIndependentActivityToGoogleClassroom');
         });
+
+        // Microsoft Team Share
+        Route::group(['prefix' => 'microsoft-team'], function () {
+            Route::get('classes', 'MicroSoftTeamController@getClasses');
+            Route::post('classes', 'MicroSoftTeamController@createMsTeamClass');
+            Route::post('classes/assignments', 'MicroSoftTeamController@createMsTeamAssignment');
+            Route::post('projects/{project}/publish','MicroSoftTeamController@publishProject');
+        });
+
+
 
         Route::get('user-lms-settings', 'UserLmsSettingsController@index');
         // default Sso Integration Setting
