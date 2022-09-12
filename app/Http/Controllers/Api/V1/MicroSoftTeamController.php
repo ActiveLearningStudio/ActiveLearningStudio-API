@@ -28,12 +28,11 @@ use Redirect;
  */
 class MicroSoftTeamController extends Controller
 {
-
-     /**
-     * User repository object
-     *
-     * @var UserRepositoryInterface
-     */
+    /**
+    * User repository object
+    *
+    * @var UserRepositoryInterface
+    */
     private $userRepository;
 
     /**
@@ -61,7 +60,7 @@ class MicroSoftTeamController extends Controller
 	 * Save MS Graph api access token in the database.
 	 *
      * @bodyParam code string  The stringified of the GAPI authorization token JSON object
-     *
+     * @urlParam gid string  user id of current logged in user
      * @response {
      *   "message": "Access token has been saved successfully."
      * }
@@ -83,9 +82,7 @@ class MicroSoftTeamController extends Controller
 	 */
     public function getAccessToken(Request $request)
     {
-        
         if(!empty($request->get('code'))) {  
-            
             $code = $request->get('code');
             $accessToken = $this->microsoftTeamRepository->getToken($code);
             
@@ -120,9 +117,6 @@ class MicroSoftTeamController extends Controller
      * @response  200 {
      *   "classes": Array of classes
      * }
-     
-     *
-     * @param MSTeamCreateClassRequest $createClassRequest
      * @return Response
 	 */
     public function getClasses(Request $request)
@@ -140,23 +134,24 @@ class MicroSoftTeamController extends Controller
 	 *
 	 * Create a new Class/Team into Microsoft Team
 	 *
-     * @urlParam project required The Id of a project. Example: 9
      * @bodyParam displayName required string Name of the class. Example: Test Class
      * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
-     
      * @response  200 {
      *   "message": [
      *     "Class have been created successfully"
      *   ]
      * }
-     
+     * * @response  500 {
+     *   "errors": [
+     *     "Something went wrong."
+     *   ]
+     * }
      *
      * @param MSTeamCreateClassRequest $createClassRequest
      * @return Response
 	 */
     public function createMsTeamClass(MSTeamCreateClassRequest $createClassRequest)
     {
-        
         $data = $createClassRequest->validated();
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
@@ -169,7 +164,7 @@ class MicroSoftTeamController extends Controller
         }
         
         return response([
-            'errors' => 'Something wrong happened.',
+            'errors' => 'Something went wrong.',
         ], 500);
         
     }
@@ -179,22 +174,22 @@ class MicroSoftTeamController extends Controller
 	 *
 	 * Publish the project activities as an assignment
 	 *
-     * @urlParam MSTeamCreateAssignmentRequest $createAssignmentRequest required The Id of a project. Example: 9
+     * @urlParam Project $project required The Id of a project. Example: 9
      * @bodyParam classId required string Id of the class. Example: Test Class
      
      * @response  200 {
      *   "message": [
-     *     "Class have been created successfully"
+     *     "Project has been published successfully"
      *   ]
      * }
-     
      *
-     * @param MSTeamCreateClassRequest $createClassRequest
+     * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
      * @param Project $project
      * @return Response
 	 */
     public function publishProject(MSTeamCreateAssignmentRequest $createAssignmentRequest, Project $project)
     {
+        $createAssignmentRequest->validated();
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
         $classId = $createAssignmentRequest->get('classId');
@@ -202,21 +197,7 @@ class MicroSoftTeamController extends Controller
         $this->microsoftTeamRepository->createMSTeamAssignment($token, $classId, $project);
         
         return response([
-            'message' => 'Project has been published successfully',
+            'message' => 'Project has been published successfully.',
         ], 200);
-    }
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+    }   
 }

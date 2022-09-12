@@ -8,41 +8,40 @@ use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Http;
 
-
 class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRepositoryInterface
 {
     
     /**
-     * @var string
-     */
+    * @var string
+    */
     protected $tenantId;
     
     /**
-     * @var string
-     */
+    * @var string
+    */
     private $secretId;
 
     /**
-     * @var string
-     */
+    * @var string
+    */
     private $redirectUrl;
     
     /**
-     * @var string
-     */
+    * @var string
+    */
     private $loginUrl;
     
     /**
-     * @var string
-     */
+    * @var string
+    */
     private $apiURL;
     /**
-     * @var string
-     */
+    * @var string
+    */
     private $clientId;
 
     /**
-     * Instantiate a MicrosoftTeam Repository instance.
+    * Instantiate a MicrosoftTeam Repository instance.
     */
     public function __construct() {
 
@@ -68,7 +67,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
             'client_secret' => $this->secretId,
             'redirect_uri' => $this->redirectUrl,
             'code' => $code,
-            'scope' => 'https://graph.microsoft.com/.default',
+            'scope' => config('ms-team-configs.scope'),
             
         ];
         
@@ -85,9 +84,9 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     }
 
     /**
-        * @param $gid int 
-        * @return string
-        */
+    * @param $gid int 
+    * @return string
+    */
     public function getLoginUrl($gid)
     {
         return $this->loginUrl . '/' . $this->tenantId . '/oauth2/v2.0/authorize?client_id=' . 
@@ -122,7 +121,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     * @param $token string 
     * @param $data array
     *
-    * return int
+    * @return int
     */
     public function createMsTeamClass($token, $data)
     {
@@ -159,10 +158,10 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
                 // Logic is in progress
                 $postInput = [
-                    'link' => 'https://dev.currikistudio.org/activity/' . $activity->id . '/shared',
+                    'link' => 'https://dev.currikistudio.org/activity/' . $activity->id . '/shared', // Need to discuss the link logic currently hardcoded
                     
                     'displayName' => $activity->title,
-                    'dueDateTime' => '2023-01-01T00:00:00Z', 
+                    'dueDateTime' => '2023-01-01T00:00:00Z',  // Need to discuss the due date logic currently hardcoded
                 ];
                 
                 $headers = [
@@ -178,9 +177,5 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
                 $responseBody = json_decode($response->getBody(), true);
             }
         }
-    
-    
    }
-
-   
 }

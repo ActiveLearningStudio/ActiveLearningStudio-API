@@ -24,9 +24,17 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     * @param $token string 
     * @param $data array
     *
-    * return 
+    * @return 
     */
     public function getClassesList($token);
+
+    /**
+    * @param $token string 
+    * @param $data array
+    *
+    * @return int
+    */
+    public function createMsTeamClass($token, $data);
 
     /**
     * @param $token string
