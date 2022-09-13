@@ -100,7 +100,6 @@ class MicroSoftTeamController extends Controller
             ], 500);
 
         } else {
-
             $gid = $request->get('gid');
             $url = $this->microsoftTeamRepository->getLoginUrl($gid);
             
@@ -155,11 +154,12 @@ class MicroSoftTeamController extends Controller
         $data = $createClassRequest->validated();
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
-        $statusCode = $this->microsoftTeamRepository->createMsTeamClass($token, $data);
+        $response = json_decode($this->microsoftTeamRepository->createMsTeamClass($token, $data),true);
 
-        if($statusCode === 202) {
+        if($response['code'] === 202) {
             return response([
                 'message' => 'Class have been created successfully',
+                'classId' => $response['classId']
             ], 200);
         }
         
@@ -176,13 +176,24 @@ class MicroSoftTeamController extends Controller
 	 *
      * @urlParam Project $project required The Id of a project. Example: 9
      * @bodyParam classId required string Id of the class. Example: Test Class
-     
+     *
      * @response  200 {
      *   "message": [
-     *     "Project has been published successfully"
+     *     "Project has been published successfully."
      *   ]
      * }
      *
+     * @response  500 {
+     *   "errors": [
+     *     "Project must be shared as we are temporarily publishing the shared link."
+     *   ]
+     * }
+     * 
+     * @response  500 {
+     *   "errors": "MS Team error message",
+     *    "statusCode" : MS team status code
+     * }
+     * 
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
      * @param Project $project
      * @return Response
@@ -190,14 +201,27 @@ class MicroSoftTeamController extends Controller
     public function publishProject(MSTeamCreateAssignmentRequest $createAssignmentRequest, Project $project)
     {
         $createAssignmentRequest->validated();
+
+        if(!$project->shared) { // temporary check will remove it in future
+            return response([
+                'errors' => 'Project must be shared as we are temporarily publishing the shared link.',
+            ], 500);
+        }
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
         $classId = $createAssignmentRequest->get('classId');
 
-        $this->microsoftTeamRepository->createMSTeamAssignment($token, $classId, $project);
+        $response = json_decode($this->microsoftTeamRepository->createMSTeamAssignment($token, $classId, $project), true);
+        
+        if($response['code'] === 201) {
+            return response([
+                'message' => 'Project has been published successfully.',
+            ], 200);
+        }
         
         return response([
-            'message' => 'Project has been published successfully.',
-        ], 200);
+            'errors' => $response['message'],
+            'statusCode' => $response['code']
+        ], 500);
     }   
 }
