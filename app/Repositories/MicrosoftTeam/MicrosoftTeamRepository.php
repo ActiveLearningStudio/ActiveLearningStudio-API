@@ -136,11 +136,11 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         $response = Http::withHeaders($headers)->withOptions(["verify"=>false])->post($apiURL, $data);
         $statusCode = $response->status();
         
-        $return_arr = [
+        $returnArr = [
             "code" => $statusCode,
             "classId" => ($statusCode === 202) ? $this->fetchClassIdFromHeader($response->getHeaders()) : Null,
         ];
-        return json_encode($return_arr);
+        return json_encode($returnArr);
     }
 
    /**
@@ -175,21 +175,21 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
                 $responseBody = json_decode($response->getBody(), true);
                 $statusCode = $response->status();
                 if ($statusCode !== 201) {
-                    $return_arr = [
+                    $returnArr = [
                         "code" => $statusCode,
                         "message" => $responseBody['error']['message'] ,
                     ];
 
-                    return json_encode($return_arr);
+                    return json_encode($returnArr);
                 }
             }
         }
-        $return_arr = [
+        $returnArr = [
             "code" => 201,
             "message" => "Projcted published successfully",
         ];
 
-        return json_encode($return_arr);
+        return json_encode($returnArr);
     }
 
     /**

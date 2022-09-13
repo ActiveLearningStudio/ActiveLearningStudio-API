@@ -179,7 +179,7 @@ class MicroSoftTeamController extends Controller
      *
      * @response  200 {
      *   "message": [
-     *     "Project has been published successfully"
+     *     "Project has been published successfully."
      *   ]
      * }
      *
@@ -188,11 +188,12 @@ class MicroSoftTeamController extends Controller
      *     "Project must be shared as we are temporarily publishing the shared link."
      *   ]
      * }
+     * 
      * @response  500 {
-     *   "errors": [
-     *     "MS Team error message"
-     *   ]
+     *   "errors": "MS Team error message",
+     *    "statusCode" : MS team status code
      * }
+     * 
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
      * @param Project $project
      * @return Response
@@ -214,7 +215,7 @@ class MicroSoftTeamController extends Controller
         
         if($response['code'] === 201) {
             return response([
-                'message' => 'Project published successfully',
+                'message' => 'Project has been published successfully.',
             ], 200);
         }
         
