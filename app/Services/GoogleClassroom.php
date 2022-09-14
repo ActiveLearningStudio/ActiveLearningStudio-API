@@ -50,7 +50,7 @@ class GoogleClassroom implements GoogleClassroomInterface
             $client->setScopes(
                 [
                     \Google_Service_Classroom::CLASSROOM_COURSES_READONLY,
-                    \Google_Service_Classroom::CLASSROOM_TOPICS_READONLY,
+                    \Google_Service_Classroom::CLASSROOM_TOPICS,
                     \Google_Service_Classroom::CLASSROOM_COURSEWORK_ME,
                     \Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS,
                     \Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY,
