@@ -731,7 +731,60 @@ class SuborganizationController extends Controller
     public function getRoleUiPermissions(Organization $suborganization, OrganizationRoleType $role)
     {
         if ($role->organization_id === $suborganization->id) {
-            return UiModuleResource::collection($this->uiModuleRepository->getTopUIModules());
+
+            $dataAll = [];
+            foreach ($this->uiModuleRepository->getTopUIModules() as $topUiRow) {
+                $data = [];
+                $data['title'] = $topUiRow->title;
+
+                $subUiData = [];
+                $viewCount = $editCount = $noneCount = 0;
+
+                foreach ($topUiRow->uiSubModules as $subUiRow) {
+
+                    $subUiData['title'] = $subUiRow->title;
+
+                    $uiPermissionsAll = [];
+                    foreach ($subUiRow->uiModulePermissions as $row) {
+                        $uiPermissions = [];
+                        $uiPermissions['id'] = $row->id;
+                        $uiPermissions['title'] = $row->title;
+                        $organizationRoleType = $row->organizationRoleTypes()->find($role);
+                        $uiPermissions['selected'] = $organizationRoleType ? true : false;
+
+                        $uiPermissionsAll[] = $uiPermissions;
+
+                        $subUiData['ui_module_permissions'] = $uiPermissionsAll;
+
+                        if ($row->title == 'View' && $uiPermissions['selected'] === true) {
+                            $viewCount++;
+                        }
+                        if ($row->title == 'Edit' && $uiPermissions['selected'] === true) {
+                            $editCount++;
+                        }
+                        if ($row->title == 'None' && $uiPermissions['selected'] === true) {
+                            $noneCount++;
+                        }
+                    }
+
+                    if ($viewCount > 0 && $editCount == 0 && $noneCount == 0) {
+                        $data['general'] = 'View';
+                    } else if ($editCount > 0 && $viewCount == 0 && $noneCount == 0) {
+                        $data['general'] = 'Edit';
+                    } else {
+                        $data['general'] = '';
+                    }
+
+                    $data['ui_sub_modules'][] = $subUiData;
+                }
+
+                $dataAll[] = $data;
+            }
+
+            return response([
+                'data' => $dataAll,
+            ], 200);
+
         }
 
         return response([
