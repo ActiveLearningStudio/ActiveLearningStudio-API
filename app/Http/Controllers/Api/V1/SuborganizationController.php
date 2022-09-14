@@ -33,7 +33,6 @@ use App\Models\OrganizationVisibilityType;
 use App\Models\OrganizationRoleType;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\UiModule\UiModuleRepositoryInterface;
-use Illuminate\Http\Request;
 
 /**
  * @authenticated
@@ -725,83 +724,14 @@ class SuborganizationController extends Controller
      *
      * @responseFile responses/organization/organization-role-ui-permissions.json
      *
-     * @param Request $request
      * @param Organization $suborganization
      * @param OrganizationRoleType $role
      * @return Response
      */
-    public function getRoleUiPermissions(Request $request, Organization $suborganization, OrganizationRoleType $role)
+    public function getRoleUiPermissions(Organization $suborganization, OrganizationRoleType $role)
     {
         if ($role->organization_id === $suborganization->id) {
-
-            $viewAllSelected = false;
-            if (isset($request->view) && $request->view === 'all') {
-                $viewAllSelected = true;
-            }
-
-            $dataAll = [];
-            foreach ($this->uiModuleRepository->getTopUIModules() as $topUiRow) {
-                $data = [];
-                $data['title'] = $topUiRow->title;
-
-                $subUiData = [];
-                $viewCount = $editCount = $noneCount = 0;
-
-                foreach ($topUiRow->uiSubModules as $subUiRow) {
-
-                    $subUiData['title'] = $subUiRow->title;
-
-                    $uiPermissionsAll = [];
-                    foreach ($subUiRow->uiModulePermissions as $row) {
-                        $uiPermissions = [];
-                        $uiPermissions['id'] = $row->id;
-                        $uiPermissions['title'] = $row->title;
-                        $organizationRoleType = $row->organizationRoleTypes()->find($role);
-                        $uiPermissions['selected'] = $organizationRoleType ? true : false;
-
-                        // to set all permissions as "View" selected in case of to show all permissions
-                        if ($viewAllSelected && $row->title == 'View') {
-                            $uiPermissions['selected'] = true;
-                        } else if ($viewAllSelected && $row->title == 'Edit') {
-                            $uiPermissions['selected'] = false;
-                        } else if ($viewAllSelected && $row->title == 'None') {
-                            $uiPermissions['selected'] = false;
-                        }
-                        // ended
-
-                        $uiPermissionsAll[] = $uiPermissions;
-
-                        $subUiData['ui_module_permissions'] = $uiPermissionsAll;
-
-                        if ($row->title == 'View' && $uiPermissions['selected'] === true) {
-                            $viewCount++;
-                        }
-                        if ($row->title == 'Edit' && $uiPermissions['selected'] === true) {
-                            $editCount++;
-                        }
-                        if ($row->title == 'None' && $uiPermissions['selected'] === true) {
-                            $noneCount++;
-                        }
-                    }
-
-                    $data['ui_sub_modules'][] = $subUiData;
-                }
-
-                if ($viewCount > 0 && $editCount == 0 && $noneCount == 0) {
-                    $data['general'] = 'View';
-                } else if ($editCount > 0 && $viewCount == 0 && $noneCount == 0) {
-                    $data['general'] = 'Edit';
-                } else {
-                    $data['general'] = '';
-                }
-
-                $dataAll[] = $data;
-            }
-
-            return response([
-                'data' => $dataAll,
-            ], 200);
-
+            return UiModuleResource::collection($this->uiModuleRepository->getTopUIModules());
         }
 
         return response([
