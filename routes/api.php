@@ -210,6 +210,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('suborganizations/{suborganization}/permissions', 'SuborganizationController@getUserPermissions')->name('suborganizations.get-user-permissions');
         Route::get('suborganizations/{suborganization}/default-permissions', 'SuborganizationController@getDefaultPermissions')->name('suborganizations.get-default-permissions');
         Route::post('suborganizations/{suborganization}/add-role', 'SuborganizationController@addRole')->name('suborganizations.add-role');
+        Route::post('suborganizations/{suborganization}/add-role-ui-permissions', 'SuborganizationController@addRoleUiPermissions')->name('suborganizations.add-role-ui-permissions');
         Route::put('suborganizations/{suborganization}/update-role', 'SuborganizationController@updateRole')->name('suborganizations.update-role');
         Route::put('suborganizations/{suborganization}/update-role-ui-permissions', 'SuborganizationController@updateRoleUiPermissions')->name('suborganizations.update-role-ui-permissions');
         Route::get('suborganizations/visibility-types', 'SuborganizationController@getVisibilityTypes')->name('suborganizations.get-visibility-types');
