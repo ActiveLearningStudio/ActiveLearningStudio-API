@@ -18,6 +18,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view'
                     ],
                     "Edit" => [
+                        'organization:view',
                         'organization:edit',
                         'organization:delete',
                         'organization:create'
@@ -31,6 +32,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-all-project'
                     ],
                     "Edit" => [
+                        'organization:view-all-project',
                         'organization:upload-thumb',
                         'organization:edit-project',
                         'organization:delete-project',
@@ -44,6 +46,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-exported-project'
                     ],
                     "Edit" => [
+                        'organization:view-exported-project',
                         'organization:export-project',
                         'organization:import-project',
                         'organization:download-project'
@@ -57,6 +60,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-activity-type'
                     ],
                     "Edit" => [
+                        'organization:view-activity-type',
                         'organization:create-activity-type',
                         'organization:delete-activity-type',
                         'organization:edit-activity-type'
@@ -68,6 +72,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-activity-item'
                     ],
                     "Edit" => [
+                        'organization:view-activity-item',
                         'organization:create-activity-item',
                         'organization:delete-activity-item',
                         'organization:edit-activity-item'
@@ -81,6 +86,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-lms-setting'
                     ],
                     "Edit" => [
+                        'organization:view-lms-setting',
                         'organization:create-lms-setting',
                         'organization:delete-lms-setting',
                         'organization:edit-lms-setting'
@@ -92,6 +98,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-all-setting'
                     ],
                     "Edit" => [
+                        'organization:view-all-setting',
                         'organization:create-all-setting',
                         'organization:delete-all-setting',
                         'organization:edit-all-setting'
@@ -103,6 +110,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-brightcove-setting'
                     ],
                     "Edit" => [
+                        'organization:view-brightcove-setting',
                         'organization:create-brightcove-setting',
                         'organization:delete-brightcove-setting',
                         'organization:edit-brightcove-setting'
@@ -116,6 +124,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-user'
                     ],
                     "Edit" => [
+                        'organization:view-user',
                         'organization:add-user',
                         'organization:invite-members',
                         'organization:update-user',
@@ -131,6 +140,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:view-role'
                     ],
                     "Edit" => [
+                        'organization:view-role',
                         'organization:add-role',
                         'organization:edit-role'
                     ],
@@ -143,6 +153,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'independent-activity:view'
                     ],
                     "Edit" => [
+                        'independent-activity:view',
                         'independent-activity:create',
                         'independent-activity:edit',
                         'independent-activity:delete',
@@ -156,6 +167,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'independent-activity:view-export'
                     ],
                     "Edit" => [
+                        'independent-activity:view-export',
                         'independent-activity:export',
                         'independent-activity:import'
                     ],
@@ -170,6 +182,9 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'project:clone'
                     ],
                     "Edit" => [
+                        'project:view',
+                        'project:share',
+                        'project:clone',
                         'project:edit',
                         'project:delete',
                         'project:create',
@@ -188,6 +203,9 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'playlist:duplicate'
                     ],
                     "Edit" => [
+                        'playlist:view',
+                        'playlist:publish',
+                        'playlist:duplicate',
                         'playlist:edit',
                         'playlist:delete',
                         'playlist:create'
@@ -201,6 +219,9 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'activity:duplicate'
                     ],
                     "Edit" => [
+                        'activity:view',
+                        'activity:share',
+                        'activity:duplicate',
                         'activity:edit',
                         'activity:delete',
                         'activity:create',
@@ -213,6 +234,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'team:view'
                     ],
                     "Edit" => [
+                        'team:view',
                         'team:create',
                         'team:edit',
                         'team:delete'
@@ -224,6 +246,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'independent-activity:view-author'
                     ],
                     "Edit" => [
+                        'independent-activity:view-author',
                         'independent-activity:edit-author'
                     ],
                     "None" => []
