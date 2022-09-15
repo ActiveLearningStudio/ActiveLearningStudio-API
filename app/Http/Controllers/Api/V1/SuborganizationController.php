@@ -12,6 +12,7 @@ use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Requests\V1\SuborganizationUpdate;
 use App\Http\Requests\V1\SuborganizationAddUser;
 use App\Http\Requests\V1\SuborganizationAddRole;
+use App\Http\Requests\V1\SuborganizationAddRoleUiPermissions;
 use App\Http\Requests\V1\SuborganizationUpdateUser;
 use App\Http\Requests\V1\SuborganizationInviteMember;
 use App\Http\Requests\V1\SuborganizationSearchRequest;
@@ -784,6 +785,53 @@ class SuborganizationController extends Controller
         $data = $request->validated();
 
         $role = $this->organizationRepository->addRole($suborganization, $data);
+
+        if ($role) {
+            return response([
+                'message' => 'Role has been added successfully.',
+                'data' => $role,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to add role.'],
+        ], 500);
+    }
+
+    /**
+     * Add Suborganization Role With UI Permissions
+     *
+     * Add role for the specified suborganization with UI permissions
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam name string required Name of a suborganization role Example: member
+     * @bodyParam display_name string required Display name of a suborganization role Example: Member
+     * @bodyParam permissions array required Ids of the permissions to assign the role Example: [1, 2]
+     *
+     * @response {
+     *   "message": "Role has been added successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to add role."
+     *   ]
+     * }
+     *
+     * @param SuborganizationAddRoleUiPermissions $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function addRoleUiPermissions(
+        SuborganizationAddRoleUiPermissions $request,
+        Organization $suborganization
+    )
+    {
+        $this->authorize('addRole', $suborganization);
+
+        $data = $request->validated();
+
+        $role = $this->organizationRepository->addRoleUiPermissions($suborganization, $data);
 
         if ($role) {
             return response([
