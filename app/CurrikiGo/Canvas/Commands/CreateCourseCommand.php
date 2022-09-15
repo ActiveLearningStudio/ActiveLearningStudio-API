@@ -68,7 +68,8 @@ class CreateCourseCommand implements Command
                 'json' => $this->courseData
             ])->getBody()->getContents();
             $response = json_decode($response);
-        } catch (Exception $ex) {
+        } 
+        catch (Exception $ex) {
         }
 
         return $response;
