@@ -79,6 +79,8 @@ use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepository;
 use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepositoryInterface;
+use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
+use App\Repositories\MicrosoftTeam\MicrosoftTeamRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -127,6 +129,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UiOrganizationPermissionMappingRepositoryInterface::class, UiOrganizationPermissionMappingRepository::class);
         $this->app->bind(UiModuleRepositoryInterface::class, UiModuleRepository::class);
         $this->app->bind(OrganizationRoleTypeRepositoryInterface::class, OrganizationRoleTypeRepository::class);
+        $this->app->bind(MicrosoftTeamRepositoryInterface::class, MicrosoftTeamRepository::class);
     }
 
     /**
