@@ -160,7 +160,6 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
                 // Logic is in progress
                 $postInput = [
-                    'link' => config('constants.front-url') . '/activity/' . $activity->id . '/shared', // Need to discuss the link logic currently hardcoded
                     'displayName' => $activity->title,
                     'dueDateTime' => '2023-01-01T00:00:00Z',  // Need to discuss the due date logic currently hardcoded
                 ];
@@ -175,13 +174,30 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
                 $responseBody = json_decode($response->getBody(), true);
                 $statusCode = $response->status();
                 if ($statusCode !== 201) {
+                    
                     $returnArr = [
-                        "code" => $statusCode,
-                        "message" => $responseBody['error']['message'] ,
+                        "code" => $resourceStatusCode,
+                        "message" => $resourceResponseBody['error']['message'],
                     ];
 
                     return json_encode($returnArr);
                 }
+                //Add link resource
+                $assignmentId = $responseBody['id'];
+                $resourceApiUrl = $this->landingUrl . 'education/classes/' . $classId . '/assignments/' . $assignmentId . '/resources';
+                $postResourceInput = [
+                    "distributeForStudentWork" => false,
+                    "resource" => [
+                        "displayName" => $activity->title,
+                        "link" => config('constants.front-url') . '/activity/' . $activity->id . '/shared', // Need to discuss the link logic currently shared link
+                        "@odata.type" => "#microsoft.graph.educationLinkResource"
+                    ]
+                ];
+
+                $responseResource = Http::withHeaders($headers)->withOptions(["verify"=>false])->post($resourceApiUrl, $postResourceInput);
+                $resourceResponseBody = json_decode($responseResource->getBody(), true);
+                $resourceStatusCode = $responseResource->status();
+                
             }
         }
         $returnArr = [
