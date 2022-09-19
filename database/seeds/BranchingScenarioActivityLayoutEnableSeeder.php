@@ -22,7 +22,7 @@ class BranchingScenarioActivityLayoutEnableSeeder extends Seeder
             ]);
         }
 
-        $branchingScenarioActivityItemsParams = ['title' => 'Branching Scenario', 'h5pLib' => 'H5P.BranchingScenario 1.7'];
+        $branchingScenarioActivityItemsParams = ['title' => 'Branching Scenario (Beta)', 'h5pLib' => 'H5P.BranchingScenario 1.7'];
         $branchingScenarioActivityItems = DB::table('activity_items')->where($branchingScenarioActivityItemsParams)->first();
         if ($branchingScenarioActivityItems) {
             DB::table('activity_items')->where($branchingScenarioActivityItemsParams)->update([
