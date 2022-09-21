@@ -22,6 +22,11 @@ class CreateOrganizationRoleTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        \Artisan::call('db:seed', [
+            '--class' => OrganizationRoleTypeSeeder::class,
+            '--force' => true
+        ]);
     }
 
     /**
