@@ -21,16 +21,6 @@ class CreateOrganizationPermissionTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        \Artisan::call('db:seed', [
-            '--class' => OrganizationPermissionTypeSeeder::class,
-            '--force' => true
-        ]);
-
-        \Artisan::call('db:seed', [
-            '--class' => DefaultSsoPermissionTypes::class,
-            '--force' => true
-        ]);
     }
 
     /**

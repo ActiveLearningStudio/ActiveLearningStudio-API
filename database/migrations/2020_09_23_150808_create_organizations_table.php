@@ -24,11 +24,6 @@ class CreateOrganizationsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        \Artisan::call('db:seed', [
-            '--class' => OrganizationSeeder::class,
-            '--force' => true
-        ]);
     }
 
     /**

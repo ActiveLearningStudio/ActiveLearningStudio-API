@@ -20,11 +20,6 @@ class CreateOrganizationVisibilityTypesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        \Artisan::call('db:seed', [
-            '--class' => OrganizationVisibilityTypeSeeder::class,
-            '--force' => true
-        ]);
     }
 
     /**
