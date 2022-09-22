@@ -325,6 +325,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
 
         // Microsoft Team Share
         Route::group(['prefix' => 'microsoft-team'], function () {
+            Route::post('save-access-token', 'MicroSoftTeamController@saveAccessToken');
             Route::get('classes', 'MicroSoftTeamController@getClasses');
             Route::post('classes', 'MicroSoftTeamController@createMsTeamClass');
             Route::post('classes/assignments', 'MicroSoftTeamController@createMsTeamAssignment');

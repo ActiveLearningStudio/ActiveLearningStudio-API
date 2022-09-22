@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\V1\MSTeamCreateClassRequest;
 use App\Http\Requests\V1\MSTeamCreateAssignmentRequest;
+use App\Http\Requests\V1\MSSaveAccessTokenRequest;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
@@ -106,6 +107,51 @@ class MicroSoftTeamController extends Controller
             return Redirect::to($url);
         }
    
+    }
+
+    /**
+	 * Save Access Token
+	 *
+	 * Save GraphAPI access token in the database.
+	 *
+     * @bodyParam access_token string required The stringified of the GraphAPI access token JSON object
+     *
+     * @response {
+     *   "message": "Access token has been saved successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Validation error: Access token is required"
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to save the token."
+     *   ]
+     * }
+     *
+     * @param MSSaveAccessTokenRequest $accessTokenRequest
+     * @return Response
+	 */
+    public function saveAccessToken(MSSaveAccessTokenRequest $accessTokenRequest)
+    {
+        $data = $accessTokenRequest->validated();
+        $authUser = auth()->user();
+        $isUpdated = $this->userRepository->update([
+            'msteam_access_token' => $data['access_token']
+        ], $authUser->id);
+
+        if ($isUpdated) {
+            return response([
+                'message' => 'Access token has been saved successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to save the token.'],
+        ], 500);
     }
     
     /**
