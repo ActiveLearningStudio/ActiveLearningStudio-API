@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class UpdateImagePairSemanticsToH5PLibraries extends Migration
+class UpdateEssaySemainticsToH5pLibraries extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +14,10 @@ class UpdateImagePairSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PImagePairSubmitButtonSeeder::class
+            '--class' => H5PEssaysLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
+        
     }
 
     /**
@@ -23,6 +27,6 @@ class UpdateImagePairSemanticsToH5PLibraries extends Migration
      */
     public function down()
     {
-        
+        //
     }
 }

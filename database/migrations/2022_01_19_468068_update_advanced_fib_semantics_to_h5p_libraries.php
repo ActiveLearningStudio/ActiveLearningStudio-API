@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateFillInTheBlankSemanticsToH5PLibraries extends Migration
+class UpdateAdvancedFibSemanticsToH5PLibraries extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,8 @@ class UpdateFillInTheBlankSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PFillInTheBlankLibSubmitButtonSeeder::class
+            '--class' => H5PAdvancedFibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 

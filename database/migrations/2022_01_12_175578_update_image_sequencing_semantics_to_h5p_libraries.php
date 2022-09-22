@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class UpdateTranslationEditorInteractiveVideo extends Migration
+class UpdateImageSequencingSemanticsToH5PLibraries extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +11,9 @@ class UpdateTranslationEditorInteractiveVideo extends Migration
      */
     public function up()
     {
-        //
         \Artisan::call('db:seed', [
-            '--class' => TransalationUpdateH5pLibrariesLanguage::class
+            '--class' => H5PImageSequencingLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
@@ -26,6 +24,6 @@ class UpdateTranslationEditorInteractiveVideo extends Migration
      */
     public function down()
     {
-        //
+        
     }
 }

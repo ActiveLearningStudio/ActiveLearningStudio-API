@@ -1,10 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class UpdateTranslationEditorDragAndDrop extends Migration
+class UpdateFillInTheBlankSemanticsToH5PLibraries extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +11,9 @@ class UpdateTranslationEditorDragAndDrop extends Migration
      */
     public function up()
     {
-        //
         \Artisan::call('db:seed', [
-            '--class' => TranslationUpdateForDragAndDrop::class
+            '--class' => H5PFillInTheBlankLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 
@@ -26,6 +24,6 @@ class UpdateTranslationEditorDragAndDrop extends Migration
      */
     public function down()
     {
-        //
+        
     }
 }

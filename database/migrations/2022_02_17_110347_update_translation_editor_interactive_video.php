@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class UpdateAdvancedFibSemanticsToH5PLibrariesV2 extends Migration
+class UpdateTranslationEditorInteractiveVideo extends Migration
 {
     /**
      * Run the migrations.
@@ -11,8 +13,10 @@ class UpdateAdvancedFibSemanticsToH5PLibrariesV2 extends Migration
      */
     public function up()
     {
+        //
         \Artisan::call('db:seed', [
-            '--class' => H5PAdvancedFibSubmitButtonSeeder::class
+            '--class' => TransalationUpdateH5pLibrariesLanguage::class,
+            '--force' => true
         ]);
     }
 
@@ -23,6 +27,6 @@ class UpdateAdvancedFibSemanticsToH5PLibrariesV2 extends Migration
      */
     public function down()
     {
-        
+        //
     }
 }

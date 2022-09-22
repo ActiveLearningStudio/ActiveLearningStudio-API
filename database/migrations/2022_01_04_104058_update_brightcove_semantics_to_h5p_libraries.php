@@ -1,8 +1,11 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Seeder;
 
-class UpdateAdvancedFibSemanticsToH5PLibraries extends Migration
+class UpdateBrightcoveSemanticsToH5PLibraries extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +15,8 @@ class UpdateAdvancedFibSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PAdvancedFibSubmitButtonSeeder::class
+            '--class' => H5PBrightcoveVideoLib::class,
+            '--force' => true
         ]);
     }
 

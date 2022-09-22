@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class UpdateImageSequencingSemanticsToH5PLibraries extends Migration
+class UpdateTranslationEditorDragAndDrop extends Migration
 {
     /**
      * Run the migrations.
@@ -11,8 +13,10 @@ class UpdateImageSequencingSemanticsToH5PLibraries extends Migration
      */
     public function up()
     {
+        //
         \Artisan::call('db:seed', [
-            '--class' => H5PImageSequencingLibSubmitButtonSeeder::class
+            '--class' => TranslationUpdateForDragAndDrop::class,
+            '--force' => true
         ]);
     }
 
@@ -23,6 +27,6 @@ class UpdateImageSequencingSemanticsToH5PLibraries extends Migration
      */
     public function down()
     {
-        
+        //
     }
 }
