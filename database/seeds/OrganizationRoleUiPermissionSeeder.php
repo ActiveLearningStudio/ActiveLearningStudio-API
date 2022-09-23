@@ -146,15 +146,18 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
                 }
             }
 
-            if (isset($this->uiModules[$permissionName]) && $this->uiModulePermissions[$permissionType][$this->uiModules[$permissionName]]) {
+            if (isset($this->uiModules[$permissionName]) && isset($this->uiModulePermissions[$permissionType][$this->uiModules[$permissionName]])) {
                 $uiModulePermissionIds[] = $this->uiModulePermissions[$permissionType][$this->uiModules[$permissionName]];
             }
         }
-        // assign ui role permissions
-        $roleType->uiModulePermissions()->sync($uiModulePermissionIds);
-        // assign backend role permissions 
-        $UiOrganizationPermissionMappingRepository = resolve(UiOrganizationPermissionMappingRepositoryInterface::class);
-        $organizationPermissionTypeIds = $UiOrganizationPermissionMappingRepository->getOrganizationPermissionTypeIds($uiModulePermissionIds);
-        $roleType->permissions()->sync($organizationPermissionTypeIds);
+
+        return DB::transaction(function () use($uiModulePermissionIds, $roleType) {
+            // assign ui role permissions
+            $roleType->uiModulePermissions()->sync($uiModulePermissionIds);
+            // assign backend role permissions 
+            $UiOrganizationPermissionMappingRepository = resolve(UiOrganizationPermissionMappingRepositoryInterface::class);
+            $organizationPermissionTypeIds = $UiOrganizationPermissionMappingRepository->getOrganizationPermissionTypeIds($uiModulePermissionIds);
+            $roleType->permissions()->sync($organizationPermissionTypeIds);
+        });
     }
 }
