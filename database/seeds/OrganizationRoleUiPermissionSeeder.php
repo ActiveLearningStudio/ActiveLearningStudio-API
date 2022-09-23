@@ -136,10 +136,12 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
        
         foreach ($uiPermissions as $permissionName => $permissionType) {
             
-            if ($this->domain === 'currikistudio.org') {
-                if ($permissionName === 'Team' && ($roleType->name === 'course_creator' || $roleType->name === 'self_registered')) {
-                    $permissionType = 'View';
-                }
+            if (
+                $this->domain === 'currikistudio.org' && 
+                $permissionName === 'Team' &&
+                ($roleType->name === 'course_creator' || $roleType->name === 'self_registered')
+            ) {
+                $permissionType = 'View';
             } else if ($this->domain === 'oci.currikistudio.org') {
                 if ($permissionName === 'Independent Activity') {
                     $permissionType = 'None';
@@ -148,9 +150,11 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
                 }
             }
 
-            $uiPermissionName = $this->uiModules[$permissionName];
-            if (isset($uiPermissionName) && isset($this->uiModulePermissions[$permissionType][$uiPermissionName])) {
-                $uiModulePermissionIds[] = $this->uiModulePermissions[$permissionType][$uiPermissionName];
+            if (isset($this->uiModules[$permissionName])) {
+                $uiPermissionName = $this->uiModules[$permissionName];
+                if (isset($this->uiModulePermissions[$permissionType][$uiPermissionName])) {
+                    $uiModulePermissionIds[] = $this->uiModulePermissions[$permissionType][$uiPermissionName];
+                }
             }
         }
 
