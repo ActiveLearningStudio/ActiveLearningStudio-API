@@ -115,17 +115,19 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
 
         $this->domain = request()->getHttpHost();
 
-        foreach ($roleTypes as $roleType) {
-            if ($roleType->name === 'admin') {
-                $this->assignPermissions($adminUiPermissions, $roleType);
-            } else if ($roleType->name === 'course_creator') {
-                $this->assignPermissions($courseCreatorUiPermissions, $roleType);
-            } else if ($roleType->name === 'member') {
-                $this->assignPermissions($memberUiPermissions, $roleType);
-            } else if ($roleType->name === 'self_registered') {
-                $this->assignPermissions($selfRegisteredUiPermissions, $roleType);
+        return DB::transaction(function () use($roleTypes, $adminUiPermissions, $courseCreatorUiPermissions, $memberUiPermissions, $selfRegisteredUiPermissions) {
+            foreach ($roleTypes as $roleType) {
+                if ($roleType->name === 'admin') {
+                    $this->assignPermissions($adminUiPermissions, $roleType);
+                } else if ($roleType->name === 'course_creator') {
+                    $this->assignPermissions($courseCreatorUiPermissions, $roleType);
+                } else if ($roleType->name === 'member') {
+                    $this->assignPermissions($memberUiPermissions, $roleType);
+                } else if ($roleType->name === 'self_registered') {
+                    $this->assignPermissions($selfRegisteredUiPermissions, $roleType);
+                }
             }
-        }
+        });
     }
 
     function assignPermissions($uiPermissions, $roleType)
@@ -146,18 +148,17 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
                 }
             }
 
-            if (isset($this->uiModules[$permissionName]) && isset($this->uiModulePermissions[$permissionType][$this->uiModules[$permissionName]])) {
-                $uiModulePermissionIds[] = $this->uiModulePermissions[$permissionType][$this->uiModules[$permissionName]];
+            $uiPermissionName = $this->uiModules[$permissionName];
+            if (isset($uiPermissionName) && isset($this->uiModulePermissions[$permissionType][$uiPermissionName])) {
+                $uiModulePermissionIds[] = $this->uiModulePermissions[$permissionType][$uiPermissionName];
             }
         }
 
-        return DB::transaction(function () use($uiModulePermissionIds, $roleType) {
-            // assign ui role permissions
-            $roleType->uiModulePermissions()->sync($uiModulePermissionIds);
-            // assign backend role permissions 
-            $UiOrganizationPermissionMappingRepository = resolve(UiOrganizationPermissionMappingRepositoryInterface::class);
-            $organizationPermissionTypeIds = $UiOrganizationPermissionMappingRepository->getOrganizationPermissionTypeIds($uiModulePermissionIds);
-            $roleType->permissions()->sync($organizationPermissionTypeIds);
-        });
+        // assign ui role permissions
+        $roleType->uiModulePermissions()->sync($uiModulePermissionIds);
+        // assign backend role permissions 
+        $UiOrganizationPermissionMappingRepository = resolve(UiOrganizationPermissionMappingRepositoryInterface::class);
+        $organizationPermissionTypeIds = $UiOrganizationPermissionMappingRepository->getOrganizationPermissionTypeIds($uiModulePermissionIds);
+        $roleType->permissions()->sync($organizationPermissionTypeIds);
     }
 }
