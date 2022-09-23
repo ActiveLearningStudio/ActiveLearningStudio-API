@@ -16,7 +16,7 @@ class IndependentActivity extends Model
      * @var array
      */
     protected $table = 'activities';
-    protected $gaurded = [];
+    protected $gaurded = ['id'];
 
     /**
      * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
