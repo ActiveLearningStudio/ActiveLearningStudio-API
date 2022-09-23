@@ -16,27 +16,7 @@ class IndependentActivity extends Model
      * @var array
      */
     protected $table = 'activities';
-    protected $fillable = [
-        'title',
-        'type',
-        'content',
-        'shared',
-        'order',
-        'is_public',
-        'h5p_content_id',
-        'thumb_url',
-        'user_id',
-        'organization_id',
-        'organization_visibility_type_id',
-        'description',
-        'source_type',
-        'source_url',
-        'cloned_from',
-        'clone_ctr',
-        'status',
-        'indexing',
-        'original_user'
-    ];
+    protected $gaurded = [];
 
     /**
      * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
