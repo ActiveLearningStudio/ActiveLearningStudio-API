@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,27 +16,7 @@ class IndependentActivity extends Model
      * @var array
      */
     protected $table = 'activities';
-    protected $fillable = [
-        'title',
-        'type',
-        'content',
-        'shared',
-        'order',
-        'is_public',
-        'h5p_content_id',
-        'thumb_url',
-        'user_id',
-        'organization_id',
-        'organization_visibility_type_id',
-        'description',
-        'source_type',
-        'source_url',
-        'cloned_from',
-        'clone_ctr',
-        'status',
-        'indexing',
-        'original_user'
-    ];
+    protected $gaurded = [];
 
     /**
      * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
@@ -49,6 +30,10 @@ class IndependentActivity extends Model
     public static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope('approve', function (Builder $builder) {
+            $builder->where('activity_type', "INDEPENDENT");
+        });
 
         self::deleting(function (IndependentActivity $independentActivity) {
             H5pBrightCoveVideoContents::where('h5p_content_id', $independentActivity->h5p_content_id)->delete();
@@ -110,7 +95,7 @@ class IndependentActivity extends Model
      */
     public function subjects()
     {
-        return $this->belongsToMany('App\Models\Subject', 'independent_activity_subject')->withTimestamps();
+        return $this->belongsToMany('App\Models\Subject', 'activity_subject', 'id')->withTimestamps();
     }
 
     /**
@@ -118,7 +103,7 @@ class IndependentActivity extends Model
      */
     public function educationLevels()
     {
-        return $this->belongsToMany('App\Models\EducationLevel', 'independent_activity_education_level')->withTimestamps();
+        return $this->belongsToMany('App\Models\EducationLevel', 'activity_education_level', 'id')->withTimestamps();
     }
 
     /**
@@ -126,7 +111,7 @@ class IndependentActivity extends Model
      */
     public function authorTags()
     {
-        return $this->belongsToMany('App\Models\AuthorTag', 'independent_activity_author_tag')->withTimestamps();
+        return $this->belongsToMany('App\Models\AuthorTag', 'activity_author_tag', 'id')->withTimestamps();
     }
 
     /**
