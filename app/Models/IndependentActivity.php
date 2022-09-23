@@ -14,6 +14,7 @@ class IndependentActivity extends Model
      *
      * @var array
      */
+    protected $table = 'activities';
     protected $fillable = [
         'title',
         'type',
