@@ -14,7 +14,7 @@ class UpdateActivitiesTableAndColumnsAddition extends Migration
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->foreignId('organization_visibility_type_id')->nullable();
+            $table->foreignId('organization_visibility_type_id')->nullable()->constrained();
             $table->unsignedBigInteger('cloned_from')->nullable()->default(null);
             $table->unsignedBigInteger('clone_ctr')->nullable()->default(0);
             $table->tinyInteger('status')->nullable()->default(1); // 1 is for draft
