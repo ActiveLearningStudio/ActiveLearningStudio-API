@@ -158,10 +158,11 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
             $activities = $playlist->activities;
             foreach($activities as $activity) {
 
+                $assignmentDueDays = config('ms-team-configs.assignment_due_days');
                 // Logic is in progress
                 $postInput = [
                     'displayName' => $activity->title,
-                    'dueDateTime' => '2023-01-01T00:00:00Z',  // Need to discuss the due date logic currently hardcoded
+                    'dueDateTime' => date('c', strtotime(date('Y-m-d'). ' + ' . $assignmentDueDays . ' days')),  // Need to discuss the due date logic currently hardcoded
                 ];
                 
                 $headers = [
@@ -170,8 +171,10 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
                     'Authorization' => 'Bearer ' . $token
                 ];
             
-                $response = Http::withHeaders($headers)->withOptions(["verify"=>false])->post($apiURL, $postInput);
+                $response = Http::withHeaders($headers)->withOptions(["verify"=>false])
+                                                ->retry(3, 6000)->post($apiURL, $postInput);
                 $responseBody = json_decode($response->getBody(), true);
+                
                 $statusCode = $response->status();
                 if ($statusCode !== 201) {
                     
