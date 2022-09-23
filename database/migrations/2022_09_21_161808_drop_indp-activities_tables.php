@@ -13,10 +13,10 @@ class DropIndpActivitiesTables extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('independent_activities');
-        Schema::dropIfExists('independent_activity_author_tag');
-        Schema::dropIfExists('independent_activity_education_level');
         Schema::dropIfExists('independent_activity_subject');
+        Schema::dropIfExists('independent_activity_education_level');
+        Schema::dropIfExists('independent_activity_author_tag');
+        Schema::dropIfExists('independent_activities');
     }
 
     /**
