@@ -3,6 +3,7 @@
 namespace App\Http\Resources\V1;
 
 use App\Http\Resources\V1\SearchUserResource;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +17,7 @@ class SearchPostgreSqlResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             'id' => $this->entity_id,
             'project_id' => $this->project_id,
             'playlist_id' => $this->when(isset($this->playlist_id), $this->playlist_id),
@@ -40,5 +41,14 @@ class SearchPostgreSqlResource extends JsonResource
                 "image" => $this->org_image
             ]
         ];
+
+        if ($this->entity == 'Activity') {
+            $project = Project::find($this->project_id);
+            $playlist = $project->playlists()->find($this->playlist_id);
+            $resource['location'] = $project->name.' > '.$playlist->title;
+            $resource['activity_type'] = explode(' ', explode('.', $this->h5plib)[1])[0];
+        }
+
+        return $resource;
     }
 }
