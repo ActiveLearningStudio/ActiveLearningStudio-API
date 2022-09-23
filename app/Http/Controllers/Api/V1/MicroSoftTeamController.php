@@ -246,6 +246,7 @@ class MicroSoftTeamController extends Controller
 	 */
     public function publishProject(MSTeamCreateAssignmentRequest $createAssignmentRequest, Project $project)
     {
+        //dd(date('c', strtotime(date('Y-m-d'). ' + 7 days')));
         $createAssignmentRequest->validated();
 
         if(!$project->shared) { // temporary check will remove it in future
