@@ -9,6 +9,7 @@ use ElasticScoutDriverPlus\CustomSearch;
 use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 use App\Models\QueryBuilders\SearchFormQueryBuilder;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 
 class Activity extends Model
 {
@@ -78,6 +79,10 @@ class Activity extends Model
     public static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope('approve', function (Builder $builder) {
+            $builder->where('activity_type', "ACTIVITY");
+        });
 
         self::deleting(function (Activity $activity) {
             H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->delete();

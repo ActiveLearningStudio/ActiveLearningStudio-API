@@ -835,12 +835,12 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                             $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
 
-                            $newSubject['independent_activity_id'] = $cloned_activity->id;
+                            $newSubject['activity_id'] = $cloned_activity->id;
                             $newSubject['subject_id'] = $recSubject->id;
                             $newSubject['created_at'] = date('Y-m-d H:i:s');
                             $newSubject['updated_at'] = date('Y-m-d H:i:s');
                             
-                            DB::table('independent_activity_subject')->insert($newSubject);
+                            DB::table('activity_subject')->insert($newSubject);
                         }
                     }
 
@@ -855,7 +855,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                             $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
 
-                            $newEducationLevel['independent_activity_id'] = $cloned_activity->id;
+                            $newEducationLevel['activity_id'] = $cloned_activity->id;
                             $newEducationLevel['education_level_id'] = $recEducationLevel->id;
                             $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
                             $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
@@ -873,7 +873,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                         \Log::info($authorTags);
                         foreach ($authorTags as $authorTag) {
                             $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
-                            $newauthorTag['independent_activity_id'] = $cloned_activity->id;
+                            $newauthorTag['activity_id'] = $cloned_activity->id;
                             $newauthorTag['author_tag_id'] = $recAuthorTag->id;
                             $newauthorTag['created_at'] = date('Y-m-d H:i:s');
                             $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
