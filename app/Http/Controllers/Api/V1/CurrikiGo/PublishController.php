@@ -175,12 +175,13 @@ class PublishController extends Controller
                 return response([
                     'playlist' => $outcome,
                 ], 200);
-            }
-            elseif($outcome == false){
+            } 
+            elseif ($outcome == false) {
                 return response([
                     'errors' => ['Something went wrong while publishing.'],
                 ], 400);
-            } else {
+            } 
+            else {
                 return response([
                     'errors' => ['Failed to send playlist to canvas.'],
                 ], 500);

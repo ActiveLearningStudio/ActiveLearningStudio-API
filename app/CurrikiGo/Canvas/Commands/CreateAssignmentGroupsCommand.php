@@ -38,7 +38,7 @@ class CreateAssignmentGroupsCommand implements Command
      *
      * @var array
      */
-    private $AssignmentGroupName;
+    private $assignmentGroupName;
 
     /**
      * Creates an instance of the command class
@@ -47,11 +47,11 @@ class CreateAssignmentGroupsCommand implements Command
      * @param string $queryString
      * @return void
      */
-    public function __construct($courseId, $AssignmentGroupName)
+    public function __construct($courseId, $assignmentGroupName)
     {
         $this->courseId = $courseId;
         $this->endpoint = config('constants.canvas_api_endpoints.assignment_groups');
-        $this->courseData = $this->prepareCourseData($AssignmentGroupName);
+        $this->courseData = $this->prepareCourseData($assignmentGroupName);
     }
 
     /**
@@ -80,8 +80,8 @@ class CreateAssignmentGroupsCommand implements Command
      * @param array $data
      * @return array
      */
-    public function prepareCourseData($AssignmentGroupName)
+    public function prepareCourseData($assignmentGroupName)
     {
-        return ["name" => $AssignmentGroupName];
+        return ["name" => $assignmentGroupName];
     }
 }

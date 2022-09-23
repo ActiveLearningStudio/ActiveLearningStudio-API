@@ -86,6 +86,7 @@ class Course
      */
     public function fetchAllCourses()
     {
+        $moduleItems = [];
         $courses = $this->canvasClient->run(new GetAllCoursesCommand());
         if ($courses) {
             foreach ($courses as $key => $item) {
@@ -119,12 +120,12 @@ class Course
      * Create assignmet groups in Canvas LMS course
      * 
      * @param $courseId
-     * @param $AssignmentGroupName
+     * @param $assignmentGroupName
      * @return array
      */
-    public function CreateAssignmentGroups($courseId, $AssignmentGroupName)
+    public function CreateAssignmentGroups($courseId, $assignmentGroupName)
     {
-        return $this->canvasClient->run(new CreateAssignmentGroupsCommand($courseId, $AssignmentGroupName));
+        return $this->canvasClient->run(new CreateAssignmentGroupsCommand($courseId, $assignmentGroupName));
     }
 
     /**
@@ -135,7 +136,7 @@ class Course
      */
     public function createNewCourse($courseName)
     {
-        return $this->canvasClient->run(new CreateCourseCommand($accountId = 'self', $courseName));
+        return $this->canvasClient->run(new CreateCourseCommand($courseName, $accountId = 'self'));
     }
 
     /**

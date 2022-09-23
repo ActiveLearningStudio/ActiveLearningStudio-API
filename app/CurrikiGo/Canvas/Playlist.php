@@ -65,7 +65,11 @@ class Playlist
             $accountId = "self";
 
             if ($createAssignment == config('constants.canvas_creation_type.create_modules')) {
-                $module = $this->canvasClient->run(new CreateModuleCommand($canvasCourseId, ["name" => $moduleName]));
+                $modules = $this->canvasClient->run(new GetModulesCommand($canvasCourseId, $moduleName));
+                $module = CourseHelper::getModuleByName($modules, $moduleName);
+                if (!$module) {
+                    $module = $this->canvasClient->run(new CreateModuleCommand($canvasCourseId, ["name" => $moduleName]));
+                }
                 $moduleItem['title'] = $playlist->title . ($data['counter'] > 0 ? ' (' . $data['counter'] . ')' : '');
                 $moduleItem['content_id'] = $playlist->id;
                 $moduleItem['external_url'] = config('constants.curriki-tsugi-host') . "?playlist=" . $playlist->id;

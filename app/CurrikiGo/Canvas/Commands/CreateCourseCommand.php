@@ -48,7 +48,7 @@ class CreateCourseCommand implements Command
      * @param array $sisId
      * @return void
      */
-    public function __construct($accountId, $courseName)
+    public function __construct($courseName, $accountId)
     {
         $this->accountId = $accountId;
         $this->courseData = $this->prepareCourseData($courseName);

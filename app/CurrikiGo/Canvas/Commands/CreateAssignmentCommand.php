@@ -96,10 +96,10 @@ class CreateAssignmentCommand implements Command
      * @param array $data
      * @return array
      */
-    public function prepareCourseData($assignmentGroupId, $AssignmentGroupName, $currikiActivityId)
+    public function prepareCourseData($assignmentGroupId, $assignmentGroupName, $currikiActivityId)
     {
         $assignment = [];
-        $assignment["name"] = $AssignmentGroupName;
+        $assignment["name"] = $assignmentGroupName;
         $assignment['assignment_group_id'] = $assignmentGroupId;
         $assignment['self_signup'] = 'enabled';
         $assignment['position'] = 1;
