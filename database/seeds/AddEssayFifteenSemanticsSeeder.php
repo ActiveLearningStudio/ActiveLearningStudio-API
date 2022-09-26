@@ -46,7 +46,7 @@ class AddEssayFifteenSemanticsSeeder extends Seeder
     private function insertDependentLibraries($h5pFibLibId)
     {
         //Preloaded Dependencies
-        $h5pQuestionParams = ['name' => "Question", "major_version" => 1, "minor_version" => 5];
+        $h5pQuestionParams = ['name' => "H5P.Question", "major_version" => 1, "minor_version" => 5];
         $h5pQuestionLib = DB::table('h5p_libraries')->where($h5pQuestionParams)->first();
         $h5pQuestionLibId = $h5pQuestionLib->id;
 
