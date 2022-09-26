@@ -24,8 +24,8 @@ class MSTeamCreateAssignmentRequest extends FormRequest
     public function rules()
     {
         return [
-            //'classId' => 'required|string|max:255',
-            //'aSyncUrl'=> 'required|string|max:255',
+            'classId' => 'string|max:255',
+           
         ];
     }
 }

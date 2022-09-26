@@ -223,7 +223,7 @@ class MicroSoftTeamController extends Controller
 	 * Publish the project activities as an assignment
 	 *
      * @urlParam Project $project required The Id of a project. Example: 9
-     * @bodyParam classId required string Id of the class. Example: Test Class
+     * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
      *
      * @response  200 {
      *   "message": [
@@ -261,7 +261,7 @@ class MicroSoftTeamController extends Controller
 	 */
     public function publishProject(MSTeamCreateAssignmentRequest $createAssignmentRequest, Project $project)
     {
-        //$createAssignmentRequest->validated();
+        $createAssignmentRequest->validated();
 
         if(!$project->shared) { // temporary check will remove it in future
             return response([
