@@ -236,25 +236,6 @@ class MicroSoftTeamController extends Controller
      *     "Project must be shared as we are temporarily publishing the shared link."
      *   ]
      * }
-     * 
-     * @response  500 {
-     * "message": "The given data was invalid.",
-     * "errors": {
-     *     "aSyncUrl": [
-     *         "The a sync url field is required."
-     *     ]
-     *   }
-     * }
-     * 
-     * @response  500 {
-     * "message": "The given data was invalid.",
-     * "errors": {
-     *     "aSyncUrl": [
-     *         "The classId field is required."
-     *     ]
-     *   }
-     * }
-     * 
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
      * @param Project $project
      * @return Response
