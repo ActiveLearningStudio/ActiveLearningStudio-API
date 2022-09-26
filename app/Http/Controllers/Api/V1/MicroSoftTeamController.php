@@ -227,7 +227,7 @@ class MicroSoftTeamController extends Controller
      *
      * @response  200 {
      *   "message": [
-     *     "Your request to publish project [project->name] into MS Team has been received and is being processed."
+     *     "Your request to publish project [project->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
      *   ]
      * }
      *
