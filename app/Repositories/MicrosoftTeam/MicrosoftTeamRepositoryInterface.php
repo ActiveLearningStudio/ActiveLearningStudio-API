@@ -36,7 +36,7 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     */
     public function createMsTeamClass($token, $data);
 
-     /**
+    /**
     * @param $token string
     * @param $classId string
     * @param $project Project

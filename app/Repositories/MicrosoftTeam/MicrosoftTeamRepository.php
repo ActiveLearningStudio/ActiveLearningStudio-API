@@ -160,6 +160,15 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         }
         
         $apiURL = $this->landingUrl . 'education/classes/' . $classId . '/assignments';
+        $assignmentDueDays = config('ms-team-configs.assignment_due_days');
+
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+        ];
+
+        $postInput['dueDateTime'] =date('c', strtotime(date('Y-m-d'). ' + ' . $assignmentDueDays . ' days'));
         
         $playlists = $project->playlists;
 
@@ -167,19 +176,8 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
             $activities = $playlist->activities;
             foreach($activities as $activity) {
 
-                $assignmentDueDays = config('ms-team-configs.assignment_due_days');
-                // Logic is in progress
-                $postInput = [
-                    'displayName' => $activity->title,
-                    'dueDateTime' => date('c', strtotime(date('Y-m-d'). ' + ' . $assignmentDueDays . ' days')),  // Need to discuss the due date logic currently hardcoded
-                ];
+                $postInput['displayName'] = $activity->title;
                 
-                $headers = [
-                    'Content-length' => 0,
-                    'Content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token
-                ];
-            
                 $response = Http::withHeaders($headers)->withOptions(["verify"=>false])
                                                 ->retry(3, 6000)->post($apiURL, $postInput);
                 $responseBody = json_decode($response->getBody(), true);
@@ -264,15 +262,15 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     private function getUserDetails($token)
     {
         $apiURL = $this->landingUrl . '/me';
-            $headers = [
-                'Content-length' => 0,
-                'Content-type' => 'application/json',
-                'Authorization' => 'Bearer ' . $token
-            ];
-      
-            $response = Http::withHeaders($headers)->get($apiURL);
-            $responseBody = json_decode($response->getBody(), true);
-            return $responseBody['id'];
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+        ];
+    
+        $response = Http::withHeaders($headers)->get($apiURL);
+        $responseBody = json_decode($response->getBody(), true);
+        return $responseBody['id'];
     }
     
 }
