@@ -19,6 +19,7 @@ use App\Http\Requests\V1\MSSaveAccessTokenRequest;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
+use App\Jobs\PublishProject;
 use App\User;
 use Redirect;
 
@@ -201,11 +202,12 @@ class MicroSoftTeamController extends Controller
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
         $response = json_decode($this->microsoftTeamRepository->createMsTeamClass($token, $data),true);
-
+        
         if($response['code'] === 202) {
             return response([
                 'message' => 'Class have been created successfully',
-                'classId' => $response['classId']
+                'classId' => $response['classId'],
+                'aSyncUrl'=> $response['aSyncURL'],
             ], 200);
         }
         
@@ -225,7 +227,7 @@ class MicroSoftTeamController extends Controller
      *
      * @response  200 {
      *   "message": [
-     *     "Project has been published successfully."
+     *     "Your request to publish project [project->name] into MS Team has been received and is being processed."
      *   ]
      * }
      *
@@ -236,8 +238,21 @@ class MicroSoftTeamController extends Controller
      * }
      * 
      * @response  500 {
-     *   "errors": "MS Team error message",
-     *    "statusCode" : MS team status code
+     * "message": "The given data was invalid.",
+     * "errors": {
+     *     "aSyncUrl": [
+     *         "The a sync url field is required."
+     *     ]
+     *   }
+     * }
+     * 
+     * @response  500 {
+     * "message": "The given data was invalid.",
+     * "errors": {
+     *     "aSyncUrl": [
+     *         "The classId field is required."
+     *     ]
+     *   }
      * }
      * 
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
@@ -246,28 +261,22 @@ class MicroSoftTeamController extends Controller
 	 */
     public function publishProject(MSTeamCreateAssignmentRequest $createAssignmentRequest, Project $project)
     {
-        $createAssignmentRequest->validated();
+        //$createAssignmentRequest->validated();
 
         if(!$project->shared) { // temporary check will remove it in future
             return response([
                 'errors' => 'Project must be shared as we are temporarily publishing the shared link.',
             ], 500);
         }
-        $authUser = auth()->user();
-        $token = $authUser->msteam_access_token;
         $classId = $createAssignmentRequest->get('classId');
+        
+        // pushed cloning of project in background
+        PublishProject::dispatch(auth()->user(), $project, $classId)->delay(now()->addSecond());
 
-        $response = json_decode($this->microsoftTeamRepository->createMSTeamAssignment($token, $classId, $project), true);
-        
-        if($response['code'] === 201) {
-            return response([
-                'message' => 'Project has been published successfully.',
-            ], 200);
-        }
-        
         return response([
-            'errors' => $response['message'],
-            'statusCode' => $response['code']
-        ], 500);
+            'message' =>  "Your request to publish project [$project->name] into MS Team has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+        
     }   
 }

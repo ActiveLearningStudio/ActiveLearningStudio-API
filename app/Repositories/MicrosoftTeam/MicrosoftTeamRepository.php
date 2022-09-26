@@ -102,8 +102,9 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     */
     public function getClassesList($token)
     {
-    
-        $apiURL = $this->landingUrl . 'education/classes';
+        $accountId = $this->getUserDetails($token);
+
+        $apiURL = $this->landingUrl . 'users/' . $accountId . '/joinedTeams';
         $headers = [
             'Content-length' => 0,
             'Content-type' => 'application/json',
@@ -114,6 +115,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
   
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
+        
         return $responseBody['value'];
     }
 
@@ -135,10 +137,11 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
         $response = Http::withHeaders($headers)->withOptions(["verify"=>false])->post($apiURL, $data);
         $statusCode = $response->status();
-        
+        \Log::info($statusCode);
         $returnArr = [
             "code" => $statusCode,
             "classId" => ($statusCode === 202) ? $this->fetchClassIdFromHeader($response->getHeaders()) : Null,
+            "aSyncURL" => ($statusCode === 202) ? $response->getHeaders()['Location'][0] : Null,
         ];
         return json_encode($returnArr);
     }
@@ -147,11 +150,17 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     * @param $token string
     * @param $classId string
     * @param $project Project
+    * @param $aSyncUrl string
     */
-    public function createMSTeamAssignment($token, $classId, $project)
+    public function createMSTeamAssignment($token, $classId, $project, $aSyncUrl)
     {
+        \Log::info('in createMSTeamAssignment');
+        if(!empty($aSyncUrl)) {
+            $this->checkClassAsyncStatus($aSyncUrl, $token); // Check if class fully functional
+        }
+        
         $apiURL = $this->landingUrl . 'education/classes/' . $classId . '/assignments';
-    
+        
         $playlists = $project->playlists;
 
         foreach ($playlists as $playlist) {
@@ -212,6 +221,34 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     }
 
     /**
+     * @param string $aSyncUrl
+     * @param string $token
+     */
+    private function checkClassAsyncStatus($aSyncUrl, $token)
+    {
+        \Log::info('in checkClassAsyncStatus');
+        if($aSyncUrl !== Null) {
+            $apiURL = $this->landingUrl . $aSyncUrl;
+            $headers = [
+                'Content-length' => 0,
+                'Content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token
+            ];
+      
+            $response = Http::withHeaders($headers)->get($apiURL);
+            if ($response->status() === 200) {
+                $responseBody = json_decode($response->getBody(), true);
+                if($responseBody['status'] === "succeeded") {
+                    return $responseBody['status'];
+                }else {
+                    sleep(30);
+                    $this->checkClassAsyncStatus($aSyncUrl, $token);
+                }
+            }
+        }
+    }
+
+    /**
      * @param string $header
      * @return string
      */
@@ -220,4 +257,22 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         // Can implement teamsAsyncOperation if needed
         return substr($header['Content-Location'][0], 8, 36);
     }
+
+    /**
+     * @param string $token
+     */
+    private function getUserDetails($token)
+    {
+        $apiURL = $this->landingUrl . '/me';
+            $headers = [
+                'Content-length' => 0,
+                'Content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token
+            ];
+      
+            $response = Http::withHeaders($headers)->get($apiURL);
+            $responseBody = json_decode($response->getBody(), true);
+            return $responseBody['id'];
+    }
+    
 }
