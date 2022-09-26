@@ -55,7 +55,7 @@ class IndependentActivity extends Model
         parent::boot();
 
         static::addGlobalScope('approve', function (Builder $builder) {
-            $builder->where('activity_type', "INDEPENDENT");
+            $builder->where('activity_type', config('constants.activity_type.independent'));
         });
 
         self::creating(function(IndependentActivity $activity) {
