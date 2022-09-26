@@ -32,13 +32,12 @@ class AddEssayFifteenSemanticsSeeder extends Seeder
                             'has_icon' => 1
             ]);
 
-            // insert libraries languages
             $this->insertDependentLibraries($h5pFibLibId);
         }
     }
 
-    
-    /**
+
+     /**
      * Insert Dependent Libraries
      * @param $h5pFibLibId
      */

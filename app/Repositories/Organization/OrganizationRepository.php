@@ -449,6 +449,40 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     }
 
     /**
+     * Add role for particular organization with UI permissions
+     *
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function addRoleUiPermissions($organization, $data)
+    {
+        $organizationPermissionTypeIds = $this->uiOrganizationPermissionMappingRepository
+        ->getOrganizationPermissionTypeIds($data['permissions']);
+
+        try {
+            DB::beginTransaction();
+
+            $role = $organization->roles()->create([
+                'name' => $data['name'],
+                'display_name' => $data['display_name'],
+            ]);
+
+            $role->uiModulePermissions()->sync($data['permissions']);
+            $role->permissions()->sync($organizationPermissionTypeIds);
+
+            DB::commit();
+
+            return $role;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollBack();
+        }
+
+        return false;
+    }
+
+    /**
      * Update role for particular organization
      *
      * @param array $data
