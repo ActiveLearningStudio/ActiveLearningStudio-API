@@ -10,11 +10,14 @@ use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\Course as CanvasCourse;
 use App\CurrikiGo\Moodle\Course as MoodleCourse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\CurrikiGo\CreateAssignmentGroupRequest;
+use App\Http\Requests\V1\CurrikiGo\CreateCourseRequest;
 use App\Http\Requests\V1\CurrikiGo\FetchCourseRequest;
 use App\Models\Project;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Request;
 
 /**
  * @group 10. CurrikiGo Course
@@ -80,6 +83,183 @@ class CourseController extends Controller
         return response([
             'errors' => ['You are not authorized to perform this action.'],
         ], 403);
+    }
+
+    /**
+     * Fetch all Courses from Canvas
+     *
+     * @bodyParam setting_id int The Id of the LMS setting Example 1
+     *
+     * @responseFile responses/curriki-go/fetch-all-courses.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @param FetchCourseRequest $fetchRequest
+     * @return Response
+     */
+    public function fetchMyCoursesFromCanvas(FetchCourseRequest $fetchRequest)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($fetchRequest['setting_id']);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->fetchAllCourses();
+
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'Fetched all the courses',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'No Courses found',
+                'data' => $outcome,
+            ], 200);
+        }
+    }
+
+    /**
+     * Fetch all Assignment groups of selected course from Canvas
+     *
+     * @bodyParam course_id int The Id of selected course
+     *
+     * @responseFile responses/curriki-go/fetch-assignment-groups.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @param $courseId
+     * @param FetchCourseRequest $request
+     * @return Response $request
+     */
+    public function fetchAssignmentGroups($courseId, FetchCourseRequest $request)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($request['setting_id']);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->fetchAssignmentGroups($courseId);
+
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'Fetched all assignment groups',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'No Assignments found',
+                'data' => $outcome,
+            ], 200);
+        }
+    }
+
+    /**
+     * Create Assignment groups of selected course from Canvas
+     *
+     * @bodyParam assignment_group's name string
+     *
+     * @responseFile responses/curriki-go/create-assignment-groups.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @param $courseId
+     * @param CreateAssignmentGroupRequest $courseId
+     * @return Response $request
+     */
+    public function createAssignmentGroups($courseId, CreateAssignmentGroupRequest $request)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($request['setting_id']);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->CreateAssignmentGroups($courseId, $request['assignment_group_name']);
+
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'New assignment group has been created successfully!',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'No Assignment Groups found',
+                'data' => $outcome,
+            ], 200);
+        }
+    }
+
+    /**
+     * Create new course in Canvas
+     *
+     * @bodyParam course name string
+     *
+     * @responseFile responses/curriki-go/create-course-groups.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Validation error"
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @return Response $request
+     */
+    public function createNewCourse(CreateCourseRequest $request)
+    {
+        $lmsSettings = $this->lmsSettingRepository->find($request->setting_id);
+        $canvasClient = new Client($lmsSettings);
+        $canvasCourse = new CanvasCourse($canvasClient);
+        $outcome = $canvasCourse->createNewCourse($request->course_name);
+
+        if ($outcome) {
+            return response([
+                'response_code' => 200,
+                'response_message' => 'New course has been created successfully!',
+                'data' => $outcome,
+            ], 200);
+        } else {
+            return response([
+                'response_code' => 500,
+                'response_message' => 'course creation failed',
+                'data' => $outcome,
+            ], 200);
+        }
     }
 
     /**
