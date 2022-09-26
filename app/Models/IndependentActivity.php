@@ -16,7 +16,30 @@ class IndependentActivity extends Model
      * @var array
      */
     protected $table = 'activities';
-    protected $gaurded = ['id'];
+    protected $fillable = [
+        'title',
+        'type',
+        'content',
+        'shared',
+        'order',
+        'thumb_url',
+        'subject_id',
+        'education_level_id',
+        'h5p_content_id',
+        'indexing',
+        'user_id',
+        'organization_id',
+        'description',
+        'source_type',
+        'source_url',
+        'activity_type',
+        'organization_visibility_type_id',
+        'cloned_from',
+        'clone_ctr',
+        'status',
+        'indexing',
+        'original_user'
+    ];
 
     /**
      * STATIC PROPERTIES FOR MAPPING THE DATABASE COLUMN VALUES
@@ -33,6 +56,10 @@ class IndependentActivity extends Model
 
         static::addGlobalScope('approve', function (Builder $builder) {
             $builder->where('activity_type', "INDEPENDENT");
+        });
+
+        self::creating(function(IndependentActivity $activity) {
+            $activity->activity_type = config('constants.activity_type.independent');
         });
 
         self::deleting(function (IndependentActivity $independentActivity) {

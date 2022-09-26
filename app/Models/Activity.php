@@ -36,7 +36,8 @@ class Activity extends Model
         'organization_id',
         'description',
         'source_type',
-        'source_url'
+        'source_url',
+        'activity_type'
     ];
 
     /**
@@ -80,8 +81,11 @@ class Activity extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('approve', function (Builder $builder) {
-            $builder->where('activity_type', "ACTIVITY");
+        self::creating(function(Activity $activity) {
+            $activity->activity_type = config('constants.activity_type.activity');
+            if($activity->type == 'h5p_standalone'){
+                $activity->activity_type = config('constants.activity_type.standalone');
+            }
         });
 
         self::deleting(function (Activity $activity) {

@@ -76,6 +76,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         return $query->where('organization_id', $organization_id)
                      ->where('user_id', $auth_user->id)
+                     ->where('activity_type', "STANDALONE")
                      ->paginate($perPage)->withQueryString();
     }
 
@@ -532,6 +533,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $activity_data = [
             'title' => ($isDuplicate) ? $activity->title . "-COPY" : $activity->title,
             'type' => $activity->type,
+            'activity_type' => $activity->activity_type,
             'content' => $activity->content,
             'playlist_id' => $playlist->id,
             'order' => ($isDuplicate) ? $activity->order + 1 : $this->getOrder($playlist->id) + 1,
@@ -579,6 +581,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $activity_data = [
             'title' => $activity->title . "-COPY",
             'type' => $activity->type,
+            'activity_type' => $activity->activity_type,
             'content' => $activity->content,
             'description' => $activity->description,
             'order' => $activity->order + 1,
