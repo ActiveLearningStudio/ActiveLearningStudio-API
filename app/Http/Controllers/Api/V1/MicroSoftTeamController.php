@@ -242,16 +242,16 @@ class MicroSoftTeamController extends Controller
 	 */
     public function publishProject(MSTeamCreateAssignmentRequest $createAssignmentRequest, Project $project)
     {
-        $createAssignmentRequest->validated();
+        $data = $createAssignmentRequest->validated();
 
         if(!$project->shared) { // temporary check will remove it in future
             return response([
                 'errors' => 'Project must be shared as we are temporarily publishing the shared link.',
             ], 500);
         }
-        $classId = $createAssignmentRequest->get('classId');
+        $classId = isset($data['classId']) ? $data['classId'] : '';
         
-        // pushed cloning of project in background
+        // pushed publishing of project in background
         PublishProject::dispatch(auth()->user(), $project, $classId)->delay(now()->addSecond());
 
         return response([

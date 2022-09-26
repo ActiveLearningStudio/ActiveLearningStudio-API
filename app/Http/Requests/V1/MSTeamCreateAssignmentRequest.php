@@ -24,7 +24,7 @@ class MSTeamCreateAssignmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'classId' => 'string|max:255',
+            'classId' => 'UUID|max:255',
            
         ];
     }

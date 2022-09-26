@@ -23,7 +23,7 @@ class ProjectPublishNotification extends Notification
      * @var string
      */
     public $projectName;
-        
+
     /**
      * Create a new notification instance.
      * 
@@ -57,7 +57,6 @@ class ProjectPublishNotification extends Notification
     public function toDatabase($notifiable)
     {
         $message = "Project [$this->projectName] has been published into Microsoft Team successfully.";
-
         
         return [
             'message' => $message,

@@ -227,7 +227,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     private function checkClassAsyncStatus($aSyncUrl, $token)
     {
         \Log::info('in checkClassAsyncStatus');
-        if($aSyncUrl !== Null) {
+        if ($aSyncUrl !== Null) {
             $apiURL = $this->landingUrl . $aSyncUrl;
             $headers = [
                 'Content-length' => 0,
@@ -238,9 +238,9 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
             $response = Http::withHeaders($headers)->get($apiURL);
             if ($response->status() === 200) {
                 $responseBody = json_decode($response->getBody(), true);
-                if($responseBody['status'] === "succeeded") {
+                if ($responseBody['status'] === "succeeded") {
                     return $responseBody['status'];
-                }else {
+                } else {
                     sleep(30);
                     $this->checkClassAsyncStatus($aSyncUrl, $token);
                 }
