@@ -76,7 +76,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         return $query->where('organization_id', $organization_id)
                      ->where('user_id', $auth_user->id)
-                     ->where('activity_type', "STANDALONE")
+                     ->where('activity_type', config('constants.activity_type.standalone'))
                      ->paginate($perPage)->withQueryString();
     }
 
