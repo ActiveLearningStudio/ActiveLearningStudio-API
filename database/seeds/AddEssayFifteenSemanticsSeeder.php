@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 
 class AddEssayFifteenSemanticsSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -37,6 +38,7 @@ class AddEssayFifteenSemanticsSeeder extends Seeder
     }
 
 
+
      /**
      * Insert Dependent Libraries
      * @param $h5pFibLibId
@@ -44,7 +46,7 @@ class AddEssayFifteenSemanticsSeeder extends Seeder
     private function insertDependentLibraries($h5pFibLibId)
     {
         //Preloaded Dependencies
-        $h5pQuestionParams = ['name' => "Question", "major_version" => 1, "minor_version" => 4];
+        $h5pQuestionParams = ['name' => "Question", "major_version" => 1, "minor_version" => 5];
         $h5pQuestionLib = DB::table('h5p_libraries')->where($h5pQuestionParams)->first();
         $h5pQuestionLibId = $h5pQuestionLib->id;
 
