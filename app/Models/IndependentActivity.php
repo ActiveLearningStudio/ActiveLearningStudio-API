@@ -126,6 +126,30 @@ class IndependentActivity extends Model
     }
 
     /**
+     * insert the independent activity subjects.
+     */
+    public function Addsubjects()
+    {
+        return $this->belongsToMany('App\Models\Subject', 'activity_subject', 'activity_id')->withTimestamps();
+    }
+
+    /**
+     * Get the independent activity education levels.
+     */
+    public function addEducationLevels()
+    {
+        return $this->belongsToMany('App\Models\EducationLevel', 'activity_education_level', 'activity_id')->withTimestamps();
+    }
+
+    /**
+     * Get the independent activity author tags.
+     */
+    public function addAuthorTags()
+    {
+        return $this->belongsToMany('App\Models\AuthorTag', 'activity_author_tag', 'activity_id')->withTimestamps();
+    }
+
+    /**
      * Get the independent activity education levels.
      */
     public function educationLevels()

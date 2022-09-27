@@ -596,13 +596,13 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $cloned_activity = $this->create($activity_data);
 
         if ($cloned_activity && count($activity->subjects) > 0) {
-            $cloned_activity->subjects()->attach($activity->subjects);
+            $cloned_activity->addSubjects()->attach($activity->subjects);
         }
         if ($cloned_activity && count($activity->educationLevels) > 0) {
-            $cloned_activity->educationLevels()->attach($activity->educationLevels);
+            $cloned_activity->addEducationLevels()->attach($activity->educationLevels);
         }
         if ($cloned_activity && count($activity->authorTags) > 0) {
-            $cloned_activity->authorTags()->attach($activity->authorTags);
+            $cloned_activity->addAuthorTags()->attach($activity->authorTags);
         }
 
         return $cloned_activity['id'];
