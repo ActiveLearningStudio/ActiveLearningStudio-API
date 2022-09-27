@@ -128,7 +128,7 @@ class IndependentActivity extends Model
     /**
      * insert the independent activity subjects.
      */
-    public function Addsubjects()
+    public function addSubjects()
     {
         return $this->belongsToMany('App\Models\Subject', 'activity_subject', 'activity_id')->withTimestamps();
     }
