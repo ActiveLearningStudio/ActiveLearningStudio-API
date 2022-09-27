@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\CurrikiGo\Canvas\Course as CanvasCourse;
 use App\Http\Requests\V1\CurrikiGo\CreateAssignmentRequest;
+use App\Http\Requests\V1\CurrikiGo\PublishMoodlePlaylistRequest;
 use Illuminate\Support\Facades\Gate;
 
 /**
@@ -77,13 +78,13 @@ class PublishController extends Controller
      *   ]
      * }
      *
-     * @param PublishPlaylistRequest $publishRequest
+     * @param PublishMoodlePlaylistRequest $publishRequest
      * @param Project $project
      * @param Playlist $playlist
      * @return Response
      */
     // TODO: need to add 200 response
-    public function playlistToMoodle(PublishPlaylistRequest $publishRequest, Project $project, Playlist $playlist)
+    public function playlistToMoodle(PublishMoodlePlaylistRequest $publishRequest, Project $project, Playlist $playlist)
     {
         if ($playlist->project_id !== $project->id) {
             return response([
