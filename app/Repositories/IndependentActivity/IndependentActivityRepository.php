@@ -1077,14 +1077,14 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $clonedActivity = $this->create($independentActivityData);
 
         if ($clonedActivity && count($activity->subjects) > 0) {
-            $clonedActivity->addSubjects()->attach($activity->subjects);
+            $clonedActivity->subjects()->attach($activity->subjects);
         }
 
         if ($clonedActivity && count($activity->educationLevels) > 0) {
-            $clonedActivity->addEducationLevels()->attach($activity->educationLevels);
+            $clonedActivity->educationLevels()->attach($activity->educationLevels);
         }
         if ($clonedActivity && count($activity->authorTags) > 0) {
-            $clonedActivity->addAuthorTags()->attach($activity->authorTags);
+            $clonedActivity->authorTags()->attach($activity->authorTags);
         }
 
         return $clonedActivity['id'];
