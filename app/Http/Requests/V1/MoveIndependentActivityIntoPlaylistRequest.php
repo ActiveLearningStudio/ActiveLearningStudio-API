@@ -25,7 +25,7 @@ class MoveIndependentActivityIntoPlaylistRequest extends FormRequest
     {
         return [
             'independentActivityIds' => 'required|array',
-            'independentActivityIds.*' => 'required|int|exists:independent_activities,id,deleted_at,NULL,shared,false,organization_visibility_type_id,1'
+            'independentActivityIds.*' => 'required|int|exists:activities,id,deleted_at,NULL,shared,false,organization_visibility_type_id,1'
         ];
     }
 
