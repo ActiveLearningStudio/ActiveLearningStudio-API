@@ -122,7 +122,7 @@ class IndependentActivity extends Model
      */
     public function subjects()
     {
-        return $this->belongsToMany('App\Models\Subject', 'activity_subject', 'id')->withTimestamps();
+        return $this->belongsToMany('App\Models\Subject', 'activity_subject', 'activity_id')->withTimestamps();
     }
 
     /**
@@ -130,7 +130,7 @@ class IndependentActivity extends Model
      */
     public function educationLevels()
     {
-        return $this->belongsToMany('App\Models\EducationLevel', 'activity_education_level', 'id')->withTimestamps();
+        return $this->belongsToMany('App\Models\EducationLevel', 'activity_education_level', 'activity_id')->withTimestamps();
     }
 
     /**
@@ -138,7 +138,7 @@ class IndependentActivity extends Model
      */
     public function authorTags()
     {
-        return $this->belongsToMany('App\Models\AuthorTag', 'activity_author_tag', 'id')->withTimestamps();
+        return $this->belongsToMany('App\Models\AuthorTag', 'activity_author_tag', 'activity_id')->withTimestamps();
     }
 
     /**

@@ -24,6 +24,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -1050,7 +1051,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $h5p_content = $activity->h5p_content;
         if ($h5p_content) {
             $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
-            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5p_content->user_id = Auth::id();// get_user_id_by_token($token); // just update the user id which is performing the cloning
             $h5p_content->save(); // this will return true, then we can get id of h5pContent
         }
         $newH5pContent = $h5p_content->id ?? null;
@@ -1066,7 +1067,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'content' => $activity->content,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
             'thumb_url' => $newThumbUrl,
-            'user_id' => get_user_id_by_token($token),
+            'user_id' => Auth::id(),// get_user_id_by_token($token),
             'shared' => 0,
             'order' => $this->getOrder($organization->id) + 1,
             'organization_id' => $organization->id,
@@ -1078,6 +1079,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         if ($clonedActivity && count($activity->subjects) > 0) {
             $clonedActivity->subjects()->attach($activity->subjects);
         }
+
         if ($clonedActivity && count($activity->educationLevels) > 0) {
             $clonedActivity->educationLevels()->attach($activity->educationLevels);
         }
