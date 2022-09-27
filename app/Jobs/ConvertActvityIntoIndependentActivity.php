@@ -16,7 +16,6 @@ use App\Notifications\CloneNotification;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use App\User;
-use Illuminate\Support\Facades\Auth;
 
 class ConvertActvityIntoIndependentActivity implements ShouldQueue
 {
@@ -63,14 +62,16 @@ class ConvertActvityIntoIndependentActivity implements ShouldQueue
      * @return void
      */
     public function handle(
-        IndependentActivityRepositoryInterface $independentActivityRepository,
+        IndependentActivityRepositoryInterface $independentActivityRepository, 
         UserRepositoryInterface $userRepository
-    ) {
+    )
+    {
         try {
             $independentActivityRepository->convertIntoIndependentActivity($this->organization, $this->activity, $this->token);
             $message = "Your request to copy activity [" . $this->activity->title . "] into 
                             Independent activity has been completed and available";
-            $user = User::find(Auth::id());
+            $userId = $userRepository->parseToken($this->token);
+            $user = User::find($userId);
             $userName = rtrim($user->first_name . ' ' . $user->last_name, ' ');
             $process = "Copy Activity into Independent Activity";
             $user->notify(new CloneNotification($message, $process, $userName));
