@@ -388,7 +388,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
             if (!empty($authenticatedUserOrgIndependentActivityIdsString)) {
                 // update order's
-                $query = 'UPDATE "independent_activities" SET "order" = "order" + 1 WHERE "id" IN (' . $authenticatedUserOrgIndependentActivityIdsString . ')';
+                $query = 'UPDATE "activities" SET "order" = "order" + 1 WHERE "id" IN (' . $authenticatedUserOrgIndependentActivityIdsString . ')';
                 $affectedIndependentActivitiesCount = DB::update($query);
             }
 
