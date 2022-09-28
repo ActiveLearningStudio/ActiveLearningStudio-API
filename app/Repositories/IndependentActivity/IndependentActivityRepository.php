@@ -1066,7 +1066,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'type' => $activity->type,
             'content' => $activity->content,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
-            'thumb_url' => "/storage/" . 'activities' . "/" . $newThumbUrl,
+            'thumb_url' => $newThumbUrl,
             'user_id' => get_user_id_by_token($token),
             'shared' => 0,
             'order' => $this->getOrder($organization->id) + 1,
