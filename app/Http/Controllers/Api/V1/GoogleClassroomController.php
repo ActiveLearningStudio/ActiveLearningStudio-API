@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\App;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\H5pOrganizationResource;
+use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Models\H5pBrightCoveVideoContents;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
@@ -519,12 +520,11 @@ class GoogleClassroomController extends Controller
             $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
             $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
         }
-
         return response([
             'h5p' => $h5p_data,
-            'activity' => new ActivityResource($activity),
-            'playlist' => new PlaylistResource($activity->playlist),
-            'organization' => new H5pOrganizationResource($activity->playlist->project->organization),
+            'activity' => $activity->activity_type != config('constants.activity_type.independent') ? new ActivityResource($activity) : new IndependentActivityResource(IndependentActivity::find($activity->id)),
+            'playlist' => $activity->activity_type != config('constants.activity_type.independent') ? new PlaylistResource($activity->playlist) : [],
+            'organization' => $activity->activity_type != config('constants.activity_type.independent') ? new H5pOrganizationResource($activity->playlist->project->organization) : [],
             'brightcoveData' => $brightcoveData,
         ], 200);
     }
