@@ -1090,15 +1090,5 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         return $clonedActivity['id'];
         
     }
-
-     /**
-     * fetch single indp activity
-     * @param $indp_activity_id
-     * @return string
-     * 
-     */
-    public function fetchSingleIndActivity($indp_activity_id){
-        return IndependentActivity::where('id', $indp_activity_id)->first();
-    }
     
 }
