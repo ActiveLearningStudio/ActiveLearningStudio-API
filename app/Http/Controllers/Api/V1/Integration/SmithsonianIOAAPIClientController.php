@@ -29,6 +29,17 @@ class SmithsonianIOAAPIClientController extends Controller
     /**
      * Get Smithsonian Contents List
      * @param Request $request
+     * @bodyParam start int like page number Example: 1
+     * @bodyParam rows int like page size or number of record per page Example: 10
+     * @bodyParam sort string The sort of the row response set. Default is relevancy. newest is sort rows by timestamp * of record in descending order. updated is sort rows by lastTimeUpdated of record in descending order.
+     * Default value: relevancy
+     * Allowed values: id, newest, updated, random
+     * @bodyParam type string The type of row object.. Each type will conform to a published schema.
+     * Default value: edanmdm
+     * Allowed values: edanmdm, ead_collection, ead_component, all
+     * @bodyParam row_group string The designated set of row types you are filtering against.. Objects refers to * objects, artifacts, specimens. Archives are all archives collection and item records.
+     * Default value: objects
+     * Allowed values: objects, archives
      * @return object $response
      * @throws GeneralException
      */
@@ -53,6 +64,7 @@ class SmithsonianIOAAPIClientController extends Controller
     /**
      * Get Smithsonian Content Detail
      * @param Request $request
+     * @bodyParam id string Example: con-1620124231687-1620150333404-0
      * @return object $response
      * @throws GeneralException
      */

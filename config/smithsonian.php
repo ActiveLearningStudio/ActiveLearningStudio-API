@@ -6,7 +6,7 @@ return [
     | Smithsonian API Base Url
     |--------------------------------------------------------------------------
     */
-    'api_base_url' => env('SMITHSONIAN_API_KEY', 'https://api.si.edu/openaccess/api/v1.0'),
+    'api_base_url' => env('SMITHSONIAN_API_BASE_URL', 'https://api.si.edu/openaccess/api/v1.0'),
 
     /*
     |--------------------------------------------------------------------------
