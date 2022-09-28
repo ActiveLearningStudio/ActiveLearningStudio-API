@@ -327,11 +327,14 @@ if (!function_exists('cloneIndependentActivityThumbnail')) {
                 if (strpos($destinationFile, 'uploads') !== false) {
                     $destinationFile = str_replace("uploads", $source, $destinationFile);
                 }
-                
+
                 \File::copy($sourceFile, $destinationFile);
                 ob_get_clean();
                 $newImageUrl = "/storage/" . $destination . "/" . $newImageName;
 
+                if($source == 'activities'){
+                    $newImageUrl = "/storage/" . $source . "/" . $newImageName;
+                }
                 if($source === "independent-activities") {
                     unlink($sourceFile);
                 }
