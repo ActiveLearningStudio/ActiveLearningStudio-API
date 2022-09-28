@@ -171,7 +171,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s 
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-                where lower(a.title) like '%s' and a.id is not null %s) )
+                where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
                 
                 
                 union all
@@ -191,7 +191,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in  (select playlist_id from activities a %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-                where lower(a.title) like '%s' and a.id is not null %s)
+                where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
                 
                 union all
                 
@@ -209,7 +209,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where hl.name is not null and lower(a.title) like '%s'  %s
+                where a.activity_type != 'INDEPENDENT' and  hl.name is not null and lower(a.title) like '%s'  %s
                 )sq1
                 left join
                 (select distinct project_id as pid from user_favorite_project
@@ -285,7 +285,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where lower(a.title) like _searchText
+                where a.activity_type != 'INDEPENDENT' and  lower(a.title) like _searchText
                 )sq1
                 left join
                 (select distinct project_id as pid from user_favorite_project
@@ -372,7 +372,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s 
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-                where lower(a.title) like '%s' and a.id is not null %s) )
+                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
                 
                 
                 union all
@@ -392,7 +392,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in  (select playlist_id from activities a %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-                where lower(a.title) like '%s' and a.id is not null %s)
+                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
                 
                 union all
                 
@@ -410,7 +410,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where hl.name is not null and lower(a.title) like '%s'  %s
+                where  a.activity_type != 'INDEPENDENT' and hl.name is not null and lower(a.title) like '%s'  %s
                 $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd);
                 
                 RETURN QUERY execute query;
@@ -479,7 +479,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where lower(a.title) like _searchText
+                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText
                 ;	
             end if;
             
