@@ -38,6 +38,7 @@ use App\Http\Resources\V1\H5pOrganizationResource;
 use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\PlaylistResource;
 use App\Models\H5pBrightCoveVideoContents;
+use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
 
 /**
@@ -59,10 +60,11 @@ class GoogleClassroomController extends Controller
      *
      * @param UserRepositoryInterface $userRepository
      */
-    public function __construct(UserRepositoryInterface $userRepository, BrightcoveAPISettingRepository $brightcoveAPISettingRepository)
+    public function __construct(UserRepositoryInterface $userRepository, BrightcoveAPISettingRepository $brightcoveAPISettingRepository, IndependentActivityRepositoryInterface $independentActivityRepository)
     {
         $this->userRepository = $userRepository;
         $this->bcAPISettingRepository = $brightcoveAPISettingRepository;
+        $this->independentActivityRepository = $independentActivityRepository;
     }
 
     /**
@@ -522,7 +524,7 @@ class GoogleClassroomController extends Controller
         }
         return response([
             'h5p' => $h5p_data,
-            'activity' => $activity->activity_type != config('constants.activity_type.independent') ? new ActivityResource($activity) : new IndependentActivityResource(IndependentActivity::find($activity->id)),
+            'activity' => $activity->activity_type != config('constants.activity_type.independent') ? new ActivityResource($activity) : new IndependentActivityResource($this->independentActivityRepository->fetchSingleIndActivity($activity->id)),
             'playlist' => $activity->activity_type != config('constants.activity_type.independent') ? new PlaylistResource($activity->playlist) : [],
             'organization' => $activity->activity_type != config('constants.activity_type.independent') ? new H5pOrganizationResource($activity->playlist->project->organization) : [],
             'brightcoveData' => $brightcoveData,
