@@ -134,12 +134,4 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * 
      */
     public function convertIntoIndependentActivity($organization, $activity, $token);
-
-    /**
-     * fetch single indp activity
-     * @param $indp_activity_id
-     * @return int
-     * 
-     */
-    public function fetchSingleIndActivity($indp_activity_id);
 }

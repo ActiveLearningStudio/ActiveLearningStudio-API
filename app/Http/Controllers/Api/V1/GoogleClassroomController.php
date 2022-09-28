@@ -524,7 +524,7 @@ class GoogleClassroomController extends Controller
         }
         return response([
             'h5p' => $h5p_data,
-            'activity' => $activity->activity_type != config('constants.activity_type.independent') ? new ActivityResource($activity) : new IndependentActivityResource($this->independentActivityRepository->fetchSingleIndActivity($activity->id)),
+            'activity' => $activity->activity_type != config('constants.activity_type.independent') ? new ActivityResource($activity) : new IndependentActivityResource($this->independentActivityRepository->find($activity->id)),
             'playlist' => $activity->activity_type != config('constants.activity_type.independent') ? new PlaylistResource($activity->playlist) : [],
             'organization' => $activity->activity_type != config('constants.activity_type.independent') ? new H5pOrganizationResource($activity->playlist->project->organization) : [],
             'brightcoveData' => $brightcoveData,
