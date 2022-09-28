@@ -11,6 +11,7 @@ use App\Services\LearnerRecordStoreService;
 use Illuminate\Support\Facades\DB;
 use App\CurrikiGo\LRS\InteractionFactory;
 use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
+use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 
 /**
  * @group 16. XAPI
@@ -29,7 +30,7 @@ class ExtractXAPIJSONController extends Controller
      * @return void
      */
     public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface,
-    GoogleClassroomRepositoryInterface $googleClassroom)
+    GoogleClassroomRepositoryInterface $googleClassroom, IndependentActivityRepositoryInterface $independentActivityRepository)
     {
         $max_statement_id = $lrsStatementsRepository->findMaxByField('statement_id');
         if (!$max_statement_id) {
@@ -105,6 +106,7 @@ class ExtractXAPIJSONController extends Controller
                 }
                 
                 $activity = $activityRepository->find($groupingInfo['activity']);
+                
                 $activityId = null;
                 $activityName = null;
                 $projectId = null;
@@ -120,6 +122,14 @@ class ExtractXAPIJSONController extends Controller
                     $projectName = $project->name;
                     $playlistId = $activity->playlist_id;
                     $playlistTitle = $activity->playlist->title;
+                } elseif ($activity = $independentActivityRepository->find($groupingInfo['activity'])) {
+                    $activityId = $activity->id;
+                    $activityName = $activity->title;
+                    $project = NULL;
+                    $projectId = NULL;
+                    $projectName = NULL;
+                    $playlistId = NULL;
+                    $playlistTitle = NULL;
                 }
                 
                 $category = $contextActivities->getCategory();
