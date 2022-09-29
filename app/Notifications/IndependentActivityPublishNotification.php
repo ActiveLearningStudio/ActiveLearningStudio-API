@@ -22,7 +22,7 @@ class IndependentActivityPublishNotification extends Notification
     /**
      * @var string
      */
-    public $projectName;
+    public $independentActivityName;
 
     /**
      * Create a new notification instance.
@@ -30,10 +30,10 @@ class IndependentActivityPublishNotification extends Notification
      *
      * @return void
      */
-    public function __construct($userName, $projectName)
+    public function __construct($userName, $independentActivityName)
     {
         $this->userName = $userName;
-        $this->projectName = $projectName;
+        $this->independentActivityName = $independentActivityName;
         
     }
 
@@ -56,11 +56,11 @@ class IndependentActivityPublishNotification extends Notification
      */
     public function toDatabase($notifiable)
     {
-        $message = "Project [$this->projectName] has been published into Microsoft Team successfully.";
+        $message = "Independent Activity [$this->independentActivityName] has been published into Microsoft Team successfully.";
         
         return [
             'message' => $message,
-            'project' => $this->projectName,
+            'project' => $this->independentActivityName,
             
         ];
     }

@@ -264,26 +264,26 @@ class MicroSoftTeamController extends Controller
     }   
 
     /**
-	 * Publish project
+	 * Publish independent activity
 	 *
-	 * Publish the project activities as an assignment
+	 * Publish the independent activity as an assignment
 	 *
-     * @urlParam Project $project required The Id of a project. Example: 9
-     * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
+     * @urlParam IndependentActivity $independent_activity required The Id of a independent_activity. Example: 9
+     * @bodyParam classId optional uuid Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
      *
      * @response  200 {
      *   "message": [
-     *     "Your request to publish project [project->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
+     *     "Your request to publish independent activity [independent_activity->title] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
      *   ]
      * }
      *
      * @response  500 {
      *   "errors": [
-     *     "Project must be shared as we are temporarily publishing the shared link."
+     *     "Independent Activity must be shared as we are temporarily publishing the shared link."
      *   ]
      * }
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
-     * @param Project $project
+     * @param IndependentActivity $independent_activity
      * @return Response
 	 */
     public function publishIndependentActivity(MSTeamCreateAssignmentRequest $createAssignmentRequest, IndependentActivity $independent_activity)
@@ -297,11 +297,11 @@ class MicroSoftTeamController extends Controller
         }
         $classId = isset($data['classId']) ? $data['classId'] : '';
         
-        // pushed publishing of project in background
+        // pushed publishing of independentActivityName in background
         PublishIndependentActivity::dispatch(auth()->user(), $independent_activity, $classId)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to publish project [$independent_activity->title] into MS Team has been received and is being processed. <br>
+            'message' =>  "Your request to publish independent activity [$independent_activity->title] into MS Team has been received and is being processed. <br>
                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
         
