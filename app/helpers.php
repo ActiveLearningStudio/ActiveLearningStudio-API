@@ -36,6 +36,9 @@ if (!function_exists('clone_thumbnail')) {
 
                 \File::copy($source_file, $destination_file);
                 ob_get_clean();
+                if($source == "independent-activities"){
+                    $source = "activities";
+                }
                 $new_image_url = "/storage/" . $source . "/" . $new_image_name;
             }
         }
