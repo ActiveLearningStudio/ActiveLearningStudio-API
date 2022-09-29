@@ -333,8 +333,11 @@ if (!function_exists('cloneIndependentActivityThumbnail')) {
 
                 \File::copy($sourceFile, $destinationFile);
                 ob_get_clean();
-                $newImageUrl = "/storage/" . $source . "/" . $newImageName;
+                $newImageUrl = "/storage/" . $destination . "/" . $newImageName;
 
+                if($source == 'activities'){
+                    $newImageUrl = "/storage/" . $source . "/" . $newImageName;
+                }
                 if($source === "independent-activities") {
                     unlink($sourceFile);
                 }
