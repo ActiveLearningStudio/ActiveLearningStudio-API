@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Requests\V1\MSTeamCreateClassRequest;
 use App\Http\Requests\V1\MSTeamCreateAssignmentRequest;
 use App\Http\Requests\V1\MSSaveAccessTokenRequest;
+use App\Models\IndependentActivity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
 use App\Jobs\PublishProject;
+use App\Jobs\PublishIndependentActivity;
 use App\User;
 use Redirect;
 
@@ -260,4 +262,48 @@ class MicroSoftTeamController extends Controller
         ], 200);
         
     }   
+
+    /**
+	 * Publish project
+	 *
+	 * Publish the project activities as an assignment
+	 *
+     * @urlParam Project $project required The Id of a project. Example: 9
+     * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
+     *
+     * @response  200 {
+     *   "message": [
+     *     "Your request to publish project [project->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
+     *   ]
+     * }
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "Project must be shared as we are temporarily publishing the shared link."
+     *   ]
+     * }
+     * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
+     * @param Project $project
+     * @return Response
+	 */
+    public function publishIndependentActivity(MSTeamCreateAssignmentRequest $createAssignmentRequest, IndependentActivity $independent_activity)
+    {
+        $data = $createAssignmentRequest->validated();
+
+        if(!$independent_activity->shared) { // temporary check will remove it in future
+            return response([
+                'errors' => 'Independent Activity must be shared as we are temporarily publishing the shared link.',
+            ], 500);
+        }
+        $classId = isset($data['classId']) ? $data['classId'] : '';
+        
+        // pushed publishing of project in background
+        PublishIndependentActivity::dispatch(auth()->user(), $independent_activity, $classId)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to publish project [$independent_activity->title] into MS Team has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+        
+    }
 }
