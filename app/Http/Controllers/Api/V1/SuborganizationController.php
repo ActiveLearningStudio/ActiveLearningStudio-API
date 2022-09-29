@@ -188,6 +188,9 @@ class SuborganizationController extends Controller
      * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
      * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
      * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
+     * @bodyParam msteam_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_activity_visibility bool Enable/disable google classroom Example: false
      *
      * @responseFile 201 responses/organization/suborganization.json
      *
@@ -275,6 +278,9 @@ class SuborganizationController extends Controller
      * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
      * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
      * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
+     * @bodyParam msteam_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_activity_visibility bool Enable/disable google classroom Example: false
      *
      * @responseFile responses/organization/suborganization.json
      *
