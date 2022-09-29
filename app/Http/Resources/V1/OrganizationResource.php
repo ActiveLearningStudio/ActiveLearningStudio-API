@@ -93,7 +93,11 @@ class OrganizationResource extends JsonResource
                 'primary_font_family' => $this->primary_font_family,
                 'secondary_font_family' => $this->secondary_font_family,
             ],
-            'allowed_visibility_type_id' => OrganizationVisibilityTypeResource::collection($this->allowedVisibilityTypes)
+            'allowed_visibility_type_id' => OrganizationVisibilityTypeResource::collection($this->allowedVisibilityTypes),
+            'msteam_client_id' => $this->msteam_client_id,
+            'msteam_secret_id' => $this->msteam_secret_id,
+            'msteam_tenant_id' => $this->msteam_tenant_id,
+            'msteam_secret_id_expiry' => $this->msteam_secret_id_expiry
         ];
     }
 }
