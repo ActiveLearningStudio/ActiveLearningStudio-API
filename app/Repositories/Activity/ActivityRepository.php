@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Subject;
 use App\Models\EducationLevel;
 use App\Models\AuthorTag;
+use App\Models\H5pBrightCoveVideoContents;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -434,7 +435,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             if (isset($data['model']) && !empty($data['model'])) {
                 unset($queryWhere[count($queryWhere) - 1]);
             }
-            
+
             $countQueryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
             $countQuery = $countQuery . $countQueryWhereStr;
             $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
@@ -576,6 +577,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         // copy the content data if exist
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
+
+        // copy brightcove video content
+        $h5pVideoContent =  H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+
+        if ($h5pVideoContent) {
+            $brightCoveVideoData['brightcove_video_id'] = $h5pVideoContent->brightcove_video_id;
+            $brightCoveVideoData['h5p_content_id'] = $newH5pContent;
+            $brightCoveVideoData['brightcove_api_setting_id'] = $h5pVideoContent->brightcove_api_setting_id;
+
+            H5pBrightCoveVideoContents::create($brightCoveVideoData);
+        }
 
         $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
         $activity_data = [
@@ -847,11 +859,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     storage_path('app/public/h5p/content/'.$new_content_id)
                 );
 
-        
+
         // Move Content to editor Folder
 
         $destinationEditorFolderPath = $extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . $old_content_id;
-        
+
         // Move editor images
         \File::copyDirectory(
             storage_path($destinationEditorFolderPath . '/images/'),
@@ -900,26 +912,26 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         // Import Activity Subjects
         $projectOrganizationId = Project::where('id',$playlist->project_id)->value('organization_id');
-        
-        $activitySubjectPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+
+        $activitySubjectPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir .
                                                                 '/activities/' . $activity_dir . '/activity_subject.json');
         if (file_exists($activitySubjectPath)) {
             $subjectContent = file_get_contents($activitySubjectPath);
             $subjects = json_decode($subjectContent,true);
             \Log::info($subjects);
             foreach ($subjects as $subject) {
-    
+
                 $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
-    
+
                 $newSubject['activity_id'] = $cloned_activity->id;
                 $newSubject['subject_id'] = $recSubject->id;
                 $newSubject['created_at'] = date('Y-m-d H:i:s');
                 $newSubject['updated_at'] = date('Y-m-d H:i:s');
-                
+
                 DB::table('activity_subject')->insert($newSubject);
             }
         }
-        
+
         // Import Activity Education-Level
 
         $activtyEducationPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
@@ -929,21 +941,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $educationLevels = json_decode($educationLevelContent,true);
             \Log::info($educationLevels);
             foreach ($educationLevels as $educationLevel) {
-    
+
                 $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
-    
+
                 $newEducationLevel['activity_id'] = $cloned_activity->id;
                 $newEducationLevel['education_level_id'] = $recEducationLevel->id;
                 $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
                 $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
-                
+
                 DB::table('activity_education_level')->insert($newEducationLevel);
             }
         }
 
         // Import Activity Author-Tag
 
-        $authorTagPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+        $authorTagPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir .
                                                             '/activities/' . $activity_dir . '/activity_author_tag.json');
         if (file_exists($authorTagPath)) {
             $authorTagContent = file_get_contents($authorTagPath);
@@ -955,7 +967,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 $newauthorTag['author_tag_id'] = $recAuthorTag->id;
                 $newauthorTag['created_at'] = date('Y-m-d H:i:s');
                 $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
-                
+
                 DB::table('activity_author_tag')->insert($newauthorTag);
             }
         }
