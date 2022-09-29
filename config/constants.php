@@ -50,7 +50,7 @@ return [
     'activity_type' => [
         'activity' => 'ACTIVITY',
         'independent' => 'INDEPENDENT',
-        'standalone' => 'STANDALONE'
+        'standalone' => 'STANDALONE',
     ],
     'canvas_api_endpoints' => [
         'assignment_groups' => 'assignment_groups',
