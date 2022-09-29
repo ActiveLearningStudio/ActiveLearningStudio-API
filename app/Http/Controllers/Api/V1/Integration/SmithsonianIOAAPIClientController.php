@@ -29,6 +29,7 @@ class SmithsonianIOAAPIClientController extends Controller
     /**
      * Get Smithsonian Contents List
      * @param Request $request
+     * @bodyParam q string use for search Example: q=online_visual_material:true AND IC 443
      * @bodyParam start int like page number Example: 1
      * @bodyParam rows int like page size or number of record per page Example: 10
      * @bodyParam sort string Sort list by id, newest, updated and random field 
@@ -40,6 +41,7 @@ class SmithsonianIOAAPIClientController extends Controller
     public function getContentList(Request $request)
     {
         $getParam = $request->only([
+            'q',
             'start',
             'rows',
             'sort',
