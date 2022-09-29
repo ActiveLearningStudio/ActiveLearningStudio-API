@@ -15,6 +15,7 @@ if (!function_exists('clone_thumbnail')) {
      */
     function clone_thumbnail($thumbnail, $source)
     {
+        $destination = 'activities';
         $new_image_url = config('app.default_thumb_url');
 
         if (!empty($thumbnail) && !empty($source)) {
@@ -36,7 +37,7 @@ if (!function_exists('clone_thumbnail')) {
 
                 \File::copy($source_file, $destination_file);
                 ob_get_clean();
-                $new_image_url = "/storage/" . $source . "/" . $new_image_name;
+                $new_image_url = "/storage/" . $destination . "/" . $new_image_name;
             }
         }
 
