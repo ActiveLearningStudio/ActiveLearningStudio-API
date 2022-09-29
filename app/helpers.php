@@ -15,7 +15,6 @@ if (!function_exists('clone_thumbnail')) {
      */
     function clone_thumbnail($thumbnail, $source)
     {
-        $destination = 'activities';
         $new_image_url = config('app.default_thumb_url');
 
         if (!empty($thumbnail) && !empty($source)) {
