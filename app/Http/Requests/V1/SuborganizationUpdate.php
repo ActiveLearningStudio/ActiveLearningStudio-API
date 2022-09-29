@@ -64,6 +64,10 @@ class SuborganizationUpdate extends FormRequest
             'tertiary_color' => 'string|nullable|max:255',
             'primary_font_family' => 'string|nullable|max:255',
             'secondary_font_family' => 'string|nullable|max:255',
+            'msteam_client_id' => 'string|nullable|max:255',
+            'msteam_secret_id' => 'string|nullable|max:255',
+            'msteam_tenant_id' => 'string|nullable|max:255',
+            'msteam_secret_id_expiry' => 'date|nullable|max:255',
         ];
     }
 
