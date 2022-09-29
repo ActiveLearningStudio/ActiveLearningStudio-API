@@ -147,7 +147,6 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 =======
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
->>>>>>> 435af6ae... CUR-4165: (#1337):database/migrations/2022_09_29_073919_update_independent_activities_adv_search_functions_and_table.php
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
@@ -229,7 +228,6 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
             
->>>>>>> 435af6ae... CUR-4165: (#1337):database/migrations/2022_09_29_073919_update_independent_activities_adv_search_functions_and_table.php
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
