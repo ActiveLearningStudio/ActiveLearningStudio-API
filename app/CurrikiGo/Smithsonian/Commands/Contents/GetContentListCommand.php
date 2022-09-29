@@ -34,7 +34,7 @@ class GetContentListCommand implements Command
      */
     public function execute()
     {
-        $apiUrl = config('smithsonian.api_base_url') . '/search?api_key='.config('smithsonian.api_key').'&q=online_visual_material:true&' . http_build_query($this->getParam);
+        $apiUrl = config('smithsonian.api_base_url') . '/search?api_key='.config('smithsonian.api_key').'&' . http_build_query($this->getParam);
         $response = Http::get($apiUrl);
         return $response->json();
     }
