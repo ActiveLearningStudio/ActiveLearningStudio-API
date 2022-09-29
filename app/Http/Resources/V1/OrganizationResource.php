@@ -97,7 +97,10 @@ class OrganizationResource extends JsonResource
             'msteam_client_id' => $this->msteam_client_id,
             'msteam_secret_id' => $this->msteam_secret_id,
             'msteam_tenant_id' => $this->msteam_tenant_id,
-            'msteam_secret_id_expiry' => $this->msteam_secret_id_expiry
+            'msteam_secret_id_expiry' => $this->msteam_secret_id_expiry,
+            'msteam_project_visibility' => $this->gcr_project_visibility,
+            'msteam_playlist_visibility' => $this->gcr_playlist_visibility,
+            'msteam_activity_visibility' => $this->gcr_activity_visibility
         ];
     }
 }
