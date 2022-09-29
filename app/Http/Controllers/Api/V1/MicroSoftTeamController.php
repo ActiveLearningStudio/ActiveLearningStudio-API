@@ -15,9 +15,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\V1\MSTeamCreateClassRequest;
 use App\Http\Requests\V1\MSTeamCreateAssignmentRequest;
+use App\Http\Requests\V1\MSSaveAccessTokenRequest;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
+use App\Jobs\PublishProject;
 use App\User;
 use Redirect;
 
@@ -107,6 +109,51 @@ class MicroSoftTeamController extends Controller
         }
    
     }
+
+    /**
+	 * Save Access Token
+	 *
+	 * Save GraphAPI access token in the database.
+	 *
+     * @bodyParam access_token string required The stringified of the GraphAPI access token JSON object
+     *
+     * @response {
+     *   "message": "Access token has been saved successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Validation error: Access token is required"
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to save the token."
+     *   ]
+     * }
+     *
+     * @param MSSaveAccessTokenRequest $accessTokenRequest
+     * @return Response
+	 */
+    public function saveAccessToken(MSSaveAccessTokenRequest $accessTokenRequest)
+    {
+        $data = $accessTokenRequest->validated();
+        $authUser = auth()->user();
+        $isUpdated = $this->userRepository->update([
+            'msteam_access_token' => $data['access_token']
+        ], $authUser->id);
+
+        if ($isUpdated) {
+            return response([
+                'message' => 'Access token has been saved successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to save the token.'],
+        ], 500);
+    }
     
     /**
 	 * Get List of Classes
@@ -155,11 +202,12 @@ class MicroSoftTeamController extends Controller
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
         $response = json_decode($this->microsoftTeamRepository->createMsTeamClass($token, $data),true);
-
+        
         if($response['code'] === 202) {
             return response([
                 'message' => 'Class have been created successfully',
-                'classId' => $response['classId']
+                'classId' => $response['classId'],
+                'aSyncUrl'=> $response['aSyncURL'],
             ], 200);
         }
         
@@ -175,11 +223,11 @@ class MicroSoftTeamController extends Controller
 	 * Publish the project activities as an assignment
 	 *
      * @urlParam Project $project required The Id of a project. Example: 9
-     * @bodyParam classId required string Id of the class. Example: Test Class
+     * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
      *
      * @response  200 {
      *   "message": [
-     *     "Project has been published successfully."
+     *     "Your request to publish project [project->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
      *   ]
      * }
      *
@@ -188,40 +236,28 @@ class MicroSoftTeamController extends Controller
      *     "Project must be shared as we are temporarily publishing the shared link."
      *   ]
      * }
-     * 
-     * @response  500 {
-     *   "errors": "MS Team error message",
-     *    "statusCode" : MS team status code
-     * }
-     * 
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
      * @param Project $project
      * @return Response
 	 */
     public function publishProject(MSTeamCreateAssignmentRequest $createAssignmentRequest, Project $project)
     {
-        $createAssignmentRequest->validated();
+        $data = $createAssignmentRequest->validated();
 
         if(!$project->shared) { // temporary check will remove it in future
             return response([
                 'errors' => 'Project must be shared as we are temporarily publishing the shared link.',
             ], 500);
         }
-        $authUser = auth()->user();
-        $token = $authUser->msteam_access_token;
-        $classId = $createAssignmentRequest->get('classId');
+        $classId = isset($data['classId']) ? $data['classId'] : '';
+        
+        // pushed publishing of project in background
+        PublishProject::dispatch(auth()->user(), $project, $classId)->delay(now()->addSecond());
 
-        $response = json_decode($this->microsoftTeamRepository->createMSTeamAssignment($token, $classId, $project), true);
-        
-        if($response['code'] === 201) {
-            return response([
-                'message' => 'Project has been published successfully.',
-            ], 200);
-        }
-        
         return response([
-            'errors' => $response['message'],
-            'statusCode' => $response['code']
-        ], 500);
+            'message' =>  "Your request to publish project [$project->name] into MS Team has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+        
     }   
 }

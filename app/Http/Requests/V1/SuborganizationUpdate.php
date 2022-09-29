@@ -64,6 +64,13 @@ class SuborganizationUpdate extends FormRequest
             'tertiary_color' => 'string|nullable|max:255',
             'primary_font_family' => 'string|nullable|max:255',
             'secondary_font_family' => 'string|nullable|max:255',
+            'msteam_client_id' => 'uuid|nullable|max:255',
+            'msteam_secret_id' => 'uuid|nullable|max:255',
+            'msteam_tenant_id' => 'uuid|nullable|max:255',
+            'msteam_secret_id_expiry' => 'date|nullable',
+            'msteam_project_visibility' => 'boolean',
+            'msteam_playlist_visibility' => 'boolean',
+            'msteam_activity_visibility' => 'boolean',
         ];
     }
 
