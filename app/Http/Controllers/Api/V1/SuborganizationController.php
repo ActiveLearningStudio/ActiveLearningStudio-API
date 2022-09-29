@@ -184,6 +184,10 @@ class SuborganizationController extends Controller
      * @bodyParam tertiary_color string primary font color Example: #515151
      * @bodyParam primary_font_family string primary font color Example: Open Sans
      * @bodyParam secondary_font_family string primary font color Example: Open Sans
+     * @bodyParam msteam_client_id uuid Client id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
      *
      * @responseFile 201 responses/organization/suborganization.json
      *
@@ -267,6 +271,10 @@ class SuborganizationController extends Controller
      * @bodyParam tertiary_color string primary font color Example: #515151
      * @bodyParam primary_font_family string primary font color Example: Open Sans
      * @bodyParam secondary_font_family string primary font color Example: Open Sans
+     * @bodyParam msteam_client_id uuid Client id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
      *
      * @responseFile responses/organization/suborganization.json
      *
