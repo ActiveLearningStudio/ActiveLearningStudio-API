@@ -81,10 +81,6 @@ class Activity extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('approve', function (Builder $builder) {
-            $builder->where('activity_type', '!=', config('constants.activity_type.independent'));
-        });
-
         self::creating(function(Activity $activity) {
             $activity->activity_type = config('constants.activity_type.activity');
             if($activity->type == 'h5p_standalone'){
