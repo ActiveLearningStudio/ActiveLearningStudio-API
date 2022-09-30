@@ -114,7 +114,7 @@ class ExtractXAPIJSONController extends Controller
                 $playlistId = null;
                 $playlistTitle = null;
 
-                if ($activity->activity_type == config('constants.activity_type.activity')) {
+                if ($activity && $activity->activity_type == config('constants.activity_type.activity')) {
                     $activityId = $activity->id;
                     $activityName = $activity->title;
                     $project = $activity->playlist->project;
