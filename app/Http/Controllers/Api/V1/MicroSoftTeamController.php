@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Requests\V1\MSTeamCreateClassRequest;
 use App\Http\Requests\V1\MSTeamCreateAssignmentRequest;
 use App\Http\Requests\V1\MSSaveAccessTokenRequest;
+use App\Models\IndependentActivity;
 use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
 use App\Jobs\PublishProject;
+use App\Jobs\PublishIndependentActivity;
 use App\User;
 use Redirect;
 
@@ -260,4 +262,48 @@ class MicroSoftTeamController extends Controller
         ], 200);
         
     }   
+
+    /**
+	 * Publish independent activity/activity
+	 *
+	 * Publish the independent activity or activity in playlist as an assignment
+	 *
+     * @urlParam Activity $activity required The Id of a activity. Example: 9
+     * @bodyParam classId optional uuid Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
+     *
+     * @response  200 {
+     *   "message": [
+     *     "Your request to publish activity [activity->title] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
+     *   ]
+     * }
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "Activity must be shared as we are temporarily publishing the shared link."
+     *   ]
+     * }
+     * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
+     * @param Activity $activity
+     * @return Response
+	 */
+    public function publishIndependentActivity(MSTeamCreateAssignmentRequest $createAssignmentRequest, Activity $activity)
+    {
+        $data = $createAssignmentRequest->validated();
+
+        if(!$activity->shared) { // temporary check will remove it in future
+            return response([
+                'errors' => 'Activity must be shared as we are temporarily publishing the shared link.',
+            ], 500);
+        }
+        $classId = isset($data['classId']) ? $data['classId'] : '';
+        
+        // pushed publishing of Activity in background
+        PublishIndependentActivity::dispatch(auth()->user(), $activity, $classId)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to publish activity [$activity->title] into MS Team has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+        
+    }
 }

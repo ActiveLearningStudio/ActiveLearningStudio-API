@@ -272,5 +272,71 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         $responseBody = json_decode($response->getBody(), true);
         return $responseBody['id'];
     }
+
+    /**
+    * @param $token string
+    * @param $classId string
+    * @param $Activity activity
+    * @param $aSyncUrl string
+    */
+    public function createMSTeamIndependentActivityAssignment($token, $classId, $activity, $aSyncUrl)
+    {
+        \Log::info('in createMSTeamAssignment');
+        if(!empty($aSyncUrl)) {
+            $this->checkClassAsyncStatus($aSyncUrl, $token); // Check if class fully functional
+        }
+        
+        $apiURL = $this->landingUrl . 'education/classes/' . $classId . '/assignments';
+        $assignmentDueDays = config('ms-team-configs.assignment_due_days');
+
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+        ];
+
+        $postInput['dueDateTime'] =date('c', strtotime(date('Y-m-d'). ' + ' . $assignmentDueDays . ' days'));
+        
+        $postInput['displayName'] = $activity->title;
+        
+        $response = Http::withHeaders($headers)->withOptions(["verify"=>false])
+                                        ->retry(3, 6000)->post($apiURL, $postInput);
+        $responseBody = json_decode($response->getBody(), true);
+        
+        $statusCode = $response->status();
+        if ($statusCode !== 201) {
+            
+            $returnArr = [
+                "code" => $resourceStatusCode,
+                "message" => $resourceResponseBody['error']['message'],
+            ];
+
+            return json_encode($returnArr);
+        }
+        //Add link resource
+        $assignmentId = $responseBody['id'];
+        $resourceApiUrl = $this->landingUrl . 'education/classes/' . $classId . '/assignments/' . $assignmentId . '/resources';
+        $postResourceInput = [
+            "distributeForStudentWork" => false,
+            "resource" => [
+                "displayName" => $independentActivity->title,
+                "link" => config('constants.front-url') . '/activity/' . $independentActivity->id . '/shared?type=ind', // Need to discuss the link logic currently shared link
+                "@odata.type" => "#microsoft.graph.educationLinkResource"
+            ]
+        ];
+
+        $responseResource = Http::withHeaders($headers)->withOptions(["verify"=>false])->post($resourceApiUrl, $postResourceInput);
+        $resourceResponseBody = json_decode($responseResource->getBody(), true);
+        $resourceStatusCode = $responseResource->status();
+                
+            
+        
+        $returnArr = [
+            "code" => 201,
+            "message" => "Projcted published successfully",
+        ];
+
+        return json_encode($returnArr);
+    }
     
 }
