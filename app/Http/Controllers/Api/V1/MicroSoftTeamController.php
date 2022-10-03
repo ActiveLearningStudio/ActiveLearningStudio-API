@@ -273,17 +273,17 @@ class MicroSoftTeamController extends Controller
      *
      * @response  200 {
      *   "message": [
-     *     "Your request to publish independent activity [independent_activity->title] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
+     *     "Your request to publish activity [activity->title] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
      *   ]
      * }
      *
      * @response  500 {
      *   "errors": [
-     *     "Independent Activity must be shared as we are temporarily publishing the shared link."
+     *     "Activity must be shared as we are temporarily publishing the shared link."
      *   ]
      * }
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
-     * @param IndependentActivity $independent_activity
+     * @param Activity $activity
      * @return Response
 	 */
     public function publishIndependentActivity(MSTeamCreateAssignmentRequest $createAssignmentRequest, Activity $activity)
@@ -292,12 +292,12 @@ class MicroSoftTeamController extends Controller
 
         if(!$activity->shared) { // temporary check will remove it in future
             return response([
-                'errors' => 'Independent Activity must be shared as we are temporarily publishing the shared link.',
+                'errors' => 'Activity must be shared as we are temporarily publishing the shared link.',
             ], 500);
         }
         $classId = isset($data['classId']) ? $data['classId'] : '';
         
-        // pushed publishing of independentActivityName in background
+        // pushed publishing of Activity in background
         PublishIndependentActivity::dispatch(auth()->user(), $activity, $classId)->delay(now()->addSecond());
 
         return response([
