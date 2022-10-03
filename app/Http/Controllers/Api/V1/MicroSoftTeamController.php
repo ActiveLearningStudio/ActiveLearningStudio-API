@@ -264,11 +264,11 @@ class MicroSoftTeamController extends Controller
     }   
 
     /**
-	 * Publish independent activity
+	 * Publish independent activity/activity
 	 *
-	 * Publish the independent activity as an assignment
+	 * Publish the independent activity or activity in playlist as an assignment
 	 *
-     * @urlParam IndependentActivity $independent_activity required The Id of a independent_activity. Example: 9
+     * @urlParam Activity $activity required The Id of a activity. Example: 9
      * @bodyParam classId optional uuid Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
      *
      * @response  200 {
@@ -286,11 +286,11 @@ class MicroSoftTeamController extends Controller
      * @param IndependentActivity $independent_activity
      * @return Response
 	 */
-    public function publishIndependentActivity(MSTeamCreateAssignmentRequest $createAssignmentRequest, IndependentActivity $independent_activity)
+    public function publishIndependentActivity(MSTeamCreateAssignmentRequest $createAssignmentRequest, Activity $activity)
     {
         $data = $createAssignmentRequest->validated();
 
-        if(!$independent_activity->shared) { // temporary check will remove it in future
+        if(!$activity->shared) { // temporary check will remove it in future
             return response([
                 'errors' => 'Independent Activity must be shared as we are temporarily publishing the shared link.',
             ], 500);
@@ -298,10 +298,10 @@ class MicroSoftTeamController extends Controller
         $classId = isset($data['classId']) ? $data['classId'] : '';
         
         // pushed publishing of independentActivityName in background
-        PublishIndependentActivity::dispatch(auth()->user(), $independent_activity, $classId)->delay(now()->addSecond());
+        PublishIndependentActivity::dispatch(auth()->user(), $activity, $classId)->delay(now()->addSecond());
 
         return response([
-            'message' =>  "Your request to publish independent activity [$independent_activity->title] into MS Team has been received and is being processed. <br>
+            'message' =>  "Your request to publish activity [$activity->title] into MS Team has been received and is being processed. <br>
                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
         

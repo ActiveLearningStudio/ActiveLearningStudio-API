@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Models\IndependentActivity;
+use App\Models\Activity;
 use App\User;
 use App\Notifications\IndependentActivityPublishNotification;
 
@@ -23,9 +24,9 @@ class PublishIndependentActivity implements ShouldQueue
     protected $user;
 
     /**
-     * @var IndependentActivity
+     * @var Activity
      */
-    protected $independent_activity;
+    protected $activity;
 
     /**
      * @var string
@@ -42,10 +43,10 @@ class PublishIndependentActivity implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(User $user, IndependentActivity $independent_activity, $classId)
+    public function __construct(User $user, Activity $activity, $classId)
     {
         $this->user = $user;
-        $this->independent_activity = $independent_activity;
+        $this->activity = $activity;
         $this->classId = $classId;
         $this->aSyncUrl = '';
     }
@@ -59,17 +60,17 @@ class PublishIndependentActivity implements ShouldQueue
     {
         try {
             if(empty($this->classId)) {
-                $response = $microsoftTeamRepository->createMsTeamClass($this->user->msteam_access_token, ['displayName'=>$this->independent_activity->title]);    
+                $response = $microsoftTeamRepository->createMsTeamClass($this->user->msteam_access_token, ['displayName'=>$this->activity->title]);    
                 \Log::info($response);
                 $class = json_decode($response, true);
                 $this->classId = $class['classId'];
                 $this->aSyncUrl = $class['aSyncURL'];
             }
             
-            $microsoftTeamRepository->createMSTeamIndependentActivityAssignment($this->user->msteam_access_token, $this->classId, $this->independent_activity, $this->aSyncUrl);
+            $microsoftTeamRepository->createMSTeamIndependentActivityAssignment($this->user->msteam_access_token, $this->classId, $this->activity, $this->aSyncUrl);
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
            
-            $this->user->notify(new IndependentActivityPublishNotification($userName, $this->project->name));
+            $this->user->notify(new IndependentActivityPublishNotification($userName, $this->activity->title));
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }

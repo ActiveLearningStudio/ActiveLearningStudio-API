@@ -276,10 +276,10 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     /**
     * @param $token string
     * @param $classId string
-    * @param $independentActivity independentActivity
+    * @param $Activity activity
     * @param $aSyncUrl string
     */
-    public function createMSTeamIndependentActivityAssignment($token, $classId, $independentActivity, $aSyncUrl)
+    public function createMSTeamIndependentActivityAssignment($token, $classId, $activity, $aSyncUrl)
     {
         \Log::info('in createMSTeamAssignment');
         if(!empty($aSyncUrl)) {
@@ -297,7 +297,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
         $postInput['dueDateTime'] =date('c', strtotime(date('Y-m-d'). ' + ' . $assignmentDueDays . ' days'));
         
-        $postInput['displayName'] = $independentActivity->title;
+        $postInput['displayName'] = $activity->title;
         
         $response = Http::withHeaders($headers)->withOptions(["verify"=>false])
                                         ->retry(3, 6000)->post($apiURL, $postInput);

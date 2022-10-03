@@ -56,7 +56,7 @@ class IndependentActivityPublishNotification extends Notification
      */
     public function toDatabase($notifiable)
     {
-        $message = "Independent Activity [$this->independentActivityName] has been published into Microsoft Team successfully.";
+        $message = "Activity [$this->independentActivityName] has been published into Microsoft Team successfully.";
         
         return [
             'message' => $message,

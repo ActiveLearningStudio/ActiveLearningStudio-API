@@ -335,7 +335,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::post('classes', 'MicroSoftTeamController@createMsTeamClass');
             Route::post('classes/assignments', 'MicroSoftTeamController@createMsTeamAssignment');
             Route::post('projects/{project}/publish','MicroSoftTeamController@publishProject');
-            Route::post('independent-activities/{independent_activity}/publish','MicroSoftTeamController@publishIndependentActivity');
+            Route::post('activities/{activity}/publish','MicroSoftTeamController@publishIndependentActivity');
         });
 
 
