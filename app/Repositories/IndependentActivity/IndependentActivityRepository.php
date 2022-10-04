@@ -104,7 +104,13 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $queryFrom = 0;
         $querySize = 10;
 
-        if (isset($data['searchType']) && $data['searchType'] === 'showcase_activities') {
+        if (
+            isset($data['searchType'])
+            && (
+                $data['searchType'] === 'showcase_activities'
+                || $data['searchType'] === 'lti_search'
+            )
+        ) {
             $organization = $data['orgObj'];
             $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
         }
@@ -142,7 +148,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                 if ($dataSearchType === 'org_activities_non_admin') {
                     $queryWhere[] = "organization_visibility_type_id NOT IN (" . config('constants.private-organization-visibility-type-id') . ")";
                 }
-            } elseif ($dataSearchType === 'showcase_activities') {
+            } elseif (
+                $dataSearchType === 'showcase_activities'
+                || $dataSearchType === 'lti_search'
+            ) {
                 // Get all public items
                 $organizationIdsShouldQueries[] = "organization_visibility_type_id IN (" . config('constants.public-organization-visibility-type-id') . ")";
 
@@ -161,6 +170,16 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                 $protectedOrganizationIdsQueries = implode(' AND ', $protectedOrganizationIdsQueries);
                 $organizationIdsShouldQueries[] = "(" . $protectedOrganizationIdsQueries . ")";
+
+                if ($dataSearchType === 'lti_search') {
+                    // Get all private items
+                    $privateOrganizationIdsQueries[] = "org_id = " . $organization->id;
+                    $privateOrganizationIdsQueries[] = "organization_visibility_type_id = " . config('constants.private-organization-visibility-type-id');
+                    $privateOrganizationIdsQueries[] = "user_id = " . $authUser;
+
+                    $privateOrganizationIdsQueries = implode(' AND ', $privateOrganizationIdsQueries);
+                    $organizationIdsShouldQueries[] = "(" . $privateOrganizationIdsQueries . ")";
+                }
 
                 $organizationIdsShouldQueries = implode(' OR ', $organizationIdsShouldQueries);
                 $queryWhere[] = "(" . $organizationIdsShouldQueries . ")";
