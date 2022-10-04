@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\UiModulePermission;
 use Illuminate\Database\Seeder;
 
 class UiModuleOrganizationPermissionMappingSeeder extends Seeder
@@ -78,6 +79,54 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:edit-activity-item'
                     ],
                     "None" => []
+                ],
+                "Activity Layouts" => [
+                    "View" => [
+                        'organization:view-activity-layout'
+                    ],
+                    "Edit" => [
+                        'organization:view-activity-layout',
+                        'organization:create-activity-layout',
+                        'organization:delete-activity-layout',
+                        'organization:edit-activity-layout'
+                    ],
+                    "None" => []
+                ],
+                "Subjects" => [
+                    "View" => [
+                        'organization:view-subject'
+                    ],
+                    "Edit" => [
+                        'organization:view-subject',
+                        'organization:create-subject',
+                        'organization:delete-subject',
+                        'organization:edit-subject'
+                    ],
+                    "None" => []
+                ],
+                "Education Levels" => [
+                    "View" => [
+                        'organization:view-education-level'
+                    ],
+                    "Edit" => [
+                        'organization:view-education-level',
+                        'organization:create-education-level',
+                        'organization:delete-education-level',
+                        'organization:edit-education-level'
+                    ],
+                    "None" => []
+                ],
+                "Author Tags" => [
+                    "View" => [
+                        'organization:view-author-tag'
+                    ],
+                    "Edit" => [
+                        'organization:view-author-tag',
+                        'organization:create-author-tag',
+                        'organization:delete-author-tag',
+                        'organization:edit-author-tag'
+                    ],
+                    "None" => []
                 ]
             ],
             "Integrations" => [
@@ -114,6 +163,18 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:create-brightcove-setting',
                         'organization:delete-brightcove-setting',
                         'organization:edit-brightcove-setting'
+                    ],
+                    "None" => []
+                ],
+                "Media" => [
+                    "View" => [
+                        'organization:view-media'
+                    ],
+                    "Edit" => [
+                        'organization:view-media',
+                        'organization:create-media',
+                        'organization:delete-media',
+                        'organization:edit-media'
                     ],
                     "None" => []
                 ]
@@ -177,9 +238,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
             "Authoring" => [
                 "Project" => [
                     "View" => [
-                        'project:view',
-                        'project:share',
-                        'project:clone'
+                        'project:view'
                     ],
                     "Edit" => [
                         'project:view',
@@ -198,9 +257,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                 ],
                 "Playlist" => [
                     "View" => [
-                        'playlist:view',
-                        'playlist:publish',
-                        'playlist:duplicate'
+                        'playlist:view'
                     ],
                     "Edit" => [
                         'playlist:view',
@@ -214,9 +271,7 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                 ],
                 "Activity" => [
                     "View" => [
-                        'activity:view',
-                        'activity:share',
-                        'activity:duplicate'
+                        'activity:view'
                     ],
                     "Edit" => [
                         'activity:view',
@@ -263,72 +318,56 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
         DB::transaction(function () use ($uiBackendPermissionMapping) {
             foreach ($uiBackendPermissionMapping as $moduleTitle => $subModules) {
                 DB::table('ui_modules')
-                ->updateOrInsert(
-                    [
-                        'title' => $moduleTitle
-                    ],
-                    [
-                        'created_at' => 'NOW()'
-                    ]
-                );
-
-                $moduleObj = DB::table('ui_modules')
-                ->where('title', $moduleTitle)
-                ->first();
-
-                foreach ($subModules as $subModuleTitle => $uiPermissions) {
-                    DB::table('ui_modules')
                     ->updateOrInsert(
                         [
-                            'title' => $subModuleTitle,
-                            'parent_id' => $moduleObj->id
+                            'title' => $moduleTitle
                         ],
                         [
                             'created_at' => 'NOW()'
                         ]
                     );
 
-                    $subModuleObj = DB::table('ui_modules')
-                    ->where('title', $subModuleTitle)
-                    ->first();
+                $moduleObj = DB::table('ui_modules')->where('title', $moduleTitle)->first();
 
-                    foreach ($uiPermissions as $uiPermissionTitle => $backendPermissions) {
-                        DB::table('ui_module_permissions')
+                foreach ($subModules as $subModuleTitle => $uiPermissions) {
+                    DB::table('ui_modules')
                         ->updateOrInsert(
                             [
-                                'title' => $uiPermissionTitle,
-                                'ui_module_id' => $subModuleObj->id
+                                'title' => $subModuleTitle,
+                                'parent_id' => $moduleObj->id
                             ],
                             [
                                 'created_at' => 'NOW()'
                             ]
                         );
 
-                        if ($backendPermissions) {
-                            $uiPermissionObj = DB::table('ui_module_permissions')
-                            ->where([
+                    $subModuleObj = DB::table('ui_modules')
+                                        ->where('title', $subModuleTitle)
+                                        ->first();
+
+                    foreach ($uiPermissions as $uiPermissionTitle => $backendPermissions) {
+                        DB::table('ui_module_permissions')
+                            ->updateOrInsert(
                                 [
-                                    'title', '=', $uiPermissionTitle
+                                    'title' => $uiPermissionTitle,
+                                    'ui_module_id' => $subModuleObj->id
                                 ],
                                 [
-                                    'ui_module_id', '=', $subModuleObj->id
+                                    'created_at' => 'NOW()'
                                 ]
-                            ])
-                            ->first();
+                            );
+
+                        if ($backendPermissions) {
+                            $uiPermissionObj = UiModulePermission::where('title', $uiPermissionTitle)
+                                                                   ->where('ui_module_id', $subModuleObj->id)
+                                                                   ->first();
 
                             $backendPermissionIds = DB::table('organization_permission_types')
-                            ->whereIn('name', $backendPermissions)
-                            ->pluck('id')
-                            ->toArray();
+                                                        ->whereIn('name', $backendPermissions)
+                                                        ->pluck('id')
+                                                        ->toArray();
 
-                            foreach ($backendPermissionIds as $backendPermissionId) {
-                                DB::table('ui_organization_permission_mappings')
-                                ->insertOrIgnore([
-                                    'ui_module_permission_id' => $uiPermissionObj->id,
-                                    'organization_permission_type_id' => $backendPermissionId,
-                                    'created_at' => 'NOW()'
-                                ]);
-                            }
+                            $uiPermissionObj->organizationPermissionTypes()->sync($backendPermissionIds);
                         }
                     }
                 }
