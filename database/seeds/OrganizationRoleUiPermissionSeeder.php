@@ -25,11 +25,16 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Import/Export Projects" => "Edit",
             "Activity Types" => "Edit",
             "Activity Items" => "Edit",
+            "Activity Layouts" => "Edit",
+            "Subjects" => "Edit",
+            "Education Levels" => "Edit",
+            "Author Tags" => "Edit",
             "Manage Users" => "Edit",
             "Manage Roles" => "Edit",
             "LMS Settings" => "Edit",
             "LTI Tools" => "Edit",
             "BrightCove" => "Edit",
+            "Media" => "Edit",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",
@@ -46,11 +51,16 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Import/Export Projects" => "None",
             "Activity Types" => "None",
             "Activity Items" => "None",
+            "Activity Layouts" => "None",
+            "Subjects" => "None",
+            "Education Levels" => "None",
+            "Author Tags" => "None",
             "Manage Users" => "None",
             "Manage Roles" => "None",
             "LMS Settings" => "None",
             "LTI Tools" => "None",
             "BrightCove" => "None",
+            "Media" => "None",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",
@@ -67,11 +77,16 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Import/Export Projects" => "None",
             "Activity Types" => "None",
             "Activity Items" => "None",
+            "Activity Layouts" => "None",
+            "Subjects" => "None",
+            "Education Levels" => "None",
+            "Author Tags" => "None",
             "Manage Users" => "None",
             "Manage Roles" => "None",
             "LMS Settings" => "None",
             "LTI Tools" => "None",
             "BrightCove" => "None",
+            "Media" => "None",
             "Project" => "View",
             "Playlist" => "View",
             "Activity" => "View",
@@ -106,7 +121,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
 
         $uiModulePermissionsList = [];
         $uiModulePermissionsResult = DB::table('ui_module_permissions')->get();
-        
+
         foreach ($uiModulePermissionsResult as $uiModulePermission) {
             $uiModulePermissionsList[$uiModulePermission->title][$uiModulePermission->ui_module_id] = $uiModulePermission->id;
         }
@@ -131,13 +146,13 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
     }
 
     function assignPermissions($uiPermissions, $roleType)
-    { 
+    {
         $uiModulePermissionIds = [];
-       
+
         foreach ($uiPermissions as $permissionName => $permissionType) {
-            
+
             if (
-                $this->domain === 'currikistudio.org' && 
+                $this->domain === 'currikistudio.org' &&
                 $permissionName === 'Team' &&
                 ($roleType->name === 'course_creator' || $roleType->name === 'self_registered')
             ) {
@@ -160,7 +175,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
 
         // assign ui role permissions
         $roleType->uiModulePermissions()->sync($uiModulePermissionIds);
-        // assign backend role permissions 
+        // assign backend role permissions
         $UiOrganizationPermissionMappingRepository = resolve(UiOrganizationPermissionMappingRepositoryInterface::class);
         $organizationPermissionTypeIds = $UiOrganizationPermissionMappingRepository->getOrganizationPermissionTypeIds($uiModulePermissionIds);
         $roleType->permissions()->sync($organizationPermissionTypeIds);
