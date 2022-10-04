@@ -125,7 +125,10 @@ class SearchController extends Controller
 
         $data['organizationIds'] = [$data['organization_id']];
         $data['orgObj'] = $organization;
-        $data['indexing'] = [config('constants.indexing-approved')];
+
+        if ($data['searchType'] !== 'lti_search') {
+            $data['indexing'] = [config('constants.indexing-approved')];
+        }
 
         if ($data['searchType'] === 'org_projects') {
             $data['searchType'] = 'org_projects_non_admin';
@@ -233,6 +236,9 @@ class SearchController extends Controller
             $data['indexing'] = [config('constants.indexing-approved')];
         } else if ($data['searchType'] === 'my_activities') {
             $data['userIds'] = [auth()->user()->id];
+        } else if ($data['searchType'] === 'lti_search') {
+            $organization = $this->organizationRepository->find($data['organization_id']);
+            $data['orgObj'] = $organization;
         } else {
             $data['indexing'] = [config('constants.indexing-approved')];
             $organization = $this->organizationRepository->find($data['organization_id']);
