@@ -24,7 +24,7 @@ class SearchIndependentActivityRequest extends FormRequest
     public function rules()
     {
         return [
-            'searchType' => 'required|in:my_activities,showcase_activities,org_activities',
+            'searchType' => 'required|in:my_activities,showcase_activities,org_activities,lti_search',
             'query' => 'string|max:255',
             'organization_id' => 'required|integer|exists:App\Models\Organization,id',
             'negativeQuery' => 'string|max:255',
