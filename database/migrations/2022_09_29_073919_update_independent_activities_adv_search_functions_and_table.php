@@ -123,12 +123,10 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join activity_subject acts on a.id=acts.activity_id ';
             end if;
-
             if _education != '' then 
                 cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join activity_education_level ael on a.id=ael.activity_id ';
             end if;
-
             if _tag != '' then 
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
@@ -137,18 +135,17 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-                h5p := ' and hl.name in  (''';
+            h5p := ' and hl.name in  (''';
+                
+                if hCnt=0 then 
+                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                else
                 for hlCnt in 1..hCnt loop
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
                 end loop;
-<<<<<<< HEAD:database/migrations/2022_08_24_142021_update_independent_activities_adv_search_functions_and_table.php
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
-                
-=======
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
             end if;
-
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
@@ -203,12 +200,10 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join activity_subject acts on a.id=acts.activity_id ';
             end if;
-
             if _education != '' then 
                 cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join activity_education_level ael on a.id=ael.activity_id ';
             end if;
-
             if _tag != '' then 
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
@@ -217,19 +212,18 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-                h5p := ' and hl.name in  (''';
+            h5p := ' and hl.name in  (''';
+                
+                if hCnt=0 then 
+                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                else
                 for hlCnt in 1..hCnt loop
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
                 end loop;
-<<<<<<< HEAD:database/migrations/2022_08_24_142021_update_independent_activities_adv_search_functions_and_table.php
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''') ' ; 
-                
-=======
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
             
             end if;
-
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,a.indexing,a.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
