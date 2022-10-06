@@ -207,9 +207,16 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
 
                     if ($role) {
+                        // assign ui role permissions
+                        $organizationRoleUiPermissions = $organizationUserRole->uiModulePermissions()
+                                                                              ->pluck('ui_module_permission_id')
+                                                                              ->toArray();
+
+                        $role->uiModulePermissions()->sync($organizationRoleUiPermissions);
+
                         $organizationUserRoleUsers = $organizationUserRole->users()
-                            ->wherePivot('organization_id', $organization->id)
-                            ->get();
+                                                                          ->wherePivot('organization_id', $organization->id)
+                                                                          ->get();
 
                         foreach ($organizationUserRoleUsers as $organizationUserRoleUser) {
                             $userRoles[$organizationUserRoleUser->id] = ['organization_role_type_id' => $role->id];
@@ -226,6 +233,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                     $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
 
                     $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+                    if ($role) {
+                        // assign ui role permissions
+                        $organizationRoleUiPermissions = $organizationUserRole->uiModulePermissions()
+                                                                              ->pluck('ui_module_permission_id')
+                                                                              ->toArray();
+
+                        $role->uiModulePermissions()->sync($organizationRoleUiPermissions);
+                    }
                 }
             }
 
