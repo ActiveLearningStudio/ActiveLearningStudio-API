@@ -39,7 +39,16 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     /**
     * @param $token string
     * @param $classId string
-    * @param $activity Activity
+    * @param $project Project
+    * @param $aSyncUrl string
     */
-   public function createMSTeamAssignment($token, $classId, $activity);
+    public function createMSTeamAssignment($token, $classId, $project, $aSyncUrl);
+
+    /**
+    * @param $token string
+    * @param $classId string
+    * @param $activity Activity
+    * @param $aSyncUrl string
+    */
+    public function createMSTeamIndependentActivityAssignment($token, $classId, $activity, $aSyncUrl);
 }

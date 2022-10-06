@@ -48,10 +48,10 @@ class CreateCourseCommand implements Command
      * @param array $sisId
      * @return void
      */
-    public function __construct($accountId, $courseData, $sisId)
+    public function __construct($courseName, $accountId)
     {
         $this->accountId = $accountId;
-        $this->courseData = $this->prepareCourseData($courseData, $sisId);
+        $this->courseData = $this->prepareCourseData($courseName);
     }
 
     /**
@@ -62,14 +62,16 @@ class CreateCourseCommand implements Command
     public function execute()
     {
         $response = null;
-        try {            
+        try {
             $response = $this->httpClient->request('POST', $this->apiURL . '/accounts/' . $this->accountId . '/courses', [
-                    'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json'],
-                    'json' => $this->courseData
-                ])->getBody()->getContents();
+                'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json'],
+                'json' => $this->courseData
+            ])->getBody()->getContents();
             $response = json_decode($response);
-        } catch (Exception $ex) {}
-        
+        } 
+        catch (Exception $ex) {
+        }
+
         return $response;
     }
 
@@ -79,12 +81,11 @@ class CreateCourseCommand implements Command
      * @param array $data
      * @return array
      */
-    public function prepareCourseData($data, $sisId)
+    public function prepareCourseData($courseName)
     {
-        $course["name"] = $data['name'];
-        $short_name = strtolower(implode('-', explode(' ', $data['name'])));
+        $course["name"] = $courseName;
+        $short_name = strtolower(implode('-', explode(' ', $courseName)));
         $course["course_code"] = $short_name;
-        $course["sis_course_id"] = $sisId;
         $course["license"] = "public_domain";
         $course["public_syllabus_to_auth"] = true;
         $course["public_description"] = $course["name"] . " by CurrikiStudio";

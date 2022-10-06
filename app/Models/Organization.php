@@ -44,7 +44,14 @@ class Organization extends Model
         'secondary_color',
         'tertiary_color',
         'primary_font_family',
-        'secondary_font_family'
+        'secondary_font_family',
+        'msteam_client_id',
+        'msteam_secret_id',
+        'msteam_tenant_id',
+        'msteam_secret_id_expiry',
+        'msteam_project_visibility',
+        'msteam_playlist_visibility',
+        'msteam_activity_visibility'
     ];
 
     /**
