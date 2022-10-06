@@ -199,10 +199,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             foreach ($organizationUserRoles as $organizationUserRole) {
                 if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
-                    $subOrganizationUserRolesData['role'] = $organizationUserRole;
                     $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
 
-                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+                    $role = $this->addRole($suborganization, $organizationUserRole);
 
                     if ($role) {
                         $organizationUserRoleUsers = $organizationUserRole->users()
@@ -218,10 +217,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             foreach ($organizationUserRolesNonAdmin as $organizationUserRole) {
                 if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
-                    $subOrganizationUserRolesData['role'] = $organizationUserRole;
                     $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
 
-                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+                    $role = $this->addRole($suborganization, $organizationUserRole);
                 }
             }
 
@@ -418,23 +416,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      * Add role for particular organization
      *
      * @param Organization $organization
-     * @param array $data
+     * @param object $organizationRole
      * @return Model
      */
-    public function addRole($organization, $data)
+    public function addRole($organization, $organizationRole)
     {
         try {
             DB::beginTransaction();
 
             $role = $organization->roles()->create([
-                'name' => $data['role']->name,
-                'display_name' => $data['role']->display_name,
+                'name' => $organizationRole->name,
+                'display_name' => $organizationRole->display_name,
             ]);
 
-            $role->permissions()->attach($data['role']->permissions->pluck('id')->toArray());
+            $role->permissions()->attach($organizationRole->permissions->pluck('id')->toArray());
 
             // assign ui role permissions
-            $organizationRoleUiPermissions = $data['role']->uiModulePermissions()
+            $organizationRoleUiPermissions = $organizationRole->uiModulePermissions()
                                                           ->pluck('ui_module_permission_id')
                                                           ->toArray();
 
