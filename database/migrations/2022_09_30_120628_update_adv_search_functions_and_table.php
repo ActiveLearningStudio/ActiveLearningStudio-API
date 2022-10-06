@@ -165,14 +165,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_24_142012_update_adv_search_functions_and_table.php
-                where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s) )
-=======
                 where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s 
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
->>>>>>> 47e8772e... CUR-4165: (#1331):database/migrations/2022_09_28_120628_update_adv_search_functions_and_table.php
                 
                 
                 union all
@@ -189,14 +185,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_24_142012_update_adv_search_functions_and_table.php
-                where p.id in  (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s)
-=======
                 where p.id in  (select playlist_id from activities a %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
->>>>>>> 47e8772e... CUR-4165: (#1331):database/migrations/2022_09_28_120628_update_adv_search_functions_and_table.php
                 
                 union all
                 
@@ -214,11 +206,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_24_142012_update_adv_search_functions_and_table.php
-                where lower(a.title) like '%s'  %s
-=======
                 where a.activity_type != 'INDEPENDENT' and  hl.name is not null and lower(a.title) like '%s'  %s
->>>>>>> 47e8772e... CUR-4165: (#1331):database/migrations/2022_09_28_120628_update_adv_search_functions_and_table.php
                 )sq1
                 left join
                 (select distinct project_id as pid from user_favorite_project
@@ -410,14 +398,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_24_142012_update_adv_search_functions_and_table.php
-                where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s) )
-=======
                 where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s 
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
->>>>>>> 47e8772e... CUR-4165: (#1331):database/migrations/2022_09_28_120628_update_adv_search_functions_and_table.php
                 
                 
                 union all
@@ -434,14 +418,10 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_24_142012_update_adv_search_functions_and_table.php
-                where p.id in  (select playlist_id from activities a %s where lower(a.title) like '%s' and a.id is not null %s)
-=======
                 where p.id in  (select playlist_id from activities a %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
->>>>>>> 47e8772e... CUR-4165: (#1331):database/migrations/2022_09_28_120628_update_adv_search_functions_and_table.php
                 
                 union all
                 
@@ -459,13 +439,8 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_24_142012_update_adv_search_functions_and_table.php
-                where lower(a.title) like '%s'  %s
-                $s$,joinTable,_searchText,cnd,joinTable,_searchText,cnd,joinTable,h5p,_searchText,cnd);
-=======
                 where  a.activity_type != 'INDEPENDENT' and hl.name is not null and lower(a.title) like '%s'  %s
                 $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd);
->>>>>>> 47e8772e... CUR-4165: (#1331):database/migrations/2022_09_28_120628_update_adv_search_functions_and_table.php
                 
                 RETURN QUERY execute query;
             else 
