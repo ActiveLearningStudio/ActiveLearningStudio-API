@@ -221,17 +221,17 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if (isset($data['author']) && !empty($data['author'])) {
-            $queryWhereAuthor[] = "first_name LIKE '%" . $data['author'] . "%'";
-            $queryWhereAuthor[] = "last_name LIKE '%" . $data['author'] . "%'";
-            $queryWhereAuthor[] = "email LIKE '%" . $data['author'] . "%'";
+            $queryWhereAuthor[] = "lower(first_name) LIKE lower('%" . $data['author'] . "%')";
+            $queryWhereAuthor[] = "lower(last_name) LIKE lower('%" . $data['author'] . "%')";
+            $queryWhereAuthor[] = "lower(email) LIKE lower('%" . $data['author'] . "%')";
 
             $queryWhereAuthor = implode(' OR ', $queryWhereAuthor);
             $queryWhere[] = "(" . $queryWhereAuthor . ")";
         }
 
         if (isset($data['h5pLibraries']) && !empty($data['h5pLibraries'])) {
-            $dataH5pLibraries = implode('","', $data['h5pLibraries']);
-            $queryParams['query_h5p'] = '("' . $dataH5pLibraries . '")';
+            $dataH5pLibraries = implode(",", $data['h5pLibraries']);
+            $queryParams['query_h5p'] = $dataH5pLibraries;
         }
 
         if (isset($data['indexing']) && !empty($data['indexing'])) {
