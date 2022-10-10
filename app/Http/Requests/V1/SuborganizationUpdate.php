@@ -64,16 +64,4 @@ class SuborganizationUpdate extends FormRequest
         ];
     }
 
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'tos_type.in' => 'The ToS type should be Parent, URL OR Content',
-            'privacy_policy_type.in' => 'The privacy policy type should be Parent, URL OR Content',
-        ];
-    }
 }
