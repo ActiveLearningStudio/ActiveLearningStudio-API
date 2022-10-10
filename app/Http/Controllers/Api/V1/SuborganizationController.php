@@ -1092,7 +1092,7 @@ class SuborganizationController extends Controller
     }
 
     /**
-     * Update classroom access credentials for google/microsoft classroom in Suborganization
+     * Update Google/Microsoft Credentials in Suborganization
      *
      * Update the specified suborganization for a user to modify classroom access credentials.
      *
@@ -1108,8 +1108,12 @@ class SuborganizationController extends Controller
      * @bodyParam msteam_playlist_visibility bool Enable/disable google classroom Example: false
      * @bodyParam msteam_activity_visibility bool Enable/disable google classroom Example: false
      *
-     * @responseFile responses/organization/suborganization.json
-     *
+     *@response 200 {
+     *   "success": [
+     *     "Fields are updated successfully."
+     *   ]
+     * }
+     * 
      * @response 500 {
      *   "errors": [
      *     "Failed to update suborganization."
@@ -1123,11 +1127,11 @@ class SuborganizationController extends Controller
     public function updateClassCredentials(ClassRoomIntegrationRequest $request, Organization $suborganization)
     {
         $data = $request->validated();
-        $is_updated = $this->organizationRepository->update($suborganization, $data);
+        $isUpdated = $this->organizationRepository->update($suborganization, $data);
         
-        if ($is_updated) {
+        if ($isUpdated) {
             return response([
-                'success' => "Fields are updated successfully",
+                'success' => ["Fields are updated successfully."],
             ], 200);
         }
 
