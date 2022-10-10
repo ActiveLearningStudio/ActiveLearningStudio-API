@@ -50,9 +50,6 @@ class SuborganizationUpdate extends FormRequest
             'api_key' => 'max:255',
             'unit_path' => 'max:255',
             'noovo_client_id' => 'string|max:255|nullable',
-            'gcr_project_visibility' => 'boolean',
-            'gcr_playlist_visibility' => 'boolean',
-            'gcr_activity_visibility' => 'boolean',
             'tos_type' => 'required|in:Parent,URL,Content',
             'tos_url' => 'required_if:tos_type,==,URL|url|max:255',
             'tos_content' => 'required_if:tos_type,==,Content|string|max:65000',
@@ -64,13 +61,6 @@ class SuborganizationUpdate extends FormRequest
             'tertiary_color' => 'string|nullable|max:255',
             'primary_font_family' => 'string|nullable|max:255',
             'secondary_font_family' => 'string|nullable|max:255',
-            'msteam_client_id' => 'uuid|nullable|max:255',
-            'msteam_secret_id' => 'uuid|nullable|max:255',
-            'msteam_tenant_id' => 'uuid|nullable|max:255',
-            'msteam_secret_id_expiry' => 'date|nullable',
-            'msteam_project_visibility' => 'boolean',
-            'msteam_playlist_visibility' => 'boolean',
-            'msteam_activity_visibility' => 'boolean',
         ];
     }
 
