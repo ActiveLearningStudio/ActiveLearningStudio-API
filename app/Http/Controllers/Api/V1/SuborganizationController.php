@@ -1096,6 +1096,7 @@ class SuborganizationController extends Controller
      *
      * Update the specified suborganization for a user to modify classroom access credentials.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
      * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
      * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
