@@ -25,6 +25,7 @@ use App\Http\Requests\V1\SuborganizationUpdateRole;
 use App\Http\Requests\V1\SuborganizationUpdateRoleUiPermissions;
 use App\Http\Requests\V1\SuborganizationUploadFaviconRequest;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
+use App\Http\Requests\V1\ClassRoomIntegrationRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Models\MediaSource;
 use Illuminate\Support\Facades\Storage;
@@ -176,22 +177,11 @@ class SuborganizationController extends Controller
      * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
-     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
      * @bodyParam primary_color string primary font color Example: #515151
      * @bodyParam secondary_color string primary font color Example: #515151
      * @bodyParam tertiary_color string primary font color Example: #515151
      * @bodyParam primary_font_family string primary font color Example: Open Sans
      * @bodyParam secondary_font_family string primary font color Example: Open Sans
-     * @bodyParam msteam_client_id uuid Client id Example: 123e4567-e89b-12d3-a456-426614174000
-     * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
-     * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
-     * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
-     * @bodyParam msteam_project_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam msteam_playlist_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam msteam_activity_visibility bool Enable/disable google classroom Example: false
-     *
      * @responseFile 201 responses/organization/suborganization.json
      *
      * @response 500 {
@@ -266,22 +256,11 @@ class SuborganizationController extends Controller
      * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
      * @bodyParam parent_id int required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
-     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
      * @bodyParam primary_color string primary font color Example: #515151
      * @bodyParam secondary_color string primary font color Example: #515151
      * @bodyParam tertiary_color string primary font color Example: #515151
      * @bodyParam primary_font_family string primary font color Example: Open Sans
      * @bodyParam secondary_font_family string primary font color Example: Open Sans
-     * @bodyParam msteam_client_id uuid Client id Example: 123e4567-e89b-12d3-a456-426614174000
-     * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
-     * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
-     * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
-     * @bodyParam msteam_project_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam msteam_playlist_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam msteam_activity_visibility bool Enable/disable google classroom Example: false
-     *
      * @responseFile responses/organization/suborganization.json
      *
      * @response 500 {
@@ -1109,6 +1088,55 @@ class SuborganizationController extends Controller
 
         return response([
             'errors' => ['Failed to update media source.'],
+        ], 500);
+    }
+
+    /**
+     * Update Google/Microsoft Credentials in Suborganization
+     *
+     * Update the specified suborganization for a user to modify classroom access credentials.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_client_id uuid Client id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
+     * @bodyParam msteam_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_activity_visibility bool Enable/disable google classroom Example: false
+     *
+     *@response 200 {
+     *   "success": [
+     *     "Fields are updated successfully."
+     *   ]
+     * }
+     * 
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update suborganization."
+     *   ]
+     * }
+     *
+     * @param ClassRoomIntegrationRequest $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function updateClassCredentials(ClassRoomIntegrationRequest $request, Organization $suborganization)
+    {
+        $data = $request->validated();
+        $isUpdated = $this->organizationRepository->update($suborganization, $data);
+        
+        if ($isUpdated) {
+            return response([
+                'success' => ["Fields are updated successfully."],
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update suborganization.'],
         ], 500);
     }
 }
