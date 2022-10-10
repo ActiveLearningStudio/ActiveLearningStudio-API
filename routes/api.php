@@ -224,6 +224,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::post('suborganizations/{suborganization}/add-user', 'SuborganizationController@addUser')->name('suborganizations.add-user');
         Route::post('suborganizations/{suborganization}/add-new-user', 'UserController@addNewUser')->name('suborganizations.add-new-user');
         Route::post('suborganizations/{suborganization}/invite-members', 'SuborganizationController@inviteMembers')->name('suborganizations.invite-members');
+        Route::post('suborganizations/{suborganization}/update-class-credentails', 'SuborganizationController@updateClassCredentials')->name('suborganizations.update-class-credentails');
         Route::put('suborganizations/{suborganization}/update-user', 'SuborganizationController@updateUser')->name('suborganizations.update-user');
         Route::put('suborganizations/{suborganization}/update-user-detail', 'UserController@updateUserDetail')->name('suborganizations.update-user-detail');
         Route::delete('suborganizations/{suborganization}/delete-user', 'SuborganizationController@deleteUser')->name('suborganizations.delete-user');
