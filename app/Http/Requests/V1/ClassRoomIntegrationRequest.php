@@ -3,7 +3,6 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\UUID;
 
 class ClassRoomIntegrationRequest extends FormRequest
 {
