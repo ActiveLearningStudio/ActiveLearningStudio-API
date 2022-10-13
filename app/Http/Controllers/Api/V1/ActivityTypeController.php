@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 /**
- * @group 6. Activity Type
+ * @group 9. Activity Type
  *
  * APIs for activity type management
  */
@@ -41,10 +41,10 @@ class ActivityTypeController extends Controller
      * Get a list of the activity types.
      *
      * @responseFile responses/activity-type/activity-types.json
-     * 
+     *
      * @param Request $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function index(Request $request, Organization $suborganization)
@@ -120,7 +120,7 @@ class ActivityTypeController extends Controller
      *
      * @param Request $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreActivityType $request, Organization $suborganization)
@@ -150,7 +150,7 @@ class ActivityTypeController extends Controller
      *
      * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, ActivityType $activityType)
@@ -200,7 +200,7 @@ class ActivityTypeController extends Controller
      * @param Request $request
      * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
+     *
      * @return Response
      */
     public function update(UpdateActivityType $request, Organization $suborganization, ActivityType $activityType)
@@ -238,7 +238,7 @@ class ActivityTypeController extends Controller
      *
      * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, ActivityType $activityType)

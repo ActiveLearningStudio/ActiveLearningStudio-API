@@ -838,7 +838,7 @@ curl -X POST \
     "http://localhost:8000/api/login/wordpress-sso" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"clientId":"est","code":"sit"}'
+    -d '{"clientId":"modi","code":"officia"}'
 
 ```
 
@@ -853,8 +853,8 @@ let headers = {
 };
 
 let body = {
-    "clientId": "est",
-    "code": "sit"
+    "clientId": "modi",
+    "code": "officia"
 }
 
 fetch(url, {
@@ -877,8 +877,8 @@ $response = $client->post(
             'Accept' => 'application/json',
         ],
         'json' => [
-            'clientId' => 'est',
-            'code' => 'sit',
+            'clientId' => 'modi',
+            'code' => 'officia',
         ],
     ]
 );
@@ -892,8 +892,8 @@ import json
 
 url = 'http://localhost:8000/api/login/wordpress-sso'
 payload = {
-    "clientId": "est",
-    "code": "sit"
+    "clientId": "modi",
+    "code": "officia"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -904,11 +904,13 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "errors": [
+        "Unable to find default LMS setting with your client id."
+    ]
 }
 ```
 
@@ -918,8 +920,8 @@ response.json()
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `clientId` | string |  optional  | client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
-        `code` | string |  optional  | temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+    `clientId` | string |  required  | client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+        `code` | string |  required  | temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
     
 <!-- END_d3a88f9c350a9c4709e4c13262a22e91 -->
 
@@ -983,11 +985,13 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "errors": [
+        "Unable to find default LMS setting with your client id."
+    ]
 }
 ```
 
@@ -998,7 +1002,7 @@ response.json()
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `client` |  optional  | id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+    `client` |  required  | id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
 
 <!-- END_26044124185dd84b408746c4f31ce5c9 -->
 
@@ -1584,14 +1588,14 @@ response.json()
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/checkemail/et" \
+    -G "http://localhost:8000/api/checkemail/perspiciatis" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/checkemail/et"
+    "http://localhost:8000/api/checkemail/perspiciatis"
 );
 
 let headers = {
@@ -1611,7 +1615,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/checkemail/et',
+    'http://localhost:8000/api/checkemail/perspiciatis',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -1627,7 +1631,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/checkemail/et'
+url = 'http://localhost:8000/api/checkemail/perspiciatis'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -1637,11 +1641,12 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (200):
 
 ```json
 {
-    "message": "Server Error"
+    "exists": false,
+    "message": "Email is not registered"
 }
 ```
 
@@ -1732,7 +1737,13 @@ response.json()
 > Example response (500):
 
 ```json
-null
+{
+    "errors": [
+        "Not an export notification.",
+        "Link has expired.",
+        "Notification with provided id does not exists."
+    ]
+}
 ```
 
 ### HTTP Request
@@ -1990,6 +2001,15 @@ response.json()
 ```
 
 
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to get user detail."
+    ]
+}
+```
 > Example response (200):
 
 ```json
@@ -2228,7 +2248,7 @@ response.json()
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `suborganization` |  optional  | id of an organization.
+    `suborganization` |  required  | id of an organization.
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
@@ -2362,7 +2382,7 @@ response.json()
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `suborganization` |  optional  | id of an organization.
+    `suborganization` |  required  | id of an organization.
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
@@ -3665,7 +3685,9 @@ Create a new user in storage.
 curl -X POST \
     "http://localhost:8000/api/v1/suborganizations/1/add-new-user" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"
+    -H "Accept: application/json" \
+    -d '{"first_name":"John","last_name":"Doe","email":"doe@gmail.com","password":"est","role_id":1,"organization_name":"Curriki","organization_type":"K-12","website":"www.currikistudio.org","job_title":"Developer","address":"20660 Stevens Creek Blvd #332, Cupertino, CA 95014","send_email":true,"message":"est"}'
+
 ```
 
 ```javascript
@@ -3678,9 +3700,25 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "doe@gmail.com",
+    "password": "est",
+    "role_id": 1,
+    "organization_name": "Curriki",
+    "organization_type": "K-12",
+    "website": "www.currikistudio.org",
+    "job_title": "Developer",
+    "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+    "send_email": true,
+    "message": "est"
+}
+
 fetch(url, {
     method: "POST",
     headers: headers,
+    body: body
 })
     .then(response => response.json())
     .then(json => console.log(json));
@@ -3696,6 +3734,20 @@ $response = $client->post(
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
+        'json' => [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'doe@gmail.com',
+            'password' => 'est',
+            'role_id' => 1,
+            'organization_name' => 'Curriki',
+            'organization_type' => 'K-12',
+            'website' => 'www.currikistudio.org',
+            'job_title' => 'Developer',
+            'address' => '20660 Stevens Creek Blvd #332, Cupertino, CA 95014',
+            'send_email' => true,
+            'message' => 'est',
+        ],
     ]
 );
 $body = $response->getBody();
@@ -3707,27 +3759,89 @@ import requests
 import json
 
 url = 'http://localhost:8000/api/v1/suborganizations/1/add-new-user'
+payload = {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "doe@gmail.com",
+    "password": "est",
+    "role_id": 1,
+    "organization_name": "Curriki",
+    "organization_type": "K-12",
+    "website": "www.currikistudio.org",
+    "job_title": "Developer",
+    "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+    "send_email": true,
+    "message": "est"
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('POST', url, headers=headers)
+response = requests.request('POST', url, headers=headers, json=payload)
 response.json()
 ```
 
 
+> Example response (200):
+
+```json
+{
+    "user": {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@currikistudio.org",
+        "organization_name": "Curriki",
+        "organization_type": null,
+        "job_title": "Developer",
+        "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+        "phone_number": "+1234567890",
+        "website": "www.currikistudio.org",
+        "subscribed": true,
+        "organization_role": "Admin",
+        "organization_role_id": 1,
+        "organization_joined_at": "2022-10-12",
+        "projects_count": 5,
+        "groups_count": 1,
+        "teams_count": 2
+    },
+    "message": "User has been created successfully."
+}
+```
 > Example response (500):
 
 ```json
 {
-    "message": "Server Error"
+    "errors": [
+        "Failed to create user."
+    ]
 }
 ```
 
 ### HTTP Request
 `POST api/v1/suborganizations/{suborganization}/add-new-user`
 
+#### URL Parameters
 
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  optional  | integer required The Id of an suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `first_name` | string |  required  | First name of a user
+        `last_name` | string |  required  | Last name of a user
+        `email` | string |  required  | email of a user
+        `password` | string |  required  | password of a user
+        `role_id` | integer |  required  | role_id of a user
+        `organization_name` | string |  optional  | Organization name of a user
+        `organization_type` | string |  optional  | type of an organization
+        `website` | string |  optional  | Website url of a user
+        `job_title` | string |  optional  | Job title of a user
+        `address` | string |  optional  | Address of a user
+        `send_email` | boolean |  optional  | true or false for email sending
+        `message` | string |  optional  | message that will send to admin
+    
 <!-- END_8fc3d9f2463253e601811dd11253957c -->
 
 <!-- START_d9ff395f7d8777451c8fc48758c4a4ad -->
@@ -3792,11 +3906,39 @@ response.json()
 ```
 
 
+> Example response (200):
+
+```json
+{
+    "user": {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@currikistudio.org",
+        "organization_name": "Curriki",
+        "organization_type": null,
+        "job_title": "Developer",
+        "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+        "phone_number": "+1234567890",
+        "website": "www.currikistudio.org",
+        "subscribed": true,
+        "organization_role": "Admin",
+        "organization_role_id": 1,
+        "organization_joined_at": "2022-10-12",
+        "projects_count": 5,
+        "groups_count": 1,
+        "teams_count": 2
+    },
+    "message": "User has been updated successfully."
+}
+```
 > Example response (500):
 
 ```json
 {
-    "message": "Server Error"
+    "errors": [
+        "Failed to update user."
+    ]
 }
 ```
 
@@ -7498,13 +7640,6 @@ response.json()
 ```
 
 
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
 
 ### HTTP Request
 `GET api/v1/playlists/update-order`
@@ -8073,7 +8208,7 @@ Create a new playlist of a project.
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/projects/ipsa/playlists" \
+    "http://localhost:8000/api/v1/projects/reprehenderit/playlists" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
     -d '{"title":"Math Playlist","order":0}'
@@ -8082,7 +8217,7 @@ curl -X POST \
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/projects/ipsa/playlists"
+    "http://localhost:8000/api/v1/projects/reprehenderit/playlists"
 );
 
 let headers = {
@@ -8108,7 +8243,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->post(
-    'http://localhost:8000/api/v1/projects/ipsa/playlists',
+    'http://localhost:8000/api/v1/projects/reprehenderit/playlists',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -8128,7 +8263,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/projects/ipsa/playlists'
+url = 'http://localhost:8000/api/v1/projects/reprehenderit/playlists'
 payload = {
     "title": "Math Playlist",
     "order": 0
@@ -13149,7 +13284,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/playlists/1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"commodi","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"et","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 
 ```
 
@@ -13166,7 +13301,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "commodi",
+    "content": "et",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -13197,7 +13332,7 @@ $response = $client->post(
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
             'type' => 'h5p',
-            'content' => 'commodi',
+            'content' => 'et',
             'order' => 2,
             'h5p_content_id' => 59,
             'thumb_url' => 'null',
@@ -13219,7 +13354,7 @@ url = 'http://localhost:8000/api/v1/playlists/1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "commodi",
+    "content": "et",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -13464,8 +13599,55 @@ response.json()
         "shared": false,
         "order": 2,
         "thumb_url": null,
-        "subject_id": null,
-        "education_level_id": null,
+        "subjects": [
+            {
+                "id": 4,
+                "name": "English",
+                "order": 3,
+                "created_at": "2022-01-06T11:59:52.000000Z",
+                "updated_at": "2022-01-06T12:15:10.000000Z"
+            },
+            {
+                "id": 1,
+                "name": "Math",
+                "order": 1,
+                "created_at": "2022-01-06T11:41:46.000000Z",
+                "updated_at": "2022-01-06T11:41:46.000000Z"
+            }
+        ],
+        "education_levels": [
+            {
+                "id": 1,
+                "name": "Grade A",
+                "order": 5,
+                "created_at": "2022-01-07T13:51:38.000000Z",
+                "updated_at": "2022-01-07T14:07:17.000000Z"
+            },
+            {
+                "id": 1,
+                "name": "Grade B",
+                "order": 6,
+                "created_at": "2022-01-07T13:51:38.000000Z",
+                "updated_at": "2022-01-07T14:07:17.000000Z"
+            }
+        ],
+        "author_tags": [
+            {
+                "id": 1,
+                "name": "Audio",
+                "order": 1,
+                "created_at": "2022-01-10T13:09:36.000000Z",
+                "updated_at": "2022-01-10T13:09:36.000000Z"
+            },
+            {
+                "id": 2,
+                "name": "Video",
+                "order": 2,
+                "created_at": "2022-01-10T13:09:44.000000Z",
+                "updated_at": "2022-01-10T13:20:57.000000Z"
+            }
+        ],
+        "gcr_activity_visibility": true,
         "h5p_content": {
             "id": 59,
             "user_id": 1,
@@ -13527,6 +13709,7 @@ Parameter | Status | Description
     `activity` |  required  | The Id of a activity
 
 <!-- END_33a2e7decc039b04e96d21e0fae0e6b1 -->
+
 <!-- START_2c284aa499dc018e9876b34be26974fe -->
 ## Update Activity
 
@@ -13539,7 +13722,7 @@ curl -X PUT \
     "http://localhost:8000/api/v1/playlists/1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"ut","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"null","education_level_id":"null"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"nostrum","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 
 ```
 
@@ -13556,13 +13739,14 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "ut",
+    "content": "nostrum",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
-    "subject_id": "null",
-    "education_level_id": "null"
+    "subject_id": "[1, 2]",
+    "education_level_id": "[1, 2]",
+    "author_tag_id": "[1, 2]"
 }
 
 fetch(url, {
@@ -13587,13 +13771,14 @@ $response = $client->put(
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
             'type' => 'h5p',
-            'content' => 'ut',
+            'content' => 'nostrum',
             'shared' => false,
             'order' => 2,
             'h5p_content_id' => 59,
             'thumb_url' => 'null',
-            'subject_id' => 'null',
-            'education_level_id' => 'null',
+            'subject_id' => '[1, 2]',
+            'education_level_id' => '[1, 2]',
+            'author_tag_id' => '[1, 2]',
         ],
     ]
 );
@@ -13609,13 +13794,14 @@ url = 'http://localhost:8000/api/v1/playlists/1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "ut",
+    "content": "nostrum",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
-    "subject_id": "null",
-    "education_level_id": "null"
+    "subject_id": "[1, 2]",
+    "education_level_id": "[1, 2]",
+    "author_tag_id": "[1, 2]"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -13657,8 +13843,55 @@ response.json()
         "shared": false,
         "order": 2,
         "thumb_url": null,
-        "subject_id": null,
-        "education_level_id": null,
+        "subjects": [
+            {
+                "id": 4,
+                "name": "English",
+                "order": 3,
+                "created_at": "2022-01-06T11:59:52.000000Z",
+                "updated_at": "2022-01-06T12:15:10.000000Z"
+            },
+            {
+                "id": 1,
+                "name": "Math",
+                "order": 1,
+                "created_at": "2022-01-06T11:41:46.000000Z",
+                "updated_at": "2022-01-06T11:41:46.000000Z"
+            }
+        ],
+        "education_levels": [
+            {
+                "id": 1,
+                "name": "Grade A",
+                "order": 5,
+                "created_at": "2022-01-07T13:51:38.000000Z",
+                "updated_at": "2022-01-07T14:07:17.000000Z"
+            },
+            {
+                "id": 1,
+                "name": "Grade B",
+                "order": 6,
+                "created_at": "2022-01-07T13:51:38.000000Z",
+                "updated_at": "2022-01-07T14:07:17.000000Z"
+            }
+        ],
+        "author_tags": [
+            {
+                "id": 1,
+                "name": "Audio",
+                "order": 1,
+                "created_at": "2022-01-10T13:09:36.000000Z",
+                "updated_at": "2022-01-10T13:09:36.000000Z"
+            },
+            {
+                "id": 2,
+                "name": "Video",
+                "order": 2,
+                "created_at": "2022-01-10T13:09:44.000000Z",
+                "updated_at": "2022-01-10T13:20:57.000000Z"
+            }
+        ],
+        "gcr_activity_visibility": true,
         "h5p_content": {
             "id": 59,
             "user_id": 1,
@@ -13730,10 +13963,12 @@ Parameter | Type | Status | Description
         `order` | integer |  optional  | The order number of a activity
         `h5p_content_id` | integer |  optional  | The Id of H5p content
         `thumb_url` | string |  optional  | The image url of thumbnail
-        `subject_id` | string |  optional  | The Id of a subject
-        `education_level_id` | string |  optional  | The Id of a education level
+        `subject_id` | array |  optional  | The Ids of a subject
+        `education_level_id` | array |  optional  | The Ids of a education level
+        `author_tag_id` | array |  optional  | The Ids of a author tag
     
 <!-- END_2c284aa499dc018e9876b34be26974fe -->
+
 <!-- START_4b91bf4495723f1f78bc403ac627bdaf -->
 ## Remove Activity
 
@@ -13824,6 +14059,7 @@ Parameter | Status | Description
     `activity` |  required  | The Id of a activity
 
 <!-- END_4b91bf4495723f1f78bc403ac627bdaf -->
+
 <!-- START_be92b98808aff43e9d78a47d46deabff -->
 ## Get Stand Alone Activities
 
@@ -14081,7 +14317,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"dignissimos","h5p_content_id":59,"order":2,"shared":false,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"esse","h5p_content_id":59,"order":2,"shared":false,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 
 ```
 
@@ -14097,7 +14333,7 @@ let headers = {
 
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "dignissimos",
+    "content": "esse",
     "h5p_content_id": 59,
     "order": 2,
     "shared": false,
@@ -14128,7 +14364,7 @@ $response = $client->post(
         ],
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
-            'content' => 'dignissimos',
+            'content' => 'esse',
             'h5p_content_id' => 59,
             'order' => 2,
             'shared' => false,
@@ -14150,7 +14386,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "dignissimos",
+    "content": "esse",
     "h5p_content_id": 59,
     "order": 2,
     "shared": false,
@@ -14519,7 +14755,7 @@ curl -X PUT \
     "http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"aut","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"voluptas","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 
 ```
 
@@ -14535,7 +14771,7 @@ let headers = {
 
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "aut",
+    "content": "voluptas",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -14566,7 +14802,7 @@ $response = $client->put(
         ],
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
-            'content' => 'aut',
+            'content' => 'voluptas',
             'shared' => false,
             'order' => 2,
             'h5p_content_id' => 59,
@@ -14588,7 +14824,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "aut",
+    "content": "voluptas",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -16565,14 +16801,14 @@ Get H5P Resource Settings for a shared activity
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/activities/explicabo/h5p-resource-settings-shared" \
+    -G "http://localhost:8000/api/v1/activities/voluptas/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/activities/explicabo/h5p-resource-settings-shared"
+    "http://localhost:8000/api/v1/activities/voluptas/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -16592,7 +16828,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/activities/explicabo/h5p-resource-settings-shared',
+    'http://localhost:8000/api/v1/activities/voluptas/h5p-resource-settings-shared',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -16608,7 +16844,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/activities/explicabo/h5p-resource-settings-shared'
+url = 'http://localhost:8000/api/v1/activities/voluptas/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -17100,7 +17336,8 @@ Parameter | Status | Description
     `activity` |  required  | The Id of a activity
 
 <!-- END_e284a1f1e8f09a03b553aa9c2ed4f443 -->
-#5. Independent Activity
+
+#6. Independent Activity
 
 
 APIs for independent activity management
@@ -17116,7 +17353,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/suborganization/1/independent-activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"non","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"occaecati","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
 
 ```
 
@@ -17133,7 +17370,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "non",
+    "content": "occaecati",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -17165,7 +17402,7 @@ $response = $client->post(
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
             'type' => 'h5p',
-            'content' => 'non',
+            'content' => 'occaecati',
             'order' => 2,
             'h5p_content_id' => 59,
             'thumb_url' => 'null',
@@ -17188,7 +17425,7 @@ url = 'http://localhost:8000/api/v1/suborganization/1/independent-activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "non",
+    "content": "occaecati",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -17498,7 +17735,7 @@ curl -X PUT \
     "http://localhost:8000/api/v1/suborganization/1/independent-activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"voluptate","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"et","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
 
 ```
 
@@ -17515,7 +17752,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "voluptate",
+    "content": "et",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -17548,7 +17785,7 @@ $response = $client->put(
         'json' => [
             'title' => 'Science of Golf: Why Balls Have Dimples',
             'type' => 'h5p',
-            'content' => 'voluptate',
+            'content' => 'et',
             'shared' => false,
             'order' => 2,
             'h5p_content_id' => 59,
@@ -17572,7 +17809,7 @@ url = 'http://localhost:8000/api/v1/suborganization/1/independent-activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "voluptate",
+    "content": "et",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -20271,14 +20508,14 @@ This is an API for to download the XAPI zip for the attempted independent activi
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/go/independent_activity/getxapifile/culpa" \
+    -G "http://localhost:8000/api/v1/go/independent_activity/getxapifile/in" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/independent_activity/getxapifile/culpa"
+    "http://localhost:8000/api/v1/go/independent_activity/getxapifile/in"
 );
 
 let headers = {
@@ -20298,7 +20535,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/go/independent_activity/getxapifile/culpa',
+    'http://localhost:8000/api/v1/go/independent_activity/getxapifile/in',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -20314,7 +20551,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/go/independent_activity/getxapifile/culpa'
+url = 'http://localhost:8000/api/v1/go/independent_activity/getxapifile/in'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20352,14 +20589,14 @@ Get H5P Resource Settings for a shared independent activity
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/independent-activities/eum/h5p-resource-settings-shared" \
+    -G "http://localhost:8000/api/v1/independent-activities/excepturi/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/independent-activities/eum/h5p-resource-settings-shared"
+    "http://localhost:8000/api/v1/independent-activities/excepturi/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -20379,7 +20616,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/independent-activities/eum/h5p-resource-settings-shared',
+    'http://localhost:8000/api/v1/independent-activities/excepturi/h5p-resource-settings-shared',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -20395,7 +20632,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/independent-activities/eum/h5p-resource-settings-shared'
+url = 'http://localhost:8000/api/v1/independent-activities/excepturi/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20733,7 +20970,1510 @@ Parameter | Status | Description
 
 <!-- END_59d505eecdc7dc62bdb89c7e8122bc44 -->
 
-#6. Activity Type
+#7. Activity Layout
+
+
+APIs for activity layout management
+<!-- START_dfbfedb1f8e3e4bf273b46f18e0841b9 -->
+## Get Activity Layouts
+
+Get a list of the activity layouts.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/activity-layouts" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 2,
+            "title": "Layout Two",
+            "description": "test",
+            "order": null,
+            "type": "h5p",
+            "h5pLib": "test",
+            "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+            "demo_activity_id": "1",
+            "demo_video_id": "1",
+            "organization_id": "1",
+            "created_at": "2022-02-09T10:22:42.000000Z",
+            "updated_at": "2022-02-09T10:22:42.000000Z"
+        },
+        {
+            "id": 1,
+            "title": "Layout One",
+            "description": "test",
+            "order": null,
+            "type": "h5p",
+            "h5pLib": "test",
+            "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+            "demo_activity_id": "1",
+            "demo_video_id": "1",
+            "organization_id": "1",
+            "created_at": "2022-02-09T09:46:28.000000Z",
+            "updated_at": "2022-02-09T10:24:52.000000Z"
+        }
+    ],
+    "links": {
+        "first": "http:\/\/localhost:8000\/api\/v1\/activity-layouts?page=1",
+        "last": "http:\/\/localhost:8000\/api\/v1\/activity-layouts?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http:\/\/localhost:8000\/api\/v1\/activity-layouts",
+        "per_page": 10,
+        "to": 2,
+        "total": 2
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/activity-layouts`
+
+
+<!-- END_dfbfedb1f8e3e4bf273b46f18e0841b9 -->
+
+<!-- START_da96dd74d2e69fdc2f46db02e77f0c46 -->
+## Create Activity Layout
+
+Create a new activity layout.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Audio","image":"corporis","order":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Audio",
+    "image": "corporis",
+    "order": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'title' => 'Audio',
+            'image' => 'corporis',
+            'order' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts'
+payload = {
+    "title": "Audio",
+    "image": "corporis",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid activity type id."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Could not create activity layout. Please try again later."
+    ]
+}
+```
+> Example response (201):
+
+```json
+{
+    "activityLayout": {
+        "id": 1,
+        "title": "Layout One",
+        "description": "test",
+        "order": null,
+        "type": "h5p",
+        "h5pLib": "test",
+        "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+        "demo_activity_id": "1",
+        "demo_video_id": "1",
+        "organization_id": "1",
+        "created_at": "2022-02-09T09:46:28.000000Z",
+        "updated_at": "2022-02-09T10:24:52.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/activity-layouts`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `title` | string |  required  | Activity Item Title.
+        `image` | image |  required  | Valid Image.
+        `order` | integer |  required  | At what order it should appear.
+    
+<!-- END_da96dd74d2e69fdc2f46db02e77f0c46 -->
+
+<!-- START_2f64f8e4788eb1dc3cda45659a9da46f -->
+## Get Activity Item
+
+Get the specified activity layout.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "activityLayout": {
+        "id": 1,
+        "title": "Layout One",
+        "description": "test",
+        "order": null,
+        "type": "h5p",
+        "h5pLib": "test",
+        "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+        "demo_activity_id": "1",
+        "demo_video_id": "1",
+        "organization_id": "1",
+        "created_at": "2022-02-09T09:46:28.000000Z",
+        "updated_at": "2022-02-09T10:24:52.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a organization
+    `activityLayout` |  required  | The Id of a activity layout
+
+<!-- END_2f64f8e4788eb1dc3cda45659a9da46f -->
+
+<!-- START_2dfb1c4de40a460c85c7245f1f15c707 -->
+## Update Activity Item
+
+Update the specified activity layout.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Audio","image":"consequuntur","order":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Audio",
+    "image": "consequuntur",
+    "order": 1
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'title' => 'Audio',
+            'image' => 'consequuntur',
+            'order' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1'
+payload = {
+    "title": "Audio",
+    "image": "consequuntur",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid activity type id."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update activity layout."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "activityLayout": {
+        "id": 1,
+        "title": "Layout One",
+        "description": "test",
+        "order": null,
+        "type": "h5p",
+        "h5pLib": "test",
+        "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+        "demo_activity_id": "1",
+        "demo_video_id": "1",
+        "organization_id": "1",
+        "created_at": "2022-02-09T09:46:28.000000Z",
+        "updated_at": "2022-02-09T10:24:52.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
+
+`PATCH api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `activity_item` |  required  | The Id of a activity layout
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `title` | string |  required  | Activity Item Title.
+        `image` | image |  required  | Valid Image.
+        `order` | integer |  required  | At what order it should appear.
+    
+<!-- END_2dfb1c4de40a460c85c7245f1f15c707 -->
+
+<!-- START_9aa2c2333fb107be8e694a8cd1d65c60 -->
+## Remove Activity Item
+
+Remove the specified activity layout.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->delete(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Activity layout has been deleted successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to delete activity layout."
+    ]
+}
+```
+
+### HTTP Request
+`DELETE api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a organization
+    `activityLayout` |  required  | The Id of a activity layout
+
+<!-- END_9aa2c2333fb107be8e694a8cd1d65c60 -->
+
+<!-- START_94b43e1dda8be1c3bfc230274185e4e1 -->
+## Upload Thumbnail
+
+Upload thumbnail image for a activity layout
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/activity-layouts/upload-thumb" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"thumb":"dicta"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/activity-layouts/upload-thumb"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "thumb": "dicta"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/activity-layouts/upload-thumb',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'thumb' => 'dicta',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/activity-layouts/upload-thumb'
+payload = {
+    "thumb": "dicta"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "image": "\/storage\/activity-layouts\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+}
+```
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid image."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/activity-layouts/upload-thumb`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `thumb` | image |  required  | Thumbnail image
+    
+<!-- END_94b43e1dda8be1c3bfc230274185e4e1 -->
+
+#8. Activity Item
+
+
+APIs for activity item management
+<!-- START_c7ef2723e12a5e30419f529d73af497c -->
+## Get Activity Items
+
+Get a list of the activity items.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/activity-items" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-items',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "activityItems": [
+        {
+            "id": 1,
+            "title": "Audio Recorder",
+            "description": "Record your voice and play back or download a .wav file of your recording.",
+            "order": 1,
+            "activityType": {
+                "id": 1,
+                "title": "Audio",
+                "order": 0,
+                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                "created_at": "2020-08-25T16:29:35.000000Z",
+                "updated_at": "2020-08-25T16:29:35.000000Z"
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.AudioRecorder 1.0",
+            "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+            "demo_activity_id": null,
+            "demo_video_id": null,
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        },
+        {
+            "id": 2,
+            "title": "Dictation",
+            "description": "A tool to create dictation exercises",
+            "order": 2,
+            "activityType": {
+                "id": 1,
+                "title": "Audio",
+                "order": 0,
+                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                "created_at": "2020-08-25T16:29:35.000000Z",
+                "updated_at": "2020-08-25T16:29:35.000000Z"
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.Dictation 1.0",
+            "image": "\/storage\/activity-items\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+            "demo_activity_id": null,
+            "demo_video_id": null,
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/activity-items`
+
+
+<!-- END_c7ef2723e12a5e30419f529d73af497c -->
+
+<!-- START_0a08d6cd167276c14770630e43a0d4a2 -->
+## Create Activity Item
+
+Create a new activity item.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Audio","image":"unde","order":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Audio",
+    "image": "unde",
+    "order": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-items',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'title' => 'Audio',
+            'image' => 'unde',
+            'order' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items'
+payload = {
+    "title": "Audio",
+    "image": "unde",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid activity type id."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Could not create activity item. Please try again later."
+    ]
+}
+```
+> Example response (201):
+
+```json
+{
+    "activityItem": {
+        "id": 1,
+        "title": "Audio Recorder",
+        "description": "Record your voice and play back or download a .wav file of your recording.",
+        "order": 1,
+        "activityType": {
+            "id": 1,
+            "title": "Audio",
+            "order": 0,
+            "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        },
+        "type": "h5p",
+        "h5pLib": "H5P.AudioRecorder 1.0",
+        "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+        "demo_activity_id": null,
+        "demo_video_id": null,
+        "created_at": "2020-08-25T16:29:35.000000Z",
+        "updated_at": "2020-08-25T16:29:35.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/activity-items`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `title` | string |  required  | Activity Item Title.
+        `image` | image |  required  | Valid Image.
+        `order` | integer |  required  | At what order it should appear.
+    
+<!-- END_0a08d6cd167276c14770630e43a0d4a2 -->
+
+<!-- START_51e7710d86d18f873a8332359ea93581 -->
+## Get Activity Item
+
+Get the specified activity item.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/activity-items/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-items/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "activityItem": {
+        "id": 1,
+        "title": "Audio Recorder",
+        "description": "Record your voice and play back or download a .wav file of your recording.",
+        "order": 1,
+        "activityType": {
+            "id": 1,
+            "title": "Audio",
+            "order": 0,
+            "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        },
+        "type": "h5p",
+        "h5pLib": "H5P.AudioRecorder 1.0",
+        "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+        "demo_activity_id": null,
+        "demo_video_id": null,
+        "created_at": "2020-08-25T16:29:35.000000Z",
+        "updated_at": "2020-08-25T16:29:35.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `activity_item` |  required  | The Id of a activity item
+
+<!-- END_51e7710d86d18f873a8332359ea93581 -->
+
+<!-- START_69bf61e8e395cbc5a091b0812b1b2944 -->
+## Update Activity Item
+
+Update the specified activity item.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"title":"Audio","image":"quod","order":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Audio",
+    "image": "quod",
+    "order": 1
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-items/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'title' => 'Audio',
+            'image' => 'quod',
+            'order' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items/1'
+payload = {
+    "title": "Audio",
+    "image": "quod",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid activity type id."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update activity item."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "activityItem": {
+        "id": 1,
+        "title": "Audio Recorder",
+        "description": "Record your voice and play back or download a .wav file of your recording.",
+        "order": 1,
+        "activityType": {
+            "id": 1,
+            "title": "Audio",
+            "order": 0,
+            "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        },
+        "type": "h5p",
+        "h5pLib": "H5P.AudioRecorder 1.0",
+        "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+        "demo_activity_id": null,
+        "demo_video_id": null,
+        "created_at": "2020-08-25T16:29:35.000000Z",
+        "updated_at": "2020-08-25T16:29:35.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
+
+`PATCH api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `activity_item` |  required  | The Id of a activity item
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `title` | string |  required  | Activity Item Title.
+        `image` | image |  required  | Valid Image.
+        `order` | integer |  required  | At what order it should appear.
+    
+<!-- END_69bf61e8e395cbc5a091b0812b1b2944 -->
+
+<!-- START_63375e7cb825182eb48023e427758e12 -->
+## Remove Activity Item
+
+Remove the specified activity item.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->delete(
+    'http://localhost:8000/api/v1/suborganizations/1/activity-items/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Activity item has been deleted successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to delete activity item."
+    ]
+}
+```
+
+### HTTP Request
+`DELETE api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `activity_item` |  required  | The Id of a activity item
+
+<!-- END_63375e7cb825182eb48023e427758e12 -->
+
+<!-- START_4b6ece79f0aefa567f28d34d26f576da -->
+## Get Activity Items with pagination and search
+
+Get a list of the activity items.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/get-activity-items" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/get-activity-items"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/get-activity-items',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/get-activity-items'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "activityItems": [
+        {
+            "id": 1,
+            "title": "Audio Recorder",
+            "description": "Record your voice and play back or download a .wav file of your recording.",
+            "order": 1,
+            "activityType": {
+                "id": 1,
+                "title": "Audio",
+                "order": 0,
+                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                "created_at": "2020-08-25T16:29:35.000000Z",
+                "updated_at": "2020-08-25T16:29:35.000000Z"
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.AudioRecorder 1.0",
+            "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+            "demo_activity_id": null,
+            "demo_video_id": null,
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        },
+        {
+            "id": 2,
+            "title": "Dictation",
+            "description": "A tool to create dictation exercises",
+            "order": 2,
+            "activityType": {
+                "id": 1,
+                "title": "Audio",
+                "order": 0,
+                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                "created_at": "2020-08-25T16:29:35.000000Z",
+                "updated_at": "2020-08-25T16:29:35.000000Z"
+            },
+            "type": "h5p",
+            "h5pLib": "H5P.Dictation 1.0",
+            "image": "\/storage\/activity-items\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+            "demo_activity_id": null,
+            "demo_video_id": null,
+            "created_at": "2020-08-25T16:29:35.000000Z",
+            "updated_at": "2020-08-25T16:29:35.000000Z"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/get-activity-items`
+
+
+<!-- END_4b6ece79f0aefa567f28d34d26f576da -->
+
+<!-- START_d23807d6745d22fa351346c80cbef8b3 -->
+## Upload Thumbnail
+
+Upload thumbnail image for a activity item
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/activity-items/upload-thumb" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"thumb":"vel"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/activity-items/upload-thumb"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "thumb": "vel"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/activity-items/upload-thumb',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'thumb' => 'vel',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/activity-items/upload-thumb'
+payload = {
+    "thumb": "vel"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "thumbUrl": "\/storage\/activity-items\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+}
+```
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid image."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/activity-items/upload-thumb`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `thumb` | image |  required  | Thumbnail image
+    
+<!-- END_d23807d6745d22fa351346c80cbef8b3 -->
+
+#9. Activity Type
 
 
 APIs for activity type management
@@ -20863,6 +22603,7 @@ Parameter | Status | Description
     `activity_type` |  required  | The Id of a activity type
 
 <!-- END_2c9d295c1b6e5666c66efa3ed320a8f8 -->
+
 <!-- START_2f7bbb1010fcd7719d8c3c2f9cf12ea9 -->
 ## Get Activity Types
 
@@ -21717,7 +23458,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/suborganizations/1/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"nemo","order":1}'
+    -d '{"title":"Audio","image":"sint","order":1}'
 
 ```
 
@@ -21733,7 +23474,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "nemo",
+    "image": "sint",
     "order": 1
 }
 
@@ -21758,7 +23499,7 @@ $response = $client->post(
         ],
         'json' => [
             'title' => 'Audio',
-            'image' => 'nemo',
+            'image' => 'sint',
             'order' => 1,
         ],
     ]
@@ -21774,7 +23515,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-types'
 payload = {
     "title": "Audio",
-    "image": "nemo",
+    "image": "sint",
     "order": 1
 }
 headers = {
@@ -21968,7 +23709,7 @@ curl -X PUT \
     "http://localhost:8000/api/v1/suborganizations/1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"iure","order":1}'
+    -d '{"title":"Audio","image":"enim","order":1}'
 
 ```
 
@@ -21984,7 +23725,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "iure",
+    "image": "enim",
     "order": 1
 }
 
@@ -22009,7 +23750,7 @@ $response = $client->put(
         ],
         'json' => [
             'title' => 'Audio',
-            'image' => 'iure',
+            'image' => 'enim',
             'order' => 1,
         ],
     ]
@@ -22025,7 +23766,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-types/1'
 payload = {
     "title": "Audio",
-    "image": "iure",
+    "image": "enim",
     "order": 1
 }
 headers = {
@@ -22227,7 +23968,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/activity-types/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"thumb":"corporis"}'
+    -d '{"thumb":"perferendis"}'
 
 ```
 
@@ -22242,7 +23983,7 @@ let headers = {
 };
 
 let body = {
-    "thumb": "corporis"
+    "thumb": "perferendis"
 }
 
 fetch(url, {
@@ -22265,7 +24006,7 @@ $response = $client->post(
             'Accept' => 'application/json',
         ],
         'json' => [
-            'thumb' => 'corporis',
+            'thumb' => 'perferendis',
         ],
     ]
 );
@@ -22279,7 +24020,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/activity-types/upload-thumb'
 payload = {
-    "thumb": "corporis"
+    "thumb": "perferendis"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -22317,3079 +24058,7 @@ Parameter | Type | Status | Description
     
 <!-- END_7261dafb0f1452d00024b1ebfc0e8fe6 -->
 
-#7. Activity Item
-
-
-APIs for activity item management
-<!-- START_c7ef2723e12a5e30419f529d73af497c -->
-## Get Activity Items
-
-Get a list of the activity items.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/activity-items" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-items',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "activityItems": [
-        {
-            "id": 1,
-            "title": "Audio Recorder",
-            "description": "Record your voice and play back or download a .wav file of your recording.",
-            "order": 1,
-            "activityType": {
-                "id": 1,
-                "title": "Audio",
-                "order": 0,
-                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-                "created_at": "2020-08-25T16:29:35.000000Z",
-                "updated_at": "2020-08-25T16:29:35.000000Z"
-            },
-            "type": "h5p",
-            "h5pLib": "H5P.AudioRecorder 1.0",
-            "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
-            "created_at": "2020-08-25T16:29:35.000000Z",
-            "updated_at": "2020-08-25T16:29:35.000000Z"
-        },
-        {
-            "id": 2,
-            "title": "Dictation",
-            "description": "A tool to create dictation exercises",
-            "order": 2,
-            "activityType": {
-                "id": 1,
-                "title": "Audio",
-                "order": 0,
-                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-                "created_at": "2020-08-25T16:29:35.000000Z",
-                "updated_at": "2020-08-25T16:29:35.000000Z"
-            },
-            "type": "h5p",
-            "h5pLib": "H5P.Dictation 1.0",
-            "image": "\/storage\/activity-items\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
-            "created_at": "2020-08-25T16:29:35.000000Z",
-            "updated_at": "2020-08-25T16:29:35.000000Z"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/activity-items`
-
-
-<!-- END_c7ef2723e12a5e30419f529d73af497c -->
-
-<!-- START_0a08d6cd167276c14770630e43a0d4a2 -->
-## Create Activity Item
-
-Create a new activity item.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"neque","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "title": "Audio",
-    "image": "neque",
-    "order": 1
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-items',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'title' => 'Audio',
-            'image' => 'neque',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items'
-payload = {
-    "title": "Audio",
-    "image": "neque",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid activity type id."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Could not create activity item. Please try again later."
-    ]
-}
-```
-> Example response (201):
-
-```json
-{
-    "activityItem": {
-        "id": 1,
-        "title": "Audio Recorder",
-        "description": "Record your voice and play back or download a .wav file of your recording.",
-        "order": 1,
-        "activityType": {
-            "id": 1,
-            "title": "Audio",
-            "order": 0,
-            "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-            "created_at": "2020-08-25T16:29:35.000000Z",
-            "updated_at": "2020-08-25T16:29:35.000000Z"
-        },
-        "type": "h5p",
-        "h5pLib": "H5P.AudioRecorder 1.0",
-        "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-        "demo_activity_id": null,
-        "demo_video_id": null,
-        "created_at": "2020-08-25T16:29:35.000000Z",
-        "updated_at": "2020-08-25T16:29:35.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/activity-items`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `title` | string |  required  | Activity Item Title.
-        `image` | image |  required  | Valid Image.
-        `order` | integer |  required  | At what order it should appear.
-    
-<!-- END_0a08d6cd167276c14770630e43a0d4a2 -->
-
-<!-- START_51e7710d86d18f873a8332359ea93581 -->
-## Get Activity Item
-
-Get the specified activity item.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/activity-items/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-items/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "activityItem": {
-        "id": 1,
-        "title": "Audio Recorder",
-        "description": "Record your voice and play back or download a .wav file of your recording.",
-        "order": 1,
-        "activityType": {
-            "id": 1,
-            "title": "Audio",
-            "order": 0,
-            "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-            "created_at": "2020-08-25T16:29:35.000000Z",
-            "updated_at": "2020-08-25T16:29:35.000000Z"
-        },
-        "type": "h5p",
-        "h5pLib": "H5P.AudioRecorder 1.0",
-        "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-        "demo_activity_id": null,
-        "demo_video_id": null,
-        "created_at": "2020-08-25T16:29:35.000000Z",
-        "updated_at": "2020-08-25T16:29:35.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `activity_item` |  required  | The Id of a activity item
-
-<!-- END_51e7710d86d18f873a8332359ea93581 -->
-
-<!-- START_69bf61e8e395cbc5a091b0812b1b2944 -->
-## Update Activity Item
-
-Update the specified activity item.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"occaecati","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "title": "Audio",
-    "image": "occaecati",
-    "order": 1
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-items/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'title' => 'Audio',
-            'image' => 'occaecati',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items/1'
-payload = {
-    "title": "Audio",
-    "image": "occaecati",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid activity type id."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update activity item."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "activityItem": {
-        "id": 1,
-        "title": "Audio Recorder",
-        "description": "Record your voice and play back or download a .wav file of your recording.",
-        "order": 1,
-        "activityType": {
-            "id": 1,
-            "title": "Audio",
-            "order": 0,
-            "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-            "created_at": "2020-08-25T16:29:35.000000Z",
-            "updated_at": "2020-08-25T16:29:35.000000Z"
-        },
-        "type": "h5p",
-        "h5pLib": "H5P.AudioRecorder 1.0",
-        "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-        "demo_activity_id": null,
-        "demo_video_id": null,
-        "created_at": "2020-08-25T16:29:35.000000Z",
-        "updated_at": "2020-08-25T16:29:35.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
-
-`PATCH api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `activity_item` |  required  | The Id of a activity item
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `title` | string |  required  | Activity Item Title.
-        `image` | image |  required  | Valid Image.
-        `order` | integer |  required  | At what order it should appear.
-    
-<!-- END_69bf61e8e395cbc5a091b0812b1b2944 -->
-
-<!-- START_63375e7cb825182eb48023e427758e12 -->
-## Remove Activity Item
-
-Remove the specified activity item.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-items/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-items/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Activity item has been deleted successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to delete activity item."
-    ]
-}
-```
-
-### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}/activity-items/{activity_item}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `activity_item` |  required  | The Id of a activity item
-
-<!-- END_63375e7cb825182eb48023e427758e12 -->
-
-<!-- START_4b6ece79f0aefa567f28d34d26f576da -->
-## Get Activity Items with pagination and search
-
-Get a list of the activity items.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/get-activity-items" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/get-activity-items"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/get-activity-items',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/get-activity-items'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "activityItems": [
-        {
-            "id": 1,
-            "title": "Audio Recorder",
-            "description": "Record your voice and play back or download a .wav file of your recording.",
-            "order": 1,
-            "activityType": {
-                "id": 1,
-                "title": "Audio",
-                "order": 0,
-                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-                "created_at": "2020-08-25T16:29:35.000000Z",
-                "updated_at": "2020-08-25T16:29:35.000000Z"
-            },
-            "type": "h5p",
-            "h5pLib": "H5P.AudioRecorder 1.0",
-            "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
-            "created_at": "2020-08-25T16:29:35.000000Z",
-            "updated_at": "2020-08-25T16:29:35.000000Z"
-        },
-        {
-            "id": 2,
-            "title": "Dictation",
-            "description": "A tool to create dictation exercises",
-            "order": 2,
-            "activityType": {
-                "id": 1,
-                "title": "Audio",
-                "order": 0,
-                "image": "\/storage\/activity-types\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-                "created_at": "2020-08-25T16:29:35.000000Z",
-                "updated_at": "2020-08-25T16:29:35.000000Z"
-            },
-            "type": "h5p",
-            "h5pLib": "H5P.Dictation 1.0",
-            "image": "\/storage\/activity-items\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
-            "created_at": "2020-08-25T16:29:35.000000Z",
-            "updated_at": "2020-08-25T16:29:35.000000Z"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/get-activity-items`
-
-
-<!-- END_4b6ece79f0aefa567f28d34d26f576da -->
-
-<!-- START_d23807d6745d22fa351346c80cbef8b3 -->
-## Upload Thumbnail
-
-Upload thumbnail image for a activity item
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/activity-items/upload-thumb" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"thumb":"amet"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/activity-items/upload-thumb"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "thumb": "amet"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/activity-items/upload-thumb',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'thumb' => 'amet',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-items/upload-thumb'
-payload = {
-    "thumb": "amet"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "thumbUrl": "\/storage\/activity-items\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
-}
-```
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid image."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/activity-items/upload-thumb`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `thumb` | image |  required  | Thumbnail image
-    
-<!-- END_d23807d6745d22fa351346c80cbef8b3 -->
-
-#7. Activity Layout
-
-
-APIs for activity layout management
-<!-- START_dfbfedb1f8e3e4bf273b46f18e0841b9 -->
-## Get Activity Layouts
-
-Get a list of the activity layouts.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/activity-layouts" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 2,
-            "title": "Layout Two",
-            "description": "test",
-            "order": null,
-            "type": "h5p",
-            "h5pLib": "test",
-            "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-            "demo_activity_id": "1",
-            "demo_video_id": "1",
-            "organization_id": "1",
-            "created_at": "2022-02-09T10:22:42.000000Z",
-            "updated_at": "2022-02-09T10:22:42.000000Z"
-        },
-        {
-            "id": 1,
-            "title": "Layout One",
-            "description": "test",
-            "order": null,
-            "type": "h5p",
-            "h5pLib": "test",
-            "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-            "demo_activity_id": "1",
-            "demo_video_id": "1",
-            "organization_id": "1",
-            "created_at": "2022-02-09T09:46:28.000000Z",
-            "updated_at": "2022-02-09T10:24:52.000000Z"
-        }
-    ],
-    "links": {
-        "first": "http:\/\/localhost:8000\/api\/v1\/activity-layouts?page=1",
-        "last": "http:\/\/localhost:8000\/api\/v1\/activity-layouts?page=1",
-        "prev": null,
-        "next": null
-    },
-    "meta": {
-        "current_page": 1,
-        "from": 1,
-        "last_page": 1,
-        "path": "http:\/\/localhost:8000\/api\/v1\/activity-layouts",
-        "per_page": 10,
-        "to": 2,
-        "total": 2
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/activity-layouts`
-
-
-<!-- END_dfbfedb1f8e3e4bf273b46f18e0841b9 -->
-
-<!-- START_da96dd74d2e69fdc2f46db02e77f0c46 -->
-## Create Activity Layout
-
-Create a new activity layout.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"consectetur","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "title": "Audio",
-    "image": "consectetur",
-    "order": 1
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'title' => 'Audio',
-            'image' => 'consectetur',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts'
-payload = {
-    "title": "Audio",
-    "image": "consectetur",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid activity type id."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Could not create activity layout. Please try again later."
-    ]
-}
-```
-> Example response (201):
-
-```json
-{
-    "activityLayout": {
-        "id": 1,
-        "title": "Layout One",
-        "description": "test",
-        "order": null,
-        "type": "h5p",
-        "h5pLib": "test",
-        "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-        "demo_activity_id": "1",
-        "demo_video_id": "1",
-        "organization_id": "1",
-        "created_at": "2022-02-09T09:46:28.000000Z",
-        "updated_at": "2022-02-09T10:24:52.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/activity-layouts`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `title` | string |  required  | Activity Item Title.
-        `image` | image |  required  | Valid Image.
-        `order` | integer |  required  | At what order it should appear.
-    
-<!-- END_da96dd74d2e69fdc2f46db02e77f0c46 -->
-
-<!-- START_2f64f8e4788eb1dc3cda45659a9da46f -->
-## Get Activity Item
-
-Get the specified activity layout.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "activityLayout": {
-        "id": 1,
-        "title": "Layout One",
-        "description": "test",
-        "order": null,
-        "type": "h5p",
-        "h5pLib": "test",
-        "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-        "demo_activity_id": "1",
-        "demo_video_id": "1",
-        "organization_id": "1",
-        "created_at": "2022-02-09T09:46:28.000000Z",
-        "updated_at": "2022-02-09T10:24:52.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a organization
-    `activityLayout` |  required  | The Id of a activity layout
-
-<!-- END_2f64f8e4788eb1dc3cda45659a9da46f -->
-
-<!-- START_2dfb1c4de40a460c85c7245f1f15c707 -->
-## Update Activity Item
-
-Update the specified activity layout.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"et","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "title": "Audio",
-    "image": "et",
-    "order": 1
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'title' => 'Audio',
-            'image' => 'et',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1'
-payload = {
-    "title": "Audio",
-    "image": "et",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid activity type id."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update activity layout."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "activityLayout": {
-        "id": 1,
-        "title": "Layout One",
-        "description": "test",
-        "order": null,
-        "type": "h5p",
-        "h5pLib": "test",
-        "image": "\/storage\/activity-layouts\/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-        "demo_activity_id": "1",
-        "demo_video_id": "1",
-        "organization_id": "1",
-        "created_at": "2022-02-09T09:46:28.000000Z",
-        "updated_at": "2022-02-09T10:24:52.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
-
-`PATCH api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `activity_item` |  required  | The Id of a activity layout
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `title` | string |  required  | Activity Item Title.
-        `image` | image |  required  | Valid Image.
-        `order` | integer |  required  | At what order it should appear.
-    
-<!-- END_2dfb1c4de40a460c85c7245f1f15c707 -->
-
-<!-- START_9aa2c2333fb107be8e694a8cd1d65c60 -->
-## Remove Activity Item
-
-Remove the specified activity layout.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Activity layout has been deleted successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to delete activity layout."
-    ]
-}
-```
-
-### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}/activity-layouts/{activity_layout}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a organization
-    `activityLayout` |  required  | The Id of a activity layout
-
-<!-- END_9aa2c2333fb107be8e694a8cd1d65c60 -->
-
-<!-- START_94b43e1dda8be1c3bfc230274185e4e1 -->
-## Upload Thumbnail
-
-Upload thumbnail image for a activity layout
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/activity-layouts/upload-thumb" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"thumb":"quos"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/activity-layouts/upload-thumb"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "thumb": "quos"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/activity-layouts/upload-thumb',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'thumb' => 'quos',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/activity-layouts/upload-thumb'
-payload = {
-    "thumb": "quos"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "image": "\/storage\/activity-layouts\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
-}
-```
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid image."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/activity-layouts/upload-thumb`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `thumb` | image |  required  | Thumbnail image
-    
-<!-- END_94b43e1dda8be1c3bfc230274185e4e1 -->
-
-#7. Author Tag
-
-
-APIs for author tags management
-<!-- START_af7fb4d074f4df0e731c94016d08947a -->
-## Get Author Tags
-
-Get a list of all author tags.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/author-tags" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/author-tags',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 1,
-            "name": "Audio",
-            "order": 1,
-            "organization_id": "1",
-            "created_at": "2022-01-10T13:09:36.000000Z",
-            "updated_at": "2022-01-10T13:09:36.000000Z"
-        },
-        {
-            "id": 2,
-            "name": "Video",
-            "order": 1,
-            "organization_id": "2",
-            "created_at": "2022-01-10T13:09:44.000000Z",
-            "updated_at": "2022-01-10T13:09:44.000000Z"
-        }
-    ],
-    "links": {
-        "first": "http:\/\/localhost:8000\/api\/v1\/author-tags?page=1",
-        "last": "http:\/\/localhost:8000\/api\/v1\/author-tags?page=1",
-        "prev": null,
-        "next": null
-    },
-    "meta": {
-        "current_page": 1,
-        "from": 1,
-        "last_page": 1,
-        "path": "http:\/\/localhost:8000\/api\/v1\/author-tags",
-        "per_page": 10,
-        "to": 2,
-        "total": 2
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/author-tags`
-
-
-<!-- END_af7fb4d074f4df0e731c94016d08947a -->
-
-<!-- START_857568139d9702000dbaba19c3c2fe41 -->
-## Create Author Tag
-
-Create a new author tag.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"Audio","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Audio",
-    "order": 1
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/author-tags',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'Audio',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags'
-payload = {
-    "name": "Audio",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Could not create author tag. Please try again later."
-    ]
-}
-```
-> Example response (201):
-
-```json
-{
-    "author-tag": {
-        "id": 1,
-        "name": "Audio",
-        "order": 1,
-        "organization_id": "1",
-        "created_at": "2022-01-10T13:09:36.000000Z",
-        "updated_at": "2022-01-10T13:09:36.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/author-tags`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Author Tag name.
-        `order` | integer |  required  | at what order it should appear.
-    
-<!-- END_857568139d9702000dbaba19c3c2fe41 -->
-
-<!-- START_d04d5d0d9e3e334e68a91fd41a0695dc -->
-## Get Author Tag
-
-Get the specified author tag.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/author-tags/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/author-tags/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "author-tag": {
-        "id": 1,
-        "name": "Audio",
-        "order": 1,
-        "organization_id": "1",
-        "created_at": "2022-01-10T13:09:36.000000Z",
-        "updated_at": "2022-01-10T13:09:36.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `authorTag` |  required  | The Id of a Author Tag item
-
-<!-- END_d04d5d0d9e3e334e68a91fd41a0695dc -->
-
-<!-- START_b27f8af3c4c830565b71e1c3072ac35f -->
-## Update Author Tag
-
-Update the specified author tag.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"Audio","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Audio",
-    "order": 1
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/author-tags/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'Audio',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags/1'
-payload = {
-    "name": "Audio",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update author tag."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "author-tag": {
-        "id": 1,
-        "name": "Audio",
-        "order": 1,
-        "organization_id": "1",
-        "created_at": "2022-01-10T13:09:36.000000Z",
-        "updated_at": "2022-01-10T13:09:36.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
-
-`PATCH api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `authorTag` |  required  | The Id of a author tag
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Author Tag name.
-        `order` | integer |  required  | at what order it should appear.
-    
-<!-- END_b27f8af3c4c830565b71e1c3072ac35f -->
-
-<!-- START_3c912d6b952bfe280face34c1382f29d -->
-## Remove Author Tag
-
-Remove the specified author tag.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1/author-tags/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Author Tag has been deleted successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to delete author tag."
-    ]
-}
-```
-
-### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `authorTag` |  required  | The Id of a author tag item
-
-<!-- END_3c912d6b952bfe280face34c1382f29d -->
-
-#7. Education Level
-
-
-APIs for education level management
-<!-- START_0f759636a46b7b26ab5d2ce6d9967c17 -->
-## Get Education Level
-
-Get a list of all education level.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/education-levels" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/education-levels',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 1,
-            "name": "Grade A",
-            "order": 1,
-            "organization_id": "1",
-            "created_at": "2022-01-07T13:51:38.000000Z",
-            "updated_at": "2022-01-07T13:51:38.000000Z"
-        },
-        {
-            "id": 2,
-            "name": "Grade B",
-            "order": 1,
-            "organization_id": "2",
-            "created_at": "2022-01-07T13:51:56.000000Z",
-            "updated_at": "2022-01-07T13:51:56.000000Z"
-        }
-    ],
-    "links": {
-        "first": "http:\/\/localhost:8000\/api\/v1\/education-levels?page=1",
-        "last": "http:\/\/localhost:8000\/api\/v1\/education-levels?page=1",
-        "prev": null,
-        "next": null
-    },
-    "meta": {
-        "current_page": 1,
-        "from": 1,
-        "last_page": 1,
-        "path": "http:\/\/localhost:8000\/api\/v1\/education-levels",
-        "per_page": 10,
-        "to": 2,
-        "total": 2
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/education-levels`
-
-
-<!-- END_0f759636a46b7b26ab5d2ce6d9967c17 -->
-
-<!-- START_05ff2efab58ece15891013f06bde7411 -->
-## Create Education Level
-
-Create a new education level.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"Special Education","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Special Education",
-    "order": 1
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/education-levels',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'Special Education',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels'
-payload = {
-    "name": "Special Education",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Could not create education level. Please try again later."
-    ]
-}
-```
-> Example response (201):
-
-```json
-{
-    "education-level": {
-        "id": 1,
-        "name": "Grade A",
-        "order": "1",
-        "organization_id": "1",
-        "created_at": "2022-01-07T13:51:56.000000Z",
-        "updated_at": "2022-01-07T13:51:56.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/education-levels`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Education Level name.
-        `order` | integer |  required  | at what order it should appear.
-    
-<!-- END_05ff2efab58ece15891013f06bde7411 -->
-
-<!-- START_48cd276be9d2e7a85df9a55e36326ec5 -->
-## Get Education Level
-
-Get the specified education level.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/education-levels/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/education-levels/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "education-level": {
-        "id": 1,
-        "name": "Grade A",
-        "order": "1",
-        "organization_id": "1",
-        "created_at": "2022-01-07T13:51:56.000000Z",
-        "updated_at": "2022-01-07T13:51:56.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `EducationLevel` |  required  | The Id of a Education Level item
-
-<!-- END_48cd276be9d2e7a85df9a55e36326ec5 -->
-
-<!-- START_e6a9be09f5fed0a4e671357e085b7bb0 -->
-## Update Education Level
-
-Update the specified education level.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"Special Education","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Special Education",
-    "order": 1
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/education-levels/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'Special Education',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels/1'
-payload = {
-    "name": "Special Education",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update education level."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "education-level": {
-        "id": 1,
-        "name": "Grade A",
-        "order": "1",
-        "organization_id": "1",
-        "created_at": "2022-01-07T13:51:56.000000Z",
-        "updated_at": "2022-01-07T13:51:56.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
-
-`PATCH api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `educationLevel` |  required  | The Id of a education level
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Education Level name.
-        `order` | integer |  required  | at what order it should appear.
-    
-<!-- END_e6a9be09f5fed0a4e671357e085b7bb0 -->
-
-<!-- START_8b1b98f3b9f01a96960a24938e91ab26 -->
-## Remove Education Level
-
-Remove the specified education level.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1/education-levels/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Education Level has been deleted successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to delete education level."
-    ]
-}
-```
-
-### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `educationLevel` |  required  | The Id of a education level item
-
-<!-- END_8b1b98f3b9f01a96960a24938e91ab26 -->
-
-#7. Subject
-
-
-APIs for subject management
-<!-- START_0845c30c8551db74c7edd885cacf81cc -->
-## Get Subjects
-
-Get a list of all subjects.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/subjects" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/subjects"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/subjects',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/subjects'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 1,
-            "name": "Math",
-            "order": 1,
-            "organization_id": "1",
-            "created_at": "2022-01-06T11:41:46.000000Z",
-            "updated_at": "2022-01-06T11:41:46.000000Z"
-        },
-        {
-            "id": 3,
-            "name": "English",
-            "order": 2,
-            "organization_id": "2",
-            "created_at": "2022-01-06T11:59:17.000000Z",
-            "updated_at": "2022-01-06T11:59:17.000000Z"
-        }
-    ],
-    "links": {
-        "first": "http:\/\/localhost:8000\/api\/v1\/subjects?page=1",
-        "last": "http:\/\/localhost:8000\/api\/v1\/subjects?page=1",
-        "prev": null,
-        "next": null
-    },
-    "meta": {
-        "current_page": 1,
-        "from": 1,
-        "last_page": 1,
-        "path": "http:\/\/localhost:8000\/api\/v1\/subjects",
-        "per_page": 10,
-        "to": 2,
-        "total": 2
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/subjects`
-
-
-<!-- END_0845c30c8551db74c7edd885cacf81cc -->
-
-<!-- START_efe16b578627ae5c9bc104a03ce68767 -->
-## Create Subject
-
-Create a new subject.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/subjects" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"Special Education","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/subjects"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Special Education",
-    "order": 1
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/subjects',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'Special Education',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/subjects'
-payload = {
-    "name": "Special Education",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Could not create subject. Please try again later."
-    ]
-}
-```
-> Example response (201):
-
-```json
-{
-    "subject": {
-        "id": 4,
-        "name": "English",
-        "order": 1,
-        "organization_id": "1",
-        "created_at": "2022-01-06T11:59:52.000000Z",
-        "updated_at": "2022-01-06T11:59:52.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/subjects`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Education Level name.
-        `order` | integer |  required  | At what order it should appear.
-    
-<!-- END_efe16b578627ae5c9bc104a03ce68767 -->
-
-<!-- START_6d13b878d55a8bfc6d9e1eda1e4012a0 -->
-## Get Subject
-
-Get the specified subject.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/subjects/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/subjects/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/subjects/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/subjects/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "subject": {
-        "id": 4,
-        "name": "English",
-        "order": 1,
-        "organization_id": "1",
-        "created_at": "2022-01-06T11:59:52.000000Z",
-        "updated_at": "2022-01-06T11:59:52.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/subjects/{subject}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `subject` |  required  | The Id of a subject item
-
-<!-- END_6d13b878d55a8bfc6d9e1eda1e4012a0 -->
-
-<!-- START_117ee4d03307644c59528d86b57638cc -->
-## Update Subject
-
-Update the specified subject.
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/subjects/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"Math","order":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/subjects/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Math",
-    "order": 1
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/subjects/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'Math',
-            'order' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/subjects/1'
-payload = {
-    "name": "Math",
-    "order": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update subject."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "subject": {
-        "id": 4,
-        "name": "English",
-        "order": 1,
-        "organization_id": "1",
-        "created_at": "2022-01-06T11:59:52.000000Z",
-        "updated_at": "2022-01-06T11:59:52.000000Z"
-    }
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/subjects/{subject}`
-
-`PATCH api/v1/suborganizations/{suborganization}/subjects/{subject}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `subject` |  required  | The Id of a subject
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Subject Name.
-        `order` | integer |  required  | at what order it should appear.
-    
-<!-- END_117ee4d03307644c59528d86b57638cc -->
-
-<!-- START_6b283712627565c48705cf0b8358092b -->
-## Remove Subject
-
-Remove the specified subject.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1/subjects/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/subjects/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1/subjects/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/subjects/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Subject has been deleted successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to delete subject."
-    ]
-}
-```
-
-### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}/subjects/{subject}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `subject` |  required  | The Id of a subject item
-
-<!-- END_6b283712627565c48705cf0b8358092b -->
-
-#8. CurrikiGo
+#10. CurrikiGo
 
 
 APIs for publishing playlists to other LMSs
@@ -25538,6 +24207,7 @@ Parameter | Type | Status | Description
         `counter` | integer |  optional  | The counter for uniqueness of the title
     
 <!-- END_83cdba63ab1e5c866e17cd2146376a02 -->
+
 <!-- START_0905144b5be99fb831597258540ec397 -->
 ## Publish Playlist to Moodle
 
@@ -25667,6 +24337,7 @@ Parameter | Type | Status | Description
         `counter` | integer |  optional  | The counter for uniqueness of the title
     
 <!-- END_0905144b5be99fb831597258540ec397 -->
+
 <!-- START_0314b0d2a618198e025592b9b661aeff -->
 ## api/v1/go/{lms}/projects/{project}/playlists/{playlist}/publish
 > Example request:
@@ -25726,11 +24397,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -25740,677 +24411,7 @@ response.json()
 
 <!-- END_0314b0d2a618198e025592b9b661aeff -->
 
-#9. LMS Settings
-
-
-APIs for LMS settings used for publishing
-<!-- START_2e23d1fbefc018b7f63a6c0e4827c8df -->
-## Authenticated user LMS settings
-
-Display a listing of the LMS settings for authenticated user
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/go/lms-settings/user/me" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/go/lms-settings/user/me"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/go/lms-settings/user/me',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms-settings/user/me'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": {
-        "settings": [
-            {
-                "id": 1,
-                "lms_url": "https:\/\/moodle39.curriki.org",
-                "lms_access_token": "bf06028490c01e1f4538f6206055bc00",
-                "site_name": "Moodle Demo",
-                "lms_name": "moodle",
-                "lms_access_key": "",
-                "lms_access_secret": "",
-                "description": "Moodle Demo",
-                "user_id": 1,
-                "lti_client_id": null,
-                "created_at": "2020-08-27T18:35:17.000000Z",
-                "updated_at": "2020-08-27T18:35:17.000000Z"
-            },
-            {
-                "id": 2,
-                "lms_url": "https:\/\/moodle39.curriki.org",
-                "lms_access_token": "bf06028490c01e1f4538f6206055bc01",
-                "site_name": "Moodle Demo",
-                "lms_name": "moodle",
-                "lms_access_key": "",
-                "lms_access_secret": "",
-                "description": "Moodle Demo",
-                "user_id": 1,
-                "lti_client_id": null,
-                "created_at": "2020-08-28T18:35:17.000000Z",
-                "updated_at": "2020-08-28T18:35:17.000000Z"
-            }
-        ]
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/go/lms-settings/user/me`
-
-
-<!-- END_2e23d1fbefc018b7f63a6c0e4827c8df -->
-<!-- START_96dd725df77268e19acea6ed61900366 -->
-## Get Projects based on LMS/LTI settings
-
-Get a list of projects that belong to the same LMS/LTI settings
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/go/lms/projects" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"lms_url":"quo","lti_client_id":12}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/go/lms/projects"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "lms_url": "quo",
-    "lti_client_id": 12
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/go/lms/projects',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'lms_url' => 'quo',
-            'lti_client_id' => 12,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms/projects'
-payload = {
-    "lms_url": "quo",
-    "lti_client_id": 12
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "projects": [
-        {
-            "id": 1,
-            "name": "Test Project",
-            "description": "This is a test project.",
-            "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
-            "shared": true,
-            "starter_project": null,
-            "is_public": true,
-            "created_at": "2020-09-06T19:21:08.000000Z",
-            "updated_at": "2020-09-06T19:21:08.000000Z"
-        },
-        {
-            "id": 2,
-            "name": "Math Project",
-            "description": "This is a test math project.",
-            "thumb_url": "https:\/\/images.pexels.com\/photos\/2832384",
-            "shared": true,
-            "starter_project": null,
-            "is_public": true,
-            "created_at": "2020-09-07T19:21:08.000000Z",
-            "updated_at": "2020-09-07T19:21:08.000000Z"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/go/lms/projects`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `lms_url` | string |  required  | The url of a lms
-        `lti_client_id` | integer |  required  | The Id of a lti client
-    
-<!-- END_96dd725df77268e19acea6ed61900366 -->
-<!-- START_cebdcdb62ee60954c143b031698c509f -->
-## api/v1/go/lms/project/{project}
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/go/lms/project/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/go/lms/project/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/go/lms/project/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms/project/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/v1/go/lms/project/{project}`
-
-
-<!-- END_cebdcdb62ee60954c143b031698c509f -->
-
-<!-- START_a7eb23f241e26168fb13116c94c761d9 -->
-## api/v1/go/lms/activities
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/go/lms/activities" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/go/lms/activities"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/go/lms/activities',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms/activities'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (422):
-
-```json
-{
-    "message": "The given data was invalid.",
-    "errors": {
-        "userEmail": [
-            "The user email field is required."
-        ],
-        "ltiClientId": [
-            "The lti client id field is required."
-        ]
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/go/lms/activities`
-
-
-<!-- END_a7eb23f241e26168fb13116c94c761d9 -->
-<!-- START_fec9262bf367bda1531f2dbfed93506b -->
-## Get organizations based on LMS/LTI settings
-
-Get a list of organizations that belong to the same LMS/LTI settings
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/go/lms/organizations" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"userEmail":"non","lti_client_id":"12"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/go/lms/organizations"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "userEmail": "non",
-    "lti_client_id": "12"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/go/lms/organizations',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'userEmail' => 'non',
-            'lti_client_id' => '12',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms/organizations'
-payload = {
-    "userEmail": "non",
-    "lti_client_id": "12"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 1,
-            "name": "Curriki Studio",
-            "description": "Curriki Studio, default organization.",
-            "image": "\/storage\/organizations\/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
-            "favicon": "\/storage\/organizations\/favicon\/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
-            "domain": "currikistudio"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/go/lms/organizations`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `userEmail` | required |  optional  | The email of a user: quo
-        `lti_client_id` | required |  optional  | The Id of a lti client
-    
-<!-- END_fec9262bf367bda1531f2dbfed93506b -->
-
-<!-- START_61a6a231d6690db1b348f81a4486a35c -->
-## Get independent Activity based on user_id of a user who launched the deeplink
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/go/lms/independent-activities" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"user_email":"somebody@somewhere.com","query":"activity title","size":"saepe"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/go/lms/independent-activities"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "user_email": "somebody@somewhere.com",
-    "query": "activity title",
-    "size": "saepe"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/go/lms/independent-activities',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'user_email' => 'somebody@somewhere.com',
-            'query' => 'activity title',
-            'size' => 'saepe',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/go/lms/independent-activities'
-payload = {
-    "user_email": "somebody@somewhere.com",
-    "query": "activity title",
-    "size": "saepe"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Could not find any independent activity. Please try again later."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "independent-activity": {
-        "id": 9,
-        "title": "title",
-        "type": "h5p",
-        "content": "content",
-        "description": null,
-        "shared": null,
-        "order": 0,
-        "thumb_url": null,
-        "created_at": "2022-06-16T05:28:25.000000Z",
-        "updated_at": "2022-06-16T05:28:25.000000Z",
-        "gcr_activity_visibility": false,
-        "subjects": [
-            {
-                "id": 1,
-                "name": "Arts",
-                "order": null,
-                "organization_id": 63,
-                "created_at": "2022-04-21T12:41:25.000000Z",
-                "updated_at": null
-            }
-        ],
-        "education_levels": [
-            {
-                "id": 1,
-                "name": "Preschool (Ages 0-4)",
-                "order": null,
-                "organization_id": 63,
-                "created_at": "2022-04-20T17:33:20.000000Z",
-                "updated_at": null
-            }
-        ],
-        "author_tags": [
-            {
-                "id": 1,
-                "name": "Homework\/Assignment",
-                "order": null,
-                "organization_id": 63,
-                "created_at": "2022-04-20T17:38:02.000000Z",
-                "updated_at": null
-            }
-        ],
-        "source_type": null,
-        "source_url": null,
-        "organization_visibility_type_id": "1",
-        "status": null,
-        "status_text": null,
-        "indexing": null,
-        "indexing_text": "NOT REQUESTED",
-        "user": {
-            "id": 3,
-            "name": "Abby _",
-            "email": "abby@curriki.org",
-            "email_verified_at": "2020-09-11T23:52:44.000000Z",
-            "created_at": "2020-04-06T20:47:21.000000Z",
-            "updated_at": "2021-05-03T19:24:58.000000Z",
-            "first_name": "Abby",
-            "last_name": "_",
-            "organization_name": "",
-            "job_title": "",
-            "address": null,
-            "phone_number": null,
-            "organization_type": null,
-            "website": null,
-            "deleted_at": null,
-            "role": null,
-            "gapi_access_token": "{\"token_type\":\"Bearer\",\"access_token\":\"ya29.a0AfH6SMA9EL2ZjzTyPOIv3cgdm7VZ6JHJ3WHgqaaYZJY4X5mKhq417RjMKiCOS36tu1E3sOwNALtVBTamNE_XyNLeDak-xZuU4lAtLV1Ap0Gi19AN10vpj5Sg57AJ3KgrT4G3THYkGF3y0BZ4r38QhdAvydlpkfn_KwCZBQ\",\"scope\":\"email profile https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses openid https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses.readonly https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.email https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.topics https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.me https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.students https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.profile\",\"login_hint\":\"AJDLj6LgfEhLCFgVLEzicO4eYW1YOkD2Ocu__Xw4RutMMX9v-B-BEo_pAMXjGBSn6gx8S9fToe9FpA7M_OwrbGosxzx3LBuA28SCV2kIKwPd_qmJ2ctCRP4\",\"expires_in\":3599,\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiODNmMTgwMjNhODU1NTg3Zjk0MmU3NTEwMjI1MTEyMDg4N2Y3MjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE0MzA3NzE2NTQwNTMzODE4OTQzIiwiaGQiOiJjdXJyaWtpLm9yZyIsImVtYWlsIjoiYWJieUBjdXJyaWtpLm9yZyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiSXBlejh3cm5uUmU3Y3p6U1NidFlJdyIsIm5hbWUiOiJBYmJ5IFJvc3MiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2cwYUVyeDRwUE1ZOVRPQXJiZ01KX3ZybHdsSzB6SEdBNVp3dFlVPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFiYnkiLCJmYW1pbHlfbmFtZSI6IlJvc3MiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTYwMDM3NDQ4NywiZXhwIjoxNjAwMzc4MDg3LCJqdGkiOiI3NmUzNjU5M2I1NWEwYjhkMDBlZDZiODRmMmFmMmRiZmVkNDFhN2RhIn0.i9YToGr1CNLtk6zHX2f6dmP4PGB5ibyxFOFisPRvxe1YZvenGpyEh3MlSMkURvHzo2RGmYGkdhpJYHtn2b_TOqbsNsx61DUE4BTME5O_4-VcR-c_YDYFn6K3MpsrYLbSxDKTgdSJbA56B8-s726QzcFEixkU5mtaK5gbO4Zb32U94qF1_ziJ5XcEtaJt1kBY8oY15d3ubXJl-zLyh-fB9K4mqssqqWABbLAtJQycfx5x-9ks6iVHYXq-_tdnfadm7HBYROlcYzKc7VJkOAP5z-e05Zqx9C1NUXpW_-gFwiHazbC7_N_-UihSej2m3qULtIdgZMtT6fid4_LftXc38Q\",\"session_state\":{\"extraQueryParams\":{\"authuser\":\"1\"}},\"first_issued_at\":1600374485776,\"expires_at\":1600378084776,\"idpId\":\"google\"}",
-            "hubspot": true,
-            "subscribed": true,
-            "subscribed_ip": "192.168.96.10",
-            "membership_type_id": 2,
-            "temp_password": null
-        },
-        "h5p_content": null
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/go/lms/independent-activities`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `user_email` | required |  optional  | The email of a user
-        `query` | is |  optional  | search-term
-        `size` | is |  optional  | for pagination
-    
-<!-- END_61a6a231d6690db1b348f81a4486a35c -->
-
-#10. CurrikiGo Course
+#11. CurrikiGo Course
 
 
 APIs for fetching courses from LMSs
@@ -26421,16 +24422,16 @@ APIs for fetching courses from LMSs
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/ab/fetch" \
+    "http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":10}'
+    -d '{"setting_id":8}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/ab/fetch"
+    "http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch"
 );
 
 let headers = {
@@ -26439,7 +24440,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 10
+    "setting_id": 8
 }
 
 fetch(url, {
@@ -26455,14 +24456,14 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->post(
-    'http://localhost:8000/api/v1/go/canvas/projects/ab/fetch',
+    'http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
         'json' => [
-            'setting_id' => 10,
+            'setting_id' => 8,
         ],
     ]
 );
@@ -26474,9 +24475,9 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/go/canvas/projects/ab/fetch'
+url = 'http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch'
 payload = {
-    "setting_id": 10
+    "setting_id": 8
 }
 headers = {
   'Content-Type': 'application/json',
@@ -26535,6 +24536,7 @@ Parameter | Type | Status | Description
     `setting_id` | integer |  optional  | The Id of the LMS setting Example 1
     
 <!-- END_782eed28046b7e5741ad6b964688c0e6 -->
+
 <!-- START_238801340a17b1d21717ec469abfbcd5 -->
 ## Fetch a Course from Generic
 
@@ -26595,11 +24597,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -26609,1928 +24611,6 @@ response.json()
 
 <!-- END_238801340a17b1d21717ec469abfbcd5 -->
 
-#11. Google Classroom
-
-
-APIs for Google Classroom
-<!-- START_e1403a4791b2f9419c8bb0bea0c91ceb -->
-## Save Access Token
-
-Save GAPI access token in the database.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/access-token" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"voluptatem"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/access-token"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "voluptatem"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/access-token',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'voluptatem',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/access-token'
-payload = {
-    "access_token": "voluptatem"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Access token has been saved successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Validation error: Access token is required"
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to save the token."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/access-token`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
-    
-<!-- END_e1403a4791b2f9419c8bb0bea0c91ceb -->
-<!-- START_679513c6d9a3e7633325d5e35620d09d -->
-## Get Courses
-
-Get all existing Google Classroom Courses
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/google-classroom/courses" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/courses"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/google-classroom/courses',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/courses'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Service exception error"
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "courses": [
-        {
-            "id": "1",
-            "name": "How to build a playlist in CurrikiStudio"
-        },
-        {
-            "id": "2",
-            "name": "Partner Content Projects"
-        },
-        {
-            "id": "3",
-            "name": "Our Great BIg Back Yard"
-        },
-        {
-            "id": "4",
-            "name": "Alice in Wonderland"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/google-classroom/courses`
-
-
-<!-- END_679513c6d9a3e7633325d5e35620d09d -->
-<!-- START_3f6177f199294bd05304ded78263e7fc -->
-## Copy project to Google Classroom
-
-Copy whole project to google classroom either as a new course or into an existing course.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/projects/9/copy" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"course_id":"123","access_token":"porro"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/projects/9/copy"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "course_id": "123",
-    "access_token": "porro"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/projects/9/copy',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'course_id' => '123',
-            'access_token' => 'porro',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/projects/9/copy'
-payload = {
-    "course_id": "123",
-    "access_token": "porro"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (403):
-
-```json
-{
-    "errors": [
-        "Forbidden. You are trying to share other user's project."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to copy project."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "course": {
-        "id": "158432479402",
-        "name": "Partner Content Projects",
-        "topics": [
-            {
-                "course_id": "158432479402",
-                "topic_id": "158409588847",
-                "name": "NBC Learn",
-                "course_work": [
-                    {
-                        "id": "158442674345",
-                        "course_id": "158432479402",
-                        "description": null,
-                        "topic_id": "158409588847",
-                        "title": "Test Activity 1 - 1",
-                        "state": "PUBLISHED",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "https:\/\/www.currikistudio.org\/shared\/activity\/10"
-                                }
-                            }
-                        ],
-                        "max_points": null
-                    },
-                    {
-                        "id": "158442674350",
-                        "course_id": "158432479402",
-                        "description": null,
-                        "topic_id": "158409588847",
-                        "title": "Test Activity 1 - 0",
-                        "state": "PUBLISHED",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "https:\/\/www.currikistudio.org\/shared\/activity\/9"
-                                }
-                            }
-                        ],
-                        "max_points": null
-                    }
-                ]
-            },
-            {
-                "course_id": "158432479402",
-                "topic_id": "158410401228",
-                "name": "Internal",
-                "course_work": [
-                    {
-                        "id": "158443047525",
-                        "course_id": "158432479402",
-                        "description": null,
-                        "topic_id": "158410401228",
-                        "title": "Test Activity 1 - 0",
-                        "state": "PUBLISHED",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "https:\/\/www.currikistudio.org\/shared\/activity\/11"
-                                }
-                            }
-                        ],
-                        "max_points": null
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/projects/{project}/copy`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `project` |  required  | The Id of a project.
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `course_id` | string |  optional  | Id of an existing Google Classroom course.
-        `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
-    
-<!-- END_3f6177f199294bd05304ded78263e7fc -->
-<!-- START_6346b2af474deb1da410172a9fe7871c -->
-## Get Courses Topics
-
-Get existing Google Classroom Course Topics
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/google-classroom/topics" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/topics"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/google-classroom/topics',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/topics'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/v1/google-classroom/topics`
-
-
-<!-- END_6346b2af474deb1da410172a9fe7871c -->
-
-<!-- START_6637783d98a6734088a78c4fd1bd8adc -->
-## To Publish playlist To Google Classroom
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"explicabo","string":"eaque"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "explicabo",
-    "string": "eaque"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'explicabo',
-            'string' => 'eaque',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish'
-payload = {
-    "access_token": "explicabo",
-    "string": "eaque"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (403):
-
-```json
-{
-    "errors": [
-        "Forbidden. You are trying to share other user's project."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to copy playlist."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "course": {
-        "id": "422473650924",
-        "name": "Activity Sampler",
-        "topics": [
-            {
-                "course_id": "422473650924",
-                "topic_id": "422474476539",
-                "name": "Questions",
-                "course_work": [
-                    {
-                        "id": "422473053485",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Advanced Fill In the Blank",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39449\/7062"
-                                }
-                            }
-                        ],
-                        "max_points": 100
-                    },
-                    {
-                        "id": "422474476548",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Arithmetic Quiz",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39450\/7063"
-                                }
-                            }
-                        ],
-                        "max_points": 100
-                    },
-                    {
-                        "id": "422474036071",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Dialog Cards",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39452\/7064"
-                                }
-                            }
-                        ],
-                        "max_points": 100
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/projects/{project}/playlists/{playlist}/publish`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `project` |  required  | The Id of a project.
-    `playlist` |  required  | The Id of a playlist.
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
-        `string` | topic_id |  optional  | (The Google Classroom topic id)
-    
-<!-- END_6637783d98a6734088a78c4fd1bd8adc -->
-
-<!-- START_6e3a306f3071e364eed15ea7c5212143 -->
-## To Publish activity To Google Classroom under a specific topic
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"aut","string":"nam"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "aut",
-    "string": "nam"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'aut',
-            'string' => 'nam',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish'
-payload = {
-    "access_token": "aut",
-    "string": "nam"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (403):
-
-```json
-{
-    "errors": [
-        "Forbidden. You are trying to share other user's project."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to copy playlist."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "course": {
-        "id": "422473650924",
-        "name": "Activity Sampler",
-        "topics": [
-            {
-                "course_id": "422473650924",
-                "topic_id": "422474476539",
-                "name": "Questions",
-                "course_work": [
-                    {
-                        "id": "422473053485",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Advanced Fill In the Blank",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39449\/7062"
-                                }
-                            }
-                        ],
-                        "max_points": 100
-                    },
-                    {
-                        "id": "422474476548",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Arithmetic Quiz",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39450\/7063"
-                                }
-                            }
-                        ],
-                        "max_points": 100
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/projects/{project}/playlists/{playlist}/activities/{activity}/publish`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `project` |  required  | The Id of a project.
-    `playlist` |  required  | The Id of a playlist.
-    `activity` |  required  | The Id of a activity.
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
-        `string` | topic_id |  optional  | (The Google Classroom topic id)
-    
-<!-- END_6e3a306f3071e364eed15ea7c5212143 -->
-
-<!-- START_9a9da3f74bee78fd27c1e4c7cbf13428 -->
-## Publish independent activity To Google Classroom
-
-To Publish independent activity To Google Classroom under a specific class or specific classwork
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/activities/11/publish" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"eum","string":"532103337862)"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/activities/11/publish"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "eum",
-    "string": "532103337862)"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/activities/11/publish',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'eum',
-            'string' => '532103337862)',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/activities/11/publish'
-payload = {
-    "access_token": "eum",
-    "string": "532103337862)"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (403):
-
-```json
-{
-    "errors": [
-        "Forbidden. You are trying to share other user's project."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to copy publish."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "course": {
-        "id": "422473650924",
-        "name": "Activity Sampler",
-        "topics": [
-            {
-                "course_id": "422473650924",
-                "topic_id": "422474476539",
-                "name": "Questions",
-                "course_work": [
-                    {
-                        "id": "422473053485",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Advanced Fill In the Blank",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39449\/7062"
-                                }
-                            }
-                        ],
-                        "max_points": 100
-                    },
-                    {
-                        "id": "422474476548",
-                        "course_id": "422473650924",
-                        "description": null,
-                        "topic_id": "422474476539",
-                        "title": "Arithmetic Quiz",
-                        "state": "DRAFT",
-                        "work_type": "ASSIGNMENT",
-                        "materials": [
-                            {
-                                "link": {
-                                    "thumbnailUrl": null,
-                                    "title": null,
-                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39450\/7063"
-                                }
-                            }
-                        ],
-                        "max_points": 100
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/activities/{independent_activity}/publish`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `independent_activity` |  required  | The Id of a independentActivity.
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
-        `string` | topic_id |  optional  | (The Google Classroom topic id
-    
-<!-- END_9a9da3f74bee78fd27c1e4c7cbf13428 -->
-
-<!-- START_749255ce687aecf69dfa83e09197546c -->
-## TurnIn a student&#039;s submission
-
-Identifies student's submission on a classwork assignment.
-Attaches a summary page link to the assignment, and turns it in.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/turnin/9" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"dolore","course_id":"quia"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/turnin/9"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "dolore",
-    "course_id": "quia"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/turnin/9',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'dolore',
-            'course_id' => 'quia',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/turnin/9'
-payload = {
-    "access_token": "dolore",
-    "course_id": "quia"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "The assignment has been turned in successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "You are not enrolled in this class."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Could not retrieve submission for this assignment."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/turnin/{classwork}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `classwork` |  required  | The Id of a classwork.
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
-        `course_id` | string |  required  | The Google Classroom course id
-    
-<!-- END_749255ce687aecf69dfa83e09197546c -->
-<!-- START_aa385388fcbdafb482e0f2457afe1cbd -->
-## Verify whether Google Classroom user has access to a student&#039;s submission
-
-If the user is a teacher, validate if he's one of the teachers in the class
-If the user is authenticated and is a student, validate if the submission is his.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/validate-summary-access" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"libero","student_id":"quae","course_id":"dignissimos","gc_classwork_id":"et","gc_submission_id":"non"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/validate-summary-access"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "libero",
-    "student_id": "quae",
-    "course_id": "dignissimos",
-    "gc_classwork_id": "et",
-    "gc_submission_id": "non"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/validate-summary-access',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'libero',
-            'student_id' => 'quae',
-            'course_id' => 'dignissimos',
-            'gc_classwork_id' => 'et',
-            'gc_submission_id' => 'non',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/validate-summary-access'
-payload = {
-    "access_token": "libero",
-    "student_id": "quae",
-    "course_id": "dignissimos",
-    "gc_classwork_id": "et",
-    "gc_submission_id": "non"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (404):
-
-```json
-{
-    "errors": [
-        "Either the entity was not found or you do not have permission to view it."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "student": {
-        "id": "102628873478251109814",
-        "email": "samstud89@gmail.com"
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/validate-summary-access`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
-        `student_id` | the |  optional  | google user id for the student
-        `course_id` | string |  required  | The Google Classroom course id
-        `gc_classwork_id` | string |  required  | The Id of the classwork
-        `gc_submission_id` | string |  required  | The Id of the student's submission
-    
-<!-- END_aa385388fcbdafb482e0f2457afe1cbd -->
-<!-- START_79cc56549336bb58311e19f6fbdd4a14 -->
-## Get student&#039;s submission against a classwork
-
-Identifies student's submission on a classwork assignment.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/google-classroom/classwork/9/submission" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"ratione","course_id":"vitae"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/classwork/9/submission"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "ratione",
-    "course_id": "vitae"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/google-classroom/classwork/9/submission',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'ratione',
-            'course_id' => 'vitae',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/classwork/9/submission'
-payload = {
-    "access_token": "ratione",
-    "course_id": "vitae"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "You are not enrolled in this class."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Could not retrieve submission for this assignment."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "submission": {
-        "id": "Cg4I4uew5KIEEKa_h6_oBQ",
-        "course_id": "199817397960",
-        "coursework_id": "199814668198",
-        "state": "RETURNED",
-        "assigned_grade": 90
-    }
-}
-```
-
-### HTTP Request
-`POST api/v1/google-classroom/classwork/{classwork}/submission`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `classwork` |  required  | The Id of a classwork.
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
-        `course_id` | string |  required  | The Google Classroom course id
-    
-<!-- END_79cc56549336bb58311e19f6fbdd4a14 -->
-<!-- START_1c762b2876b1508d8d8551785606c99a -->
-## Get H5P Resource Settings For Google Classroom
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Activity not found."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "h5p": {
-        "id": 59,
-        "title": "Science of Golf: Why Balls Have Dimples",
-        "params": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-        "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-        "slug": "science-of-golf-why-balls-have-dimples",
-        "user_id": 1,
-        "embedType": "div",
-        "disable": 9,
-        "libraryMajorVersion": 1,
-        "libraryMinorVersion": 21,
-        "authors": null,
-        "source": null,
-        "yearFrom": null,
-        "yearTo": null,
-        "licenseVersion": null,
-        "licenseExtras": null,
-        "authorComments": null,
-        "changes": null,
-        "defaultLanguage": null,
-        "metadata": {
-            "title": "Science of Golf: Why Balls Have Dimples",
-            "license": "U"
-        },
-        "library": {
-            "id": 40,
-            "name": "H5P.InteractiveVideo",
-            "majorVersion": 1,
-            "minorVersion": 21,
-            "embedTypes": "iframe",
-            "fullscreen": 1
-        },
-        "language": "en",
-        "tags": ""
-    },
-    "activity": {
-        "id": 1,
-        "playlist_id": 1,
-        "title": "Science of Golf: Why Balls Have Dimples",
-        "type": "h5p",
-        "content": "",
-        "shared": false,
-        "order": 2,
-        "thumb_url": null,
-        "subject_id": null,
-        "education_level_id": null,
-        "h5p_content": {
-            "id": 59,
-            "created_at": "2020-04-30T20:24:58.000000Z",
-            "updated_at": "2020-04-30T20:24:58.000000Z",
-            "user_id": 1,
-            "title": "Science of Golf: Why Balls Have Dimples",
-            "library_id": 40,
-            "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-            "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-            "slug": "science-of-golf-why-balls-have-dimples",
-            "embed_type": "div",
-            "disable": 9,
-            "content_type": null,
-            "authors": null,
-            "source": null,
-            "year_from": null,
-            "year_to": null,
-            "license": "U",
-            "license_version": null,
-            "license_extras": null,
-            "author_comments": null,
-            "changes": null,
-            "default_language": null
-        },
-        "is_public": false,
-        "created_at": null,
-        "updated_at": null
-    },
-    "playlist": {
-        "id": 1,
-        "title": "The Engineering & Design Behind Golf Balls",
-        "order": 0,
-        "is_public": true,
-        "project_id": 1,
-        "project": {
-            "id": 1,
-            "name": "The Science of Golf",
-            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
-            "thumb_url": "\/storage\/projects\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
-            "shared": false,
-            "starter_project": false,
-            "users": [
-                {
-                    "id": 1,
-                    "email": "john.doe@currikistudio.org",
-                    "first_name": "John",
-                    "last_name": "Doe",
-                    "role": "owner"
-                }
-            ],
-            "is_public": true,
-            "created_at": "2020-04-30T20:03:12.000000Z",
-            "updated_at": "2020-07-11T12:51:07.000000Z"
-        },
-        "activities": [
-            {
-                "id": 4,
-                "playlist_id": 1,
-                "title": "Labeling Golf Ball - Principles of Physics",
-                "type": "h5p",
-                "content": "",
-                "shared": false,
-                "order": 0,
-                "thumb_url": null,
-                "subject_id": null,
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 65,
-                    "created_at": "2020-04-30T23:40:49.000000Z",
-                    "updated_at": "2020-04-30T23:40:49.000000Z",
-                    "user_id": 1,
-                    "title": "Labeling Golf Ball - Principles of Physics",
-                    "library_id": 19,
-                    "parameters": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images\/background-5eab614083be2.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Lift<\/p>\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Drag<\/p>\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Spin<\/p>\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Lift<\/div>\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Drag<\/div>\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Spin<\/div>\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
-                    "filtered": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images\/background-5eab614083be2.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Lift<\/p>\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Drag<\/p>\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Spin<\/p>\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Lift<\/div>\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Drag<\/div>\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Spin<\/div>\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
-                    "slug": "labeling-golf-ball-principles-of-physics",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": null,
-                "updated_at": null
-            },
-            {
-                "id": 17774,
-                "playlist_id": 1,
-                "title": "Latest",
-                "type": "h5p",
-                "content": "test",
-                "shared": false,
-                "order": null,
-                "thumb_url": "\/storage\/activities\/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
-                "subject_id": "Mathematics",
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 19334,
-                    "created_at": "2020-08-30T20:09:56.000000Z",
-                    "updated_at": "2020-08-30T20:09:56.000000Z",
-                    "user_id": 1,
-                    "title": "Latest",
-                    "library_id": 98,
-                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
-                    "filtered": "",
-                    "slug": "latest",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": "2020-08-30T20:22:47.000000Z",
-                "updated_at": "2020-08-30T20:22:47.000000Z"
-            },
-            {
-                "id": 17776,
-                "playlist_id": 1,
-                "title": "Latest",
-                "type": "h5p",
-                "content": "test",
-                "shared": false,
-                "order": null,
-                "thumb_url": "\/storage\/activities\/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
-                "subject_id": "Mathematics",
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 19334,
-                    "created_at": "2020-08-30T20:09:56.000000Z",
-                    "updated_at": "2020-08-30T20:09:56.000000Z",
-                    "user_id": 1,
-                    "title": "Latest",
-                    "library_id": 98,
-                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
-                    "filtered": "",
-                    "slug": "latest",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": "2020-08-30T20:24:29.000000Z",
-                "updated_at": "2020-08-30T20:24:29.000000Z"
-            },
-            {
-                "id": 3,
-                "playlist_id": 1,
-                "title": "Physics Vocabulary Study Guide",
-                "type": "h5p",
-                "content": "",
-                "shared": false,
-                "order": 1,
-                "thumb_url": null,
-                "subject_id": null,
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 61,
-                    "created_at": "2020-04-30T20:35:30.000000Z",
-                    "updated_at": "2020-04-30T20:35:30.000000Z",
-                    "user_id": 1,
-                    "title": "Physics Vocabulary Study Guide",
-                    "library_id": 63,
-                    "parameters": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">Acceleration is the measurement of the change <\/span><\/span><\/span><span style=\\\"font-size:11.0pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\">in an object\\u2019s velocity. <\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">The faster the air moves, the less pressure it exerts.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"<p><span style=\\\"font-size:10.5pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\"><span style=\\\"color:black\\\">A vector is a quantity that has both a magnitude and a direction.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"<p><span style=\\\"font-size:10.5pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\"><span style=\\\"color:black\\\">Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:normal\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:10.5pt\\\"><span style=\\\"color:black\\\">A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.<\/span><\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
-                    "filtered": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"<p><span><span><span>Acceleration is the measurement of the change <\/span><\/span><\/span><span><span><span>in an object\\u2019s velocity. <\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span>The faster the air moves, the less pressure it exerts.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span>A vector is a quantity that has both a magnitude and a direction.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span>Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span><span>A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.<\/span><\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span>Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
-                    "slug": "physics-vocabulary-study-guide",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": null,
-                "updated_at": null
-            },
-            {
-                "id": 1,
-                "playlist_id": 1,
-                "title": "Science of Golf: Why Balls Have Dimples",
-                "type": "h5p",
-                "content": "",
-                "shared": false,
-                "order": 2,
-                "thumb_url": null,
-                "subject_id": null,
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 59,
-                    "created_at": "2020-04-30T20:24:58.000000Z",
-                    "updated_at": "2020-04-30T20:24:58.000000Z",
-                    "user_id": 1,
-                    "title": "Science of Golf: Why Balls Have Dimples",
-                    "library_id": 40,
-                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-                    "slug": "science-of-golf-why-balls-have-dimples",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": null,
-                "updated_at": null
-            },
-            {
-                "id": 2,
-                "playlist_id": 1,
-                "title": "Physics and Golf Balls",
-                "type": "h5p",
-                "content": "",
-                "shared": false,
-                "order": 3,
-                "thumb_url": null,
-                "subject_id": null,
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 60,
-                    "created_at": "2020-04-30T20:31:11.000000Z",
-                    "updated_at": "2020-04-30T20:31:11.000000Z",
-                    "user_id": 1,
-                    "title": "Physics and Golf Balls",
-                    "library_id": 60,
-                    "parameters": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images\/image-5eab35098aaf0.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images\/image-5eab355f7ca78.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images\/image-5eab3589be9e3.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
-                    "filtered": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images\/image-5eab35098aaf0.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images\/image-5eab355f7ca78.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images\/image-5eab3589be9e3.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
-                    "slug": "physics-and-golf-balls",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": null,
-                "updated_at": null
-            },
-            {
-                "id": 6,
-                "playlist_id": 1,
-                "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
-                "type": "h5p",
-                "content": "",
-                "shared": false,
-                "order": 4,
-                "thumb_url": null,
-                "subject_id": null,
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 75,
-                    "created_at": "2020-05-01T04:51:11.000000Z",
-                    "updated_at": "2020-05-01T04:51:11.000000Z",
-                    "user_id": 1,
-                    "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
-                    "library_id": 40,
-                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/www.youtube.com\/watch?v=FdH0JQL5E-U&list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"<p>\\\"Torque\\\"&nbsp;is&nbsp;a property of golf&nbsp;shafts that describes how much the shaft is&nbsp;prone to twisting during the golf&nbsp;swing.<\/p>\\n\",\"answers\":[\"<p>True<\/p>\\n\",\"<p>False<\/p>\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"<p>... A shaft with a _____ torque&nbsp;rating means&nbsp;the shaft better resists twisting; a shaft with a ____ torque&nbsp;rating means&nbsp;the shaft is&nbsp;more prone to twisting (all other things being equal).<\/p>\\n\",\"answers\":[\"<p>lower,&nbsp;higher<\/p>\\n\",\"<p>higher, lower<\/p>\\n\",\"<p>sharper, duller<\/p>\\n\",\"<p>straigher, curved<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.<\/p>\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.<\/p>\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the right, causing a fade&nbsp; slice curved flight.<\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the left, causing a <strong>slice<\/strong> curved flight.<\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>When a ball is spinning&nbsp;in a clockwise&nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.<\/p>\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/www.youtube.com\/watch?v=FdH0JQL5E-U&amp;list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"<p>\\\"Torque\\\"&nbsp;is&nbsp;a property of golf&nbsp;shafts that describes how much the shaft is&nbsp;prone to twisting during the golf&nbsp;swing.<\/p>\\n\",\"answers\":[\"<p>True<\/p>\\n\",\"<p>False<\/p>\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"<p>... A shaft with a _____ torque&nbsp;rating means&nbsp;the shaft better resists twisting; a shaft with a ____ torque&nbsp;rating means&nbsp;the shaft is&nbsp;more prone to twisting (all other things being equal).<\/p>\\n\",\"answers\":[\"<p>lower,&nbsp;higher<\/p>\\n\",\"<p>higher, lower<\/p>\\n\",\"<p>sharper, duller<\/p>\\n\",\"<p>straigher, curved<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.<\/p>\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.<\/p>\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the right, causing a fade&nbsp; slice curved flight.<\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the left, causing a <strong>slice<\/strong> curved flight.<\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>When a ball is spinning&nbsp;in a clockwise&nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.<\/p>\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
-                    "slug": "understanding-gear-effect-equipment-and-tech-18birdies",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": null,
-                "updated_at": null
-            },
-            {
-                "id": 5,
-                "playlist_id": 1,
-                "title": "The Evolution of the Golf Ball",
-                "type": "h5p",
-                "content": "",
-                "shared": false,
-                "order": 5,
-                "thumb_url": null,
-                "subject_id": null,
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 66,
-                    "created_at": "2020-04-30T23:58:44.000000Z",
-                    "updated_at": "2020-04-30T23:58:44.000000Z",
-                    "user_id": 1,
-                    "title": "The Evolution of the Golf Ball",
-                    "library_id": 61,
-                    "parameters": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab648fb61c9.jpeg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"<p>Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab64e26de00.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"<p>The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab652f19393.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"<p>The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&nbsp;<\/p>\\n\\n<p>It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&nbsp;<\/p>\\n\\n<p>After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&nbsp;<\/p>\\n\\n<p>Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab658fa6bde.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https:\/\/images.app.goo.gl\/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"<p>In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab65cbe1adb.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"<p>It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&nbsp;<\/p>\\n\\n<p>The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.<\/p>\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"<p>American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.<\/p>\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"<div>A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!<\/div>\\n\",\"backgroundImage\":{\"path\":\"images\/backgroundImage-5eab633e2e935.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
-                    "filtered": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab648fb61c9.jpeg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"<p>Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab64e26de00.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"<p>The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab652f19393.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"<p>The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&nbsp;<\/p>\\n\\n<p>It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&nbsp;<\/p>\\n\\n<p>After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&nbsp;<\/p>\\n\\n<p>Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab658fa6bde.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https:\/\/images.app.goo.gl\/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"<p>In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab65cbe1adb.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"<p>It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&nbsp;<\/p>\\n\\n<p>The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.<\/p>\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"<p>American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.<\/p>\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"<div>A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!<\/div>\\n\",\"backgroundImage\":{\"path\":\"images\/backgroundImage-5eab633e2e935.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
-                    "slug": "the-evolution-of-the-golf-ball",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": null,
-                "updated_at": null
-            },
-            {
-                "id": 7,
-                "playlist_id": 1,
-                "title": "Famous Golf Holes",
-                "type": "h5p",
-                "content": "",
-                "shared": false,
-                "order": 6,
-                "thumb_url": null,
-                "subject_id": null,
-                "education_level_id": null,
-                "h5p_content": {
-                    "id": 76,
-                    "created_at": "2020-05-01T05:20:54.000000Z",
-                    "updated_at": "2020-05-01T05:20:54.000000Z",
-                    "user_id": 1,
-                    "title": "Famous Golf Holes",
-                    "library_id": 60,
-                    "parameters": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images\/image-5eabad2e71b62.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"<p>Mickey Mantle<br>\\nAT&amp;T Pro Am<\/p>\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images\/image-5eabae675c197.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images\/image-5eabaec199254.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images\/image-5eabafb2400f7.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images\/image-5eabb0ced23c3.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images\/image-5eabb17c9a715.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
-                    "filtered": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images\/image-5eabad2e71b62.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"<p>Mickey Mantle<br>\\nAT&amp;T Pro Am<\/p>\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images\/image-5eabae675c197.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images\/image-5eabaec199254.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images\/image-5eabafb2400f7.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images\/image-5eabb0ced23c3.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images\/image-5eabb17c9a715.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
-                    "slug": "famous-golf-holes",
-                    "embed_type": "div",
-                    "disable": 9,
-                    "content_type": null,
-                    "authors": null,
-                    "source": null,
-                    "year_from": null,
-                    "year_to": null,
-                    "license": "U",
-                    "license_version": null,
-                    "license_extras": null,
-                    "author_comments": null,
-                    "changes": null,
-                    "default_language": null
-                },
-                "is_public": false,
-                "created_at": null,
-                "updated_at": null
-            }
-        ],
-        "created_at": null,
-        "updated_at": null
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/google-classroom/activities/{activity}/h5p-resource-settings`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `activity` |  required  | The Id of a activity
-
-<!-- END_1c762b2876b1508d8d8551785606c99a -->
 #12. H5P
 
 
@@ -28608,6 +24688,7 @@ response.json()
 
 
 <!-- END_369293816da1be491c68109d134f702b -->
+
 <!-- START_63e3a887440ff6d148ca0a5d5957983a -->
 ## Get H5Ps
 
@@ -28683,6 +24764,7 @@ response.json()
 
 
 <!-- END_63e3a887440ff6d148ca0a5d5957983a -->
+
 <!-- START_be26525cce0877341cba62b279e3bcf6 -->
 ## Store H5P
 
@@ -28756,6 +24838,7 @@ response.json()
 
 
 <!-- END_be26525cce0877341cba62b279e3bcf6 -->
+
 <!-- START_fee295f549f18f97f0e3b72f0963aa5b -->
 ## Get H5P
 
@@ -29715,6 +25798,7 @@ Parameter | Status | Description
     `id` |  required  | The Id of a H5p
 
 <!-- END_fee295f549f18f97f0e3b72f0963aa5b -->
+
 <!-- START_3ac1b5fedbcb4a286bf1c670a6105698 -->
 ## Update H5P
 
@@ -29805,6 +25889,7 @@ Parameter | Status | Description
     `id` |  required  | The Id of a H5p Example 5
 
 <!-- END_3ac1b5fedbcb4a286bf1c670a6105698 -->
+
 <!-- START_d9d81fea54c5b042bf04be1ff1ceee5b -->
 ## Remove H5P
 
@@ -29885,6 +25970,7 @@ Parameter | Status | Description
     `id` |  required  | The Id of a H5P
 
 <!-- END_d9d81fea54c5b042bf04be1ff1ceee5b -->
+
 <!-- START_98c551bd43ad6ec4969a8835e7da2ca7 -->
 ## Get H5P based on Independent Activity
 
@@ -29892,14 +25978,14 @@ Parameter | Status | Description
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/veritatis" \
+    -G "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/soluta" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/veritatis"
+    "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/soluta"
 );
 
 let headers = {
@@ -29919,7 +26005,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/veritatis',
+    'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/soluta',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -29935,7 +26021,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/veritatis'
+url = 'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/soluta'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -31791,6 +27877,7 @@ Parameter | Status | Description
     `id` |  required  | The Id of a H5p
 
 <!-- END_525329a5d3ad637983f78cadac3a1960 -->
+
 <!-- START_b23f56278f110d3e1c77c84c91cb39d6 -->
 ## api/v1/google-classroom/h5p/ajax/content-user-data
 > Example request:
@@ -31850,13 +27937,6 @@ response.json()
 ```
 
 
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
 
 ### HTTP Request
 `GET api/v1/google-classroom/h5p/ajax/content-user-data`
@@ -32624,7 +28704,6735 @@ Parameter | Status | Description
 
 <!-- END_5c23485ae1c0985b2a03894683f1c714 -->
 
-#14. Group
+#14. CurrikiGo Outcome
+
+
+APIs for generating outcomes against students' submissions.
+<!-- START_e6ae3b80fa5bac4e60bd0cadeabcd542 -->
+## Get Student Results Grouped Summary
+
+Fetch LRS statements based on parameters, and generate a student result summary
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/outcome/summary" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/outcome/summary"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/outcome/summary',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/outcome/summary'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers)
+response.json()
+```
+
+
+> Example response (404):
+
+```json
+{
+    "errors": [
+        "No results found."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "summary": [
+        [
+            {
+                "sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
+                "relation-sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
+                "library": "H5P.TrueFalse 1.6",
+                "content-type": "True\/False Question",
+                "title": "CP - True\/False question",
+                "content": {
+                    "questions": "<p>Is 5 x 100 = 500?<\/p>\n"
+                },
+                "answer": [
+                    {
+                        "name": "CP - True\/False question",
+                        "score": {
+                            "raw": 1,
+                            "max": 1
+                        },
+                        "duration": "00:00",
+                        "ending-point": "00:01",
+                        "verb": "answered"
+                    }
+                ]
+            },
+            {
+                "sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
+                "relation-sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
+                "library": "H5P.MultiChoice 1.14",
+                "content-type": "Multiple Choice",
+                "title": "CP - Multiple Choice Quiz",
+                "content": {
+                    "questions": "<p>Which of the following statements are correct?<\/p>\n"
+                },
+                "answer": [
+                    {
+                        "name": "CP - Multiple Choice Quiz",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:04",
+                        "ending-point": "00:01",
+                        "verb": "answered"
+                    }
+                ]
+            },
+            {
+                "sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
+                "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
+                "library": "H5P.SingleChoiceSet 1.11",
+                "content-type": "Single Choice Set",
+                "title": "CP - Single Choice Set",
+                "content": {
+                    "children": [
+                        {
+                            "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                            "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                            "question": "<p>2 + 2 = ?<\/p>\n",
+                            "answers": [
+                                "<p>4<\/p>\n",
+                                "<p>10<\/p>\n",
+                                "<p>22<\/p>\n"
+                            ]
+                        },
+                        {
+                            "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                            "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                            "question": "<p>5 x 10 = ?<\/p>\n",
+                            "answers": [
+                                "<p>50<\/p>\n",
+                                "<p>510<\/p>\n",
+                                "<p>15<\/p>\n"
+                            ]
+                        }
+                    ]
+                },
+                "answer": [
+                    {
+                        "name": "CP - Single Choice Set",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:09",
+                        "ending-point": "00:01",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ],
+        [
+            {
+                "sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
+                "relation-sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
+                "library": "H5P.Blanks 1.12",
+                "content-type": "Fill in the Blanks",
+                "title": "IB &gt; CP &gt; Fill in the Blanks",
+                "content": {
+                    "text": "<p>CP - Fill in the missing words #1<\/p>\n",
+                    "questions": [
+                        "<p>New Dehli is the capitol of *India*<\/p>\n",
+                        "<p>H5P content may be edited using a *browser\/web-browser:Something you use every day*.<\/p>\n"
+                    ]
+                },
+                "answer": [
+                    {
+                        "name": "IB &gt; CP &gt; Fill in the Blanks",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:14",
+                        "ending-point": "00:02",
+                        "verb": "answered"
+                    }
+                ]
+            },
+            {
+                "sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
+                "relation-sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
+                "library": "H5P.DragQuestion 1.13",
+                "content-type": "Drag and Drop",
+                "title": "CP - Drag and Drop",
+                "content": [],
+                "answer": [
+                    {
+                        "name": "CP - Drag and Drop",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:07",
+                        "ending-point": "00:02",
+                        "verb": "answered"
+                    }
+                ]
+            },
+            {
+                "sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
+                "relation-sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
+                "library": "H5P.MarkTheWords 1.9",
+                "content-type": "Mark the Words",
+                "title": "CP - Mark the Words",
+                "content": {
+                    "description": "<p>Mark the articles in the sentences below:<\/p>\n",
+                    "text": "<p>*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&nbsp;<\/p>\n"
+                },
+                "answer": [
+                    {
+                        "name": "CP - Mark the Words",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "00:04",
+                        "ending-point": "00:02",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ],
+        [
+            {
+                "sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
+                "relation-sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
+                "library": "H5P.DragText 1.8",
+                "content-type": "Drag Text",
+                "title": "CP - Drag Text",
+                "content": {
+                    "description": "Drag the words into the correct boxes"
+                },
+                "answer": [
+                    {
+                        "name": "CP - Drag Text",
+                        "score": {
+                            "raw": 2,
+                            "max": 2
+                        },
+                        "duration": "01:37",
+                        "ending-point": "00:03",
+                        "verb": "answered"
+                    }
+                ]
+            },
+            {
+                "sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
+                "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
+                "library": "H5P.Summary 1.10",
+                "content-type": "Summary",
+                "title": "CP - Summary",
+                "content": {
+                    "title": "Choose the correct statement.",
+                    "children": [
+                        {
+                            "sub-content-id": "6e003430-0edc-4a54-b8f9-e124b119a92a",
+                            "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719|6e003430-0edc-4a54-b8f9-e124b119a92a",
+                            "question": [
+                                "<p>5 x 5 = 25<\/p>\n",
+                                "<p>5 x 20 = 80<\/p>\n"
+                            ]
+                        }
+                    ]
+                },
+                "answer": [
+                    {
+                        "name": "CP - Summary",
+                        "score": {
+                            "raw": 1,
+                            "max": 1
+                        },
+                        "duration": "01:01:57",
+                        "ending-point": "00:03",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ],
+        [
+            {
+                "sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
+                "relation-sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
+                "library": "H5P.AdvancedText 1.1",
+                "content-type": "Text",
+                "title": "CP Text",
+                "content": []
+            },
+            {
+                "sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
+                "relation-sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
+                "library": "H5P.Link 1.3",
+                "content-type": "Link",
+                "title": "Link",
+                "content": {
+                    "title": "Link to google"
+                }
+            },
+            {
+                "sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
+                "relation-sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
+                "library": "H5P.Image 1.1",
+                "content-type": "Image",
+                "title": "CP Image",
+                "content": []
+            },
+            {
+                "sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
+                "relation-sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
+                "library": "H5P.Shape 1.0",
+                "content-type": "Shapes",
+                "title": "Rectangle Shapes",
+                "content": []
+            },
+            {
+                "sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
+                "relation-sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
+                "library": "H5P.Video 1.5",
+                "content-type": "Video",
+                "title": "CP &gt; Video",
+                "content": []
+            },
+            {
+                "sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
+                "relation-sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
+                "library": "H5P.Audio 1.4",
+                "content-type": "Audio",
+                "title": "CP &gt; Test Audio",
+                "content": []
+            }
+        ],
+        [
+            {
+                "sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
+                "relation-sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
+                "library": "H5P.Dialogcards 1.8",
+                "content-type": "Dialog Cards",
+                "title": "CP - Dialog Cards",
+                "content": {
+                    "title": "<p>CP - Dialog Cards<\/p>\n"
+                }
+            },
+            {
+                "sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
+                "relation-sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
+                "library": "H5P.TwitterUserFeed 1.0",
+                "content-type": "Twitter User Feed",
+                "title": "Twitter User Feed",
+                "content": []
+            },
+            {
+                "sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
+                "relation-sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
+                "library": "H5P.Table 1.1",
+                "content-type": "Table",
+                "title": "CP Table",
+                "content": []
+            },
+            {
+                "sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
+                "relation-sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
+                "library": "H5P.ExportableTextArea 1.3",
+                "content-type": "Exportable Text Area",
+                "title": "CP Exportable Text Area",
+                "content": []
+            }
+        ],
+        [
+            {
+                "sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
+                "relation-sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
+                "library": "H5P.ContinuousText 1.2",
+                "content-type": "Continuous Text",
+                "title": "CP &gt; Continuous Text",
+                "content": []
+            }
+        ],
+        [
+            {
+                "sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
+                "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
+                "library": "H5P.InteractiveVideo 1.22",
+                "content-type": "Interactive Video",
+                "title": "CP - Interactive Video",
+                "content": [
+                    {
+                        "sub-content-id": "6824967c-9282-4d12-bcc5-ad0bced64d2f",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|6824967c-9282-4d12-bcc5-ad0bced64d2f",
+                        "library": "H5P.TrueFalse 1.6",
+                        "content-type": "True\/False Question",
+                        "title": "CP &gt; IV&gt; True\/False question",
+                        "content": {
+                            "questions": "<p>Is 5 x 100 = 500?<\/p>\n"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &gt; IV&gt; True\/False question",
+                                "score": {
+                                    "raw": 1,
+                                    "max": 1
+                                },
+                                "duration": "00:02",
+                                "ending-point": "00:00",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "88c60326-825c-4992-80da-b86af8e997a1",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|88c60326-825c-4992-80da-b86af8e997a1",
+                        "library": "H5P.MultiChoice 1.14",
+                        "content-type": "Multiple Choice",
+                        "title": "CP &gt; IV &gt; Multiple Choice Quiz",
+                        "content": {
+                            "questions": "<p>Which of the following statements are correct?<\/p>\n"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &gt; IV &gt; Multiple Choice Quiz",
+                                "score": {
+                                    "raw": 0,
+                                    "max": 2
+                                },
+                                "duration": "00:03",
+                                "ending-point": "00:05",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
+                        "library": "H5P.SingleChoiceSet 1.11",
+                        "content-type": "Single Choice Set",
+                        "title": "CP &gt; IV &gt; Single Choice Set",
+                        "content": {
+                            "children": [
+                                {
+                                    "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
+                                    "question": "<p>2 + 2 = ?<\/p>\n",
+                                    "answers": [
+                                        "<p>4<\/p>\n",
+                                        "<p>10<\/p>\n",
+                                        "<p>22<\/p>\n"
+                                    ]
+                                },
+                                {
+                                    "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
+                                    "question": "<p>5 x 10 = ?<\/p>\n",
+                                    "answers": [
+                                        "<p>50<\/p>\n",
+                                        "<p>510<\/p>\n",
+                                        "<p>15<\/p>\n"
+                                    ]
+                                }
+                            ]
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &gt; IV &gt; Single Choice Set",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:10",
+                                "ending-point": "00:09",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
+                        "library": "H5P.Blanks 1.12",
+                        "content-type": "Fill in the Blanks",
+                        "title": "CP &gt; IV &gt; Fill in the Blanks",
+                        "content": {
+                            "text": "<p>CP &gt; IV &gt; Fill in the missing words #1<\/p>\n",
+                            "questions": [
+                                "<p>New Dehli is the capitol of *India*<\/p>\n",
+                                "<p>H5P content may be edited using a *browser\/web-browser:Something you use every day*.<\/p>\n"
+                            ]
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &gt; IV &gt; Fill in the Blanks",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:06",
+                                "ending-point": "00:18",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
+                        "library": "H5P.DragQuestion 1.13",
+                        "content-type": "Drag and Drop",
+                        "title": "CP &gt; IV &gt; Drag and Drop",
+                        "content": [],
+                        "answer": [
+                            {
+                                "name": "CP &gt; IV &gt; Drag and Drop",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:03",
+                                "ending-point": "00:20",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
+                        "library": "H5P.MarkTheWords 1.9",
+                        "content-type": "Mark the Words",
+                        "title": "CP &gt; IV &gt; Mark the Words",
+                        "content": {
+                            "description": "<p>Mark the articles in the sentences below:<\/p>\n",
+                            "text": "<p>*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&nbsp;<\/p>\n"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &gt; IV &gt; Mark the Words",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:04",
+                                "ending-point": "00:23",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
+                        "library": "H5P.DragText 1.8",
+                        "content-type": "Drag Text",
+                        "title": "CP &gt; IV &gt; Drag Text",
+                        "content": {
+                            "description": "Drag the words into the correct boxes"
+                        },
+                        "answer": [
+                            {
+                                "name": "CP &gt; IV &gt; Drag Text",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "01:05",
+                                "ending-point": "00:26",
+                                "verb": "answered"
+                            }
+                        ]
+                    },
+                    {
+                        "sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e",
+                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f6839abe-d5d1-41cb-85a4-c19c49a4583e",
+                        "library": "H5P.Summary 1.10",
+                        "content-type": "Summary",
+                        "title": "IB &gt; IV &gt; Summary",
+                        "content": {
+                            "title": "Choose the correct statement.",
+                            "children": [
+                                {
+                                    "sub-content-id": "8146ae19-549a-4f79-8165-30573f8f8769",
+                                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|8146ae19-549a-4f79-8165-30573f8f8769",
+                                    "question": [
+                                        "<p>8+9 = 17<\/p>\n",
+                                        "<p>10 x 2 = 12<\/p>\n",
+                                        "<p>13 x 13 = 149<\/p>\n"
+                                    ]
+                                },
+                                {
+                                    "sub-content-id": "6afe0b3b-9af7-41ab-8506-017ae8b89375",
+                                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|6afe0b3b-9af7-41ab-8506-017ae8b89375",
+                                    "question": [
+                                        "<p>4 x 2 = 8<\/p>\n",
+                                        "<p>5 x 6 = 31<\/p>\n",
+                                        "<p>10 \/ 2 = 4<\/p>\n"
+                                    ]
+                                }
+                            ]
+                        },
+                        "answer": [
+                            {
+                                "name": "IB &gt; IV &gt; Summary",
+                                "score": {
+                                    "raw": 2,
+                                    "max": 2
+                                },
+                                "duration": "00:05",
+                                "ending-point": "00:27",
+                                "verb": "answered"
+                            }
+                        ]
+                    }
+                ],
+                "answer": [
+                    {
+                        "name": "CP - Interactive Video",
+                        "score": {
+                            "raw": 13,
+                            "max": 15
+                        },
+                        "duration": "01:22",
+                        "ending-point": "00:07",
+                        "verb": "answered"
+                    }
+                ]
+            }
+        ]
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/outcome/summary`
+
+
+<!-- END_e6ae3b80fa5bac4e60bd0cadeabcd542 -->
+
+#15. Google Classroom
+
+
+APIs for Google Classroom
+<!-- START_e1403a4791b2f9419c8bb0bea0c91ceb -->
+## Save Access Token
+
+Save GAPI access token in the database.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/access-token" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"ratione"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/access-token"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "ratione"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/access-token',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'access_token' => 'ratione',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/access-token'
+payload = {
+    "access_token": "ratione"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Access token has been saved successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Validation error: Access token is required"
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to save the token."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/access-token`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
+    
+<!-- END_e1403a4791b2f9419c8bb0bea0c91ceb -->
+
+<!-- START_679513c6d9a3e7633325d5e35620d09d -->
+## Get Courses
+
+Get all existing Google Classroom Courses
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/google-classroom/courses" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/courses"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/google-classroom/courses',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/courses'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Service exception error"
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "courses": [
+        {
+            "id": "1",
+            "name": "How to build a playlist in CurrikiStudio"
+        },
+        {
+            "id": "2",
+            "name": "Partner Content Projects"
+        },
+        {
+            "id": "3",
+            "name": "Our Great BIg Back Yard"
+        },
+        {
+            "id": "4",
+            "name": "Alice in Wonderland"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/google-classroom/courses`
+
+
+<!-- END_679513c6d9a3e7633325d5e35620d09d -->
+
+<!-- START_3f6177f199294bd05304ded78263e7fc -->
+## Copy project to Google Classroom
+
+Copy whole project to google classroom either as a new course or into an existing course.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/projects/9/copy" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"course_id":"123","access_token":"eos"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/projects/9/copy"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "course_id": "123",
+    "access_token": "eos"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/projects/9/copy',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'course_id' => '123',
+            'access_token' => 'eos',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/projects/9/copy'
+payload = {
+    "course_id": "123",
+    "access_token": "eos"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (403):
+
+```json
+{
+    "errors": [
+        "Forbidden. You are trying to share other user's project."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to copy project."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "course": {
+        "id": "158432479402",
+        "name": "Partner Content Projects",
+        "topics": [
+            {
+                "course_id": "158432479402",
+                "topic_id": "158409588847",
+                "name": "NBC Learn",
+                "course_work": [
+                    {
+                        "id": "158442674345",
+                        "course_id": "158432479402",
+                        "description": null,
+                        "topic_id": "158409588847",
+                        "title": "Test Activity 1 - 1",
+                        "state": "PUBLISHED",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "https:\/\/www.currikistudio.org\/shared\/activity\/10"
+                                }
+                            }
+                        ],
+                        "max_points": null
+                    },
+                    {
+                        "id": "158442674350",
+                        "course_id": "158432479402",
+                        "description": null,
+                        "topic_id": "158409588847",
+                        "title": "Test Activity 1 - 0",
+                        "state": "PUBLISHED",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "https:\/\/www.currikistudio.org\/shared\/activity\/9"
+                                }
+                            }
+                        ],
+                        "max_points": null
+                    }
+                ]
+            },
+            {
+                "course_id": "158432479402",
+                "topic_id": "158410401228",
+                "name": "Internal",
+                "course_work": [
+                    {
+                        "id": "158443047525",
+                        "course_id": "158432479402",
+                        "description": null,
+                        "topic_id": "158410401228",
+                        "title": "Test Activity 1 - 0",
+                        "state": "PUBLISHED",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "https:\/\/www.currikistudio.org\/shared\/activity\/11"
+                                }
+                            }
+                        ],
+                        "max_points": null
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/projects/{project}/copy`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `project` |  required  | The Id of a project.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `course_id` | string |  optional  | Id of an existing Google Classroom course.
+        `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
+    
+<!-- END_3f6177f199294bd05304ded78263e7fc -->
+
+<!-- START_6346b2af474deb1da410172a9fe7871c -->
+## Get Courses Topics
+
+Get existing Google Classroom Course Topics
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/google-classroom/topics" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/topics"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/google-classroom/topics',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/topics'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/v1/google-classroom/topics`
+
+
+<!-- END_6346b2af474deb1da410172a9fe7871c -->
+
+<!-- START_6637783d98a6734088a78c4fd1bd8adc -->
+## To Publish playlist To Google Classroom
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"architecto","string":"soluta"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "architecto",
+    "string": "soluta"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'access_token' => 'architecto',
+            'string' => 'soluta',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish'
+payload = {
+    "access_token": "architecto",
+    "string": "soluta"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (403):
+
+```json
+{
+    "errors": [
+        "Forbidden. You are trying to share other user's project."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to copy playlist."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "course": {
+        "id": "422473650924",
+        "name": "Activity Sampler",
+        "topics": [
+            {
+                "course_id": "422473650924",
+                "topic_id": "422474476539",
+                "name": "Questions",
+                "course_work": [
+                    {
+                        "id": "422473053485",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Advanced Fill In the Blank",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39449\/7062"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    },
+                    {
+                        "id": "422474476548",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Arithmetic Quiz",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39450\/7063"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    },
+                    {
+                        "id": "422474036071",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Dialog Cards",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39452\/7064"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/projects/{project}/playlists/{playlist}/publish`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `project` |  required  | The Id of a project.
+    `playlist` |  required  | The Id of a playlist.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
+        `string` | topic_id |  optional  | (The Google Classroom topic id)
+    
+<!-- END_6637783d98a6734088a78c4fd1bd8adc -->
+
+<!-- START_6e3a306f3071e364eed15ea7c5212143 -->
+## To Publish activity To Google Classroom under a specific topic
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"ut","string":"et"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "ut",
+    "string": "et"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'access_token' => 'ut',
+            'string' => 'et',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish'
+payload = {
+    "access_token": "ut",
+    "string": "et"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (403):
+
+```json
+{
+    "errors": [
+        "Forbidden. You are trying to share other user's project."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to copy playlist."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "course": {
+        "id": "422473650924",
+        "name": "Activity Sampler",
+        "topics": [
+            {
+                "course_id": "422473650924",
+                "topic_id": "422474476539",
+                "name": "Questions",
+                "course_work": [
+                    {
+                        "id": "422473053485",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Advanced Fill In the Blank",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39449\/7062"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    },
+                    {
+                        "id": "422474476548",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Arithmetic Quiz",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39450\/7063"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/projects/{project}/playlists/{playlist}/activities/{activity}/publish`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `project` |  required  | The Id of a project.
+    `playlist` |  required  | The Id of a playlist.
+    `activity` |  required  | The Id of a activity.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
+        `string` | topic_id |  optional  | (The Google Classroom topic id)
+    
+<!-- END_6e3a306f3071e364eed15ea7c5212143 -->
+
+<!-- START_9a9da3f74bee78fd27c1e4c7cbf13428 -->
+## Publish independent activity To Google Classroom
+
+To Publish independent activity To Google Classroom under a specific class or specific classwork
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/activities/11/publish" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"tempora","string":"532103337862)"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/activities/11/publish"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "tempora",
+    "string": "532103337862)"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/activities/11/publish',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'access_token' => 'tempora',
+            'string' => '532103337862)',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/activities/11/publish'
+payload = {
+    "access_token": "tempora",
+    "string": "532103337862)"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (403):
+
+```json
+{
+    "errors": [
+        "Forbidden. You are trying to share other user's project."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to copy publish."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "course": {
+        "id": "422473650924",
+        "name": "Activity Sampler",
+        "topics": [
+            {
+                "course_id": "422473650924",
+                "topic_id": "422474476539",
+                "name": "Questions",
+                "course_work": [
+                    {
+                        "id": "422473053485",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Advanced Fill In the Blank",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39449\/7062"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    },
+                    {
+                        "id": "422474476548",
+                        "course_id": "422473650924",
+                        "description": null,
+                        "topic_id": "422474476539",
+                        "title": "Arithmetic Quiz",
+                        "state": "DRAFT",
+                        "work_type": "ASSIGNMENT",
+                        "materials": [
+                            {
+                                "link": {
+                                    "thumbnailUrl": null,
+                                    "title": null,
+                                    "url": "http:\/\/localhost:3000\/gclass\/launch\/3\/422473650924\/39450\/7063"
+                                }
+                            }
+                        ],
+                        "max_points": 100
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/activities/{independent_activity}/publish`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `independent_activity` |  required  | The Id of a independentActivity.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `access_token` | string|null |  optional  | The stringified of the GAPI access token JSON object
+        `string` | topic_id |  optional  | (The Google Classroom topic id
+    
+<!-- END_9a9da3f74bee78fd27c1e4c7cbf13428 -->
+
+<!-- START_749255ce687aecf69dfa83e09197546c -->
+## TurnIn a student&#039;s submission
+
+Identifies student's submission on a classwork assignment.
+Attaches a summary page link to the assignment, and turns it in.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/turnin/9" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"qui","course_id":"iure"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/turnin/9"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "qui",
+    "course_id": "iure"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/turnin/9',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'access_token' => 'qui',
+            'course_id' => 'iure',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/turnin/9'
+payload = {
+    "access_token": "qui",
+    "course_id": "iure"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "The assignment has been turned in successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "You are not enrolled in this class."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Could not retrieve submission for this assignment."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/turnin/{classwork}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `classwork` |  required  | The Id of a classwork.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
+        `course_id` | string |  required  | The Google Classroom course id
+    
+<!-- END_749255ce687aecf69dfa83e09197546c -->
+
+<!-- START_aa385388fcbdafb482e0f2457afe1cbd -->
+## Verify whether Google Classroom user has access to a student&#039;s submission
+
+If the user is a teacher, validate if he's one of the teachers in the class
+If the user is authenticated and is a student, validate if the submission is his.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/validate-summary-access" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"a","student_id":"tempore","course_id":"doloremque","gc_classwork_id":"nesciunt","gc_submission_id":"animi"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/validate-summary-access"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "a",
+    "student_id": "tempore",
+    "course_id": "doloremque",
+    "gc_classwork_id": "nesciunt",
+    "gc_submission_id": "animi"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/validate-summary-access',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'access_token' => 'a',
+            'student_id' => 'tempore',
+            'course_id' => 'doloremque',
+            'gc_classwork_id' => 'nesciunt',
+            'gc_submission_id' => 'animi',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/validate-summary-access'
+payload = {
+    "access_token": "a",
+    "student_id": "tempore",
+    "course_id": "doloremque",
+    "gc_classwork_id": "nesciunt",
+    "gc_submission_id": "animi"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (404):
+
+```json
+{
+    "errors": [
+        "Either the entity was not found or you do not have permission to view it."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "student": {
+        "id": "102628873478251109814",
+        "email": "samstud89@gmail.com"
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/validate-summary-access`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
+        `student_id` | the |  optional  | google user id for the student
+        `course_id` | string |  required  | The Google Classroom course id
+        `gc_classwork_id` | string |  required  | The Id of the classwork
+        `gc_submission_id` | string |  required  | The Id of the student's submission
+    
+<!-- END_aa385388fcbdafb482e0f2457afe1cbd -->
+
+<!-- START_79cc56549336bb58311e19f6fbdd4a14 -->
+## Get student&#039;s submission against a classwork
+
+Identifies student's submission on a classwork assignment.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/google-classroom/classwork/9/submission" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"access_token":"asperiores","course_id":"quaerat"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/classwork/9/submission"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "access_token": "asperiores",
+    "course_id": "quaerat"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/google-classroom/classwork/9/submission',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'access_token' => 'asperiores',
+            'course_id' => 'quaerat',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/classwork/9/submission'
+payload = {
+    "access_token": "asperiores",
+    "course_id": "quaerat"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "You are not enrolled in this class."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Could not retrieve submission for this assignment."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "submission": {
+        "id": "Cg4I4uew5KIEEKa_h6_oBQ",
+        "course_id": "199817397960",
+        "coursework_id": "199814668198",
+        "state": "RETURNED",
+        "assigned_grade": 90
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/google-classroom/classwork/{classwork}/submission`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `classwork` |  required  | The Id of a classwork.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `access_token` | string |  required  | The stringified of the GAPI access token JSON object
+        `course_id` | string |  required  | The Google Classroom course id
+    
+<!-- END_79cc56549336bb58311e19f6fbdd4a14 -->
+
+<!-- START_1c762b2876b1508d8d8551785606c99a -->
+## Get H5P Resource Settings For Google Classroom
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/google-classroom/activities/minus/h5p-resource-settings'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Activity not found."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "h5p": {
+        "id": 59,
+        "title": "Science of Golf: Why Balls Have Dimples",
+        "params": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+        "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+        "slug": "science-of-golf-why-balls-have-dimples",
+        "user_id": 1,
+        "embedType": "div",
+        "disable": 9,
+        "libraryMajorVersion": 1,
+        "libraryMinorVersion": 21,
+        "authors": null,
+        "source": null,
+        "yearFrom": null,
+        "yearTo": null,
+        "licenseVersion": null,
+        "licenseExtras": null,
+        "authorComments": null,
+        "changes": null,
+        "defaultLanguage": null,
+        "metadata": {
+            "title": "Science of Golf: Why Balls Have Dimples",
+            "license": "U"
+        },
+        "library": {
+            "id": 40,
+            "name": "H5P.InteractiveVideo",
+            "majorVersion": 1,
+            "minorVersion": 21,
+            "embedTypes": "iframe",
+            "fullscreen": 1
+        },
+        "language": "en",
+        "tags": ""
+    },
+    "activity": {
+        "id": 1,
+        "playlist_id": 1,
+        "title": "Science of Golf: Why Balls Have Dimples",
+        "type": "h5p",
+        "content": "",
+        "shared": false,
+        "order": 2,
+        "thumb_url": null,
+        "subject_id": null,
+        "education_level_id": null,
+        "h5p_content": {
+            "id": 59,
+            "created_at": "2020-04-30T20:24:58.000000Z",
+            "updated_at": "2020-04-30T20:24:58.000000Z",
+            "user_id": 1,
+            "title": "Science of Golf: Why Balls Have Dimples",
+            "library_id": 40,
+            "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+            "slug": "science-of-golf-why-balls-have-dimples",
+            "embed_type": "div",
+            "disable": 9,
+            "content_type": null,
+            "authors": null,
+            "source": null,
+            "year_from": null,
+            "year_to": null,
+            "license": "U",
+            "license_version": null,
+            "license_extras": null,
+            "author_comments": null,
+            "changes": null,
+            "default_language": null
+        },
+        "is_public": false,
+        "created_at": null,
+        "updated_at": null
+    },
+    "playlist": {
+        "id": 1,
+        "title": "The Engineering & Design Behind Golf Balls",
+        "order": 0,
+        "is_public": true,
+        "project_id": 1,
+        "project": {
+            "id": 1,
+            "name": "The Science of Golf",
+            "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+            "thumb_url": "\/storage\/projects\/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png",
+            "shared": false,
+            "starter_project": false,
+            "users": [
+                {
+                    "id": 1,
+                    "email": "john.doe@currikistudio.org",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "role": "owner"
+                }
+            ],
+            "is_public": true,
+            "created_at": "2020-04-30T20:03:12.000000Z",
+            "updated_at": "2020-07-11T12:51:07.000000Z"
+        },
+        "activities": [
+            {
+                "id": 4,
+                "playlist_id": 1,
+                "title": "Labeling Golf Ball - Principles of Physics",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 0,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 65,
+                    "created_at": "2020-04-30T23:40:49.000000Z",
+                    "updated_at": "2020-04-30T23:40:49.000000Z",
+                    "user_id": 1,
+                    "title": "Labeling Golf Ball - Principles of Physics",
+                    "library_id": 19,
+                    "parameters": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images\/background-5eab614083be2.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Lift<\/p>\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Drag<\/p>\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Spin<\/p>\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Lift<\/div>\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Drag<\/div>\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"type\":{\"library\":\"H5P.DragQuestionDropzone 0.1\"},\"label\":\"<div>Spin<\/div>\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
+                    "filtered": "{\"scoreShow\":\"Check\",\"tryAgain\":\"Retry\",\"scoreExplanation\":\"Correct answers give +1 point. Incorrect answers give -1 point. The lowest possible score is 0.\",\"question\":{\"settings\":{\"size\":{\"width\":620,\"height\":310},\"background\":{\"path\":\"images\/background-5eab614083be2.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":620,\"height\":310}},\"task\":{\"elements\":[{\"x\":0,\"y\":47.96909692035003,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Lift<\/p>\\n\"},\"subContentId\":\"be1d9b11-91ff-4e59-a7c6-9966e1bf8cb2\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Lift\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":58.810763796296285,\"width\":7.812090416666667,\"height\":1.3537570833333332,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Drag<\/p>\\n\"},\"subContentId\":\"05a00202-b5dd-44a9-acf1-0cce77278b33\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"backgroundOpacity\":100,\"multiple\":false},{\"x\":-4.63163666049382e-8,\"y\":36.89236101851851,\"width\":7.812090416666667,\"height\":1.281997824074074,\"dropZones\":[\"0\",\"1\",\"2\"],\"type\":{\"library\":\"H5P.AdvancedText 1.1\",\"params\":{\"text\":\"<p>Spin<\/p>\\n\"},\"subContentId\":\"140a5423-873b-46d4-8f4f-9b236cefce20\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Spin\"}},\"backgroundOpacity\":100,\"multiple\":false}],\"dropZones\":[{\"x\":72.35516653328209,\"y\":14.75972212933847,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"0\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Lift<\/div>\\n\"},{\"x\":72.35484909201396,\"y\":36.89236101851851,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"1\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Drag<\/div>\\n\"},{\"x\":72.35516653328209,\"y\":51.65902745268465,\"width\":8.61111111111111,\"height\":2.511574074074074,\"correctElements\":[\"2\"],\"showLabel\":false,\"backgroundOpacity\":50,\"tipsAndFeedback\":{\"tip\":\"\"},\"single\":true,\"autoAlign\":true,\"label\":\"<div>Spin<\/div>\\n\"}]}},\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableCheckButton\":true,\"showSolutionsRequiresInput\":true,\"singlePoint\":false,\"applyPenalties\":true,\"enableScoreExplanation\":true,\"dropZoneHighlighting\":\"dragging\",\"autoAlignSpacing\":2,\"enableFullScreen\":false,\"showScorePoints\":true,\"showTitle\":true},\"grabbablePrefix\":\"Grabbable {num} of {total}.\",\"grabbableSuffix\":\"Placed in dropzone {num}.\",\"dropzonePrefix\":\"Dropzone {num} of {total}.\",\"noDropzone\":\"No dropzone.\",\"tipLabel\":\"Show tip.\",\"tipAvailable\":\"Tip available\",\"correctAnswer\":\"Correct answer\",\"wrongAnswer\":\"Wrong answer\",\"feedbackHeader\":\"Feedback\",\"scoreBarLabel\":\"You got :num out of :total points\",\"scoreExplanationButtonLabel\":\"Show score explanation\",\"localize\":{\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit fullscreen\"}}",
+                    "slug": "labeling-golf-ball-principles-of-physics",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 17774,
+                "playlist_id": 1,
+                "title": "Latest",
+                "type": "h5p",
+                "content": "test",
+                "shared": false,
+                "order": null,
+                "thumb_url": "\/storage\/activities\/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
+                "subject_id": "Mathematics",
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 19334,
+                    "created_at": "2020-08-30T20:09:56.000000Z",
+                    "updated_at": "2020-08-30T20:09:56.000000Z",
+                    "user_id": 1,
+                    "title": "Latest",
+                    "library_id": 98,
+                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                    "filtered": "",
+                    "slug": "latest",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": "2020-08-30T20:22:47.000000Z",
+                "updated_at": "2020-08-30T20:22:47.000000Z"
+            },
+            {
+                "id": 17776,
+                "playlist_id": 1,
+                "title": "Latest",
+                "type": "h5p",
+                "content": "test",
+                "shared": false,
+                "order": null,
+                "thumb_url": "\/storage\/activities\/DrV6rZ6ZDXFMT1k51gbOqw04rqguq6CMtiiD1nDH.png",
+                "subject_id": "Mathematics",
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 19334,
+                    "created_at": "2020-08-30T20:09:56.000000Z",
+                    "updated_at": "2020-08-30T20:09:56.000000Z",
+                    "user_id": 1,
+                    "title": "Latest",
+                    "library_id": 98,
+                    "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                    "filtered": "",
+                    "slug": "latest",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": "2020-08-30T20:24:29.000000Z",
+                "updated_at": "2020-08-30T20:24:29.000000Z"
+            },
+            {
+                "id": 3,
+                "playlist_id": 1,
+                "title": "Physics Vocabulary Study Guide",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 1,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 61,
+                    "created_at": "2020-04-30T20:35:30.000000Z",
+                    "updated_at": "2020-04-30T20:35:30.000000Z",
+                    "user_id": 1,
+                    "title": "Physics Vocabulary Study Guide",
+                    "library_id": 63,
+                    "parameters": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">Acceleration is the measurement of the change <\/span><\/span><\/span><span style=\\\"font-size:11.0pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\">in an object\\u2019s velocity. <\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">The faster the air moves, the less pressure it exerts.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"<p><span style=\\\"font-size:10.5pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\"><span style=\\\"color:black\\\">A vector is a quantity that has both a magnitude and a direction.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"<p><span style=\\\"font-size:10.5pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:&quot;Calibri&quot;,sans-serif\\\"><span style=\\\"color:black\\\">Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:normal\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:10.5pt\\\"><span style=\\\"color:black\\\">A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.<\/span><\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"<p style=\\\"margin-bottom:10px\\\"><span style=\\\"font-size:11pt\\\"><span style=\\\"line-height:107%\\\"><span style=\\\"font-family:Calibri,sans-serif\\\">Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
+                    "filtered": "{\"panels\":[{\"content\":{\"params\":{\"text\":\"<p><span><span><span>Acceleration is the measurement of the change <\/span><\/span><\/span><span><span><span>in an object\\u2019s velocity. <\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"97578055-d386-46be-afe3-c19eae4108aa\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Acceleration\"}},\"title\":\"Acceleration\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span>The faster the air moves, the less pressure it exerts.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"0ce32fbf-4ff1-465b-9c50-8876c5fef34d\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Bernoulli\\u2019s Principle\"}},\"title\":\"Bernoulli\\u2019s Principle\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span>A vector is a quantity that has both a magnitude and a direction.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"cead752e-0c29-4acb-b9ae-2f61a3cd5c9b\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Vector\"}},\"title\":\"Vector\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span>Drag is the force that acts opposite to the direction of motion. Drag is caused by friction and differences in air pressure.<\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"6ae4b819-276d-405e-b085-e894c31484d3\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Drag\"}},\"title\":\"Drag\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span><span><span>A turbulent flow is one in which the particles have irregular, fluctuating motions and erratic paths.<\/span><\/span><\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"f9f63fdd-0a8a-4259-a3f1-ca7271b51727\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Turbulent airflow\"}},\"title\":\"Turbulent airflow\"},{\"content\":{\"params\":{\"text\":\"<p><span><span><span>Friction is the resistance of motion when one object rubs against another. It is a force and is measured in newtons.<\/span><\/span><\/span><\/p>\\n\"},\"library\":\"H5P.AdvancedText 1.1\",\"subContentId\":\"236c832f-f754-47d6-8d2c-1311a354d861\",\"metadata\":{\"contentType\":\"Text\",\"license\":\"U\",\"title\":\"Friction\"}},\"title\":\"Friction\"}],\"hTag\":\"h2\"}",
+                    "slug": "physics-vocabulary-study-guide",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 1,
+                "playlist_id": 1,
+                "title": "Science of Golf: Why Balls Have Dimples",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 2,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 59,
+                    "created_at": "2020-04-30T20:24:58.000000Z",
+                    "updated_at": "2020-04-30T20:24:58.000000Z",
+                    "user_id": 1,
+                    "title": "Science of Golf: Why Balls Have Dimples",
+                    "library_id": 40,
+                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/youtu.be\/fcjaxC-e8oY\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":58.33,\"to\":68.33},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"133bca3d-cfe9-442d-a887-8bf1e2ce682a\",\"question\":\"<p>Why do golf balls have dimples?<\/p>\\n\",\"answers\":[\"<p>They reduce wind resistance.<\/p>\\n\",\"<p>They make the ball more visually interesting.<\/p>\\n\",\"<p>They grip the putting green better than a smooth ball.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"ac029b43-7225-49ed-a2d7-8656037748e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Why do golf balls have dimples?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Why do golf balls have dimples?<\/p>\\n\"},{\"x\":45.96541786743516,\"y\":42.78350515463918,\"width\":10,\"height\":10,\"duration\":{\"from\":132.969,\"to\":142.969},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"308503f3-8d41-4f4f-b016-587bcce3dfac\",\"question\":\"<p>A smooth ball will have a detached airflow, which causes what?<\/p>\\n\",\"answers\":[\"<p>A low pressure zone, which is what causes drag.<\/p>\\n\",\"<p>The ball has no spin.<\/p>\\n\",\"<p>The ball travels higher, but for a shorter distance.<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"f70c849d-9542-4f30-9116-8b60b7da708d\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Smooth Ball?\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"<p>Smooth Ball<\/p>\\n\"}],\"endscreens\":[{\"time\":295,\"label\":\"4:55 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"8e2cf84f-4557-4f79-a03e-526838498a7d\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"8d5527ef-3601-4ad9-9e63-2782c9775173\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":false,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "slug": "science-of-golf-why-balls-have-dimples",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 2,
+                "playlist_id": 1,
+                "title": "Physics and Golf Balls",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 3,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 60,
+                    "created_at": "2020-04-30T20:31:11.000000Z",
+                    "updated_at": "2020-04-30T20:31:11.000000Z",
+                    "user_id": 1,
+                    "title": "Physics and Golf Balls",
+                    "library_id": 60,
+                    "parameters": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images\/image-5eab35098aaf0.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images\/image-5eab355f7ca78.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images\/image-5eab3589be9e3.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
+                    "filtered": "{\"cards\":[{\"text\":\"Is the measurement of the change in an object\\u2019s velocity called Speed or Acceleration?\",\"answer\":\"Acceleration\",\"image\":{\"path\":\"images\/image-5eab35098aaf0.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Dimples reduce wind resistance or aerodynamic drag. Does that make the ball go farther or faster?\",\"answer\":\"Farther\",\"image\":{\"path\":\"images\/image-5eab355f7ca78.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1280,\"height\":720},\"tip\":\"\"},{\"text\":\"Do dimples on a ball increase or decrease the lift?\",\"answer\":\"Increase\",\"image\":{\"path\":\"images\/image-5eab3589be9e3.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":634,\"height\":508},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"See if you can remember what you learned!\"}",
+                    "slug": "physics-and-golf-balls",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 6,
+                "playlist_id": 1,
+                "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 4,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 75,
+                    "created_at": "2020-05-01T04:51:11.000000Z",
+                    "updated_at": "2020-05-01T04:51:11.000000Z",
+                    "user_id": 1,
+                    "title": "Understanding Gear Effect | Equipment and Tech | 18Birdies",
+                    "library_id": 40,
+                    "parameters": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/www.youtube.com\/watch?v=FdH0JQL5E-U&list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"},\"aspectRatio\":\"16:9\"}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"<p>\\\"Torque\\\"&nbsp;is&nbsp;a property of golf&nbsp;shafts that describes how much the shaft is&nbsp;prone to twisting during the golf&nbsp;swing.<\/p>\\n\",\"answers\":[\"<p>True<\/p>\\n\",\"<p>False<\/p>\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"<p>... A shaft with a _____ torque&nbsp;rating means&nbsp;the shaft better resists twisting; a shaft with a ____ torque&nbsp;rating means&nbsp;the shaft is&nbsp;more prone to twisting (all other things being equal).<\/p>\\n\",\"answers\":[\"<p>lower,&nbsp;higher<\/p>\\n\",\"<p>higher, lower<\/p>\\n\",\"<p>sharper, duller<\/p>\\n\",\"<p>straigher, curved<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.<\/p>\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.<\/p>\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"type\":{\"params\":{}},\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the right, causing a fade&nbsp; slice curved flight.<\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the left, causing a <strong>slice<\/strong> curved flight.<\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>When a ball is spinning&nbsp;in a clockwise&nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.<\/p>\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"bookmarks\":[],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\",\"authors\":[],\"changes\":[],\"extraTitle\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "filtered": "{\"interactiveVideo\":{\"video\":{\"startScreenOptions\":{\"title\":\"Interactive Video\",\"hideStartTitle\":false},\"textTracks\":{\"videoTrack\":[{\"label\":\"Subtitles\",\"kind\":\"subtitles\",\"srcLang\":\"en\"}]},\"files\":[{\"path\":\"https:\/\/www.youtube.com\/watch?v=FdH0JQL5E-U&amp;list=PLVIShUJLAj0rWw3Yr3VtFGH4IbIVMfQFo\",\"mime\":\"video\/YouTube\",\"copyright\":{\"license\":\"U\"}}]},\"assets\":{\"interactions\":[{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":52,\"to\":52},\"libraryTitle\":\"Single Choice Set\",\"action\":{\"library\":\"H5P.SingleChoiceSet 1.11\",\"params\":{\"choices\":[{\"subContentId\":\"c9f0c83d-2ba2-4810-843a-1ee7bec2076f\",\"question\":\"<p>\\\"Torque\\\"&nbsp;is&nbsp;a property of golf&nbsp;shafts that describes how much the shaft is&nbsp;prone to twisting during the golf&nbsp;swing.<\/p>\\n\",\"answers\":[\"<p>True<\/p>\\n\",\"<p>False<\/p>\\n\"]},{\"subContentId\":\"81f2e02c-0f04-44a3-922c-4eac61a11acb\",\"question\":\"<p>... A shaft with a _____ torque&nbsp;rating means&nbsp;the shaft better resists twisting; a shaft with a ____ torque&nbsp;rating means&nbsp;the shaft is&nbsp;more prone to twisting (all other things being equal).<\/p>\\n\",\"answers\":[\"<p>lower,&nbsp;higher<\/p>\\n\",\"<p>higher, lower<\/p>\\n\",\"<p>sharper, duller<\/p>\\n\",\"<p>straigher, curved<\/p>\\n\"]}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"autoContinue\":true,\"timeoutCorrect\":2000,\"timeoutWrong\":3000,\"soundEffectsEnabled\":true,\"enableRetry\":true,\"enableSolutionsButton\":true,\"passPercentage\":100},\"l10n\":{\"nextButtonLabel\":\"Next question\",\"showSolutionButtonLabel\":\"Show solution\",\"retryButtonLabel\":\"Retry\",\"solutionViewTitle\":\"Solution list\",\"correctText\":\"Correct!\",\"incorrectText\":\"Incorrect!\",\"muteButtonLabel\":\"Mute feedback sound\",\"closeButtonLabel\":\"Close\",\"slideOfTotal\":\"Slide :num of :total\",\"scoreBarLabel\":\"You got :num out of :total points\",\"solutionListQuestionNumber\":\"Question :num\"}},\"subContentId\":\"eadebb1e-891e-4ff3-8676-943c2616a9e0\",\"metadata\":{\"contentType\":\"Single Choice Set\",\"license\":\"U\",\"title\":\"Untitled Single Choice Set\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":24.314,\"to\":34.314},\"libraryTitle\":\"Statements\",\"action\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"7bce98af-5267-4ca6-a08c-0c8f2bef5afb\",\"summary\":[\"Gear effect is the term used to explain how and why hitting the ball off-center changes the ball flight.\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to adjust the pressure on the clubhead.<\/p>\\n\",\"<p>Gear effect is the term used to explain how and why it is imprtant to ride your bike to the course.<\/p>\\n\"],\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"3b954191-ad43-452c-95c3-868047eb55be\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"pause\":false,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"}},\"label\":\"\"},{\"x\":46.87499999999999,\"y\":44.44444444444444,\"width\":10,\"height\":10,\"duration\":{\"from\":145.688,\"to\":155.688},\"libraryTitle\":\"Multiple Choice\",\"action\":{\"library\":\"H5P.MultiChoice 1.14\",\"params\":{\"media\":{\"disableImageZooming\":false},\"answers\":[{\"correct\":true,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the right, causing a fade&nbsp; slice curved flight.<\/div>\\n\"},{\"correct\":false,\"tipsAndFeedback\":{\"tip\":\"\",\"chosenFeedback\":\"\",\"notChosenFeedback\":\"\"},\"text\":\"<div>This pushes the ball to the left, causing a <strong>slice<\/strong> curved flight.<\/div>\\n\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"behaviour\":{\"enableRetry\":true,\"enableSolutionsButton\":true,\"enableCheckButton\":true,\"type\":\"auto\",\"singlePoint\":false,\"randomAnswers\":true,\"showSolutionsRequiresInput\":true,\"confirmCheckDialog\":false,\"confirmRetryDialog\":false,\"autoCheck\":false,\"passPercentage\":100,\"showScorePoints\":true},\"UI\":{\"checkAnswerButton\":\"Check\",\"showSolutionButton\":\"Show solution\",\"tryAgainButton\":\"Retry\",\"tipsLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"tipAvailable\":\"Tip available\",\"feedbackAvailable\":\"Feedback available\",\"readFeedback\":\"Read feedback\",\"wrongAnswer\":\"Wrong answer\",\"correctAnswer\":\"Correct answer\",\"shouldCheck\":\"Should have been checked\",\"shouldNotCheck\":\"Should not have been checked\",\"noInput\":\"Please answer before viewing the solution\"},\"confirmCheck\":{\"header\":\"Finish ?\",\"body\":\"Are you sure you wish to finish ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Finish\"},\"confirmRetry\":{\"header\":\"Retry ?\",\"body\":\"Are you sure you wish to retry ?\",\"cancelLabel\":\"Cancel\",\"confirmLabel\":\"Confirm\"},\"question\":\"<p>When a ball is spinning&nbsp;in a clockwise&nbsp;direction, there is high pressure on the left hand side of the ball, and low pressure on the right.<\/p>\\n\"},\"subContentId\":\"df5e99b0-6513-4aa9-a760-e3d9e2bfefe9\",\"metadata\":{\"contentType\":\"Multiple Choice\",\"license\":\"U\",\"title\":\"Untitled Multiple Choice\"}},\"pause\":true,\"displayType\":\"button\",\"buttonOnMobile\":false,\"adaptivity\":{\"correct\":{\"allowOptOut\":false,\"message\":\"\"},\"wrong\":{\"allowOptOut\":false,\"message\":\"\"},\"requireCompletion\":false},\"label\":\"\"}],\"endscreens\":[{\"time\":358,\"label\":\"5:58 Submit screen\"}]},\"summary\":{\"task\":{\"library\":\"H5P.Summary 1.10\",\"params\":{\"intro\":\"Choose the correct statement.\",\"summaries\":[{\"subContentId\":\"64506cb8-ea40-4c72-8c98-ed0bb3c3b808\",\"tip\":\"\"}],\"overallFeedback\":[{\"from\":0,\"to\":100}],\"solvedLabel\":\"Progress:\",\"scoreLabel\":\"Wrong answers:\",\"resultLabel\":\"Your result\",\"labelCorrect\":\"Correct.\",\"labelIncorrect\":\"Incorrect! Please try again.\",\"alternativeIncorrectLabel\":\"Incorrect\",\"labelCorrectAnswers\":\"Correct answers.\",\"tipButtonLabel\":\"Show tip\",\"scoreBarLabel\":\"You got :num out of :total points\",\"progressText\":\"Progress :num of :total\"},\"subContentId\":\"b8eb5a4d-5e2e-4b74-95f5-ca37d1a45186\",\"metadata\":{\"contentType\":\"Summary\",\"license\":\"U\",\"title\":\"Untitled Summary\"}},\"displayAt\":3}},\"override\":{\"autoplay\":true,\"loop\":false,\"showBookmarksmenuOnLoad\":false,\"showRewind10\":false,\"preventSkipping\":false,\"deactivateSound\":false,\"startVideoAt\":37},\"l10n\":{\"interaction\":\"Interaction\",\"play\":\"Play\",\"pause\":\"Pause\",\"mute\":\"Mute\",\"unmute\":\"Unmute\",\"quality\":\"Video Quality\",\"captions\":\"Captions\",\"close\":\"Close\",\"fullscreen\":\"Fullscreen\",\"exitFullscreen\":\"Exit Fullscreen\",\"summary\":\"Open summary dialog\",\"bookmarks\":\"Bookmarks\",\"endscreen\":\"Submit screen\",\"defaultAdaptivitySeekLabel\":\"Continue\",\"continueWithVideo\":\"Continue with video\",\"playbackRate\":\"Playback Rate\",\"rewind10\":\"Rewind 10 Seconds\",\"navDisabled\":\"Navigation is disabled\",\"sndDisabled\":\"Sound is disabled\",\"requiresCompletionWarning\":\"You need to answer all the questions correctly before continuing.\",\"back\":\"Back\",\"hours\":\"Hours\",\"minutes\":\"Minutes\",\"seconds\":\"Seconds\",\"currentTime\":\"Current time:\",\"totalTime\":\"Total time:\",\"singleInteractionAnnouncement\":\"Interaction appeared:\",\"multipleInteractionsAnnouncement\":\"Multiple interactions appeared.\",\"videoPausedAnnouncement\":\"Video is paused\",\"content\":\"Content\",\"answered\":\"@answered answered\",\"endcardTitle\":\"@answered Question(s) answered\",\"endcardInformation\":\"You have answered @answered questions, click below to submit your answers.\",\"endcardInformationNoAnswers\":\"You have not answered any questions.\",\"endcardInformationMustHaveAnswer\":\"You have to answer at least one question before you can submit your answers.\",\"endcardSubmitButton\":\"Submit Answers\",\"endcardSubmitMessage\":\"Your answers have been submitted!\",\"endcardTableRowAnswered\":\"Answered questions\",\"endcardTableRowScore\":\"Score\",\"endcardAnsweredScore\":\"answered\",\"endCardTableRowSummaryWithScore\":\"You got @score out of @total points for the @question that appeared after @minutes minutes and @seconds seconds.\",\"endCardTableRowSummaryWithoutScore\":\"You have answered the @question that appeared after @minutes minutes and @seconds seconds.\"}}",
+                    "slug": "understanding-gear-effect-equipment-and-tech-18birdies",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 5,
+                "playlist_id": 1,
+                "title": "The Evolution of the Golf Ball",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 5,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 66,
+                    "created_at": "2020-04-30T23:58:44.000000Z",
+                    "updated_at": "2020-04-30T23:58:44.000000Z",
+                    "user_id": 1,
+                    "title": "The Evolution of the Golf Ball",
+                    "library_id": 61,
+                    "parameters": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab648fb61c9.jpeg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"<p>Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab64e26de00.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"<p>The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab652f19393.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"<p>The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&nbsp;<\/p>\\n\\n<p>It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&nbsp;<\/p>\\n\\n<p>After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&nbsp;<\/p>\\n\\n<p>Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab658fa6bde.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https:\/\/images.app.goo.gl\/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"<p>In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab65cbe1adb.png#tmp\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"<p>It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&nbsp;<\/p>\\n\\n<p>The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.<\/p>\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"<p>American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.<\/p>\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"<div>A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!<\/div>\\n\",\"backgroundImage\":{\"path\":\"images\/backgroundImage-5eab633e2e935.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
+                    "filtered": "{\"timeline\":{\"defaultZoomLevel\":\"0\",\"height\":600,\"asset\":{},\"date\":[{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab648fb61c9.jpeg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":234,\"height\":216}},\"startDate\":\"1400\",\"endDate\":\"2020\",\"headline\":\"Origins of Golf\",\"text\":\"<p>Golf is recorded in its first recognizable form in the Eastern Coast of Scotland.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab64e26de00.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":222}},\"startDate\":\"1600\",\"headline\":\"Wood Golf Balls\",\"text\":\"<p>The first known golf ball was made out of wood, most likely beech, boxroot and similar hardwoods. Wooden clubs were the golf club of choice, which in conjunction with the wood balls would have made your friendly game of golf a rather jarring experience.<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab652f19393.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":1128,\"height\":1096}},\"startDate\":\"1618\",\"headline\":\"Feathery Golf Balls\",\"text\":\"<p>The first \\\"real\\\" golf ball was known as a \\\"feathery\\\"golf ball. Basically, the feathery was a leather sack filled with boiled goose feathers, then stitched up and painted. Feathery golf balls were expensive to make easily damaged and only the privileged few could afford to use them.&nbsp;<\/p>\\n\\n<p>It was made of cow or horsehide which was stuffed with feathers; most often goose feather. The leather, in order to be easier to work with, was soaked in water. The feathers that were forced into the ball by using a specially designed crutch-handled filling rod were soaked as well.&nbsp;<\/p>\\n\\n<p>After the ball was carefully hand sewn together, it was left to dry. While the leather shrank, the feathers expanded, which made the ball very hard and compact.&nbsp;<\/p>\\n\\n<p>Interestingly, the featherie also had excellent flight characteristics as it could reach a distance of up to 175 yards; although the longest recorded distance is more than 361 yards.<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab658fa6bde.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1350,\"height\":759},\"media\":\"https:\/\/images.app.goo.gl\/MFHFL1dtDiyR5nGq7\"},\"startDate\":\"1848\",\"headline\":\"Cost of Golf Balls\",\"text\":\"<p>In the mid-19th century, most people could only dream of playing golf. There were at the time fewer than 20 golf clubs around the world, with just three being outside Scotland. But that was not the only thing that prevented most people from playing golf. The high cost of golf essentials, especially of golf balls, made the game pretty much inaccessible to ordinary people.31 But that was soon about to change...<br>\\n&nbsp;<\/p>\\n\"},{\"asset\":{\"thumbnail\":{\"path\":\"images\/thumbnail-5eab65cbe1adb.png\",\"mime\":\"image\/png\",\"copyright\":{\"license\":\"U\"},\"width\":944,\"height\":890}},\"startDate\":\"1848\",\"endDate\":\"1890\",\"headline\":\"Gutty Golf Balls\",\"text\":\"<p>It wasn't until 1848 that Rev. Dr. Robert Adams began creating golf balls out of Gutta Percha \\\"Gutty\\\". The Gutty golf ball was created from the dried sap of the Sapodilla tree. It had a rubber-like feel and was formed into ball shapes by heating it up and shaping it while hot.&nbsp;<\/p>\\n\\n<p>The arrival of the gutta percha ball or \\\"gutty\\\", as it was called, revolutionized the game of golf and allowed its spread to the masses due to its affordability, playability and durability.<\/p>\\n\"},{\"asset\":{},\"startDate\":\"1899\",\"headline\":\"Hand Hammered Gutta Ball\",\"text\":\"<p>American businessman and inventor Coburn Haskell (1868-1922) got a (joint) patent from the United States Patent Office for the rubber-wound ball47 which would soon lead to another revolution in golf. Widely regarded as the first modern golf ball, Haskell\\u2019s ball was made of a solid rubber-wound core that was covered by guttapercha.<\/p>\\n\"}],\"language\":\"en\",\"headline\":\"The Evolution of the Golf Ball\",\"text\":\"<div>A golf ball is central to the game of golf. In fact, golf is all about the ball. Well, getting it into the hole in the ground!<\/div>\\n\",\"backgroundImage\":{\"path\":\"images\/backgroundImage-5eab633e2e935.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":2139,\"height\":1179}}}",
+                    "slug": "the-evolution-of-the-golf-ball",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            },
+            {
+                "id": 7,
+                "playlist_id": 1,
+                "title": "Famous Golf Holes",
+                "type": "h5p",
+                "content": "",
+                "shared": false,
+                "order": 6,
+                "thumb_url": null,
+                "subject_id": null,
+                "education_level_id": null,
+                "h5p_content": {
+                    "id": 76,
+                    "created_at": "2020-05-01T05:20:54.000000Z",
+                    "updated_at": "2020-05-01T05:20:54.000000Z",
+                    "user_id": 1,
+                    "title": "Famous Golf Holes",
+                    "library_id": 60,
+                    "parameters": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images\/image-5eabad2e71b62.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"<p>Mickey Mantle<br>\\nAT&amp;T Pro Am<\/p>\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images\/image-5eabae675c197.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images\/image-5eabaec199254.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images\/image-5eabafb2400f7.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images\/image-5eabb0ced23c3.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images\/image-5eabb17c9a715.jpg#tmp\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
+                    "filtered": "{\"cards\":[{\"answer\":\"7th Hole at Pebble Beach\",\"image\":{\"path\":\"images\/image-5eabad2e71b62.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":991,\"height\":500},\"tip\":\"<p>Mickey Mantle<br>\\nAT&amp;T Pro Am<\/p>\\n\"},{\"answer\":\"12th hole at Augusta National\",\"image\":{\"path\":\"images\/image-5eabae675c197.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":847,\"height\":467},\"tip\":\"\"},{\"answer\":\"7th hole at TPC Sawgrass\",\"image\":{\"path\":\"images\/image-5eabaec199254.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":1024,\"height\":570},\"tip\":\"\"},{\"answer\":\"The Old Course at St Andrews,  #18\",\"image\":{\"path\":\"images\/image-5eabafb2400f7.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":475,\"height\":367},\"tip\":\"\"},{\"answer\":\"Pine Valley Golf Club, #18\",\"image\":{\"path\":\"images\/image-5eabb0ced23c3.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":960,\"height\":640},\"tip\":\"\"},{\"answer\":\"Celebrity Course - Indian Wells Golf Resort, #14\",\"image\":{\"path\":\"images\/image-5eabb17c9a715.jpg\",\"mime\":\"image\/jpeg\",\"copyright\":{\"license\":\"U\"},\"width\":780,\"height\":490},\"tip\":\"\"}],\"progressText\":\"Card @card of @total\",\"next\":\"Next\",\"previous\":\"Previous\",\"checkAnswerText\":\"Check\",\"showSolutionsRequiresInput\":true,\"defaultAnswerText\":\"Your answer\",\"correctAnswerText\":\"Correct\",\"incorrectAnswerText\":\"Incorrect\",\"showSolutionText\":\"Correct answer\",\"results\":\"Results\",\"ofCorrect\":\"@score of @total correct\",\"showResults\":\"Show results\",\"answerShortText\":\"A:\",\"retry\":\"Retry\",\"caseSensitive\":false,\"cardAnnouncement\":\"Incorrect answer. Correct answer was @answer\",\"pageAnnouncement\":\"Page @current of @total\",\"description\":\"Match the Hole with the Course\"}",
+                    "slug": "famous-golf-holes",
+                    "embed_type": "div",
+                    "disable": 9,
+                    "content_type": null,
+                    "authors": null,
+                    "source": null,
+                    "year_from": null,
+                    "year_to": null,
+                    "license": "U",
+                    "license_version": null,
+                    "license_extras": null,
+                    "author_comments": null,
+                    "changes": null,
+                    "default_language": null
+                },
+                "is_public": false,
+                "created_at": null,
+                "updated_at": null
+            }
+        ],
+        "created_at": null,
+        "updated_at": null
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/google-classroom/activities/{activity}/h5p-resource-settings`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `activity` |  required  | The Id of a activity
+
+<!-- END_1c762b2876b1508d8d8551785606c99a -->
+#16. XAPI Cron
+
+
+Cron job for XAPI extract
+<!-- START_fc0aca58a5d3a95a9e07e5140ad5a1c4 -->
+## Runs the xAPI extract job script
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/xapi-extract" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/xapi-extract"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/xapi-extract',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/xapi-extract'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (500):
+
+```json
+{
+    "message": "Server Error"
+}
+```
+
+### HTTP Request
+`GET api/v1/xapi-extract`
+
+
+<!-- END_fc0aca58a5d3a95a9e07e5140ad5a1c4 -->
+
+#17. Organization Permission Type API
+
+
+APIs for Organization Permission Types
+<!-- START_bd2777b2132db6c9cf93e928b5b5e44d -->
+## Get All Organization Permission Type
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the organization permission type.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/permissions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"query":"edit"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/permissions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "query": "edit"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/permissions',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'query' => 'edit',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/permissions'
+payload = {
+    "query": "edit"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 25,
+            "name": "activity:edit",
+            "display_name": "Edit Activity",
+            "feature": "Activity"
+        },
+        {
+            "id": 43,
+            "name": "group:edit",
+            "display_name": "Edit Group",
+            "feature": "Group"
+        },
+        {
+            "id": 1,
+            "name": "organization:edit",
+            "display_name": "Edit Organization",
+            "feature": "Organization"
+        },
+        {
+            "id": 19,
+            "name": "playlist:edit",
+            "display_name": "Edit Playlist",
+            "feature": "Playlist"
+        },
+        {
+            "id": 10,
+            "name": "project:edit",
+            "display_name": "Edit Project",
+            "feature": "Project"
+        },
+        {
+            "id": 31,
+            "name": "team:edit",
+            "display_name": "Edit Team",
+            "feature": "Team"
+        },
+        {
+            "id": 57,
+            "name": "user:edit",
+            "display_name": "Edit User",
+            "feature": "User"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/permissions`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `query` | string |  required  | Query to search organization permission types against
+    
+<!-- END_bd2777b2132db6c9cf93e928b5b5e44d -->
+
+#18. Organization API
+
+
+APIs for Organization
+<!-- START_f5a985d69025164365132a0f650f9365 -->
+## Get By Domain
+
+Get organization by domain
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/organization/get-by-domain" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"domain":"curriki"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/organization/get-by-domain"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "domain": "curriki"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/organization/get-by-domain',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'domain' => 'curriki',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/organization/get-by-domain'
+payload = {
+    "domain": "curriki"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid domain."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "organization": {
+        "id": 16,
+        "name": "nassau",
+        "description": "nassau",
+        "image": "\/storage\/organizations\/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
+        "domain": "nassau"
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/organization/get-by-domain`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `domain` | string |  required  | Organization domain to get data for
+    
+<!-- END_f5a985d69025164365132a0f650f9365 -->
+<!-- START_e414f1efc0e5c440f414a20c1754fd5e -->
+## Search organization by name
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/organizations/search" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"query":"curriki"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/organizations/search"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "query": "curriki"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/organizations/search',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'query' => 'curriki',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/organizations/search'
+payload = {
+    "query": "curriki"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/v1/organizations/search`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `query` | string |  required  | Organization name to get data for
+    
+<!-- END_e414f1efc0e5c440f414a20c1754fd5e -->
+
+#19. Suborganization API
+
+
+APIs for Suborganization
+<!-- START_3726723e608688e3c57352fcbf47c944 -->
+## User has permission
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Check if user has the specified permission in the provided organization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/user-has-permission" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"permission":"organization:view"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/user-has-permission"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "permission": "organization:view"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/user-has-permission',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'permission' => 'organization:view',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/user-has-permission'
+payload = {
+    "permission": "organization:view"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "userHasPermission": true
+}
+```
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "The permission field is required."
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/user-has-permission`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `permission` | string |  required  | Permission to check user access
+    
+<!-- END_3726723e608688e3c57352fcbf47c944 -->
+<!-- START_0045c8698c152f6ca7984303a34dd379 -->
+## Get User Permissions
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get the logged-in user's permissions in the suborganization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/permissions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/permissions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/permissions',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/permissions'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "permissions": {
+        "activeRole": "non_editing_teacher",
+        "roleId": 4,
+        "Project": [
+            "project:view"
+        ],
+        "Playlist": [
+            "playlist:view"
+        ],
+        "Activity": [
+            "activity:view"
+        ]
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/permissions`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+
+<!-- END_0045c8698c152f6ca7984303a34dd379 -->
+
+<!-- START_876172cd5b0c9476c675e444d4040d4b -->
+## Get Default Permissions
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get the all default permissions in the suborganization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/default-permissions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/default-permissions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/default-permissions',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/default-permissions'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "permissions": {
+        "activeRole": "non_editing_teacher",
+        "roleId": 4,
+        "Project": [
+            "project:view"
+        ],
+        "Playlist": [
+            "playlist:view"
+        ],
+        "Activity": [
+            "activity:view"
+        ]
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/default-permissions`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+
+<!-- END_876172cd5b0c9476c675e444d4040d4b -->
+
+<!-- START_ae3e4815d547bcfa4b4ab978d1b689a3 -->
+## Add Suborganization Role
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Add role for the specified suborganization
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/add-role" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"member","display_name":"Member","permissions":"[1, 2]"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/add-role"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "member",
+    "display_name": "Member",
+    "permissions": "[1, 2]"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/add-role',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'name' => 'member',
+            'display_name' => 'Member',
+            'permissions' => '[1, 2]',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/add-role'
+payload = {
+    "name": "member",
+    "display_name": "Member",
+    "permissions": "[1, 2]"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Role has been added successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to add role."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/add-role`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | Name of a suborganization role
+        `display_name` | string |  required  | Display name of a suborganization role
+        `permissions` | array |  required  | Ids of the permissions to assign the role
+    
+<!-- END_ae3e4815d547bcfa4b4ab978d1b689a3 -->
+
+<!-- START_2b7f9717ee62cc3137e044d83558069f -->
+## Update Suborganization Role
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Update role for the specified suborganization
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/update-role" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"role_id":1,"permissions":"[1, 2]"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/update-role"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "role_id": 1,
+    "permissions": "[1, 2]"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1/update-role',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'role_id' => 1,
+            'permissions' => '[1, 2]',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/update-role'
+payload = {
+    "role_id": 1,
+    "permissions": "[1, 2]"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Role has been updated successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update role."
+    ]
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}/update-role`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `role_id` | integer |  required  | Id of a suborganization role
+        `permissions` | array |  required  | Ids of the permissions to assign the role
+    
+<!-- END_2b7f9717ee62cc3137e044d83558069f -->
+
+<!-- START_b541e406e7c079de3df76d2ebca01e9e -->
+## Update Suborganization Role UI Permissions
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Update role UI permissions for the specified suborganization
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"role_id":1,"permissions":"[1, 2]"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "role_id": 1,
+    "permissions": "[1, 2]"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'role_id' => 1,
+            'permissions' => '[1, 2]',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions'
+payload = {
+    "role_id": 1,
+    "permissions": "[1, 2]"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Role UI permissions have been updated successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update role UI permissions."
+    ]
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}/update-role-ui-permissions`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `role_id` | integer |  required  | Id of a suborganization role
+        `permissions` | array |  required  | Ids of the ui permissions to assign the role
+    
+<!-- END_b541e406e7c079de3df76d2ebca01e9e -->
+
+<!-- START_0d835883cdae9e0f53be5344cf85ba25 -->
+## Get Visibility Types For Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the visibility types for suborganization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/visibility-types" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/visibility-types"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/visibility-types',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/visibility-types'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "private",
+            "display_name": "Private"
+        },
+        {
+            "id": 2,
+            "name": "protected",
+            "display_name": "Protected"
+        },
+        {
+            "id": 3,
+            "name": "global",
+            "display_name": "Global"
+        },
+        {
+            "id": 4,
+            "name": "public",
+            "display_name": "Public"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/visibility-types`
+
+
+<!-- END_0d835883cdae9e0f53be5344cf85ba25 -->
+
+<!-- START_558d0d7200313e563cf041d0a57cf15d -->
+## Get User Roles For Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the users roles for suborganization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/roles" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/roles"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/roles',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/roles'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "admin",
+            "display_name": "Administrator"
+        },
+        {
+            "id": 3,
+            "name": "member",
+            "display_name": "Member"
+        },
+        {
+            "id": 2,
+            "name": "course_creator",
+            "display_name": "Course Creator"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/roles`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+
+<!-- END_558d0d7200313e563cf041d0a57cf15d -->
+
+<!-- START_53e64500d90c30206825f23ae394c32d -->
+## Get User Role detail For Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get detail of the user role for suborganization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/role/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/role/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/role/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/role/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "admin",
+            "display_name": "Administrator"
+        },
+        {
+            "id": 3,
+            "name": "member",
+            "display_name": "Member"
+        },
+        {
+            "id": 2,
+            "name": "course_creator",
+            "display_name": "Course Creator"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/role/{roleId}`
+
+
+<!-- END_53e64500d90c30206825f23ae394c32d -->
+
+<!-- START_4d6e2abbb79dc0c50328617312df4a59 -->
+## Get User Role UI Permissions For Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get detail of the user role UI permissions for suborganization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/role/1/permissions" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/role/1/permissions"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/role/1/permissions',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/role/1/permissions'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "title": "Organiziations",
+            "ui_sub_modules": [
+                {
+                    "title": "Organiziation",
+                    "ui_module_permissions": [
+                        {
+                            "id": 1,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 2,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 3,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Projects",
+            "ui_sub_modules": [
+                {
+                    "title": "All Projects",
+                    "ui_module_permissions": [
+                        {
+                            "id": 4,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 5,
+                            "title": "Edit",
+                            "selected": true
+                        },
+                        {
+                            "id": 6,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Import\/Export Projects",
+                    "ui_module_permissions": [
+                        {
+                            "id": 7,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 8,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 9,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Ref. Tables",
+            "ui_sub_modules": [
+                {
+                    "title": "Activity Types",
+                    "ui_module_permissions": [
+                        {
+                            "id": 10,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 11,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 12,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Activity Items",
+                    "ui_module_permissions": [
+                        {
+                            "id": 13,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 14,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 15,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Integrations",
+            "ui_sub_modules": [
+                {
+                    "title": "LMS Settings",
+                    "ui_module_permissions": [
+                        {
+                            "id": 16,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 17,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 18,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "LTI Tools",
+                    "ui_module_permissions": [
+                        {
+                            "id": 19,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 20,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 21,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "BrightCove",
+                    "ui_module_permissions": [
+                        {
+                            "id": 22,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 23,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 24,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Users",
+            "ui_sub_modules": [
+                {
+                    "title": "Manage Users",
+                    "ui_module_permissions": [
+                        {
+                            "id": 25,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 26,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 27,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Manage Roles",
+                    "ui_module_permissions": [
+                        {
+                            "id": 28,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 29,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 30,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Independent Activities",
+            "ui_sub_modules": [
+                {
+                    "title": "All Independent Activities",
+                    "ui_module_permissions": [
+                        {
+                            "id": 31,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 32,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 33,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Export\/Import Activities",
+                    "ui_module_permissions": [
+                        {
+                            "id": 34,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 35,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 36,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Authoring",
+            "ui_sub_modules": [
+                {
+                    "title": "Project",
+                    "ui_module_permissions": [
+                        {
+                            "id": 37,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 38,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 39,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Playlist",
+                    "ui_module_permissions": [
+                        {
+                            "id": 40,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 41,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 42,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Activity",
+                    "ui_module_permissions": [
+                        {
+                            "id": 43,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 44,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 45,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Team",
+                    "ui_module_permissions": [
+                        {
+                            "id": 46,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 47,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 48,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Independent Activity",
+                    "ui_module_permissions": [
+                        {
+                            "id": 49,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 50,
+                            "title": "Edit",
+                            "selected": false
+                        },
+                        {
+                            "id": 51,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                },
+                {
+                    "title": "My Interactive Video",
+                    "ui_module_permissions": [
+                        {
+                            "id": 52,
+                            "title": "View",
+                            "selected": false
+                        },
+                        {
+                            "id": 53,
+                            "title": "None",
+                            "selected": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/role/{role}/permissions`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+    `role` |  required  | The Id of an organization role
+
+<!-- END_4d6e2abbb79dc0c50328617312df4a59 -->
+
+<!-- START_418929bc46bc5fb9a5f01f4c3dd9d030 -->
+## Upload thumbnail
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Upload thumbnail image for a suborganization
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/upload-thumb" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"thumb":"(binary)"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/upload-thumb"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "thumb": "(binary)"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/upload-thumb',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'thumb' => '(binary)',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/upload-thumb'
+payload = {
+    "thumb": "(binary)"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "thumbUrl": "\/storage\/organizations\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+}
+```
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid image."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/upload-thumb`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `thumb` | image |  required  | Thumbnail image to upload
+    
+<!-- END_418929bc46bc5fb9a5f01f4c3dd9d030 -->
+
+<!-- START_e50a8c607f83eeb83e51151f5173d636 -->
+## Upload Favicon
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Upload favicon for a suborganization
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/upload-favicon" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"favicon":"(binary)"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/upload-favicon"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "favicon": "(binary)"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/upload-favicon',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'favicon' => '(binary)',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/upload-favicon'
+payload = {
+    "favicon": "(binary)"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "faviconUrl": "\/storage\/organizations\/favicon\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+}
+```
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Invalid favicon."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/upload-favicon`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `favicon` | required |  optional  | image to upload
+    
+<!-- END_e50a8c607f83eeb83e51151f5173d636 -->
+
+<!-- START_b0608819de2e29d9ba05ca54db68d914 -->
+## Show Member Options
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Display a listing of the user member options for suborganization, other then the exiting ones.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/member-options" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"query":"leo"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/member-options"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "query": "leo"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/member-options',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'query' => 'leo',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/member-options'
+payload = {
+    "query": "leo"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "The query field is required."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "member-options": [
+        {
+            "id": 3,
+            "first_name": "Abby",
+            "last_name": "_",
+            "email": "abby@curriki.org",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true
+        },
+        {
+            "id": 1494,
+            "first_name": "Gabriella",
+            "last_name": "Tennant-Nicholas",
+            "email": "gabbytennant05@gmail.com",
+            "organization_name": "Arizona State University",
+            "organization_type": null,
+            "job_title": "Student",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/member-options`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  optional  | int required The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `query` | string |  required  | Query to search users against
+    
+<!-- END_b0608819de2e29d9ba05ca54db68d914 -->
+<!-- START_6a093c75ae46f95bc8e0401ac1190533 -->
+## Get All Users For a Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the users for a suborganization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/users" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"query":"Leo"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "query": "Leo"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/users',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'query' => 'Leo',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/users'
+payload = {
+    "query": "Leo"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 1544,
+            "first_name": "Kari",
+            "last_name": "Lund",
+            "email": "kari.lund@nkcschools.org",
+            "organization_name": "North Kansas City Schools",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1595,
+            "first_name": "Song",
+            "last_name": "Nam",
+            "email": "tpqtrang@songnam.net",
+            "organization_name": "Ms TRANG",
+            "organization_type": "Architecture design",
+            "job_title": "Tư vấn giám sát",
+            "address": null,
+            "phone_number": "84769861168",
+            "website": "http:\/\/www.songnam.net\/Dich-vu-va-Du-an\/Tu-van-giam-sat\/48",
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 4,
+            "first_name": "kochdemo",
+            "last_name": "",
+            "email": "kochdemo@curriki.org",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": false,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 5,
+            "first_name": "jonathanbrusco79",
+            "last_name": "",
+            "email": "jonathanbrusco79@gmail.com",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1545,
+            "first_name": "Tara",
+            "last_name": "Miller",
+            "email": "voorhtk@nv.ccsd.net",
+            "organization_name": "CCSD",
+            "organization_type": null,
+            "job_title": "Theme Coordinator",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1596,
+            "first_name": "Georgia",
+            "last_name": "Blacklock",
+            "email": "georgiablacklock7@gmail.com",
+            "organization_name": "Australian Catholic University",
+            "organization_type": null,
+            "job_title": "pre-teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1628,
+            "first_name": "John",
+            "last_name": "Hochstetler",
+            "email": "jhochstetler@hse.k12.in.us",
+            "organization_name": "Riverside Intermediate School",
+            "organization_type": null,
+            "job_title": "Teacher Librarian",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 1546,
+            "first_name": "Michelle",
+            "last_name": "Floyd",
+            "email": "michellefloyd@spsk12.net",
+            "organization_name": "Kilby Shores Elementary School",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1597,
+            "first_name": "Madison",
+            "last_name": "Cathey",
+            "email": "madicat94@hotmail.com",
+            "organization_name": "SJSD",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        },
+        {
+            "id": 710,
+            "first_name": "Anthony",
+            "last_name": "Baker",
+            "email": "abaker@digitalpromise.org",
+            "organization_name": "",
+            "organization_type": null,
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 2
+        },
+        {
+            "id": 1547,
+            "first_name": "John",
+            "last_name": "Lowe",
+            "email": "john_lowe@baylor.edu",
+            "organization_name": "Baylor",
+            "organization_type": null,
+            "job_title": "Instructional Designer",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 7
+        },
+        {
+            "id": 1598,
+            "first_name": "Meredith",
+            "last_name": "Carlton",
+            "email": "meredith@beaconacademync.org",
+            "organization_name": "Beacon Academy Inc",
+            "organization_type": null,
+            "job_title": null,
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1629,
+            "first_name": "Joy",
+            "last_name": "Prescott",
+            "email": "2019fltoy@gmail.com",
+            "organization_name": "Educator",
+            "organization_type": null,
+            "job_title": "Educator",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": false,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 5
+        },
+        {
+            "id": 1548,
+            "first_name": "Mary",
+            "last_name": "Regione",
+            "email": "maryregione@spsk12.net",
+            "organization_name": "KIlby Shores Elementary",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member"
+        },
+        {
+            "id": 1599,
+            "first_name": "Tionia",
+            "last_name": "Richardson",
+            "email": "richmathteacher@gmail.com",
+            "organization_name": "Rock Hill Schools",
+            "organization_type": null,
+            "job_title": "Teacher",
+            "address": null,
+            "phone_number": null,
+            "website": null,
+            "subscribed": true,
+            "default_organization": null,
+            "organization_role": "Member",
+            "projects_count": 1
+        }
+    ],
+    "links": {
+        "first": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=1",
+        "last": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=109",
+        "prev": null,
+        "next": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 109,
+        "path": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users",
+        "per_page": 15,
+        "to": 15,
+        "total": 1627
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/users`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+    `page` |  optional  | The pagination page no to show
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `query` | string |  required  | Query to search suborganization users against
+    
+<!-- END_6a093c75ae46f95bc8e0401ac1190533 -->
+<!-- START_9bbfc9b39a47f5f1aac00c343eb08701 -->
+## Add Suborganization User
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Add user for the specified role in suborganization
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/add-user" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"user_id":1,"role_id":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/add-user"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_id": 1,
+    "role_id": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/add-user',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'user_id' => 1,
+            'role_id' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/add-user'
+payload = {
+    "user_id": 1,
+    "role_id": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User has been added successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to add user."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/add-user`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `user_id` | integer |  required  | Id of the user to be added
+        `role_id` | integer |  required  | Id of the role for added user
+    
+<!-- END_9bbfc9b39a47f5f1aac00c343eb08701 -->
+
+<!-- START_3beb55445b4fa278ba431ff224573fd0 -->
+## Invite Organization Member
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Invite a member to the organization.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/invite-members" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"email":"abby@curriki.org","role_id":1,"note":"Welcome"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/invite-members"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "email": "abby@curriki.org",
+    "role_id": 1,
+    "note": "Welcome"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/invite-members',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'email' => 'abby@curriki.org',
+            'role_id' => 1,
+            'note' => 'Welcome',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/invite-members'
+payload = {
+    "email": "abby@curriki.org",
+    "role_id": 1,
+    "note": "Welcome"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User have been invited to the organization successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to invite user to the organization."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/invite-members`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `email` | string |  required  | The email of the user
+        `role_id` | integer |  required  | Id of the role for invited user
+        `note` | string |  optional  | The note for the user
+    
+<!-- END_3beb55445b4fa278ba431ff224573fd0 -->
+
+<!-- START_220202f5c856b2376dbe45d796a51ea6 -->
+## Update Suborganization User
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Update user for the specified role in default suborganization
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/update-user" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"user_id":1,"role_id":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/update-user"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_id": 1,
+    "role_id": 1
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1/update-user',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'user_id' => 1,
+            'role_id' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/update-user'
+payload = {
+    "user_id": 1,
+    "role_id": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User has been updated successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update user."
+    ]
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}/update-user`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `user_id` | integer |  required  | Id of the user to be updated
+        `role_id` | integer |  required  | Id of the role for updated user
+    
+<!-- END_220202f5c856b2376dbe45d796a51ea6 -->
+
+<!-- START_16f327440cf69cecca0ec2cd55bad11c -->
+## Remove Suborganization User
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Remove the specified user from default suborganization.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://localhost:8000/api/v1/suborganizations/1/delete-user" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"user_id":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/delete-user"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_id": 1
+}
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->delete(
+    'http://localhost:8000/api/v1/suborganizations/1/delete-user',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'user_id' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/delete-user'
+payload = {
+    "user_id": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User has been deleted successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to delete user."
+    ]
+}
+```
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "The user_id field is required."
+    ]
+}
+```
+
+### HTTP Request
+`DELETE api/v1/suborganizations/{suborganization}/delete-user`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `user_id` | integer |  required  | Id of the user to be deleted
+    
+<!-- END_16f327440cf69cecca0ec2cd55bad11c -->
+<!-- START_85977dad8e439c6125cae5d71321d61b -->
+## Remove Suborganization User
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Remove the specified user from a particular organization.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://localhost:8000/api/v1/suborganizations/1/remove-user" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"user_id":1,"preserve_data":false}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/remove-user"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_id": 1,
+    "preserve_data": false
+}
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->delete(
+    'http://localhost:8000/api/v1/suborganizations/1/remove-user',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'user_id' => 1,
+            'preserve_data' => false,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/remove-user'
+payload = {
+    "user_id": 1,
+    "preserve_data": false
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User has been removed successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to remove user."
+    ]
+}
+```
+> Example response (422):
+
+```json
+{
+    "message": "The given data was invalid.",
+    "errors": {
+        "user_id": [
+            "The user id field is required."
+        ]
+    }
+}
+```
+
+### HTTP Request
+`DELETE api/v1/suborganizations/{suborganization}/remove-user`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `user_id` | integer |  required  | Id of the user to be removed
+        `preserve_data` | boolean |  optional  | Whether to assign user data to admin or delete it
+    
+<!-- END_85977dad8e439c6125cae5d71321d61b -->
+
+<!-- START_634204a9dfb2ca532f64d3bd155194c0 -->
+## Create Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Create a new suborganization for a user's default organization.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admins":"[1, 2]","users":"[[user_id => 5, 3], [user_id => 6, 2]]","parent_id":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Old Campus",
+    "description": "This is a test suborganization.",
+    "domain": "oldcampus",
+    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+    "admins": "[1, 2]",
+    "users": "[[user_id => 5, 3], [user_id => 6, 2]]",
+    "parent_id": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'name' => 'Old Campus',
+            'description' => 'This is a test suborganization.',
+            'domain' => 'oldcampus',
+            'image' => '/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg',
+            'admins' => '[1, 2]',
+            'users' => '[[user_id => 5, 3], [user_id => 6, 2]]',
+            'parent_id' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations'
+payload = {
+    "name": "Old Campus",
+    "description": "This is a test suborganization.",
+    "domain": "oldcampus",
+    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+    "admins": "[1, 2]",
+    "users": "[[user_id => 5, 3], [user_id => 6, 2]]",
+    "parent_id": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Could not create suborganization. Please try again later."
+    ]
+}
+```
+> Example response (201):
+
+```json
+{
+    "suborganization": {
+        "id": 6,
+        "name": "org name 5",
+        "description": "org description 5",
+        "image": "\/storage\/organizations\/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
+        "domain": "orgdomain5"
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | Name of a suborganization
+        `description` | string |  required  | Description of a suborganization
+        `domain` | string |  required  | Domain of a suborganization
+        `image` | string |  required  | Image path of a suborganization
+        `admins` | array |  required  | Ids of the suborganization admin users
+        `users` | array |  required  | Array of the "user_id" and "role_id" for suborganization users
+        `parent_id` | integer |  required  | Id of the parent organization
+    
+<!-- END_634204a9dfb2ca532f64d3bd155194c0 -->
+<!-- START_097ac7ebd0af5dd434bd8c4a773c362f -->
+## Get Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get the specified suborganization detail.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "suborganization": {
+        "id": 6,
+        "name": "org name 5",
+        "description": "org description 5",
+        "image": "\/storage\/organizations\/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
+        "domain": "orgdomain5"
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+
+<!-- END_097ac7ebd0af5dd434bd8c4a773c362f -->
+<!-- START_7057d920c8289381bd5cc4f50c90e974 -->
+## Update Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Update the specified suborganization for a user.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admins":"[1, 2]","users":"[[user_id => 5, 3], [user_id => 6, 2]]"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Old Campus",
+    "description": "This is a test suborganization.",
+    "domain": "oldcampus",
+    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+    "admins": "[1, 2]",
+    "users": "[[user_id => 5, 3], [user_id => 6, 2]]"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'name' => 'Old Campus',
+            'description' => 'This is a test suborganization.',
+            'domain' => 'oldcampus',
+            'image' => '/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg',
+            'admins' => '[1, 2]',
+            'users' => '[[user_id => 5, 3], [user_id => 6, 2]]',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1'
+payload = {
+    "name": "Old Campus",
+    "description": "This is a test suborganization.",
+    "domain": "oldcampus",
+    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+    "admins": "[1, 2]",
+    "users": "[[user_id => 5, 3], [user_id => 6, 2]]"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update suborganization."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "suborganization": {
+        "id": 6,
+        "name": "org name 5",
+        "description": "org description 5",
+        "image": "\/storage\/organizations\/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
+        "domain": "orgdomain5"
+    }
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}`
+
+`PATCH api/v1/suborganizations/{suborganization}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | Name of a suborganization
+        `description` | string |  required  | Description of a suborganization
+        `domain` | string |  required  | Domain of a suborganization
+        `image` | string |  required  | Image path of a suborganization
+        `admins` | array |  required  | Ids of the suborganization admin users
+        `users` | array |  required  | Array of the "user_id" and "role_id" for suborganization users
+    
+<!-- END_7057d920c8289381bd5cc4f50c90e974 -->
+<!-- START_28d6dce17a37901a5098a615273be724 -->
+## Remove Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Remove the specified suborganization.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://localhost:8000/api/v1/suborganizations/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->delete(
+    'http://localhost:8000/api/v1/suborganizations/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Suborganization has been deleted successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to delete suborganization."
+    ]
+}
+```
+
+### HTTP Request
+`DELETE api/v1/suborganizations/{suborganization}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  optional  | int required The Id of a suborganization
+
+<!-- END_28d6dce17a37901a5098a615273be724 -->
+
+<!-- START_5623f6a0709ff5b4205333de28b249d9 -->
+## Get All Suborganization
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get a list of the suborganizations for a user's default organization.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/index" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"query":"Vivensity"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/index"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "query": "Vivensity"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/index',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'query' => 'Vivensity',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/index'
+payload = {
+    "query": "Vivensity"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "suborganization": [
+        {
+            "id": 3,
+            "name": "Suborganization",
+            "description": "Suborganization description",
+            "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+            "domain": "suborganization"
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/index`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `query` | string |  required  | Query to search suborganization against
+    
+<!-- END_5623f6a0709ff5b4205333de28b249d9 -->
+<!-- START_24358fde38eb3bd6ff4123c0858c2e0d -->
+## Get Organization Media Sources
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get the media sources of specific organization for image and videos .
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/media-sources" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/media-sources"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/media-sources',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/media-sources'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "mediaSources": [
+        {
+            "id": 1,
+            "name": "My device",
+            "media_type": "Video",
+            "created_at": "2022-05-09T10:18:09.000000Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "pivot": {
+                "organization_id": 1,
+                "media_source_id": 1,
+                "h5p_library": "H5P.AudioRecorder 1.0"
+            }
+        },
+        {
+            "id": 2,
+            "name": "YouTube",
+            "media_type": "Video",
+            "created_at": "2022-05-09T10:18:09.000000Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "pivot": {
+                "organization_id": 1,
+                "media_source_id": 2,
+                "h5p_library": "H5P.CoursePresentation 1.22"
+            }
+        }
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/media-sources`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+
+<!-- END_24358fde38eb3bd6ff4123c0858c2e0d -->
+
+<!-- START_46ca253646f35addf401ddd6fe9ed40d -->
+## Update Suborganization Media Sources
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Update the media sources for specified suborganization.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/update-media-sources" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"media_source_ids":"1","h5p_library":"H5P.AudioRecorder 1.0"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/update-media-sources"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "media_source_ids": "1",
+    "h5p_library": "H5P.AudioRecorder 1.0"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1/update-media-sources',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'media_source_ids' => '1',
+            'h5p_library' => 'H5P.AudioRecorder 1.0',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/update-media-sources'
+payload = {
+    "media_source_ids": "1",
+    "h5p_library": "H5P.AudioRecorder 1.0"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+null
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update Media sources."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "message": "Media sources has been updated successfully.",
+    "mediaSources": [
+        {
+            "id": 1,
+            "name": "My device",
+            "media_type": "Video",
+            "created_at": "2022-05-09T10:18:09.000000Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "pivot": {
+                "organization_id": 1,
+                "media_source_id": 1,
+                "h5p_library": "H5P.AudioRecorder 1.0"
+            }
+        },
+        {
+            "id": 7,
+            "name": "My device",
+            "media_type": "Image",
+            "created_at": "2022-05-09T10:18:09.000000Z",
+            "updated_at": null,
+            "deleted_at": null,
+            "pivot": {
+                "organization_id": 1,
+                "media_source_id": 7,
+                "h5p_library": "H5P.CoursePresentation 1.22"
+            }
+        }
+    ]
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}/update-media-sources`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `suborganization` |  required  | The Id of a suborganization
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `media_source_ids` | array |  required  | Ids of a media source type
+        `h5p_library` | string |  optional  | optional name of H5p Library
+    
+<!-- END_46ca253646f35addf401ddd6fe9ed40d -->
+
+<!-- START_00cd55ad540fcd37b92bd740c4bb691e -->
+## Get Media Sources
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+Get the media sources for image and videos.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/media-sources" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/media-sources"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/media-sources',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/media-sources'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "mediaSources": {
+        "Video": [
+            {
+                "id": 1,
+                "name": "My device",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 2,
+                "name": "YouTube",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 3,
+                "name": "Kaltura",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 4,
+                "name": "Safari Montage",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 5,
+                "name": "BrightCove",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 6,
+                "name": "Vimeo",
+                "media_type": "Video",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            }
+        ],
+        "Image": [
+            {
+                "id": 7,
+                "name": "My device",
+                "media_type": "Image",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 8,
+                "name": "Pexels",
+                "media_type": "Image",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            {
+                "id": 9,
+                "name": "Safari Montage",
+                "media_type": "Image",
+                "created_at": "2022-05-09T10:18:09.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            }
+        ]
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/media-sources`
+
+
+<!-- END_00cd55ad540fcd37b92bd740c4bb691e -->
+
+#20. XAPI
+
+
+An XAPI Controller Class
+Handles xAPI operations.
+<!-- START_a86c4cd0d35d4f13bdc36508a43719e4 -->
+## Save an xAPI Statement
+
+Creates a new statement in the database.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/xapi/statements" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/xapi/statements"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/xapi/statements',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/xapi/statements'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers)
+response.json()
+```
+
+
+> Example response (201):
+
+```json
+{
+    "id": "61ffa986-1dcc-3df0-94d8-a09384b197a7"
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "The statement could not be saved due to an error"
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/xapi/statements`
+
+
+<!-- END_a86c4cd0d35d4f13bdc36508a43719e4 -->
+
+#21. Group
 
 
 APIs for group management
@@ -32731,6 +35539,7 @@ Parameter | Type | Status | Description
         `email` | string |  required  | The email corresponded to the user
     
 <!-- END_6a97c3f5b0867c49fbe4bdea782e56c5 -->
+
 <!-- START_9023db9f559ebe4a4f02cbb92760cd11 -->
 ## Invite Group Member
 
@@ -32841,6 +35650,7 @@ Parameter | Type | Status | Description
     `email` | string |  required  | The email of the user
     
 <!-- END_9023db9f559ebe4a4f02cbb92760cd11 -->
+
 <!-- START_8db5d576beec72ec70c5f15b68b1f891 -->
 ## Invite Group Members
 
@@ -32951,6 +35761,7 @@ Parameter | Type | Status | Description
     `users` | array |  required  | The array of the users
     
 <!-- END_8db5d576beec72ec70c5f15b68b1f891 -->
+
 <!-- START_519c405cee161194324885ec13dae4bc -->
 ## Remove Group Member
 
@@ -33061,6 +35872,7 @@ Parameter | Type | Status | Description
     `id` | integer |  required  | The Id of the user
     
 <!-- END_519c405cee161194324885ec13dae4bc -->
+
 <!-- START_6f3fafb6d963b006803f492a52fbe8d7 -->
 ## Add Projects to the Group
 
@@ -33171,6 +35983,7 @@ Parameter | Type | Status | Description
     `ids` | array |  required  | The list of the project Ids to add
     
 <!-- END_6f3fafb6d963b006803f492a52fbe8d7 -->
+
 <!-- START_193f7aee0753ed91bf629ebcdd9e0f5a -->
 ## Remove Project from the Group
 
@@ -33281,6 +36094,7 @@ Parameter | Type | Status | Description
     `id` | integer |  required  | The Id of the project to remove
     
 <!-- END_193f7aee0753ed91bf629ebcdd9e0f5a -->
+
 <!-- START_e20e03a10255710162fc0ba06cebbec1 -->
 ## Add Members to the Group Project
 
@@ -33391,6 +36205,7 @@ Parameter | Type | Status | Description
     `ids` | array |  required  | The list of the member Ids to add
     
 <!-- END_e20e03a10255710162fc0ba06cebbec1 -->
+
 <!-- START_2aef5f49d5aa6b0624102f9ffb26f040 -->
 ## Remove Member from the Group Project
 
@@ -33501,6 +36316,7 @@ Parameter | Type | Status | Description
     `id` | integer |  required  | The Id of the member to remove
     
 <!-- END_2aef5f49d5aa6b0624102f9ffb26f040 -->
+
 <!-- START_1eea92a48dce892ffa09be896adc5c28 -->
 ## Get All Organization Groups
 
@@ -33839,6 +36655,7 @@ Parameter | Type | Status | Description
         `description` | string |  required  | Description of a group
     
 <!-- END_314b01ec7ab1fd0be2eeb46f41fe2ce5 -->
+
 <!-- START_4e9886e6eee626fe53c24be2cbfa31c4 -->
 ## Get Group
 
@@ -33943,6 +36760,7 @@ Parameter | Status | Description
     `group` |  required  | The Id of a group
 
 <!-- END_4e9886e6eee626fe53c24be2cbfa31c4 -->
+
 <!-- START_eb9ae0d7e31e484c7336e74188a38c54 -->
 ## Update Group
 
@@ -34079,6 +36897,7 @@ Parameter | Type | Status | Description
         `description` | string |  required  | Description of a group
     
 <!-- END_eb9ae0d7e31e484c7336e74188a38c54 -->
+
 <!-- START_84265d7681d587be78b856f2adc0389e -->
 ## Remove Group
 
@@ -34169,7 +36988,8 @@ Parameter | Status | Description
     `group` |  required  | The Id of a group
 
 <!-- END_84265d7681d587be78b856f2adc0389e -->
-#14. Team
+
+#22. Team
 
 
 APIs for team management
@@ -34276,6 +37096,7 @@ Parameter | Type | Status | Description
         `email` | string |  required  | The email corresponded to the user
     
 <!-- END_27a081279577e3f6f78ba3a9814a7143 -->
+
 <!-- START_31fa1500bb158b4c7a39b2330e55a7c0 -->
 ## Invite Team Member
 
@@ -34386,6 +37207,7 @@ Parameter | Type | Status | Description
     `email` | string |  required  | The email of the user
     
 <!-- END_31fa1500bb158b4c7a39b2330e55a7c0 -->
+
 <!-- START_a7d023363f32a57f15b20b747d06bf7f -->
 ## Invite Team Members
 
@@ -34606,6 +37428,7 @@ Parameter | Type | Status | Description
     `id` | integer |  required  | The Id of the user
     
 <!-- END_32ba803ff8ac2655c4962881dcfd5956 -->
+
 <!-- START_468567280d86e75bf96ad9765932b723 -->
 ## Add Projects to the Team
 
@@ -34716,6 +37539,7 @@ Parameter | Type | Status | Description
     `ids` | array |  required  | The list of the project Ids to add
     
 <!-- END_468567280d86e75bf96ad9765932b723 -->
+
 <!-- START_cda3666edcf2ff11d3a2f2ba2f03e265 -->
 ## Remove Project from the Team
 
@@ -34826,6 +37650,7 @@ Parameter | Type | Status | Description
     `id` | integer |  required  | The Id of the project to remove
     
 <!-- END_cda3666edcf2ff11d3a2f2ba2f03e265 -->
+
 <!-- START_e6c3e7d31143e75a7880693974dd0790 -->
 ## Add Members to the Team Project
 
@@ -34936,6 +37761,7 @@ Parameter | Type | Status | Description
     `ids` | array |  required  | The list of the member Ids to add
     
 <!-- END_e6c3e7d31143e75a7880693974dd0790 -->
+
 <!-- START_1c3c131ff8f1b33e8af840aea128052f -->
 ## Remove Member from the Team Project
 
@@ -35046,6 +37872,7 @@ Parameter | Type | Status | Description
     `id` | integer |  required  | The Id of the member to remove
     
 <!-- END_1c3c131ff8f1b33e8af840aea128052f -->
+
 <!-- START_5c31d7db864823744d3b09af45156ad1 -->
 ## Get All Organization Teams
 
@@ -36427,6 +39254,7 @@ Parameter | Status | Description
     `team` |  required  | The Id of a team
 
 <!-- END_c08b362aabc1ace0d37cfe39ab19e13c -->
+
 <!-- START_229a69ea50d00d212330153ed47c233a -->
 ## Push Project to Noovo
 
@@ -36534,756 +39362,27 @@ Parameter | Status | Description
 
 <!-- END_229a69ea50d00d212330153ed47c233a -->
 
-#15. CurrikiGo Outcome
+#23. Author Tag
 
 
-APIs for generating outcomes against students' submissions.
-<!-- START_e6ae3b80fa5bac4e60bd0cadeabcd542 -->
-## Get Student Results Grouped Summary
+APIs for author tags management
+<!-- START_af7fb4d074f4df0e731c94016d08947a -->
+## Get Author Tags
 
-Fetch LRS statements based on parameters, and generate a student result summary
+Get a list of all author tags.
 
 > Example request:
 
 ```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/outcome/summary" \
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/author-tags" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/outcome/summary"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/outcome/summary',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/outcome/summary'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (404):
-
-```json
-{
-    "errors": [
-        "No results found."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "summary": [
-        [
-            {
-                "sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
-                "relation-sub-content-id": "a89d2ee5-0763-4b03-8a4a-ccbda9b00c3e",
-                "library": "H5P.TrueFalse 1.6",
-                "content-type": "True\/False Question",
-                "title": "CP - True\/False question",
-                "content": {
-                    "questions": "<p>Is 5 x 100 = 500?<\/p>\n"
-                },
-                "answer": [
-                    {
-                        "name": "CP - True\/False question",
-                        "score": {
-                            "raw": 1,
-                            "max": 1
-                        },
-                        "duration": "00:00",
-                        "ending-point": "00:01",
-                        "verb": "answered"
-                    }
-                ]
-            },
-            {
-                "sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
-                "relation-sub-content-id": "3495a536-de1f-47a2-91d8-6010910b64d0",
-                "library": "H5P.MultiChoice 1.14",
-                "content-type": "Multiple Choice",
-                "title": "CP - Multiple Choice Quiz",
-                "content": {
-                    "questions": "<p>Which of the following statements are correct?<\/p>\n"
-                },
-                "answer": [
-                    {
-                        "name": "CP - Multiple Choice Quiz",
-                        "score": {
-                            "raw": 2,
-                            "max": 2
-                        },
-                        "duration": "00:04",
-                        "ending-point": "00:01",
-                        "verb": "answered"
-                    }
-                ]
-            },
-            {
-                "sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
-                "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b",
-                "library": "H5P.SingleChoiceSet 1.11",
-                "content-type": "Single Choice Set",
-                "title": "CP - Single Choice Set",
-                "content": {
-                    "children": [
-                        {
-                            "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
-                            "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
-                            "question": "<p>2 + 2 = ?<\/p>\n",
-                            "answers": [
-                                "<p>4<\/p>\n",
-                                "<p>10<\/p>\n",
-                                "<p>22<\/p>\n"
-                            ]
-                        },
-                        {
-                            "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
-                            "relation-sub-content-id": "6e7df1b6-3b10-44f0-adc8-d6cc58e59c5b|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
-                            "question": "<p>5 x 10 = ?<\/p>\n",
-                            "answers": [
-                                "<p>50<\/p>\n",
-                                "<p>510<\/p>\n",
-                                "<p>15<\/p>\n"
-                            ]
-                        }
-                    ]
-                },
-                "answer": [
-                    {
-                        "name": "CP - Single Choice Set",
-                        "score": {
-                            "raw": 2,
-                            "max": 2
-                        },
-                        "duration": "00:09",
-                        "ending-point": "00:01",
-                        "verb": "answered"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
-                "relation-sub-content-id": "e5229334-ca8b-4807-bf13-0002e9cba0fa",
-                "library": "H5P.Blanks 1.12",
-                "content-type": "Fill in the Blanks",
-                "title": "IB &gt; CP &gt; Fill in the Blanks",
-                "content": {
-                    "text": "<p>CP - Fill in the missing words #1<\/p>\n",
-                    "questions": [
-                        "<p>New Dehli is the capitol of *India*<\/p>\n",
-                        "<p>H5P content may be edited using a *browser\/web-browser:Something you use every day*.<\/p>\n"
-                    ]
-                },
-                "answer": [
-                    {
-                        "name": "IB &gt; CP &gt; Fill in the Blanks",
-                        "score": {
-                            "raw": 2,
-                            "max": 2
-                        },
-                        "duration": "00:14",
-                        "ending-point": "00:02",
-                        "verb": "answered"
-                    }
-                ]
-            },
-            {
-                "sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
-                "relation-sub-content-id": "d5eb9385-5418-41ed-96a0-0309ca11d99e",
-                "library": "H5P.DragQuestion 1.13",
-                "content-type": "Drag and Drop",
-                "title": "CP - Drag and Drop",
-                "content": [],
-                "answer": [
-                    {
-                        "name": "CP - Drag and Drop",
-                        "score": {
-                            "raw": 2,
-                            "max": 2
-                        },
-                        "duration": "00:07",
-                        "ending-point": "00:02",
-                        "verb": "answered"
-                    }
-                ]
-            },
-            {
-                "sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
-                "relation-sub-content-id": "d8c0aa84-95e5-48b0-96b5-707948f0e14f",
-                "library": "H5P.MarkTheWords 1.9",
-                "content-type": "Mark the Words",
-                "title": "CP - Mark the Words",
-                "content": {
-                    "description": "<p>Mark the articles in the sentences below:<\/p>\n",
-                    "text": "<p>*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&nbsp;<\/p>\n"
-                },
-                "answer": [
-                    {
-                        "name": "CP - Mark the Words",
-                        "score": {
-                            "raw": 2,
-                            "max": 2
-                        },
-                        "duration": "00:04",
-                        "ending-point": "00:02",
-                        "verb": "answered"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
-                "relation-sub-content-id": "86111a02-4be4-4acf-9037-25165975f59b",
-                "library": "H5P.DragText 1.8",
-                "content-type": "Drag Text",
-                "title": "CP - Drag Text",
-                "content": {
-                    "description": "Drag the words into the correct boxes"
-                },
-                "answer": [
-                    {
-                        "name": "CP - Drag Text",
-                        "score": {
-                            "raw": 2,
-                            "max": 2
-                        },
-                        "duration": "01:37",
-                        "ending-point": "00:03",
-                        "verb": "answered"
-                    }
-                ]
-            },
-            {
-                "sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
-                "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719",
-                "library": "H5P.Summary 1.10",
-                "content-type": "Summary",
-                "title": "CP - Summary",
-                "content": {
-                    "title": "Choose the correct statement.",
-                    "children": [
-                        {
-                            "sub-content-id": "6e003430-0edc-4a54-b8f9-e124b119a92a",
-                            "relation-sub-content-id": "bf355dbb-8ec7-460b-aefd-439ca4319719|6e003430-0edc-4a54-b8f9-e124b119a92a",
-                            "question": [
-                                "<p>5 x 5 = 25<\/p>\n",
-                                "<p>5 x 20 = 80<\/p>\n"
-                            ]
-                        }
-                    ]
-                },
-                "answer": [
-                    {
-                        "name": "CP - Summary",
-                        "score": {
-                            "raw": 1,
-                            "max": 1
-                        },
-                        "duration": "01:01:57",
-                        "ending-point": "00:03",
-                        "verb": "answered"
-                    }
-                ]
-            }
-        ],
-        [
-            {
-                "sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
-                "relation-sub-content-id": "4d49d34d-d4f3-4710-8842-a882f837d6dd",
-                "library": "H5P.AdvancedText 1.1",
-                "content-type": "Text",
-                "title": "CP Text",
-                "content": []
-            },
-            {
-                "sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
-                "relation-sub-content-id": "0dee6a0a-36aa-445c-a362-8a5c9c9d7791",
-                "library": "H5P.Link 1.3",
-                "content-type": "Link",
-                "title": "Link",
-                "content": {
-                    "title": "Link to google"
-                }
-            },
-            {
-                "sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
-                "relation-sub-content-id": "c6ef9040-4cad-49f6-a359-4ac7f18a49cd",
-                "library": "H5P.Image 1.1",
-                "content-type": "Image",
-                "title": "CP Image",
-                "content": []
-            },
-            {
-                "sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
-                "relation-sub-content-id": "06f169ef-2de1-4f3e-b6fd-ed20837cd3c6",
-                "library": "H5P.Shape 1.0",
-                "content-type": "Shapes",
-                "title": "Rectangle Shapes",
-                "content": []
-            },
-            {
-                "sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
-                "relation-sub-content-id": "cf3cef4e-5d9d-473d-b72c-091f6a00bb7d",
-                "library": "H5P.Video 1.5",
-                "content-type": "Video",
-                "title": "CP &gt; Video",
-                "content": []
-            },
-            {
-                "sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
-                "relation-sub-content-id": "96a735b1-8220-441f-9195-c0dc8536955b",
-                "library": "H5P.Audio 1.4",
-                "content-type": "Audio",
-                "title": "CP &gt; Test Audio",
-                "content": []
-            }
-        ],
-        [
-            {
-                "sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
-                "relation-sub-content-id": "a9d77f51-1e94-4be0-bf14-defc7de2b93b",
-                "library": "H5P.Dialogcards 1.8",
-                "content-type": "Dialog Cards",
-                "title": "CP - Dialog Cards",
-                "content": {
-                    "title": "<p>CP - Dialog Cards<\/p>\n"
-                }
-            },
-            {
-                "sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
-                "relation-sub-content-id": "5fffdfcd-3794-45f4-a0e5-49e8fc55dae8",
-                "library": "H5P.TwitterUserFeed 1.0",
-                "content-type": "Twitter User Feed",
-                "title": "Twitter User Feed",
-                "content": []
-            },
-            {
-                "sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
-                "relation-sub-content-id": "17ba5347-61df-4151-a833-8cf9d0718c07",
-                "library": "H5P.Table 1.1",
-                "content-type": "Table",
-                "title": "CP Table",
-                "content": []
-            },
-            {
-                "sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
-                "relation-sub-content-id": "2932aab9-ce54-4be2-a1b7-9257483829f1",
-                "library": "H5P.ExportableTextArea 1.3",
-                "content-type": "Exportable Text Area",
-                "title": "CP Exportable Text Area",
-                "content": []
-            }
-        ],
-        [
-            {
-                "sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
-                "relation-sub-content-id": "495b1089-b7d1-47fd-ae2d-9b55273780c9",
-                "library": "H5P.ContinuousText 1.2",
-                "content-type": "Continuous Text",
-                "title": "CP &gt; Continuous Text",
-                "content": []
-            }
-        ],
-        [
-            {
-                "sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
-                "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e",
-                "library": "H5P.InteractiveVideo 1.22",
-                "content-type": "Interactive Video",
-                "title": "CP - Interactive Video",
-                "content": [
-                    {
-                        "sub-content-id": "6824967c-9282-4d12-bcc5-ad0bced64d2f",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|6824967c-9282-4d12-bcc5-ad0bced64d2f",
-                        "library": "H5P.TrueFalse 1.6",
-                        "content-type": "True\/False Question",
-                        "title": "CP &gt; IV&gt; True\/False question",
-                        "content": {
-                            "questions": "<p>Is 5 x 100 = 500?<\/p>\n"
-                        },
-                        "answer": [
-                            {
-                                "name": "CP &gt; IV&gt; True\/False question",
-                                "score": {
-                                    "raw": 1,
-                                    "max": 1
-                                },
-                                "duration": "00:02",
-                                "ending-point": "00:00",
-                                "verb": "answered"
-                            }
-                        ]
-                    },
-                    {
-                        "sub-content-id": "88c60326-825c-4992-80da-b86af8e997a1",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|88c60326-825c-4992-80da-b86af8e997a1",
-                        "library": "H5P.MultiChoice 1.14",
-                        "content-type": "Multiple Choice",
-                        "title": "CP &gt; IV &gt; Multiple Choice Quiz",
-                        "content": {
-                            "questions": "<p>Which of the following statements are correct?<\/p>\n"
-                        },
-                        "answer": [
-                            {
-                                "name": "CP &gt; IV &gt; Multiple Choice Quiz",
-                                "score": {
-                                    "raw": 0,
-                                    "max": 2
-                                },
-                                "duration": "00:03",
-                                "ending-point": "00:05",
-                                "verb": "answered"
-                            }
-                        ]
-                    },
-                    {
-                        "sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|4961cd7d-03ef-4dd6-8b8f-59b908e70b8a",
-                        "library": "H5P.SingleChoiceSet 1.11",
-                        "content-type": "Single Choice Set",
-                        "title": "CP &gt; IV &gt; Single Choice Set",
-                        "content": {
-                            "children": [
-                                {
-                                    "sub-content-id": "e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
-                                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|e6c0a1a4-b38e-4672-aadc-2aa4bee0d459",
-                                    "question": "<p>2 + 2 = ?<\/p>\n",
-                                    "answers": [
-                                        "<p>4<\/p>\n",
-                                        "<p>10<\/p>\n",
-                                        "<p>22<\/p>\n"
-                                    ]
-                                },
-                                {
-                                    "sub-content-id": "4e60ed79-c713-4c21-8903-a5e6f2b80a59",
-                                    "relation-sub-content-id": "4961cd7d-03ef-4dd6-8b8f-59b908e70b8a|4e60ed79-c713-4c21-8903-a5e6f2b80a59",
-                                    "question": "<p>5 x 10 = ?<\/p>\n",
-                                    "answers": [
-                                        "<p>50<\/p>\n",
-                                        "<p>510<\/p>\n",
-                                        "<p>15<\/p>\n"
-                                    ]
-                                }
-                            ]
-                        },
-                        "answer": [
-                            {
-                                "name": "CP &gt; IV &gt; Single Choice Set",
-                                "score": {
-                                    "raw": 2,
-                                    "max": 2
-                                },
-                                "duration": "00:10",
-                                "ending-point": "00:09",
-                                "verb": "answered"
-                            }
-                        ]
-                    },
-                    {
-                        "sub-content-id": "03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|03b1f5f1-c70c-4ae6-9c76-8dd308800f67",
-                        "library": "H5P.Blanks 1.12",
-                        "content-type": "Fill in the Blanks",
-                        "title": "CP &gt; IV &gt; Fill in the Blanks",
-                        "content": {
-                            "text": "<p>CP &gt; IV &gt; Fill in the missing words #1<\/p>\n",
-                            "questions": [
-                                "<p>New Dehli is the capitol of *India*<\/p>\n",
-                                "<p>H5P content may be edited using a *browser\/web-browser:Something you use every day*.<\/p>\n"
-                            ]
-                        },
-                        "answer": [
-                            {
-                                "name": "CP &gt; IV &gt; Fill in the Blanks",
-                                "score": {
-                                    "raw": 2,
-                                    "max": 2
-                                },
-                                "duration": "00:06",
-                                "ending-point": "00:18",
-                                "verb": "answered"
-                            }
-                        ]
-                    },
-                    {
-                        "sub-content-id": "f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f5ee0f8d-f235-4c2b-ae57-97853b1496ae",
-                        "library": "H5P.DragQuestion 1.13",
-                        "content-type": "Drag and Drop",
-                        "title": "CP &gt; IV &gt; Drag and Drop",
-                        "content": [],
-                        "answer": [
-                            {
-                                "name": "CP &gt; IV &gt; Drag and Drop",
-                                "score": {
-                                    "raw": 2,
-                                    "max": 2
-                                },
-                                "duration": "00:03",
-                                "ending-point": "00:20",
-                                "verb": "answered"
-                            }
-                        ]
-                    },
-                    {
-                        "sub-content-id": "7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|7b5ae8d2-84e9-47d5-b147-daa1c26e499a",
-                        "library": "H5P.MarkTheWords 1.9",
-                        "content-type": "Mark the Words",
-                        "title": "CP &gt; IV &gt; Mark the Words",
-                        "content": {
-                            "description": "<p>Mark the articles in the sentences below:<\/p>\n",
-                            "text": "<p>*The* correct words are marked like this: correctword, *an* asterisk is written like this **.&nbsp;<\/p>\n"
-                        },
-                        "answer": [
-                            {
-                                "name": "CP &gt; IV &gt; Mark the Words",
-                                "score": {
-                                    "raw": 2,
-                                    "max": 2
-                                },
-                                "duration": "00:04",
-                                "ending-point": "00:23",
-                                "verb": "answered"
-                            }
-                        ]
-                    },
-                    {
-                        "sub-content-id": "55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|55a4933b-d2fb-4c77-bfb3-1eab67b0ad14",
-                        "library": "H5P.DragText 1.8",
-                        "content-type": "Drag Text",
-                        "title": "CP &gt; IV &gt; Drag Text",
-                        "content": {
-                            "description": "Drag the words into the correct boxes"
-                        },
-                        "answer": [
-                            {
-                                "name": "CP &gt; IV &gt; Drag Text",
-                                "score": {
-                                    "raw": 2,
-                                    "max": 2
-                                },
-                                "duration": "01:05",
-                                "ending-point": "00:26",
-                                "verb": "answered"
-                            }
-                        ]
-                    },
-                    {
-                        "sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e",
-                        "relation-sub-content-id": "02b3bee1-61c4-496a-9b6b-3d4ae1f43f4e|f6839abe-d5d1-41cb-85a4-c19c49a4583e",
-                        "library": "H5P.Summary 1.10",
-                        "content-type": "Summary",
-                        "title": "IB &gt; IV &gt; Summary",
-                        "content": {
-                            "title": "Choose the correct statement.",
-                            "children": [
-                                {
-                                    "sub-content-id": "8146ae19-549a-4f79-8165-30573f8f8769",
-                                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|8146ae19-549a-4f79-8165-30573f8f8769",
-                                    "question": [
-                                        "<p>8+9 = 17<\/p>\n",
-                                        "<p>10 x 2 = 12<\/p>\n",
-                                        "<p>13 x 13 = 149<\/p>\n"
-                                    ]
-                                },
-                                {
-                                    "sub-content-id": "6afe0b3b-9af7-41ab-8506-017ae8b89375",
-                                    "relation-sub-content-id": "f6839abe-d5d1-41cb-85a4-c19c49a4583e|6afe0b3b-9af7-41ab-8506-017ae8b89375",
-                                    "question": [
-                                        "<p>4 x 2 = 8<\/p>\n",
-                                        "<p>5 x 6 = 31<\/p>\n",
-                                        "<p>10 \/ 2 = 4<\/p>\n"
-                                    ]
-                                }
-                            ]
-                        },
-                        "answer": [
-                            {
-                                "name": "IB &gt; IV &gt; Summary",
-                                "score": {
-                                    "raw": 2,
-                                    "max": 2
-                                },
-                                "duration": "00:05",
-                                "ending-point": "00:27",
-                                "verb": "answered"
-                            }
-                        ]
-                    }
-                ],
-                "answer": [
-                    {
-                        "name": "CP - Interactive Video",
-                        "score": {
-                            "raw": 13,
-                            "max": 15
-                        },
-                        "duration": "01:22",
-                        "ending-point": "00:07",
-                        "verb": "answered"
-                    }
-                ]
-            }
-        ]
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/outcome/summary`
-
-
-<!-- END_e6ae3b80fa5bac4e60bd0cadeabcd542 -->
-#16. XAPI
-
-
-An XAPI Controller Class
-Handles xAPI operations.
-<!-- START_a86c4cd0d35d4f13bdc36508a43719e4 -->
-## Save an xAPI Statement
-
-Creates a new statement in the database.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/xapi/statements" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/xapi/statements"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/xapi/statements',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/xapi/statements'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers)
-response.json()
-```
-
-
-> Example response (201):
-
-```json
-{
-    "id": "61ffa986-1dcc-3df0-94d8-a09384b197a7"
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "The statement could not be saved due to an error"
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/xapi/statements`
-
-
-<!-- END_a86c4cd0d35d4f13bdc36508a43719e4 -->
-<!-- START_fc0aca58a5d3a95a9e07e5140ad5a1c4 -->
-## Runs the xAPI extract job script
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/xapi-extract" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/xapi-extract"
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags"
 );
 
 let headers = {
@@ -37303,7 +39402,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/xapi-extract',
+    'http://localhost:8000/api/v1/suborganizations/1/author-tags',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -37319,1178 +39418,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/xapi-extract'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/v1/xapi-extract`
-
-
-<!-- END_fc0aca58a5d3a95a9e07e5140ad5a1c4 -->
-#17. Organization Permission Type API
-
-
-APIs for Organization Permission Types
-<!-- START_bd2777b2132db6c9cf93e928b5b5e44d -->
-## Get All Organization Permission Type
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get a list of the organization permission type.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"query":"edit"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "query": "edit"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/permissions',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'query' => 'edit',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/permissions'
-payload = {
-    "query": "edit"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 25,
-            "name": "activity:edit",
-            "display_name": "Edit Activity",
-            "feature": "Activity"
-        },
-        {
-            "id": 43,
-            "name": "group:edit",
-            "display_name": "Edit Group",
-            "feature": "Group"
-        },
-        {
-            "id": 1,
-            "name": "organization:edit",
-            "display_name": "Edit Organization",
-            "feature": "Organization"
-        },
-        {
-            "id": 19,
-            "name": "playlist:edit",
-            "display_name": "Edit Playlist",
-            "feature": "Playlist"
-        },
-        {
-            "id": 10,
-            "name": "project:edit",
-            "display_name": "Edit Project",
-            "feature": "Project"
-        },
-        {
-            "id": 31,
-            "name": "team:edit",
-            "display_name": "Edit Team",
-            "feature": "Team"
-        },
-        {
-            "id": 57,
-            "name": "user:edit",
-            "display_name": "Edit User",
-            "feature": "User"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/permissions`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `query` | string |  required  | Query to search organization permission types against
-    
-<!-- END_bd2777b2132db6c9cf93e928b5b5e44d -->
-#18. Organization API
-
-
-APIs for Organization
-<!-- START_f5a985d69025164365132a0f650f9365 -->
-## Get By Domain
-
-Get organization by domain
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/organization/get-by-domain" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"domain":"curriki"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/organization/get-by-domain"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "domain": "curriki"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/organization/get-by-domain',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'domain' => 'curriki',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/organization/get-by-domain'
-payload = {
-    "domain": "curriki"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid domain."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "organization": {
-        "id": 16,
-        "name": "nassau",
-        "description": "nassau",
-        "image": "\/storage\/organizations\/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
-        "domain": "nassau"
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/organization/get-by-domain`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `domain` | string |  required  | Organization domain to get data for
-    
-<!-- END_f5a985d69025164365132a0f650f9365 -->
-<!-- START_e414f1efc0e5c440f414a20c1754fd5e -->
-## Search organization by name
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/organizations/search" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"query":"curriki"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/organizations/search"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "query": "curriki"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/organizations/search',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'query' => 'curriki',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/organizations/search'
-payload = {
-    "query": "curriki"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
-}
-```
-
-### HTTP Request
-`GET api/v1/organizations/search`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `query` | string |  required  | Organization name to get data for
-    
-<!-- END_e414f1efc0e5c440f414a20c1754fd5e -->
-
-#19. Suborganization API
-
-
-APIs for Suborganization
-<!-- START_3726723e608688e3c57352fcbf47c944 -->
-## User has permission
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Check if user has the specified permission in the provided organization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/user-has-permission" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"permission":"organization:view"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/user-has-permission"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "permission": "organization:view"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/user-has-permission',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'permission' => 'organization:view',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/user-has-permission'
-payload = {
-    "permission": "organization:view"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "userHasPermission": true
-}
-```
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "The permission field is required."
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/user-has-permission`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `permission` | string |  required  | Permission to check user access
-    
-<!-- END_3726723e608688e3c57352fcbf47c944 -->
-<!-- START_0045c8698c152f6ca7984303a34dd379 -->
-## Get User Permissions
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get the logged-in user's permissions in the suborganization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/permissions',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/permissions'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "permissions": {
-        "activeRole": "non_editing_teacher",
-        "roleId": 4,
-        "Project": [
-            "project:view"
-        ],
-        "Playlist": [
-            "playlist:view"
-        ],
-        "Activity": [
-            "activity:view"
-        ]
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/permissions`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-
-<!-- END_0045c8698c152f6ca7984303a34dd379 -->
-<!-- START_876172cd5b0c9476c675e444d4040d4b -->
-## Get Default Permissions
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get the all default permissions in the suborganization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/default-permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/default-permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/default-permissions',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/default-permissions'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "permissions": {
-        "activeRole": "non_editing_teacher",
-        "roleId": 4,
-        "Project": [
-            "project:view"
-        ],
-        "Playlist": [
-            "playlist:view"
-        ],
-        "Activity": [
-            "activity:view"
-        ]
-    }
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/default-permissions`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-
-<!-- END_876172cd5b0c9476c675e444d4040d4b -->
-
-<!-- START_ae3e4815d547bcfa4b4ab978d1b689a3 -->
-## Add Suborganization Role
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Add role for the specified suborganization
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/add-role" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"member","display_name":"Member","permissions":"[1, 2]"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/add-role"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "member",
-    "display_name": "Member",
-    "permissions": "[1, 2]"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/add-role',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'member',
-            'display_name' => 'Member',
-            'permissions' => '[1, 2]',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/add-role'
-payload = {
-    "name": "member",
-    "display_name": "Member",
-    "permissions": "[1, 2]"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Role has been added successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to add role."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/add-role`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Name of a suborganization role
-        `display_name` | string |  required  | Display name of a suborganization role
-        `permissions` | array |  required  | Ids of the permissions to assign the role
-    
-<!-- END_ae3e4815d547bcfa4b4ab978d1b689a3 -->
-<!-- START_369ee41be04b9ef9290727661d7be15c -->
-## Add Suborganization Role With UI Permissions
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Add role for the specified suborganization with UI permissions
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/add-role-ui-permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"member","display_name":"Member","permissions":"[1, 2]"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/add-role-ui-permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "member",
-    "display_name": "Member",
-    "permissions": "[1, 2]"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/add-role-ui-permissions',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'member',
-            'display_name' => 'Member',
-            'permissions' => '[1, 2]',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/add-role-ui-permissions'
-payload = {
-    "name": "member",
-    "display_name": "Member",
-    "permissions": "[1, 2]"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Role has been added successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to add role."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/add-role-ui-permissions`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Name of a suborganization role
-        `display_name` | string |  required  | Display name of a suborganization role
-        `permissions` | array |  required  | Ids of the permissions to assign the role
-    
-<!-- END_369ee41be04b9ef9290727661d7be15c -->
-
-<!-- START_2b7f9717ee62cc3137e044d83558069f -->
-## Update Suborganization Role
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Update role for the specified suborganization
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/update-role" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"role_id":1,"permissions":"[1, 2]"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/update-role"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "role_id": 1,
-    "permissions": "[1, 2]"
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/update-role',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'role_id' => 1,
-            'permissions' => '[1, 2]',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/update-role'
-payload = {
-    "role_id": 1,
-    "permissions": "[1, 2]"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Role has been updated successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update role."
-    ]
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/update-role`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `role_id` | integer |  required  | Id of a suborganization role
-        `permissions` | array |  required  | Ids of the permissions to assign the role
-    
-<!-- END_2b7f9717ee62cc3137e044d83558069f -->
-
-<!-- START_b541e406e7c079de3df76d2ebca01e9e -->
-## Update Suborganization Role UI Permissions
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Update role UI permissions for the specified suborganization
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"role_id":1,"permissions":"[1, 2]"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "role_id": 1,
-    "permissions": "[1, 2]"
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'role_id' => 1,
-            'permissions' => '[1, 2]',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/update-role-ui-permissions'
-payload = {
-    "role_id": 1,
-    "permissions": "[1, 2]"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Role UI permissions have been updated successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update role UI permissions."
-    ]
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/update-role-ui-permissions`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `role_id` | integer |  required  | Id of a suborganization role
-        `permissions` | array |  required  | Ids of the ui permissions to assign the role
-    
-<!-- END_b541e406e7c079de3df76d2ebca01e9e -->
-
-<!-- START_0d835883cdae9e0f53be5344cf85ba25 -->
-## Get Visibility Types For Suborganization
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get a list of the visibility types for suborganization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/visibility-types" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/visibility-types"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/visibility-types',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/visibility-types'
+url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -38507,1418 +39435,64 @@ response.json()
     "data": [
         {
             "id": 1,
-            "name": "private",
-            "display_name": "Private"
+            "name": "Audio",
+            "order": 1,
+            "organization_id": "1",
+            "created_at": "2022-01-10T13:09:36.000000Z",
+            "updated_at": "2022-01-10T13:09:36.000000Z"
         },
         {
             "id": 2,
-            "name": "protected",
-            "display_name": "Protected"
-        },
-        {
-            "id": 3,
-            "name": "global",
-            "display_name": "Global"
-        },
-        {
-            "id": 4,
-            "name": "public",
-            "display_name": "Public"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/visibility-types`
-
-
-<!-- END_0d835883cdae9e0f53be5344cf85ba25 -->
-<!-- START_558d0d7200313e563cf041d0a57cf15d -->
-## Get User Roles For Suborganization
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get a list of the users roles for suborganization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/roles" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/roles"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/roles',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/roles'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 1,
-            "name": "admin",
-            "display_name": "Administrator"
-        },
-        {
-            "id": 3,
-            "name": "member",
-            "display_name": "Member"
-        },
-        {
-            "id": 2,
-            "name": "course_creator",
-            "display_name": "Course Creator"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/roles`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-
-<!-- END_558d0d7200313e563cf041d0a57cf15d -->
-
-<!-- START_53e64500d90c30206825f23ae394c32d -->
-## Get User Role detail For Suborganization
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get detail of the user role for suborganization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/role/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/role/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/role/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/role/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 1,
-            "name": "admin",
-            "display_name": "Administrator"
-        },
-        {
-            "id": 3,
-            "name": "member",
-            "display_name": "Member"
-        },
-        {
-            "id": 2,
-            "name": "course_creator",
-            "display_name": "Course Creator"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/role/{roleId}`
-
-
-<!-- END_53e64500d90c30206825f23ae394c32d -->
-
-<!-- START_4d6e2abbb79dc0c50328617312df4a59 -->
-## Get User Role UI Permissions For Suborganization
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get detail of the user role UI permissions for suborganization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/role/1/permissions" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/role/1/permissions"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/role/1/permissions',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/role/1/permissions'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "title": "Organiziations",
-            "ui_sub_modules": [
-                {
-                    "title": "Organiziation",
-                    "ui_module_permissions": [
-                        {
-                            "id": 1,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 2,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 3,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "title": "Projects",
-            "ui_sub_modules": [
-                {
-                    "title": "All Projects",
-                    "ui_module_permissions": [
-                        {
-                            "id": 4,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 5,
-                            "title": "Edit",
-                            "selected": true
-                        },
-                        {
-                            "id": 6,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Import\/Export Projects",
-                    "ui_module_permissions": [
-                        {
-                            "id": 7,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 8,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 9,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "title": "Ref. Tables",
-            "ui_sub_modules": [
-                {
-                    "title": "Activity Types",
-                    "ui_module_permissions": [
-                        {
-                            "id": 10,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 11,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 12,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Activity Items",
-                    "ui_module_permissions": [
-                        {
-                            "id": 13,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 14,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 15,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "title": "Integrations",
-            "ui_sub_modules": [
-                {
-                    "title": "LMS Settings",
-                    "ui_module_permissions": [
-                        {
-                            "id": 16,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 17,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 18,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "LTI Tools",
-                    "ui_module_permissions": [
-                        {
-                            "id": 19,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 20,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 21,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "BrightCove",
-                    "ui_module_permissions": [
-                        {
-                            "id": 22,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 23,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 24,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "title": "Users",
-            "ui_sub_modules": [
-                {
-                    "title": "Manage Users",
-                    "ui_module_permissions": [
-                        {
-                            "id": 25,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 26,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 27,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Manage Roles",
-                    "ui_module_permissions": [
-                        {
-                            "id": 28,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 29,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 30,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "title": "Independent Activities",
-            "ui_sub_modules": [
-                {
-                    "title": "All Independent Activities",
-                    "ui_module_permissions": [
-                        {
-                            "id": 31,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 32,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 33,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Export\/Import Activities",
-                    "ui_module_permissions": [
-                        {
-                            "id": 34,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 35,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 36,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "title": "Authoring",
-            "ui_sub_modules": [
-                {
-                    "title": "Project",
-                    "ui_module_permissions": [
-                        {
-                            "id": 37,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 38,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 39,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Playlist",
-                    "ui_module_permissions": [
-                        {
-                            "id": 40,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 41,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 42,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Activity",
-                    "ui_module_permissions": [
-                        {
-                            "id": 43,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 44,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 45,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Team",
-                    "ui_module_permissions": [
-                        {
-                            "id": 46,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 47,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 48,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "Independent Activity",
-                    "ui_module_permissions": [
-                        {
-                            "id": 49,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 50,
-                            "title": "Edit",
-                            "selected": false
-                        },
-                        {
-                            "id": 51,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                },
-                {
-                    "title": "My Interactive Video",
-                    "ui_module_permissions": [
-                        {
-                            "id": 52,
-                            "title": "View",
-                            "selected": false
-                        },
-                        {
-                            "id": 53,
-                            "title": "None",
-                            "selected": false
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/role/{role}/permissions`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-    `role` |  required  | The Id of an organization role
-
-<!-- END_4d6e2abbb79dc0c50328617312df4a59 -->
-
-<!-- START_418929bc46bc5fb9a5f01f4c3dd9d030 -->
-## Upload thumbnail
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Upload thumbnail image for a suborganization
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/upload-thumb" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"thumb":"(binary)"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/upload-thumb"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "thumb": "(binary)"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/upload-thumb',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'thumb' => '(binary)',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/upload-thumb'
-payload = {
-    "thumb": "(binary)"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "thumbUrl": "\/storage\/organizations\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
-}
-```
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid image."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/upload-thumb`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `thumb` | image |  required  | Thumbnail image to upload
-    
-<!-- END_418929bc46bc5fb9a5f01f4c3dd9d030 -->
-<!-- START_e50a8c607f83eeb83e51151f5173d636 -->
-## Upload Favicon
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Upload favicon for a suborganization
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/upload-favicon" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"favicon":"(binary)"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/upload-favicon"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "favicon": "(binary)"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/upload-favicon',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'favicon' => '(binary)',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/upload-favicon'
-payload = {
-    "favicon": "(binary)"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "faviconUrl": "\/storage\/organizations\/favicon\/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
-}
-```
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "Invalid favicon."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/upload-favicon`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `favicon` | required |  optional  | image to upload
-    
-<!-- END_e50a8c607f83eeb83e51151f5173d636 -->
-
-<!-- START_b0608819de2e29d9ba05ca54db68d914 -->
-## Show Member Options
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Display a listing of the user member options for suborganization, other then the exiting ones.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/member-options" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"query":"leo"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/member-options"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "query": "leo"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/member-options',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'query' => 'leo',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/member-options'
-payload = {
-    "query": "leo"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "The query field is required."
-    ]
-}
-```
-> Example response (200):
-
-```json
-{
-    "member-options": [
-        {
-            "id": 3,
-            "first_name": "Abby",
-            "last_name": "_",
-            "email": "abby@curriki.org",
-            "organization_name": "",
-            "organization_type": null,
-            "job_title": "",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true
-        },
-        {
-            "id": 1494,
-            "first_name": "Gabriella",
-            "last_name": "Tennant-Nicholas",
-            "email": "gabbytennant05@gmail.com",
-            "organization_name": "Arizona State University",
-            "organization_type": null,
-            "job_title": "Student",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/member-options`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  optional  | int required The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `query` | string |  required  | Query to search users against
-    
-<!-- END_b0608819de2e29d9ba05ca54db68d914 -->
-<!-- START_6a093c75ae46f95bc8e0401ac1190533 -->
-## Get All Users For a Suborganization
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get a list of the users for a suborganization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/users" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"query":"Leo"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/users"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "query": "Leo"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/users',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'query' => 'Leo',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/users'
-payload = {
-    "query": "Leo"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "data": [
-        {
-            "id": 1544,
-            "first_name": "Kari",
-            "last_name": "Lund",
-            "email": "kari.lund@nkcschools.org",
-            "organization_name": "North Kansas City Schools",
-            "organization_type": null,
-            "job_title": "Teacher",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
-        },
-        {
-            "id": 1595,
-            "first_name": "Song",
-            "last_name": "Nam",
-            "email": "tpqtrang@songnam.net",
-            "organization_name": "Ms TRANG",
-            "organization_type": "Architecture design",
-            "job_title": "Tư vấn giám sát",
-            "address": null,
-            "phone_number": "84769861168",
-            "website": "http:\/\/www.songnam.net\/Dich-vu-va-Du-an\/Tu-van-giam-sat\/48",
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
-        },
-        {
-            "id": 4,
-            "first_name": "kochdemo",
-            "last_name": "",
-            "email": "kochdemo@curriki.org",
-            "organization_name": "",
-            "organization_type": null,
-            "job_title": "",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": false,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
-        },
-        {
-            "id": 5,
-            "first_name": "jonathanbrusco79",
-            "last_name": "",
-            "email": "jonathanbrusco79@gmail.com",
-            "organization_name": "",
-            "organization_type": null,
-            "job_title": "",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
-        },
-        {
-            "id": 1545,
-            "first_name": "Tara",
-            "last_name": "Miller",
-            "email": "voorhtk@nv.ccsd.net",
-            "organization_name": "CCSD",
-            "organization_type": null,
-            "job_title": "Theme Coordinator",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
-        },
-        {
-            "id": 1596,
-            "first_name": "Georgia",
-            "last_name": "Blacklock",
-            "email": "georgiablacklock7@gmail.com",
-            "organization_name": "Australian Catholic University",
-            "organization_type": null,
-            "job_title": "pre-teacher",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member"
-        },
-        {
-            "id": 1628,
-            "first_name": "John",
-            "last_name": "Hochstetler",
-            "email": "jhochstetler@hse.k12.in.us",
-            "organization_name": "Riverside Intermediate School",
-            "organization_type": null,
-            "job_title": "Teacher Librarian",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
-        },
-        {
-            "id": 1546,
-            "first_name": "Michelle",
-            "last_name": "Floyd",
-            "email": "michellefloyd@spsk12.net",
-            "organization_name": "Kilby Shores Elementary School",
-            "organization_type": null,
-            "job_title": "Teacher",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member"
-        },
-        {
-            "id": 1597,
-            "first_name": "Madison",
-            "last_name": "Cathey",
-            "email": "madicat94@hotmail.com",
-            "organization_name": "SJSD",
-            "organization_type": null,
-            "job_title": "Teacher",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
-        },
-        {
-            "id": 710,
-            "first_name": "Anthony",
-            "last_name": "Baker",
-            "email": "abaker@digitalpromise.org",
-            "organization_name": "",
-            "organization_type": null,
-            "job_title": "",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 2
-        },
-        {
-            "id": 1547,
-            "first_name": "John",
-            "last_name": "Lowe",
-            "email": "john_lowe@baylor.edu",
-            "organization_name": "Baylor",
-            "organization_type": null,
-            "job_title": "Instructional Designer",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 7
-        },
-        {
-            "id": 1598,
-            "first_name": "Meredith",
-            "last_name": "Carlton",
-            "email": "meredith@beaconacademync.org",
-            "organization_name": "Beacon Academy Inc",
-            "organization_type": null,
-            "job_title": null,
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member"
-        },
-        {
-            "id": 1629,
-            "first_name": "Joy",
-            "last_name": "Prescott",
-            "email": "2019fltoy@gmail.com",
-            "organization_name": "Educator",
-            "organization_type": null,
-            "job_title": "Educator",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": false,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 5
-        },
-        {
-            "id": 1548,
-            "first_name": "Mary",
-            "last_name": "Regione",
-            "email": "maryregione@spsk12.net",
-            "organization_name": "KIlby Shores Elementary",
-            "organization_type": null,
-            "job_title": "Teacher",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member"
-        },
-        {
-            "id": 1599,
-            "first_name": "Tionia",
-            "last_name": "Richardson",
-            "email": "richmathteacher@gmail.com",
-            "organization_name": "Rock Hill Schools",
-            "organization_type": null,
-            "job_title": "Teacher",
-            "address": null,
-            "phone_number": null,
-            "website": null,
-            "subscribed": true,
-            "default_organization": null,
-            "organization_role": "Member",
-            "projects_count": 1
+            "name": "Video",
+            "order": 1,
+            "organization_id": "2",
+            "created_at": "2022-01-10T13:09:44.000000Z",
+            "updated_at": "2022-01-10T13:09:44.000000Z"
         }
     ],
     "links": {
-        "first": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=1",
-        "last": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=109",
+        "first": "http:\/\/localhost:8000\/api\/v1\/author-tags?page=1",
+        "last": "http:\/\/localhost:8000\/api\/v1\/author-tags?page=1",
         "prev": null,
-        "next": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users?page=2"
+        "next": null
     },
     "meta": {
         "current_page": 1,
         "from": 1,
-        "last_page": 109,
-        "path": "http:\/\/127.0.0.1:8000\/api\/v1\/suborganizations\/1\/users",
-        "per_page": 15,
-        "to": 15,
-        "total": 1627
+        "last_page": 1,
+        "path": "http:\/\/localhost:8000\/api\/v1\/author-tags",
+        "per_page": 10,
+        "to": 2,
+        "total": 2
     }
 }
 ```
 
 ### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/users`
+`GET api/v1/suborganizations/{suborganization}/author-tags`
 
-#### URL Parameters
 
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-    `page` |  optional  | The pagination page no to show
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `query` | string |  required  | Query to search suborganization users against
-    
-<!-- END_6a093c75ae46f95bc8e0401ac1190533 -->
-<!-- START_9bbfc9b39a47f5f1aac00c343eb08701 -->
-## Add Suborganization User
+<!-- END_af7fb4d074f4df0e731c94016d08947a -->
 
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Add user for the specified role in suborganization
+<!-- START_857568139d9702000dbaba19c3c2fe41 -->
+## Create Author Tag
+
+Create a new author tag.
 
 > Example request:
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/add-user" \
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"user_id":1,"role_id":1}'
+    -d '{"name":"Audio","order":1}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/add-user"
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags"
 );
 
 let headers = {
@@ -39927,8 +39501,8 @@ let headers = {
 };
 
 let body = {
-    "user_id": 1,
-    "role_id": 1
+    "name": "Audio",
+    "order": 1
 }
 
 fetch(url, {
@@ -39944,15 +39518,15 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/add-user',
+    'http://localhost:8000/api/v1/suborganizations/1/author-tags',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
         'json' => [
-            'user_id' => 1,
-            'role_id' => 1,
+            'name' => 'Audio',
+            'order' => 1,
         ],
     ]
 );
@@ -39964,602 +39538,10 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/suborganizations/1/add-user'
+url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags'
 payload = {
-    "user_id": 1,
-    "role_id": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "User has been added successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to add user."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/add-user`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `user_id` | integer |  required  | Id of the user to be added
-        `role_id` | integer |  required  | Id of the role for added user
-    
-<!-- END_9bbfc9b39a47f5f1aac00c343eb08701 -->
-<!-- START_3beb55445b4fa278ba431ff224573fd0 -->
-## Invite Organization Member
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Invite a member to the organization.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations/1/invite-members" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"email":"abby@curriki.org","role_id":1,"note":"Welcome"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/invite-members"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "email": "abby@curriki.org",
-    "role_id": 1,
-    "note": "Welcome"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations/1/invite-members',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'email' => 'abby@curriki.org',
-            'role_id' => 1,
-            'note' => 'Welcome',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/invite-members'
-payload = {
-    "email": "abby@curriki.org",
-    "role_id": 1,
-    "note": "Welcome"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "User have been invited to the organization successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to invite user to the organization."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/suborganizations/{suborganization}/invite-members`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `email` | string |  required  | The email of the user
-        `role_id` | integer |  required  | Id of the role for invited user
-        `note` | string |  optional  | The note for the user
-    
-<!-- END_3beb55445b4fa278ba431ff224573fd0 -->
-<!-- START_220202f5c856b2376dbe45d796a51ea6 -->
-## Update Suborganization User
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Update user for the specified role in default suborganization
-
-> Example request:
-
-```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/update-user" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"user_id":1,"role_id":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/update-user"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "user_id": 1,
-    "role_id": 1
-}
-
-fetch(url, {
-    method: "PUT",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/update-user',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'user_id' => 1,
-            'role_id' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/update-user'
-payload = {
-    "user_id": 1,
-    "role_id": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('PUT', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "User has been updated successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to update user."
-    ]
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/update-user`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `user_id` | integer |  required  | Id of the user to be updated
-        `role_id` | integer |  required  | Id of the role for updated user
-    
-<!-- END_220202f5c856b2376dbe45d796a51ea6 -->
-<!-- START_16f327440cf69cecca0ec2cd55bad11c -->
-## Remove Suborganization User
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Remove the specified user from default suborganization.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1/delete-user" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"user_id":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/delete-user"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "user_id": 1
-}
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1/delete-user',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'user_id' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/delete-user'
-payload = {
-    "user_id": 1
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "User has been deleted successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to delete user."
-    ]
-}
-```
-> Example response (400):
-
-```json
-{
-    "errors": [
-        "The user_id field is required."
-    ]
-}
-```
-
-### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}/delete-user`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `user_id` | integer |  required  | Id of the user to be deleted
-    
-<!-- END_16f327440cf69cecca0ec2cd55bad11c -->
-<!-- START_85977dad8e439c6125cae5d71321d61b -->
-## Remove Suborganization User
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Remove the specified user from a particular organization.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1/remove-user" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"user_id":1,"preserve_data":false}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/remove-user"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "user_id": 1,
-    "preserve_data": false
-}
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1/remove-user',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'user_id' => 1,
-            'preserve_data' => false,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/remove-user'
-payload = {
-    "user_id": 1,
-    "preserve_data": false
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "User has been removed successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to remove user."
-    ]
-}
-```
-> Example response (422):
-
-```json
-{
-    "message": "The given data was invalid.",
-    "errors": {
-        "user_id": [
-            "The user id field is required."
-        ]
-    }
-}
-```
-
-### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}/remove-user`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `user_id` | integer |  required  | Id of the user to be removed
-        `preserve_data` | boolean |  optional  | Whether to assign user data to admin or delete it
-    
-<!-- END_85977dad8e439c6125cae5d71321d61b -->
-
-<!-- START_634204a9dfb2ca532f64d3bd155194c0 -->
-## Create Suborganization
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Create a new suborganization for a user's default organization.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/suborganizations" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admins":"[1, 2]","users":"[[user_id => 5, 3], [user_id => 6, 2]]","parent_id":1}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "name": "Old Campus",
-    "description": "This is a test suborganization.",
-    "domain": "oldcampus",
-    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admins": "[1, 2]",
-    "users": "[[user_id => 5, 3], [user_id => 6, 2]]",
-    "parent_id": 1
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/suborganizations',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'name' => 'Old Campus',
-            'description' => 'This is a test suborganization.',
-            'domain' => 'oldcampus',
-            'image' => '/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg',
-            'admins' => '[1, 2]',
-            'users' => '[[user_id => 5, 3], [user_id => 6, 2]]',
-            'parent_id' => 1,
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations'
-payload = {
-    "name": "Old Campus",
-    "description": "This is a test suborganization.",
-    "domain": "oldcampus",
-    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admins": "[1, 2]",
-    "users": "[[user_id => 5, 3], [user_id => 6, 2]]",
-    "parent_id": 1
+    "name": "Audio",
+    "order": 1
 }
 headers = {
   'Content-Type': 'application/json',
@@ -40575,7 +39557,7 @@ response.json()
 ```json
 {
     "errors": [
-        "Could not create suborganization. Please try again later."
+        "Could not create author tag. Please try again later."
     ]
 }
 ```
@@ -40583,49 +39565,45 @@ response.json()
 
 ```json
 {
-    "suborganization": {
-        "id": 6,
-        "name": "org name 5",
-        "description": "org description 5",
-        "image": "\/storage\/organizations\/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
-        "domain": "orgdomain5"
+    "author-tag": {
+        "id": 1,
+        "name": "Audio",
+        "order": 1,
+        "organization_id": "1",
+        "created_at": "2022-01-10T13:09:36.000000Z",
+        "updated_at": "2022-01-10T13:09:36.000000Z"
     }
 }
 ```
 
 ### HTTP Request
-`POST api/v1/suborganizations`
+`POST api/v1/suborganizations/{suborganization}/author-tags`
 
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Name of a suborganization
-        `description` | string |  required  | Description of a suborganization
-        `domain` | string |  required  | Domain of a suborganization
-        `image` | string |  required  | Image path of a suborganization
-        `admins` | array |  required  | Ids of the suborganization admin users
-        `users` | array |  required  | Array of the "user_id" and "role_id" for suborganization users
-        `parent_id` | integer |  required  | Id of the parent organization
+    `name` | string |  required  | Author Tag name.
+        `order` | integer |  required  | at what order it should appear.
     
-<!-- END_634204a9dfb2ca532f64d3bd155194c0 -->
-<!-- START_097ac7ebd0af5dd434bd8c4a773c362f -->
-## Get Suborganization
+<!-- END_857568139d9702000dbaba19c3c2fe41 -->
 
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get the specified suborganization detail.
+<!-- START_d04d5d0d9e3e334e68a91fd41a0695dc -->
+## Get Author Tag
+
+Get the specified author tag.
 
 > Example request:
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1" \
+    -G "http://localhost:8000/api/v1/suborganizations/1/author-tags/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1"
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1"
 );
 
 let headers = {
@@ -40645,7 +39623,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1',
+    'http://localhost:8000/api/v1/suborganizations/1/author-tags/1',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -40661,7 +39639,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/suborganizations/1'
+url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -40675,46 +39653,47 @@ response.json()
 
 ```json
 {
-    "suborganization": {
-        "id": 6,
-        "name": "org name 5",
-        "description": "org description 5",
-        "image": "\/storage\/organizations\/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
-        "domain": "orgdomain5"
+    "author-tag": {
+        "id": 1,
+        "name": "Audio",
+        "order": 1,
+        "organization_id": "1",
+        "created_at": "2022-01-10T13:09:36.000000Z",
+        "updated_at": "2022-01-10T13:09:36.000000Z"
     }
 }
 ```
 
 ### HTTP Request
-`GET api/v1/suborganizations/{suborganization}`
+`GET api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
 
 #### URL Parameters
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
+    `authorTag` |  required  | The Id of a Author Tag item
 
-<!-- END_097ac7ebd0af5dd434bd8c4a773c362f -->
-<!-- START_7057d920c8289381bd5cc4f50c90e974 -->
-## Update Suborganization
+<!-- END_d04d5d0d9e3e334e68a91fd41a0695dc -->
 
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Update the specified suborganization for a user.
+<!-- START_b27f8af3c4c830565b71e1c3072ac35f -->
+## Update Author Tag
+
+Update the specified author tag.
 
 > Example request:
 
 ```bash
 curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1" \
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"name":"Old Campus","description":"This is a test suborganization.","domain":"oldcampus","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg","admins":"[1, 2]","users":"[[user_id => 5, 3], [user_id => 6, 2]]"}'
+    -d '{"name":"Audio","order":1}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1"
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1"
 );
 
 let headers = {
@@ -40723,12 +39702,8 @@ let headers = {
 };
 
 let body = {
-    "name": "Old Campus",
-    "description": "This is a test suborganization.",
-    "domain": "oldcampus",
-    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admins": "[1, 2]",
-    "users": "[[user_id => 5, 3], [user_id => 6, 2]]"
+    "name": "Audio",
+    "order": 1
 }
 
 fetch(url, {
@@ -40744,19 +39719,15 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1',
+    'http://localhost:8000/api/v1/suborganizations/1/author-tags/1',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
         'json' => [
-            'name' => 'Old Campus',
-            'description' => 'This is a test suborganization.',
-            'domain' => 'oldcampus',
-            'image' => '/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg',
-            'admins' => '[1, 2]',
-            'users' => '[[user_id => 5, 3], [user_id => 6, 2]]',
+            'name' => 'Audio',
+            'order' => 1,
         ],
     ]
 );
@@ -40768,14 +39739,10 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/suborganizations/1'
+url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags/1'
 payload = {
-    "name": "Old Campus",
-    "description": "This is a test suborganization.",
-    "domain": "oldcampus",
-    "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-    "admins": "[1, 2]",
-    "users": "[[user_id => 5, 3], [user_id => 6, 2]]"
+    "name": "Audio",
+    "order": 1
 }
 headers = {
   'Content-Type': 'application/json',
@@ -40791,7 +39758,7 @@ response.json()
 ```json
 {
     "errors": [
-        "Failed to update suborganization."
+        "Failed to update author tag."
     ]
 }
 ```
@@ -40799,55 +39766,52 @@ response.json()
 
 ```json
 {
-    "suborganization": {
-        "id": 6,
-        "name": "org name 5",
-        "description": "org description 5",
-        "image": "\/storage\/organizations\/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
-        "domain": "orgdomain5"
+    "author-tag": {
+        "id": 1,
+        "name": "Audio",
+        "order": 1,
+        "organization_id": "1",
+        "created_at": "2022-01-10T13:09:36.000000Z",
+        "updated_at": "2022-01-10T13:09:36.000000Z"
     }
 }
 ```
 
 ### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}`
+`PUT api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
 
-`PATCH api/v1/suborganizations/{suborganization}`
+`PATCH api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
 
 #### URL Parameters
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
+    `authorTag` |  required  | The Id of a author tag
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `name` | string |  required  | Name of a suborganization
-        `description` | string |  required  | Description of a suborganization
-        `domain` | string |  required  | Domain of a suborganization
-        `image` | string |  required  | Image path of a suborganization
-        `admins` | array |  required  | Ids of the suborganization admin users
-        `users` | array |  required  | Array of the "user_id" and "role_id" for suborganization users
+    `name` | string |  required  | Author Tag name.
+        `order` | integer |  required  | at what order it should appear.
     
-<!-- END_7057d920c8289381bd5cc4f50c90e974 -->
-<!-- START_28d6dce17a37901a5098a615273be724 -->
-## Remove Suborganization
+<!-- END_b27f8af3c4c830565b71e1c3072ac35f -->
 
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Remove the specified suborganization.
+<!-- START_3c912d6b952bfe280face34c1382f29d -->
+## Remove Author Tag
+
+Remove the specified author tag.
 
 > Example request:
 
 ```bash
 curl -X DELETE \
-    "http://localhost:8000/api/v1/suborganizations/1" \
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1"
+    "http://localhost:8000/api/v1/suborganizations/1/author-tags/1"
 );
 
 let headers = {
@@ -40867,7 +39831,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->delete(
-    'http://localhost:8000/api/v1/suborganizations/1',
+    'http://localhost:8000/api/v1/suborganizations/1/author-tags/1',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -40883,7 +39847,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/suborganizations/1'
+url = 'http://localhost:8000/api/v1/suborganizations/1/author-tags/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -40897,7 +39861,7 @@ response.json()
 
 ```json
 {
-    "message": "Suborganization has been deleted successfully."
+    "message": "Author Tag has been deleted successfully."
 }
 ```
 > Example response (500):
@@ -40905,145 +39869,43 @@ response.json()
 ```json
 {
     "errors": [
-        "Failed to delete suborganization."
+        "Failed to delete author tag."
     ]
 }
 ```
 
 ### HTTP Request
-`DELETE api/v1/suborganizations/{suborganization}`
+`DELETE api/v1/suborganizations/{suborganization}/author-tags/{author_tag}`
 
 #### URL Parameters
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `suborganization` |  optional  | int required The Id of a suborganization
+    `authorTag` |  required  | The Id of a author tag item
 
-<!-- END_28d6dce17a37901a5098a615273be724 -->
-<!-- START_5623f6a0709ff5b4205333de28b249d9 -->
-## Get All Suborganization
+<!-- END_3c912d6b952bfe280face34c1382f29d -->
 
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get a list of the suborganizations for a user's default organization.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/index" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"query":"Vivensity"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/index"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "query": "Vivensity"
-}
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/index',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'query' => 'Vivensity',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/suborganizations/1/index'
-payload = {
-    "query": "Vivensity"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, json=payload)
-response.json()
-```
+#24. Education Level
 
 
-> Example response (200):
+APIs for education level management
+<!-- START_0f759636a46b7b26ab5d2ce6d9967c17 -->
+## Get Education Level
 
-```json
-{
-    "suborganization": [
-        {
-            "id": 3,
-            "name": "Suborganization",
-            "description": "Suborganization description",
-            "image": "\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
-            "domain": "suborganization"
-        }
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/index`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `query` | string |  required  | Query to search suborganization against
-    
-<!-- END_5623f6a0709ff5b4205333de28b249d9 -->
-<!-- START_24358fde38eb3bd6ff4123c0858c2e0d -->
-## Get Organization Media Sources
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get the media sources of specific organization for image and videos .
+Get a list of all education level.
 
 > Example request:
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/media-sources" \
+    -G "http://localhost:8000/api/v1/suborganizations/1/education-levels" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/media-sources"
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels"
 );
 
 let headers = {
@@ -41063,7 +39925,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/suborganizations/1/media-sources',
+    'http://localhost:8000/api/v1/suborganizations/1/education-levels',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -41079,7 +39941,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/suborganizations/1/media-sources'
+url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -41093,68 +39955,67 @@ response.json()
 
 ```json
 {
-    "mediaSources": [
+    "data": [
         {
             "id": 1,
-            "name": "My device",
-            "media_type": "Video",
-            "created_at": "2022-05-09T10:18:09.000000Z",
-            "updated_at": null,
-            "deleted_at": null,
-            "pivot": {
-                "organization_id": 1,
-                "media_source_id": 1,
-                "h5p_library": "H5P.AudioRecorder 1.0"
-            }
+            "name": "Grade A",
+            "order": 1,
+            "organization_id": "1",
+            "created_at": "2022-01-07T13:51:38.000000Z",
+            "updated_at": "2022-01-07T13:51:38.000000Z"
         },
         {
             "id": 2,
-            "name": "YouTube",
-            "media_type": "Video",
-            "created_at": "2022-05-09T10:18:09.000000Z",
-            "updated_at": null,
-            "deleted_at": null,
-            "pivot": {
-                "organization_id": 1,
-                "media_source_id": 2,
-                "h5p_library": "H5P.CoursePresentation 1.22"
-            }
+            "name": "Grade B",
+            "order": 1,
+            "organization_id": "2",
+            "created_at": "2022-01-07T13:51:56.000000Z",
+            "updated_at": "2022-01-07T13:51:56.000000Z"
         }
-    ]
+    ],
+    "links": {
+        "first": "http:\/\/localhost:8000\/api\/v1\/education-levels?page=1",
+        "last": "http:\/\/localhost:8000\/api\/v1\/education-levels?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http:\/\/localhost:8000\/api\/v1\/education-levels",
+        "per_page": 10,
+        "to": 2,
+        "total": 2
+    }
 }
 ```
 
 ### HTTP Request
-`GET api/v1/suborganizations/{suborganization}/media-sources`
+`GET api/v1/suborganizations/{suborganization}/education-levels`
 
-#### URL Parameters
 
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
+<!-- END_0f759636a46b7b26ab5d2ce6d9967c17 -->
 
-<!-- END_24358fde38eb3bd6ff4123c0858c2e0d -->
+<!-- START_05ff2efab58ece15891013f06bde7411 -->
+## Create Education Level
 
-<!-- START_46ca253646f35addf401ddd6fe9ed40d -->
-## Update Suborganization Media Sources
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Update the media sources for specified suborganization.
+Create a new education level.
 
 > Example request:
 
 ```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/suborganizations/1/update-media-sources" \
+curl -X POST \
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"media_source_ids":"1","h5p_library":"H5P.AudioRecorder 1.0"}'
+    -d '{"name":"Special Education","order":1}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/suborganizations/1/update-media-sources"
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels"
 );
 
 let headers = {
@@ -41163,8 +40024,209 @@ let headers = {
 };
 
 let body = {
-    "media_source_ids": "1",
-    "h5p_library": "H5P.AudioRecorder 1.0"
+    "name": "Special Education",
+    "order": 1
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/suborganizations/1/education-levels',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'name' => 'Special Education',
+            'order' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels'
+payload = {
+    "name": "Special Education",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Could not create education level. Please try again later."
+    ]
+}
+```
+> Example response (201):
+
+```json
+{
+    "education-level": {
+        "id": 1,
+        "name": "Grade A",
+        "order": "1",
+        "organization_id": "1",
+        "created_at": "2022-01-07T13:51:56.000000Z",
+        "updated_at": "2022-01-07T13:51:56.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/suborganizations/{suborganization}/education-levels`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | Education Level name.
+        `order` | integer |  required  | at what order it should appear.
+    
+<!-- END_05ff2efab58ece15891013f06bde7411 -->
+
+<!-- START_48cd276be9d2e7a85df9a55e36326ec5 -->
+## Get Education Level
+
+Get the specified education level.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/suborganizations/1/education-levels/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/suborganizations/1/education-levels/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "education-level": {
+        "id": 1,
+        "name": "Grade A",
+        "order": "1",
+        "organization_id": "1",
+        "created_at": "2022-01-07T13:51:56.000000Z",
+        "updated_at": "2022-01-07T13:51:56.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `EducationLevel` |  required  | The Id of a Education Level item
+
+<!-- END_48cd276be9d2e7a85df9a55e36326ec5 -->
+
+<!-- START_e6a9be09f5fed0a4e671357e085b7bb0 -->
+## Update Education Level
+
+Update the specified education level.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"Special Education","order":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Special Education",
+    "order": 1
 }
 
 fetch(url, {
@@ -41180,15 +40242,15 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->put(
-    'http://localhost:8000/api/v1/suborganizations/1/update-media-sources',
+    'http://localhost:8000/api/v1/suborganizations/1/education-levels/1',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
         'json' => [
-            'media_source_ids' => '1',
-            'h5p_library' => 'H5P.AudioRecorder 1.0',
+            'name' => 'Special Education',
+            'order' => 1,
         ],
     ]
 );
@@ -41200,10 +40262,10 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/suborganizations/1/update-media-sources'
+url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels/1'
 payload = {
-    "media_source_ids": "1",
-    "h5p_library": "H5P.AudioRecorder 1.0"
+    "name": "Special Education",
+    "order": 1
 }
 headers = {
   'Content-Type': 'application/json',
@@ -41214,17 +40276,12 @@ response.json()
 ```
 
 
-> Example response (200):
-
-```json
-null
-```
 > Example response (500):
 
 ```json
 {
     "errors": [
-        "Failed to update Media sources."
+        "Failed to update education level."
     ]
 }
 ```
@@ -41232,237 +40289,53 @@ null
 
 ```json
 {
-    "message": "Media sources has been updated successfully.",
-    "mediaSources": [
-        {
-            "id": 1,
-            "name": "My device",
-            "media_type": "Video",
-            "created_at": "2022-05-09T10:18:09.000000Z",
-            "updated_at": null,
-            "deleted_at": null,
-            "pivot": {
-                "organization_id": 1,
-                "media_source_id": 1,
-                "h5p_library": "H5P.AudioRecorder 1.0"
-            }
-        },
-        {
-            "id": 7,
-            "name": "My device",
-            "media_type": "Image",
-            "created_at": "2022-05-09T10:18:09.000000Z",
-            "updated_at": null,
-            "deleted_at": null,
-            "pivot": {
-                "organization_id": 1,
-                "media_source_id": 7,
-                "h5p_library": "H5P.CoursePresentation 1.22"
-            }
-        }
-    ]
-}
-```
-
-### HTTP Request
-`PUT api/v1/suborganizations/{suborganization}/update-media-sources`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `suborganization` |  required  | The Id of a suborganization
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `media_source_ids` | array |  required  | Ids of a media source type
-        `h5p_library` | string |  optional  | optional name of H5p Library
-    
-<!-- END_46ca253646f35addf401ddd6fe9ed40d -->
-
-<!-- START_00cd55ad540fcd37b92bd740c4bb691e -->
-## Get Media Sources
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-Get the media sources for image and videos.
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/media-sources" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/media-sources"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/media-sources',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/media-sources'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "mediaSources": {
-        "Video": [
-            {
-                "id": 1,
-                "name": "My device",
-                "media_type": "Video",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            },
-            {
-                "id": 2,
-                "name": "YouTube",
-                "media_type": "Video",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            },
-            {
-                "id": 3,
-                "name": "Kaltura",
-                "media_type": "Video",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            },
-            {
-                "id": 4,
-                "name": "Safari Montage",
-                "media_type": "Video",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            },
-            {
-                "id": 5,
-                "name": "BrightCove",
-                "media_type": "Video",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            },
-            {
-                "id": 6,
-                "name": "Vimeo",
-                "media_type": "Video",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            }
-        ],
-        "Image": [
-            {
-                "id": 7,
-                "name": "My device",
-                "media_type": "Image",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            },
-            {
-                "id": 8,
-                "name": "Pexels",
-                "media_type": "Image",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            },
-            {
-                "id": 9,
-                "name": "Safari Montage",
-                "media_type": "Image",
-                "created_at": "2022-05-09T10:18:09.000000Z",
-                "updated_at": null,
-                "deleted_at": null
-            }
-        ]
+    "education-level": {
+        "id": 1,
+        "name": "Grade A",
+        "order": "1",
+        "organization_id": "1",
+        "created_at": "2022-01-07T13:51:56.000000Z",
+        "updated_at": "2022-01-07T13:51:56.000000Z"
     }
 }
 ```
 
 ### HTTP Request
-`GET api/v1/media-sources`
+`PUT api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
 
+`PATCH api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
 
-<!-- END_00cd55ad540fcd37b92bd740c4bb691e -->
+#### URL Parameters
 
-#1001. Admin/Users
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `educationLevel` |  required  | The Id of a education level
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | Education Level name.
+        `order` | integer |  required  | at what order it should appear.
+    
+<!-- END_e6a9be09f5fed0a4e671357e085b7bb0 -->
 
+<!-- START_8b1b98f3b9f01a96960a24938e91ab26 -->
+## Remove Education Level
 
-APIs for users on admin panel.
-<!-- START_fe0f34240799837f8ceb6d2b43ba5ac7 -->
-## Users Basic Report
-
-Returns the paginated response of the users with basic reporting (DataTables are fully supported - All Params).
+Remove the specified education level.
 
 > Example request:
 
 ```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/admin/users/report/basic?start=0&length=25" \
+curl -X DELETE \
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/admin/users/report/basic"
+    "http://localhost:8000/api/v1/suborganizations/1/education-levels/1"
 );
-
-let params = {
-    "start": "0",
-    "length": "25",
-};
-Object.keys(params)
-    .forEach(key => url.searchParams.append(key, params[key]));
 
 let headers = {
     "Content-Type": "application/json",
@@ -41470,7 +40343,7 @@ let headers = {
 };
 
 fetch(url, {
-    method: "GET",
+    method: "DELETE",
     headers: headers,
 })
     .then(response => response.json())
@@ -41480,16 +40353,12 @@ fetch(url, {
 ```php
 
 $client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/admin/users/report/basic',
+$response = $client->delete(
+    'http://localhost:8000/api/v1/suborganizations/1/education-levels/1',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-        ],
-        'query' => [
-            'start'=> '0',
-            'length'=> '25',
         ],
     ]
 );
@@ -41501,16 +40370,12 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/admin/users/report/basic'
-params = {
-  'start': '0',
-  'length': '25',
-}
+url = 'http://localhost:8000/api/v1/suborganizations/1/education-levels/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('GET', url, headers=headers, params=params)
+response = requests.request('DELETE', url, headers=headers)
 response.json()
 ```
 
@@ -41519,141 +40384,7 @@ response.json()
 
 ```json
 {
-    "current_page": 1,
-    "data": [
-        {
-            "id": 1242,
-            "first_name": "123security",
-            "last_name": "products",
-            "email": "wirelessproducts.wl@gmail.com",
-            "projects_count": 2,
-            "playlists_count": 9,
-            "activities_count": 60
-        },
-        {
-            "id": 824,
-            "first_name": "168xoso",
-            "last_name": "com",
-            "email": "168xosocom@gmail.com",
-            "projects_count": 2,
-            "playlists_count": 9,
-            "activities_count": 60
-        }
-    ],
-    "first_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=1",
-    "from": 1,
-    "last_page": 816,
-    "last_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=816",
-    "next_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=2",
-    "path": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic",
-    "per_page": "2",
-    "prev_page_url": null,
-    "to": 2,
-    "total": 1632
-}
-```
-
-### HTTP Request
-`GET api/v1/admin/users/report/basic`
-
-#### Query Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -----------
-    `start` |  optional  | Offset for getting the paginated response, Default 0.
-    `length` |  optional  | Limit for getting the paginated records, Default 25.
-
-<!-- END_fe0f34240799837f8ceb6d2b43ba5ac7 -->
-<!-- START_25676ed5ebaafc1daa224c7a86b89348 -->
-## Bulk Import
-
-Bulk import the users from CSV file.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/admin/users/bulk/import" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"import_file":"et"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/admin/users/bulk/import"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "import_file": "et"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/admin/users/bulk/import',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'import_file' => 'et',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users/bulk/import'
-payload = {
-    "import_file": "et"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (206):
-
-```json
-{
-    "errors": [
-        "Failed to import some rows data, please download detailed error report."
-    ],
-    "report": "https:\/\/currikistudio.org\/api\/storage\/temporary\/users-import-report.csv"
-}
-```
-> Example response (200):
-
-```json
-{
-    "message": "All users data imported successfully!"
+    "message": "Education Level has been deleted successfully."
 }
 ```
 > Example response (500):
@@ -41661,37 +40392,43 @@ response.json()
 ```json
 {
     "errors": [
-        "Empty or bad formatted file, please download sample file for proper format."
+        "Failed to delete education level."
     ]
 }
 ```
 
 ### HTTP Request
-`POST api/v1/admin/users/bulk/import`
+`DELETE api/v1/suborganizations/{suborganization}/education-levels/{education_level}`
 
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `import_file` | file |  required  | The import file must be a file of type: CSV.
-    
-<!-- END_25676ed5ebaafc1daa224c7a86b89348 -->
-<!-- START_ef52cb1e3190f07a381bee96496d9e42 -->
-## Change User Role
+#### URL Parameters
 
-Make any user admin or remove from admin.
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `educationLevel` |  required  | The Id of a education level item
+
+<!-- END_8b1b98f3b9f01a96960a24938e91ab26 -->
+
+#25. Subject
+
+
+APIs for subject management
+<!-- START_0845c30c8551db74c7edd885cacf81cc -->
+## Get Subjects
+
+Get a list of all subjects.
 
 > Example request:
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/admin/users/1/roles/1" \
+    -G "http://localhost:8000/api/v1/suborganizations/1/subjects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/admin/users/1/roles/1"
+    "http://localhost:8000/api/v1/suborganizations/1/subjects"
 );
 
 let headers = {
@@ -41711,7 +40448,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/admin/users/1/roles/1',
+    'http://localhost:8000/api/v1/suborganizations/1/subjects',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -41727,7 +40464,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/admin/users/1/roles/1'
+url = 'http://localhost:8000/api/v1/suborganizations/1/subjects'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -41741,183 +40478,67 @@ response.json()
 
 ```json
 {
-    "message": "User role is changed successfully!"
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "You cannot change the role of yourself."
-    ]
-}
-```
-
-### HTTP Request
-`GET api/v1/admin/users/{user}/roles/{role}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `user` |  required  | The Id of a user.
-    `role` |  required  | Role 0 or 1, 1 for making admin, 0 for removing from admin.
-
-<!-- END_ef52cb1e3190f07a381bee96496d9e42 -->
-<!-- START_ce6b124894a429e5cdb7415c0d8a91fb -->
-## Get All Users List
-
-Returns the paginated response with pagination links (DataTables are fully supported - All Params).
-
-> Example request:
-
-```bash
-curl -X GET \
-    -G "http://localhost:8000/api/v1/admin/users?start=0&length=25" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/admin/users"
-);
-
-let params = {
-    "start": "0",
-    "length": "25",
-};
-Object.keys(params)
-    .forEach(key => url.searchParams.append(key, params[key]));
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->get(
-    'http://localhost:8000/api/v1/admin/users',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'query' => [
-            'start'=> '0',
-            'length'=> '25',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users'
-params = {
-  'start': '0',
-  'length': '25',
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('GET', url, headers=headers, params=params)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
     "data": [
         {
-            "id": 1242,
-            "name": "123security products",
-            "email": "wirelessproducts.wl@gmail.com",
-            "first_name": "123security",
-            "last_name": "products",
-            "job_title": "123securityproducts",
-            "organization_type": "Architecture design",
-            "is_admin": false,
-            "organization_name": "North Kansas City Schools"
+            "id": 1,
+            "name": "Math",
+            "order": 1,
+            "organization_id": "1",
+            "created_at": "2022-01-06T11:41:46.000000Z",
+            "updated_at": "2022-01-06T11:41:46.000000Z"
         },
         {
-            "id": 824,
-            "name": "168xoso com",
-            "email": "168xosocom@gmail.com",
-            "first_name": "168xoso",
-            "last_name": "com",
-            "job_title": "",
-            "organization_type": "K-12",
-            "is_admin": false,
-            "organization_name": "North Kansas City Schools"
+            "id": 3,
+            "name": "English",
+            "order": 2,
+            "organization_id": "2",
+            "created_at": "2022-01-06T11:59:17.000000Z",
+            "updated_at": "2022-01-06T11:59:17.000000Z"
         }
     ],
     "links": {
-        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=1",
-        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=66",
+        "first": "http:\/\/localhost:8000\/api\/v1\/subjects?page=1",
+        "last": "http:\/\/localhost:8000\/api\/v1\/subjects?page=1",
         "prev": null,
-        "next": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=2"
+        "next": null
     },
     "meta": {
         "current_page": 1,
         "from": 1,
-        "last_page": 66,
-        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users",
-        "per_page": "25",
-        "to": 25,
-        "total": 1632
+        "last_page": 1,
+        "path": "http:\/\/localhost:8000\/api\/v1\/subjects",
+        "per_page": 10,
+        "to": 2,
+        "total": 2
     }
 }
 ```
 
 ### HTTP Request
-`GET api/v1/admin/users`
+`GET api/v1/suborganizations/{suborganization}/subjects`
 
-#### Query Parameters
 
-Parameter | Status | Description
---------- | ------- | ------- | -----------
-    `start` |  optional  | Offset for getting the paginated response, Default 0.
-    `length` |  optional  | Limit for getting the paginated records, Default 25.
+<!-- END_0845c30c8551db74c7edd885cacf81cc -->
 
-<!-- END_ce6b124894a429e5cdb7415c0d8a91fb -->
-<!-- START_521e32c7d2ba5e2282925ea8a26584bc -->
-## Create User
+<!-- START_efe16b578627ae5c9bc104a03ce68767 -->
+## Create Subject
 
-Creates the new user in database.
+Create a new subject.
 
 > Example request:
 
 ```bash
 curl -X POST \
-    "http://localhost:8000/api/v1/admin/users" \
+    "http://localhost:8000/api/v1/suborganizations/1/subjects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
+    -d '{"name":"Special Education","order":1}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/admin/users"
+    "http://localhost:8000/api/v1/suborganizations/1/subjects"
 );
 
 let headers = {
@@ -41926,13 +40547,8 @@ let headers = {
 };
 
 let body = {
-    "first_name": "Ahmad",
-    "last_name": "Mukhtar",
-    "organization_name": "Studio",
-    "organization_type": "K-12",
-    "job_title": "2",
-    "email": "ahmedmukhtar1133@gmail.com",
-    "password": "kljd@Fi4R"
+    "name": "Special Education",
+    "order": 1
 }
 
 fetch(url, {
@@ -41948,20 +40564,15 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->post(
-    'http://localhost:8000/api/v1/admin/users',
+    'http://localhost:8000/api/v1/suborganizations/1/subjects',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
         'json' => [
-            'first_name' => 'Ahmad',
-            'last_name' => 'Mukhtar',
-            'organization_name' => 'Studio',
-            'organization_type' => 'K-12',
-            'job_title' => '2',
-            'email' => 'ahmedmukhtar1133@gmail.com',
-            'password' => 'kljd@Fi4R',
+            'name' => 'Special Education',
+            'order' => 1,
         ],
     ]
 );
@@ -41973,15 +40584,10 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/admin/users'
+url = 'http://localhost:8000/api/v1/suborganizations/1/subjects'
 payload = {
-    "first_name": "Ahmad",
-    "last_name": "Mukhtar",
-    "organization_name": "Studio",
-    "organization_type": "K-12",
-    "job_title": "2",
-    "email": "ahmedmukhtar1133@gmail.com",
-    "password": "kljd@Fi4R"
+    "name": "Special Education",
+    "order": 1
 }
 headers = {
   'Content-Type': 'application/json',
@@ -41992,58 +40598,58 @@ response.json()
 ```
 
 
-> Example response (200):
-
-```json
-{
-    "message": "User created successfully!",
-    "data": [
-        "Created User Data Array"
-    ]
-}
-```
 > Example response (500):
 
 ```json
 {
     "errors": [
-        "Unable to create user, please try again later."
+        "Could not create subject. Please try again later."
     ]
+}
+```
+> Example response (201):
+
+```json
+{
+    "subject": {
+        "id": 4,
+        "name": "English",
+        "order": 1,
+        "organization_id": "1",
+        "created_at": "2022-01-06T11:59:52.000000Z",
+        "updated_at": "2022-01-06T11:59:52.000000Z"
+    }
 }
 ```
 
 ### HTTP Request
-`POST api/v1/admin/users`
+`POST api/v1/suborganizations/{suborganization}/subjects`
 
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `first_name` | string |  required  | First name of the user.
-        `last_name` | string |  required  | Last name of the user.
-        `organization_name` | string |  required  | Organization name.
-        `organization_type` | string |  required  | Valid organization type.
-        `job_title` | string |  required  | Job title of the user in organization.
-        `email` | email |  required  | Unique email for registration.
-        `password` | password |  required  | Must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.
+    `name` | string |  required  | Education Level name.
+        `order` | integer |  required  | At what order it should appear.
     
-<!-- END_521e32c7d2ba5e2282925ea8a26584bc -->
-<!-- START_effe89f830caf4daa978f55524698087 -->
-## Get Specified User
+<!-- END_efe16b578627ae5c9bc104a03ce68767 -->
 
-Get the specified user data.
+<!-- START_6d13b878d55a8bfc6d9e1eda1e4012a0 -->
+## Get Subject
+
+Get the specified subject.
 
 > Example request:
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/admin/users/1" \
+    -G "http://localhost:8000/api/v1/suborganizations/1/subjects/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/admin/users/1"
+    "http://localhost:8000/api/v1/suborganizations/1/subjects/1"
 );
 
 let headers = {
@@ -42063,7 +40669,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/admin/users/1',
+    'http://localhost:8000/api/v1/suborganizations/1/subjects/1',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -42079,7 +40685,309 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/admin/users/1'
+url = 'http://localhost:8000/api/v1/suborganizations/1/subjects/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "subject": {
+        "id": 4,
+        "name": "English",
+        "order": 1,
+        "organization_id": "1",
+        "created_at": "2022-01-06T11:59:52.000000Z",
+        "updated_at": "2022-01-06T11:59:52.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/suborganizations/{suborganization}/subjects/{subject}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `subject` |  required  | The Id of a subject item
+
+<!-- END_6d13b878d55a8bfc6d9e1eda1e4012a0 -->
+
+<!-- START_117ee4d03307644c59528d86b57638cc -->
+## Update Subject
+
+Update the specified subject.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/suborganizations/1/subjects/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"Math","order":1}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/subjects/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Math",
+    "order": 1
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/suborganizations/1/subjects/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'name' => 'Math',
+            'order' => 1,
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/subjects/1'
+payload = {
+    "name": "Math",
+    "order": 1
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to update subject."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "subject": {
+        "id": 4,
+        "name": "English",
+        "order": 1,
+        "organization_id": "1",
+        "created_at": "2022-01-06T11:59:52.000000Z",
+        "updated_at": "2022-01-06T11:59:52.000000Z"
+    }
+}
+```
+
+### HTTP Request
+`PUT api/v1/suborganizations/{suborganization}/subjects/{subject}`
+
+`PATCH api/v1/suborganizations/{suborganization}/subjects/{subject}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `subject` |  required  | The Id of a subject
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `name` | string |  required  | Subject Name.
+        `order` | integer |  required  | at what order it should appear.
+    
+<!-- END_117ee4d03307644c59528d86b57638cc -->
+
+<!-- START_6b283712627565c48705cf0b8358092b -->
+## Remove Subject
+
+Remove the specified subject.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://localhost:8000/api/v1/suborganizations/1/subjects/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/suborganizations/1/subjects/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->delete(
+    'http://localhost:8000/api/v1/suborganizations/1/subjects/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/suborganizations/1/subjects/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "Subject has been deleted successfully."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Failed to delete subject."
+    ]
+}
+```
+
+### HTTP Request
+`DELETE api/v1/suborganizations/{suborganization}/subjects/{subject}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `subject` |  required  | The Id of a subject item
+
+<!-- END_6b283712627565c48705cf0b8358092b -->
+
+#26. LMS Settings
+
+
+APIs for LMS settings used for publishing
+<!-- START_2e23d1fbefc018b7f63a6c0e4827c8df -->
+## Authenticated user LMS settings
+
+Display a listing of the LMS settings for authenticated user
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/go/lms-settings/user/me" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/go/lms-settings/user/me"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/go/lms-settings/user/me',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/go/lms-settings/user/me'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -42094,151 +41002,34 @@ response.json()
 ```json
 {
     "data": {
-        "id": 1,
-        "name": "Sample User",
-        "email": "sample_user@test.com",
-        "first_name": "Sample",
-        "last_name": "User",
-        "job_title": "Developer",
-        "organization_type": "Architecture design",
-        "is_admin": true,
-        "organization_name": "North Kansas City Schools",
-        "projects": [
+        "settings": [
             {
-                "id": 9874,
-                "name": "Activity Sampler",
-                "description": "Studio Demos",
-                "thumb_url": "",
-                "shared": true,
-                "starter_project": false,
-                "is_user_starter": true,
-                "cloned_from": 68,
-                "clone_ctr": 0,
-                "status": 1,
-                "status_text": "DRAFT",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "09-Oct-2020",
-                "updated_at": "15-Oct-2020"
+                "id": 1,
+                "lms_url": "https:\/\/moodle39.curriki.org",
+                "lms_access_token": "bf06028490c01e1f4538f6206055bc00",
+                "site_name": "Moodle Demo",
+                "lms_name": "moodle",
+                "lms_access_key": "",
+                "lms_access_secret": "",
+                "description": "Moodle Demo",
+                "user_id": 1,
+                "lti_client_id": null,
+                "created_at": "2020-08-27T18:35:17.000000Z",
+                "updated_at": "2020-08-27T18:35:17.000000Z"
             },
             {
-                "id": 9952,
-                "name": "Activity Sampler",
-                "description": "Studio Demos",
-                "thumb_url": "",
-                "shared": true,
-                "starter_project": false,
-                "is_user_starter": true,
-                "cloned_from": 68,
-                "clone_ctr": 0,
-                "status": 1,
-                "status_text": "DRAFT",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "09-Oct-2020",
-                "updated_at": "15-Oct-2020"
-            },
-            {
-                "id": 80127,
-                "name": "Testing creation",
-                "description": "Testing after creation.",
-                "thumb_url": "https:\/\/images.pexels.com\/photos\/3169299\/pexels-photo-3169299.jpeg?auto=compress&cs=tinysrgb&dpr=1&fit=crop&h=200&w=280",
-                "shared": false,
-                "starter_project": null,
-                "is_user_starter": false,
-                "cloned_from": null,
-                "clone_ctr": 0,
-                "status": 1,
-                "status_text": "DRAFT",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "15-Oct-2020",
-                "updated_at": "15-Oct-2020"
-            },
-            {
-                "id": 80071,
-                "name": "Test",
-                "description": "test",
-                "thumb_url": "",
-                "shared": false,
-                "starter_project": null,
-                "is_user_starter": false,
-                "cloned_from": null,
-                "clone_ctr": 0,
-                "status": 2,
-                "status_text": "FINISHED",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "13-Oct-2020",
-                "updated_at": "15-Oct-2020"
-            },
-            {
-                "id": 80074,
-                "name": "Boolean Type Cast Testing",
-                "description": "Test",
-                "thumb_url": "",
-                "shared": false,
-                "starter_project": null,
-                "is_user_starter": false,
-                "cloned_from": null,
-                "clone_ctr": 0,
-                "status": 2,
-                "status_text": "FINISHED",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "13-Oct-2020",
-                "updated_at": "15-Oct-2020"
-            },
-            {
-                "id": 2118,
-                "name": "How well do you know?",
-                "description": "How well do you know me?",
-                "thumb_url": "",
-                "shared": true,
-                "starter_project": null,
-                "is_user_starter": false,
-                "cloned_from": null,
-                "clone_ctr": 0,
-                "status": 1,
-                "status_text": "DRAFT",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "16-Sep-2020",
-                "updated_at": "15-Oct-2020"
-            },
-            {
-                "id": 2170,
-                "name": "Math Review",
-                "description": "Math Review Unit 2",
-                "thumb_url": "",
-                "shared": false,
-                "starter_project": null,
-                "is_user_starter": false,
-                "cloned_from": null,
-                "clone_ctr": 0,
-                "status": 1,
-                "status_text": "DRAFT",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "16-Sep-2020",
-                "updated_at": "15-Oct-2020"
-            },
-            {
-                "id": 2169,
-                "name": "Test",
-                "description": "Exit Ticket test",
-                "thumb_url": "",
-                "shared": false,
-                "starter_project": null,
-                "is_user_starter": false,
-                "cloned_from": null,
-                "clone_ctr": 0,
-                "status": 1,
-                "status_text": "DRAFT",
-                "indexing": null,
-                "indexing_text": "NOT REQUESTED",
-                "created_at": "16-Sep-2020",
-                "updated_at": "15-Oct-2020"
+                "id": 2,
+                "lms_url": "https:\/\/moodle39.curriki.org",
+                "lms_access_token": "bf06028490c01e1f4538f6206055bc01",
+                "site_name": "Moodle Demo",
+                "lms_name": "moodle",
+                "lms_access_key": "",
+                "lms_access_secret": "",
+                "description": "Moodle Demo",
+                "user_id": 1,
+                "lti_client_id": null,
+                "created_at": "2020-08-28T18:35:17.000000Z",
+                "updated_at": "2020-08-28T18:35:17.000000Z"
             }
         ]
     }
@@ -42246,34 +41037,30 @@ response.json()
 ```
 
 ### HTTP Request
-`GET api/v1/admin/users/{user}`
+`GET api/v1/go/lms-settings/user/me`
 
-#### URL Parameters
 
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `user` |  required  | The Id of a user
+<!-- END_2e23d1fbefc018b7f63a6c0e4827c8df -->
 
-<!-- END_effe89f830caf4daa978f55524698087 -->
-<!-- START_4bfaf4c2bfaf88b96536e717be6b0e62 -->
-## Update Specified User
+<!-- START_96dd725df77268e19acea6ed61900366 -->
+## Get Projects based on LMS/LTI settings
 
-Updates the user data in database.
+Get a list of projects that belong to the same LMS/LTI settings
 
 > Example request:
 
 ```bash
-curl -X PUT \
-    "http://localhost:8000/api/v1/admin/users/1" \
+curl -X POST \
+    "http://localhost:8000/api/v1/go/lms/projects" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
+    -d '{"lms_url":"quo","lti_client_id":12}'
 
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/admin/users/1"
+    "http://localhost:8000/api/v1/go/lms/projects"
 );
 
 let headers = {
@@ -42282,17 +41069,12 @@ let headers = {
 };
 
 let body = {
-    "first_name": "Ahmad",
-    "last_name": "Mukhtar",
-    "organization_name": "Studio",
-    "organization_type": "K-12",
-    "job_title": "2",
-    "email": "ahmedmukhtar1133@gmail.com",
-    "password": "kljd@Fi4R"
+    "lms_url": "quo",
+    "lti_client_id": 12
 }
 
 fetch(url, {
-    method: "PUT",
+    method: "POST",
     headers: headers,
     body: body
 })
@@ -42303,21 +41085,16 @@ fetch(url, {
 ```php
 
 $client = new \GuzzleHttp\Client();
-$response = $client->put(
-    'http://localhost:8000/api/v1/admin/users/1',
+$response = $client->post(
+    'http://localhost:8000/api/v1/go/lms/projects',
     [
         'headers' => [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ],
         'json' => [
-            'first_name' => 'Ahmad',
-            'last_name' => 'Mukhtar',
-            'organization_name' => 'Studio',
-            'organization_type' => 'K-12',
-            'job_title' => '2',
-            'email' => 'ahmedmukhtar1133@gmail.com',
-            'password' => 'kljd@Fi4R',
+            'lms_url' => 'quo',
+            'lti_client_id' => 12,
         ],
     ]
 );
@@ -42329,21 +41106,16 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/admin/users/1'
+url = 'http://localhost:8000/api/v1/go/lms/projects'
 payload = {
-    "first_name": "Ahmad",
-    "last_name": "Mukhtar",
-    "organization_name": "Studio",
-    "organization_type": "K-12",
-    "job_title": "2",
-    "email": "ahmedmukhtar1133@gmail.com",
-    "password": "kljd@Fi4R"
+    "lms_url": "quo",
+    "lti_client_id": 12
 }
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('PUT', url, headers=headers, json=payload)
+response = requests.request('POST', url, headers=headers, json=payload)
 response.json()
 ```
 
@@ -42352,157 +41124,59 @@ response.json()
 
 ```json
 {
-    "message": "User data updated successfully!",
-    "data": [
-        "Updated User Data Array"
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Unable to update user, please try again later."
+    "projects": [
+        {
+            "id": 1,
+            "name": "Test Project",
+            "description": "This is a test project.",
+            "thumb_url": "https:\/\/images.pexels.com\/photos\/2832382",
+            "shared": true,
+            "starter_project": null,
+            "is_public": true,
+            "gcr_project_visibility": true,
+            "created_at": "2020-09-06T19:21:08.000000Z",
+            "updated_at": "2020-09-06T19:21:08.000000Z"
+        },
+        {
+            "id": 2,
+            "name": "Math Project",
+            "description": "This is a test math project.",
+            "thumb_url": "https:\/\/images.pexels.com\/photos\/2832384",
+            "shared": true,
+            "starter_project": null,
+            "is_public": true,
+            "created_at": "2020-09-07T19:21:08.000000Z",
+            "updated_at": "2020-09-07T19:21:08.000000Z"
+        }
     ]
 }
 ```
 
 ### HTTP Request
-`PUT api/v1/admin/users/{user}`
+`POST api/v1/go/lms/projects`
 
-`PATCH api/v1/admin/users/{user}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `user` |  required  | The Id of a user
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `first_name` | string |  required  | First name of the user.
-        `last_name` | string |  required  | Last name of the user.
-        `organization_name` | string |  required  | Organization name.
-        `organization_type` | string |  required  | Valid organization type.
-        `job_title` | string |  required  | Job title of the user in organization.
-        `email` | email |  required  | Valid Email.
-        `password` | password |  required  | Must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.
+    `lms_url` | string |  required  | The url of a lms
+        `lti_client_id` | integer |  required  | The Id of a lti client
     
-<!-- END_4bfaf4c2bfaf88b96536e717be6b0e62 -->
-<!-- START_ff019bc7db8f5be9ac8699027d67f85c -->
-## Delete Specified User
+<!-- END_96dd725df77268e19acea6ed61900366 -->
 
-Deletes the user record from database.
-
-> Example request:
-
-```bash
-curl -X DELETE \
-    "http://localhost:8000/api/v1/admin/users/1" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json"
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/admin/users/1"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "DELETE",
-    headers: headers,
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->delete(
-    'http://localhost:8000/api/v1/admin/users/1',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/admin/users/1'
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('DELETE', url, headers=headers)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-null
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "You cannot delete your own user."
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Unable to delete user, please try again later."
-    ]
-}
-```
-
-### HTTP Request
-`DELETE api/v1/admin/users/{user}`
-
-#### URL Parameters
-
-Parameter | Status | Description
---------- | ------- | ------- | -------
-    `user` |  required  | The Id of a user
-
-<!-- END_ff019bc7db8f5be9ac8699027d67f85c -->
-<!-- START_f8dcc97e33f92cce8410917973a81b60 -->
-## Download Sample File
-
-Download import sample file for users.
-
+<!-- START_cebdcdb62ee60954c143b031698c509f -->
+## api/v1/go/lms/project/{project}
 > Example request:
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/admin/users/import/sample-file" \
+    -G "http://localhost:8000/api/v1/go/lms/project/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://localhost:8000/api/v1/admin/users/import/sample-file"
+    "http://localhost:8000/api/v1/go/lms/project/1"
 );
 
 let headers = {
@@ -42522,7 +41196,7 @@ fetch(url, {
 
 $client = new \GuzzleHttp\Client();
 $response = $client->get(
-    'http://localhost:8000/api/v1/admin/users/import/sample-file',
+    'http://localhost:8000/api/v1/go/lms/project/1',
     [
         'headers' => [
             'Content-Type' => 'application/json',
@@ -42538,7 +41212,7 @@ print_r(json_decode((string) $body));
 import requests
 import json
 
-url = 'http://localhost:8000/api/v1/admin/users/import/sample-file'
+url = 'http://localhost:8000/api/v1/go/lms/project/1'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -42548,28 +41222,389 @@ response.json()
 ```
 
 
+> Example response (404):
+
+```json
+{
+    "message": "No query results for model [App\\Models\\Project] 1"
+}
+```
+
+### HTTP Request
+`GET api/v1/go/lms/project/{project}`
+
+
+<!-- END_cebdcdb62ee60954c143b031698c509f -->
+
+<!-- START_a7eb23f241e26168fb13116c94c761d9 -->
+## api/v1/go/lms/activities
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/go/lms/activities" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/go/lms/activities"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/go/lms/activities',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/go/lms/activities'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers)
+response.json()
+```
+
+
+> Example response (422):
+
+```json
+{
+    "message": "The given data was invalid.",
+    "errors": {
+        "userEmail": [
+            "The user email field is required."
+        ],
+        "ltiClientId": [
+            "The lti client id field is required."
+        ]
+    }
+}
+```
+
+### HTTP Request
+`POST api/v1/go/lms/activities`
+
+
+<!-- END_a7eb23f241e26168fb13116c94c761d9 -->
+
+<!-- START_fec9262bf367bda1531f2dbfed93506b -->
+## Get organizations based on LMS/LTI settings
+
+Get a list of organizations that belong to the same LMS/LTI settings
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/go/lms/organizations" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"userEmail":"libero","lti_client_id":"12"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/go/lms/organizations"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "userEmail": "libero",
+    "lti_client_id": "12"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/go/lms/organizations',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'userEmail' => 'libero',
+            'lti_client_id' => '12',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/go/lms/organizations'
+payload = {
+    "userEmail": "libero",
+    "lti_client_id": "12"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
+
+
 > Example response (200):
 
 ```json
 {
-    "file": "Downloadable sample file."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Sample file not found!"
+    "data": [
+        {
+            "id": 1,
+            "name": "Curriki Studio",
+            "description": "Curriki Studio, default organization.",
+            "image": "\/storage\/organizations\/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
+            "favicon": "\/storage\/organizations\/favicon\/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
+            "domain": "currikistudio"
+        }
     ]
 }
 ```
 
 ### HTTP Request
-`GET api/v1/admin/users/import/sample-file`
+`GET api/v1/go/lms/organizations`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `userEmail` | required |  optional  | The email of a user: quo
+        `lti_client_id` | required |  optional  | The Id of a lti client
+    
+<!-- END_fec9262bf367bda1531f2dbfed93506b -->
+
+<!-- START_61a6a231d6690db1b348f81a4486a35c -->
+## Get independent Activity based on user_id of a user who launched the deeplink
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/go/lms/independent-activities" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"user_email":"somebody@somewhere.com","query":"activity title","size":"accusamus"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/go/lms/independent-activities"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "user_email": "somebody@somewhere.com",
+    "query": "activity title",
+    "size": "accusamus"
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/go/lms/independent-activities',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'user_email' => 'somebody@somewhere.com',
+            'query' => 'activity title',
+            'size' => 'accusamus',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/go/lms/independent-activities'
+payload = {
+    "user_email": "somebody@somewhere.com",
+    "query": "activity title",
+    "size": "accusamus"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, json=payload)
+response.json()
+```
 
 
-<!-- END_f8dcc97e33f92cce8410917973a81b60 -->
+> Example response (400):
+
+```json
+{
+    "errors": [
+        "Could not find any independent activity. Please try again later."
+    ]
+}
+```
+> Example response (200):
+
+```json
+{
+    "independent-activity": {
+        "id": 9,
+        "title": "title",
+        "type": "h5p",
+        "content": "content",
+        "description": null,
+        "shared": null,
+        "order": 0,
+        "thumb_url": null,
+        "created_at": "2022-06-16T05:28:25.000000Z",
+        "updated_at": "2022-06-16T05:28:25.000000Z",
+        "gcr_activity_visibility": false,
+        "subjects": [
+            {
+                "id": 1,
+                "name": "Arts",
+                "order": null,
+                "organization_id": 63,
+                "created_at": "2022-04-21T12:41:25.000000Z",
+                "updated_at": null
+            }
+        ],
+        "education_levels": [
+            {
+                "id": 1,
+                "name": "Preschool (Ages 0-4)",
+                "order": null,
+                "organization_id": 63,
+                "created_at": "2022-04-20T17:33:20.000000Z",
+                "updated_at": null
+            }
+        ],
+        "author_tags": [
+            {
+                "id": 1,
+                "name": "Homework\/Assignment",
+                "order": null,
+                "organization_id": 63,
+                "created_at": "2022-04-20T17:38:02.000000Z",
+                "updated_at": null
+            }
+        ],
+        "source_type": null,
+        "source_url": null,
+        "organization_visibility_type_id": "1",
+        "status": null,
+        "status_text": null,
+        "indexing": null,
+        "indexing_text": "NOT REQUESTED",
+        "user": {
+            "id": 3,
+            "name": "Abby _",
+            "email": "abby@curriki.org",
+            "email_verified_at": "2020-09-11T23:52:44.000000Z",
+            "created_at": "2020-04-06T20:47:21.000000Z",
+            "updated_at": "2021-05-03T19:24:58.000000Z",
+            "first_name": "Abby",
+            "last_name": "_",
+            "organization_name": "",
+            "job_title": "",
+            "address": null,
+            "phone_number": null,
+            "organization_type": null,
+            "website": null,
+            "deleted_at": null,
+            "role": null,
+            "gapi_access_token": "{\"token_type\":\"Bearer\",\"access_token\":\"ya29.a0AfH6SMA9EL2ZjzTyPOIv3cgdm7VZ6JHJ3WHgqaaYZJY4X5mKhq417RjMKiCOS36tu1E3sOwNALtVBTamNE_XyNLeDak-xZuU4lAtLV1Ap0Gi19AN10vpj5Sg57AJ3KgrT4G3THYkGF3y0BZ4r38QhdAvydlpkfn_KwCZBQ\",\"scope\":\"email profile https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses openid https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.courses.readonly https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.email https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.topics https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.me https:\\\/\\\/www.googleapis.com\\\/auth\\\/classroom.coursework.students https:\\\/\\\/www.googleapis.com\\\/auth\\\/userinfo.profile\",\"login_hint\":\"AJDLj6LgfEhLCFgVLEzicO4eYW1YOkD2Ocu__Xw4RutMMX9v-B-BEo_pAMXjGBSn6gx8S9fToe9FpA7M_OwrbGosxzx3LBuA28SCV2kIKwPd_qmJ2ctCRP4\",\"expires_in\":3599,\"id_token\":\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiODNmMTgwMjNhODU1NTg3Zjk0MmU3NTEwMjI1MTEyMDg4N2Y3MjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE0MzA3NzE2NTQwNTMzODE4OTQzIiwiaGQiOiJjdXJyaWtpLm9yZyIsImVtYWlsIjoiYWJieUBjdXJyaWtpLm9yZyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiSXBlejh3cm5uUmU3Y3p6U1NidFlJdyIsIm5hbWUiOiJBYmJ5IFJvc3MiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2cwYUVyeDRwUE1ZOVRPQXJiZ01KX3ZybHdsSzB6SEdBNVp3dFlVPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFiYnkiLCJmYW1pbHlfbmFtZSI6IlJvc3MiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTYwMDM3NDQ4NywiZXhwIjoxNjAwMzc4MDg3LCJqdGkiOiI3NmUzNjU5M2I1NWEwYjhkMDBlZDZiODRmMmFmMmRiZmVkNDFhN2RhIn0.i9YToGr1CNLtk6zHX2f6dmP4PGB5ibyxFOFisPRvxe1YZvenGpyEh3MlSMkURvHzo2RGmYGkdhpJYHtn2b_TOqbsNsx61DUE4BTME5O_4-VcR-c_YDYFn6K3MpsrYLbSxDKTgdSJbA56B8-s726QzcFEixkU5mtaK5gbO4Zb32U94qF1_ziJ5XcEtaJt1kBY8oY15d3ubXJl-zLyh-fB9K4mqssqqWABbLAtJQycfx5x-9ks6iVHYXq-_tdnfadm7HBYROlcYzKc7VJkOAP5z-e05Zqx9C1NUXpW_-gFwiHazbC7_N_-UihSej2m3qULtIdgZMtT6fid4_LftXc38Q\",\"session_state\":{\"extraQueryParams\":{\"authuser\":\"1\"}},\"first_issued_at\":1600374485776,\"expires_at\":1600378084776,\"idpId\":\"google\"}",
+            "hubspot": true,
+            "subscribed": true,
+            "subscribed_ip": "192.168.96.10",
+            "membership_type_id": 2,
+            "temp_password": null
+        },
+        "h5p_content": null
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/go/lms/independent-activities`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `user_email` | required |  optional  | The email of a user
+        `query` | is |  optional  | search-term
+        `size` | is |  optional  | for pagination
+    
+<!-- END_61a6a231d6690db1b348f81a4486a35c -->
+
 #1002. Admin/Activity Types
 
 
@@ -42750,6 +41785,7 @@ Parameter | Status | Description
     `length` |  optional  | Limit for getting the paginated records, Default 25.
 
 <!-- END_197c7d7cd44f76b20d2c1e30e9875bcf -->
+
 <!-- START_be74407f085cafa8c03238e489fa014d -->
 ## Create New Activity Type
 
@@ -42996,6 +42032,7 @@ Parameter | Status | Description
     `activity_type` |  required  | The Id of a activity type
 
 <!-- END_1c8c52e2bf26d886997e6d019cc66a99 -->
+
 <!-- START_6a8b9fca09620ddb62fe64d5ed11234a -->
 ## Update Specified Activity Type
 
@@ -43202,6 +42239,7 @@ Parameter | Status | Description
     `activity_type` |  required  | The Id of a activity type
 
 <!-- END_572751e0107e5bc634e1ac0587093211 -->
+
 #1003. Admin/Activity Items
 
 
@@ -43360,6 +42398,7 @@ Parameter | Status | Description
     `length` |  optional  | Limit for getting the paginated records, Default 25.
 
 <!-- END_df6d8716f17197a140172f39a46dd818 -->
+
 <!-- START_92bea385086e8c01571b78a10df594c8 -->
 ## Create New Activity Item
 
@@ -43596,6 +42635,7 @@ Parameter | Status | Description
     `activity_item` |  required  | The Id of a activity item
 
 <!-- END_bb884f911c1bc5348c85017679f2680a -->
+
 <!-- START_d5360e88fb9f395c18bb9d6064c1aca3 -->
 ## Update Specified Activity Item
 
@@ -43608,7 +42648,7 @@ curl -X PUT \
     "http://localhost:8000/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"voluptatem","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"esse","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 
 ```
 
@@ -43627,7 +42667,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "voluptatem",
+    "image": "esse",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -43658,7 +42698,7 @@ $response = $client->put(
             'description' => 'Create Math activities.',
             'demo_activity_id' => 1,
             'demo_video_id' => 1,
-            'image' => 'voluptatem',
+            'image' => 'esse',
             'order' => 1,
             'type' => 'h5p',
             'activity_type_id' => 1,
@@ -43680,7 +42720,7 @@ payload = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "voluptatem",
+    "image": "esse",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -43739,6 +42779,7 @@ Parameter | Type | Status | Description
         `h5pLib` | string |  required  | H5P activity name & version.
     
 <!-- END_d5360e88fb9f395c18bb9d6064c1aca3 -->
+
 <!-- START_f2aa8766f56a4b6208a962284333bc6a -->
 ## Delete Activity Item
 
@@ -43826,6 +42867,7 @@ Parameter | Status | Description
     `activity_item` |  required  | The Id of a activity item
 
 <!-- END_f2aa8766f56a4b6208a962284333bc6a -->
+
 #1004. Admin/Projects
 
 
@@ -43933,6 +42975,7 @@ Parameter | Type | Status | Description
         `index` | integer |  required  | New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'.
     
 <!-- END_e06f1c2edc1efaf34e84485c6f1731b8 -->
+
 <!-- START_de3902c9d2f7f7c820e7fb0ed9abfd77 -->
 ## Starter Project Toggle
 
@@ -44036,6 +43079,7 @@ Parameter | Type | Status | Description
         `flag` | boolean |  required  | Selected projects remove or make starter.
     
 <!-- END_de3902c9d2f7f7c820e7fb0ed9abfd77 -->
+
 <!-- START_d72aa9bd32fa1e868d979411efd317b6 -->
 ## Project Indexing
 
@@ -44290,6 +43334,7 @@ Parameter | Status | Description
     `project` |  required  | The Id of a project.
 
 <!-- END_a82b7707bfbb3bfb6a194b341f9d2bac -->
+
 <!-- START_fc2a4353e3093252e672968599713345 -->
 ## Get All Projects.
 
@@ -44450,6 +43495,7 @@ Parameter | Status | Description
     `length` |  optional  | Limit for getting the paginated records, Default 25.
 
 <!-- END_fc2a4353e3093252e672968599713345 -->
+
 #1005. Admin/LMS Settings
 
 
@@ -44463,7 +43509,7 @@ Returns the paginated response with pagination links (DataTables are fully suppo
 
 ```bash
 curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/lms-settings?Organization=sed&start=0&length=25" \
+    -G "http://localhost:8000/api/v1/suborganizations/1/lms-settings?Organization=assumenda&start=0&length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
@@ -44474,7 +43520,7 @@ const url = new URL(
 );
 
 let params = {
-    "Organization": "sed",
+    "Organization": "assumenda",
     "start": "0",
     "length": "25",
 };
@@ -44505,7 +43551,7 @@ $response = $client->get(
             'Accept' => 'application/json',
         ],
         'query' => [
-            'Organization'=> 'sed',
+            'Organization'=> 'assumenda',
             'start'=> '0',
             'length'=> '25',
         ],
@@ -44521,7 +43567,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/suborganizations/1/lms-settings'
 params = {
-  'Organization': 'sed',
+  'Organization': 'assumenda',
   'start': '0',
   'length': '25',
 }
@@ -45510,6 +44556,7 @@ Parameter | Type | Status | Description
         `description` | text |  required  | Brief description.
     
 <!-- END_e75b6b178b609b7bd0cce5907371aa27 -->
+
 <!-- START_2f2758b0abc25e98982d44b733c0347d -->
 ## Get LMS Setting
 
@@ -45760,6 +44807,7 @@ Parameter | Type | Status | Description
         `description` | text |  required  | Brief description.
     
 <!-- END_dfc3e6d45a925c4d7791043f1e5ddcb1 -->
+
 <!-- START_b1748719c1f572e3601dbbb3b63923dc -->
 ## Delete LMS Setting
 
@@ -45847,6 +44895,7 @@ Parameter | Status | Description
     `lms_setting` |  required  | The Id of a lms setting
 
 <!-- END_b1748719c1f572e3601dbbb3b63923dc -->
+
 #1005. Admin/Whiteboard
 
 
@@ -46043,6 +45092,7 @@ response.json()
 
 
 <!-- END_4136d7e618a59691f2b786924080a1b8 -->
+
 <!-- START_499de428ee63cab2620646b3cf7e3971 -->
 ## Create Organization Type
 
@@ -46146,6 +45196,7 @@ Parameter | Type | Status | Description
         `order` | integer |  required  | Order Sequence value.
     
 <!-- END_499de428ee63cab2620646b3cf7e3971 -->
+
 <!-- START_ab86f5c63956fa42bcde2ca97b638ca2 -->
 ## Get Organization Type
 
@@ -46229,6 +45280,7 @@ Parameter | Status | Description
     `organization_type` |  required  | The Id of a organization type
 
 <!-- END_ab86f5c63956fa42bcde2ca97b638ca2 -->
+
 <!-- START_621c794fa4548f3be2ca9856b00bd68d -->
 ## Update Organization Type
 
@@ -46335,6 +45387,7 @@ Parameter | Type | Status | Description
         `label` | string |  required  | Updated label for organization type.
     
 <!-- END_621c794fa4548f3be2ca9856b00bd68d -->
+
 <!-- START_8647ecfbe889fff07f7d7867212325fc -->
 ## Delete Organization Type
 
@@ -46422,6 +45475,7 @@ Parameter | Status | Description
     `organization_type` |  required  | The Id of a organization type.
 
 <!-- END_8647ecfbe889fff07f7d7867212325fc -->
+
 #1007. Admin/Queues
 
 
@@ -47146,6 +46200,7 @@ Parameter | Status | Description
     `length` |  optional  | Limit for getting the paginated records, Default 25.
 
 <!-- END_19d2e958e5b93e2b59c7c5f9acf6cbcd -->
+
 <!-- START_974c9a8bc7cc1bbac2ac685ff311333e -->
 ## Retry All Failed Jobs
 
@@ -47219,6 +46274,7 @@ response.json()
 
 
 <!-- END_974c9a8bc7cc1bbac2ac685ff311333e -->
+
 <!-- START_ba68bb0fa6b0c7c5c6a906f18d8889dd -->
 ## Delete All Failed Jobs
 
@@ -47292,6 +46348,7 @@ response.json()
 
 
 <!-- END_ba68bb0fa6b0c7c5c6a906f18d8889dd -->
+
 <!-- START_4d974cc26d982988b65af87d04e9087f -->
 ## Retry Specific Failed Job
 
@@ -47372,6 +46429,7 @@ Parameter | Status | Description
     `job` |  required  | The integer Id of a job.
 
 <!-- END_4d974cc26d982988b65af87d04e9087f -->
+
 <!-- START_82b017fa48d3c6810bbe211c47d6232f -->
 ## Delete Specific Failed Job
 
@@ -47452,6 +46510,7 @@ Parameter | Status | Description
     `job` |  required  | The integer Id of a job.
 
 <!-- END_82b017fa48d3c6810bbe211c47d6232f -->
+
 <!-- START_3bc52c8117e841c812597887d1c9a011 -->
 ## Get All Queues Logs
 
@@ -47592,6 +46651,7 @@ Parameter | Status | Description
     `length` |  optional  | Limit for getting the paginated records, Default 25.
 
 <!-- END_3bc52c8117e841c812597887d1c9a011 -->
+
 #1008.   Admin/Lti Tool Settings *
 
 APIs for Lti tool settings on admin panel.
@@ -47656,11 +46716,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -47730,11 +46790,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -47806,11 +46866,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -47951,6 +47011,7 @@ Parameter | Status | Description
     `length` |  optional  | Limit for getting the paginated records, Default 25.
 
 <!-- END_336f85eb05e83b47631afcaa03d5bc13 -->
+
 <!-- START_6782e315dd64de685da3c7592a2c7af4 -->
 ## Get Organizations
 
@@ -48071,6 +47132,7 @@ response.json()
 
 
 <!-- END_6782e315dd64de685da3c7592a2c7af4 -->
+
 <!-- START_153156e8246149b781532c73d387fce6 -->
 ## Create Organization
 
@@ -48191,6 +47253,7 @@ Parameter | Type | Status | Description
         `parent_id` | integer |  optional  | Id of the parent organization
     
 <!-- END_153156e8246149b781532c73d387fce6 -->
+
 <!-- START_58d63b8081617bba8693da51da05f6bd -->
 ## Get Organization
 
@@ -48320,6 +47383,7 @@ Parameter | Status | Description
     `id` |  required  | The Id of the organization
 
 <!-- END_58d63b8081617bba8693da51da05f6bd -->
+
 <!-- START_d3c0720d465d2a46c1a1d5a1131e81f8 -->
 ## Update Organization
 
@@ -48447,6 +47511,7 @@ Parameter | Type | Status | Description
         `parent_id` | integer |  optional  | Id of the parent organization
     
 <!-- END_d3c0720d465d2a46c1a1d5a1131e81f8 -->
+
 <!-- START_909206cbda762cc4d89cbc36803a206c -->
 ## Remove Organization
 
@@ -48528,6 +47593,7 @@ Parameter | Status | Description
     `id` |  optional  | int required The Id of a organization
 
 <!-- END_909206cbda762cc4d89cbc36803a206c -->
+
 <!-- START_25fb150fc59870fa2f77bdfa6a686e94 -->
 ## Remove Organization User
 
@@ -48617,6 +47683,7 @@ Parameter | Status | Description
     `user` |  optional  | int required Id of the user to be deleted.
 
 <!-- END_25fb150fc59870fa2f77bdfa6a686e94 -->
+
 <!-- START_717fca58d493839508f6960bc537f6d4 -->
 ## Display parent organizations options
 
@@ -48728,6 +47795,7 @@ Parameter | Status | Description
     `id` |  optional  | int required The Id of a organization
 
 <!-- END_717fca58d493839508f6960bc537f6d4 -->
+
 <!-- START_b1b519f1eafea099d55a936120a04094 -->
 ## Display member options
 
@@ -48851,6 +47919,7 @@ Parameter | Status | Description
     `id` |  optional  | int required The Id of a organization
 
 <!-- END_b1b519f1eafea099d55a936120a04094 -->
+
 #general
 
 
@@ -48929,6 +47998,7 @@ response.json()
 
 
 <!-- END_6c3256ccb776586b79a2c91cb56e0197 -->
+
 <!-- START_041da1e48afee5a68905e4520ab4d9e1 -->
 ## Save Access Token
 
@@ -48941,7 +48011,7 @@ curl -X GET \
     -G "http://localhost:8000/api/microsoft-team/get-access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"code":"architecto"}'
+    -d '{"code":"quisquam"}'
 
 ```
 
@@ -48956,7 +48026,7 @@ let headers = {
 };
 
 let body = {
-    "code": "architecto"
+    "code": "quisquam"
 }
 
 fetch(url, {
@@ -48979,7 +48049,7 @@ $response = $client->get(
             'Accept' => 'application/json',
         ],
         'json' => [
-            'code' => 'architecto',
+            'code' => 'quisquam',
         ],
     ]
 );
@@ -48993,7 +48063,7 @@ import json
 
 url = 'http://localhost:8000/api/microsoft-team/get-access-token'
 payload = {
-    "code": "architecto"
+    "code": "quisquam"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -49154,6 +48224,7 @@ response.json()
 
 
 <!-- END_603efd3e2b9c40f032302500d4008665 -->
+
 <!-- START_69a8dde08953161063147f25d064f8bc -->
 ## Display error
 
@@ -49392,6 +48463,7 @@ response.json()
 
 
 <!-- END_191534ba0ff7c75b39820e5ff52cb5dc -->
+
 <!-- START_51a87ff5602fb398eb3dad7eec519e31 -->
 ## Get All Brightcove API Settings for listing.
 
@@ -49470,11 +48542,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -49756,7 +48828,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/brightcove-api-settings/upload-css" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"css":"rerum"}'
+    -d '{"css":"natus"}'
 
 ```
 
@@ -49771,7 +48843,7 @@ let headers = {
 };
 
 let body = {
-    "css": "rerum"
+    "css": "natus"
 }
 
 fetch(url, {
@@ -49794,7 +48866,7 @@ $response = $client->post(
             'Accept' => 'application/json',
         ],
         'json' => [
-            'css' => 'rerum',
+            'css' => 'natus',
         ],
     ]
 );
@@ -49808,7 +48880,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/brightcove-api-settings/upload-css'
 payload = {
-    "css": "rerum"
+    "css": "natus"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -49897,11 +48969,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -49910,117 +48982,6 @@ response.json()
 
 
 <!-- END_a79c0f8b2d083cb00061fc8a136a261a -->
-
-<!-- START_9a1936975ccad3c497c3c4ce5119beb6 -->
-## Save Access Token
-
-Save GraphAPI access token in the database.
-
-> Example request:
-
-```bash
-curl -X POST \
-    "http://localhost:8000/api/v1/microsoft-team/save-access-token" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"access_token":"sit"}'
-
-```
-
-```javascript
-const url = new URL(
-    "http://localhost:8000/api/v1/microsoft-team/save-access-token"
-);
-
-let headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "access_token": "sit"
-}
-
-fetch(url, {
-    method: "POST",
-    headers: headers,
-    body: body
-})
-    .then(response => response.json())
-    .then(json => console.log(json));
-```
-
-```php
-
-$client = new \GuzzleHttp\Client();
-$response = $client->post(
-    'http://localhost:8000/api/v1/microsoft-team/save-access-token',
-    [
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-        'json' => [
-            'access_token' => 'sit',
-        ],
-    ]
-);
-$body = $response->getBody();
-print_r(json_decode((string) $body));
-```
-
-```python
-import requests
-import json
-
-url = 'http://localhost:8000/api/v1/microsoft-team/save-access-token'
-payload = {
-    "access_token": "sit"
-}
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-response = requests.request('POST', url, headers=headers, json=payload)
-response.json()
-```
-
-
-> Example response (200):
-
-```json
-{
-    "message": "Access token has been saved successfully."
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Validation error: Access token is required"
-    ]
-}
-```
-> Example response (500):
-
-```json
-{
-    "errors": [
-        "Failed to save the token."
-    ]
-}
-```
-
-### HTTP Request
-`POST api/v1/microsoft-team/save-access-token`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `access_token` | string |  required  | The stringified of the GraphAPI access token JSON object
-    
-<!-- END_9a1936975ccad3c497c3c4ce5119beb6 -->
 
 <!-- START_314b49e27ed5b16210ec5358e5cbd0cd -->
 ## Get List of Classes
@@ -50108,7 +49069,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/microsoft-team/classes" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"displayName":"Test Class","access_token":"quis"}'
+    -d '{"displayName":"Test Class","access_token":"neque"}'
 
 ```
 
@@ -50124,7 +49085,7 @@ let headers = {
 
 let body = {
     "displayName": "Test Class",
-    "access_token": "quis"
+    "access_token": "neque"
 }
 
 fetch(url, {
@@ -50148,7 +49109,7 @@ $response = $client->post(
         ],
         'json' => [
             'displayName' => 'Test Class',
-            'access_token' => 'quis',
+            'access_token' => 'neque',
         ],
     ]
 );
@@ -50163,7 +49124,7 @@ import json
 url = 'http://localhost:8000/api/v1/microsoft-team/classes'
 payload = {
     "displayName": "Test Class",
-    "access_token": "quis"
+    "access_token": "neque"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -50203,7 +49164,7 @@ curl -X POST \
     "http://localhost:8000/api/v1/microsoft-team/projects/1/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"classId":"Test Class"}'
+    -d '{"classId":"bebe45d4-d0e6-4085-b418-e98a51db70c3"}'
 
 ```
 
@@ -50218,7 +49179,7 @@ let headers = {
 };
 
 let body = {
-    "classId": "Test Class"
+    "classId": "bebe45d4-d0e6-4085-b418-e98a51db70c3"
 }
 
 fetch(url, {
@@ -50241,7 +49202,7 @@ $response = $client->post(
             'Accept' => 'application/json',
         ],
         'json' => [
-            'classId' => 'Test Class',
+            'classId' => 'bebe45d4-d0e6-4085-b418-e98a51db70c3',
         ],
     ]
 );
@@ -50255,7 +49216,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/microsoft-team/projects/1/publish'
 payload = {
-    "classId": "Test Class"
+    "classId": "bebe45d4-d0e6-4085-b418-e98a51db70c3"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -50271,7 +49232,7 @@ response.json()
 ```json
 {
     "message": [
-        "Project has been published successfully."
+        "Your request to publish project [project->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
     ]
 }
 ```
@@ -50283,11 +49244,6 @@ response.json()
         "Project must be shared as we are temporarily publishing the shared link."
     ]
 }
-```
-> Example response (500):
-
-```json
-null
 ```
 
 ### HTTP Request
@@ -50301,7 +49257,7 @@ Parameter | Status | Description
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `classId` | required |  optional  | string Id of the class.
+    `classId` | optional |  optional  | string Id of the class.
     
 <!-- END_9e2f2b8e250e0ebe8503e9dfff0455e7 -->
 
@@ -50378,6 +49334,7 @@ response.json()
 
 
 <!-- END_d632df2b6f298dfb891c5da13abff768 -->
+
 <!-- START_ea432c871b063b3342f949d8a0c0f6e6 -->
 ## Display a listing of the resource.
 
@@ -50438,11 +49395,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -50512,11 +49469,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -50586,11 +49543,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -50660,11 +49617,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -50736,11 +49693,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -50810,11 +49767,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (404):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "No query results for model [App\\Models\\Activity] 1"
 }
 ```
 
@@ -50897,6 +49854,1146 @@ response.json()
 
 
 <!-- END_eae1730795b87f123284725c216b6bf5 -->
+
+<!-- START_fe0f34240799837f8ceb6d2b43ba5ac7 -->
+## Users Basic Report
+
+Returns the paginated response of the users with basic reporting (DataTables are fully supported - All Params).
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/admin/users/report/basic?start=0&length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users/report/basic"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key => url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/admin/users/report/basic',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'query' => [
+            'start'=> '0',
+            'length'=> '25',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users/report/basic'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "current_page": 1,
+    "data": [
+        {
+            "id": 1242,
+            "first_name": "123security",
+            "last_name": "products",
+            "email": "wirelessproducts.wl@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        },
+        {
+            "id": 824,
+            "first_name": "168xoso",
+            "last_name": "com",
+            "email": "168xosocom@gmail.com",
+            "projects_count": 2,
+            "playlists_count": 9,
+            "activities_count": 60
+        }
+    ],
+    "first_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=1",
+    "from": 1,
+    "last_page": 816,
+    "last_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=816",
+    "next_page_url": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic?page=2",
+    "path": "https:\/\/currikistudio.org\/api\/api\/api\/v1\/admin\/users\/report\/basic",
+    "per_page": "2",
+    "prev_page_url": null,
+    "to": 2,
+    "total": 1632
+}
+```
+
+### HTTP Request
+`GET api/v1/admin/users/report/basic`
+
+#### Query Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -----------
+    `start` |  optional  | Offset for getting the paginated response, Default 0.
+    `length` |  optional  | Limit for getting the paginated records, Default 25.
+
+<!-- END_fe0f34240799837f8ceb6d2b43ba5ac7 -->
+
+<!-- START_25676ed5ebaafc1daa224c7a86b89348 -->
+## Bulk Import
+
+Bulk import the users from CSV file.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/admin/users/bulk/import" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"import_file":"et"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users/bulk/import"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "import_file": "et"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/admin/users/bulk/import',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'import_file' => 'et',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users/bulk/import'
+payload = {
+    "import_file": "et"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (206):
+
+```json
+{
+    "errors": [
+        "Failed to import some rows data, please download detailed error report."
+    ],
+    "report": "https:\/\/currikistudio.org\/api\/storage\/temporary\/users-import-report.csv"
+}
+```
+> Example response (200):
+
+```json
+{
+    "message": "All users data imported successfully!"
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Empty or bad formatted file, please download sample file for proper format."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/admin/users/bulk/import`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `import_file` | file |  required  | The import file must be a file of type: CSV.
+    
+<!-- END_25676ed5ebaafc1daa224c7a86b89348 -->
+<!-- START_ef52cb1e3190f07a381bee96496d9e42 -->
+## Change User Role
+
+Make any user admin or remove from admin.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/admin/users/1/roles/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users/1/roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/admin/users/1/roles/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users/1/roles/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User role is changed successfully!"
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "You cannot change the role of yourself."
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/admin/users/{user}/roles/{role}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `user` |  required  | The Id of a user.
+    `role` |  required  | Role 0 or 1, 1 for making admin, 0 for removing from admin.
+
+<!-- END_ef52cb1e3190f07a381bee96496d9e42 -->
+
+<!-- START_ce6b124894a429e5cdb7415c0d8a91fb -->
+## Get All Users List
+
+Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/admin/users?start=0&length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users"
+);
+
+let params = {
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key => url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/admin/users',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'query' => [
+            'start'=> '0',
+            'length'=> '25',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users'
+params = {
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 1242,
+            "name": "123security products",
+            "email": "wirelessproducts.wl@gmail.com",
+            "first_name": "123security",
+            "last_name": "products",
+            "job_title": "123securityproducts",
+            "organization_type": "Architecture design",
+            "is_admin": false,
+            "organization_name": "North Kansas City Schools"
+        },
+        {
+            "id": 824,
+            "name": "168xoso com",
+            "email": "168xosocom@gmail.com",
+            "first_name": "168xoso",
+            "last_name": "com",
+            "job_title": "",
+            "organization_type": "K-12",
+            "is_admin": false,
+            "organization_name": "North Kansas City Schools"
+        }
+    ],
+    "links": {
+        "first": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=1",
+        "last": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=66",
+        "prev": null,
+        "next": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 66,
+        "path": "https:\/\/www.currikistudio.org\/api\/v1\/admin\/users",
+        "per_page": "25",
+        "to": 25,
+        "total": 1632
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/admin/users`
+
+#### Query Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -----------
+    `start` |  optional  | Offset for getting the paginated response, Default 0.
+    `length` |  optional  | Limit for getting the paginated records, Default 25.
+
+<!-- END_ce6b124894a429e5cdb7415c0d8a91fb -->
+
+<!-- START_521e32c7d2ba5e2282925ea8a26584bc -->
+## Create User
+
+Creates the new user in database.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://localhost:8000/api/v1/admin/users" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->post(
+    'http://localhost:8000/api/v1/admin/users',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'first_name' => 'Ahmad',
+            'last_name' => 'Mukhtar',
+            'organization_name' => 'Studio',
+            'organization_type' => 'K-12',
+            'job_title' => '2',
+            'email' => 'ahmedmukhtar1133@gmail.com',
+            'password' => 'kljd@Fi4R',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users'
+payload = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User created successfully!",
+    "data": [
+        "Created User Data Array"
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Unable to create user, please try again later."
+    ]
+}
+```
+
+### HTTP Request
+`POST api/v1/admin/users`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `first_name` | string |  required  | First name of the user.
+        `last_name` | string |  required  | Last name of the user.
+        `organization_name` | string |  required  | Organization name.
+        `organization_type` | string |  required  | Valid organization type.
+        `job_title` | string |  required  | Job title of the user in organization.
+        `email` | email |  required  | Unique email for registration.
+        `password` | password |  required  | Must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.
+    
+<!-- END_521e32c7d2ba5e2282925ea8a26584bc -->
+
+<!-- START_effe89f830caf4daa978f55524698087 -->
+## Get Specified User
+
+Get the specified user data.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/admin/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/admin/users/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": {
+        "id": 1,
+        "name": "Sample User",
+        "email": "sample_user@test.com",
+        "first_name": "Sample",
+        "last_name": "User",
+        "job_title": "Developer",
+        "organization_type": "Architecture design",
+        "is_admin": true,
+        "organization_name": "North Kansas City Schools",
+        "projects": [
+            {
+                "id": 9874,
+                "name": "Activity Sampler",
+                "description": "Studio Demos",
+                "thumb_url": "",
+                "shared": true,
+                "starter_project": false,
+                "is_user_starter": true,
+                "cloned_from": 68,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "09-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 9952,
+                "name": "Activity Sampler",
+                "description": "Studio Demos",
+                "thumb_url": "",
+                "shared": true,
+                "starter_project": false,
+                "is_user_starter": true,
+                "cloned_from": 68,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "09-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 80127,
+                "name": "Testing creation",
+                "description": "Testing after creation.",
+                "thumb_url": "https:\/\/images.pexels.com\/photos\/3169299\/pexels-photo-3169299.jpeg?auto=compress&cs=tinysrgb&dpr=1&fit=crop&h=200&w=280",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "15-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 80071,
+                "name": "Test",
+                "description": "test",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 2,
+                "status_text": "FINISHED",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "13-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 80074,
+                "name": "Boolean Type Cast Testing",
+                "description": "Test",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 2,
+                "status_text": "FINISHED",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "13-Oct-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 2118,
+                "name": "How well do you know?",
+                "description": "How well do you know me?",
+                "thumb_url": "",
+                "shared": true,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "16-Sep-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 2170,
+                "name": "Math Review",
+                "description": "Math Review Unit 2",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "16-Sep-2020",
+                "updated_at": "15-Oct-2020"
+            },
+            {
+                "id": 2169,
+                "name": "Test",
+                "description": "Exit Ticket test",
+                "thumb_url": "",
+                "shared": false,
+                "starter_project": null,
+                "is_user_starter": false,
+                "cloned_from": null,
+                "clone_ctr": 0,
+                "status": 1,
+                "status_text": "DRAFT",
+                "indexing": null,
+                "indexing_text": "NOT REQUESTED",
+                "created_at": "16-Sep-2020",
+                "updated_at": "15-Oct-2020"
+            }
+        ]
+    }
+}
+```
+
+### HTTP Request
+`GET api/v1/admin/users/{user}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `user` |  required  | The Id of a user
+
+<!-- END_effe89f830caf4daa978f55524698087 -->
+
+<!-- START_4bfaf4c2bfaf88b96536e717be6b0e62 -->
+## Update Specified User
+
+Updates the user data in database.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://localhost:8000/api/v1/admin/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"first_name":"Ahmad","last_name":"Mukhtar","organization_name":"Studio","organization_type":"K-12","job_title":"2","email":"ahmedmukhtar1133@gmail.com","password":"kljd@Fi4R"}'
+
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->put(
+    'http://localhost:8000/api/v1/admin/users/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+        'json' => [
+            'first_name' => 'Ahmad',
+            'last_name' => 'Mukhtar',
+            'organization_name' => 'Studio',
+            'organization_type' => 'K-12',
+            'job_title' => '2',
+            'email' => 'ahmedmukhtar1133@gmail.com',
+            'password' => 'kljd@Fi4R',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users/1'
+payload = {
+    "first_name": "Ahmad",
+    "last_name": "Mukhtar",
+    "organization_name": "Studio",
+    "organization_type": "K-12",
+    "job_title": "2",
+    "email": "ahmedmukhtar1133@gmail.com",
+    "password": "kljd@Fi4R"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "message": "User data updated successfully!",
+    "data": [
+        "Updated User Data Array"
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Unable to update user, please try again later."
+    ]
+}
+```
+
+### HTTP Request
+`PUT api/v1/admin/users/{user}`
+
+`PATCH api/v1/admin/users/{user}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `user` |  required  | The Id of a user
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `first_name` | string |  required  | First name of the user.
+        `last_name` | string |  required  | Last name of the user.
+        `organization_name` | string |  required  | Organization name.
+        `organization_type` | string |  required  | Valid organization type.
+        `job_title` | string |  required  | Job title of the user in organization.
+        `email` | email |  required  | Valid Email.
+        `password` | password |  required  | Must be at-least 8 characters long, should contain at-least 1 Uppercase, 1 Lowercase and 1 Numeric character.
+    
+<!-- END_4bfaf4c2bfaf88b96536e717be6b0e62 -->
+
+<!-- START_ff019bc7db8f5be9ac8699027d67f85c -->
+## Delete Specified User
+
+Deletes the user record from database.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://localhost:8000/api/v1/admin/users/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->delete(
+    'http://localhost:8000/api/v1/admin/users/1',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users/1'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+null
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "You cannot delete your own user."
+    ]
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Unable to delete user, please try again later."
+    ]
+}
+```
+
+### HTTP Request
+`DELETE api/v1/admin/users/{user}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `user` |  required  | The Id of a user
+
+<!-- END_ff019bc7db8f5be9ac8699027d67f85c -->
+
+<!-- START_f8dcc97e33f92cce8410917973a81b60 -->
+## Download Sample File
+
+Download import sample file for users.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost:8000/api/v1/admin/users/import/sample-file" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/v1/admin/users/import/sample-file"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+```php
+
+$client = new \GuzzleHttp\Client();
+$response = $client->get(
+    'http://localhost:8000/api/v1/admin/users/import/sample-file',
+    [
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ],
+    ]
+);
+$body = $response->getBody();
+print_r(json_decode((string) $body));
+```
+
+```python
+import requests
+import json
+
+url = 'http://localhost:8000/api/v1/admin/users/import/sample-file'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()
+```
+
+
+> Example response (200):
+
+```json
+{
+    "file": "Downloadable sample file."
+}
+```
+> Example response (500):
+
+```json
+{
+    "errors": [
+        "Sample file not found!"
+    ]
+}
+```
+
+### HTTP Request
+`GET api/v1/admin/users/import/sample-file`
+
+
+<!-- END_f8dcc97e33f92cce8410917973a81b60 -->
 
 <!-- START_22d41927f0a1ecde8e741c9204b26ebe -->
 ## Get H5P Resource Settings For Brightcove
@@ -52033,11 +52130,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -52108,11 +52205,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -52183,11 +52280,11 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "message": "Unauthenticated."
 }
 ```
 
@@ -52257,11 +52354,90 @@ response.json()
 ```
 
 
-> Example response (500):
+> Example response (200):
 
 ```json
 {
-    "message": "Server Error"
+    "data": [
+        {
+            "id": 1,
+            "user_id": 1225,
+            "organization_id": 1,
+            "account_id": "62825503020012",
+            "account_name": "Curriki Brightcove CMS2",
+            "account_email": "masterdemo2@curriki.org",
+            "client_id": "ba458ab6-ec97-4a7c-a0da-854427823722",
+            "client_secret": "ohYIarN4dT3YGP-beI2gB_CX2juT3FeDxXLiVFr8b5tuD1XUhcouecv4FdOOYkCewRF1zCdi6dxM5TQs4DW4zQ",
+            "description": "Add multiple interactions to any video2",
+            "created_at": "2022-07-19T09:28:25.000000Z",
+            "updated_at": "2022-07-19T09:29:13.000000Z",
+            "deleted_at": null,
+            "css_path": "\/storage\/brightcove\/css\/\/oracle-styles-template-ed02-FINAL (1).css",
+            "user": {
+                "id": 1225,
+                "name": "demo@currikistudio.org",
+                "email": "demo@currikistudio.org",
+                "email_verified_at": "2020-09-12T16:14:03.000000Z",
+                "created_at": null,
+                "updated_at": "2022-08-04T15:12:23.000000Z",
+                "first_name": "Muhammad",
+                "last_name": "Waleed",
+                "organization_name": "Curriki",
+                "job_title": "Job title",
+                "address": null,
+                "phone_number": null,
+                "organization_type": "Test",
+                "website": null,
+                "deleted_at": null,
+                "role": null,
+                "gapi_access_token": null,
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "192.168.96.10",
+                "membership_type_id": 2,
+                "temp_password": null,
+                "msteam_access_token": null
+            },
+            "organization": {
+                "id": 1,
+                "name": "test",
+                "description": "test",
+                "domain": "curriki",
+                "parent_id": null,
+                "image": "test",
+                "created_at": null,
+                "updated_at": "2022-09-01T11:25:31.000000Z",
+                "deleted_at": null,
+                "self_registration": false,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false,
+                "tos_type": "Parent",
+                "tos_url": null,
+                "tos_content": null,
+                "privacy_policy_type": "Parent",
+                "privacy_policy_url": null,
+                "privacy_policy_content": null,
+                "primary_color": null,
+                "secondary_color": null,
+                "tertiary_color": null,
+                "primary_font_family": null,
+                "secondary_font_family": null,
+                "favicon": null,
+                "msteam_client_id": null,
+                "msteam_secret_id": null,
+                "msteam_tenant_id": null,
+                "msteam_secret_id_expiry": null,
+                "msteam_project_visibility": true,
+                "msteam_playlist_visibility": false,
+                "msteam_activity_visibility": false
+            }
+        }
+    ]
 }
 ```
 
@@ -52355,7 +52531,9 @@ response.json()
 
 ```json
 {
-    "message": "Server Error"
+    "errors": [
+        "No Record Found!"
+    ]
 }
 ```
 
@@ -52435,7 +52613,9 @@ response.json()
 
 ```json
 {
-    "message": "Server Error"
+    "errors": [
+        "Required videoId and type field!"
+    ]
 }
 ```
 

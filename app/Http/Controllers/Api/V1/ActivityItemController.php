@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 /**
- * @group 7. Activity Item
+ * @group 8. Activity Item
  *
  * APIs for activity item management
  */
@@ -66,7 +66,7 @@ class ActivityItemController extends Controller
      *
      * @param Request $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function getItems(Request $request, Organization $suborganization)
@@ -158,7 +158,7 @@ class ActivityItemController extends Controller
      *
      * @param Request $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreActivityItem $request, Organization $suborganization)
@@ -188,7 +188,7 @@ class ActivityItemController extends Controller
      *
      * @param Organization $suborganization
      * @param ActivityItem $activityItem
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, ActivityItem $activityItem)
@@ -229,7 +229,7 @@ class ActivityItemController extends Controller
      * @param Request $request
      * @param Organization $suborganization
      * @param ActivityItem $activityItem
-     * 
+     *
      * @return Response
      */
     public function update(UpdateActivityItem $request, Organization $suborganization, ActivityItem $activityItem)
@@ -267,7 +267,7 @@ class ActivityItemController extends Controller
      *
      * @param Organization $suborganization
      * @param ActivityItem $activityItem
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, ActivityItem $activityItem)

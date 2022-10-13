@@ -13,7 +13,7 @@ use App\CurrikiGo\LRS\InteractionFactory;
 use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 
 /**
- * @group 16. XAPI
+ * @group 16. XAPI Cron
  *
  * Cron job for XAPI extract
  */
@@ -53,15 +53,15 @@ class ExtractXAPIJSONController extends Controller
                 $statement = $service->buildStatementfromJSON($row->data);
                 $actor = $statement->getActor();
                 $target = $statement->getTarget();
-                
+
                 $verb = $service->getVerbFromStatement($statement->getVerb());
                 $context = $statement->getContext();
                 $nameOfActivity = 'Unknown Quiz set';
                 $defaultActivityName = true;
-                
+
                 // At the moment, we're only tackling targets of 'activity' type.
                 $definition = ($target->getObjectType() === 'Activity' ? $target->getDefinition() : '');
-               
+
                 // In some cases, we do not have a 'name' property for the object.
                 // So, we've added an additional check here.
                 // @todo - the LRS statements generated need to have this property
@@ -71,7 +71,7 @@ class ExtractXAPIJSONController extends Controller
                 } elseif ($target->getObjectType() === 'StatementRef') {
                     $nameOfActivity = $target->getId();
                 }
-                
+
                 $result = $statement->getResult();
 
                 if (!empty($actor->getAccount())) {
@@ -82,10 +82,10 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['actor_id'] = $actor->getMbox();
                     $insertData['actor_homepage'] = $actor->getName();
                 }
-                
+
                 $insertData['statement_id'] = $row->id;
                 $insertData['statement_uuid'] = $statement->getId();
-                
+
                 $insertData['object_name'] = $nameOfActivity;
                 $insertData['datetime'] = $row->created_at;
                 $insertData['object_id'] = $target->getId();
@@ -96,14 +96,14 @@ class ExtractXAPIJSONController extends Controller
                     $groupingInfo = $service->findGroupingInfo($other);
                     $platform = $context->getPlatform();
                 }
-                
+
                 // Skip if we don't have the activity.
                 if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
                     // It maybe an old format statement. Just save verb, object and actor, and move on.
                     $inserted = $lrsStatementsRepository->create($insertData);
                     continue;
                 }
-                
+
                 $activity = $activityRepository->find($groupingInfo['activity']);
                 $activityId = null;
                 $activityName = null;
@@ -121,7 +121,7 @@ class ExtractXAPIJSONController extends Controller
                     $playlistId = $activity->playlist_id;
                     $playlistTitle = $activity->playlist->title;
                 }
-                
+
                 $category = $contextActivities->getCategory();
                 $categoryId = '';
                 $h5pInteraction = '';
@@ -135,16 +135,16 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['project_id'] = $projectId;
                 $insertData['playlist_id'] = $playlistId;
                 $insertData['assignment_submitted'] = ($verb === LearnerRecordStoreService::SUBMITTED_VERB_NAME ? TRUE : FALSE);
-                
+
                 $insertData['activity_category'] = $h5pInteraction;
                 $insertData['platform'] = $platform;
                 $insertData['project_name'] = $projectName;
-                
+
                 $insertData['playlist_name'] = $playlistTitle;
                 $insertData['assignment_id'] = $activityId;
                 $insertData['assignment_name'] = $activityName;
 
-                //added submitted_id and attempt_id column for new summary page 
+                //added submitted_id and attempt_id column for new summary page
                 $insertData['submission_id'] = $groupingInfo['submission'];
                 $insertData['attempt_id'] = $groupingInfo['attempt'];
 
@@ -203,7 +203,7 @@ class ExtractXAPIJSONController extends Controller
                     $insertData['question'] = $interactionSummary['description'];
                     $insertData['duration'] = (!empty($interactionSummary['raw-duration']) ? $interactionSummary['raw-duration'] : null);
                     $insertData['options'] = (isset($interactionSummary['choices']) ? implode(", ", $interactionSummary['choices']) : null);
-                    if (isset($interactionSummary['response']) && !empty($interactionSummary['response'])) { 
+                    if (isset($interactionSummary['response']) && !empty($interactionSummary['response'])) {
                         $insertData['answer'] = (is_array($interactionSummary['response']) ? implode(", ", $interactionSummary['response']) : $interactionSummary['response']);
                     }
                     if ($interactionSummary['scorable'] || (isset($interactionSummary['score']) && $interactionSummary['score']['max'] > 0)) {
@@ -214,20 +214,20 @@ class ExtractXAPIJSONController extends Controller
                     }
                 }
                 // Overriding object name, when we have Questionnaire H5P, and object name is not available.
-                if ($defaultActivityName && ($h5pInteraction 
+                if ($defaultActivityName && ($h5pInteraction
                 && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Questionnaire/', $h5pInteraction, $matches))) {
                     $insertData['object_name'] = $matches[0];
                 }
                 // need to determine column layout interaction on 'completed'.
-                if (($h5pInteraction 
+                if (($h5pInteraction
                 && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Column/', $h5pInteraction))) {
                     $insertData['page'] = $insertData['object_name'];
                     $insertData['page_completed'] = $insertData['verb'] === 'completed' ? true : false;
                 }
                 $inserted = $lrsStatementsRepository->create($insertData);
-               
+
                 if ($inserted) {
-                    //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
+                    //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms..
                     if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
                         if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {
                             $responseObject = (is_array(json_decode($interactionSummaryGlobal['response'], true)) ? json_decode($interactionSummaryGlobal['response'], true) : false);

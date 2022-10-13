@@ -40,7 +40,7 @@ use App\Models\H5pBrightCoveVideoContents;
 use App\Repositories\Integration\BrightcoveAPISettingRepository;
 
 /**
- * @group 11. Google Classroom
+ * @group 15. Google Classroom
  *
  * APIs for Google Classroom
  */

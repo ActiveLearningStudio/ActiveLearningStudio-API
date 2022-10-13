@@ -220,7 +220,53 @@ class UserController extends Controller
      *
      * Create a new user in storage.
      *
-     * @param Request $request
+     * @urlParam suborganization integer required The Id of an suborganization Example: 1
+     * @bodyParam first_name string required First name of a user Example: John
+     * @bodyParam last_name string required Last name of a user Example: Doe
+     * @bodyParam email string required email of a user Example: doe@gmail.com
+     * @bodyParam password string required password of a user
+     * @bodyParam role_id integer required role_id of a user Example: 1
+     * @bodyParam organization_name string Organization name of a user Example: Curriki
+     * @bodyParam organization_type string type of an organization Example: K-12
+     * @bodyParam website string Website url of a user Example: www.currikistudio.org
+     * @bodyParam job_title string Job title of a user Example: Developer
+     * @bodyParam address string Address of a user Example: 20660 Stevens Creek Blvd #332, Cupertino, CA 95014
+     * @bodyParam send_email boolean true or false for email sending Example: true
+     * @bodyParam message string message that will send to admin
+     *
+     * @response {
+     *   "user": {
+     *     "id": 1,
+     *     "first_name": "John",
+     *     "last_name": "Doe",
+     *     "email": "john.doe@currikistudio.org",
+     *     "organization_name": "Curriki",
+     *     "organization_type": null,
+     *     "job_title": "Developer",
+     *     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+     *     "phone_number": "+1234567890",
+     *     "website": "www.currikistudio.org",
+     *     "subscribed": true,
+     *     "organization_role": "Admin",
+     *     "organization_role": "Admin",
+     *     "organization_role_id": 1,
+     *     "organization_joined_at": "2022-10-12",
+     *     "projects_count": 5,
+     *     "groups_count": 1,
+     *     "teams_count": 2
+     *   },
+     *   "message": "User has been created successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to create user."
+     *   ]
+     * }
+     *
+     * @param SuborganizationAddNewUser $request
+     * @param Organization $suborganization
+     *
      * @return Response
      */
     public function addNewUser(SuborganizationAddNewUser $addNewUserrequest, Organization $suborganization)
@@ -279,7 +325,39 @@ class UserController extends Controller
      *
      * Update user detail in storage.
      *
-     * @param Request $request
+     * @response {
+     *   "user": {
+     *     "id": 1,
+     *     "first_name": "John",
+     *     "last_name": "Doe",
+     *     "email": "john.doe@currikistudio.org",
+     *     "organization_name": "Curriki",
+     *     "organization_type": null,
+     *     "job_title": "Developer",
+     *     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
+     *     "phone_number": "+1234567890",
+     *     "website": "www.currikistudio.org",
+     *     "subscribed": true,
+     *     "organization_role": "Admin",
+     *     "organization_role": "Admin",
+     *     "organization_role_id": 1,
+     *     "organization_joined_at": "2022-10-12",
+     *     "projects_count": 5,
+     *     "groups_count": 1,
+     *     "teams_count": 2
+     *   },
+     *   "message": "User has been updated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update user."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateUserDetail $request
+     * @param Organization $suborganization
+     *
      * @return Response
      */
     public function updateUserDetail(SuborganizationUpdateUserDetail $addNewUserrequest, Organization $suborganization)
@@ -332,6 +410,12 @@ class UserController extends Controller
      * Get the authenticated user detail.
      *
      * @responseFile responses/user/user.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to get user detail."
+     *   ]
+     * }
      *
      * @return Response
      */
@@ -633,6 +717,7 @@ class UserController extends Controller
      * }
      *
      * @param $notification_id
+     *
      * @return Response
      */
     public function deleteNotification(Request $request, $notification_id)
@@ -764,7 +849,7 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @urlParam suborganization id of an organization. Example: 1
+     * @urlParam suborganization required id of an organization. Example: 1
      * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
      * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
@@ -786,7 +871,7 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @urlParam suborganization id of an organization. Example: 1
+     * @urlParam suborganization required id of an organization. Example: 1
      * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
      * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
@@ -807,25 +892,15 @@ class UserController extends Controller
      *
      * @urlParam $notification_id string required Current id of a notification Example: 123
      *
-     * @response {
+     * @response 200{
      *   "message": "Notification has been deleted successfully."
      * }
      *
      * @response 500 {
      *   "errors": [
+     *     "Not an export notification.",
+     *     "Link has expired.",
      *     "Notification with provided id does not exists."
-     *   ]
-     * }
-     *
-     *  @response 500 {
-     *   "errors": [
-     *     "Link has expired."
-     *   ]
-     * }
-     *
-     *  @response 500 {
-     *   "errors": [
-     *     "Not an export notification."
      *   ]
      * }
      *

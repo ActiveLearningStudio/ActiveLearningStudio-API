@@ -57,7 +57,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get Specified User 
+     * Get Specified User
      *
      * Get the specified user data.
      *

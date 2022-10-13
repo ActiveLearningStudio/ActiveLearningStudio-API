@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
 
 /**
- * @group 10. CurrikiGo Course
+ * @group 11. CurrikiGo Course
  *
  * APIs for fetching courses from LMSs
  */

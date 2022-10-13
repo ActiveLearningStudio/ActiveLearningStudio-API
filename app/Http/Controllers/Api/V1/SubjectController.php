@@ -13,7 +13,7 @@ use App\Repositories\Subject\SubjectRepositoryInterface;
 use Illuminate\Http\Response;
 
 /**
- * @group 7. Subject
+ * @group 25. Subject
  *
  * APIs for subject management
  */
@@ -65,7 +65,7 @@ class SubjectController extends Controller
      *
      * @param StoreSubjectRequest $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreSubjectRequest $request, Organization $suborganization)
@@ -95,7 +95,7 @@ class SubjectController extends Controller
      *
      * @param Organization $suborganization
      * @param Subject $subject
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, Subject $subject)
@@ -131,7 +131,7 @@ class SubjectController extends Controller
      * @param UpdateSubjectRequest $request
      * @param Organization $suborganization
      * @param Subject $subject
-     * 
+     *
      * @return Response
      */
     public function update(UpdateSubjectRequest $request, Organization $suborganization, Subject $subject)
@@ -169,7 +169,7 @@ class SubjectController extends Controller
      *
      * @param Organization $suborganization
      * @param Subject $subject
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, Subject $subject)
@@ -179,7 +179,7 @@ class SubjectController extends Controller
                 'message' => 'Invalid subject or organization',
             ], 400);
         }
-        
+
         $isDeleted = $this->subjectRepository->delete($subject->id);
 
         if ($isDeleted) {

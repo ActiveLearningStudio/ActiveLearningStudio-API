@@ -1070,7 +1070,7 @@ class AuthController extends Controller
     /**
      * Wordpress SSO: Get default settings for a particular wordpress sso integration
      *
-     * @urlParam client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+     * @urlParam client required id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
      *
      * @param string $clientId
      * @return Application|ResponseFactory|Response
@@ -1092,8 +1092,8 @@ class AuthController extends Controller
     /**
      * Wordpress SSO: Execute wordpress sso authentication
      *
-     * @bodyParam clientId string client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
-     * @bodyParam code string temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+     * @bodyParam clientId string required client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+     * @bodyParam code string required temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
      *
      * @param WordpressSSOLoginRequest $request
      * @return Application|ResponseFactory|Response
@@ -1174,7 +1174,7 @@ class AuthController extends Controller
                 : $default_lms_setting->organization->roles()->where('name', 'self_registered')->first()->id;
 
             $default_lms_setting->organization->users()->attach(
-                $user, 
+                $user,
                 ['organization_role_type_id' => $roleId]
             );
         }

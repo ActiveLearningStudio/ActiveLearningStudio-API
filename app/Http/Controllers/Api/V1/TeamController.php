@@ -30,7 +30,7 @@ use App\Jobs\ExportProjecttoNoovo;
 use App\Services\NoovoCMSService;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 /**
- * @group 14. Team
+ * @group 22. Team
  *
  * APIs for team management
  */
@@ -907,7 +907,7 @@ class TeamController extends Controller
     public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team, Project $project)
     {
         $checkActivityCount = $this->teamRepository->checkActivityCount($project);
-        
+
         if($checkActivityCount === 0) {
             return response([
                 'message' =>  "No Activity Found.Please create atleast one activity.",

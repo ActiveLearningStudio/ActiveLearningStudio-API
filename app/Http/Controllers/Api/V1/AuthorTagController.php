@@ -13,7 +13,7 @@ use App\Repositories\AuthorTag\AuthorTagRepositoryInterface;
 use Illuminate\Http\Response;
 
 /**
- * @group 7. Author Tag
+ * @group 23. Author Tag
  *
  * APIs for author tags management
  */

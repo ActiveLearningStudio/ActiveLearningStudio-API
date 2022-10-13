@@ -44,7 +44,7 @@ use RecursiveIteratorIterator;
 use ZipArchive;
 
 /**
- * @group 5. Independent Activity
+ * @group 6. Independent Activity
  *
  * APIs for independent activity management
  */

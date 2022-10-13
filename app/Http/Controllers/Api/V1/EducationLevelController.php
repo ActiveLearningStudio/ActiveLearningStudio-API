@@ -13,7 +13,7 @@ use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use Illuminate\Http\Response;
 
 /**
- * @group 7. Education Level
+ * @group 24. Education Level
  *
  * APIs for education level management
  */

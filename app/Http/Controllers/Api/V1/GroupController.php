@@ -21,12 +21,6 @@ use App\Repositories\Group\GroupRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Response;
 
-/**
- * @group 14. Group
- *
- * APIs for group management
- */
-// TODO: need to reorder API documentation block
 class GroupController extends Controller
 {
 
@@ -56,7 +50,7 @@ class GroupController extends Controller
      * Get All Groups
      *
      * Get a list of the groups of a user.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/group/group.json
      *
@@ -84,7 +78,7 @@ class GroupController extends Controller
      * Get All Organization Groups
      *
      * Get a list of the groups of an organization.
-     * 
+     *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/group/group.json
      *
