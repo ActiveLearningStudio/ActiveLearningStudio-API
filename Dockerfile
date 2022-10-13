@@ -40,16 +40,15 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
 
-#New Relic
-RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-10.2.0.314-linux.tar.gz && \
-	tar -xzf newrelic-php5-10.2.0.314-linux.tar.gz
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
 WORKDIR /var/www/html
 
-
+#New Relic
+RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-10.2.0.314-linux.tar.gz && \
+	tar -xzf newrelic-php5-10.2.0.314-linux.tar.gz
 
 # Copy the PHP configuration file
 COPY ./php.ini /usr/local/etc/php/
