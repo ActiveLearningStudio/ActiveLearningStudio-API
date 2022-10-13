@@ -199,17 +199,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             foreach ($organizationUserRoles as $organizationUserRole) {
                 if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
-                    $subOrganizationUserRolesData['name'] = $organizationUserRole->name;
-                    $subOrganizationUserRolesData['display_name'] = $organizationUserRole->display_name;
-                    $subOrganizationUserRolesData['permissions'] = $organizationUserRole->permissions->pluck('id')->toArray();
                     $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
 
-                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+                    $role = $this->addRole($suborganization, $organizationUserRole);
 
                     if ($role) {
                         $organizationUserRoleUsers = $organizationUserRole->users()
-                            ->wherePivot('organization_id', $organization->id)
-                            ->get();
+                                                                          ->wherePivot('organization_id', $organization->id)
+                                                                          ->get();
 
                         foreach ($organizationUserRoleUsers as $organizationUserRoleUser) {
                             $userRoles[$organizationUserRoleUser->id] = ['organization_role_type_id' => $role->id];
@@ -220,12 +217,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             foreach ($organizationUserRolesNonAdmin as $organizationUserRole) {
                 if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
-                    $subOrganizationUserRolesData['name'] = $organizationUserRole->name;
-                    $subOrganizationUserRolesData['display_name'] = $organizationUserRole->display_name;
-                    $subOrganizationUserRolesData['permissions'] = $organizationUserRole->permissions->pluck('id')->toArray();
                     $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
 
-                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+                    $role = $this->addRole($suborganization, $organizationUserRole);
                 }
             }
 
@@ -422,20 +416,27 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      * Add role for particular organization
      *
      * @param Organization $organization
-     * @param array $data
+     * @param object $organizationRole
      * @return Model
      */
-    public function addRole($organization, $data)
+    public function addRole($organization, $organizationRole)
     {
         try {
             DB::beginTransaction();
 
             $role = $organization->roles()->create([
-                'name' => $data['name'],
-                'display_name' => $data['display_name'],
+                'name' => $organizationRole->name,
+                'display_name' => $organizationRole->display_name,
             ]);
 
-            $role->permissions()->attach($data['permissions']);
+            $role->permissions()->attach($organizationRole->permissions->pluck('id')->toArray());
+
+            // assign ui role permissions
+            $organizationRoleUiPermissions = $organizationRole->uiModulePermissions()
+                                                          ->pluck('ui_module_permission_id')
+                                                          ->toArray();
+
+            $role->uiModulePermissions()->sync($organizationRoleUiPermissions);
 
             DB::commit();
 
