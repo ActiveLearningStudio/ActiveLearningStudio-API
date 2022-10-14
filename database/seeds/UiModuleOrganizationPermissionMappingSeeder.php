@@ -13,8 +13,8 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
     public function run()
     {
         $uiBackendPermissionMapping = [
-            "Organiziations" => [
-                "Organiziation" => [
+            "Organizations" => [
+                "Organization" => [
                     "View" => [
                         'organization:view'
                     ],
@@ -177,6 +177,30 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:edit-media'
                     ],
                     "None" => []
+                ],
+                "Google Classroom" => [
+                    "View" => [
+                        'organization:view-google-classroom'
+                    ],
+                    "Edit" => [
+                        'organization:view-google-classroom',
+                        'organization:create-google-classroom',
+                        'organization:delete-google-classroom',
+                        'organization:edit-google-classroom'
+                    ],
+                    "None" => []
+                ],
+                "Microsoft Teams" => [
+                    "View" => [
+                        'organization:view-microsoft-team'
+                    ],
+                    "Edit" => [
+                        'organization:view-microsoft-team',
+                        'organization:create-microsoft-team',
+                        'organization:delete-microsoft-team',
+                        'organization:edit-microsoft-team'
+                    ],
+                    "None" => []
                 ]
             ],
             "Users" => [
@@ -316,6 +340,10 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
         ];
 
         DB::transaction(function () use ($uiBackendPermissionMapping) {
+
+            DB::table('ui_modules')->where('title', 'Organiziations')->update(['title' => 'Organizations']);
+            DB::table('ui_modules')->where('title', 'Organiziation')->update(['title' => 'Organization']);
+
             foreach ($uiBackendPermissionMapping as $moduleTitle => $subModules) {
                 DB::table('ui_modules')
                     ->updateOrInsert(
