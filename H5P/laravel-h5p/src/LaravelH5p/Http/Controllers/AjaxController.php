@@ -30,7 +30,7 @@ class AjaxController extends Controller
         // headers for CORS
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-        
+
         $machineName = $request->get('machineName');
         $major_version = $request->get('majorVersion');
         $minor_version = $request->get('minorVersion');
@@ -148,6 +148,12 @@ class AjaxController extends Controller
 
     public function files(Request $request)
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            // headers for CORS
+            header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+            return;
+        }
         $fieldParam = json_decode($request->get('field'));
         if (json_last_error() === JSON_ERROR_NONE) {
             $filePath = $request->file('file');
@@ -155,10 +161,10 @@ class AjaxController extends Controller
             $editor = $h5p::$h5peditor;
             $token = csrf_token();
             // $editor->ajax->action(H5PEditorEndpoints::FILES, $request->get('_token'), $request->get('contentId'));
-            $editor->ajax->action(H5PEditorEndpoints::FILES, $token, $request->get('contentId'));     
+            $editor->ajax->action(H5PEditorEndpoints::FILES, $token, $request->get('contentId'));
         } else {
             throw new GeneralException('Invalid json format of field param!');
-        }        
+        }
     }
 
     public function filter(Request $request)
