@@ -126,18 +126,14 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join activity_subject acts on a.id=acts.activity_id ';
             end if;
-
             if _education != '' then 
                 cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join activity_education_level ael on a.id=ael.activity_id ';
             end if;
-
             if _tag != '' then 
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
             end if;
-
-
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
@@ -151,7 +147,6 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
             end if;
-
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
                 
                 query := format($s$ 
@@ -171,11 +166,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s 
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-<<<<<<< HEAD:database/migrations/2022_08_30_120628_update_adv_search_functions_and_table.php
-                where lower(a.title) like '%s' and a.id is not null %s) )
-=======
                 where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
->>>>>>> staging:database/migrations/2022_10_06_120628_update_adv_search_functions_and_table.php
                 
                 
                 union all
@@ -195,11 +186,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in  (select playlist_id from activities a %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-<<<<<<< HEAD:database/migrations/2022_08_30_120628_update_adv_search_functions_and_table.php
-                where lower(a.title) like '%s' and a.id is not null %s)
-=======
                 where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
->>>>>>> staging:database/migrations/2022_10_06_120628_update_adv_search_functions_and_table.php
                 
                 union all
                 
@@ -217,11 +204,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_30_120628_update_adv_search_functions_and_table.php
-                where hl.name is not null and lower(a.title) like '%s'  %s
-=======
                 where a.activity_type != 'INDEPENDENT' and  hl.name is not null and lower(a.title) like '%s'  %s
->>>>>>> staging:database/migrations/2022_10_06_120628_update_adv_search_functions_and_table.php
                 )sq1
                 left join
                 (select distinct project_id as pid from user_favorite_project
@@ -374,18 +357,14 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join activity_subject acts on a.id=acts.activity_id ';
             end if;
-
             if _education != '' then 
                 cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join activity_education_level ael on a.id=ael.activity_id ';
             end if;
-
             if _tag != '' then 
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
             end if;
-
-
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
@@ -399,7 +378,6 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
             end if;
-
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
                         
                 query := format($s$ 
@@ -419,11 +397,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s 
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-<<<<<<< HEAD:database/migrations/2022_08_30_120628_update_adv_search_functions_and_table.php
-                where lower(a.title) like '%s' and a.id is not null %s) )
-=======
                 where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
->>>>>>> staging:database/migrations/2022_10_06_120628_update_adv_search_functions_and_table.php
                 
                 
                 union all
@@ -443,11 +417,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in  (select playlist_id from activities a %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-<<<<<<< HEAD:database/migrations/2022_08_30_120628_update_adv_search_functions_and_table.php
-                where lower(a.title) like '%s' and a.id is not null %s)
-=======
                 where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
->>>>>>> staging:database/migrations/2022_10_06_120628_update_adv_search_functions_and_table.php
                 
                 union all
                 
@@ -465,11 +435,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-<<<<<<< HEAD:database/migrations/2022_08_30_120628_update_adv_search_functions_and_table.php
-                where hl.name is not null and lower(a.title) like '%s'  %s
-=======
                 where  a.activity_type != 'INDEPENDENT' and hl.name is not null and lower(a.title) like '%s'  %s
->>>>>>> staging:database/migrations/2022_10_06_120628_update_adv_search_functions_and_table.php
                 $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd);
                 
                 RETURN QUERY execute query;
