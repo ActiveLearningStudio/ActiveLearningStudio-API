@@ -9,6 +9,7 @@ use ElasticScoutDriverPlus\CustomSearch;
 use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 use App\Models\QueryBuilders\SearchFormQueryBuilder;
 use App\Repositories\Activity\ActivityRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 
 class Activity extends Model
 {
@@ -35,7 +36,8 @@ class Activity extends Model
         'organization_id',
         'description',
         'source_type',
-        'source_url'
+        'source_url',
+        'activity_type'
     ];
 
     /**
@@ -78,6 +80,13 @@ class Activity extends Model
     public static function boot()
     {
         parent::boot();
+
+        self::creating(function(Activity $activity) {
+            $activity->activity_type = config('constants.activity_type.activity');
+            if($activity->type == 'h5p_standalone'){
+                $activity->activity_type = config('constants.activity_type.standalone');
+            }
+        });
 
         self::deleting(function (Activity $activity) {
             H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->delete();
