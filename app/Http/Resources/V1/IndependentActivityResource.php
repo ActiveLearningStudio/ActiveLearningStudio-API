@@ -38,6 +38,7 @@ class IndependentActivityResource extends JsonResource
             'indexing' => $this->indexing,
             'indexing_text' => $this->indexing_text,
             'user' => $this->user,
+            'activity_type' => $this->activity_type
         ];
 
         // Feature added after the fact for optimization

@@ -36,6 +36,9 @@ if (!function_exists('clone_thumbnail')) {
 
                 \File::copy($source_file, $destination_file);
                 ob_get_clean();
+                if($source == "independent-activities"){
+                    $source = "activities";
+                }
                 $new_image_url = "/storage/" . $source . "/" . $new_image_name;
             }
         }
@@ -327,10 +330,10 @@ if (!function_exists('cloneIndependentActivityThumbnail')) {
                 if (strpos($destinationFile, 'uploads') !== false) {
                     $destinationFile = str_replace("uploads", $source, $destinationFile);
                 }
-                
+
                 \File::copy($sourceFile, $destinationFile);
                 ob_get_clean();
-                $newImageUrl = "/storage/" . $destination . "/" . $newImageName;
+                $newImageUrl = "/storage/" . $source . "/" . $newImageName;
 
                 if($source === "independent-activities") {
                     unlink($sourceFile);

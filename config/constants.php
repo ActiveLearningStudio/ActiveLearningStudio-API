@@ -47,6 +47,11 @@ return [
      | Possible Values: false|'string_url'
      */
     'server_proxy' => env('SERVER_PROXY', 'api'),
+    'activity_type' => [
+        'activity' => 'ACTIVITY',
+        'independent' => 'INDEPENDENT',
+        'standalone' => 'STANDALONE'
+    ],
     'canvas_api_endpoints' => [
         'assignment_groups' => 'assignment_groups',
         'create_assignment' => 'assignments'

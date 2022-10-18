@@ -33,6 +33,7 @@ class StandAloneActivityResource extends JsonResource
             'source_url' => $this->source_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'activity_type' => $this->activity_type
         ];
 
         // Feature added after the fact for optimization
