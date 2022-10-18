@@ -18,7 +18,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
     public function run()
     {
         $adminUiPermissions = [
-            "Organiziation" => "Edit",
+            "Organization" => "Edit",
             "All Independent Activities" => "Edit",
             "Export/Import Activities" => "Edit",
             "All Projects" => "Edit",
@@ -35,6 +35,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "LTI Tools" => "Edit",
             "BrightCove" => "Edit",
             "Media" => "Edit",
+            "Google Classroom" => "Edit",
+            "Microsoft Teams" => "Edit",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",
@@ -44,7 +46,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
         ];
 
         $courseCreatorUiPermissions = [
-            "Organiziation" => "None",
+            "Organization" => "None",
             "All Independent Activities" => "None",
             "Export/Import Activities" => "None",
             "All Projects" => "None",
@@ -61,6 +63,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "LTI Tools" => "None",
             "BrightCove" => "None",
             "Media" => "None",
+            "Google Classroom" => "None",
+            "Microsoft Teams" => "None",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",
@@ -70,7 +74,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
         ];
 
         $memberUiPermissions = [
-            "Organiziation" => "None",
+            "Organization" => "None",
             "All Independent Activities" => "None",
             "Export/Import Activities" => "None",
             "All Projects" => "None",
@@ -87,6 +91,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "LTI Tools" => "None",
             "BrightCove" => "None",
             "Media" => "None",
+            "Google Classroom" => "None",
+            "Microsoft Teams" => "None",
             "Project" => "View",
             "Playlist" => "View",
             "Activity" => "View",
@@ -96,7 +102,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
         ];
 
         $selfRegisteredUiPermissions = [
-            "Organiziation" => "None",
+            "Organization" => "None",
             "All Independent Activities" => "None",
             "Export/Import Activities" => "None",
             "All Projects" => "None",
@@ -113,6 +119,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "LTI Tools" => "None",
             "BrightCove" => "None",
             "Media" => "None",
+            "Google Classroom" => "None",
+            "Microsoft Teams" => "None",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",

@@ -251,5 +251,53 @@ class OrganizationAdminPanelPermissionTypeSeeder extends Seeder
             'display_name' => 'Create Organization Media',
             'feature' => 'Organization'
         ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:edit-google-classroom',
+            'display_name' => 'Edit Organization Google Classroom',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:delete-google-classroom',
+            'display_name' => 'Delete Organization Google Classroom',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:view-google-classroom',
+            'display_name' => 'View Organization Google Classroom',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:create-google-classroom',
+            'display_name' => 'Create Organization Google Classroom',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:edit-microsoft-team',
+            'display_name' => 'Edit Organization Microsoft Team',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:delete-microsoft-team',
+            'display_name' => 'Delete Organization Microsoft Team',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:view-microsoft-team',
+            'display_name' => 'View Organization Microsoft Team',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:create-microsoft-team',
+            'display_name' => 'Create Organization Microsoft Team',
+            'feature' => 'Organization'
+        ]);
     }
 }
