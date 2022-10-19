@@ -319,8 +319,8 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         $postResourceInput = [
             "distributeForStudentWork" => false,
             "resource" => [
-                "displayName" => $independentActivity->title,
-                "link" => config('constants.front-url') . '/activity/' . $independentActivity->id . '/shared?type=ind', // Need to discuss the link logic currently shared link
+                "displayName" => $activity->title,
+                "link" => config('constants.front-url') . '/activity/' . $activity->id . '/shared?type=ind', // Need to discuss the link logic currently shared link
                 "@odata.type" => "#microsoft.graph.educationLinkResource"
             ]
         ];
