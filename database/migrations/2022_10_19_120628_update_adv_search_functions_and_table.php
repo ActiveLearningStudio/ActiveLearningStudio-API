@@ -126,14 +126,18 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join activity_subject acts on a.id=acts.activity_id ';
             end if;
+
             if _education != '' then 
                 cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join activity_education_level ael on a.id=ael.activity_id ';
             end if;
+
             if _tag != '' then 
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
             end if;
+
+
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
@@ -146,7 +150,9 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 end loop;
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
+                cnd := cnd || h5p;
             end if;
+
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
                 
                 query := format($s$ 
@@ -357,14 +363,18 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 cnd := cnd || ' and acts.subject_id in ' || _subject;
                 joinTable := joinTable || ' left join activity_subject acts on a.id=acts.activity_id ';
             end if;
+
             if _education != '' then 
                 cnd := cnd || ' and ael.education_level_id in ' || _education;
                 joinTable := joinTable || ' left join activity_education_level ael on a.id=ael.activity_id ';
             end if;
+
             if _tag != '' then 
                 cnd := cnd || ' and aat.author_tag_id in ' || _tag ;
                 joinTable := joinTable || ' left join activity_author_tag aat on a.id=aat.activity_id ';
             end if;
+
+
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
@@ -377,7 +387,9 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 end loop;
                     h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
                 end if;
+                cnd := cnd || h5p;
             end if;
+
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
                         
                 query := format($s$ 
