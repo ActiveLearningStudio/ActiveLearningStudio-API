@@ -68,7 +68,7 @@ class Playlist extends Model
      */
     public function activities()
     {
-        return $this->hasMany('App\Models\Activity', 'playlist_id');
+        return $this->hasMany('App\Models\Activity', 'playlist_id')->where('activity_type', config('constants.activity_type.activity'));
     }
 
     /**

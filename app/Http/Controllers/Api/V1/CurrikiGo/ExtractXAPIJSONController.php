@@ -11,6 +11,7 @@ use App\Services\LearnerRecordStoreService;
 use Illuminate\Support\Facades\DB;
 use App\CurrikiGo\LRS\InteractionFactory;
 use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
+use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 
 /**
  * @group 16. XAPI Cron
@@ -28,23 +29,27 @@ class ExtractXAPIJSONController extends Controller
      * @param  GoogleClassroomRepositoryInterface  $googleClassroom
      * @return void
      */
-    public function runJob(ActivityRepositoryInterface $activityRepository, LRSStatementsDataRepositoryInterface $lrsStatementsRepository, LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface,
-    GoogleClassroomRepositoryInterface $googleClassroom)
-    {
+    public function runJob(
+        ActivityRepositoryInterface $activityRepository,
+        LRSStatementsDataRepositoryInterface $lrsStatementsRepository,
+        LRSStatementsSummaryDataRepositoryInterface $lrsStatementsSummaryDataRepositoryInterface,
+        GoogleClassroomRepositoryInterface $googleClassroom,
+        IndependentActivityRepositoryInterface $independentActivityRepository
+    ) {
         $max_statement_id = $lrsStatementsRepository->findMaxByField('statement_id');
         if (!$max_statement_id) {
             $max_statement_id = 0;
         }
-        \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script - started from max ID: '. $max_statement_id);
+        \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script - started from max ID: ' . $max_statement_id);
         $offset = 0;
         $limit = config('xapi.lrs_job_row_limit');
         $xapiStatements = DB::connection('lrs_pgsql')->table(config('xapi.lrs_db_statements_table'))->select()
-                ->offset($offset)
-                ->limit($limit)
-                ->where('voided', false)
-                ->where('id', '>', $max_statement_id)
-                ->orderby('id', 'ASC')
-                ->get();
+            ->offset($offset)
+            ->limit($limit)
+            ->where('voided', false)
+            ->where('id', '>', $max_statement_id)
+            ->orderby('id', 'ASC')
+            ->get();
 
         try {
             $service = new LearnerRecordStoreService();
@@ -105,6 +110,7 @@ class ExtractXAPIJSONController extends Controller
                 }
 
                 $activity = $activityRepository->find($groupingInfo['activity']);
+
                 $activityId = null;
                 $activityName = null;
                 $projectId = null;
@@ -113,13 +119,23 @@ class ExtractXAPIJSONController extends Controller
                 $playlistTitle = null;
 
                 if ($activity) {
-                    $activityId = $activity->id;
-                    $activityName = $activity->title;
-                    $project = $activity->playlist->project;
-                    $projectId = $project->id;
-                    $projectName = $project->name;
-                    $playlistId = $activity->playlist_id;
-                    $playlistTitle = $activity->playlist->title;
+                    if ($activity->activity_type == config('constants.activity_type.activity')) {
+                        $activityId = $activity->id;
+                        $activityName = $activity->title;
+                        $project = $activity->playlist->project;
+                        $projectId = $project->id;
+                        $projectName = $project->name;
+                        $playlistId = $activity->playlist_id;
+                        $playlistTitle = $activity->playlist->title;
+                    } else {
+                        $activityId = $activity->id;
+                        $activityName = $activity->title;
+                        $project = NULL;
+                        $projectId = NULL;
+                        $projectName = NULL;
+                        $playlistId = NULL;
+                        $playlistTitle = NULL;
+                    }
                 }
 
                 $category = $contextActivities->getCategory();
@@ -215,12 +231,12 @@ class ExtractXAPIJSONController extends Controller
                 }
                 // Overriding object name, when we have Questionnaire H5P, and object name is not available.
                 if ($defaultActivityName && ($h5pInteraction
-                && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Questionnaire/', $h5pInteraction, $matches))) {
+                    && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Questionnaire/', $h5pInteraction, $matches))) {
                     $insertData['object_name'] = $matches[0];
                 }
                 // need to determine column layout interaction on 'completed'.
                 if (($h5pInteraction
-                && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Column/', $h5pInteraction))) {
+                    && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Column/', $h5pInteraction))) {
                     $insertData['page'] = $insertData['object_name'];
                     $insertData['page_completed'] = $insertData['verb'] === 'completed' ? true : false;
                 }
