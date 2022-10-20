@@ -36,7 +36,10 @@ class GetSearchFilterDataCommand implements Command
     {
         $category = $this->getParam['category'];
         unset($this->getParam['category']);
-        $apiUrl = config('smithsonian.api_base_url') . '/terms/' . $category . '?q=online_visual_material:true&api_key=' . config('smithsonian.api_key' ) . '&' . http_build_query($this->getParam);
+        $apiUrl = config('smithsonian.api_base_url') . 
+                  '/terms/' . $category . '?q=online_visual_material:true&api_key=' . 
+                   config('smithsonian.api_key' ) . '&' . 
+                   http_build_query($this->getParam);
         $response = Http::get($apiUrl);
         return $response->json();
     }

@@ -81,9 +81,15 @@ class SmithsonianIOAAPIClientController extends Controller
 
     /**
      * Get Smithsonian Search Filter Data
-     * @param Request $request
+     *
+     * Get a list of search filter data w.r.t filter category
+     *
      * @bodyParam the term category or search filter name. Required String. Only Allowed values:culture, data_source, date, object_type, online_media_type, place, topic, unit_code
      * @bodyParam starts_with the optional string prefix filter. Example: Any alphabet or string
+     *
+     * @responseFile responses/smithsonian/getsearchfilterdata.json
+     *
+     * @param Request $request
      * @return object $response
      * @throws GeneralException
      */
@@ -94,7 +100,7 @@ class SmithsonianIOAAPIClientController extends Controller
             'starts_with'
         ]);
         $auth = \Auth::user();
-        if ( $auth && $auth->id && isset($getParam['category']) && $getParam['category'] != '') {
+        if ($auth && $auth->id && isset($getParam['category']) && $getParam['category'] !== '') {
             $instance = new GetSearchFilterData($this->client);
             $response = $instance->fetch($getParam);
             return $response;
