@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 /**
- * @group 29. Admin/Queues
+ * @group 28. Admin/Queues
  *
  * APIs for queues monitoring on admin panel.
  */
