@@ -95,6 +95,10 @@ class SmithsonianIOAAPIClientController extends Controller
      */
     public function getSearchFilterData(Request $request)
     {
+        $this->validate($request,[
+            'category' => 'required|string|max:30',
+            'starts_with' => 'string'
+        ]);
         $getParam = $request->only([
             'category',
             'starts_with'
