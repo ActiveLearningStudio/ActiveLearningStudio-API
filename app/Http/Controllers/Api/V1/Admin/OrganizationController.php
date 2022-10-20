@@ -16,7 +16,7 @@ use App\User;
 /**
  * @authenticated
  *
- * @group  Admin Organization API
+ * @group 29. Admin Organization API
  *
  * Admin APIs for Organization
  */
