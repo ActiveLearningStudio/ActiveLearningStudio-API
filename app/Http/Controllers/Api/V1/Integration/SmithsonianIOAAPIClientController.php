@@ -95,18 +95,14 @@ class SmithsonianIOAAPIClientController extends Controller
      */
     public function getSearchFilterData(Request $request)
     {
-        $this->validate($request,[
+        $getParamData = $this->validate($request,[
             'category' => 'required|string|max:30',
             'starts_with' => 'string'
         ]);
-        $getParam = $request->only([
-            'category',
-            'starts_with'
-        ]);
         $auth = \Auth::user();
-        if ($auth && $auth->id && isset($getParam['category']) && $getParam['category'] !== '') {
+        if ($auth && $auth->id && isset($getParamData['category']) && $getParamData['category'] !== '') {
             $instance = new GetSearchFilterData($this->client);
-            $response = $instance->fetch($getParam);
+            $response = $instance->fetch($getParamData);
             return $response;
         }
         throw new GeneralException('Please check your payload data. category field is require!');
