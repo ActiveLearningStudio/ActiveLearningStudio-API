@@ -11,6 +11,11 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+/**
+ * @group 30. Admin/Queues
+ *
+ * APIs for queues monitoring on admin panel.
+ */
 class QueueMonitorController extends Controller
 {
     private $queueMonitorRepository;

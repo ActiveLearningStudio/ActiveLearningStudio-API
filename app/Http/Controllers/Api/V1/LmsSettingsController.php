@@ -16,6 +16,12 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+
+/**
+ * @group 29. Admin/LMS Settings
+ *
+ * APIs for lms settings on admin panel.
+ */
 class LmsSettingsController extends Controller
 {
     private $lmsSettingRepository;

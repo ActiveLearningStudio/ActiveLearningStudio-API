@@ -218,45 +218,23 @@ class UserController extends Controller
     /**
      * Create New Organization User
      *
-     * Create a new user in storage.
+     * Create a new organization user in storage.
      *
      * @urlParam suborganization integer required The Id of an suborganization Example: 1
      * @bodyParam first_name string required First name of a user Example: John
      * @bodyParam last_name string required Last name of a user Example: Doe
-     * @bodyParam email string required email of a user Example: doe@gmail.com
-     * @bodyParam password string required password of a user
-     * @bodyParam role_id integer required role_id of a user Example: 1
+     * @bodyParam email string required Email of a user Example: doe@gmail.com
+     * @bodyParam password string required Password of a user
+     * @bodyParam role_id integer required Role Id of a user Example: 1
      * @bodyParam organization_name string Organization name of a user Example: Curriki
-     * @bodyParam organization_type string type of an organization Example: K-12
+     * @bodyParam organization_type string Type of an organization Example: K-12
      * @bodyParam website string Website url of a user Example: www.currikistudio.org
      * @bodyParam job_title string Job title of a user Example: Developer
      * @bodyParam address string Address of a user Example: 20660 Stevens Creek Blvd #332, Cupertino, CA 95014
      * @bodyParam send_email boolean true or false for email sending Example: true
-     * @bodyParam message string message that will send to admin
+     * @bodyParam message string Message that will send to admin
      *
-     * @response {
-     *   "user": {
-     *     "id": 1,
-     *     "first_name": "John",
-     *     "last_name": "Doe",
-     *     "email": "john.doe@currikistudio.org",
-     *     "organization_name": "Curriki",
-     *     "organization_type": null,
-     *     "job_title": "Developer",
-     *     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
-     *     "phone_number": "+1234567890",
-     *     "website": "www.currikistudio.org",
-     *     "subscribed": true,
-     *     "organization_role": "Admin",
-     *     "organization_role": "Admin",
-     *     "organization_role_id": 1,
-     *     "organization_joined_at": "2022-10-12",
-     *     "projects_count": 5,
-     *     "groups_count": 1,
-     *     "teams_count": 2
-     *   },
-     *   "message": "User has been created successfully."
-     * }
+     * @responseFile responses/user/user.json
      *
      * @response 500 {
      *   "errors": [
@@ -264,7 +242,7 @@ class UserController extends Controller
      *   ]
      * }
      *
-     * @param SuborganizationAddNewUser $request
+     * @param SuborganizationAddNewUser $addNewUserrequest
      * @param Organization $suborganization
      *
      * @return Response
@@ -325,29 +303,7 @@ class UserController extends Controller
      *
      * Update user detail in storage.
      *
-     * @response {
-     *   "user": {
-     *     "id": 1,
-     *     "first_name": "John",
-     *     "last_name": "Doe",
-     *     "email": "john.doe@currikistudio.org",
-     *     "organization_name": "Curriki",
-     *     "organization_type": null,
-     *     "job_title": "Developer",
-     *     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
-     *     "phone_number": "+1234567890",
-     *     "website": "www.currikistudio.org",
-     *     "subscribed": true,
-     *     "organization_role": "Admin",
-     *     "organization_role": "Admin",
-     *     "organization_role_id": 1,
-     *     "organization_joined_at": "2022-10-12",
-     *     "projects_count": 5,
-     *     "groups_count": 1,
-     *     "teams_count": 2
-     *   },
-     *   "message": "User has been updated successfully."
-     * }
+     * @responseFile responses/user/user.json
      *
      * @response 500 {
      *   "errors": [
@@ -355,7 +311,7 @@ class UserController extends Controller
      *   ]
      * }
      *
-     * @param SuborganizationUpdateUserDetail $request
+     * @param SuborganizationUpdateUserDetail $addNewUserrequest
      * @param Organization $suborganization
      *
      * @return Response
@@ -476,22 +432,7 @@ class UserController extends Controller
      * @bodyParam address string Address of a user Example: 20660 Stevens Creek Blvd #332, Cupertino, CA 95014
      * @bodyParam phone_number string Phone number of a user Example: +1234567890
      *
-     * @response {
-     *   "user": {
-     *     "id": 1,
-     *     "first_name": "John",
-     *     "last_name": "Doe",
-     *     "email": "john.doe@currikistudio.org",
-     *     "organization_name": "Curriki",
-     *     "organization_type": null,
-     *     "job_title": "Developer",
-     *     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
-     *     "phone_number": "+1234567890",
-     *     "website": "www.currikistudio.org",
-     *     "subscribed": true
-     *   },
-     *   "message": "Profile has been updated successfully."
-     * }
+     * @responseFile responses/user/user.json
      *
      * @response 500 {
      *   "errors": [
