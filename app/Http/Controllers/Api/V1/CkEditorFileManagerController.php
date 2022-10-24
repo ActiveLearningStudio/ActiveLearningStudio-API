@@ -23,7 +23,7 @@ class CkEditorFileManagerController extends Controller
      *
      * @param Request $request
      *
-     * @bodyParam upload file of type doc/docx/pdf/txt
+     * @bodyParam upload File of type doc/docx/pdf/txt
      * @responseFile responses/ckeditor/upload-file.json
      *
      * @response 404 {

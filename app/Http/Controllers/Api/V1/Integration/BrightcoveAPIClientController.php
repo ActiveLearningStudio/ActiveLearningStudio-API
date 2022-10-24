@@ -45,8 +45,8 @@ class BrightcoveAPIClientController extends Controller
      * Get Brightcove Videos List
      * Get the specified Brightcove API setting data.
      * @param Request $request
-     * @bodyParam id require Valid id of a brightcove api settings table Example: 1
-     * @bodyParam organization_id require Valid id of existing user organization  Example: 1
+     * @bodyParam id required Valid id of a brightcove api settings table Example: 1
+     * @bodyParam organization_id required Valid id of existing user organization  Example: 1
      * @bodyParam query_param optional Valid brightcove query param Example: query=name=file&limit=0&offset=0
      * @return BrightcoveAPISettingResource
      * @throws GeneralException

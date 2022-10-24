@@ -100,17 +100,7 @@ class ActivityTypeController extends Controller
      * @bodyParam order int The order number of a activity type Example: 0
      * @bodyParam image string The image url of a activity type Example: /storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png
      *
-     * @response 201 {
-     *   "activityType": {
-     *     "id": 1,
-     *     "title": "Audio",
-     *     "order": 0,
-     *     "image": "/storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-     *     "activityItems": [],
-     *     "created_at": "2020-09-25T16:29:35.000000Z",
-     *     "updated_at": "2020-09-25T16:29:35.000000Z"
-     *   }
-     * }
+     * @responseFile responses/activity-type/activity-type.json
      *
      * @response 500 {
      *   "errors": [

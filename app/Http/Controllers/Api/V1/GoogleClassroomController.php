@@ -120,12 +120,6 @@ class GoogleClassroomController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Validation error: Access token is required"
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
      *     "Failed to save the token."
      *   ]
      * }
@@ -398,7 +392,7 @@ class GoogleClassroomController extends Controller
      * If the user is authenticated and is a student, validate if the submission is his.
      *
      * @bodyParam access_token string required The stringified of the GAPI access token JSON object
-     * @bodyParam student_id the google user id for the student
+     * @bodyParam student_id The google user id for the student
      * @bodyParam course_id string required The Google Classroom course id
      * @bodyParam gc_classwork_id string required The Id of the classwork
      * @bodyParam gc_submission_id string required The Id of the student's submission
@@ -565,8 +559,8 @@ class GoogleClassroomController extends Controller
      * @urlParam project required The Id of a project. Example: 9
      * @urlParam playlist required The Id of a playlist. Example: 10
      * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
-     * @bodyParam string course_id (The Google Classroom course id)
-     * @bodyParam string topic_id (The Google Classroom topic id)
+     * @bodyParam course_id string The Google Classroom course id
+     * @bodyParam topic_id string The Google Classroom topic id
      * @param Project $project
      * @param Playlist $playlist
      * @param GCPublishPlaylistRequest $publishPlaylistRequest
@@ -629,8 +623,8 @@ class GoogleClassroomController extends Controller
      * @urlParam playlist required The Id of a playlist. Example: 10
      * @urlParam activity required The Id of a activity. Example: 11
      * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
-     * @bodyParam string course_id (The Google Classroom course id)
-     * @bodyParam string topic_id (The Google Classroom topic id)
+     * @bodyParam course_id string The Google Classroom course id
+     * @bodyParam topic_id string The Google Classroom topic id
      * @param Project $project
      * @param Playlist $playlist
      * @param Activity $activity
@@ -695,8 +689,8 @@ class GoogleClassroomController extends Controller
      *
      * @urlParam independent_activity required The Id of a independentActivity. Example: 11
      * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
-     * @bodyParam string course_id (The Google Classroom course id Example: 532068611011)
-     * @bodyParam string topic_id (The Google Classroom topic id Example: 532103337862)
+     * @bodyParam string course_id The Google Classroom course id Example: 532068611011
+     * @bodyParam string topic_id The Google Classroom topic id Example: 532103337862
      *
      * @responseFile responses/google-classroom/google-classroom-publish-activity.json
      *

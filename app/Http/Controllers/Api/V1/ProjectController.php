@@ -83,9 +83,9 @@ class ProjectController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search suborganization against Example: Vivensity
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: name
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: name
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/project/projects.json
      *
@@ -289,7 +289,7 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile 201 responses/project/project.json
      *
@@ -470,7 +470,7 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile responses/project/project.json
      *
@@ -645,8 +645,8 @@ class ProjectController extends Controller
      *
      * Update project's order.
      *
-     * @urlParam project_id int required Id of the project whose order is to be updated Example: 1
-     * @bodyParam order int required New order to set for the project Example: 1
+     * @urlParam project_id integer required Id of the project whose order is to be updated Example: 1
+     * @bodyParam order integer required New order to set for the project Example: 1
      *
      * @response {
      *   "message": "Project reorder has been successful."

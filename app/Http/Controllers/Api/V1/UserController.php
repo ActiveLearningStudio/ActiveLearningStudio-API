@@ -122,8 +122,8 @@ class UserController extends Controller
      * Check if organization user exist in specific organization or not.
      *
      * @urlParam  Organization $suborganization
-     * @bodyParam user_id inetger required user Id Example: 1
-     * @bodyParam organization_id inetger required organization Id Example: 1
+     * @bodyParam user_id inetger required User Id Example: 1
+     * @bodyParam organization_id inetger required Organization Id Example: 1
      *
      * @response {
      *   "invited": true,
@@ -136,6 +136,7 @@ class UserController extends Controller
      * }
      *
      * @param UserCheckRequest $userCheckRequest
+     * @param Organization $suborganization
      * @return Response
      */
     public function checkOrgUser(UserCheckRequest $userCheckRequest, Organization $suborganization)
@@ -231,7 +232,7 @@ class UserController extends Controller
      * @bodyParam website string Website url of a user Example: www.currikistudio.org
      * @bodyParam job_title string Job title of a user Example: Developer
      * @bodyParam address string Address of a user Example: 20660 Stevens Creek Blvd #332, Cupertino, CA 95014
-     * @bodyParam send_email boolean true or false for email sending Example: true
+     * @bodyParam send_email boolean True or false for email sending Example: true
      * @bodyParam message string Message that will send to admin
      *
      * @responseFile responses/user/user.json
@@ -657,6 +658,7 @@ class UserController extends Controller
      *   ]
      * }
      *
+     * @param Request $request
      * @param $notification_id
      *
      * @return Response
@@ -792,7 +794,7 @@ class UserController extends Controller
      *
      * @urlParam suborganization required id of an organization. Example: 1
      * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     * @bodyParam days_limit Days limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/export-notifications.json
      *
@@ -814,7 +816,7 @@ class UserController extends Controller
      *
      * @urlParam suborganization required id of an organization. Example: 1
      * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     * @bodyParam days_limit Days limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/independent-activity-export-notifications.json
      *

@@ -117,7 +117,7 @@ class StandAloneActivityController extends Controller
      * @urlParam Organization $suborganization required The Id of a organization Example: 1
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam content string required The content of a activity Example:
-     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam h5p_content_id integer The Id of H5p content Example: 59
      * @bodyParam order int The order number of a activity Example: 2
      * @bodyParam shared bool The status of share of a activity Example: false
      * @bodyParam thumb_url string The image url of thumbnail Example: null
@@ -209,7 +209,7 @@ class StandAloneActivityController extends Controller
      * @bodyParam content string required The content of a activity Example:
      * @bodyParam shared bool The status of share of a activity Example: false
      * @bodyParam order int The order number of a activity Example: 2
-     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam h5p_content_id integer The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
      * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
      * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]

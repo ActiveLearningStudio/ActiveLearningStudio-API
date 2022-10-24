@@ -55,7 +55,7 @@ class EducationLevelController extends Controller
      * Create a new education level.
      *
      * @bodyParam name string required The name of a education level Example: Grade A
-     * @bodyParam order int The order number of a education level item Example: 1
+     * @bodyParam order integer The order number of a education level item Example: 1
      *
      * @responseFile 201 responses/education-level/education-level.json
      *
@@ -120,7 +120,7 @@ class EducationLevelController extends Controller
      *
      * @urlParam educationLevel required The Id of a education level Example: 1
      * @bodyParam name string required The name of a education level Example: Grade A
-     * @bodyParam order int The order number of a education level item Example: 1
+     * @bodyParam order integer The order number of a education level item Example: 1
 
      * @responseFile responses/education-level/education-level.json
      *

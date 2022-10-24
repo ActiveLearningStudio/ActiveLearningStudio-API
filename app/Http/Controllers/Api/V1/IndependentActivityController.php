@@ -82,9 +82,9 @@ class IndependentActivityController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search independent activity against Example: Video
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: title
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: title
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/independent-activity/independent-activities.json
      *
@@ -110,9 +110,9 @@ class IndependentActivityController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search independent activity against Example: Video
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: title
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: title
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/independent-activity/independent-activities.json
      *
@@ -175,13 +175,13 @@ class IndependentActivityController extends Controller
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
-     * @bodyParam order int The order number of a activity Example: 2
-     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam order integer The order number of a activity Example: 2
+     * @bodyParam h5p_content_id integer The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
      * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
      * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
      * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile 201 responses/independent-activity/independent-activity.json
      *
@@ -262,13 +262,13 @@ class IndependentActivityController extends Controller
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
      * @bodyParam shared bool The status of share of a activity Example: false
-     * @bodyParam order int The order number of a activity Example: 2
-     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam order integer The order number of a activity Example: 2
+     * @bodyParam h5p_content_id integer The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
      * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
      * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
      * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile responses/independent-activity/independent-activity.json
      *

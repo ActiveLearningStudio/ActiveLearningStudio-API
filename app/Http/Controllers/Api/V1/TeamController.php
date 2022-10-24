@@ -249,7 +249,7 @@ class TeamController extends Controller
      *
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
-     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
+     * @bodyParam noovo_group_title string Title of a Noovo Group Example: Test_Group
      *
      * @responseFile 201 responses/team/team.json
      *
@@ -707,7 +707,7 @@ class TeamController extends Controller
      * @urlParam team required The Id of a team Example: 1
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
-     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
+     * @bodyParam noovo_group_title string Title of a Noovo Group Example: Test_Group
      *
      * @responseFile responses/team/team.json
      *
@@ -758,9 +758,9 @@ class TeamController extends Controller
      * Update the specified user role of a team.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam team required The Id of a team Example: 1
-     * @bodyParam role_id inetger required id of a team role Example: 1
-     * @bodyParam user_id inetger required id of a user Example: 12
+     * @urlParam team required The id of a team Example: 1
+     * @bodyParam role_id inetger required The d of a team role Example: 1
+     * @bodyParam user_id inetger required The id of a user Example: 12
      *
      * @responseFile responses/team/team.json
      *
@@ -770,7 +770,8 @@ class TeamController extends Controller
      *   ]
      * }
      *
-     * @param TeamUpdateRequest $teamUpdateRequest
+     * @param TeamUpdateRequest $request
+     * @param Organization $suborganization
      * @param Team $team
      * @return Response
      */
@@ -811,6 +812,7 @@ class TeamController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param Team $team
      * @return Response
      */
@@ -899,7 +901,7 @@ class TeamController extends Controller
      * }
      *
      * @param Request $request
-     * @param $suborganization
+     * @param Organization $suborganization
      * @param Team $team
      * @param Team $project
      * @return Response

@@ -30,11 +30,11 @@ class SmithsonianIOAAPIClientController extends Controller
     /**
      * Get Smithsonian Contents List
      * @param Request $request
-     * @bodyParam q string use for search Example: q=online_visual_material:true AND IC 443
-     * @bodyParam start int like page number Example: 1
-     * @bodyParam rows int like page size or number of record per page Example: 10
+     * @bodyParam q string Use for search Example: q=online_visual_material:true AND IC 443
+     * @bodyParam start int Like page number Example: 1
+     * @bodyParam rows int Like page size or number of record per page Example: 10
      * @bodyParam sort string Sort list by id, newest, updated and random field 
-     * @bodyParam type string get list by type = edanmdm or ead_collection or ead_component or all
+     * @bodyParam type string Get list by type = edanmdm or ead_collection or ead_component or all
      * @bodyParam row_group string The designated set of row types you are filtering it may be objects, archives
      * @return object $response
      * @throws GeneralException
@@ -84,8 +84,8 @@ class SmithsonianIOAAPIClientController extends Controller
      *
      * Get a list of search filter data w.r.t filter category
      *
-     * @bodyParam the term category or search filter name. Required String. Only Allowed values:culture, data_source, date, object_type, online_media_type, place, topic, unit_code
-     * @bodyParam starts_with the optional string prefix filter. Example: Any alphabet or string
+     * @bodyParam category required string The term category or search filter name. Only Allowed values:culture, data_source, date, object_type, online_media_type, place, topic, unit_code
+     * @bodyParam starts_with optional string Prefix filter. Example: Any alphabet or string
      *
      * @responseFile responses/smithsonian/getsearchfilterdata.json
      *

@@ -53,7 +53,7 @@ class SubjectController extends Controller
      * Create a new subject.
      *
      * @bodyParam name string required The name of a subject Example: English
-     * @bodyParam order int The order number of a subject item Example: 1
+     * @bodyParam order integer The order number of a subject item Example: 1
      *
      * @responseFile 201 responses/subject/subject.json
      *
@@ -118,7 +118,7 @@ class SubjectController extends Controller
      *
      * @urlParam subject required The Id of a subject Example: 1
      * @bodyParam name string required The name of a subject Example: English
-     * @bodyParam order int The order number of a subject item Example: 1
+     * @bodyParam order integer The order number of a subject item Example: 1
 
      * @responseFile responses/subject/subject.json
      *
