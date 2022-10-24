@@ -122,7 +122,7 @@ class UserController extends Controller
      * Check if organization user exist in specific organization or not.
      *
      * @urlParam  Organization $suborganization
-     * @bodyParam user_id inetger required User Id Example: 1
+     * @bodyParam user_id inetger required User id Example: 1
      * @bodyParam organization_id inetger required Organization Id Example: 1
      *
      * @response {
@@ -312,15 +312,15 @@ class UserController extends Controller
      *   ]
      * }
      *
-     * @param SuborganizationUpdateUserDetail $addNewUserrequest
+     * @param SuborganizationUpdateUserDetail $addNewUserRequest
      * @param Organization $suborganization
      *
      * @return Response
      */
-    public function updateUserDetail(SuborganizationUpdateUserDetail $addNewUserrequest, Organization $suborganization)
+    public function updateUserDetail(SuborganizationUpdateUserDetail $addNewUserRequest, Organization $suborganization)
     {
         $this->authorize('updateUser', $suborganization);
-        $data = $addNewUserrequest->validated();
+        $data = $addNewUserRequest->validated();
 
         return \DB::transaction(function () use ($suborganization, $data) {
 
@@ -774,8 +774,8 @@ class UserController extends Controller
      *
      * Returns the paginated response of the users with basic reporting.
      *
-     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @bodyParam query for getting the search records by name and email. Example: Test
+     * @bodyParam size integer Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam query string For getting the search records by name and email. Example: Test
      *
      * @responseFile responses/admin/user/users_report.json
      *
@@ -792,8 +792,8 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @urlParam suborganization required id of an organization. Example: 1
-     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @urlParam suborganization required Id of an organization. Example: 1
+     * @bodyParam size integer Limit for getting the paginated records, Default 25. Example: 25
      * @bodyParam days_limit Days limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/export-notifications.json
@@ -814,8 +814,8 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @urlParam suborganization required id of an organization. Example: 1
-     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
+     * @urlParam suborganization required Id of an organization. Example: 1
+     * @bodyParam size integer Limit for getting the paginated records, Default 25. Example: 25
      * @bodyParam days_limit Days limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/independent-activity-export-notifications.json

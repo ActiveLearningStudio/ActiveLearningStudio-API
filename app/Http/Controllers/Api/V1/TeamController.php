@@ -759,7 +759,7 @@ class TeamController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The id of a team Example: 1
-     * @bodyParam role_id inetger required The d of a team role Example: 1
+     * @bodyParam role_id inetger required The id of a team role Example: 1
      * @bodyParam user_id inetger required The id of a user Example: 12
      *
      * @responseFile responses/team/team.json
@@ -903,7 +903,7 @@ class TeamController extends Controller
      * @param Request $request
      * @param Organization $suborganization
      * @param Team $team
-     * @param Team $project
+     * @param Project $project
      * @return Response
      */
     public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team, Project $project)
