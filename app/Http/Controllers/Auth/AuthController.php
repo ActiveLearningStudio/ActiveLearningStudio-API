@@ -360,8 +360,8 @@ class AuthController extends Controller
                                 $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                                 if (!$selfRegisteredRole) {
                                     $selfRegisteredRole = $this->organizationRepository->duplicateRole($organization, 'self_registered');
-                                    $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                                 }
+                                $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                             }
                         }
 
