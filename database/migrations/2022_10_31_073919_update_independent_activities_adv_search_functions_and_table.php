@@ -100,7 +100,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
 
         $independentActivityAdvSearchSql = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
+        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying,_matchActivityType boolean)
         RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
@@ -137,17 +137,31 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-            h5p := ' and hl.name in  (''';
-                
-                if hCnt=0 then 
-                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
-                else
-                for hlCnt in 1..hCnt loop
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
-                end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+
+                if _matchActivityType then
+                    h5p := ' and concat(concat(concat(hl.name,'' ''),major_version),concat(''.'',minor_version)) in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(_h5p,',',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(_h5p,',',hlCnt) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(_h5p,',',hCnt+1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
+                else 
+                    h5p := ' and hl.name in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hCnt+1),' ',1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
                 end if;
-                cnd := cnd || h5p;
+                
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
@@ -181,7 +195,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
 
         $independentActivityAdvsearchSqlOverloading = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
+        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying,_matchActivityType boolean)
         RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
@@ -218,17 +232,31 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-            h5p := ' and hl.name in  (''';
                 
-                if hCnt=0 then 
-                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
-                else
-                for hlCnt in 1..hCnt loop
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
-                end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                if _matchActivityType then
+                    h5p := ' and concat(concat(concat(hl.name,'' ''),major_version),concat(''.'',minor_version)) in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(_h5p,',',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(_h5p,',',hlCnt) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(_h5p,',',hCnt+1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
+                else 
+                    h5p := ' and hl.name in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hCnt+1),' ',1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
                 end if;
-            cnd := cnd || h5p;
+                
             end if;
 
         query := format($s$ select distinct 1 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,

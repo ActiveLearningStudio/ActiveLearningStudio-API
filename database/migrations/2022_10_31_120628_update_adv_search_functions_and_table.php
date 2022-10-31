@@ -103,7 +103,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
 
 
         $advsearchSql = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advsearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
+        CREATE OR REPLACE FUNCTION public.advsearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying,_matchActivityType boolean)
         RETURNS SETOF advsearch_dtnew
         LANGUAGE plpgsql
         AS $function$
@@ -141,16 +141,31 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-            h5p := ' and hl.name in  (''';
-                if hCnt=0 then 
-                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
-                else
-                for hlCnt in 1..hCnt loop
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
-                end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                
+                if _matchActivityType then
+                    h5p := ' and concat(concat(concat(hl.name,'' ''),major_version),concat(''.'',minor_version)) in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(_h5p,',',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(_h5p,',',hlCnt) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(_h5p,',',hCnt+1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
+                else 
+                    h5p := ' and hl.name in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hCnt+1),' ',1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
                 end if;
-                cnd := cnd || h5p;
+                
             end if;
 
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
@@ -340,7 +355,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
 
 
         $advsearchSqlOverloading = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advsearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
+        CREATE OR REPLACE FUNCTION public.advsearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying,_matchActivityType boolean)
         RETURNS SETOF advsearch_dtnew
         LANGUAGE plpgsql
         AS $function$
@@ -378,16 +393,31 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-            h5p := ' and hl.name in  (''';
-                if hCnt=0 then 
-                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
-                else
-                for hlCnt in 1..hCnt loop
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
-                end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+            
+                if _matchActivityType then
+                    h5p := ' and concat(concat(concat(hl.name,'' ''),major_version),concat(''.'',minor_version)) in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(_h5p,',',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(_h5p,',',hlCnt) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(_h5p,',',hCnt+1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
+                else 
+                    h5p := ' and hl.name in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hCnt+1),' ',1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
                 end if;
-                cnd := cnd || h5p;
+                
             end if;
 
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
@@ -533,7 +563,6 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in  (select playlist_id from activities a
                 where  a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText and a.id is not null )
                 
-                
                 union all
                 
                 select 1 as priority,'Activity' as entity,pr.organization_id as org_id,a.id as entity_id,u.id as user_id, pr.id as project_id,
@@ -552,7 +581,6 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where  a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText
                 ;	
             end if;
-            
                 END;
         $function$
         EOL;
