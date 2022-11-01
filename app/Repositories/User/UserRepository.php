@@ -12,6 +12,8 @@ use Laravel\Passport\Passport;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -253,5 +255,86 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function getFirstUser()
     {
         return $this->model->orderBy('id', 'asc')->first();
+    }
+
+    public function eliminateDualSignup()
+    {
+        $orderClause = 'LOWER(email) ASC';
+        $res = DB::select('SELECT * FROM users WHERE LOWER(email) IN (SELECT LOWER(email) AS usr_email FROM users GROUP BY usr_email HAVING COUNT(*) > 1) ORDER BY email');
+
+        $storeResponnse = false;
+        $doneRows = array();
+        $toRetain = array();
+        $toDestroy = array();
+        $data_record = array();
+
+        foreach ($res as $key => $oneEmail) {
+            if (!in_array(strtolower($oneEmail->email), $doneRows)) {
+                $duplicateUsers = User::where('email', 'ilike', $oneEmail->email)->orderBy('email')->get();
+
+                if ($duplicateUsers && count($duplicateUsers) > 1) {
+
+                    $toRetain = $duplicateUsers[0]['email'];
+                    $toDestroy = $duplicateUsers[1]['email'];
+
+                    $toRetainId = $duplicateUsers[0]['id'];
+                    $toDestroyId = $duplicateUsers[1]['id'];
+
+                    $doneRows[] = $oneEmail->email;
+
+                    $data_record[$key]['emailToRetain'] = $toRetain;
+                    $data_record[$key]['emailToDestroy'] = $toDestroy;
+                    $data_record[$key]['idToRetain'] = $toRetainId;
+                    $data_record[$key]['idToDestroy'] = $toDestroyId;
+                    /**
+                     * Swap the id's
+                     */
+                    $data_record[$key]['user_team'] = DB::table('user_team')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['user_project'] = DB::table('user_project')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['user_logins'] = DB::table('user_logins')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['user_group'] = DB::table('user_group')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['user_favorite_project'] = DB::table('user_favorite_project')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['teams'] = DB::table('teams')->where('original_user', $toDestroyId)->update(['original_user' => $toRetainId]);
+                    $data_record[$key]['team_user_roles'] = DB::table('team_user_roles')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['team_project_user'] = DB::table('team_project_user')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['sso_logins'] = DB::table('sso_logins')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['projects'] = DB::table('projects')->where('original_user', $toDestroyId)->update(['original_user' => $toRetainId]);
+                    $data_record[$key]['password_resets'] = DB::table('password_resets')->where('email', $duplicateUsers[1]['email'])->update(['email' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['organization_user_permissions'] = DB::table('organization_user_permissions')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['notifications'] = DB::table('notifications')->where('notifiable_id', $toDestroyId)->where('notifiable_type', "App\User")->update(['notifiable_id' => $toRetainId]);
+                    $data_record[$key]['mobile_app_h5p_results'] = DB::table('mobile_app_h5p_results')->where('email', $duplicateUsers[1]['email'])->update(['email' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['lti_tool_settings'] = DB::table('lti_tool_settings')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['lrs_statements_data'] = DB::table('lrs_statements_data')->where('publisher_id', $toDestroyId)->update(['publisher_id' => $toRetainId]);
+                    $data_record[$key]['lms_settings'] = DB::table('lms_settings')->where('user_id', $toDestroyId)->where('lms_login_id', $duplicateUsers[1]['email'])->update(['user_id' => $toRetainId, 'lms_login_id' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['invited_team_users'] = DB::table('invited_team_users')->where('invited_email', $toDestroyId)->update(['invited_email' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['invited_organization_users'] = DB::table('invited_organization_users')->where('invited_email', $toDestroyId)->update(['invited_email' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['invited_group_users'] = DB::table('invited_group_users')->where('invited_email', $toDestroyId)->update(['invited_email' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['h5p_results'] = DB::table('h5p_results')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['h5p_events'] = DB::table('h5p_events')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['h5p_event_logs'] = DB::table('h5p_event_logs')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['h5p_contents_user_data_go'] = DB::table('h5p_contents_user_data_go')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['h5p_contents_user_data'] = DB::table('h5p_contents_user_data')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['h5p_contents'] = DB::table('h5p_contents')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['groups'] = DB::table('groups')->where('original_user', $toDestroyId)->update(['original_user' => $toRetainId]);
+                    $data_record[$key]['group_project_user'] = DB::table('group_project_user')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['gclass_api_data'] = DB::table('gclass_api_data')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    $data_record[$key]['gclass_api_data'] = DB::table('gclass_api_data')->where('curriki_teacher_email', $toDestroyId)->update(['curriki_teacher_email' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['brightcove_api_settings'] = DB::table('brightcove_api_settings')->where('user_id', $toDestroyId)->where('account_email', $toDestroyId)->update(['user_id' => $toRetainId, 'account_email' => $duplicateUsers[0]['email']]);
+                    $data_record[$key]['activities'] = DB::table('activities')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+
+                    if (DB::table('organization_user_roles')->where('user_id', $toRetainId)) {
+                        $data_record[$key]['organization_user_roles'] = DB::table('organization_user_roles')->where('user_id', $toDestroyId)->delete();
+                    } else {
+                        $data_record[$key]['organization_user_roles'] = DB::table('organization_user_roles')->where('user_id', $toDestroyId)->update(['user_id' => $toRetainId]);
+                    }
+
+                    $storeResponnse = Storage::put('Duplicate-users-fix.json', json_encode($data_record));
+                    $deleteUppercaseUser = User::where('id', $toDestroyId)->delete();
+                }
+            }
+        }
+        if ($storeResponnse)
+            return true;
+        return false;
     }
 }
