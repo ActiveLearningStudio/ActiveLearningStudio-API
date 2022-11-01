@@ -262,7 +262,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function eliminateDualSignup()
     {
-        $orderClause = 'LOWER(email) ASC';
         $res = DB::select('SELECT * FROM users WHERE LOWER(email) IN (SELECT LOWER(email) AS usr_email FROM users 
         GROUP BY usr_email HAVING COUNT(*) > 1) ORDER BY email');
 
