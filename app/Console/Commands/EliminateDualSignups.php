@@ -19,7 +19,8 @@ class EliminateDualSignups extends Command
      *
      * @var string
      */
-    protected $description = 'Command will detect the multiple user signups with case sensitivity difference and then swap the id of first signup with the id of second signup';
+    protected $description = 'Command will detect the multiple user signups with case sensitivity difference and then swap the id of first signup 
+    with the id of second signup';
 
     /**
      * Create a new command instance.
