@@ -258,7 +258,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * This function will eliminate the duplicate users from users table and swaps the id of actual signup to duplicates entries
+     * Command will detect the multiple user with multiple signups, then we take the ids of signup with lowercase 
+     * email and replace in all tables on the signup id of uppercase email, then we delete the user record with the uppercase email
      */
     public function eliminateDualSignup()
     {

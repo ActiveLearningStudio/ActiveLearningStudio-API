@@ -19,8 +19,8 @@ class EliminateDualSignups extends Command
      *
      * @var string
      */
-    protected $description = 'Command will detect the multiple user signups with case sensitivity difference and then swap the id of first signup 
-    with the id of second signup';
+    protected $description = 'Command will detect the multiple user with multiple signups, then we take the ids of signup with lowercase 
+    email and replace in all tables on the signup id of uppercase email, then we delete the user record with the uppercase email';
 
     /**
      * Create a new command instance.
