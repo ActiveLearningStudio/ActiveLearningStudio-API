@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\User\UserRepositoryInterface;
+use App\Jobs\EliminateDualSignupJob;
 use Illuminate\Console\Command;
 
 class EliminateDualSignups extends Command
@@ -37,8 +37,9 @@ class EliminateDualSignups extends Command
      *
      * @return int
      */
-    public function handle(UserRepositoryInterface $userRepository)
+    public function handle()
     {
-        return $userRepository->eliminateDualSignup();
+        EliminateDualSignupJob::dispatch();
+        return true;
     }
 }
