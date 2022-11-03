@@ -40,6 +40,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::group(['prefix' => 'smithsonian'], function () {
             Route::post('get-content-list', 'Integration\SmithsonianIOAAPIClientController@getContentList');
             Route::post('get-content-detail', 'Integration\SmithsonianIOAAPIClientController@getContentDetail');
+            Route::post('get-search-filter-data', 'Integration\SmithsonianIOAAPIClientController@getSearchFilterData');
         });
     });
     

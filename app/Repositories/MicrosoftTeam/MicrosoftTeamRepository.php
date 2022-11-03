@@ -199,7 +199,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
                     "distributeForStudentWork" => false,
                     "resource" => [
                         "displayName" => $activity->title,
-                        "link" => config('constants.front-url') . '/activity/' . $activity->id . '/shared', // Need to discuss the link logic currently shared link
+                        "link" => config('constants.front-url') . '/msteams/launch/activity/' . $activity->id . '/class/' . $classId . '/assignment/' . $assignmentId,
                         "@odata.type" => "#microsoft.graph.educationLinkResource"
                     ]
                 ];
@@ -319,8 +319,8 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         $postResourceInput = [
             "distributeForStudentWork" => false,
             "resource" => [
-                "displayName" => $independentActivity->title,
-                "link" => config('constants.front-url') . '/activity/' . $independentActivity->id . '/shared?type=ind', // Need to discuss the link logic currently shared link
+                "displayName" => $activity->title,
+                "link" => config('constants.front-url') . '/msteams/launch/activity/' . $activity->id . '/class/' . $classId . '/assignment/' . $assignmentId,
                 "@odata.type" => "#microsoft.graph.educationLinkResource"
             ]
         ];

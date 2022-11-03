@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Subject;
 use App\Models\EducationLevel;
 use App\Models\AuthorTag;
+use App\Models\H5pBrightCoveVideoContents;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -76,6 +77,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         return $query->where('organization_id', $organization_id)
                      ->where('user_id', $auth_user->id)
+                     ->where('activity_type', config('constants.activity_type.standalone'))
                      ->paginate($perPage)->withQueryString();
     }
 
@@ -269,20 +271,27 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $queryParams['query_education'] = '';
         $queryParams['query_tags'] = '';
         $queryParams['query_h5p'] = '';
+        $queryParams['query_h5p_version'] = false;
         $queryFrom = 0;
         $querySize = 10;
 
-        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
+        if (
+            isset($data['searchType'])
+            && (
+                $data['searchType'] === 'showcase_projects'
+                || $data['searchType'] === 'lti_search'
+            )
+        ) {
             $organization = $data['orgObj'];
             $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advSearch(:user_id, :query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advSearch(:user_id, :query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
 
             $queryParams['user_id'] = $authUser;
         } else {
-            $query = 'SELECT * FROM advSearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advSearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
         }
 
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
@@ -313,7 +322,10 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 if ($dataSearchType === 'org_projects_non_admin') {
                     $queryWhere[] = "organization_visibility_type_id NOT IN (" . config('constants.private-organization-visibility-type-id') . ")";
                 }
-            } elseif ($dataSearchType === 'showcase_projects') {
+            } elseif (
+                $dataSearchType === 'showcase_projects'
+                || $dataSearchType === 'lti_search'
+            ) {
                 // Get all public items
                 $organizationIdsShouldQueries[] = "organization_visibility_type_id IN (" . config('constants.public-organization-visibility-type-id') . ")";
 
@@ -332,6 +344,19 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
                 $protectedOrganizationIdsQueries = implode(' AND ', $protectedOrganizationIdsQueries);
                 $organizationIdsShouldQueries[] = "(" . $protectedOrganizationIdsQueries . ")";
+
+                if ($dataSearchType === 'lti_search') {
+                    // Get all private items
+                    $privateOrganizationIdsQueries[] = "org_id = " . $organization->id;
+                    $privateOrganizationIdsQueries[] = "organization_visibility_type_id = " . config('constants.private-organization-visibility-type-id');
+                    $privateOrganizationIdsQueries[] = "user_id = " . $authUser;
+
+                    $privateOrganizationIdsQueries = implode(' AND ', $privateOrganizationIdsQueries);
+                    $organizationIdsShouldQueries[] = "(" . $privateOrganizationIdsQueries . ")";
+
+                    // Consider H5P version while filtering
+                    $queryParams['query_h5p_version'] = true;
+                }
 
                 $organizationIdsShouldQueries = implode(' OR ', $organizationIdsShouldQueries);
                 $queryWhere[] = "(" . $organizationIdsShouldQueries . ")";
@@ -433,7 +458,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             if (isset($data['model']) && !empty($data['model'])) {
                 unset($queryWhere[count($queryWhere) - 1]);
             }
-            
+
             $countQueryWhereStr = " WHERE " . implode(' AND ', $queryWhere);
             $countQuery = $countQuery . $countQueryWhereStr;
             $countsQuery = 'SELECT entity, count(1) FROM (' . $countQuery . ')sq GROUP BY entity';
@@ -532,6 +557,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $activity_data = [
             'title' => ($isDuplicate) ? $activity->title . "-COPY" : $activity->title,
             'type' => $activity->type,
+            'activity_type' => $activity->activity_type,
             'content' => $activity->content,
             'playlist_id' => $playlist->id,
             'order' => ($isDuplicate) ? $activity->order + 1 : $this->getOrder($playlist->id) + 1,
@@ -575,10 +601,22 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         // copy the content data if exist
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
 
+        // copy brightcove video content
+        $h5pVideoContent =  H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
+
+        if ($h5pVideoContent) {
+            $brightCoveVideoData['brightcove_video_id'] = $h5pVideoContent->brightcove_video_id;
+            $brightCoveVideoData['h5p_content_id'] = $newH5pContent;
+            $brightCoveVideoData['brightcove_api_setting_id'] = $h5pVideoContent->brightcove_api_setting_id;
+
+            H5pBrightCoveVideoContents::create($brightCoveVideoData);
+        }
+
         $new_thumb_url = clone_thumbnail($activity->thumb_url, "activities");
         $activity_data = [
             'title' => $activity->title . "-COPY",
             'type' => $activity->type,
+            'activity_type' => $activity->activity_type,
             'content' => $activity->content,
             'description' => $activity->description,
             'order' => $activity->order + 1,
@@ -844,11 +882,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                     storage_path('app/public/h5p/content/'.$new_content_id)
                 );
 
-        
+
         // Move Content to editor Folder
 
         $destinationEditorFolderPath = $extracted_folder . '/playlists/' . $playlist_dir . '/activities/' . $activity_dir . '/' . $old_content_id;
-        
+
         // Move editor images
         \File::copyDirectory(
             storage_path($destinationEditorFolderPath . '/images/'),
@@ -897,26 +935,26 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
         // Import Activity Subjects
         $projectOrganizationId = Project::where('id',$playlist->project_id)->value('organization_id');
-        
-        $activitySubjectPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+
+        $activitySubjectPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir .
                                                                 '/activities/' . $activity_dir . '/activity_subject.json');
         if (file_exists($activitySubjectPath)) {
             $subjectContent = file_get_contents($activitySubjectPath);
             $subjects = json_decode($subjectContent,true);
             \Log::info($subjects);
             foreach ($subjects as $subject) {
-    
+
                 $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
-    
+
                 $newSubject['activity_id'] = $cloned_activity->id;
                 $newSubject['subject_id'] = $recSubject->id;
                 $newSubject['created_at'] = date('Y-m-d H:i:s');
                 $newSubject['updated_at'] = date('Y-m-d H:i:s');
-                
+
                 DB::table('activity_subject')->insert($newSubject);
             }
         }
-        
+
         // Import Activity Education-Level
 
         $activtyEducationPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . '/activities/' .
@@ -926,21 +964,21 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
             $educationLevels = json_decode($educationLevelContent,true);
             \Log::info($educationLevels);
             foreach ($educationLevels as $educationLevel) {
-    
+
                 $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
-    
+
                 $newEducationLevel['activity_id'] = $cloned_activity->id;
                 $newEducationLevel['education_level_id'] = $recEducationLevel->id;
                 $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
                 $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
-                
+
                 DB::table('activity_education_level')->insert($newEducationLevel);
             }
         }
 
         // Import Activity Author-Tag
 
-        $authorTagPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir . 
+        $authorTagPath = storage_path($extracted_folder . '/playlists/' . $playlist_dir .
                                                             '/activities/' . $activity_dir . '/activity_author_tag.json');
         if (file_exists($authorTagPath)) {
             $authorTagContent = file_get_contents($authorTagPath);
@@ -952,7 +990,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
                 $newauthorTag['author_tag_id'] = $recAuthorTag->id;
                 $newauthorTag['created_at'] = date('Y-m-d H:i:s');
                 $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
-                
+
                 DB::table('activity_author_tag')->insert($newauthorTag);
             }
         }

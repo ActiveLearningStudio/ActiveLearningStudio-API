@@ -10,6 +10,7 @@ use App\Models\Activity;
 use App\Models\Subject;
 use App\Models\EducationLevel;
 use App\Models\AuthorTag;
+use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
@@ -24,6 +25,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -35,6 +37,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     private $subjectRepository;
     private $educationLevelRepository;
     private $client;
+    private $h5pContentRepository;
 
     /**
      * IndependentActivityRepository constructor.
@@ -43,12 +46,14 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
      * @param SubjectRepositoryInterface $subjectRepository
      * @param EducationLevelRepositoryInterface $educationLevelRepository
+     * @param H5pContentRepositoryInterface $h5pContentRepository
      */
     public function __construct(
         IndependentActivity $model,
         H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
         SubjectRepositoryInterface $subjectRepository,
-        EducationLevelRepositoryInterface $educationLevelRepository
+        EducationLevelRepositoryInterface $educationLevelRepository,
+        H5pContentRepositoryInterface $h5pContentRepository
     )
     {
         parent::__construct($model);
@@ -56,6 +61,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
         $this->subjectRepository = $subjectRepository;
         $this->educationLevelRepository = $educationLevelRepository;
+        $this->h5pContentRepository = $h5pContentRepository;
     }
 
     /**
@@ -100,20 +106,27 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $queryParams['query_education'] = '';
         $queryParams['query_tags'] = '';
         $queryParams['query_h5p'] = '';
+        $queryParams['query_h5p_version'] = false;
         $queryFrom = 0;
         $querySize = 10;
 
-        if (isset($data['searchType']) && $data['searchType'] === 'showcase_activities') {
+        if (
+            isset($data['searchType'])
+            && (
+                $data['searchType'] === 'showcase_activities'
+                || $data['searchType'] === 'lti_search'
+            )
+        ) {
             $organization = $data['orgObj'];
             $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
         } else {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
         }
 
         $queryWhere[] = "deleted_at IS NULL";
@@ -141,7 +154,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                 if ($dataSearchType === 'org_activities_non_admin') {
                     $queryWhere[] = "organization_visibility_type_id NOT IN (" . config('constants.private-organization-visibility-type-id') . ")";
                 }
-            } elseif ($dataSearchType === 'showcase_activities') {
+            } elseif (
+                $dataSearchType === 'showcase_activities'
+                || $dataSearchType === 'lti_search'
+            ) {
                 // Get all public items
                 $organizationIdsShouldQueries[] = "organization_visibility_type_id IN (" . config('constants.public-organization-visibility-type-id') . ")";
 
@@ -160,6 +176,19 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                 $protectedOrganizationIdsQueries = implode(' AND ', $protectedOrganizationIdsQueries);
                 $organizationIdsShouldQueries[] = "(" . $protectedOrganizationIdsQueries . ")";
+
+                if ($dataSearchType === 'lti_search') {
+                    // Get all private items
+                    $privateOrganizationIdsQueries[] = "org_id = " . $organization->id;
+                    $privateOrganizationIdsQueries[] = "organization_visibility_type_id = " . config('constants.private-organization-visibility-type-id');
+                    $privateOrganizationIdsQueries[] = "user_id = " . $authUser;
+
+                    $privateOrganizationIdsQueries = implode(' AND ', $privateOrganizationIdsQueries);
+                    $organizationIdsShouldQueries[] = "(" . $privateOrganizationIdsQueries . ")";
+
+                    // Consider H5P version while filtering
+                    $queryParams['query_h5p_version'] = true;
+                }
 
                 $organizationIdsShouldQueries = implode(' OR ', $organizationIdsShouldQueries);
                 $queryWhere[] = "(" . $organizationIdsShouldQueries . ")";
@@ -266,7 +295,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
     /**
      * To clone Independent Activity
-     * 
+     *
      * @param Organization $organization
      * @param IndependentActivity $independentActivity
      * @param string $token
@@ -300,6 +329,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => ($isDuplicate) ? $independentActivity->order + 1 : $this->getOrder($organization->id) + 1,
             'h5p_content_id' => $newH5pContent, // set if new h5pContent created
             'thumb_url' => $new_thumb_url,
+            'description' => $independentActivity->description,
             'subject_id' => $independentActivity->subject_id,
             'education_level_id' => $independentActivity->education_level_id,
             'shared' => $independentActivity->shared,
@@ -388,7 +418,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
             if (!empty($authenticatedUserOrgIndependentActivityIdsString)) {
                 // update order's
-                $query = 'UPDATE "independent_activities" SET "order" = "order" + 1 WHERE "id" IN (' . $authenticatedUserOrgIndependentActivityIdsString . ')';
+                $query = 'UPDATE "activities" SET "order" = "order" + 1 WHERE "id" IN (' . $authenticatedUserOrgIndependentActivityIdsString . ')';
                 $affectedIndependentActivitiesCount = DB::update($query);
             }
 
@@ -613,21 +643,21 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $activity_json_file = '/exports/' . $activity_dir_name .  '/activity.json';
         Storage::disk('public')->put($activity_json_file, $independent_activity);
 
-        // Export Subject 
+        // Export Subject
         $activitySubjectJsonFile = '/exports/' . $activity_dir_name . '/activity_subject.json';
-        
+
         Storage::disk('public')->put($activitySubjectJsonFile, $independent_activity->subjects);
 
         // Export Education level
 
         $activityEducationLevelJsonFile = '/exports/' . $activity_dir_name . '/activity_education_level.json';
-        
+
         Storage::disk('public')->put($activityEducationLevelJsonFile, $independent_activity->educationLevels);
 
         // Export Author
 
         $activityAuthorTagJsonFile = '/exports/' . $activity_dir_name . '/activity_author_tag.json';
-        
+
         Storage::disk('public')->put($activityAuthorTagJsonFile, $independent_activity->authorTags);
 
         $decoded_content = json_decode($independent_activity->h5p_content,true);
@@ -655,7 +685,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $exported_content_dir_path = 'app/public/exports/' . $activity_dir_name . '/' . $independent_activity->h5p_content_id;
         $exported_content_dir = storage_path($exported_content_dir_path);
         \File::copyDirectory( storage_path('app/public/h5p/content/'.$independent_activity->h5p_content_id), $exported_content_dir );
-    
+
         // Get real path for our folder
         $rootPath = storage_path('app/public/exports/'.$activity_dir_name);
 
@@ -746,7 +776,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             }
             return DB::transaction(function () use ($extracted_folder, $suborganization_id, $authUser, $source_file, $method_source) {
                 if (file_exists(storage_path($extracted_folder.'/activity.json'))) {
-                    
+
                     $activity_json = file_get_contents(storage_path($extracted_folder . '/activity.json'));
                     $activity = json_decode($activity_json,true);
 
@@ -775,7 +805,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                                 storage_path($extracted_folder . '/' . $old_content_id),
                                 storage_path('app/public/h5p/content/'.$new_content_id)
                             );
-                    
+
                     // Move Content to editor Folder
                     $destinationEditorFolderPath = $extracted_folder . $old_content_id;
 
@@ -835,12 +865,12 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                             $recSubject = Subject::firstOrCreate(['name' => $subject['name'], 'organization_id'=>$projectOrganizationId]);
 
-                            $newSubject['independent_activity_id'] = $cloned_activity->id;
+                            $newSubject['activity_id'] = $cloned_activity->id;
                             $newSubject['subject_id'] = $recSubject->id;
                             $newSubject['created_at'] = date('Y-m-d H:i:s');
                             $newSubject['updated_at'] = date('Y-m-d H:i:s');
-                            
-                            DB::table('independent_activity_subject')->insert($newSubject);
+
+                            DB::table('activity_subject')->insert($newSubject);
                         }
                     }
 
@@ -855,11 +885,11 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                             $recEducationLevel = EducationLevel::firstOrCreate(['name' => $educationLevel['name'], 'organization_id'=>$projectOrganizationId]);
 
-                            $newEducationLevel['independent_activity_id'] = $cloned_activity->id;
+                            $newEducationLevel['activity_id'] = $cloned_activity->id;
                             $newEducationLevel['education_level_id'] = $recEducationLevel->id;
                             $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
                             $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
-                            
+
                             DB::table('independent_activity_education_level')->insert($newEducationLevel);
                         }
                     }
@@ -873,11 +903,11 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                         \Log::info($authorTags);
                         foreach ($authorTags as $authorTag) {
                             $recAuthorTag = AuthorTag::firstOrCreate(['name' => $authorTag['name'], 'organization_id'=>$projectOrganizationId]);
-                            $newauthorTag['independent_activity_id'] = $cloned_activity->id;
+                            $newauthorTag['activity_id'] = $cloned_activity->id;
                             $newauthorTag['author_tag_id'] = $recAuthorTag->id;
                             $newauthorTag['created_at'] = date('Y-m-d H:i:s');
                             $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
-                            
+
                             DB::table('independent_activity_author_tag')->insert($newauthorTag);
                         }
                     }
@@ -937,7 +967,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * @param $playlist
      * @param $token
      * @return string
-     * 
+     *
      */
     public function copyToPlaylist($independentActivity, $playlist, $token)
     {
@@ -963,7 +993,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'thumb_url' => $new_thumb_url,
             'shared' => $playlist->project->shared,
         ];
-        
+
         $cloned_activity = Activity::create($activity_data);
 
         if ($cloned_activity && count($independentActivity->subjects) > 0) {
@@ -977,6 +1007,93 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         return $cloned_activity['id'];
+    }
+
+    /**
+     * Copy exisiting independentent activities into activities table
+     *
+     * @return boolean
+     *
+     */
+    public function copyToActivity()
+    {
+        $independentActivities = DB::table('independent_activities')
+                                ->whereNull('deleted_at')
+                                ->get();
+
+        DB::transaction(function () use ($independentActivities) {
+            foreach ($independentActivities as $independentActivity) {
+                $h5p_content = $this->h5pContentRepository->find($independentActivity->h5p_content_id);
+
+                if ($h5p_content) {
+                    $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+                    $h5p_content->user_id = $independentActivity->user_id; // just add the user id
+                    $h5p_content->save(); // this will return true, then we can get id of h5pContent
+                }
+                $newH5pContent = $h5p_content->id ?? null;
+
+                // copy the content data if exist
+                $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
+
+                $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "independent-activities");
+                $activity_data = [
+                    'title' => $independentActivity->title,
+                    'type' => $independentActivity->type,
+                    'content' => $independentActivity->content,
+                    'shared' => $independentActivity->shared,
+                    'order' => $independentActivity->order,
+                    'created_at' => $independentActivity->created_at,
+                    'updated_at' => $independentActivity->updated_at,
+                    'is_public' => $independentActivity->is_public,
+                    'h5p_content_id' => $newH5pContent, // set if new h5pContent created
+                    'thumb_url' => $new_thumb_url,
+                    'user_id' => $independentActivity->user_id,
+                    'organization_id' => $independentActivity->organization_id,
+                    'description' => $independentActivity->description,
+                    'source_type' => $independentActivity->source_type,
+                    'source_url' => $independentActivity->source_url,
+                    'organization_visibility_type_id' => $independentActivity->organization_visibility_type_id,
+                    'cloned_from' => $independentActivity->cloned_from,
+                    'clone_ctr' => $independentActivity->clone_ctr,
+                    'status' => $independentActivity->status,
+                    'indexing' => $independentActivity->indexing,
+                    'original_user' => $independentActivity->original_user,
+                ];
+
+                $cloned_activity = $this->create($activity_data);
+
+                if ($cloned_activity) {
+                    $subjectIds = DB::table('independent_activity_subject')
+                                            ->where('independent_activity_id', '=', $independentActivity->id)
+                                            ->whereNull('deleted_at')
+                                            ->pluck('subject_id');
+
+                    if (count($subjectIds) > 0) {
+                        $cloned_activity->subjects()->attach($subjectIds);
+                    }
+
+                    $educationLevelIds = DB::table('independent_activity_education_level')
+                                                    ->where('independent_activity_id', '=', $independentActivity->id)
+                                                    ->whereNull('deleted_at')
+                                                    ->pluck('education_level_id');
+
+                    if (count($educationLevelIds) > 0) {
+                        $cloned_activity->educationLevels()->attach($educationLevelIds);
+                    }
+
+                    $authorTagIds = DB::table('independent_activity_author_tag')
+                                                ->where('independent_activity_id', '=', $independentActivity->id)
+                                                ->whereNull('deleted_at')
+                                                ->pluck('author_tag_id');
+
+                    if (count($authorTagIds) > 0) {
+                        $cloned_activity->authorTags()->attach($authorTagIds);
+                    }
+                }
+            }
+        });
+
+        return 1;
     }
 
     /**
@@ -1005,25 +1122,25 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * @param $playlist
      * @param $token
      * @return string
-     * 
+     *
      */
     public function moveToPlaylist($independentActivity, $playlist, $token)
     {
         $newThumbUrl = cloneIndependentActivityThumbnail($independentActivity->thumb_url, "independent-activities", "activities");
-        
+
         $activity_data = [
             'title' => $independentActivity->title,
             'type' => $independentActivity->type,
             'content' => $independentActivity->content,
             'playlist_id' => $playlist->id,
             'order' => $this->getOrder($playlist->id) + 1,
-            'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content 
+            'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content
             'thumb_url' => $newThumbUrl,
             'shared' => $playlist->project->shared,
         ];
-        
+
         $cloned_activity = Activity::create($activity_data);
-        
+
         if ($cloned_activity && count($independentActivity->subjects) > 0) {
             $cloned_activity->subjects()->attach($independentActivity->subjects);
         }
@@ -1043,7 +1160,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * @param $activity
      * @param $token
      * @return int
-     * 
+     *
      */
     public function convertIntoIndependentActivity($organization, $activity, $token)
     {
@@ -1059,7 +1176,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
 
         $newThumbUrl = cloneIndependentActivityThumbnail($activity->thumb_url, "activities", "independent-activities");
-        
+
         $independentActivityData = [
             'title' => $activity->title,
             'type' => $activity->type,
@@ -1072,12 +1189,13 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'organization_id' => $organization->id,
             'organization_visibility_type_id' => config('constants.private-organization-visibility-type-id'),
         ];
-        
+
         $clonedActivity = $this->create($independentActivityData);
 
         if ($clonedActivity && count($activity->subjects) > 0) {
             $clonedActivity->subjects()->attach($activity->subjects);
         }
+
         if ($clonedActivity && count($activity->educationLevels) > 0) {
             $clonedActivity->educationLevels()->attach($activity->educationLevels);
         }
@@ -1086,7 +1204,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         return $clonedActivity['id'];
-        
+
     }
-    
+
 }

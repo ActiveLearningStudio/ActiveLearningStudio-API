@@ -71,7 +71,7 @@ class KalturaGeneratedAPIClientController extends Controller
           $secret = $ltiRowResult->tool_secret_key;
           $partnerId = $ltiRowResult->tool_consumer_key;
         } else {
-          throw new GeneralException('Unable to find kaltur settings, please try again later!');
+          throw new GeneralException('Unable to find Kaltura API settings!');
         }
         $responeResult = '';
         $config = new $this->kalturaConfiguration();

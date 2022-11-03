@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\CurrikiGo\Smithsonian\Client;
 use App\CurrikiGo\Smithsonian\Contents\GetContentList;
 use App\CurrikiGo\Smithsonian\Contents\GetContentDetail;
+use App\CurrikiGo\Smithsonian\Contents\GetSearchFilterData;
 use App\Exceptions\GeneralException;
 
 class SmithsonianIOAAPIClientController extends Controller
@@ -75,6 +76,35 @@ class SmithsonianIOAAPIClientController extends Controller
             $response = $instance->fetch($getParam);
             return $response;
         }
-        throw new GeneralException('Please check you payload data. id field is require!');
+        throw new GeneralException('Please check your payload data. id field is require!');
+    }
+
+    /**
+     * Get Smithsonian Search Filter Data
+     *
+     * Get a list of search filter data w.r.t filter category
+     *
+     * @bodyParam the term category or search filter name. Required String. Only Allowed values:culture, data_source, date, object_type, online_media_type, place, topic, unit_code
+     * @bodyParam starts_with the optional string prefix filter. Example: Any alphabet or string
+     *
+     * @responseFile responses/smithsonian/getsearchfilterdata.json
+     *
+     * @param Request $request
+     * @return object $response
+     * @throws GeneralException
+     */
+    public function getSearchFilterData(Request $request)
+    {
+        $getParamData = $this->validate($request,[
+            'category' => 'required|string|max:30',
+            'starts_with' => 'string'
+        ]);
+        $auth = \Auth::user();
+        if ($auth && $auth->id && isset($getParamData['category']) && $getParamData['category'] !== '') {
+            $instance = new GetSearchFilterData($this->client);
+            $response = $instance->fetch($getParamData);
+            return $response;
+        }
+        throw new GeneralException('Please check your payload data. category field is require!');
     }
 }
