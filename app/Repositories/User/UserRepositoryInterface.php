@@ -69,4 +69,10 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @return mixed
      */
     public function getUsersExportIndependentActivitiesList($suborganization, $data);
+
+    /**
+     * To fix the dual signups in users table
+     * @return bool
+     */
+    public function eliminateDualSignup();
 }
