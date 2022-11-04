@@ -13,6 +13,8 @@ class CreateOutcomeDataView extends Migration
      */
     public function up()
     {
+        DB::statement("drop view IF EXISTS outcome_data");
+
         DB::statement("CREATE OR REPLACE VIEW public.outcome_data
 AS SELECT sq1.user_id,
     sq1.class_id,
@@ -33,7 +35,8 @@ AS SELECT sq1.user_id,
     lsd.score_max,
     lsd.score_raw,
     lsd.activity_category,
-    sq1.chapter_name,
+    lsd.chapter_name,
+    sq1.object_id,
     lsd.object_name,
     lm.page_order,
     lsd.glass_alternate_course_id,
@@ -45,14 +48,14 @@ AS SELECT sq1.user_id,
             lrs_statements_data.playlist_id,
             lrs_statements_data.assignment_id,
             lrs_statements_data.submission_id,
-            lrs_statements_data.chapter_name,
+            lrs_statements_data.object_id,
             replace(lrs_statements_data.question, '  '::text, ' '::text) AS question,
             max(lrs_statements_data.datetime) AS datetime
             FROM lrs_statements_data
             WHERE lrs_statements_data.question IS NOT NULL AND lrs_statements_data.answer IS NOT NULL AND (lrs_statements_data.verb::text = ANY (ARRAY['answered'::text, 'interacted'::text, 'completed'::text]))
-            GROUP BY lrs_statements_data.actor_id, lrs_statements_data.class_id, lrs_statements_data.project_id, lrs_statements_data.playlist_id, lrs_statements_data.assignment_id, lrs_statements_data.submission_id, lrs_statements_data.chapter_name, (replace(lrs_statements_data.question, '  '::text, ' '::text))) sq1
-        LEFT JOIN lrs_statements_data lsd ON sq1.user_id::text = lsd.actor_id::text AND sq1.class_id = lsd.class_id AND sq1.assignment_id::text = lsd.assignment_id::text AND sq1.submission_id::text = lsd.submission_id::text AND sq1.chapter_name::text = lsd.chapter_name::text AND replace(sq1.question, '  '::text, ' '::text) = replace(lsd.question, '  '::text, ' '::text) AND sq1.datetime = lsd.datetime
-        LEFT JOIN lrs_metadata lm ON lsd.assignment_id::text = lm.activity_id::text AND lsd.chapter_name::text = lm.chapter_name::text
+            GROUP BY lrs_statements_data.actor_id, lrs_statements_data.class_id, lrs_statements_data.project_id, lrs_statements_data.playlist_id, lrs_statements_data.assignment_id, lrs_statements_data.submission_id, lrs_statements_data.object_id, (replace(lrs_statements_data.question, '  '::text, ' '::text))) sq1
+        LEFT JOIN lrs_statements_data lsd ON sq1.user_id::text = lsd.actor_id::text AND sq1.class_id = lsd.class_id AND sq1.assignment_id::text = lsd.assignment_id::text AND sq1.submission_id::text = lsd.submission_id::text AND sq1.object_id::text = lsd.object_id::text AND replace(sq1.question, '  '::text, ' '::text) = replace(lsd.question, '  '::text, ' '::text) AND sq1.datetime = lsd.datetime
+        LEFT JOIN lrs_metadata lm ON lsd.assignment_id::text = lm.activity_id::text and lm.chapter_name=lsd.chapter_name
 UNION ALL
     SELECT sq1.user_id,
     sq1.class_id,
@@ -74,6 +77,7 @@ UNION ALL
     lsd.score_raw,
     lsd.activity_category,
     lsd.chapter_name,
+    lsd.object_id,
     lsd.object_name,
     50 AS page_order,
     lsd.glass_alternate_course_id,

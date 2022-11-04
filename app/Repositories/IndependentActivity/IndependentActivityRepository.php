@@ -10,6 +10,7 @@ use App\Models\Activity;
 use App\Models\Subject;
 use App\Models\EducationLevel;
 use App\Models\AuthorTag;
+use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
@@ -36,6 +37,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     private $subjectRepository;
     private $educationLevelRepository;
     private $client;
+    private $h5pContentRepository;
 
     /**
      * IndependentActivityRepository constructor.
@@ -44,12 +46,14 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
      * @param SubjectRepositoryInterface $subjectRepository
      * @param EducationLevelRepositoryInterface $educationLevelRepository
+     * @param H5pContentRepositoryInterface $h5pContentRepository
      */
     public function __construct(
         IndependentActivity $model,
         H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
         SubjectRepositoryInterface $subjectRepository,
-        EducationLevelRepositoryInterface $educationLevelRepository
+        EducationLevelRepositoryInterface $educationLevelRepository,
+        H5pContentRepositoryInterface $h5pContentRepository
     )
     {
         parent::__construct($model);
@@ -57,6 +61,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
         $this->subjectRepository = $subjectRepository;
         $this->educationLevelRepository = $educationLevelRepository;
+        $this->h5pContentRepository = $h5pContentRepository;
     }
 
     /**
@@ -998,6 +1003,93 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         return $cloned_activity['id'];
+    }
+
+    /**
+     * Copy exisiting independentent activities into activities table
+     *
+     * @return boolean
+     *
+     */
+    public function copyToActivity()
+    {
+        $independentActivities = DB::table('independent_activities')
+                                ->whereNull('deleted_at')
+                                ->get();
+
+        DB::transaction(function () use ($independentActivities) {
+            foreach ($independentActivities as $independentActivity) {
+                $h5p_content = $this->h5pContentRepository->find($independentActivity->h5p_content_id);
+
+                if ($h5p_content) {
+                    $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+                    $h5p_content->user_id = $independentActivity->user_id; // just add the user id
+                    $h5p_content->save(); // this will return true, then we can get id of h5pContent
+                }
+                $newH5pContent = $h5p_content->id ?? null;
+
+                // copy the content data if exist
+                $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
+
+                $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "independent-activities");
+                $activity_data = [
+                    'title' => $independentActivity->title,
+                    'type' => $independentActivity->type,
+                    'content' => $independentActivity->content,
+                    'shared' => $independentActivity->shared,
+                    'order' => $independentActivity->order,
+                    'created_at' => $independentActivity->created_at,
+                    'updated_at' => $independentActivity->updated_at,
+                    'is_public' => $independentActivity->is_public,
+                    'h5p_content_id' => $newH5pContent, // set if new h5pContent created
+                    'thumb_url' => $new_thumb_url,
+                    'user_id' => $independentActivity->user_id,
+                    'organization_id' => $independentActivity->organization_id,
+                    'description' => $independentActivity->description,
+                    'source_type' => $independentActivity->source_type,
+                    'source_url' => $independentActivity->source_url,
+                    'organization_visibility_type_id' => $independentActivity->organization_visibility_type_id,
+                    'cloned_from' => $independentActivity->cloned_from,
+                    'clone_ctr' => $independentActivity->clone_ctr,
+                    'status' => $independentActivity->status,
+                    'indexing' => $independentActivity->indexing,
+                    'original_user' => $independentActivity->original_user,
+                ];
+
+                $cloned_activity = $this->create($activity_data);
+
+                if ($cloned_activity) {
+                    $subjectIds = DB::table('independent_activity_subject')
+                                            ->where('independent_activity_id', '=', $independentActivity->id)
+                                            ->whereNull('deleted_at')
+                                            ->pluck('subject_id');
+
+                    if (count($subjectIds) > 0) {
+                        $cloned_activity->subjects()->attach($subjectIds);
+                    }
+
+                    $educationLevelIds = DB::table('independent_activity_education_level')
+                                                    ->where('independent_activity_id', '=', $independentActivity->id)
+                                                    ->whereNull('deleted_at')
+                                                    ->pluck('education_level_id');
+
+                    if (count($educationLevelIds) > 0) {
+                        $cloned_activity->educationLevels()->attach($educationLevelIds);
+                    }
+
+                    $authorTagIds = DB::table('independent_activity_author_tag')
+                                                ->where('independent_activity_id', '=', $independentActivity->id)
+                                                ->whereNull('deleted_at')
+                                                ->pluck('author_tag_id');
+
+                    if (count($authorTagIds) > 0) {
+                        $cloned_activity->authorTags()->attach($authorTagIds);
+                    }
+                }
+            }
+        });
+
+        return 1;
     }
 
     /**
