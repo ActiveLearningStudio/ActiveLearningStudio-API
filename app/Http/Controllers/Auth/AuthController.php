@@ -872,7 +872,7 @@ class AuthController extends Controller
 
         $user = User::with(['lmssetting' => function($query) use ($result) {
             $query->where('lms_access_key', $result['oauth_consumer_key']);
-        }])->where('email', $result['user_email'])->first();
+        }])->where('email', 'ilike', $result['user_email'])->first();
 
         if (!$user) {
             $password = Str::random(10);
