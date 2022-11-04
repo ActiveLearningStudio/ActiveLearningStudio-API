@@ -29,6 +29,9 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
         DB::statement("drop function IF EXISTS advSearch(int,varchar,varchar,varchar,varchar,varchar)");
         DB::statement("drop function IF EXISTS advSearch(varchar,varchar,varchar,varchar,varchar)");
 
+        DB::statement("drop function IF EXISTS advSearch(int,varchar,varchar,varchar,varchar,varchar,boolean)");
+        DB::statement("drop function IF EXISTS advSearch(varchar,varchar,varchar,varchar,varchar,boolean)");
+
         DB::statement("drop table IF EXISTS advSearch_dt");
 
         DB::statement("drop table IF EXISTS advsearch_dtnew");
@@ -103,7 +106,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
 
 
         $advsearchSql = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advsearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
+        CREATE OR REPLACE FUNCTION public.advsearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying, _matchactivitytype boolean)
         RETURNS SETOF advsearch_dtnew
         LANGUAGE plpgsql
         AS $function$
@@ -141,16 +144,31 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-            h5p := ' and hl.name in  (''';
-                if hCnt=0 then 
-                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
-                else
-                for hlCnt in 1..hCnt loop
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
-                end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                
+                if _matchActivityType then
+                    h5p := ' and concat(concat(concat(hl.name,'' ''),major_version),concat(''.'',minor_version)) in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(_h5p,',',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(_h5p,',',hlCnt) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(_h5p,',',hCnt+1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
+                else 
+                    h5p := ' and hl.name in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hCnt+1),' ',1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
                 end if;
-                cnd := cnd || h5p;
+                
             end if;
 
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
@@ -266,7 +284,8 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-                where 
+                where lower(p.description) not like _searchText
+                and lower(p.name) not like _searchText and
                 p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a 
                 where a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText and a.id is not null ) )
                 
@@ -301,7 +320,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where p.id in  (select playlist_id from activities a
+                where lower(p.title) not like _searchText and p.id in  (select playlist_id from activities a
                 where a.activity_type != 'INDEPENDENT' and lower(a.title) like  _searchText and a.id is not null )
                 
                 
@@ -340,7 +359,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
 
 
         $advsearchSqlOverloading = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advsearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying)
+        CREATE OR REPLACE FUNCTION public.advsearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying, _matchactivitytype boolean)
         RETURNS SETOF advsearch_dtnew
         LANGUAGE plpgsql
         AS $function$
@@ -378,27 +397,42 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
             if _h5p != '' then 
                 select regexp_count(_h5p, ',') into hCnt ;
                 hCnt := hCnt;
-            h5p := ' and hl.name in  (''';
-                if hCnt=0 then 
-                    h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
-                else
-                for hlCnt in 1..hCnt loop
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
-                end loop;
-                    h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt+1),' ',1) || ''') ' ;
+                
+                if _matchActivityType then
+                    h5p := ' and concat(concat(concat(hl.name,'' ''),major_version),concat(''.'',minor_version)) in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(_h5p,',',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(_h5p,',',hlCnt) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(_h5p,',',hCnt+1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
+                else 
+                    h5p := ' and hl.name in  (''';
+                    if hCnt=0 then 
+                        h5p:=  h5p || split_part(split_part(_h5p,',',1),' ',1) || ''') ' ;
+                    else
+                    for hlCnt in 1..hCnt loop
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hlCnt),' ',1) || ''' , ''' ; 
+                    end loop;
+                        h5p:=  h5p || split_part(split_part(_h5p,',',hCnt+1),' ',1) || ''') ' ;
+                    end if;
+                    cnd := cnd || h5p;
                 end if;
-                cnd := cnd || h5p;
+                
             end if;
 
             if _tag != '' or _education != '' or _subject != '' or _h5p != ''then
-                        
-                query := format($s$ 
                 
-                select 1 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,0::bigint as playlist_id,
-                u.first_name,u.last_name,u.email,
+                query := format($s$ 
+                select distinct sq1.*, case when sq2.pid is not null then TRUE else FALSE end as favored from(
+                
+                select 1 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
                 , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,
-                t.name::text  as team_name, 0 as standalone_activity_user_id,null::boolean as favored
+                t.name::text  as team_name, 0 as standalone_activity_user_id
                 from projects p
                 left join user_project up
                 on p.id=up.project_id
@@ -406,17 +440,17 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
                 left join teams t on p.team_id=t.id
-                where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a %s 
+                where p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a %s 
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
+                where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s) )
                 
                 
                 union all
                 
                 select 1 as priority,'Playlist' as entity,pr.organization_id as org_id,p.id as entity_id,u.id as user_id, p.project_id as project_id,
                 p.id as playlist_id,u.first_name,u.last_name,u.email,p.title as name,null as description,pr.thumb_url,p.created_at,p.deleted_at,
-                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text as team_name, 0 as standalone_activity_user_id,null::boolean as favored
+                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image, t.name::text  as team_name, 0 as standalone_activity_user_id
                 from playlists p
                 left join projects pr
                 on p.project_id=pr.id
@@ -429,34 +463,41 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 where p.id in  (select playlist_id from activities a %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id %s
-                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
+                where a.activity_type != 'INDEPENDENT' and lower(a.title) like '%s' and a.id is not null %s)
                 
                 union all
                 
                 select 1 as priority,'Activity' as entity,pr.organization_id as org_id,a.id as entity_id,u.id as user_id, pr.id as project_id,
                 a.playlist_id as playlist_id,u.first_name,u.last_name,u.email,a.title as name,null as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,pr.indexing,pr.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image, t.name::text  as team_name,a.user_id as standalone_activity_user_id, null::boolean as favored
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text  as team_name,a.user_id as standalone_activity_user_id
                 from activities a  
                 %s
                 left join h5p_contents hc on a.h5p_content_id=hc.id
-                left join h5p_libraries hl on hc.library_id=hl.id  %s
+                left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join playlists p on a.playlist_id=p.id
                 left join projects pr on p.project_id=pr.id
                 left join user_project up on pr.id=up.project_id
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where  a.activity_type != 'INDEPENDENT' and hl.name is not null and lower(a.title) like '%s'  %s
-                $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd);
+                where a.activity_type != 'INDEPENDENT' and  hl.name is not null and lower(a.title) like '%s'  %s
+                )sq1
+                left join
+                (select distinct project_id as pid from user_favorite_project
+                where user_id=%s)sq2
+                on
+                sq1.project_id=sq2.pid and h5pLib!=' .'
+                $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,cnd,_uid);
                 
                 RETURN QUERY execute query;
             else 
                 RETURN QUERY 
-                select 1 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,0::bigint as playlist_id,u.first_name,u.last_name,u.email,
+                select distinct sq1.*, case when sq2.pid is not null then TRUE else FALSE end as favored from(
+                select 1 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
-                , null as h5pLib,0::bigint as subject_id,0::bigint as education_level_id, 0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,
-                case when t.name::text is null then null::varchar else t.name::text end as team_name, 0 as standalone_activity_user_id,null::boolean as favored
+                , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,
+                t.name::text  as team_name, 0 as standalone_activity_user_id
                 from projects p
                 left join user_project up
                 on p.id=up.project_id
@@ -470,9 +511,9 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 union all
                 
                 
-                select 2 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,0::bigint as playlist_id,u.first_name,u.last_name,u.email,
+                select 2 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
-                , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image, t.name::text  as team_name,0 as standalone_activity_user_id, null::boolean as favored
+                , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image, t.name::text  as team_name,0 as standalone_activity_user_id
                 from projects p
                 left join user_project up
                 on p.id=up.project_id
@@ -485,26 +526,27 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 
                 
                 union all
-                
-                
-                select 2 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,0::bigint as playlist_id,u.first_name,u.last_name,u.email,
+            
+                select 2 as priority,'Project' as entity,p.organization_id as org_id,p.id as entity_id,u.id as user_id, p.id as project_id,null::bigint as playlist_id,u.first_name,u.last_name,u.email,
                 p.name, p.description,p.thumb_url,p.created_at,p.deleted_at,p.shared as is_shared,p.is_public,p.indexing,p.organization_visibility_type_id
-                , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image, t.name::text  as team_name,0 as standalone_activity_user_id, null::boolean as favored
+                , null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image, t.name::text  as team_name,0 as standalone_activity_user_id
                 from projects p
                 left join user_project up
                 on p.id=up.project_id
                 left join users u
                 on up.user_id=u.id
                 left join organizations o on p.organization_id=o.id
-                left join teams t on p.team_id=t.id        
-                where p.id in (select project_id from playlists pl where pl. id in (select playlist_id from activities a 
-                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText and a.id is not null ) )
+                left join teams t on p.team_id=t.id
+                where lower(p.description) not like _searchText
+                and lower(p.name) not like _searchText and
+                p.id in (select project_id from playlists pl where pl.id in (select playlist_id from activities a 
+                where a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText and a.id is not null ) )
                 
                 union all
                 
                 select 1 as priority,'Playlist' as entity,pr.organization_id as org_id,p.id as entity_id,u.id as user_id, p.project_id as project_id,
                 p.id as playlist_id,u.first_name,u.last_name,u.email,p.title as name,null as description,pr.thumb_url,p.created_at,p.deleted_at,
-                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text  as team_name, 0 as standalone_activity_user_id,null::boolean as favored
+                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text  as team_name, 0 as standalone_activity_user_id
                 from playlists p
                 left join projects pr
                 on p.project_id=pr.id
@@ -516,11 +558,12 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join teams t on pr.team_id=t.id
                 where lower(p.title) like _searchText
                 
+                
                 union all
                 
                 select 2 as priority,'Playlist' as entity,pr.organization_id as org_id,p.id as entity_id,u.id as user_id, p.project_id as project_id,
                 p.id as playlist_id,u.first_name,u.last_name,u.email,p.title as name,null as description,pr.thumb_url,p.created_at,p.deleted_at,
-                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text  as team_name, 0 as standalone_activity_user_id,null::boolean as favored
+                null::boolean as is_shared,p.is_public,pr.indexing,pr.organization_visibility_type_id, null as h5pLib,0 as subject_id,0 as education_level_id, 0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text  as team_name, 0 as standalone_activity_user_id
                 from playlists p
                 left join projects pr
                 on p.project_id=pr.id
@@ -530,8 +573,9 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where p.id in  (select playlist_id from activities a
-                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText and a.id is not null )
+                where lower(p.title) not like _searchText and p.id in  (select playlist_id from activities a
+                where a.activity_type != 'INDEPENDENT' and lower(a.title) like  _searchText and a.id is not null )
+                
                 
                 
                 union all
@@ -539,7 +583,7 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 select 1 as priority,'Activity' as entity,pr.organization_id as org_id,a.id as entity_id,u.id as user_id, pr.id as project_id,
                 a.playlist_id as playlist_id,u.first_name,u.last_name,u.email,a.title as name,null as description,a.thumb_url,a.created_at,a.deleted_at,
                 a.shared as is_shared,a.is_public,pr.indexing,pr.organization_visibility_type_id, concat(concat(concat(hl.name,' '),major_version),concat('.',minor_version)) as h5pLib
-                , 0 as subject_id,0 as education_level_id ,0 as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text  as team_name,a.user_id as standalone_activity_user_id, null::boolean as favored
+                , 0::bigint as subject_id,0::bigint as education_level_id ,0::bigint as author_tag_id,o.name as organization_name,o.description as org_description,o.image as org_image,t.name::text  as team_name,a.user_id as standalone_activity_user_id
                 from activities a  
                 left join h5p_contents hc on a.h5p_content_id=hc.id
                 left join h5p_libraries hl on hc.library_id=hl.id
@@ -549,7 +593,14 @@ class UpdateAdvSearchFunctionsAndTable extends Migration
                 left join users u on up.user_id=u.id
                 left join organizations o on pr.organization_id=o.id
                 left join teams t on pr.team_id=t.id
-                where  a.activity_type != 'INDEPENDENT' and lower(a.title) like _searchText
+                where a.activity_type != 'INDEPENDENT' and  lower(a.title) like _searchText
+                )sq1
+                left join
+                (select distinct project_id as pid from user_favorite_project
+                where user_id=_uid)sq2
+                on
+                sq1.project_id=sq2.pid
+                
                 ;	
             end if;
             
