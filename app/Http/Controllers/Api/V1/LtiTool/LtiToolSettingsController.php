@@ -158,7 +158,6 @@ class LtiToolSettingsController extends Controller
      * @responseFile responses/organization/filter-media-source.json
      *
      * @param Organization $suborganization
-     *
      * @return LtiToolSettingResource
      */
     public function getLTIToolTypeList(Organization $suborganization)
