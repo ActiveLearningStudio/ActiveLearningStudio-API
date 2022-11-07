@@ -147,9 +147,23 @@ class LtiToolSettingsController extends Controller
      * @responseFile responses/admin/lti-tool/lti-tool-settings
      * @return LtiToolSettingResource
      */
+
+    /**
+     * Get LTI Tool Type List
+     *
+     * Get filter based media sources list for specified suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/organization/filter-media-source.json
+     *
+     * @param Organization $suborganization
+     *
+     * @return LtiToolSettingResource
+     */
     public function getLTIToolTypeList(Organization $suborganization)
     {
-        $ltiToolType = $suborganization->mediaSources->where('media_type', 'Video');
+        $ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
         return new LtiToolSettingResource($ltiToolType);
     }
 }
