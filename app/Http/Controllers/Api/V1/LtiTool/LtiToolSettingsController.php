@@ -162,7 +162,10 @@ class LtiToolSettingsController extends Controller
      */
     public function getLTIToolTypeList(Organization $suborganization)
     {
-        $ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
+        $ltiToolType = $suborganization->mediaSources->where('media_type', 'Video');
+
+        // Will handle inside story CUR-4316
+        //$ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
         return new LtiToolSettingResource($ltiToolType);
     }
 }
