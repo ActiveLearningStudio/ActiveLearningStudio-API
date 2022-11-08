@@ -224,6 +224,16 @@ class User extends Authenticatable implements MustVerifyEmail
                 $project->delete();
             }
         });
+
+        self::creating(function(User $user) {
+            $user->email = strtolower($user->email);
+        });
+
+        self::updating(function (User $user) {
+            if($user->email){
+                $user->email = strtolower($user->email);
+            }
+        });
     }
 
     /**

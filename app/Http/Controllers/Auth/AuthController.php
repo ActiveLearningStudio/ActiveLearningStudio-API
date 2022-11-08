@@ -764,9 +764,9 @@ class AuthController extends Controller
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
 
-            $user = User::with(['lmssetting' => function ($query) use ($result) {
+            $user = User::with(['lmssetting' => function($query) use ($result) {
                 $query->where('lti_client_id', $result['lti_client_id']);
-            }])->where('email', $result['email'])->first();
+            }])->where('email', 'ilike', $result['email'])->first();
 
             if (!$user) {
                 $password = Str::random(10);
@@ -883,14 +883,13 @@ class AuthController extends Controller
      * @return Response
      */
     public function ltiSsoLogin1p0(SsoLoginRequest $request) {
-
         return \DB::transaction(function () use ($request) {
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
 
-            $user = User::with(['lmssetting' => function ($query) use ($result) {
+            $user = User::with(['lmssetting' => function($query) use ($result) {
                 $query->where('lms_access_key', $result['oauth_consumer_key']);
-            }])->where('email', $result['user_email'])->first();
+            }])->where('email', 'ilike', $result['user_email'])->first();
 
             if (!$user) {
                 $password = Str::random(10);
