@@ -169,7 +169,20 @@ class Organization extends Model
      */
     public function mediaSources()
     {
-        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')->withPivot('h5p_library');
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get the filter based media sources for the organization
+     */
+    public function filterBasedMediaSources()
+    {
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withTimestamps()
+                    ->wherePivot('lti_tool_settings_status', true);
     }
 
     /**
