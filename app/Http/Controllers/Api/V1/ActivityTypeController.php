@@ -97,8 +97,9 @@ class ActivityTypeController extends Controller
      * Create a new activity type.
      *
      * @bodyParam title string required The title of a activity type Example: Audio
-     * @bodyParam order int The order number of a activity type Example: 0
+     * @bodyParam order integer The order number of a activity type Example: 0
      * @bodyParam image string The image url of a activity type Example: /storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
      * @responseFile responses/activity-type/activity-type.json
      *
@@ -108,7 +109,7 @@ class ActivityTypeController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param StoreActivityType $request
      * @param Organization $suborganization
      *
      * @return Response
@@ -134,7 +135,7 @@ class ActivityTypeController extends Controller
      *
      * Get the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam activityType required The Id of a activity type Example: 1
      *
      * @responseFile responses/activity-type/activity-type.json
      *
@@ -155,7 +156,7 @@ class ActivityTypeController extends Controller
      *
      * Get a list of activity items of the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam activityType required The Id of a activity type Example: 1
      *
      * @responseFile responses/activity-type/activity-items.json
      *
@@ -174,10 +175,11 @@ class ActivityTypeController extends Controller
      *
      * Update the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam activityType required The Id of a activity type Example: 1
      * @bodyParam title string required The title of a activity type Example: Audio
-     * @bodyParam order int The order number of a activity type Example: 0
+     * @bodyParam order integer The order number of a activity type Example: 0
      * @bodyParam image string The image url of a activity type Example: /storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
      * @responseFile responses/activity-type/activity-type.json
      *
@@ -187,7 +189,7 @@ class ActivityTypeController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param UpdateActivityType $request
      * @param Organization $suborganization
      * @param ActivityType $activityType
      *
@@ -214,7 +216,7 @@ class ActivityTypeController extends Controller
      *
      * Remove the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam activityType required The Id of a activity type Example: 1
      *
      * @response {
      *   "message": "Activity type has been deleted successfully."

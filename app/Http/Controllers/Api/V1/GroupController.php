@@ -54,6 +54,7 @@ class GroupController extends Controller
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/group/group.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
     public function index(Organization $suborganization)
@@ -82,6 +83,7 @@ class GroupController extends Controller
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @responseFile responses/group/group.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
     public function getOrgGroups(Organization $suborganization)
@@ -619,6 +621,7 @@ class GroupController extends Controller
      * }
      *
      * @param GroupUpdateRequest $groupUpdateRequest
+     * @param Organization $suborganization
      * @param Group $group
      * @return Response
      */
@@ -665,6 +668,7 @@ class GroupController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param Group $group
      * @return Response
      */
@@ -690,7 +694,7 @@ class GroupController extends Controller
      *
      * Make the indexing request for a group.
      *
-     * @urlParam group required The Id of a group Example: 1
+     * @urlParam group integer required The Id of a group Example: 1
      *
      * @response {
      *   "message": "Indexing request for this group has been made successfully!"
@@ -702,13 +706,8 @@ class GroupController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Indexing value is already set. Current indexing state of this group: CURRENT_STATE_OF_PROJECT_INDEX"
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Group must be finalized before requesting the indexing."
+     *     "Indexing value is already set. Current indexing state of this group: CURRENT_STATE_OF_PROJECT_INDEX",
+     *     ""Group must be finalized before requesting the indexing.""
      *   ]
      * }
      *

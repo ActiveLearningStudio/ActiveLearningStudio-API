@@ -272,6 +272,8 @@ class StandAloneActivityController extends Controller
 
     /**
      * Update H5P
+     * 
+     * Update H5P Detail
      *
      * @param $request
      * @param int $id
@@ -452,6 +454,8 @@ class StandAloneActivityController extends Controller
 
     /**
      * H5P Activity
+     * 
+     * Get H5P Activity
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activity required The Id of a activity Example: 1

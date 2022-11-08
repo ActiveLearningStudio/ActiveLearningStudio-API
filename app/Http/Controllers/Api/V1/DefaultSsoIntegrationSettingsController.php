@@ -105,6 +105,8 @@ class DefaultSsoIntegrationSettingsController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * Remove the specified resource from storage.
      *
      * @param DefaultSsoIntegrationSettings $default_sso_setting
      * @param Organization $organization

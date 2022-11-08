@@ -90,6 +90,8 @@ class QueueMonitorController extends Controller
 
     /**
      * Retry All Failed Jobs
+     * 
+     * Retry All Failed Jobs
      *
      * @response 200 {
      *   "message": "All failed jobs has been pushed back onto the queue!"
@@ -122,6 +124,8 @@ class QueueMonitorController extends Controller
     }
 
     /**
+     * Delete All Failed Jobs
+     * 
      * Delete All Failed Jobs
      *
      * @response 200 {

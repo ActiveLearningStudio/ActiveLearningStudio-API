@@ -341,6 +341,8 @@ class IndependentActivityController extends Controller
 
     /**
      * Update H5P
+     * 
+     * Update H5P Content
      *
      * @param $request
      * @param int $id
@@ -861,6 +863,9 @@ class IndependentActivityController extends Controller
      *
      * @urlParam independent_activity required id, title, slug of an independent_activity
      *
+     * @param Request $request
+     * @param IndependentActivity $independent_activity
+     * 
      * @return download file download for the independent activity XAPI zip download
      */
     public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
@@ -902,7 +907,8 @@ class IndependentActivityController extends Controller
      * Import the specified independent activity of a user.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @param independent_activity
+     * @param IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest
+     * @param Organization $suborganization
      * @response {
      *   "message": "Your request to import independent activity has been received and is being processed."
      * }

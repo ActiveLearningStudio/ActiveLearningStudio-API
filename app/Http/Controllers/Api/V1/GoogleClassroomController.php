@@ -306,13 +306,8 @@ class GoogleClassroomController extends Controller
      *
      * @response  500 {
      *   "errors": [
+     *     "Could not retrieve submission for this assignment.",
      *     "You are not enrolled in this class."
-     *   ]
-     * }
-     *
-     * @response  500 {
-     *   "errors": [
-     *     "Could not retrieve submission for this assignment."
      *   ]
      * }
      *
@@ -480,6 +475,8 @@ class GoogleClassroomController extends Controller
     }
 
     /**
+     * H5P Google Classroom Resource Settings For Google Classroom
+     * 
      * Get H5P Resource Settings For Google Classroom
      *
      * @urlParam activity required The Id of a activity
@@ -617,14 +614,17 @@ class GoogleClassroomController extends Controller
     }
 
     /**
+     * Publish activity To Google Classroom
+     * 
      * To Publish activity To Google Classroom under a specific topic
      *
-     * @urlParam project required The Id of a project. Example: 9
-     * @urlParam playlist required The Id of a playlist. Example: 10
-     * @urlParam activity required The Id of a activity. Example: 11
-     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
-     * @bodyParam course_id string The Google Classroom course id
-     * @bodyParam topic_id string The Google Classroom topic id
+     * @urlParam project integer required The Id of a project. Example: 9
+     * @urlParam playlist integer required The Id of a playlist. Example: 10
+     * @urlParam activity integer required The Id of a activity. Example: 11
+     * @bodyParam access_token string The stringified of the GAPI access token JSON object. Example: jhdfsy7dshduHHJG6 
+     * @bodyParam course_id string The Google Classroom course id. Example: 532068611011
+     * @bodyParam topic_id string The Google Classroom topic id. Example: 532068611011
+     * 
      * @param Project $project
      * @param Playlist $playlist
      * @param Activity $activity
@@ -687,8 +687,8 @@ class GoogleClassroomController extends Controller
      *
      * To Publish independent activity To Google Classroom under a specific class or specific classwork
      *
-     * @urlParam independent_activity required The Id of a independentActivity. Example: 11
-     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
+     * @urlParam independent_activity integer required The Id of a independentActivity. Example: 11
+     * @bodyParam access_token string The stringified of the GAPI access token JSON object. Example: 532068611011
      * @bodyParam string course_id The Google Classroom course id Example: 532068611011
      * @bodyParam string topic_id The Google Classroom topic id Example: 532103337862
      *

@@ -694,6 +694,7 @@ response.json()</code></pre>
 <td><code>tokenObj.session_state.extraQueryParams</code></td>
 <td>object</td>
 <td>required</td>
+<td>Extra query params for goole login</td>
 </tr>
 <tr>
 <td><code>tokenObj.session_state.extraQueryParams.authuser</code></td>
@@ -948,7 +949,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/login/wordpress-sso" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"clientId":"ut","code":"voluptatibus"}'
+    -d '{"clientId":"labore","code":"quo"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/login/wordpress-sso"
@@ -960,8 +961,8 @@ let headers = {
 };
 
 let body = {
-    "clientId": "ut",
-    "code": "voluptatibus"
+    "clientId": "labore",
+    "code": "quo"
 }
 
 fetch(url, {
@@ -981,8 +982,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'clientId' =&gt; 'ut',
-            'code' =&gt; 'voluptatibus',
+            'clientId' =&gt; 'labore',
+            'code' =&gt; 'quo',
         ],
     ]
 );
@@ -993,8 +994,8 @@ import json
 
 url = 'http://localhost:8000/api/login/wordpress-sso'
 payload = {
-    "clientId": "ut",
-    "code": "voluptatibus"
+    "clientId": "labore",
+    "code": "quo"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -1027,19 +1028,20 @@ response.json()</code></pre>
 <td><code>clientId</code></td>
 <td>string</td>
 <td>required</td>
-<td>client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta</td>
+<td>Client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta</td>
 </tr>
 <tr>
 <td><code>code</code></td>
 <td>string</td>
 <td>required</td>
-<td>temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta</td>
+<td>Temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta</td>
 </tr>
 </tbody>
 </table>
 <!-- END_d3a88f9c350a9c4709e4c13262a22e91 -->
 <!-- START_26044124185dd84b408746c4f31ce5c9 -->
-<h2>Wordpress SSO: Get default settings for a particular wordpress sso integration</h2>
+<h2>Get Wordpress SSO default settings</h2>
+<p>Wordpress SSO: Get default settings for a particular wordpress sso integration</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -1107,8 +1109,8 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>client</code></td>
-<td>required</td>
-<td>id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta</td>
+<td>optional</td>
+<td>integer required Id for the integration</td>
 </tr>
 </tbody>
 </table>
@@ -1654,11 +1656,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/checkemail/ab" \
+    -G "http://localhost:8000/api/checkemail/eius" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/checkemail/ab"
+    "http://localhost:8000/api/checkemail/eius"
 );
 
 let headers = {
@@ -1675,7 +1677,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8000/api/checkemail/ab',
+    'http://localhost:8000/api/checkemail/eius',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -1688,7 +1690,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/checkemail/ab'
+url = 'http://localhost:8000/api/checkemail/eius'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -2122,7 +2124,7 @@ response.json()</code></pre>
     -G "http://localhost:8000/api/v1/suborganization/1/users/notifications/export-list" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"size":"25","days_limit":"?days_limit=5"}'
+    -d '{"size":25,"days_limit":"?days_limit=5"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganization/1/users/notifications/export-list"
@@ -2134,7 +2136,7 @@ let headers = {
 };
 
 let body = {
-    "size": "25",
+    "size": 25,
     "days_limit": "?days_limit=5"
 }
 
@@ -2155,7 +2157,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'size' =&gt; '25',
+            'size' =&gt; 25,
             'days_limit' =&gt; '?days_limit=5',
         ],
     ]
@@ -2167,7 +2169,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/suborganization/1/users/notifications/export-list'
 payload = {
-    "size": "25",
+    "size": 25,
     "days_limit": "?days_limit=5"
 }
 headers = {
@@ -2227,7 +2229,7 @@ response.json()</code></pre>
 <tr>
 <td><code>suborganization</code></td>
 <td>required</td>
-<td>id of an organization.</td>
+<td>Id of an organization.</td>
 </tr>
 </tbody>
 </table>
@@ -2244,15 +2246,15 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>size</code></td>
-<td>Limit</td>
+<td>integer</td>
 <td>optional</td>
-<td>for getting the paginated records, Default 25.</td>
+<td>Limit for getting the paginated records, Default 25.</td>
 </tr>
 <tr>
 <td><code>days_limit</code></td>
-<td>days</td>
+<td>Days</td>
 <td>optional</td>
-<td>Limit for getting the exported project records, Default 10.</td>
+<td>limit for getting the exported project records, Default 10.</td>
 </tr>
 </tbody>
 </table>
@@ -2267,7 +2269,7 @@ response.json()</code></pre>
     -G "http://localhost:8000/api/v1/suborganization/1/users/notifications/export-list-independent-activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"size":"25","days_limit":"?days_limit=5"}'
+    -d '{"size":25,"days_limit":"?days_limit=5"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganization/1/users/notifications/export-list-independent-activities"
@@ -2279,7 +2281,7 @@ let headers = {
 };
 
 let body = {
-    "size": "25",
+    "size": 25,
     "days_limit": "?days_limit=5"
 }
 
@@ -2300,7 +2302,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'size' =&gt; '25',
+            'size' =&gt; 25,
             'days_limit' =&gt; '?days_limit=5',
         ],
     ]
@@ -2312,7 +2314,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/suborganization/1/users/notifications/export-list-independent-activities'
 payload = {
-    "size": "25",
+    "size": 25,
     "days_limit": "?days_limit=5"
 }
 headers = {
@@ -2374,7 +2376,7 @@ response.json()</code></pre>
 <tr>
 <td><code>suborganization</code></td>
 <td>required</td>
-<td>id of an organization.</td>
+<td>Id of an organization.</td>
 </tr>
 </tbody>
 </table>
@@ -2391,15 +2393,15 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>size</code></td>
-<td>Limit</td>
+<td>integer</td>
 <td>optional</td>
-<td>for getting the paginated records, Default 25.</td>
+<td>Limit for getting the paginated records, Default 25.</td>
 </tr>
 <tr>
 <td><code>days_limit</code></td>
-<td>days</td>
+<td>Days</td>
 <td>optional</td>
-<td>Limit for getting the exported project records, Default 10.</td>
+<td>limit for getting the exported project records, Default 10.</td>
 </tr>
 </tbody>
 </table>
@@ -2988,13 +2990,13 @@ response.json()</code></pre>
 <td><code>user_id</code></td>
 <td>inetger</td>
 <td>required</td>
-<td>user Id</td>
+<td>User id</td>
 </tr>
 <tr>
 <td><code>organization_id</code></td>
 <td>inetger</td>
 <td>required</td>
-<td>organization Id</td>
+<td>Organization Id</td>
 </tr>
 </tbody>
 </table>
@@ -3710,7 +3712,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/add-new-user" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"first_name":"John","last_name":"Doe","email":"doe@gmail.com","password":"temporibus","role_id":1,"organization_name":"Curriki","organization_type":"K-12","website":"www.currikistudio.org","job_title":"Developer","address":"20660 Stevens Creek Blvd #332, Cupertino, CA 95014","send_email":true,"message":"modi"}'
+    -d '{"first_name":"John","last_name":"Doe","email":"doe@gmail.com","password":"enim","role_id":1,"organization_name":"Curriki","organization_type":"K-12","website":"www.currikistudio.org","job_title":"Developer","address":"20660 Stevens Creek Blvd #332, Cupertino, CA 95014","send_email":true,"message":"eveniet"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/add-new-user"
@@ -3725,7 +3727,7 @@ let body = {
     "first_name": "John",
     "last_name": "Doe",
     "email": "doe@gmail.com",
-    "password": "temporibus",
+    "password": "enim",
     "role_id": 1,
     "organization_name": "Curriki",
     "organization_type": "K-12",
@@ -3733,7 +3735,7 @@ let body = {
     "job_title": "Developer",
     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
     "send_email": true,
-    "message": "modi"
+    "message": "eveniet"
 }
 
 fetch(url, {
@@ -3756,7 +3758,7 @@ $response = $client-&gt;post(
             'first_name' =&gt; 'John',
             'last_name' =&gt; 'Doe',
             'email' =&gt; 'doe@gmail.com',
-            'password' =&gt; 'temporibus',
+            'password' =&gt; 'enim',
             'role_id' =&gt; 1,
             'organization_name' =&gt; 'Curriki',
             'organization_type' =&gt; 'K-12',
@@ -3764,7 +3766,7 @@ $response = $client-&gt;post(
             'job_title' =&gt; 'Developer',
             'address' =&gt; '20660 Stevens Creek Blvd #332, Cupertino, CA 95014',
             'send_email' =&gt; true,
-            'message' =&gt; 'modi',
+            'message' =&gt; 'eveniet',
         ],
     ]
 );
@@ -3778,7 +3780,7 @@ payload = {
     "first_name": "John",
     "last_name": "Doe",
     "email": "doe@gmail.com",
-    "password": "temporibus",
+    "password": "enim",
     "role_id": 1,
     "organization_name": "Curriki",
     "organization_type": "K-12",
@@ -3786,7 +3788,7 @@ payload = {
     "job_title": "Developer",
     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
     "send_email": true,
-    "message": "modi"
+    "message": "eveniet"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -4026,7 +4028,7 @@ response.json()</code></pre>
     -G "http://localhost:8000/api/v1/users/report/basic" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"size":"25","query":"Test"}'
+    -d '{"size":25,"query":"Test"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/users/report/basic"
@@ -4038,7 +4040,7 @@ let headers = {
 };
 
 let body = {
-    "size": "25",
+    "size": 25,
     "query": "Test"
 }
 
@@ -4059,7 +4061,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'size' =&gt; '25',
+            'size' =&gt; 25,
             'query' =&gt; 'Test',
         ],
     ]
@@ -4071,7 +4073,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/users/report/basic'
 payload = {
-    "size": "25",
+    "size": 25,
     "query": "Test"
 }
 headers = {
@@ -4131,15 +4133,15 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>size</code></td>
-<td>Limit</td>
+<td>integer</td>
 <td>optional</td>
-<td>for getting the paginated records, Default 25.</td>
+<td>Limit for getting the paginated records, Default 25.</td>
 </tr>
 <tr>
 <td><code>query</code></td>
-<td>for</td>
+<td>string</td>
 <td>optional</td>
-<td>getting the search records by name and email.</td>
+<td>For getting the search records by name and email.</td>
 </tr>
 </tbody>
 </table>
@@ -4844,11 +4846,6 @@ response.json()</code></pre>
 <td>optional</td>
 <td>Organization $suborganization.</td>
 </tr>
-<tr>
-<td><code>Organization</code></td>
-<td>optional</td>
-<td>$suborganization</td>
-</tr>
 </tbody>
 </table>
 <h4>Query Parameters</h4>
@@ -5355,7 +5352,7 @@ response.json()</code></pre>
 <tr>
 <td><code>project_id</code></td>
 <td>optional</td>
-<td>int required Id of the project whose order is to be updated</td>
+<td>integer required Id of the project whose order is to be updated</td>
 </tr>
 </tbody>
 </table>
@@ -6864,7 +6861,8 @@ response.json()</code></pre>
 </table>
 <!-- END_91f04144a1041e00c6d76c89583590b9 -->
 <!-- START_779fd2b601bc1f9df8cc331a838cb73f -->
-<h2>Get the Projects by Ids</h2>
+<h2>Get Projects by Ids</h2>
+<p>Get the Projects by Ids</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -7057,19 +7055,19 @@ response.json()</code></pre>
 <td><code>size</code></td>
 <td>integer</td>
 <td>optional</td>
-<td>size to show per page records</td>
+<td>Size to show per page records</td>
 </tr>
 <tr>
 <td><code>order_by_column</code></td>
 <td>string</td>
 <td>optional</td>
-<td>to sort data with specific column</td>
+<td>To sort data with specific column</td>
 </tr>
 <tr>
 <td><code>order_by_type</code></td>
 <td>string</td>
 <td>optional</td>
-<td>to sort data in ascending or descending order</td>
+<td>To sort data in ascending or descending order</td>
 </tr>
 </tbody>
 </table>
@@ -10509,6 +10507,7 @@ response.json()</code></pre>
 <!-- END_1dffbfda926912c6f46776975e41d907 -->
 <!-- START_a3187f8cb6946bc93861af01af9fdaa2 -->
 <h2>H5P Activity</h2>
+<p>Get H5P Activity details</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -13198,7 +13197,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/playlists/1/activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"adipisci","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"dolor","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/playlists/1/activities"
@@ -13212,7 +13211,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "adipisci",
+    "content": "dolor",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -13240,7 +13239,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'adipisci',
+            'content' =&gt; 'dolor',
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
             'thumb_url' =&gt; 'null',
@@ -13259,7 +13258,7 @@ url = 'http://localhost:8000/api/v1/playlists/1/activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "adipisci",
+    "content": "dolor",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -13679,7 +13678,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/playlists/1/activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"deserunt","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"maiores","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/playlists/1/activities/1"
@@ -13693,7 +13692,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "deserunt",
+    "content": "maiores",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -13722,7 +13721,7 @@ $response = $client-&gt;put(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'deserunt',
+            'content' =&gt; 'maiores',
             'shared' =&gt; false,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -13742,7 +13741,7 @@ url = 'http://localhost:8000/api/v1/playlists/1/activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "deserunt",
+    "content": "maiores",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -14317,7 +14316,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"et","h5p_content_id":59,"order":2,"shared":false,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"ipsum","h5p_content_id":59,"order":2,"shared":false,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity"
@@ -14330,7 +14329,7 @@ let headers = {
 
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "et",
+    "content": "ipsum",
     "h5p_content_id": 59,
     "order": 2,
     "shared": false,
@@ -14358,7 +14357,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
-            'content' =&gt; 'et',
+            'content' =&gt; 'ipsum',
             'h5p_content_id' =&gt; 59,
             'order' =&gt; 2,
             'shared' =&gt; false,
@@ -14377,7 +14376,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "et",
+    "content": "ipsum",
     "h5p_content_id": 59,
     "order": 2,
     "shared": false,
@@ -14798,7 +14797,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"nihil","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","content":"rerum","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity/1"
@@ -14811,7 +14810,7 @@ let headers = {
 
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "nihil",
+    "content": "rerum",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -14839,7 +14838,7 @@ $response = $client-&gt;put(
         ],
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
-            'content' =&gt; 'nihil',
+            'content' =&gt; 'rerum',
             'shared' =&gt; false,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -14858,7 +14857,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/stand-alone-activity/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
-    "content": "nihil",
+    "content": "rerum",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -15397,6 +15396,7 @@ response.json()</code></pre>
 <!-- END_801998fd0972c9cc16cc2e3be525deba -->
 <!-- START_d28959a8ba9ed67714fac60b5fabfaf6 -->
 <h2>H5P Activity</h2>
+<p>Get H5P Activity</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -16879,11 +16879,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/activities/perferendis/h5p-resource-settings-shared" \
+    -G "http://localhost:8000/api/v1/activities/repudiandae/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/activities/perferendis/h5p-resource-settings-shared"
+    "http://localhost:8000/api/v1/activities/repudiandae/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -16900,7 +16900,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8000/api/v1/activities/perferendis/h5p-resource-settings-shared',
+    'http://localhost:8000/api/v1/activities/repudiandae/h5p-resource-settings-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -16913,7 +16913,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/activities/perferendis/h5p-resource-settings-shared'
+url = 'http://localhost:8000/api/v1/activities/repudiandae/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -17421,7 +17421,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganization/1/independent-activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"optio","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"explicabo","order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganization/1/independent-activities"
@@ -17435,7 +17435,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "optio",
+    "content": "explicabo",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -17464,7 +17464,7 @@ $response = $client-&gt;post(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'optio',
+            'content' =&gt; 'explicabo',
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
             'thumb_url' =&gt; 'null',
@@ -17484,7 +17484,7 @@ url = 'http://localhost:8000/api/v1/suborganization/1/independent-activities'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "optio",
+    "content": "explicabo",
     "order": 2,
     "h5p_content_id": 59,
     "thumb_url": "null",
@@ -17851,7 +17851,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganization/1/independent-activities/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"voluptas","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
+    -d '{"title":"Science of Golf: Why Balls Have Dimples","type":"h5p","content":"cum","shared":false,"order":2,"h5p_content_id":59,"thumb_url":"null","subject_id":"[1, 2]","education_level_id":"[1, 2]","author_tag_id":"[1, 2]","organization_visibility_type_id":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganization/1/independent-activities/1"
@@ -17865,7 +17865,7 @@ let headers = {
 let body = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "voluptas",
+    "content": "cum",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -17895,7 +17895,7 @@ $response = $client-&gt;put(
         'json' =&gt; [
             'title' =&gt; 'Science of Golf: Why Balls Have Dimples',
             'type' =&gt; 'h5p',
-            'content' =&gt; 'voluptas',
+            'content' =&gt; 'cum',
             'shared' =&gt; false,
             'order' =&gt; 2,
             'h5p_content_id' =&gt; 59,
@@ -17916,7 +17916,7 @@ url = 'http://localhost:8000/api/v1/suborganization/1/independent-activities/1'
 payload = {
     "title": "Science of Golf: Why Balls Have Dimples",
     "type": "h5p",
-    "content": "voluptas",
+    "content": "cum",
     "shared": false,
     "order": 2,
     "h5p_content_id": 59,
@@ -20613,11 +20613,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/go/independent_activity/getxapifile/deserunt" \
+    -G "http://localhost:8000/api/v1/go/independent_activity/getxapifile/ut" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/go/independent_activity/getxapifile/deserunt"
+    "http://localhost:8000/api/v1/go/independent_activity/getxapifile/ut"
 );
 
 let headers = {
@@ -20634,7 +20634,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8000/api/v1/go/independent_activity/getxapifile/deserunt',
+    'http://localhost:8000/api/v1/go/independent_activity/getxapifile/ut',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20647,7 +20647,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/go/independent_activity/getxapifile/deserunt'
+url = 'http://localhost:8000/api/v1/go/independent_activity/getxapifile/ut'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -20687,11 +20687,11 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/independent-activities/at/h5p-resource-settings-shared" \
+    -G "http://localhost:8000/api/v1/independent-activities/sed/h5p-resource-settings-shared" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/independent-activities/at/h5p-resource-settings-shared"
+    "http://localhost:8000/api/v1/independent-activities/sed/h5p-resource-settings-shared"
 );
 
 let headers = {
@@ -20708,7 +20708,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8000/api/v1/independent-activities/at/h5p-resource-settings-shared',
+    'http://localhost:8000/api/v1/independent-activities/sed/h5p-resource-settings-shared',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -20721,7 +20721,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/independent-activities/at/h5p-resource-settings-shared'
+url = 'http://localhost:8000/api/v1/independent-activities/sed/h5p-resource-settings-shared'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -21167,7 +21167,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/activity-layouts" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"omnis","order":1}'
+    -d '{"title":"Audio","image":"et","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/activity-layouts"
@@ -21180,7 +21180,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "omnis",
+    "image": "et",
     "order": 1
 }
 
@@ -21202,7 +21202,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'omnis',
+            'image' =&gt; 'et',
             'order' =&gt; 1,
         ],
     ]
@@ -21215,7 +21215,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts'
 payload = {
     "title": "Audio",
-    "image": "omnis",
+    "image": "et",
     "order": 1
 }
 headers = {
@@ -21395,7 +21395,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"id","order":1}'
+    -d '{"title":"Audio","image":"delectus","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1"
@@ -21408,7 +21408,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "id",
+    "image": "delectus",
     "order": 1
 }
 
@@ -21430,7 +21430,7 @@ $response = $client-&gt;put(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'id',
+            'image' =&gt; 'delectus',
             'order' =&gt; 1,
         ],
     ]
@@ -21443,7 +21443,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-layouts/1'
 payload = {
     "title": "Audio",
-    "image": "id",
+    "image": "delectus",
     "order": 1
 }
 headers = {
@@ -21636,7 +21636,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/activity-layouts/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"thumb":"quas"}'
+    -d '{"thumb":"rerum"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/activity-layouts/upload-thumb"
@@ -21648,7 +21648,7 @@ let headers = {
 };
 
 let body = {
-    "thumb": "quas"
+    "thumb": "rerum"
 }
 
 fetch(url, {
@@ -21668,7 +21668,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'thumb' =&gt; 'quas',
+            'thumb' =&gt; 'rerum',
         ],
     ]
 );
@@ -21679,7 +21679,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/activity-layouts/upload-thumb'
 payload = {
-    "thumb": "quas"
+    "thumb": "rerum"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -21794,8 +21794,9 @@ response.json()</code></pre>
             "type": "h5p",
             "h5pLib": "H5P.AudioRecorder 1.0",
             "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
+            "demo_activity_id": "768",
+            "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+            "organization_id": 1,
             "created_at": "2020-08-25T16:29:35.000000Z",
             "updated_at": "2020-08-25T16:29:35.000000Z"
         },
@@ -21815,8 +21816,9 @@ response.json()</code></pre>
             "type": "h5p",
             "h5pLib": "H5P.Dictation 1.0",
             "image": "\/storage\/activity-items\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
+            "demo_activity_id": "760",
+            "demo_video_id": "https:\/\/youtu.be\/O73ikb7yxLg",
+            "organization_id": 1,
             "created_at": "2020-08-25T16:29:35.000000Z",
             "updated_at": "2020-08-25T16:29:35.000000Z"
         }
@@ -21835,7 +21837,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/activity-items" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"voluptatem","order":1}'
+    -d '{"title":"Audio","image":"ad","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/activity-items"
@@ -21848,7 +21850,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "voluptatem",
+    "image": "ad",
     "order": 1
 }
 
@@ -21870,7 +21872,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'voluptatem',
+            'image' =&gt; 'ad',
             'order' =&gt; 1,
         ],
     ]
@@ -21883,7 +21885,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items'
 payload = {
     "title": "Audio",
-    "image": "voluptatem",
+    "image": "ad",
     "order": 1
 }
 headers = {
@@ -21928,8 +21930,9 @@ response.json()</code></pre>
         "type": "h5p",
         "h5pLib": "H5P.AudioRecorder 1.0",
         "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-        "demo_activity_id": null,
-        "demo_video_id": null,
+        "demo_activity_id": "768",
+        "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+        "organization_id": 1,
         "created_at": "2020-08-25T16:29:35.000000Z",
         "updated_at": "2020-08-25T16:29:35.000000Z"
     }
@@ -22036,8 +22039,9 @@ response.json()</code></pre>
         "type": "h5p",
         "h5pLib": "H5P.AudioRecorder 1.0",
         "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-        "demo_activity_id": null,
-        "demo_video_id": null,
+        "demo_activity_id": "768",
+        "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+        "organization_id": 1,
         "created_at": "2020-08-25T16:29:35.000000Z",
         "updated_at": "2020-08-25T16:29:35.000000Z"
     }
@@ -22072,7 +22076,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"officiis","order":1}'
+    -d '{"title":"Audio","image":"ad","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/activity-items/1"
@@ -22085,7 +22089,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "officiis",
+    "image": "ad",
     "order": 1
 }
 
@@ -22107,7 +22111,7 @@ $response = $client-&gt;put(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'officiis',
+            'image' =&gt; 'ad',
             'order' =&gt; 1,
         ],
     ]
@@ -22120,7 +22124,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-items/1'
 payload = {
     "title": "Audio",
-    "image": "officiis",
+    "image": "ad",
     "order": 1
 }
 headers = {
@@ -22165,8 +22169,9 @@ response.json()</code></pre>
         "type": "h5p",
         "h5pLib": "H5P.AudioRecorder 1.0",
         "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-        "demo_activity_id": null,
-        "demo_video_id": null,
+        "demo_activity_id": "768",
+        "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+        "organization_id": 1,
         "created_at": "2020-08-25T16:29:35.000000Z",
         "updated_at": "2020-08-25T16:29:35.000000Z"
     }
@@ -22374,8 +22379,9 @@ response.json()</code></pre>
             "type": "h5p",
             "h5pLib": "H5P.AudioRecorder 1.0",
             "image": "\/storage\/activity-items\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
+            "demo_activity_id": "768",
+            "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+            "organization_id": 1,
             "created_at": "2020-08-25T16:29:35.000000Z",
             "updated_at": "2020-08-25T16:29:35.000000Z"
         },
@@ -22395,8 +22401,9 @@ response.json()</code></pre>
             "type": "h5p",
             "h5pLib": "H5P.Dictation 1.0",
             "image": "\/storage\/activity-items\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-            "demo_activity_id": null,
-            "demo_video_id": null,
+            "demo_activity_id": "760",
+            "demo_video_id": "https:\/\/youtu.be\/O73ikb7yxLg",
+            "organization_id": 1,
             "created_at": "2020-08-25T16:29:35.000000Z",
             "updated_at": "2020-08-25T16:29:35.000000Z"
         }
@@ -22617,7 +22624,7 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
-<td><code>activity_type</code></td>
+<td><code>activityType</code></td>
 <td>required</td>
 <td>The Id of a activity type</td>
 </tr>
@@ -22682,6 +22689,7 @@ response.json()</code></pre>
             "title": "Audio",
             "order": 0,
             "image": "\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+            "organization_id": 1,
             "activityItems": [
                 {
                     "id": 52,
@@ -22696,7 +22704,8 @@ response.json()</code></pre>
                     "updated_at": "2020-09-12T01:16:52.000000Z",
                     "deleted_at": null,
                     "demo_activity_id": "769",
-                    "demo_video_id": "https:\/\/youtu.be\/lgzsJDcMvPI"
+                    "demo_video_id": "https:\/\/youtu.be\/lgzsJDcMvPI",
+                    "organization_id": 1
                 },
                 {
                     "id": 50,
@@ -22711,22 +22720,8 @@ response.json()</code></pre>
                     "updated_at": "2020-09-12T01:16:52.000000Z",
                     "deleted_at": null,
                     "demo_activity_id": "768",
-                    "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg"
-                },
-                {
-                    "id": 51,
-                    "title": "Dictation",
-                    "description": "A tool to create dictation exercises",
-                    "order": 2,
-                    "activity_type_id": 7,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Dictation 1.0",
-                    "image": "\/storage\/uploads\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "767",
-                    "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY"
+                    "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+                    "organization_id": 1
                 }
             ],
             "created_at": "2020-09-10T01:16:52.000000Z",
@@ -22751,7 +22746,8 @@ response.json()</code></pre>
                     "updated_at": "2020-09-28T08:56:13.000000Z",
                     "deleted_at": null,
                     "demo_activity_id": "732",
-                    "demo_video_id": "https:\/\/youtu.be\/Fh5zrkWgAjk"
+                    "demo_video_id": "https:\/\/youtu.be\/Fh5zrkWgAjk",
+                    "organization_id": 1
                 },
                 {
                     "id": 57,
@@ -22766,677 +22762,8 @@ response.json()</code></pre>
                     "updated_at": "2020-09-12T01:16:52.000000Z",
                     "deleted_at": null,
                     "demo_activity_id": "762",
-                    "demo_video_id": "https:\/\/youtu.be\/EuXbu4Y4EkU"
-                },
-                {
-                    "id": 56,
-                    "title": "Iframe Embedder",
-                    "description": "Create an interactive activity from an existing JavaScript application",
-                    "order": 4,
-                    "activity_type_id": 8,
-                    "type": "h5p",
-                    "h5pLib": "H5P.IFrameEmbed 1.0",
-                    "image": "\/storage\/uploads\/fARyMYykXTZkMNl3dxplhBmRjUhBano3NU5MBUJw.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "764",
-                    "demo_video_id": "https:\/\/youtu.be\/T_jP_G4nYoY"
-                },
-                {
-                    "id": 53,
-                    "title": "Accordion",
-                    "description": "An activity that creates accessible (WAI-ARIA enabled) accordions",
-                    "order": 1,
-                    "activity_type_id": 8,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Accordion 1.0",
-                    "image": "\/storage\/uploads\/XprFXn7YfIpu6gBe8atabONmxDHwqfK5wdSkjfkL.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "763",
-                    "demo_video_id": "https:\/\/youtu.be\/dVDFwhy93Vc"
-                },
-                {
-                    "id": 55,
-                    "title": "Form Wizard",
-                    "description": "Create guides for structured writing processes",
-                    "order": 3,
-                    "activity_type_id": 8,
-                    "type": "h5p",
-                    "h5pLib": "H5P.DocumentationTool 1.8",
-                    "image": "\/storage\/uploads\/6mZxbhyyKfoEzF6bvZxHxlmAggZFMfOs45EbDBtg.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "765",
-                    "demo_video_id": "https:\/\/youtu.be\/0pVTe7ooaW8"
-                }
-            ],
-            "created_at": "2020-09-10T01:16:52.000000Z",
-            "updated_at": "2020-09-10T01:16:52.000000Z"
-        },
-        {
-            "id": 9,
-            "title": "Photo \/ Images",
-            "order": 0,
-            "image": "\/storage\/uploads\/Ny8UBxvFcg8S541iaVOWhc8R9ZDbuMEVOS6N2DLP.png",
-            "activityItems": [
-                {
-                    "id": 60,
-                    "title": "Drag &amp; Drop",
-                    "description": "Create many forms of drag and drop interactions",
-                    "order": 3,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.DragQuestion 1.13",
-                    "image": "\/storage\/uploads\/KiKSAEGmUwklrsA4mRS0mEfy77LzRaZ0of31B6Rn.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "753",
-                    "demo_video_id": "https:\/\/youtu.be\/S_4qMIN2hoE"
-                },
-                {
-                    "id": 61,
-                    "title": "Flash Cards",
-                    "description": "Create stylish and intuitive flashcards that pair images to questions",
-                    "order": 4,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Flashcards 1.5",
-                    "image": "\/storage\/uploads\/fXqVCC2ZvT7ZeQGYkV07KhavKPYmk4OMAYWWVyB1.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "749",
-                    "demo_video_id": "https:\/\/youtu.be\/vgco6i3B-yc"
-                },
-                {
-                    "id": 68,
-                    "title": "Memory Game",
-                    "description": "Create a classic image pairing game",
-                    "order": 11,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.MemoryGame 1.3",
-                    "image": "\/storage\/uploads\/UDoQ0qUS0WDCnq2o4o6fqNXRqIPwX58oF4pZ72jL.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "754",
-                    "demo_video_id": "https:\/\/youtu.be\/4FhblZzRh8c"
-                },
-                {
-                    "id": 66,
-                    "title": "Image Sequencing",
-                    "description": "Reorder images and place them in their correct sequence",
-                    "order": 9,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImageSequencing 1.1",
-                    "image": "\/storage\/uploads\/ficHQXiR5QcJgcw9BvA4I3Wq6q9AYxUwgedj2YrA.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "752",
-                    "demo_video_id": "https:\/\/youtu.be\/zrNAd3VMfyQ"
-                },
-                {
-                    "id": 65,
-                    "title": "Image Pairing",
-                    "description": "Interactive image matching game",
-                    "order": 7,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImagePair 1.4",
-                    "image": "\/storage\/uploads\/YB81YLAPvYeLT4YHvw4Mz8hOi6PMlx8MnIxcbQs1.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "746",
-                    "demo_video_id": "https:\/\/youtu.be\/LdbtfHFGq5w"
-                },
-                {
-                    "id": 58,
-                    "title": "Agamotto",
-                    "description": "Learners compare and explore a sequence of images interactively",
-                    "order": 1,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Agamotto 1.5",
-                    "image": "\/storage\/uploads\/8muVD4B5RxycYNEb77YmPQk1NytdRhKqIu682nFQ.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "745",
-                    "demo_video_id": "https:\/\/youtu.be\/5o9sGAVjnUc"
-                },
-                {
-                    "id": 59,
-                    "title": "Collage",
-                    "description": "Set up multiple photos in a custom layout",
-                    "order": 2,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Collage 0.3",
-                    "image": "\/storage\/uploads\/Aa2ywn3fTM5zvr0pZEBGUD2vIQeVXIk4jafkX7pW.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "744",
-                    "demo_video_id": "https:\/\/youtu.be\/TaV_Dj3kous"
-                },
-                {
-                    "id": 62,
-                    "title": "Guess The Answer",
-                    "description": "Create challenges where the user guesses the answer based on a picture",
-                    "order": 5,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.GuessTheAnswer 1.4",
-                    "image": "\/storage\/uploads\/6gQRtYE6bXUchUbJav0cmfyxMNx7ZXEYTZJJA9jU.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "750",
-                    "demo_video_id": "https:\/\/youtu.be\/csMLYiMX2zs"
-                },
-                {
-                    "id": 63,
-                    "title": "Image Hotspot",
-                    "description": "Add hotspots to images that reveal text, images or videos when clicked",
-                    "order": 6,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImageHotspots 1.8",
-                    "image": "\/storage\/uploads\/AOvoE9bDC55n0gy8dYq5LWdEcOxQqNPciMQx9dFQ.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "743",
-                    "demo_video_id": "https:\/\/youtu.be\/5XFXY5pYG-M"
-                },
-                {
-                    "id": 69,
-                    "title": "Multiple Hotspots",
-                    "description": "Create an image based test where the learner is to find the correct spots on an image.",
-                    "order": 12,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImageHotspotQuestion 1.8",
-                    "image": "\/storage\/uploads\/dKCUT6WnML5fKAOtzDdtgqRcQp7b5OJyNbq86ELA.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "751",
-                    "demo_video_id": "https:\/\/youtu.be\/Go6mE7mLNU8"
-                },
-                {
-                    "id": 64,
-                    "title": "Image Juxtaposition",
-                    "description": "Activity where the learner compare two images interactively",
-                    "order": 7,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImageJuxtaposition 1.4",
-                    "image": "\/storage\/uploads\/L5s5ziW4TZOiw4tPxYtypcD3AxFlLGCr7K75S2NL.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "748",
-                    "demo_video_id": "https:\/\/youtu.be\/aNUWJRoCSOY"
-                },
-                {
-                    "id": 67,
-                    "title": "Image Slider",
-                    "description": "Create attractive image slide shows",
-                    "order": 10,
-                    "activity_type_id": 9,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImageSlider 1.0",
-                    "image": "\/storage\/uploads\/a6iuwLq8xJym12HLl1weshjv0ZjQFr60tYImRpHp.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "747",
-                    "demo_video_id": "https:\/\/youtu.be\/CE5SyvPvjxU"
-                }
-            ],
-            "created_at": "2020-09-10T01:16:52.000000Z",
-            "updated_at": "2020-09-10T01:16:52.000000Z"
-        },
-        {
-            "id": 10,
-            "title": "Multimedia",
-            "order": 0,
-            "image": "\/storage\/uploads\/ET7YsSWwBBu8RLmC2zZCpfoaGFoKR3p9UhMnkNFM.png",
-            "activityItems": [
-                {
-                    "id": 74,
-                    "title": "Impressive Presentation",
-                    "description": "Create interactive 3D presentations",
-                    "order": 5,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImpressPresentation 1.0",
-                    "image": "\/storage\/uploads\/zyasFZqgCeS4jMI4xADPRqATXdDALKLFb0drMWsI.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 79,
-                    "title": "Immersive Reader",
-                    "description": "Read text documents with Microsoft's Immersive Reader",
-                    "order": 1,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ImmersiveReader 1.0",
-                    "image": "\/storage\/uploads\/GCHLlCIym6OSnC4EpYPaTxyUyoYrOWjeXi4xUNSH.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 75,
-                    "title": "Interactive Video",
-                    "description": "Add multiple interactions to any video",
-                    "order": 6,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.InteractiveVideo 1.21",
-                    "image": "\/storage\/uploads\/g00HaXlz1ziuQMFKGyPtBQFp9pmEJufNZkjNu5Qy.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "755",
-                    "demo_video_id": "https:\/\/youtu.be\/7FnoeS8fxXg"
-                },
-                {
-                    "id": 70,
-                    "title": "Branching Scenario",
-                    "description": "Create adaptive scenarios for the learner",
-                    "order": 1,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.BranchingScenario 1.1",
-                    "image": "\/storage\/uploads\/pPJhpwDi6lyVPwFyeFQkTWMWUE1Vnjg8GmtH3PoO.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "759",
-                    "demo_video_id": "https:\/\/youtu.be\/6sOoeu_NUU4"
-                },
-                {
-                    "id": 77,
-                    "title": "Virtual Tour",
-                    "description": "Add questions, texts and interactions to multiple 360 environments",
-                    "order": 8,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ThreeImage 0.3",
-                    "image": "\/storage\/uploads\/NtjzTIkER929gjL4BKT6nK8uSU3O7lpOCE8yY5VF.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "761",
-                    "demo_video_id": "https:\/\/youtu.be\/cZbxGLBOo9M"
-                },
-                {
-                    "id": 78,
-                    "title": "Interactive Book",
-                    "description": "Interactive Book",
-                    "order": 9,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.InteractiveBook 1.2",
-                    "image": "\/storage\/uploads\/7uNOSsq3aqzcjF4Q7EblIgatpIetY66Xe1NDYObJ.svg",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 76,
-                    "title": "Timeline",
-                    "description": "Create a multimedia timeline of events",
-                    "order": 7,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Timeline 1.1",
-                    "image": "\/storage\/uploads\/nQ7tNbcLgugvSdoZLHSSGYpsc4m4lSFiogDhp71D.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "757",
-                    "demo_video_id": "https:\/\/youtu.be\/7JTpDzRgoW4"
-                },
-                {
-                    "id": 72,
-                    "title": "Column Layout",
-                    "description": "Stack multiple interactions in a column layout",
-                    "order": 3,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Column 1.11",
-                    "image": "\/storage\/uploads\/auvx6Xm6B0cQ7SNgERfdXwDSJRexLVzqePXnNfPF.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "760",
-                    "demo_video_id": "https:\/\/youtu.be\/ngXSzWNYzU4"
-                },
-                {
-                    "id": 73,
-                    "title": "Course Presentation",
-                    "description": "Add multiple interactions into a slide presentation",
-                    "order": 4,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.CoursePresentation 1.22",
-                    "image": "\/storage\/uploads\/m1bZV1V5dTOpYUuvBAnZUzwYvQTBpfQH5T0ELwKJ.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "758",
-                    "demo_video_id": "https:\/\/youtu.be\/b1_-JJWKh3w"
-                },
-                {
-                    "id": 71,
-                    "title": "Chart",
-                    "description": "Create pie and bar charts",
-                    "order": 2,
-                    "activity_type_id": 10,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Chart 1.2",
-                    "image": "\/storage\/uploads\/BMrm37ISEWl59V03kDPzTR8iWdfs8mdLxfgUvMuJ.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "756",
-                    "demo_video_id": ""
-                }
-            ],
-            "created_at": "2020-09-10T01:16:52.000000Z",
-            "updated_at": "2020-09-10T01:16:52.000000Z"
-        },
-        {
-            "id": 11,
-            "title": "Questions",
-            "order": 0,
-            "image": "\/storage\/uploads\/E9wUgZpAvbmzogYIZYyABuWlvSIJPNYEFDqqL1rt.png",
-            "activityItems": [
-                {
-                    "id": 84,
-                    "title": "Fill In The Blanks",
-                    "description": "Create a task with  missing words the learner has to provide",
-                    "order": 5,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Blanks 1.12",
-                    "image": "\/storage\/uploads\/GiJlkdR7y38Og7At4ecSzheU4bB6aRouYdacCBcY.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "742",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 90,
-                    "title": "Questionnaire",
-                    "description": "Receive feedback through an interactive questionnaire",
-                    "order": 11,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Questionnaire 1.2",
-                    "image": "\/storage\/uploads\/bAZWBNFfRTEMfuTyDqIyiERjli9k5GHNS9ZzK0Es.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "741",
-                    "demo_video_id": " https:\/\/youtu.be\/zh3cXnEmLxg"
-                },
-                {
-                    "id": 80,
-                    "title": "Advanced Fill In The Blanks",
-                    "description": "Fill in missing words with advanced feedback options",
-                    "order": 1,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.AdvancedBlanks 1.0",
-                    "image": "\/storage\/uploads\/mn2EzEE6wW1EAhxBfWMgzQDHCFswRFvT09PGofdJ.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "729",
-                    "demo_video_id": "https:\/\/youtu.be\/f1yuOIUsVHA"
-                },
-                {
-                    "id": 85,
-                    "title": "Mark The Words",
-                    "description": "Create a word highlighting activity",
-                    "order": 6,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.MarkTheWords 1.9",
-                    "image": "\/storage\/uploads\/AQ37iaQzZA38uFFP3VwqEEqxmcaak0TlEvR2NwiP.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "731",
-                    "demo_video_id": "https:\/\/youtu.be\/A5B2Py-o1jI"
-                },
-                {
-                    "id": 93,
-                    "title": "Word Find",
-                    "description": "Create a word find game based on your selection of words",
-                    "order": 14,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.FindTheWords 1.4",
-                    "image": "\/storage\/uploads\/pYNiysBArs4807f7Y8rccBbHhysWoKjDGELQlexN.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "734",
-                    "demo_video_id": "https:\/\/youtu.be\/gx7a8FBvkUM"
-                },
-                {
-                    "id": 92,
-                    "title": "Word Drag &amp; Drop",
-                    "description": "Create a text based drag and drop activity",
-                    "order": 13,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.DragText 1.8",
-                    "image": "\/storage\/uploads\/WEygFUAlr4SmMSD2gEywhtSmbqgGF5J8MLGbeBU7.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "737",
-                    "demo_video_id": "https:\/\/youtu.be\/UMbgmnXD5co"
-                },
-                {
-                    "id": 83,
-                    "title": "Essay",
-                    "description": "Create interactive essays with instant feedback",
-                    "order": 4,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Essay 1.2",
-                    "image": "\/storage\/uploads\/peuR8e7uQUiQmtNaYDAynY4ztCQx4cVsvGVYuB7P.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "735",
-                    "demo_video_id": "https:\/\/youtu.be\/d6WhXexBVnI"
-                },
-                {
-                    "id": 87,
-                    "title": "Personality Quiz",
-                    "description": "Build your own personality quiz",
-                    "order": 8,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.PersonalityQuiz 1.0",
-                    "image": "\/storage\/uploads\/jdHy6THv8aZLNrEdy3REa9aKZHcFdM6UXH3Lk7Nz.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "739",
-                    "demo_video_id": " https:\/\/youtu.be\/zY8CTNn5LVA"
-                },
-                {
-                    "id": 91,
-                    "title": "Quiz",
-                    "description": "Create an assessment with multiple question types",
-                    "order": 12,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.QuestionSet 1.17",
-                    "image": "\/storage\/uploads\/0m58CTMK1lOCHImkHo30rEmT3BiE6Y9Sq1MnfvRk.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "736",
-                    "demo_video_id": "https:\/\/youtu.be\/t0vsfxiq1zk"
-                },
-                {
-                    "id": 89,
-                    "title": "True &amp; False",
-                    "description": "Create classic true and false questions",
-                    "order": 10,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.TrueFalse 1.6",
-                    "image": "\/storage\/uploads\/NMkSvedHnwGeAvq5BaKdeWsIBk5nBdcZdwymxoML.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "738",
-                    "demo_video_id": "https:\/\/youtu.be\/pbjfPVykP1M"
-                },
-                {
-                    "id": 88,
-                    "title": "Single Choice Set",
-                    "description": "Create questions with one correct answer",
-                    "order": 9,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.SingleChoiceSet 1.11",
-                    "image": "\/storage\/uploads\/k8dnF9TWwK7gz6TG0lJV2I25QhKOyh6x0Up3cmiC.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "740",
-                    "demo_video_id": "https:\/\/youtu.be\/mufRBzsqZEw"
-                },
-                {
-                    "id": 82,
-                    "title": "Dialog Cards",
-                    "description": "Create great language learning resources",
-                    "order": 3,
-                    "activity_type_id": 11,
-                    "type": "h5p",
-                    "h5pLib": "H5P.Dialogcards 1.8",
-                    "image": "\/storage\/uploads\/h82IJvGEMcu97qh1G08IwiJ0Ar8hpYCiml4zPtNa.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-28T08:50:25.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "732",
-                    "demo_video_id": "https:\/\/youtu.be\/Fh5zrkWgAjk"
-                }
-            ],
-            "created_at": "2020-09-10T01:16:52.000000Z",
-            "updated_at": "2020-09-10T01:16:52.000000Z"
-        },
-        {
-            "id": 12,
-            "title": "Mathematics",
-            "order": 0,
-            "image": "\/storage\/uploads\/WjTxMYKvmbfv8YN7Cz2jiFzZkgOciRuL0mRLobVe.png",
-            "activityItems": [
-                {
-                    "id": 94,
-                    "title": "GeoGebra 3D",
-                    "description": "GeoGebra 3D",
-                    "order": 1,
-                    "activity_type_id": 12,
-                    "type": "h5p",
-                    "h5pLib": "H5P.GeoGebra3d 1.0",
-                    "image": "\/storage\/uploads\/WQAtDYleMReMKH7MFULLCMcMhS38kGd6Fewt8rRr.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 95,
-                    "title": "GeoGebra CAS",
-                    "description": "GeoGebra CAS",
-                    "order": 2,
-                    "activity_type_id": 12,
-                    "type": "h5p",
-                    "h5pLib": "H5P.GeoGebraClassic 1.0",
-                    "image": "\/storage\/uploads\/PP2s7IlweWPbMqj6m1xcAnbq6htrCYPUzVvMjjoM.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 96,
-                    "title": "GeoGebra Geometry",
-                    "description": "GeoGebra Geometry",
-                    "order": 3,
-                    "activity_type_id": 12,
-                    "type": "h5p",
-                    "h5pLib": "H5P.GeoGebraGeometry 1.0",
-                    "image": "\/storage\/uploads\/dJ3OFG184cuwpwPYe7jtoOujM16s4JzeuOiWpBEC.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 97,
-                    "title": "GeoGebra Graphing",
-                    "description": "GeoGebra Graphing",
-                    "order": 4,
-                    "activity_type_id": 12,
-                    "type": "h5p",
-                    "h5pLib": "H5P.GeoGebraGraphing 1.0",
-                    "image": "\/storage\/uploads\/6ye1dv3Ct4jUWs8Y86kSGXLMzRIwmZzbVTKj7QNK.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-09-12T01:16:52.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "",
-                    "demo_video_id": ""
-                },
-                {
-                    "id": 81,
-                    "title": "Arithmetic Quiz",
-                    "description": "Time based arithmetic exam builder",
-                    "order": 2,
-                    "activity_type_id": 12,
-                    "type": "h5p",
-                    "h5pLib": "H5P.ArithmeticQuiz 1.1",
-                    "image": "\/storage\/uploads\/V2EzpoGzJi7F9KmWCUCwLF8uXKvr8Nsaunq6Uzw6.png",
-                    "created_at": "2020-09-12T01:16:52.000000Z",
-                    "updated_at": "2020-10-01T13:50:50.000000Z",
-                    "deleted_at": null,
-                    "demo_activity_id": "730",
-                    "demo_video_id": "https:\/\/youtu.be\/Z61BUoL6k1Y"
+                    "demo_video_id": "https:\/\/youtu.be\/EuXbu4Y4EkU",
+                    "organization_id": 1
                 }
             ],
             "created_at": "2020-09-10T01:16:52.000000Z",
@@ -23457,7 +22784,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/activity-types" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"voluptatem","order":1}'
+    -d '{"title":"Audio","image":"rerum","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/activity-types"
@@ -23470,7 +22797,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "voluptatem",
+    "image": "rerum",
     "order": 1
 }
 
@@ -23492,7 +22819,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'voluptatem',
+            'image' =&gt; 'rerum',
             'order' =&gt; 1,
         ],
     ]
@@ -23505,7 +22832,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-types'
 payload = {
     "title": "Audio",
-    "image": "voluptatem",
+    "image": "rerum",
     "order": 1
 }
 headers = {
@@ -23515,26 +22842,73 @@ headers = {
 response = requests.request('POST', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
-<p>Example response (201):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "activityType": {
-        "id": 1,
-        "title": "Audio",
-        "order": 0,
-        "image": "\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-        "activityItems": [],
-        "created_at": "2020-09-25T16:29:35.000000Z",
-        "updated_at": "2020-09-25T16:29:35.000000Z"
-    }
-}</code></pre>
-<blockquote>
 <p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
     "errors": [
         "Could not create activity type. Please try again later."
     ]
+}</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": 7,
+    "title": "Audio",
+    "order": 0,
+    "image": "\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+    "organization_id": 1,
+    "activityItems": [
+        {
+            "id": 52,
+            "title": "Spoken Answers",
+            "description": "Voice recognition activity that the learner can answered with their own voice.",
+            "order": 3,
+            "activity_type_id": 7,
+            "type": "h5p",
+            "h5pLib": "H5P.SpeakTheWords 1.3",
+            "image": "\/storage\/uploads\/7iyRffLSS9QdFKCazDuDetl6WPk4BQP8tEP2eeuJ.png",
+            "created_at": "2020-09-12T01:16:52.000000Z",
+            "updated_at": "2020-09-12T01:16:52.000000Z",
+            "deleted_at": null,
+            "demo_activity_id": "769",
+            "demo_video_id": "https:\/\/youtu.be\/lgzsJDcMvPI"
+        },
+        {
+            "id": 50,
+            "title": "Audio Recorder",
+            "description": "Record your voice and play back or download a .wav file of your recording.",
+            "order": 1,
+            "activity_type_id": 7,
+            "type": "h5p",
+            "h5pLib": "H5P.AudioRecorder 1.0",
+            "image": "\/storage\/uploads\/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+            "created_at": "2020-09-12T01:16:52.000000Z",
+            "updated_at": "2020-09-12T01:16:52.000000Z",
+            "deleted_at": null,
+            "demo_activity_id": "768",
+            "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+            "organization_id": 1
+        },
+        {
+            "id": 51,
+            "title": "Dictation",
+            "description": "A tool to create dictation exercises",
+            "order": 2,
+            "activity_type_id": 7,
+            "type": "h5p",
+            "h5pLib": "H5P.Dictation 1.0",
+            "image": "\/storage\/uploads\/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+            "created_at": "2020-09-12T01:16:52.000000Z",
+            "updated_at": "2020-09-12T01:16:52.000000Z",
+            "deleted_at": null,
+            "demo_activity_id": "767",
+            "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY",
+            "organization_id": 1
+        }
+    ],
+    "created_at": "2020-09-10T01:16:52.000000Z",
+    "updated_at": "2020-09-10T01:16:52.000000Z"
 }</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/v1/suborganizations/{suborganization}/activity-types</code></p>
@@ -23626,6 +23000,7 @@ response.json()</code></pre>
     "title": "Audio",
     "order": 0,
     "image": "\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+    "organization_id": 1,
     "activityItems": [
         {
             "id": 52,
@@ -23655,7 +23030,8 @@ response.json()</code></pre>
             "updated_at": "2020-09-12T01:16:52.000000Z",
             "deleted_at": null,
             "demo_activity_id": "768",
-            "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg"
+            "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+            "organization_id": 1
         },
         {
             "id": 51,
@@ -23670,7 +23046,8 @@ response.json()</code></pre>
             "updated_at": "2020-09-12T01:16:52.000000Z",
             "deleted_at": null,
             "demo_activity_id": "767",
-            "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY"
+            "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY",
+            "organization_id": 1
         }
     ],
     "created_at": "2020-09-10T01:16:52.000000Z",
@@ -23689,7 +23066,7 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
-<td><code>activity_type</code></td>
+<td><code>activityType</code></td>
 <td>required</td>
 <td>The Id of a activity type</td>
 </tr>
@@ -23706,7 +23083,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/suborganizations/1/activity-types/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Audio","image":"sunt","order":1}'
+    -d '{"title":"Audio","image":"voluptate","order":1}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/activity-types/1"
@@ -23719,7 +23096,7 @@ let headers = {
 
 let body = {
     "title": "Audio",
-    "image": "sunt",
+    "image": "voluptate",
     "order": 1
 }
 
@@ -23741,7 +23118,7 @@ $response = $client-&gt;put(
         ],
         'json' =&gt; [
             'title' =&gt; 'Audio',
-            'image' =&gt; 'sunt',
+            'image' =&gt; 'voluptate',
             'order' =&gt; 1,
         ],
     ]
@@ -23754,7 +23131,7 @@ import json
 url = 'http://localhost:8000/api/v1/suborganizations/1/activity-types/1'
 payload = {
     "title": "Audio",
-    "image": "sunt",
+    "image": "voluptate",
     "order": 1
 }
 headers = {
@@ -23779,6 +23156,7 @@ response.json()</code></pre>
     "title": "Audio",
     "order": 0,
     "image": "\/storage\/uploads\/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+    "organization_id": 1,
     "activityItems": [
         {
             "id": 52,
@@ -23808,7 +23186,8 @@ response.json()</code></pre>
             "updated_at": "2020-09-12T01:16:52.000000Z",
             "deleted_at": null,
             "demo_activity_id": "768",
-            "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg"
+            "demo_video_id": "https:\/\/youtu.be\/O73hIb7yxLg",
+            "organization_id": 1
         },
         {
             "id": 51,
@@ -23823,7 +23202,8 @@ response.json()</code></pre>
             "updated_at": "2020-09-12T01:16:52.000000Z",
             "deleted_at": null,
             "demo_activity_id": "767",
-            "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY"
+            "demo_video_id": "https:\/\/youtu.be\/JLYtQpB0JmY",
+            "organization_id": 1
         }
     ],
     "created_at": "2020-09-10T01:16:52.000000Z",
@@ -23843,7 +23223,7 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
-<td><code>activity_type</code></td>
+<td><code>activityType</code></td>
 <td>required</td>
 <td>The Id of a activity type</td>
 </tr>
@@ -23956,7 +23336,7 @@ response.json()</code></pre>
 </thead>
 <tbody>
 <tr>
-<td><code>activity_type</code></td>
+<td><code>activityType</code></td>
 <td>required</td>
 <td>The Id of a activity type</td>
 </tr>
@@ -23973,7 +23353,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/activity-types/upload-thumb" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"thumb":"sit"}'
+    -d '{"thumb":"quisquam"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/activity-types/upload-thumb"
@@ -23985,7 +23365,7 @@ let headers = {
 };
 
 let body = {
-    "thumb": "sit"
+    "thumb": "quisquam"
 }
 
 fetch(url, {
@@ -24005,7 +23385,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'thumb' =&gt; 'sit',
+            'thumb' =&gt; 'quisquam',
         ],
     ]
 );
@@ -24016,7 +23396,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/activity-types/upload-thumb'
 payload = {
-    "thumb": "sit"
+    "thumb": "quisquam"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -24425,18 +23805,19 @@ response.json()</code></pre>
 <h1>11. CurrikiGo Course</h1>
 <p>APIs for fetching courses from LMSs</p>
 <!-- START_782eed28046b7e5741ad6b964688c0e6 -->
-<h2>Fetch a Course from Canvas</h2>
+<h2>Fetch a Course</h2>
+<p>Fetch a Course from Canvas</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X POST \
-    "http://localhost:8000/api/v1/go/canvas/projects/natus/fetch" \
+    "http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"setting_id":15}'
+    -d '{"setting_id":8}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/go/canvas/projects/natus/fetch"
+    "http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch"
 );
 
 let headers = {
@@ -24445,7 +23826,7 @@ let headers = {
 };
 
 let body = {
-    "setting_id": 15
+    "setting_id": 8
 }
 
 fetch(url, {
@@ -24458,14 +23839,14 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
-    'http://localhost:8000/api/v1/go/canvas/projects/natus/fetch',
+    'http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'setting_id' =&gt; 15,
+            'setting_id' =&gt; 8,
         ],
     ]
 );
@@ -24474,9 +23855,9 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/go/canvas/projects/natus/fetch'
+url = 'http://localhost:8000/api/v1/go/canvas/projects/praesentium/fetch'
 payload = {
-    "setting_id": 15
+    "setting_id": 8
 }
 headers = {
   'Content-Type': 'application/json',
@@ -24613,6 +23994,7 @@ response.json()</code></pre>
 <p>APIs for H5P management</p>
 <!-- START_369293816da1be491c68109d134f702b -->
 <h2>Create H5P Settings</h2>
+<p>Create H5P Settings in the database.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -24726,6 +24108,7 @@ response.json()</code></pre>
 <!-- END_63e3a887440ff6d148ca0a5d5957983a -->
 <!-- START_be26525cce0877341cba62b279e3bcf6 -->
 <h2>Store H5P</h2>
+<p>Store H5P Content</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -25890,16 +25273,17 @@ response.json()</code></pre>
 </table>
 <!-- END_d9d81fea54c5b042bf04be1ff1ceee5b -->
 <!-- START_98c551bd43ad6ec4969a8835e7da2ca7 -->
-<h2>Get H5P based on Independent Activity</h2>
+<h2>Get H5P Independent Activity</h2>
+<p>Get H5P based on Independent Activity</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/sit" \
+    -G "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/similique" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
-    "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/sit"
+    "http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/similique"
 );
 
 let headers = {
@@ -25916,7 +25300,7 @@ fetch(url, {
 <pre><code class="language-php">
 $client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/sit',
+    'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/similique',
     [
         'headers' =&gt; [
             'Content-Type' =&gt; 'application/json',
@@ -25929,7 +25313,7 @@ print_r(json_decode((string) $body));</code></pre>
 <pre><code class="language-python">import requests
 import json
 
-url = 'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/sit'
+url = 'http://localhost:8000/api/v1/h5p/independent-activity/1/visibility/similique'
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
@@ -29379,7 +28763,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"ea"}'
+    -d '{"access_token":"dolores"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/access-token"
@@ -29391,7 +28775,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "ea"
+    "access_token": "dolores"
 }
 
 fetch(url, {
@@ -29411,7 +28795,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'ea',
+            'access_token' =&gt; 'dolores',
         ],
     ]
 );
@@ -29422,7 +28806,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/access-token'
 payload = {
-    "access_token": "ea"
+    "access_token": "dolores"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -29435,14 +28819,6 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "message": "Access token has been saved successfully."
-}</code></pre>
-<blockquote>
-<p>Example response (500):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "errors": [
-        "Validation error: Access token is required"
-    ]
 }</code></pre>
 <blockquote>
 <p>Example response (500):</p>
@@ -29566,7 +28942,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/projects/9/copy" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"course_id":"123","access_token":"quo"}'
+    -d '{"course_id":"123","access_token":"non"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/projects/9/copy"
@@ -29579,7 +28955,7 @@ let headers = {
 
 let body = {
     "course_id": "123",
-    "access_token": "quo"
+    "access_token": "non"
 }
 
 fetch(url, {
@@ -29600,7 +28976,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'course_id' =&gt; '123',
-            'access_token' =&gt; 'quo',
+            'access_token' =&gt; 'non',
         ],
     ]
 );
@@ -29612,7 +28988,7 @@ import json
 url = 'http://localhost:8000/api/v1/google-classroom/projects/9/copy'
 payload = {
     "course_id": "123",
-    "access_token": "quo"
+    "access_token": "non"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -29830,7 +29206,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"dolores","string":"sunt"}'
+    -d '{"access_token":"tenetur","course_id":"soluta","topic_id":"corporis"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish"
@@ -29842,8 +29218,9 @@ let headers = {
 };
 
 let body = {
-    "access_token": "dolores",
-    "string": "sunt"
+    "access_token": "tenetur",
+    "course_id": "soluta",
+    "topic_id": "corporis"
 }
 
 fetch(url, {
@@ -29863,8 +29240,9 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'dolores',
-            'string' =&gt; 'sunt',
+            'access_token' =&gt; 'tenetur',
+            'course_id' =&gt; 'soluta',
+            'topic_id' =&gt; 'corporis',
         ],
     ]
 );
@@ -29875,8 +29253,9 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/publish'
 payload = {
-    "access_token": "dolores",
-    "string": "sunt"
+    "access_token": "tenetur",
+    "course_id": "soluta",
+    "topic_id": "corporis"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -30018,16 +29397,23 @@ response.json()</code></pre>
 <td>The stringified of the GAPI access token JSON object</td>
 </tr>
 <tr>
-<td><code>string</code></td>
-<td>topic_id</td>
+<td><code>course_id</code></td>
+<td>string</td>
 <td>optional</td>
-<td>(The Google Classroom topic id)</td>
+<td>The Google Classroom course id</td>
+</tr>
+<tr>
+<td><code>topic_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>The Google Classroom topic id</td>
 </tr>
 </tbody>
 </table>
 <!-- END_6637783d98a6734088a78c4fd1bd8adc -->
 <!-- START_6e3a306f3071e364eed15ea7c5212143 -->
-<h2>To Publish activity To Google Classroom under a specific topic</h2>
+<h2>Publish activity To Google Classroom</h2>
+<p>To Publish activity To Google Classroom under a specific topic</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -30035,7 +29421,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"cupiditate","string":"corrupti"}'
+    -d '{"access_token":"jhdfsy7dshduHHJG6","course_id":"532068611011","topic_id":"532068611011"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish"
@@ -30047,8 +29433,9 @@ let headers = {
 };
 
 let body = {
-    "access_token": "cupiditate",
-    "string": "corrupti"
+    "access_token": "jhdfsy7dshduHHJG6",
+    "course_id": "532068611011",
+    "topic_id": "532068611011"
 }
 
 fetch(url, {
@@ -30068,8 +29455,9 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'cupiditate',
-            'string' =&gt; 'corrupti',
+            'access_token' =&gt; 'jhdfsy7dshduHHJG6',
+            'course_id' =&gt; '532068611011',
+            'topic_id' =&gt; '532068611011',
         ],
     ]
 );
@@ -30080,8 +29468,9 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/projects/9/playlists/10/activities/11/publish'
 payload = {
-    "access_token": "cupiditate",
-    "string": "corrupti"
+    "access_token": "jhdfsy7dshduHHJG6",
+    "course_id": "532068611011",
+    "topic_id": "532068611011"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -30175,18 +29564,18 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>project</code></td>
-<td>required</td>
-<td>The Id of a project.</td>
+<td>optional</td>
+<td>integer required The Id of a project.</td>
 </tr>
 <tr>
 <td><code>playlist</code></td>
-<td>required</td>
-<td>The Id of a playlist.</td>
+<td>optional</td>
+<td>integer required The Id of a playlist.</td>
 </tr>
 <tr>
 <td><code>activity</code></td>
-<td>required</td>
-<td>The Id of a activity.</td>
+<td>optional</td>
+<td>integer required The Id of a activity.</td>
 </tr>
 </tbody>
 </table>
@@ -30204,15 +29593,20 @@ response.json()</code></pre>
 <tr>
 <td><code>access_token</code></td>
 <td>string</td>
-<td>null</td>
 <td>optional</td>
-<td>The stringified of the GAPI access token JSON object</td>
+<td>The stringified of the GAPI access token JSON object.</td>
 </tr>
 <tr>
-<td><code>string</code></td>
-<td>topic_id</td>
+<td><code>course_id</code></td>
+<td>string</td>
 <td>optional</td>
-<td>(The Google Classroom topic id)</td>
+<td>The Google Classroom course id.</td>
+</tr>
+<tr>
+<td><code>topic_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>The Google Classroom topic id.</td>
 </tr>
 </tbody>
 </table>
@@ -30227,7 +29621,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/activities/11/publish" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"qui","string":"532103337862)"}'
+    -d '{"access_token":"532068611011","string":"532103337862"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/activities/11/publish"
@@ -30239,8 +29633,8 @@ let headers = {
 };
 
 let body = {
-    "access_token": "qui",
-    "string": "532103337862)"
+    "access_token": "532068611011",
+    "string": "532103337862"
 }
 
 fetch(url, {
@@ -30260,8 +29654,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'qui',
-            'string' =&gt; '532103337862)',
+            'access_token' =&gt; '532068611011',
+            'string' =&gt; '532103337862',
         ],
     ]
 );
@@ -30272,8 +29666,8 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/activities/11/publish'
 payload = {
-    "access_token": "qui",
-    "string": "532103337862)"
+    "access_token": "532068611011",
+    "string": "532103337862"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -30367,8 +29761,8 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>independent_activity</code></td>
-<td>required</td>
-<td>The Id of a independentActivity.</td>
+<td>optional</td>
+<td>integer required The Id of a independentActivity.</td>
 </tr>
 </tbody>
 </table>
@@ -30386,15 +29780,14 @@ response.json()</code></pre>
 <tr>
 <td><code>access_token</code></td>
 <td>string</td>
-<td>null</td>
 <td>optional</td>
-<td>The stringified of the GAPI access token JSON object</td>
+<td>The stringified of the GAPI access token JSON object.</td>
 </tr>
 <tr>
 <td><code>string</code></td>
 <td>topic_id</td>
 <td>optional</td>
-<td>(The Google Classroom topic id</td>
+<td>The Google Classroom topic id</td>
 </tr>
 </tbody>
 </table>
@@ -30410,7 +29803,7 @@ Attaches a summary page link to the assignment, and turns it in.</p>
     "http://localhost:8000/api/v1/google-classroom/turnin/9" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"dolor","course_id":"consequuntur"}'
+    -d '{"access_token":"consequatur","course_id":"quidem"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/turnin/9"
@@ -30422,8 +29815,8 @@ let headers = {
 };
 
 let body = {
-    "access_token": "dolor",
-    "course_id": "consequuntur"
+    "access_token": "consequatur",
+    "course_id": "quidem"
 }
 
 fetch(url, {
@@ -30443,8 +29836,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'dolor',
-            'course_id' =&gt; 'consequuntur',
+            'access_token' =&gt; 'consequatur',
+            'course_id' =&gt; 'quidem',
         ],
     ]
 );
@@ -30455,8 +29848,8 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/turnin/9'
 payload = {
-    "access_token": "dolor",
-    "course_id": "consequuntur"
+    "access_token": "consequatur",
+    "course_id": "quidem"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -30475,15 +29868,8 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "errors": [
+        "Could not retrieve submission for this assignment.",
         "You are not enrolled in this class."
-    ]
-}</code></pre>
-<blockquote>
-<p>Example response (500):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "errors": [
-        "Could not retrieve submission for this assignment."
     ]
 }</code></pre>
 <h3>HTTP Request</h3>
@@ -30542,7 +29928,7 @@ If the user is authenticated and is a student, validate if the submission is his
     "http://localhost:8000/api/v1/google-classroom/validate-summary-access" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"quo","student_id":"unde","course_id":"totam","gc_classwork_id":"eveniet","gc_submission_id":"nesciunt"}'
+    -d '{"access_token":"magni","student_id":"accusamus","course_id":"non","gc_classwork_id":"maxime","gc_submission_id":"ut"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/validate-summary-access"
@@ -30554,11 +29940,11 @@ let headers = {
 };
 
 let body = {
-    "access_token": "quo",
-    "student_id": "unde",
-    "course_id": "totam",
-    "gc_classwork_id": "eveniet",
-    "gc_submission_id": "nesciunt"
+    "access_token": "magni",
+    "student_id": "accusamus",
+    "course_id": "non",
+    "gc_classwork_id": "maxime",
+    "gc_submission_id": "ut"
 }
 
 fetch(url, {
@@ -30578,11 +29964,11 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'quo',
-            'student_id' =&gt; 'unde',
-            'course_id' =&gt; 'totam',
-            'gc_classwork_id' =&gt; 'eveniet',
-            'gc_submission_id' =&gt; 'nesciunt',
+            'access_token' =&gt; 'magni',
+            'student_id' =&gt; 'accusamus',
+            'course_id' =&gt; 'non',
+            'gc_classwork_id' =&gt; 'maxime',
+            'gc_submission_id' =&gt; 'ut',
         ],
     ]
 );
@@ -30593,11 +29979,11 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/validate-summary-access'
 payload = {
-    "access_token": "quo",
-    "student_id": "unde",
-    "course_id": "totam",
-    "gc_classwork_id": "eveniet",
-    "gc_submission_id": "nesciunt"
+    "access_token": "magni",
+    "student_id": "accusamus",
+    "course_id": "non",
+    "gc_classwork_id": "maxime",
+    "gc_submission_id": "ut"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -30643,7 +30029,7 @@ response.json()</code></pre>
 </tr>
 <tr>
 <td><code>student_id</code></td>
-<td>the</td>
+<td>The</td>
 <td>optional</td>
 <td>google user id for the student</td>
 </tr>
@@ -30678,7 +30064,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/google-classroom/classwork/9/submission" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"quia","course_id":"ut"}'
+    -d '{"access_token":"explicabo","course_id":"laborum"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/google-classroom/classwork/9/submission"
@@ -30690,8 +30076,8 @@ let headers = {
 };
 
 let body = {
-    "access_token": "quia",
-    "course_id": "ut"
+    "access_token": "explicabo",
+    "course_id": "laborum"
 }
 
 fetch(url, {
@@ -30711,8 +30097,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'quia',
-            'course_id' =&gt; 'ut',
+            'access_token' =&gt; 'explicabo',
+            'course_id' =&gt; 'laborum',
         ],
     ]
 );
@@ -30723,8 +30109,8 @@ import json
 
 url = 'http://localhost:8000/api/v1/google-classroom/classwork/9/submission'
 payload = {
-    "access_token": "quia",
-    "course_id": "ut"
+    "access_token": "explicabo",
+    "course_id": "laborum"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -31344,7 +30730,8 @@ response.json()</code></pre>
 <h1>16. XAPI Cron</h1>
 <p>Cron job for XAPI extract</p>
 <!-- START_fc0aca58a5d3a95a9e07e5140ad5a1c4 -->
-<h2>Runs the xAPI extract job script</h2>
+<h2>xAPI extract job script</h2>
+<p>Runs the xAPI extract job script</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -31640,7 +31027,8 @@ response.json()</code></pre>
 </table>
 <!-- END_f5a985d69025164365132a0f650f9365 -->
 <!-- START_e414f1efc0e5c440f414a20c1754fd5e -->
-<h2>Search organization by name</h2>
+<h2>Search organization</h2>
+<p>Search organization by name</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -35677,7 +35065,7 @@ response.json()</code></pre>
 <td><code>h5p_library</code></td>
 <td>string</td>
 <td>optional</td>
-<td>optional name of H5p Library</td>
+<td>optional Name of H5p Library</td>
 </tr>
 </tbody>
 </table>
@@ -35945,14 +35333,17 @@ response.json()</code></pre>
 <p><code>POST api/v1/suborganizations/{suborganization}/lti-tool-settings</code></p>
 <!-- END_909cb4c8c2a7d264a4e68b50ca39f198 -->
 <!-- START_06903716dc834f07f78a1375dd585173 -->
-<h2>Update Lti Tool Setting</h2>
+<h2>Lti Tool Setting</h2>
+<p>Update Lti Tool Setting</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X PUT \
     "http://localhost:8000/api/v1/suborganizations/1/lti-tool-settings/1" \
     -H "Content-Type: application/json" \
-    -H "Accept: application/json"</code></pre>
+    -H "Accept: application/json" \
+    -d '{"tool_name":"Safari Montage","tool_url":"https:\/\/partner.safarimontage.com\/SAFARI\/api\/imsltisearch.php","lti_version":"LTI-1p0","media_source_id":"Kaltura or safari Montage or Vimeo or Youtube","tool_consumer_key":"consumer key","tool_secret_key":"secret key","tool_content_selection_url":"if not set, automatically set the tool_url","user_id":1,"organization_id":1}'
+</code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/suborganizations/1/lti-tool-settings/1"
 );
@@ -35962,9 +35353,22 @@ let headers = {
     "Accept": "application/json",
 };
 
+let body = {
+    "tool_name": "Safari Montage",
+    "tool_url": "https:\/\/partner.safarimontage.com\/SAFARI\/api\/imsltisearch.php",
+    "lti_version": "LTI-1p0",
+    "media_source_id": "Kaltura or safari Montage or Vimeo or Youtube",
+    "tool_consumer_key": "consumer key",
+    "tool_secret_key": "secret key",
+    "tool_content_selection_url": "if not set, automatically set the tool_url",
+    "user_id": 1,
+    "organization_id": 1
+}
+
 fetch(url, {
     method: "PUT",
     headers: headers,
+    body: body
 })
     .then(response =&gt; response.json())
     .then(json =&gt; console.log(json));</code></pre>
@@ -35977,6 +35381,17 @@ $response = $client-&gt;put(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'json' =&gt; [
+            'tool_name' =&gt; 'Safari Montage',
+            'tool_url' =&gt; 'https://partner.safarimontage.com/SAFARI/api/imsltisearch.php',
+            'lti_version' =&gt; 'LTI-1p0',
+            'media_source_id' =&gt; 'Kaltura or safari Montage or Vimeo or Youtube',
+            'tool_consumer_key' =&gt; 'consumer key',
+            'tool_secret_key' =&gt; 'secret key',
+            'tool_content_selection_url' =&gt; 'if not set, automatically set the tool_url',
+            'user_id' =&gt; 1,
+            'organization_id' =&gt; 1,
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -35985,11 +35400,22 @@ print_r(json_decode((string) $body));</code></pre>
 import json
 
 url = 'http://localhost:8000/api/v1/suborganizations/1/lti-tool-settings/1'
+payload = {
+    "tool_name": "Safari Montage",
+    "tool_url": "https:\/\/partner.safarimontage.com\/SAFARI\/api\/imsltisearch.php",
+    "lti_version": "LTI-1p0",
+    "media_source_id": "Kaltura or safari Montage or Vimeo or Youtube",
+    "tool_consumer_key": "consumer key",
+    "tool_secret_key": "secret key",
+    "tool_content_selection_url": "if not set, automatically set the tool_url",
+    "user_id": 1,
+    "organization_id": 1
+}
 headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
-response = requests.request('PUT', url, headers=headers)
+response = requests.request('PUT', url, headers=headers, json=payload)
 response.json()</code></pre>
 <blockquote>
 <p>Example response (500):</p>
@@ -36000,6 +35426,72 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>PUT api/v1/suborganizations/{suborganization}/lti-tool-settings/{lti_tool_setting}</code></p>
 <p><code>PATCH api/v1/suborganizations/{suborganization}/lti-tool-settings/{lti_tool_setting}</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool_name</code></td>
+<td>string</td>
+<td>optional</td>
+<td>required.</td>
+</tr>
+<tr>
+<td><code>tool_url</code></td>
+<td>string</td>
+<td>optional</td>
+<td>required.</td>
+</tr>
+<tr>
+<td><code>lti_version</code></td>
+<td>string</td>
+<td>optional</td>
+<td>required.</td>
+</tr>
+<tr>
+<td><code>media_source_id</code></td>
+<td>string</td>
+<td>optional</td>
+<td>required.</td>
+</tr>
+<tr>
+<td><code>tool_consumer_key</code></td>
+<td>string</td>
+<td>optional</td>
+</tr>
+<tr>
+<td><code>tool_secret_key</code></td>
+<td>required_with:tool_consumer_key</td>
+<td>unique.</td>
+<td>optional</td>
+</tr>
+<tr>
+<td><code>tool_content_selection_url</code></td>
+<td>string</td>
+<td>optional</td>
+<td>URL of selection tool</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Id of a user</td>
+</tr>
+<tr>
+<td><code>organization_id</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Id of an organization</td>
+</tr>
+</tbody>
+</table>
 <!-- END_06903716dc834f07f78a1375dd585173 -->
 <!-- START_9dea1ccd2fe8a45966d1af6b2a6ee797 -->
 <h2>Delete Lti Tool Setting</h2>
@@ -37466,7 +36958,7 @@ response.json()</code></pre>
 <tr>
 <td><code>team</code></td>
 <td>required</td>
-<td>The Id of a team</td>
+<td>The id of a team</td>
 </tr>
 </tbody>
 </table>
@@ -37485,13 +36977,13 @@ response.json()</code></pre>
 <td><code>role_id</code></td>
 <td>inetger</td>
 <td>required</td>
-<td>id of a team role</td>
+<td>The id of a team role</td>
 </tr>
 <tr>
 <td><code>user_id</code></td>
 <td>inetger</td>
 <td>required</td>
-<td>id of a user</td>
+<td>The id of a user</td>
 </tr>
 </tbody>
 </table>
@@ -37845,7 +37337,7 @@ response.json()</code></pre>
 <td><code>noovo_group_title</code></td>
 <td>string</td>
 <td>optional</td>
-<td>title of a Noovo Group</td>
+<td>Title of a Noovo Group</td>
 </tr>
 </tbody>
 </table>
@@ -38210,7 +37702,7 @@ response.json()</code></pre>
 <td><code>noovo_group_title</code></td>
 <td>string</td>
 <td>optional</td>
-<td>title of a Noovo Group</td>
+<td>Title of a Noovo Group</td>
 </tr>
 </tbody>
 </table>
@@ -38367,14 +37859,7 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "errors": [
-        "Noovo Client id or group id is missing."
-    ]
-}</code></pre>
-<blockquote>
-<p>Example response (500):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "errors": [
+        "Noovo Client id or group id is missing.",
         "Team must be finalized before requesting the indexing."
     ]
 }</code></pre>
@@ -40143,7 +39628,7 @@ response.json()</code></pre>
     -G "http://localhost:8000/api/v1/go/lms/organizations" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"userEmail":"est","lti_client_id":"12"}'
+    -d '{"userEmail":"eveniet","lti_client_id":"12"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/go/lms/organizations"
@@ -40155,7 +39640,7 @@ let headers = {
 };
 
 let body = {
-    "userEmail": "est",
+    "userEmail": "eveniet",
     "lti_client_id": "12"
 }
 
@@ -40176,7 +39661,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'userEmail' =&gt; 'est',
+            'userEmail' =&gt; 'eveniet',
             'lti_client_id' =&gt; '12',
         ],
     ]
@@ -40188,7 +39673,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/go/lms/organizations'
 payload = {
-    "userEmail": "est",
+    "userEmail": "eveniet",
     "lti_client_id": "12"
 }
 headers = {
@@ -40241,7 +39726,8 @@ response.json()</code></pre>
 </table>
 <!-- END_fec9262bf367bda1531f2dbfed93506b -->
 <!-- START_61a6a231d6690db1b348f81a4486a35c -->
-<h2>Get independent Activity based on user_id of a user who launched the deeplink</h2>
+<h2>Get independent Activity based on user_id</h2>
+<p>Get independent Activity based on user_id of a user who launched the deeplink</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -40249,7 +39735,7 @@ response.json()</code></pre>
     -G "http://localhost:8000/api/v1/go/lms/independent-activities" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"user_email":"somebody@somewhere.com","query":"activity title","size":"quas"}'
+    -d '{"user_email":"somebody@somewhere.com","query":"activity title","size":"10"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/go/lms/independent-activities"
@@ -40263,7 +39749,7 @@ let headers = {
 let body = {
     "user_email": "somebody@somewhere.com",
     "query": "activity title",
-    "size": "quas"
+    "size": "10"
 }
 
 fetch(url, {
@@ -40285,7 +39771,7 @@ $response = $client-&gt;get(
         'json' =&gt; [
             'user_email' =&gt; 'somebody@somewhere.com',
             'query' =&gt; 'activity title',
-            'size' =&gt; 'quas',
+            'size' =&gt; '10',
         ],
     ]
 );
@@ -40298,7 +39784,7 @@ url = 'http://localhost:8000/api/v1/go/lms/independent-activities'
 payload = {
     "user_email": "somebody@somewhere.com",
     "query": "activity title",
-    "size": "quas"
+    "size": "10"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -40415,15 +39901,15 @@ response.json()</code></pre>
 </tr>
 <tr>
 <td><code>query</code></td>
-<td>is</td>
+<td>For</td>
 <td>optional</td>
 <td>search-term</td>
 </tr>
 <tr>
 <td><code>size</code></td>
-<td>is</td>
+<td>For</td>
 <td>optional</td>
-<td>for pagination</td>
+<td>pagination</td>
 </tr>
 </tbody>
 </table>
@@ -40568,6 +40054,7 @@ response.json()</code></pre>
 <!-- END_b75c374e2dffdaf1b7107538d0036ebc -->
 <!-- START_8d68f6ee63c7a8877ebd8d6b4c9e5e16 -->
 <h2>Retry All Failed Jobs</h2>
+<p>Retry All Failed Jobs</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -40624,6 +40111,7 @@ response.json()</code></pre>
 <!-- END_8d68f6ee63c7a8877ebd8d6b4c9e5e16 -->
 <!-- START_05d6f6a6f9a428086b5a22fd1cb47773 -->
 <h2>Delete All Failed Jobs</h2>
+<p>Delete All Failed Jobs</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -41036,7 +40524,7 @@ response.json()</code></pre>
 <p>Example request:</p>
 </blockquote>
 <pre><code class="language-bash">curl -X GET \
-    -G "http://localhost:8000/api/v1/suborganizations/1/lms-settings?Organization=perspiciatis&amp;start=0&amp;length=25" \
+    -G "http://localhost:8000/api/v1/suborganizations/1/lms-settings?Organization=placeat&amp;start=0&amp;length=25" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"</code></pre>
 <pre><code class="language-javascript">const url = new URL(
@@ -41044,7 +40532,7 @@ response.json()</code></pre>
 );
 
 let params = {
-    "Organization": "perspiciatis",
+    "Organization": "placeat",
     "start": "0",
     "length": "25",
 };
@@ -41072,7 +40560,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'query' =&gt; [
-            'Organization'=&gt; 'perspiciatis',
+            'Organization'=&gt; 'placeat',
             'start'=&gt; '0',
             'length'=&gt; '25',
         ],
@@ -41085,7 +40573,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/suborganizations/1/lms-settings'
 params = {
-  'Organization': 'perspiciatis',
+  'Organization': 'placeat',
   'start': '0',
   'length': '25',
 }
@@ -41992,7 +41480,7 @@ response.json()</code></pre>
     -G "http://localhost:8000/api/microsoft-team/get-access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"code":"aspernatur"}'
+    -d '{"code":"esse"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/microsoft-team/get-access-token"
@@ -42004,7 +41492,7 @@ let headers = {
 };
 
 let body = {
-    "code": "aspernatur"
+    "code": "esse"
 }
 
 fetch(url, {
@@ -42024,7 +41512,7 @@ $response = $client-&gt;get(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'code' =&gt; 'aspernatur',
+            'code' =&gt; 'esse',
         ],
     ]
 );
@@ -42035,7 +41523,7 @@ import json
 
 url = 'http://localhost:8000/api/microsoft-team/get-access-token'
 payload = {
-    "code": "aspernatur"
+    "code": "esse"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -42048,14 +41536,6 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "message": "Access token has been saved successfully."
-}</code></pre>
-<blockquote>
-<p>Example response (500):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "errors": [
-        "Validation error: Access token is required"
-    ]
 }</code></pre>
 <blockquote>
 <p>Example response (500):</p>
@@ -42080,7 +41560,7 @@ response.json()</code></pre>
 <tr>
 <td><code>gid</code></td>
 <td>optional</td>
-<td>string  user id of current logged in user</td>
+<td>string User id of current logged in user</td>
 </tr>
 </tbody>
 </table>
@@ -43996,7 +43476,8 @@ response.json()</code></pre>
 </table>
 <!-- END_51a87ff5602fb398eb3dad7eec519e31 -->
 <!-- START_e57c1713ca06453df3abb6651947f648 -->
-<h2>Create Brightcove API Setting Data</h2>
+<h2>Create Brightcove API Setting</h2>
+<p>Create Brightcove API Setting Data</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -44063,7 +43544,8 @@ response.json()</code></pre>
 <p><code>POST api/v1/suborganizations/{suborganization}/brightcove-api-settings</code></p>
 <!-- END_e57c1713ca06453df3abb6651947f648 -->
 <!-- START_8fb1d10b85f0657b46ba4e9c3b5901ea -->
-<h2>Update Brightcove API Setting Data</h2>
+<h2>Update Brightcove API Setting</h2>
+<p>Update Brightcove API Setting Data</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -44131,7 +43613,8 @@ response.json()</code></pre>
 <p><code>PATCH api/v1/suborganizations/{suborganization}/brightcove-api-settings/{brightcove_api_setting}</code></p>
 <!-- END_8fb1d10b85f0657b46ba4e9c3b5901ea -->
 <!-- START_e67488e57a30b0e4eb7961a68ad0a377 -->
-<h2>Delete Brightcove API Setting</h2>
+<h2>Delete Brightcove Setting</h2>
+<p>Delete Brightcove API Setting</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -44202,7 +43685,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/brightcove-api-settings/upload-css" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"css":"quod"}'
+    -d '{"css":"eum"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/brightcove-api-settings/upload-css"
@@ -44214,7 +43697,7 @@ let headers = {
 };
 
 let body = {
-    "css": "quod"
+    "css": "eum"
 }
 
 fetch(url, {
@@ -44234,7 +43717,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'css' =&gt; 'quod',
+            'css' =&gt; 'eum',
         ],
     ]
 );
@@ -44245,7 +43728,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/brightcove-api-settings/upload-css'
 payload = {
-    "css": "quod"
+    "css": "eum"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -44282,7 +43765,8 @@ response.json()</code></pre>
 </table>
 <!-- END_4f9b4872287d751bf50d56a4980411e2 -->
 <!-- START_a79c0f8b2d083cb00061fc8a136a261a -->
-<h2>Login to Canvas LMS</h2>
+<h2>Login to Canvas</h2>
+<p>Login to Canvas LMS</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -44347,7 +43831,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/microsoft-team/save-access-token" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"access_token":"sapiente"}'
+    -d '{"access_token":"iste"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/microsoft-team/save-access-token"
@@ -44359,7 +43843,7 @@ let headers = {
 };
 
 let body = {
-    "access_token": "sapiente"
+    "access_token": "iste"
 }
 
 fetch(url, {
@@ -44379,7 +43863,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'access_token' =&gt; 'sapiente',
+            'access_token' =&gt; 'iste',
         ],
     ]
 );
@@ -44390,7 +43874,7 @@ import json
 
 url = 'http://localhost:8000/api/v1/microsoft-team/save-access-token'
 payload = {
-    "access_token": "sapiente"
+    "access_token": "iste"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -44403,14 +43887,6 @@ response.json()</code></pre>
 </blockquote>
 <pre><code class="language-json">{
     "message": "Access token has been saved successfully."
-}</code></pre>
-<blockquote>
-<p>Example response (500):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "errors": [
-        "Validation error: Access token is required"
-    ]
 }</code></pre>
 <blockquote>
 <p>Example response (500):</p>
@@ -44507,7 +43983,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/microsoft-team/classes" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"displayName":"Test Class","access_token":"assumenda"}'
+    -d '{"displayName":"Test Class","access_token":"dolorem"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/microsoft-team/classes"
@@ -44520,7 +43996,7 @@ let headers = {
 
 let body = {
     "displayName": "Test Class",
-    "access_token": "assumenda"
+    "access_token": "dolorem"
 }
 
 fetch(url, {
@@ -44541,7 +44017,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'displayName' =&gt; 'Test Class',
-            'access_token' =&gt; 'assumenda',
+            'access_token' =&gt; 'dolorem',
         ],
     ]
 );
@@ -44553,7 +44029,7 @@ import json
 url = 'http://localhost:8000/api/v1/microsoft-team/classes'
 payload = {
     "displayName": "Test Class",
-    "access_token": "assumenda"
+    "access_token": "dolorem"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -45109,6 +44585,7 @@ response.json()</code></pre>
 <!-- END_6af017bb3393e943be76074db16c4dba -->
 <!-- START_c255e950e2c777051d817aefca4b0fd2 -->
 <h2>Remove the specified resource from storage.</h2>
+<p>Remove the specified resource from storage.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -45164,7 +44641,8 @@ response.json()</code></pre>
 <p><code>DELETE api/v1/organizations/{organization}/default-sso-settings/{default_sso_setting}</code></p>
 <!-- END_c255e950e2c777051d817aefca4b0fd2 -->
 <!-- START_366a70e33019b31eedbefac881882d06 -->
-<h2>Download XApi File</h2>
+<h2>XApi File</h2>
+<p>Download XApi File</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -45220,7 +44698,8 @@ response.json()</code></pre>
 <p><code>GET api/v1/go/getxapifile/{activity}</code></p>
 <!-- END_366a70e33019b31eedbefac881882d06 -->
 <!-- START_eae1730795b87f123284725c216b6bf5 -->
-<h2>Save Canvas Teacher&#039;s data.</h2>
+<h2>Canvas Teacher&#039;s data.</h2>
+<p>Save Canvas Teacher's data.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -48794,7 +48273,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/admin/activity-items/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"nobis","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
+    -d '{"title":"Math","description":"Create Math activities.","demo_activity_id":1,"demo_video_id":1,"image":"nihil","order":1,"type":"h5p","activity_type_id":1,"h5pLib":"H5P.DocumentsUpload 1.0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/admin/activity-items/1"
@@ -48810,7 +48289,7 @@ let body = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "nobis",
+    "image": "nihil",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -48838,7 +48317,7 @@ $response = $client-&gt;put(
             'description' =&gt; 'Create Math activities.',
             'demo_activity_id' =&gt; 1,
             'demo_video_id' =&gt; 1,
-            'image' =&gt; 'nobis',
+            'image' =&gt; 'nihil',
             'order' =&gt; 1,
             'type' =&gt; 'h5p',
             'activity_type_id' =&gt; 1,
@@ -48857,7 +48336,7 @@ payload = {
     "description": "Create Math activities.",
     "demo_activity_id": 1,
     "demo_video_id": 1,
-    "image": "nobis",
+    "image": "nihil",
     "order": 1,
     "type": "h5p",
     "activity_type_id": 1,
@@ -51164,7 +50643,8 @@ response.json()</code></pre>
 <p><code>GET api/v1/admin/users/import/sample-file</code></p>
 <!-- END_f8dcc97e33f92cce8410917973a81b60 -->
 <!-- START_22d41927f0a1ecde8e741c9204b26ebe -->
-<h2>Get H5P Resource Settings For Brightcove</h2>
+<h2>H5P H5P Resource Settings</h2>
+<p>Get H5P Resource Settings</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -51681,7 +51161,8 @@ response.json()</code></pre>
 <p><code>GET api/v1/brightcove/{accountId}/{videoId}/{dataPlayer}/{dataEmbed}/h5p-resource-settings</code></p>
 <!-- END_22d41927f0a1ecde8e741c9204b26ebe -->
 <!-- START_372fbb1a8f878b2cb1461b0a99ed0007 -->
-<h2>Get H5P Resource Settings For Brightcove</h2>
+<h2>Get Brightcove H5P Resource Settings</h2>
+<p>Get H5P Resource Settings For Brightcove</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -52198,10 +51679,8 @@ response.json()</code></pre>
 <p><code>GET api/v1/brightcove/{videoId}/h5p-resource-settings</code></p>
 <!-- END_372fbb1a8f878b2cb1461b0a99ed0007 -->
 <!-- START_e4e9395fe3d606209dd64772c2815ff0 -->
-<h2>Method       getMediaEntryList</h2>
-<p>Description  Use Kaltura Session to get the api token
-Purpose      To get those media list, which do not have any &#039;Entitlement Enforcement/Permission Category&#039;
-Usage        Inside H5p Curriki Interactive Video</p>
+<h2>getMediaEntryList</h2>
+<p>Use Kaltura Session to get the api token. To get those media list, which do not have any &#039;Entitlement Enforcement/Permission Category&#039;</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -52371,7 +51850,8 @@ response.json()</code></pre>
 <p><code>POST api/v1/komodo/get-my-video-list</code></p>
 <!-- END_b01896d71441b2d82365387ae8ee882f -->
 <!-- START_97d30d1129f6591372b7a3e88dfbcb92 -->
-<h2>Get Smithsonian Contents List</h2>
+<h2>Smithsonian Contents List</h2>
+<p>Get Smithsonian Contents List</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -52379,7 +51859,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/smithsonian/get-content-list" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"q":"q=online_visual_material:true AND IC 443","start":1,"rows":10,"sort":"tempore","type":"est","row_group":"voluptatem"}'
+    -d '{"q":"online","start":1,"rows":10,"sort":"asc","type":"ead_collection","row_group":"user"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/smithsonian/get-content-list"
@@ -52391,12 +51871,12 @@ let headers = {
 };
 
 let body = {
-    "q": "q=online_visual_material:true AND IC 443",
+    "q": "online",
     "start": 1,
     "rows": 10,
-    "sort": "tempore",
-    "type": "est",
-    "row_group": "voluptatem"
+    "sort": "asc",
+    "type": "ead_collection",
+    "row_group": "user"
 }
 
 fetch(url, {
@@ -52416,12 +51896,12 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'q' =&gt; 'q=online_visual_material:true AND IC 443',
+            'q' =&gt; 'online',
             'start' =&gt; 1,
             'rows' =&gt; 10,
-            'sort' =&gt; 'tempore',
-            'type' =&gt; 'est',
-            'row_group' =&gt; 'voluptatem',
+            'sort' =&gt; 'asc',
+            'type' =&gt; 'ead_collection',
+            'row_group' =&gt; 'user',
         ],
     ]
 );
@@ -52432,12 +51912,12 @@ import json
 
 url = 'http://localhost:8000/api/v1/smithsonian/get-content-list'
 payload = {
-    "q": "q=online_visual_material:true AND IC 443",
+    "q": "online",
     "start": 1,
     "rows": 10,
-    "sort": "tempore",
-    "type": "est",
-    "row_group": "voluptatem"
+    "sort": "asc",
+    "type": "ead_collection",
+    "row_group": "user"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -52468,19 +51948,19 @@ response.json()</code></pre>
 <td><code>q</code></td>
 <td>string</td>
 <td>optional</td>
-<td>use for search</td>
+<td>Use for search Example: q=online_visual_material:true AND IC 443</td>
 </tr>
 <tr>
 <td><code>start</code></td>
 <td>integer</td>
 <td>optional</td>
-<td>like page number</td>
+<td>Like page number</td>
 </tr>
 <tr>
 <td><code>rows</code></td>
 <td>integer</td>
 <td>optional</td>
-<td>like page size or number of record per page</td>
+<td>Like page size or number of record per page</td>
 </tr>
 <tr>
 <td><code>sort</code></td>
@@ -52492,7 +51972,7 @@ response.json()</code></pre>
 <td><code>type</code></td>
 <td>string</td>
 <td>optional</td>
-<td>get list by type = edanmdm or ead_collection or ead_component or all</td>
+<td>Get list by type = edanmdm or ead_collection or ead_component or all</td>
 </tr>
 <tr>
 <td><code>row_group</code></td>
@@ -52504,7 +51984,8 @@ response.json()</code></pre>
 </table>
 <!-- END_97d30d1129f6591372b7a3e88dfbcb92 -->
 <!-- START_ecb33010f0c0b486acd24f15fc6913aa -->
-<h2>Get Smithsonian Content Detail</h2>
+<h2>Get Smithsonian Content</h2>
+<p>Get Smithsonian Content Detail</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -52591,7 +52072,8 @@ response.json()</code></pre>
 </table>
 <!-- END_ecb33010f0c0b486acd24f15fc6913aa -->
 <!-- START_7d3802d1a5daff1c3e407e034a3aa663 -->
-<h2>Get All Brightcove Account List.</h2>
+<h2>All Brightcove Account List.</h2>
+<p>Get All Brightcove Account List.</p>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -52656,7 +52138,7 @@ response.json()</code></pre>
     "http://localhost:8000/api/v1/brightcove/get-bc-videos-list" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    -d '{"id":"1","organization_id":"1","query_param":"query=name=file&amp;limit=0&amp;offset=0"}'
+    -d '{"id":1,"organization_id":1,"query_param":"query=name=file&amp;limit=0&amp;offset=0"}'
 </code></pre>
 <pre><code class="language-javascript">const url = new URL(
     "http://localhost:8000/api/v1/brightcove/get-bc-videos-list"
@@ -52668,8 +52150,8 @@ let headers = {
 };
 
 let body = {
-    "id": "1",
-    "organization_id": "1",
+    "id": 1,
+    "organization_id": 1,
     "query_param": "query=name=file&amp;limit=0&amp;offset=0"
 }
 
@@ -52690,8 +52172,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'id' =&gt; '1',
-            'organization_id' =&gt; '1',
+            'id' =&gt; 1,
+            'organization_id' =&gt; 1,
             'query_param' =&gt; 'query=name=file&amp;limit=0&amp;offset=0',
         ],
     ]
@@ -52703,8 +52185,8 @@ import json
 
 url = 'http://localhost:8000/api/v1/brightcove/get-bc-videos-list'
 payload = {
-    "id": "1",
-    "organization_id": "1",
+    "id": 1,
+    "organization_id": 1,
     "query_param": "query=name=file&amp;limit=0&amp;offset=0"
 }
 headers = {
@@ -52734,21 +52216,21 @@ response.json()</code></pre>
 <tbody>
 <tr>
 <td><code>id</code></td>
-<td>require</td>
-<td>optional</td>
+<td>integer</td>
+<td>required</td>
 <td>Valid id of a brightcove api settings table</td>
 </tr>
 <tr>
 <td><code>organization_id</code></td>
-<td>require</td>
-<td>optional</td>
+<td>integer</td>
+<td>required</td>
 <td>Valid id of existing user organization</td>
 </tr>
 <tr>
 <td><code>query_param</code></td>
+<td>string</td>
 <td>optional</td>
-<td>optional</td>
-<td>Valid brightcove query param</td>
+<td>optional Valid brightcove query param</td>
 </tr>
 </tbody>
 </table>

@@ -136,11 +136,14 @@ class ActivityItemController extends Controller
      *
      * @bodyParam title string required The title of a activity item Example: Audio Recorder
      * @bodyParam description string required The description of a activity item Example: Record your voice and play back or download a .wav file of your recording.
-     * @bodyParam order int The order number of a activity item Example: 1
-     * @bodyParam activity_type_id int The Id of a activity type Example: 1
+     * @bodyParam order integer The order number of a activity item Example: 1
+     * @bodyParam activity_type_id integer The Id of a activity type Example: 1
      * @bodyParam type any required The type of a activity item Example: h5p
      * @bodyParam h5pLib any required The H5pLib of a activity item Example: H5P.AudioRecorder 1.0
      * @bodyParam image string The image url of a activity item Example: /storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png
+     * @bodyParam demo_activity_id string required The image url of a activity item Example: 1
+     * @bodyParam demo_video_id string string The image url of a activity item Example: 1
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
      * @responseFile 201 responses/activity-item/activity-item.json
      *
@@ -211,6 +214,9 @@ class ActivityItemController extends Controller
      * @bodyParam type any required The type of a activity item Example: h5p
      * @bodyParam h5pLib any required The H5pLib of a activity item Example: H5P.AudioRecorder 1.0
      * @bodyParam image string The image url of a activity item Example: /storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png
+     * @bodyParam demo_activity_id string required The image url of a activity item Example: 1
+     * @bodyParam demo_video_id string string The image url of a activity item Example: 1
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
      * @responseFile responses/activity-item/activity-item.json
      *
@@ -226,7 +232,7 @@ class ActivityItemController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param UpdateActivityItem $request
      * @param Organization $suborganization
      * @param ActivityItem $activityItem
      *

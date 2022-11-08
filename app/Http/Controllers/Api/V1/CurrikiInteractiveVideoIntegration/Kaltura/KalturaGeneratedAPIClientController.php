@@ -46,10 +46,8 @@ class KalturaGeneratedAPIClientController extends Controller
     }
 
     /**
-     * Method       getMediaEntryList
-     * Description  Use Kaltura Session to get the api token
-     * Purpose      To get those media list, which do not have any 'Entitlement Enforcement/Permission Category'
-     * Usage        Inside H5p Curriki Interactive Video
+     * getMediaEntryList
+     * Use Kaltura Session to get the api token. To get those media list, which do not have any 'Entitlement Enforcement/Permission Category' 
      * @param       Request $request
      * @return      string token
      * @throws GeneralException

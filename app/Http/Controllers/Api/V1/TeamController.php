@@ -850,12 +850,7 @@ class TeamController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Indexing value is already set. Current indexing state of this team: CURRENT_STATE_OF_PROJECT_INDEX"
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
+     *     "Indexing value is already set. Current indexing state of this team: CURRENT_STATE_OF_PROJECT_INDEX",
      *     "Team must be finalized before requesting the indexing."
      *   ]
      * }
@@ -890,12 +885,7 @@ class TeamController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Noovo Client id or group id is missing."
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
+     *     "Noovo Client id or group id is missing.",
      *     "Team must be finalized before requesting the indexing."
      *   ]
      * }

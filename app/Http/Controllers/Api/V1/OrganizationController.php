@@ -59,6 +59,8 @@ class OrganizationController extends Controller
     }
 
     /**
+     * Search organization
+     * 
      * Search organization by name
      *
      * @bodyParam query string required Organization name to get data for Example: curriki

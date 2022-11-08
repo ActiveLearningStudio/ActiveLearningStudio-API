@@ -1087,11 +1087,13 @@ class AuthController extends Controller
     }
 
     /**
+     * Get Wordpress SSO default settings
+     * 
      * Wordpress SSO: Get default settings for a particular wordpress sso integration
      *
-     * @urlParam client integer required Id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+     * @urlParam client integer required Id for the integration Example: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
      *
-     * @param string $clientId
+     * @param $clientId
      * @return Application|ResponseFactory|Response
      * @throws \Throwable
      */

@@ -105,6 +105,8 @@ class UserController extends Controller
      * @responseFile responses/user/users-for-team.json
      *
      * @param UserSearchRequest $userSearchRequest
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
     public function getOrgUsers(UserSearchRequest $userSearchRequest, Organization $suborganization)
@@ -755,6 +757,7 @@ class UserController extends Controller
      *
      * @responseFile responses/project/projects.json
      *
+     * @param SharedProjectRequest $request
      * @return Response
      */
     public function sharedProjects(SharedProjectRequest $request)
@@ -820,6 +823,7 @@ class UserController extends Controller
      *
      * @responseFile responses/notifications/independent-activity-export-notifications.json
      *
+     * @param Organization $suborganization
      * @param Request $request
      * @return Response
      */
@@ -847,6 +851,7 @@ class UserController extends Controller
      *   ]
      * }
      *
+     * @param Request $request
      * @param $notification_id
      * @return Response
      */

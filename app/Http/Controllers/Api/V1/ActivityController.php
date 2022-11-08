@@ -319,9 +319,12 @@ class ActivityController extends Controller
 
     /**
      * Update H5P
+     * 
+     * Update H5P content
      *
      * @param $request
      * @param int $id
+     * 
      * @return mixed
      * @throws H5PException
      */
@@ -597,6 +600,8 @@ class ActivityController extends Controller
 
     /**
      * H5P Activity
+     * 
+     * Get H5P Activity details
      *
      * @urlParam activity required The Id of a activity Example: 1
      *

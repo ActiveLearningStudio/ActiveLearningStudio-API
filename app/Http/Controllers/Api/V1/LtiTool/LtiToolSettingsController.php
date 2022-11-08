@@ -39,12 +39,18 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Get All LTI Tool Settings for listing.
+     * 
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     * 
      * @queryParam Organization $suborganization
      * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
      * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
-     * @responseFile responses/admin/lti-tool/lti-tool-settings
+     * 
      * @param Request $request
+     * @param Organization $suborganization
+     * 
+     * @responseFile responses/admin/lti-tool/lti-tool-settings
+     * 
      * @return LtiToolSettingCollection
      */
     public function index(Request $request, Organization $suborganization)
@@ -55,12 +61,19 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Get Lti Tool Setting
+     * 
      * Get the specified lti tool setting data.
+     * 
      * @urlParam id required The Id of a lti_tool_settings table Example: 1
-     * @urlParam Organization $suborganization The Id of suborganization
+     * @urlParam Organization $suborganization The Id of suborganization Example: 1
+     * 
      * @responseFile responses/admin/lti-tool/lti-tool-settings
+     * 
      * @return LtiToolSettingResource
+     * 
+     * @param $suborganization
      * @param $id
+     * 
      * @throws GeneralException
      */
     public function show(Organization $suborganization, $id)
@@ -71,10 +84,14 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Create Lti tool Setting
+     * 
      * Creates the new lti tool setting in database
+     * 
      * @param StoreLtiToolSetting $request
      * @param Organization $suborganization
+     * 
      * @return LtiToolSettingResource|Application|ResponseFactory|Response
+     * 
      * @throws GeneralException
      */
     public function store(StoreLtiToolSetting $request, Organization $suborganization)
@@ -100,11 +117,26 @@ class LtiToolSettingsController extends Controller
     }
 
     /**
+     * Lti Tool Setting
+     * 
      * Update Lti Tool Setting
+     * 
+     * @bodyParam tool_name string required. Example: Safari Montage
+     * @bodyParam tool_url string required. Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
+     * @bodyParam lti_version string required. Example: LTI-1p0
+     * @bodyParam media_source_id string required. Example: Kaltura or safari Montage or Vimeo or Youtube
+     * @bodyParam tool_consumer_key string Example: consumer key
+     * @bodyParam tool_secret_key required_with:tool_consumer_key|unique. Example: secret key
+     * @bodyParam tool_content_selection_url string URL of selection tool Example: if not set, automatically set the tool_url
+     * @bodyParam user_id integer required Id of a user Example: 1
+     * @bodyParam organization_id integer required Id of an organization Example: 1
+     * 
      * @param UpdateLtiToolSetting $request
      * @param Organization $suborganization
      * @param $id
+     * 
      * @return Application|ResponseFactory|Response
+     * 
      * @throws GeneralException
      */
     public function update(UpdateLtiToolSetting $request, Organization $suborganization, $id)

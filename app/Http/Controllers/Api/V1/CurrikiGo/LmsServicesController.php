@@ -44,6 +44,7 @@ class LmsServicesController extends Controller
     }
 
     /**
+     * Login to Canvas
      * Login to Canvas LMS
      *
      * @param Request $request
@@ -69,6 +70,7 @@ class LmsServicesController extends Controller
     }
 
     /**
+     * XApi File
      * Download XApi File
      *
      * @param Request $request
@@ -80,6 +82,7 @@ class LmsServicesController extends Controller
     }
 
     /**
+     * Canvas Teacher's data.
      * Save Canvas Teacher's data.
      *
      * @param Request $request

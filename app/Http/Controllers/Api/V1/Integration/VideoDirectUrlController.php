@@ -61,6 +61,7 @@ class VideoDirectUrlController extends Controller
     }    
 
     /**
+     * Get Vimeo Video Info
      * Get Vimeo Video Info w.r.t quality
      * @param string $url
      * @return string $videoInfo
@@ -82,8 +83,11 @@ class VideoDirectUrlController extends Controller
     }
 
     /**
+     * Get video config
      * Get video config object
-     * @param mix $string, string $start, $end
+     * @param $string
+     * @param $start
+     * @param $end
      * @return mix
      */
     private function getConfigObjectFromHtml($string, $start, $end)
@@ -99,8 +103,10 @@ class VideoDirectUrlController extends Controller
     }
 
     /**
+     * Get Vimeo video object
      * Get Vimeo video object w.r.t quality
-     * @param array $videoArray, string $quality
+     * @param array $videoArray
+     * @param array $quality
      * @return object
      */
     private function getVimeoQualityVideo($videoArray, $quality)
@@ -109,6 +115,7 @@ class VideoDirectUrlController extends Controller
     }
 
     /**
+     * Get Komodo direct url
      * Get Komodo direct or playable url
      * @param string $url
      * @return string $directUrl
@@ -127,8 +134,9 @@ class VideoDirectUrlController extends Controller
     }
 
     /**
+     * Get remote content
      * Get remote content by URL
-     * @param string $url remote page URL
+     * @param $url
      * @return string result content
      */
     private function getRemoteContent($url)

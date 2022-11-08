@@ -42,6 +42,7 @@ class CourseController extends Controller
     }
 
     /**
+     * Fetch a Course
      * Fetch a Course from Canvas
      *
      * @urlParam project required The Id of the project Example 1

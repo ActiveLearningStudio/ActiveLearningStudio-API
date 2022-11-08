@@ -226,11 +226,13 @@ class LmsController extends Controller
     }
 
     /**
+     * Get independent Activity based on user_id
+     * 
      * Get independent Activity based on user_id of a user who launched the deeplink
      *
      * @bodyParam user_email required The email of a user Example: somebody@somewhere.com
-     * @bodyParam query is search-term Example: activity title
-     * @bodyParam size is for pagination
+     * @bodyParam query For search-term Example: activity title
+     * @bodyParam size For pagination Example: 10
      *
      * @responseFile 200 responses/independent-activity/independent-activity.json
      *
