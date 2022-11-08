@@ -12,7 +12,10 @@ class UpdateActivityItemTitleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('activity_items')->where('title', 'Findthe Hotspot')->update(['title' => 'Find The Hotspot']);
+        $count = DB::table('activity_items')->where('title', 'Find The Hotspot')->count();
+        if($count === 0) {
+            DB::table('activity_items')->where('title', 'Findthe Hotspot')->update(['title' => 'Find The Hotspot']);
+        }
 
         DB::delete("DELETE FROM activity_items WHERE title = 'Geo Gebra3 d' ");
     }
