@@ -156,11 +156,12 @@ class ActivityTypeController extends Controller
      *
      * Get a list of activity items of the specified activity type.
      *
-     * @urlParam activityType required The Id of a activity type Example: 1
+     * @urlParam activityType integer required The Id of a activity type Example: 1
      *
      * @responseFile responses/activity-type/activity-items.json
      *
      * @param ActivityType $activityType
+     * 
      * @return Response
      */
     public function items(ActivityType $activityType)

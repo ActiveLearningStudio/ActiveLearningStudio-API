@@ -46,10 +46,16 @@ class KalturaGeneratedAPIClientController extends Controller
     }
 
     /**
-     * getMediaEntryList
+     * Get Media Entry List
+     * 
+     * Get all list of media entry
+     * 
      * Use Kaltura Session to get the api token. To get those media list, which do not have any 'Entitlement Enforcement/Permission Category' 
-     * @param       Request $request
-     * @return      string token
+     * 
+     * @param Request $request
+     * 
+     * @return string token
+     * 
      * @throws GeneralException
      */
     public function getMediaEntryList(Request $request)

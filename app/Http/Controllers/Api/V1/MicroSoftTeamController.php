@@ -172,7 +172,7 @@ class MicroSoftTeamController extends Controller
 	 * Create a new Class/Team into Microsoft Team
 	 *
      * @bodyParam displayName required string Name of the class. Example: Test Class
-     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
+     * @bodyParam access_token string The stringified of the GAPI access token JSON object Example: 123
      * @response  200 {
      *   "message": [
      *     "Class have been created successfully"

@@ -59,8 +59,11 @@ class ProjectController extends Controller
      *
      * Get a list of the projects of a user.
      *
-     * @urlParam required Organization $suborganization. Example: 1
-     * @queryParam optional GetProjectsRequest $request. Example: size, order_by_type, order_by_column8
+     * @urlParam suborganization required Id of an organization Example: 1
+     * @queryParam size integer Example: 10
+     * @queryParam order_by_type string Example: ASC OR DESC
+     * @queryParam order_by_column8 string Example: name, created_at
+     * 
      * @response array
      *
      * @param GetProjectsRequest $request
@@ -107,6 +110,7 @@ class ProjectController extends Controller
      * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
      *
+     * @param Request $request
      * @param Organization $suborganization
      * 
      * @responseFile responses/project/team-projects.json
@@ -232,8 +236,10 @@ class ProjectController extends Controller
      *
      * Get a list of the default projects.
      *
-     * @urlParam required Organization $suborganization. Example: 1
-     * @queryParam optional GetProjectsRequest $request. Example: size, order_by_type, order_by_column8
+     * @urlParam suborganization required Id of an organization Example: 1
+     * @queryParam size integer Example: 10
+     * @queryParam order_by_type string Example: ASC OR DESC
+     * @queryParam order_by_column8 string Example: name, created_at
      * 
      * @param GetProjectsRequest $request
      * @param Organization $suborganization
@@ -635,9 +641,10 @@ class ProjectController extends Controller
      *
      * Reorder projects of a user.
      *
-     * @bodyParam projects array required projects of a user
+     * @bodyParam projects array required Projects of a user Example: [1, 2, 3]
      * 
      * @param Request $request
+     * @param Organization $suborganization
      * 
      * @responseFile responses/project/projects.json
      * 
@@ -752,10 +759,12 @@ class ProjectController extends Controller
      * 
      * @urlParam Organization $suborganization
      * 
+     * @responseFile responses/project/projects.json
+     * 
      * @param Request $request
      * @return Response
 
-     * @responseFile responses/project/projects.json
+     * 
      */
     public function getFavorite(GetProjectsRequest $request, Organization $suborganization)
     {
@@ -770,7 +779,7 @@ class ProjectController extends Controller
      *
      * Export the specified project of a user.
      *
-     * @urlParam Organization $suborganization
+     * @urlParam suborganization required The Id of an organization Example: 1
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {

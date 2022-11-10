@@ -32,7 +32,7 @@ class SmithsonianIOAAPIClientController extends Controller
      * 
      * Get Smithsonian Contents List
      * 
-     * @bodyParam q string Use for search Example: q=online_visual_material:true AND IC 443 Example: online
+     * @bodyParam q string Use for search Example: q=online_visual_material:true AND IC 443
      * @bodyParam start integer Like page number Example: 1
      * @bodyParam rows integer Like page size or number of record per page Example: 10
      * @bodyParam sort string Sort list by id, newest, updated and random field Example: asc
@@ -66,10 +66,15 @@ class SmithsonianIOAAPIClientController extends Controller
 
     /**
      * Get Smithsonian Content
+     * 
      * Get Smithsonian Content Detail
+     * 
      * @bodyParam id string Example: con-1620124231687-1620150333404-0
+     * 
      * @param Request $request
+     * 
      * @return object $response
+     * 
      * @throws GeneralException
      */
     public function getContentDetail(Request $request)
@@ -97,7 +102,9 @@ class SmithsonianIOAAPIClientController extends Controller
      * @responseFile responses/smithsonian/getsearchfilterdata.json
      *
      * @param Request $request
+     * 
      * @return object $response
+     * 
      * @throws GeneralException
      */
     public function getSearchFilterData(Request $request)

@@ -154,7 +154,7 @@ class GoogleClassroomController extends Controller
 	 *
      * @urlParam project required The Id of a project. Example: 9
      * @bodyParam course_id string Id of an existing Google Classroom course. Example: 123
-     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
+     * @bodyParam access_token string The stringified of the GAPI access token JSON object Example: 123
      *
      * @responseFile responses/google-classroom/google-classroom-project.json
      *
@@ -551,13 +551,16 @@ class GoogleClassroomController extends Controller
 
 
     /**
+     * Publish playlist To Google Classroom
+     * 
      * To Publish playlist To Google Classroom
      *
-     * @urlParam project required The Id of a project. Example: 9
-     * @urlParam playlist required The Id of a playlist. Example: 10
-     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
-     * @bodyParam course_id string The Google Classroom course id
-     * @bodyParam topic_id string The Google Classroom topic id
+     * @urlParam project integer required The Id of a project. Example: 9
+     * @urlParam playlist integer required The Id of a playlist. Example: 10
+     * @bodyParam access_token string The stringified of the GAPI access token JSON object
+     * @bodyParam course_id string The Google Classroom course id Example: 123
+     * @bodyParam topic_id string The Google Classroom topic id Example: 123
+     * 
      * @param Project $project
      * @param Playlist $playlist
      * @param GCPublishPlaylistRequest $publishPlaylistRequest

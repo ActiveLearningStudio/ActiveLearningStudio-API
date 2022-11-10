@@ -114,7 +114,7 @@ class StandAloneActivityController extends Controller
      *
      * Create a new activity.
      *
-     * @urlParam Organization $suborganization required The Id of a organization Example: 1
+     * @urlParam Organization suborganization required The Id of a organization Example: 1
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam content string required The content of a activity Example:
      * @bodyParam h5p_content_id integer The Id of H5p content Example: 59
@@ -176,8 +176,8 @@ class StandAloneActivityController extends Controller
      *
      * Get the specified stand alone activity.
      *
-     * @urlParam Organization $suborganization required The Id of a organization Example: 1
-     * @urlParam Activity $standAloneActivity required The Id of a activity Example: 1
+     * @urlParam suborganization required The Id of a organization Example: 1
+     * @urlParam standAloneActivity required The Id of a activity Example: 1
      *
      * @responseFile responses/activity/activity.json
      *

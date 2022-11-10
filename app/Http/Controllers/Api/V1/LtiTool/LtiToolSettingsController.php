@@ -22,6 +22,7 @@ use Illuminate\View\View;
  * @author        Asim Sarwar
  * Date           11-10-2021
  * @group 21.   Admin/Lti Tool Settings
+ * 
  * APIs for Lti tool settings on admin panel.
  */
 class LtiToolSettingsController extends Controller
@@ -42,9 +43,9 @@ class LtiToolSettingsController extends Controller
      * 
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      * 
-     * @queryParam Organization $suborganization
-     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
-     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     * @urlParam $suborganization integer required Id of an organization Example: 1
+     * @queryParam start integer Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length integer Limit for getting the paginated records, Default 25. Example: 25
      * 
      * @param Request $request
      * @param Organization $suborganization
@@ -65,13 +66,13 @@ class LtiToolSettingsController extends Controller
      * Get the specified lti tool setting data.
      * 
      * @urlParam id required The Id of a lti_tool_settings table Example: 1
-     * @urlParam Organization $suborganization The Id of suborganization Example: 1
+     * @urlParam suborganization The Id of suborganization Example: 1
      * 
      * @responseFile responses/admin/lti-tool/lti-tool-settings
      * 
      * @return LtiToolSettingResource
      * 
-     * @param $suborganization
+     * @param Organization $suborganization
      * @param $id
      * 
      * @throws GeneralException
@@ -86,6 +87,8 @@ class LtiToolSettingsController extends Controller
      * Create Lti tool Setting
      * 
      * Creates the new lti tool setting in database
+     * 
+     * @urlParam suborganization The Id of suborganization Example: 1
      * 
      * @param StoreLtiToolSetting $request
      * @param Organization $suborganization
@@ -121,12 +124,12 @@ class LtiToolSettingsController extends Controller
      * 
      * Update Lti Tool Setting
      * 
-     * @bodyParam tool_name string required. Example: Safari Montage
-     * @bodyParam tool_url string required. Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
-     * @bodyParam lti_version string required. Example: LTI-1p0
-     * @bodyParam media_source_id string required. Example: Kaltura or safari Montage or Vimeo or Youtube
-     * @bodyParam tool_consumer_key string Example: consumer key
-     * @bodyParam tool_secret_key required_with:tool_consumer_key|unique. Example: secret key
+     * @bodyParam tool_name string required Name of the tool Example: Safari Montage
+     * @bodyParam tool_url string required The URL of tool Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
+     * @bodyParam lti_version string required The version of LTI Example: LTI-1p0
+     * @bodyParam media_source_id string required The id of media source Example: Kaltura or safari Montage or Vimeo or Youtube
+     * @bodyParam tool_consumer_key string The unique key of tool consumer Example: consumer key
+     * @bodyParam tool_secret_key required_with:tool_consumer_key|unique The secret key of tool Example: secret key
      * @bodyParam tool_content_selection_url string URL of selection tool Example: if not set, automatically set the tool_url
      * @bodyParam user_id integer required Id of a user Example: 1
      * @bodyParam organization_id integer required Id of an organization Example: 1

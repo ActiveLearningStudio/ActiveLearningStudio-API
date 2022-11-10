@@ -67,7 +67,7 @@ class LmsController extends Controller
      * Get a list of projects that belong to the same LMS/LTI settings
      *
      * @bodyParam lms_url string required The url of a lms Example: quo
-     * @bodyParam lti_client_id int required The Id of a lti client Example: 12
+     * @bodyParam lti_client_id integer required The Id of a lti client Example: 12
      *
      * @responseFile responses/project/projects.json
      *
@@ -172,8 +172,8 @@ class LmsController extends Controller
      *
      * Get a list of organizations that belong to the same LMS/LTI settings
      *
-     * @bodyParam userEmail required The email of a user: quo
-     * @bodyParam lti_client_id required The Id of a lti client Example: 12
+     * @bodyParam userEmail string required The email of a user: quo
+     * @bodyParam lti_client_id integer required The Id of a lti client Example: 12
      *
      * @responseFile responses/organization/organizations.json
      *
@@ -201,8 +201,8 @@ class LmsController extends Controller
      *
      * Get a list of teams that belong to the same LMS/LTI settings
      *
-     * @bodyParam user_email required The email of a user Example: somebody@somewhere.com
-     * @bodyParam lti_client_id required The Id of a lti client Example: 12
+     * @bodyParam user_email string required The email of a user Example: somebody@somewhere.com
+     * @bodyParam lti_client_id integer required The Id of a lti client Example: 12
      *
      * @responseFile responses/team/teams.json
      *
@@ -230,9 +230,9 @@ class LmsController extends Controller
      * 
      * Get independent Activity based on user_id of a user who launched the deeplink
      *
-     * @bodyParam user_email required The email of a user Example: somebody@somewhere.com
-     * @bodyParam query For search-term Example: activity title
-     * @bodyParam size For pagination Example: 10
+     * @bodyParam user_email string required The email of a user Example: somebody@somewhere.com
+     * @bodyParam query string For search-term Example: activity title
+     * @bodyParam size integer For pagination Example: 10
      *
      * @responseFile 200 responses/independent-activity/independent-activity.json
      *

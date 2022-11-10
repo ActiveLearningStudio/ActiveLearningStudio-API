@@ -185,7 +185,7 @@ class ActivityItemController extends Controller
      *
      * Get the specified activity item.
      *
-     * @urlParam activity_item required The Id of a activity item Example: 1
+     * @urlParam activityItem integer required The Id of a activity item Example: 1
      *
      * @responseFile responses/activity-item/activity-item.json
      *

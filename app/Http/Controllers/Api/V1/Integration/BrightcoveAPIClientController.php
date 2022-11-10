@@ -32,8 +32,11 @@ class BrightcoveAPIClientController extends Controller
     
     /**
      * All Brightcove Account List.
+     * 
      * Get All Brightcove Account List.
+     * 
      * @param integer $suborganization
+     * 
      * @return BrightcoveAPISettingCollection
      */
     public function getAccountList($suborganization)
@@ -48,7 +51,7 @@ class BrightcoveAPIClientController extends Controller
      * Get the specified Brightcove API setting data.
      *  
      * @bodyParam id integer required Valid id of a brightcove api settings table Example: 1
-     * @bodyParam organization_id integer required Valid id of existing user organization  Example: 1
+     * @bodyParam organization_id integer required Valid id of existing user organization Example: 1
      * @bodyParam query_param string optional Valid brightcove query param Example: query=name=file&limit=0&offset=0
      * 
      * @param Request $request
