@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\App;
 use App\Repositories\LtiTool\LtiToolSettingRepository;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\LtiTool\KalturaAPISettingRequest;
-use App\Models\MediaSource;
 
 class KalturaGeneratedAPIClientController extends Controller
 {
@@ -52,13 +51,18 @@ class KalturaGeneratedAPIClientController extends Controller
      *
      * Use Kaltura Session to get the api token. Using nside H5p Curriki Interactive Video
      *
-     * @bodyParam organization_id required int. The Id of a suborganization Example: 1
-     * @bodyParam pageSize required string. Mean record per page Example: 10
-     * @bodyParam pageIndex required string. Mean skip record per page Example: 0 on first page or 10 on next page and so on
+     * @bodyParam organization_id required int The Id of a suborganization Example: 1
+     * @bodyParam pageSize required string Mean record per page Example: 10
+     * @bodyParam pageIndex required string Mean skip record per page Example: 0 on first page or 10 on next page and so on
      * @bodyParam searchText string mean search record by video title or video id Example: 1_4mmw1lb3 or KalturaWebcasting
      *
      * @responseFile responses/kaltura/kaltura-media-entry.json
      *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to find Kaltura API settings!"
+     *   ]
+     * }
      * @param KalturaAPISettingRequest $request
      * @return object $response
      * @throws GeneralException
@@ -72,9 +76,7 @@ class KalturaGeneratedAPIClientController extends Controller
           'searchText'
       ]);
       $videoMediaSources = getVideoMediaSources();
-      $mediaSourcesRow = MediaSource::where('name', $videoMediaSources['kaltura'])->where('media_type', 'Video')->first();
-      $mediaSourcesId = !empty($mediaSourcesRow) ? $mediaSourcesRow->id : 0;
-      $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($getParam['organization_id'], $mediaSourcesId);
+      $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($getParam['organization_id'], $videoMediaSources['kaltura']);
       // Credentials For Kaltura Session
       if ($ltiRowResult) {
         $secret = $ltiRowResult->tool_secret_key;
@@ -89,7 +91,11 @@ class KalturaGeneratedAPIClientController extends Controller
 
       $expiry = config('kaltura.expiry');
       $privileges = '*';
-      // $sessionType mean Kaltura Session Type. It may be 0 or 2, 0 for user and 2 for admin (https://www.kaltura.com/api_v3/testmeDoc/enums/KalturaSessionType.html)
+      /*
+      * $sessionType mean Kaltura Session Type. It may be 0 or 2,
+      * 0 for user and 2 for admin
+      * (https://www.kaltura.com/api_v3/testmeDoc/enums/KalturaSessionType.html)
+      */
       $sessionType = config('kaltura.session_type');
 
       $pageSize = $getParam['pageSize'];
@@ -110,14 +116,10 @@ class KalturaGeneratedAPIClientController extends Controller
         $pager = new $this->kalturaFilterPager();
         $pager->pageSize = $pageSize;
         $pager->pageIndex = $pageIndex;
-        try {
-          $result = $client->media->listAction($filter, $pager);
-          $responeResult = response()->json($result);
-        } catch (Exception $e) {
-          $responeResult = response()->json(array("error" => $e->getMessage()));
-        }
+        $result = $client->media->listAction($filter, $pager);
+        $responeResult = response()->json($result);
       } catch (Exception $e) {
-          $responeResult = response()->json(array("error" => $e->getMessage()));
+        $responeResult = response()->json(array("error" => $e->getMessage()));
       }
       return $responeResult;
     }

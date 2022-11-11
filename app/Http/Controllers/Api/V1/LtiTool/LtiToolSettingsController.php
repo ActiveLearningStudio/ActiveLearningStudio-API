@@ -23,6 +23,7 @@ use Illuminate\View\View;
  * Date           11-10-2021
  * @group 1008.   Admin/Lti Tool Settings *
  * APIs for Lti tool settings on admin panel.
+ * The doc block for LTIToolSettingsController will be updated later.
  */
 class LtiToolSettingsController extends Controller
 {

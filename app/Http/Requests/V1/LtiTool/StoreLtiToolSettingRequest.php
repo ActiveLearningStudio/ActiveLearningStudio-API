@@ -29,13 +29,14 @@ class StoreLtiToolSettingRequest extends FormRequest
      */
     public function rules()
     {
+        $orgId = request('organization_id');
         return [
-            'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
-            'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
+            'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
             'lti_version' => 'required|max:20',
             'media_source_id' => 'required|exists:media_sources,id',
-            'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
-            'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key,NULL,id,deleted_at,NULL,organization_id,' . request('organization_id'),
+            'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
+            'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_content_selection_url' => 'nullable|url|max:255',
             'user_id' => 'required|exists:users,id',
             'organization_id' => 'required|exists:organizations,id'
