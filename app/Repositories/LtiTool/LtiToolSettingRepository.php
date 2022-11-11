@@ -122,13 +122,17 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     }
 
     /**
-     * @param $userId integer, $orgId integer $mediaSourceId int
-     * @return mixed
+     * To get row record by org and tool type match
+     *
+     * @param $orgId integer
+     * @param $mediaSourceId int
+     * @return object
+     * @throws GeneralException
      */
-    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $mediaSourceId)
+    public function getRowRecordByOrgAndToolType($orgId, $mediaSourceId)
     {
         try {
-            return $this->model->where([['user_id','=', $userId],['organization_id','=', $orgId],['media_source_id','=', $mediaSourceId]])->first();
+            return $this->model->where([['organization_id','=', $orgId],['media_source_id','=', $mediaSourceId]])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

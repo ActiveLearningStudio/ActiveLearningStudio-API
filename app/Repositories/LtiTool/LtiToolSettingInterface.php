@@ -8,9 +8,14 @@ use App\Repositories\EloquentRepositoryInterface;
 
 interface LtiToolSettingInterface extends EloquentRepositoryInterface
 {
+    
     /**
-     * @param $userId integer, $orgId integer $mediaSourceId int
-     * @return mixed
+     * To get row record by org and tool type match
+     *
+     * @param $orgId integer
+     * @param $mediaSourceId int
+     * @return object
+     * @throws GeneralException
      */
-    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $mediaSourceId);
+    public function getRowRecordByOrgAndToolType($orgId, $mediaSourceId);
 }

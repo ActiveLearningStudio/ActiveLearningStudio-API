@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1\LtiTool;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\LtiTool\StoreLtiToolSetting;
-use App\Http\Requests\V1\LtiTool\UpdateLtiToolSetting;
+use App\Http\Requests\V1\LtiTool\StoreLtiToolSettingRequest;
+use App\Http\Requests\V1\LtiTool\UpdateLtiToolSettingRequest;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingCollection;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingResource;
 use App\Models\LtiTool\LtiToolSetting;
@@ -72,12 +72,12 @@ class LtiToolSettingsController extends Controller
     /**
      * Create Lti tool Setting
      * Creates the new lti tool setting in database
-     * @param StoreLtiToolSetting $request
+     * @param StoreLtiToolSettingRequest $request
      * @param Organization $suborganization
      * @return LtiToolSettingResource|Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function store(StoreLtiToolSetting $request, Organization $suborganization)
+    public function store(StoreLtiToolSettingRequest $request, Organization $suborganization)
     {
         $data = $request->only([
             'user_id',
@@ -101,13 +101,13 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Update Lti Tool Setting
-     * @param UpdateLtiToolSetting $request
+     * @param UpdateLtiToolSettingRequest $request
      * @param Organization $suborganization
      * @param $id
      * @return Application|ResponseFactory|Response
      * @throws GeneralException
      */
-    public function update(UpdateLtiToolSetting $request, Organization $suborganization, $id)
+    public function update(UpdateLtiToolSettingRequest $request, Organization $suborganization, $id)
     {
         $data = $request->only([
             'user_id',
@@ -162,10 +162,7 @@ class LtiToolSettingsController extends Controller
      */
     public function getLTIToolTypeList(Organization $suborganization)
     {
-        $ltiToolType = $suborganization->mediaSources->where('media_type', 'Video');
-
-        // Will handle inside story CUR-4316
-        //$ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
+        $ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
         return new LtiToolSettingResource($ltiToolType);
     }
 }
