@@ -13,7 +13,6 @@ class UpdateTranslationEditorInteractiveVideo extends Migration
      */
     public function up()
     {
-        //
         \Artisan::call('db:seed', [
             '--class' => TransalationUpdateH5pLibrariesLanguage::class,
             '--force' => true
@@ -27,6 +26,5 @@ class UpdateTranslationEditorInteractiveVideo extends Migration
      */
     public function down()
     {
-        //
     }
 }

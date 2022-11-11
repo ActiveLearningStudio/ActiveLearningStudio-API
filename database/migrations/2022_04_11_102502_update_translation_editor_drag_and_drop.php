@@ -13,7 +13,6 @@ class UpdateTranslationEditorDragAndDrop extends Migration
      */
     public function up()
     {
-        //
         \Artisan::call('db:seed', [
             '--class' => TranslationUpdateForDragAndDrop::class,
             '--force' => true
@@ -27,6 +26,5 @@ class UpdateTranslationEditorDragAndDrop extends Migration
      */
     public function down()
     {
-        //
     }
 }
