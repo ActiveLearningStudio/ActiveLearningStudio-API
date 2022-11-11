@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\App;
 use App\Repositories\LtiTool\LtiToolSettingRepository;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\LtiTool\KalturaAPISettingRequest;
+use App\Repositories\MediaSources\MediaSourcesRepository;
 
 class KalturaGeneratedAPIClientController extends Controller
 {
@@ -30,31 +31,39 @@ class KalturaGeneratedAPIClientController extends Controller
     protected $kalturaMediaEntryFilter;
     protected $kalturaFilterPager;
     private $ltiToolSettingRepository;
+    private $mediaSourcesRepository;
 
     /**
      * KalturaGeneratedAPIClientController constructor.
      *
-     * @param KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF, KalturaFilterPager $kFP
+     * @param KalturaConfiguration $kC
+     * @param KalturaClient $kClient
+     * @param KalturaMediaEntryFilter $kMEF
+     * @param KalturaFilterPager $kFP
+     * @param MediaSourcesRepository $mediaSourcesRepository
      */
     public function __construct(KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF,
-        KalturaFilterPager $kFP, LtiToolSettingRepository $ltiToolSettingRepository)
+        KalturaFilterPager $kFP, LtiToolSettingRepository $ltiToolSettingRepository,
+        MediaSourcesRepository $mediaSourcesRepository
+      )
     {
         $this->kalturaConfiguration = $kC;
         $this->kalturaClient = $kClient;
         $this->kalturaMediaEntryFilter = $kMEF;
         $this->kalturaFilterPager = $kFP;
         $this->ltiToolSettingRepository = $ltiToolSettingRepository;
+        $this->mediaSourcesRepository = $mediaSourcesRepository;
     }
 
     /**
      * Get Kaltura media entries list
      *
-     * Use Kaltura Session to get the api token. Using nside H5p Curriki Interactive Video
+     * Use Kaltura Session to get the api token. Using inside H5p Curriki Interactive Video
      *
      * @bodyParam organization_id required int The Id of a suborganization Example: 1
      * @bodyParam pageSize required string Mean record per page Example: 10
      * @bodyParam pageIndex required string Mean skip record per page Example: 0 on first page or 10 on next page and so on
-     * @bodyParam searchText string mean search record by video title or video id Example: 1_4mmw1lb3 or KalturaWebcasting
+     * @bodyParam searchText string Mean search record by video title or video id Example: 1_4mmw1lb3 or KalturaWebcasting
      *
      * @responseFile responses/kaltura/kaltura-media-entry.json
      *
@@ -63,6 +72,7 @@ class KalturaGeneratedAPIClientController extends Controller
      *     "Unable to find Kaltura API settings!"
      *   ]
      * }
+     *
      * @param KalturaAPISettingRequest $request
      * @return object $response
      * @throws GeneralException
@@ -76,7 +86,8 @@ class KalturaGeneratedAPIClientController extends Controller
           'searchText'
       ]);
       $videoMediaSources = getVideoMediaSources();
-      $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($getParam['organization_id'], $videoMediaSources['kaltura']);
+      $mediaSourcesId = $this->mediaSourcesRepository->getMediaSourceIdByName($videoMediaSources['kaltura']);
+      $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($getParam['organization_id'], $mediaSourcesId);
       // Credentials For Kaltura Session
       if ($ltiRowResult) {
         $secret = $ltiRowResult->tool_secret_key;

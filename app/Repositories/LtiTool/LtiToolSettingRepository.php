@@ -7,7 +7,6 @@ use App\Models\LtiTool\LtiToolSetting;
 use App\Models\Organization;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Log;
-use App\Models\MediaSource;
 
 /**
  * @author        Asim Sarwar
@@ -126,15 +125,13 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
      * To get row record by org and tool type match
      *
      * @param $orgId integer
-     * @param $mediaSourceName string
+     * @param $mediaSourcesId int
      * @return object
      * @throws GeneralException
      */
-    public function getRowRecordByOrgAndToolType($orgId, $mediaSourceName)
+    public function getRowRecordByOrgAndToolType($orgId, $mediaSourcesId)
     {
-        try {
-            $mediaSourcesRow = MediaSource::where('name', $mediaSourceName)->where('media_type', 'Video')->first();
-            $mediaSourcesId = !empty($mediaSourcesRow) ? $mediaSourcesRow->id : 0;
+        try {            
             return $this->model->where([['organization_id','=', $orgId],['media_source_id','=', $mediaSourcesId]])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());

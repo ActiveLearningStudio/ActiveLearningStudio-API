@@ -13,9 +13,9 @@ interface LtiToolSettingInterface extends EloquentRepositoryInterface
      * To get row record by org and tool type match
      *
      * @param $orgId integer
-     * @param $mediaSourceName string
+     * @param $mediaSourcesId int
      * @return object
      * @throws GeneralException
      */
-    public function getRowRecordByOrgAndToolType($orgId, $mediaSourceName);
+    public function getRowRecordByOrgAndToolType($orgId, $mediaSourcesId);
 }
