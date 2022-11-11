@@ -40,6 +40,7 @@ class KalturaGeneratedAPIClientController extends Controller
      * @param KalturaClient $kClient
      * @param KalturaMediaEntryFilter $kMEF
      * @param KalturaFilterPager $kFP
+     * @param LtiToolSettingRepository $ltiToolSettingRepository
      * @param MediaSourcesRepository $mediaSourcesRepository
      */
     public function __construct(KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF,
