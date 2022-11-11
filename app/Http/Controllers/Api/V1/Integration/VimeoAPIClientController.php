@@ -8,12 +8,12 @@ namespace App\Http\Controllers\Api\V1\Integration;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Repositories\LtiTool\LtiToolSettingRepository;
+use App\Repositories\LtiTool\LtiToolSettingInterface;
 use App\CurrikiGo\Vimeo\Client;
 use App\CurrikiGo\Vimeo\Videos\GetMyVideoList;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\LtiTool\VimeoAPISettingRequest;
-use App\Repositories\MediaSources\MediaSourcesRepository;
+use App\Repositories\MediaSources\MediaSourcesInterface;
 
 class VimeoAPIClientController extends Controller
 {
@@ -21,10 +21,10 @@ class VimeoAPIClientController extends Controller
     private $mediaSourcesRepository;
     /**
      * VimeoAPIClientController constructor.
-     * @param LtiToolSettingRepository $ltiToolSettingRepository
-     * @param MediaSourcesRepository $mediaSourcesRepository
+     * @param LtiToolSettingInterface $ltiToolSettingRepository
+     * @param mediaSourcesInterface $mediaSourcesRepository
      */
-    public function __construct(LtiToolSettingRepository $ltiToolSettingRepository, MediaSourcesRepository $mediaSourcesRepository)
+    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository, MediaSourcesInterface $mediaSourcesRepository)
     {
       $this->ltiToolSettingRepository = $ltiToolSettingRepository;
       $this->mediaSourcesRepository = $mediaSourcesRepository;

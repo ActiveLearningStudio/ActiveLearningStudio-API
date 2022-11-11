@@ -19,10 +19,10 @@ use Kaltura\Client\Type\MediaEntryFilter as KalturaMediaEntryFilter;
 use Kaltura\Client\Type\FilterPager as KalturaFilterPager;
 use Kaltura\Client;
 use Illuminate\Support\Facades\App;
-use App\Repositories\LtiTool\LtiToolSettingRepository;
+use App\Repositories\LtiTool\LtiToolSettingInterface;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\LtiTool\KalturaAPISettingRequest;
-use App\Repositories\MediaSources\MediaSourcesRepository;
+use App\Repositories\MediaSources\MediaSourcesInterface;
 
 class KalturaGeneratedAPIClientController extends Controller
 {
@@ -40,12 +40,12 @@ class KalturaGeneratedAPIClientController extends Controller
      * @param KalturaClient $kClient
      * @param KalturaMediaEntryFilter $kMEF
      * @param KalturaFilterPager $kFP
-     * @param LtiToolSettingRepository $ltiToolSettingRepository
-     * @param MediaSourcesRepository $mediaSourcesRepository
+     * @param LtiToolSettingInterface $ltiToolSettingRepository
+     * @param MediaSourcesInterface $mediaSourcesRepository
      */
     public function __construct(KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF,
-        KalturaFilterPager $kFP, LtiToolSettingRepository $ltiToolSettingRepository,
-        MediaSourcesRepository $mediaSourcesRepository
+        KalturaFilterPager $kFP, LtiToolSettingInterface $ltiToolSettingRepository,
+        MediaSourcesInterface $mediaSourcesRepository
       )
     {
         $this->kalturaConfiguration = $kC;

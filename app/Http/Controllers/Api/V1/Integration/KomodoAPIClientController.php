@@ -8,12 +8,12 @@ namespace App\Http\Controllers\Api\V1\Integration;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Repositories\LtiTool\LtiToolSettingRepository;
+use App\Repositories\LtiTool\LtiToolSettingInterface;
 use App\CurrikiGo\Komodo\Client;
 use App\CurrikiGo\Komodo\Videos\GetMyVideoList;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\LtiTool\KomodoAPISettingRequest;
-use App\Repositories\MediaSources\MediaSourcesRepository;
+use App\Repositories\MediaSources\MediaSourcesInterface;
 
 class KomodoAPIClientController extends Controller
 {
@@ -21,10 +21,10 @@ class KomodoAPIClientController extends Controller
     private $mediaSourcesRepository;
     /**
      * KomodoAPIClientController constructor.
-     * @param LtiToolSettingRepository $ltiToolSettingRepository
-     * @param MediaSourcesRepository $mediaSourcesRepository
+     * @param LtiToolSettingInterface $ltiToolSettingRepository
+     * @param MediaSourcesInterface $mediaSourcesRepository
      */
-    public function __construct(LtiToolSettingRepository $ltiToolSettingRepository, MediaSourcesRepository $mediaSourcesRepository)
+    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository, MediaSourcesInterface $mediaSourcesRepository)
     {
         $this->ltiToolSettingRepository = $ltiToolSettingRepository;
         $this->mediaSourcesRepository = $mediaSourcesRepository;
