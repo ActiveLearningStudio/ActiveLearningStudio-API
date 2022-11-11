@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateFillInTheBlankSemanticsToH5PLibrariesV2 extends Migration
+class RunOrganizationPermissionTypeSeeder extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class UpdateFillInTheBlankSemanticsToH5PLibrariesV2 extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PFillInTheBlankLibSubmitButtonSeeder::class,
+            '--class' => OrganizationPermissionTypeSeeder::class,
             '--force' => true
         ]);
     }
@@ -24,6 +24,6 @@ class UpdateFillInTheBlankSemanticsToH5PLibrariesV2 extends Migration
      */
     public function down()
     {
-        
+        //
     }
 }
