@@ -3,10 +3,7 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Support\Facades\Http;
 use App\Models\Project;
-use App\Http\Controllers\Api\V1\ProjectController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProjectTest extends TestCase
@@ -16,27 +13,32 @@ class ProjectTest extends TestCase
     /** @test Function to create project*/
     public function createProject()
     {
+        // This step will mock the user session using user factory
         $user = $this->actingAs(factory('App\User')->create(), 'api');
-        $project = factory('App\Models\Project')->make();
+        $project = factory('App\Models\Project')->make(); // it will create the object of project
         $response = $this->withSession(['banned' => false])->postJson('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray());
         
+        // API should return the 201 status code in order to success the test
         $response->assertStatus(201);
         
     }
 
     /** @test function for mandatory title*/
-    public function ProjectRequiresATitle(){
-
+    public function projectRequiresTitle()
+    {
         $this->actingAs(factory('App\User')->create(),'api');
 
+        // Make project object with title as null
         $project = factory('App\Models\Project')->make(['name' => null]);
 
+        // API call should return the name validation error message
         $this->withSession(['banned' => false])->post('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray())
                 ->assertSessionHasErrors('name');
     }
 
     /** @test  function for mandatory description*/
-    public function ProjectRequiresADescription(){
+    public function projectRequiresDescription()
+    {
 
         $this->actingAs(factory('App\User')->create(),'api');
 
@@ -47,8 +49,8 @@ class ProjectTest extends TestCase
     }
 
     /** @test  function for mandatory thumb url*/
-    public function ProjectRequiresAThumbUrl(){
-
+    public function projectRequiresThumbUrl()
+    {
         $this->actingAs(factory('App\User')->create(),'api');
 
         $project = factory('App\Models\Project')->make(['thumb_url' => null]);
@@ -58,8 +60,8 @@ class ProjectTest extends TestCase
     }
 
     /** @test function for mandatory organization visibilty id*/
-    public function ProjectRequiresOrganizationVisibilityTypeId(){
-
+    public function projectRequiresOrganizationVisibilityTypeId()
+    {
         $this->actingAs(factory('App\User')->create(),'api');
 
         $project = factory('App\Models\Project')->make(['organization_visibility_type_id' => null]);
@@ -71,9 +73,9 @@ class ProjectTest extends TestCase
     /** @test function for unauthenticated user create project*/
     public function unauthenticatedUsersCannotCreateNewProject()
     {
-        //Given we have a task object
+        //Given we have a project object
         $project = factory('App\Models\Project')->make();
-        //When unauthenticated user submits post request to create task endpoint
+        //When unauthenticated user submits post request to create project endpoint
         // He should be redirected to login page
         $this->postJson('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray())
         ->assertStatus(401);
