@@ -16,7 +16,11 @@ class PlaylistTest extends TestCase
         $user = $this->actingAs(factory('App\User')->create(), 'api');
         $playlist = factory('App\Models\Playlist')->make();
         
-        $response = $this->withSession(['banned' => false])->postJson('/api/v1/projects/' . $playlist->project_id . '/playlists',$playlist->toArray());
+        $response = $this->withSession(['banned' => false])
+                        ->postJson(
+                            '/api/v1/projects/' . $playlist->project_id . '/playlists',
+                            $playlist->toArray()
+                        );
         
         $response->assertStatus(201);
     }
@@ -28,32 +32,41 @@ class PlaylistTest extends TestCase
 
         $playlist = factory('App\Models\Playlist')->make(['title' => null]);
         
-        $this->withSession(['banned' => false])->post('/api/v1/projects/' . $playlist->project_id . '/playlists',$playlist->toArray())
-                ->assertSessionHasErrors('title');
+        $this->withSession(['banned' => false])
+            ->post(
+                '/api/v1/projects/' . $playlist->project_id . '/playlists',
+                $playlist->toArray()
+                )->assertSessionHasErrors('title');
     }
 
     /** @test function for unauthenticated user to create playlist*/
     public function unauthenticatedUsersCannotCreateANewPlaylist()
     {
-        //Given we have a playlist object
+        // Given we have a playlist object
         $playlist = factory('App\Models\Playlist')->make();
-        //When unauthenticated user submits post request to create playlist endpoint
-        $this->postJson('/api/v1/projects/' . $playlist->project_id . '/playlists',$playlist->toArray())
-        ->assertStatus(401);
+        // When unauthenticated user submits post request to create playlist endpoint
+        $this->postJson(
+            '/api/v1/projects/' . $playlist->project_id . '/playlists',
+            $playlist->toArray()
+            )->assertStatus(401);
     }
 
     /** @test function for authorized user to create playlist */
     public function authorizedUserCanUpdateThePlaylist() 
     {
-        //Given we have a signed in user
+        // Given we have a signed in user
         $this->actingAs(factory('App\User')->create(),'api');
 
-        //And a playlist which is created by the user
+        // And a playlist which is created by the user
         $playlist = factory('App\Models\Playlist')->create();
         $playlist->title = "Updated Title";
         
-        //When the user hit's the endpoint to update the playlist
-        $response = $this->withSession(['banned' => false])->put('/api/v1/projects/'.$playlist->project_id.'/playlists/'. $playlist->id, $playlist->toArray());
+        // When the user hit's the endpoint to update the playlist
+        $response = $this->withSession(['banned' => false])
+                        ->put(
+                            '/api/v1/projects/'.$playlist->project_id.'/playlists/'. $playlist->id,
+                             $playlist->toArray()
+                            );
         
         $response->assertStatus(200);
     }

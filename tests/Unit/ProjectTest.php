@@ -15,8 +15,16 @@ class ProjectTest extends TestCase
     {
         // This step will mock the user session using user factory
         $user = $this->actingAs(factory('App\User')->create(), 'api');
-        $project = factory('App\Models\Project')->make(); // it will create the object of project
-        $response = $this->withSession(['banned' => false])->postJson('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray());
+
+        // It will create the object of project
+        $project = factory('App\Models\Project')->make();
+
+        // Post request to the create project route should return 201 status
+        $response = $this->withSession(['banned' => false])
+                            ->postJson(
+                                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                                $project->toArray()
+                            );
         
         // API should return the 201 status code in order to success the test
         $response->assertStatus(201);
@@ -32,20 +40,25 @@ class ProjectTest extends TestCase
         $project = factory('App\Models\Project')->make(['name' => null]);
 
         // API call should return the name validation error message
-        $this->withSession(['banned' => false])->post('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray())
-                ->assertSessionHasErrors('name');
+        $this->withSession(['banned' => false])
+            ->post(
+                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                $project->toArray()
+            )->assertSessionHasErrors('name');
     }
 
     /** @test  function for mandatory description*/
     public function projectRequiresDescription()
     {
-
         $this->actingAs(factory('App\User')->create(),'api');
 
         $project = factory('App\Models\Project')->make(['description' => null]);
 
-        $this->withSession(['banned' => false])->post('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray())
-            ->assertSessionHasErrors('description');
+        $this->withSession(['banned' => false])
+            ->post(
+                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                $project->toArray()
+            )->assertSessionHasErrors('description');
     }
 
     /** @test  function for mandatory thumb url*/
@@ -55,8 +68,11 @@ class ProjectTest extends TestCase
 
         $project = factory('App\Models\Project')->make(['thumb_url' => null]);
 
-        $this->withSession(['banned' => false])->post('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray())
-            ->assertSessionHasErrors('thumb_url');
+        $this->withSession(['banned' => false])
+            ->post(
+                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                $project->toArray()
+            )->assertSessionHasErrors('thumb_url');
     }
 
     /** @test function for mandatory organization visibilty id*/
@@ -66,20 +82,23 @@ class ProjectTest extends TestCase
 
         $project = factory('App\Models\Project')->make(['organization_visibility_type_id' => null]);
 
-        $this->withSession(['banned' => false])->post('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray())
-            ->assertSessionHasErrors('organization_visibility_type_id');
+        $this->withSession(['banned' => false])
+            ->post(
+                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                $project->toArray()
+                )->assertSessionHasErrors('organization_visibility_type_id');
     }
 
     /** @test function for unauthenticated user create project*/
     public function unauthenticatedUsersCannotCreateNewProject()
     {
-        //Given we have a project object
+        // Given we have a project object
         $project = factory('App\Models\Project')->make();
-        //When unauthenticated user submits post request to create project endpoint
-        // He should be redirected to login page
-        $this->postJson('/api/v1/suborganization/' . $project->organization_id . '/projects',$project->toArray())
-        ->assertStatus(401);
+        // When unauthenticated user submits post request to create project endpoint
+        // He should be retrun the 401 authorization status code
+        $this->postJson(
+            '/api/v1/suborganization/' . $project->organization_id . '/projects', 
+            $project->toArray()
+        )->assertStatus(401);
     }
-
-
 }
