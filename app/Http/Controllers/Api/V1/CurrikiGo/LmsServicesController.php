@@ -45,10 +45,14 @@ class LmsServicesController extends Controller
 
     /**
      * Login to Canvas
+     * 
+     * @urlParam lms required object of lms example: {"id": 1}
+     * 
      * Login to Canvas LMS
      *
      * @param Request $request
      * @param array $lms
+     * 
      * @return Response
      */
     public function login(Request $request, $lms) {
@@ -71,6 +75,8 @@ class LmsServicesController extends Controller
 
     /**
      * XApi File
+     * 
+     * @urlParam activity required Id of an activity Example: 1
      * 
      * Download XApi File
      *

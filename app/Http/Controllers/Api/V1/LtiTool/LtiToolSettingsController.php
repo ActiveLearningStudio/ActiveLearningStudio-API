@@ -167,23 +167,24 @@ class LtiToolSettingsController extends Controller
     }
 
     /**
+     * Delete Lti Tool
+     * 
      * Delete Lti Tool Setting
+     * 
+     * @urlParam suborganization integer required Id of a suborganization Exp: 1
+     * @urlParam id integer required Id of LTI tool setting Exp: 1
+     * 
      * @param Organization $suborganization
      * @param $id
+     * 
      * @return Application|Factory|View
+     * 
      * @throws GeneralException
      */
     public function destroy(Organization $suborganization, $id)
     {
         return response(['message' => $this->ltiToolSettingRepository->destroy($id)], 200);
     }
-
-    /**
-     * Get Tool Type For LTI Tool Settings
-     * @urlParam Organization $suborganization
-     * @responseFile responses/admin/lti-tool/lti-tool-settings
-     * @return LtiToolSettingResource
-     */
 
     /**
      * Get LTI Tool Type List
@@ -195,6 +196,7 @@ class LtiToolSettingsController extends Controller
      * @responseFile responses/organization/filter-media-source.json
      *
      * @param Organization $suborganization
+     * 
      * @return LtiToolSettingResource
      */
     public function getLTIToolTypeList(Organization $suborganization)

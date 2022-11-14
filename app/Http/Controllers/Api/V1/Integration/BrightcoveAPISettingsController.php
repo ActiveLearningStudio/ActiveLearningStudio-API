@@ -60,6 +60,7 @@ class BrightcoveAPISettingsController extends Controller
      * 
      * Get the specified Brightcove API setting data.
      * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam id integer required Id of brightCove Example: 1
      * 
      * @param Organization $suborganization
@@ -80,8 +81,7 @@ class BrightcoveAPISettingsController extends Controller
      * 
      * Create Brightcove API Setting Data
      * 
-     * @param StoreBrightcoveAPISetting $request
-     * @param Organization $suborganization
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * 
      * @response {
      *   "message": "Brightcove API Setting created successfully!",
@@ -92,7 +92,10 @@ class BrightcoveAPISettingsController extends Controller
      *   "errors": [
      *     "Unable to create setting, please try again later!"
      *   ]
-     * }     
+     * }
+     * 
+     * @param StoreBrightcoveAPISetting $request
+     * @param Organization $suborganization     
      * 
      * @return BrightcoveAPISettingResource
      */
@@ -121,10 +124,6 @@ class BrightcoveAPISettingsController extends Controller
      * @urlParam suborganization integer required Id of an organization Example: 1
      * @urlParam id integer required Id of brightCove Example: 1
      * 
-     * @param UpdateBrightcoveAPISetting $request
-     * @param Organization $suborganization
-     * @param $id
-     * 
      * @response {
      *   "message": "Brightcove API setting data updated successfully!",
      *   "data": ["Updated Brightcove API setting data array"]
@@ -133,7 +132,12 @@ class BrightcoveAPISettingsController extends Controller
      *   "errors": [
      *     "Unable to update Brightcove API setting, please try again later."
      *   ]
-     * }     
+     * }
+     * 
+     * @param UpdateBrightcoveAPISetting $request
+     * @param Organization $suborganization
+     * @param $id
+     *      
      * @return BrightcoveAPISettingResource
      */
     public function update(UpdateBrightcoveAPISetting $request, Organization $suborganization, $id)
@@ -155,17 +159,22 @@ class BrightcoveAPISettingsController extends Controller
 
     /**
      * Delete Brightcove Setting
+     * 
      * Delete Brightcove API Setting
+     * 
      * @param Organization $suborganization
      * @param $id
+     * 
      * @response {
      *   "message": "Brightcove API setting deleted successfully!",
      * }
+     * 
      * @response 500 {
      *   "errors": [
      *     "Unable to delete Brightcove API setting, please try again later."
      *   ]
      * }
+     * 
      * @return Response
      */
     public function destroy(Organization $suborganization, $id)

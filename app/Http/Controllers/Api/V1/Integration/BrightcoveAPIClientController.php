@@ -35,14 +35,16 @@ class BrightcoveAPIClientController extends Controller
      * 
      * Get All Brightcove Account List.
      * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @param integer $suborganization
      * 
      * @return BrightcoveAPISettingCollection
      */
     public function getAccountList($suborganization)
     {
-      $collections = $this->bcAPISettingRepository->getAccountListByOrg($suborganization);
-      return new BrightcoveAPISettingCollection($collections);    
+        $collections = $this->bcAPISettingRepository->getAccountListByOrg($suborganization);
+        return new BrightcoveAPISettingCollection($collections);    
     }
 
     /**

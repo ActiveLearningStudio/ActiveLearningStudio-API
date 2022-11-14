@@ -35,6 +35,8 @@ class SubjectController extends Controller
      *
      * Get a list of all subjects.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @responseFile responses/subject/subjects.json
      *
      * @param SearchSubjectRequest $request
@@ -52,6 +54,7 @@ class SubjectController extends Controller
      *
      * Create a new subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam name string required The name of a subject Example: English
      * @bodyParam order integer The order number of a subject item Example: 1
      *
@@ -89,6 +92,7 @@ class SubjectController extends Controller
      *
      * Get the specified subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam subject required The Id of a subject item Example: 1
      *
      * @responseFile responses/subject/subject.json
@@ -116,6 +120,7 @@ class SubjectController extends Controller
      *
      * Update the specified subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam subject required The Id of a subject Example: 1
      * @bodyParam name string required The name of a subject Example: English
      * @bodyParam order integer The order number of a subject item Example: 1
@@ -155,6 +160,7 @@ class SubjectController extends Controller
      *
      * Remove the specified subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam subject required The Id of a subject item Example: 1
      *
      * @response {

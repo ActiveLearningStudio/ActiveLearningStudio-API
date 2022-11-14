@@ -323,6 +323,7 @@ class TeamController extends Controller
      *
      * Invite a team member to the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam email string required The email of the user Example: abby@curriki.org
      *
      * @response {
@@ -376,6 +377,8 @@ class TeamController extends Controller
      *
      * Invite a bundle of users to the team.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam users array required The array of the users Example:
      * [{id: 1, first_name: Jean, last_name: Erik, name: "Jean Erik"}, {id: "Kairo@Seed.com", email: "Kairo@Seed.com"}]
      *
@@ -436,6 +439,7 @@ class TeamController extends Controller
      *
      * remove a team member to the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam id integer required The Id of the user Example: 1
      *
      * @response {
@@ -488,6 +492,7 @@ class TeamController extends Controller
      *
      * Add projects to the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam ids array required The list of the project Ids to add Example: [1]
      *
      * @response {
@@ -545,6 +550,7 @@ class TeamController extends Controller
      *
      * Remove a project from the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam id integer required The Id of the project to remove Example: 1
      *
      * @response {
@@ -595,6 +601,8 @@ class TeamController extends Controller
      *
      * Add members to a specified project of specified team.
      *
+     * @urlParam team required The Id of a team Example: 1
+     * @urlParam project required The Id of a project Example: 1
      * @bodyParam ids array required The list of the member Ids to add Example: [1]
      *
      * @response {
@@ -653,6 +661,8 @@ class TeamController extends Controller
      *
      * Remove member from a specified project of specified team.
      *
+     * @urlParam team required The Id of a team Example: 1
+     * @urlParam project required The Id of a project Example: 1
      * @bodyParam id integer required The Id of the member to remove Example: 1
      *
      * @response {
@@ -874,6 +884,7 @@ class TeamController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
+     * @urlParam project required The Id of a project Example: 1
      *
      * @response {
      *   "message": "Indexing request for this team has been made successfully!"

@@ -242,7 +242,7 @@ class LmsController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param IndependentActivityForDeeplink $request
      */
     public function independentActivities(IndependentActivityForDeeplink $request)
     {

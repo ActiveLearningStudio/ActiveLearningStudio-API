@@ -40,16 +40,21 @@ class BrightcoveController extends Controller
      * 
      * Get H5P Resource Settings
      *
-     * @param $accountId integer For brightcove video Example: 1
-     * @param $videoId integer For brightcove video Example: 1
-     * @param $dataPlayer integer For brightcove video Example: 1
-     * @param $dataEmbed integer For brightcove video Example: 1
-     *
+     * @urlParam accountId required For brightcove video Example: 1
+     * @urlParam videoId required For brightcove video Example: 1
+     * @urlParam dataPlayer required For brightcove video Example: 1
+     * @urlParam dataEmbed required For brightcove video Example: 1
+     * 
      * @responseFile responses/h5p/h5p-resource-settings-open.json
      *
      * @response 404 {
      *   "h5p": null
      * }
+     * 
+     * @param $accountId 
+     * @param $videoId 
+     * @param $dataPlayer 
+     * @param $dataEmbed 
      *
      * @return Response
      */
@@ -78,13 +83,15 @@ class BrightcoveController extends Controller
      * 
      * Get H5P Resource Settings For Brightcove
      *
-     * @param $videoId integer For brightcove video
+     * @urlParam videoId required For brightcove video Example: 1
      *
      * @responseFile responses/h5p/h5p-resource-settings-open.json
      *
      * @response 404 {
      *   "h5p": null
      * }
+     * 
+     * @param $videoId
      *
      * @return Response
      */

@@ -39,6 +39,8 @@ class ActivityTypeController extends Controller
      * Get Activity Types
      *
      * Get a list of the activity types.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile responses/activity-type/activity-types.json
      *
@@ -96,6 +98,7 @@ class ActivityTypeController extends Controller
      *
      * Create a new activity type.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam title string required The title of a activity type Example: Audio
      * @bodyParam order integer The order number of a activity type Example: 0
      * @bodyParam image string The image url of a activity type Example: /storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png
@@ -135,6 +138,7 @@ class ActivityTypeController extends Controller
      *
      * Get the specified activity type.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activityType required The Id of a activity type Example: 1
      *
      * @responseFile responses/activity-type/activity-type.json
@@ -176,6 +180,7 @@ class ActivityTypeController extends Controller
      *
      * Update the specified activity type.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activityType required The Id of a activity type Example: 1
      * @bodyParam title string required The title of a activity type Example: Audio
      * @bodyParam order integer The order number of a activity type Example: 0
@@ -217,6 +222,7 @@ class ActivityTypeController extends Controller
      *
      * Remove the specified activity type.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activityType required The Id of a activity type Example: 1
      *
      * @response {

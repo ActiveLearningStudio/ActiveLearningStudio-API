@@ -343,9 +343,12 @@ class IndependentActivityController extends Controller
      * Update H5P
      * 
      * Update H5P Content
+     * 
+     * @urlParam id required The Id of hp5 content Example: 1
      *
      * @param $request
      * @param int $id
+     * 
      * @return mixed
      * @throws H5PException
      */

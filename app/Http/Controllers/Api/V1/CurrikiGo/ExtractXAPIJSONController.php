@@ -22,6 +22,7 @@ class ExtractXAPIJSONController extends Controller
 {
     /**
      * xAPI extract job script
+     * 
      * Runs the xAPI extract job script
      *
      * @param  ActivityRepositoryInterface  $activityRepository

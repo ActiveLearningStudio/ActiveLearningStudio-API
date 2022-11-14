@@ -62,6 +62,8 @@ class ActivityItemController extends Controller
      *
      * Get a list of the activity items.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @responseFile responses/activity-item/activity-items.json
      *
      * @param Request $request
@@ -134,6 +136,7 @@ class ActivityItemController extends Controller
      *
      * Create a new activity item.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam title string required The title of a activity item Example: Audio Recorder
      * @bodyParam description string required The description of a activity item Example: Record your voice and play back or download a .wav file of your recording.
      * @bodyParam order integer The order number of a activity item Example: 1
@@ -185,6 +188,7 @@ class ActivityItemController extends Controller
      *
      * Get the specified activity item.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam activityItem integer required The Id of a activity item Example: 1
      *
      * @responseFile responses/activity-item/activity-item.json
@@ -206,7 +210,8 @@ class ActivityItemController extends Controller
      *
      * Update the specified activity item.
      *
-     * @urlParam activity_item required The Id of a activity item Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityItem required The Id of a activity item Example: 1
      * @bodyParam title string required The title of a activity item Example: Audio Recorder
      * @bodyParam description string required The description of a activity item Example: Record your voice and play back or download a .wav file of your recording.
      * @bodyParam order int The order number of a activity item Example: 1
@@ -259,7 +264,8 @@ class ActivityItemController extends Controller
      *
      * Remove the specified activity item.
      *
-     * @urlParam activity_item required The Id of a activity item Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityItem required The Id of a activity item Example: 1
      *
      * @response {
      *   "message": "Activity item has been deleted successfully."
