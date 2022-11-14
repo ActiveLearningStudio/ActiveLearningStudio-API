@@ -15,12 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-
-/**
- * @group 1002. Admin/Activity Types
- *
- * APIs for activity types on admin panel.
- */
 class ActivityTypeController extends Controller
 {
     private $repository;

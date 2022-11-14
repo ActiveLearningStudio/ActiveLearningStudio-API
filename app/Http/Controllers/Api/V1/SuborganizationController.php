@@ -74,9 +74,9 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search suborganization against Example: Vivensity
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: name
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: name
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/suborganizations.json
      *
@@ -175,13 +175,13 @@ class SuborganizationController extends Controller
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
-     * @bodyParam parent_id int required Id of the parent organization Example: 1
+     * @bodyParam parent_id integer required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
-     * @bodyParam primary_color string primary font color Example: #515151
-     * @bodyParam secondary_color string primary font color Example: #515151
-     * @bodyParam tertiary_color string primary font color Example: #515151
-     * @bodyParam primary_font_family string primary font color Example: Open Sans
-     * @bodyParam secondary_font_family string primary font color Example: Open Sans
+     * @bodyParam primary_color string Primary font color Example: #515151
+     * @bodyParam secondary_color string Primary font color Example: #515151
+     * @bodyParam tertiary_color string Primary font color Example: #515151
+     * @bodyParam primary_font_family string Primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string Primary font color Example: Open Sans
      * @responseFile 201 responses/organization/suborganization.json
      *
      * @response 500 {
@@ -254,13 +254,14 @@ class SuborganizationController extends Controller
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
      * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
-     * @bodyParam parent_id int required Id of the parent organization Example: 1
+     * @bodyParam parent_id integer required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
-     * @bodyParam primary_color string primary font color Example: #515151
-     * @bodyParam secondary_color string primary font color Example: #515151
-     * @bodyParam tertiary_color string primary font color Example: #515151
-     * @bodyParam primary_font_family string primary font color Example: Open Sans
-     * @bodyParam secondary_font_family string primary font color Example: Open Sans
+     * @bodyParam primary_color string Primary font color Example: #515151
+     * @bodyParam secondary_color string Primary font color Example: #515151
+     * @bodyParam tertiary_color string Primary font color Example: #515151
+     * @bodyParam primary_font_family string Primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string Primary font color Example: Open Sans
+     * 
      * @responseFile responses/organization/suborganization.json
      *
      * @response 500 {
@@ -587,7 +588,7 @@ class SuborganizationController extends Controller
      * Remove the specified user from a particular organization.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @bodyParam user_id int required Id of the user to be removed Example: 1
+     * @bodyParam user_id integer required Id of the user to be removed Example: 1
      * @bodyParam preserve_data bool Whether to assign user data to admin or delete it Example: false
      *
      * @response {
@@ -648,10 +649,10 @@ class SuborganizationController extends Controller
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam page The pagination page no to show  Example: 1
      * @bodyParam query string Query to search suborganization users against Example: Leo
-     * @bodyParam size int Number of items to be displayed "per page" Example: 1
-     * @bodyParam role int Organization role type id to filter by Example: 1
-     * @bodyParam order_by_column string to sort data with specific column Example: name
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Number of items to be displayed "per page" Example: 1
+     * @bodyParam role integer Organization role type id to filter by Example: 1
+     * @bodyParam order_by_column string To sort data with specific column Example: name
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/organization-users.json
      *
@@ -1049,7 +1050,7 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam media_source_ids array required Ids of a media source type Example: 1
-     * @bodyParam h5p_library string optional name of H5p Library Example: H5P.AudioRecorder 1.0
+     * @bodyParam h5p_library string optional Name of H5p Library Example: H5P.AudioRecorder 1.0
      *
      * @responseFile responses/organization/update-media-source.json
      *

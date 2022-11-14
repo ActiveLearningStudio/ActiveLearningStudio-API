@@ -63,16 +63,11 @@ class MicroSoftTeamController extends Controller
 	 *
 	 * Save MS Graph api access token in the database.
 	 *
-     * @bodyParam code string  The stringified of the GAPI authorization token JSON object
-     * @urlParam gid string  user id of current logged in user
+     * @urlParam gid string User id of current logged in user
+     * @bodyParam code string The stringified of the GAPI authorization token JSON object
+     * 
      * @response {
      *   "message": "Access token has been saved successfully."
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Validation error: Access token is required"
-     *   ]
      * }
      *
      * @response 500 {
@@ -121,12 +116,6 @@ class MicroSoftTeamController extends Controller
      *
      * @response {
      *   "message": "Access token has been saved successfully."
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Validation error: Access token is required"
-     *   ]
      * }
      *
      * @response 500 {
@@ -183,7 +172,7 @@ class MicroSoftTeamController extends Controller
 	 * Create a new Class/Team into Microsoft Team
 	 *
      * @bodyParam displayName required string Name of the class. Example: Test Class
-     * @bodyParam access_token string|null The stringified of the GAPI access token JSON object
+     * @bodyParam access_token string The stringified of the GAPI access token JSON object Example: 123
      * @response  200 {
      *   "message": [
      *     "Class have been created successfully"

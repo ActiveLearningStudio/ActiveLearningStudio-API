@@ -35,12 +35,18 @@ class BrightcoveAPISettingsController extends Controller
 
     /**
      * Get All Brightcove API Settings for listing.
+     * 
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
-     * @param Organization $suborganization     
+     * 
+     * @urlParam $suborganization integer required Id of an organization Example: 1
+     * @bodyParam start integer Offset for getting the paginated response, Default 0. Example: 0
+     * @bodyParam length integer Limit for getting the paginated records, Default 10. Example: 10
+     * 
      * @param Request $request
-     * @bodyParam start Offset for getting the paginated response, Default 0. Example: 0
-     * @bodyParam length Limit for getting the paginated records, Default 10. Example: 10
+     * @param Organization $suborganization     
+     * 
      * @responseUrl domain-name/api/#get-all-brightcove-api-sSettings-for-listing
+     * 
      * @return BrightcoveAPISettingCollection
      */
     public function index(Request $request, Organization $suborganization)
@@ -51,10 +57,17 @@ class BrightcoveAPISettingsController extends Controller
 
     /**
      * Get Brightcove API Setting
+     * 
      * Get the specified Brightcove API setting data.
-     * @param id required The Id of a brightcove_api_settings table Example: 1
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id integer required Id of brightCove Example: 1
+     * 
      * @param Organization $suborganization
+     * @param $id
+     * 
      * @responseFile domain-name/api/#get-brightcove-api-setting
+     * 
      * @return BrightcoveAPISettingResource
      */
     public function show(Organization $suborganization, $id)
@@ -64,18 +77,26 @@ class BrightcoveAPISettingsController extends Controller
     }
 
     /**
+     * Create Brightcove API Setting
+     * 
      * Create Brightcove API Setting Data
-     * @param StoreBrightcoveAPISetting $request
-     * @param Organization $suborganization
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @response {
      *   "message": "Brightcove API Setting created successfully!",
      *   "data": ["Created Setting Data Array"]
      * }
+     * 
      * @response 500 {
      *   "errors": [
      *     "Unable to create setting, please try again later!"
      *   ]
-     * }     
+     * }
+     * 
+     * @param StoreBrightcoveAPISetting $request
+     * @param Organization $suborganization     
+     * 
      * @return BrightcoveAPISettingResource
      */
     public function store(StoreBrightcoveAPISetting $request, Organization $suborganization)
@@ -96,10 +117,13 @@ class BrightcoveAPISettingsController extends Controller
     }
 
     /**
+     * Update Brightcove API Setting
+     * 
      * Update Brightcove API Setting Data
-     * @param id required The Id of a brightcove_api_settings table Example: 1
-     * @param UpdateBrightcoveAPISetting $request
-     * @param Organization $suborganization
+     * 
+     * @urlParam suborganization integer required Id of an organization Example: 1
+     * @urlParam id integer required Id of brightCove Example: 1
+     * 
      * @response {
      *   "message": "Brightcove API setting data updated successfully!",
      *   "data": ["Updated Brightcove API setting data array"]
@@ -108,7 +132,12 @@ class BrightcoveAPISettingsController extends Controller
      *   "errors": [
      *     "Unable to update Brightcove API setting, please try again later."
      *   ]
-     * }     
+     * }
+     * 
+     * @param UpdateBrightcoveAPISetting $request
+     * @param Organization $suborganization
+     * @param $id
+     *      
      * @return BrightcoveAPISettingResource
      */
     public function update(UpdateBrightcoveAPISetting $request, Organization $suborganization, $id)
@@ -129,17 +158,23 @@ class BrightcoveAPISettingsController extends Controller
     }
 
     /**
+     * Delete Brightcove Setting
+     * 
      * Delete Brightcove API Setting
-     * @param id required The Id of a brightcove_api_settings Example: 1
+     * 
      * @param Organization $suborganization
+     * @param $id
+     * 
      * @response {
      *   "message": "Brightcove API setting deleted successfully!",
      * }
+     * 
      * @response 500 {
      *   "errors": [
      *     "Unable to delete Brightcove API setting, please try again later."
      *   ]
      * }
+     * 
      * @return Response
      */
     public function destroy(Organization $suborganization, $id)

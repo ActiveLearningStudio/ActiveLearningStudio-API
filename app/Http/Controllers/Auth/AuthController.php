@@ -271,7 +271,7 @@ class AuthController extends Controller
      * @bodyParam tokenObj.expires_in int required The token expire of google login Example: 3599
      * @bodyParam tokenObj.id_token string required The token Id of google login Example: eyJhbGciOiJSUzI1NiIsImtpZCI6I...
      * @bodyParam tokenObj.session_state object required The session state of google login
-     * @bodyParam tokenObj.session_state.extraQueryParams object required
+     * @bodyParam tokenObj.session_state.extraQueryParams object required Extra query params for goole login
      * @bodyParam tokenObj.session_state.extraQueryParams.authuser string required Example: 0
      * @bodyParam tokenObj.first_issued_at int required The first issued time of google login Example: 1601535932504
      * @bodyParam tokenObj.expires_at int required The expire time of google login Example: 1601539531504
@@ -1086,11 +1086,13 @@ class AuthController extends Controller
     }
 
     /**
+     * Get Wordpress SSO default settings
+     * 
      * Wordpress SSO: Get default settings for a particular wordpress sso integration
      *
-     * @urlParam client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+     * @urlParam client integer required Id for the integration Example: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
      *
-     * @param string $clientId
+     * @param $clientId
      * @return Application|ResponseFactory|Response
      * @throws \Throwable
      */
@@ -1110,8 +1112,8 @@ class AuthController extends Controller
     /**
      * Wordpress SSO: Execute wordpress sso authentication
      *
-     * @bodyParam clientId string client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
-     * @bodyParam code string temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+     * @bodyParam clientId string required Client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
+     * @bodyParam code string required Temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta
      *
      * @param WordpressSSOLoginRequest $request
      * @return Application|ResponseFactory|Response
@@ -1192,7 +1194,7 @@ class AuthController extends Controller
                 : $default_lms_setting->organization->roles()->where('name', 'self_registered')->first()->id;
 
             $default_lms_setting->organization->users()->attach(
-                $user, 
+                $user,
                 ['organization_role_type_id' => $roleId]
             );
         }

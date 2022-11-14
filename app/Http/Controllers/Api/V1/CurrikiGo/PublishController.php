@@ -28,7 +28,7 @@ use App\Http\Requests\V1\CurrikiGo\PublishMoodlePlaylistRequest;
 use Illuminate\Support\Facades\Gate;
 
 /**
- * @group 8. CurrikiGo
+ * @group 10. CurrikiGo
  *
  * APIs for publishing playlists to other LMSs
  */
@@ -176,12 +176,12 @@ class PublishController extends Controller
                 return response([
                     'playlist' => $outcome,
                 ], 200);
-            } 
+            }
             elseif ($outcome == false) {
                 return response([
                     'errors' => ['Something went wrong while publishing.'],
                 ], 400);
-            } 
+            }
             else {
                 return response([
                     'errors' => ['Failed to send playlist to canvas.'],
@@ -251,7 +251,7 @@ class PublishController extends Controller
             // User can publish
             $data = $publishRequest->validated();
             $lmsSettings = $this->lmsSettingRepository->find($data['setting_id']);
-            
+
             $easyUpload = new SafariMontageEasyUpload($lmsSettings);
             $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
             $outcome = $easyUpload->uploadActivity($activity, ['counter' => $counter]);

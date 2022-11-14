@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @group 1005. Admin/Whiteboard
+ * @group 28. Admin/Whiteboard
  *
  * APIs for whiteboard.
  */
