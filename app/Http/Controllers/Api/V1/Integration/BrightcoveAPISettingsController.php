@@ -38,6 +38,7 @@ class BrightcoveAPISettingsController extends Controller
      * 
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      * 
+     * @urlParam $suborganization integer required Id of an organization Example: 1
      * @bodyParam start integer Offset for getting the paginated response, Default 0. Example: 0
      * @bodyParam length integer Limit for getting the paginated records, Default 10. Example: 10
      * 
@@ -58,6 +59,8 @@ class BrightcoveAPISettingsController extends Controller
      * Get Brightcove API Setting
      * 
      * Get the specified Brightcove API setting data.
+     * 
+     * @urlParam id integer required Id of brightCove Example: 1
      * 
      * @param Organization $suborganization
      * @param $id
@@ -115,10 +118,12 @@ class BrightcoveAPISettingsController extends Controller
      * 
      * Update Brightcove API Setting Data
      * 
-     * @urlParam $suborganization integer required Id of an organization Example: 1
-     * @urlParam $id integer required Id of brightCove Example: 1
+     * @urlParam suborganization integer required Id of an organization Example: 1
+     * @urlParam id integer required Id of brightCove Example: 1
      * 
      * @param UpdateBrightcoveAPISetting $request
+     * @param Organization $suborganization
+     * @param $id
      * 
      * @response {
      *   "message": "Brightcove API setting data updated successfully!",

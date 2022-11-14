@@ -261,6 +261,7 @@ class SuborganizationController extends Controller
      * @bodyParam tertiary_color string Primary font color Example: #515151
      * @bodyParam primary_font_family string Primary font color Example: Open Sans
      * @bodyParam secondary_font_family string Primary font color Example: Open Sans
+     * 
      * @responseFile responses/organization/suborganization.json
      *
      * @response 500 {

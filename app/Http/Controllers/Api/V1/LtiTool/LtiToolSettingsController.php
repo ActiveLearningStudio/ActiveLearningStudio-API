@@ -75,6 +75,8 @@ class LtiToolSettingsController extends Controller
      * @param Organization $suborganization
      * @param $id
      * 
+     * @return LtiToolSettingResource
+     * 
      * @throws GeneralException
      */
     public function show(Organization $suborganization, $id)
