@@ -66,12 +66,10 @@ class LtiToolSettingsController extends Controller
      * 
      * Get the specified lti tool setting data.
      * 
-     * @urlParam id required The Id of a lti_tool_settings table Example: 1
      * @urlParam suborganization The Id of suborganization Example: 1
+     * @urlParam id required The Id of a lti_tool_settings table Example: 1
      * 
      * @responseFile responses/admin/lti-tool/lti-tool-settings
-     * 
-     * @return LtiToolSettingResource
      * 
      * @param Organization $suborganization
      * @param $id

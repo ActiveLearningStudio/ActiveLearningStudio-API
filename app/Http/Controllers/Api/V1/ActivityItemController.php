@@ -162,7 +162,7 @@ class ActivityItemController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param StoreActivityItem $request
      * @param Organization $suborganization
      *
      * @return Response
