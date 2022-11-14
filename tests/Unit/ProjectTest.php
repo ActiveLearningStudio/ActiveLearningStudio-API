@@ -88,8 +88,8 @@ class ProjectTest extends TestCase
             ->post(
                 '/api/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
-                )
-                ->assertSessionHasErrors('organization_visibility_type_id');
+            )
+            ->assertSessionHasErrors('organization_visibility_type_id');
     }
 
     /** @test function for unauthenticated user create project*/
@@ -100,9 +100,9 @@ class ProjectTest extends TestCase
         // When unauthenticated user submits post request to create project endpoint
         // He should be retrun the 401 authorization status code
         $this->postJson(
-            '/api/v1/suborganization/' . $project->organization_id . '/projects', 
-            $project->toArray()
-        )
-        ->assertStatus(401);
+                '/api/v1/suborganization/' . $project->organization_id . '/projects', 
+                $project->toArray()
+            )
+            ->assertStatus(401);
     }
 }
