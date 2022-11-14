@@ -10,6 +10,5 @@ $factory->define(Organization::class, function (Faker $faker) {
         'name' => $faker->sentence,
         'description' => $faker->paragraph,
         'domain' => $faker->word,
-        
     ];
 });

@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\Playlist;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PlaylistTest extends TestCase
