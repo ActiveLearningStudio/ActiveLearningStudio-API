@@ -12,7 +12,8 @@ class UpdateFillInTheBlankSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PFillInTheBlankLibSubmitButtonSeeder::class
+            '--class' => H5PFillInTheBlankLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 

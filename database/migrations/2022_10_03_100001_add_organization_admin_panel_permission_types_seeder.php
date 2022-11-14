@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class AddOrganizationAdminPanelPermissionTypesSeeder extends Migration
 {
@@ -14,7 +12,8 @@ class AddOrganizationAdminPanelPermissionTypesSeeder extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => OrganizationAdminPanelPermissionTypeSeeder::class
+            '--class' => OrganizationAdminPanelPermissionTypeSeeder::class,
+            '--force' => true
         ]);
     }
 

@@ -1,0 +1,43 @@
+{
+    "total_record": 3,
+    "page": 1,
+    "per_page": 10,
+    "paging": {
+        "next": null,
+        "previous": null,
+        "first": "/api/curriki/v1/recordings?per_page=10&page=1",
+        "last": "/api/curriki/v1/recordings?per_page=10&page=1"
+    },
+    "data": [
+        {
+            "id": "P63Y51bGxgpwJKNNW0Rl",
+            "title": "Test Demo",
+            "createdAt": "8/31/2022, 9:53:11 AM",
+            "htmlUrl": "https://komododecks.com/recordings/P63Y51bGxgpwJKNNW0Rl",
+            "videoUrl": "https://storage.googleapis.com/komodo-280e0.appspot.com/IzFnGEbx3QOiQk1bOIlN0OBVwGx1/P63Y51bGxgpwJKNNW0Rl/index-c2317da67746280b1097c1a92e88a706d8816c132d92bab824f9ad28e7d39187.m3u8",
+            "previewUrl": "https://storage.googleapis.com/komodo-280e0.appspot.com/IzFnGEbx3QOiQk1bOIlN0OBVwGx1/P63Y51bGxgpwJKNNW0Rl/preview-c2317da67746280b1097c1a92e88a706d8816c132d92bab824f9ad28e7d39187.jpg",
+            "previewWidth": 1920,
+            "previewHeight": 1200
+        },
+        {
+            "id": "WpFT8CY7MbWyG50xn7F6",
+            "title": "Komodo Technologies: Screencasting with ease",
+            "createdAt": "8/31/2022, 9:50:03 AM",
+            "htmlUrl": "https://komododecks.com/recordings/WpFT8CY7MbWyG50xn7F6",
+            "videoUrl": "https://storage.googleapis.com/komodo-280e0.appspot.com/IzFnGEbx3QOiQk1bOIlN0OBVwGx1/WpFT8CY7MbWyG50xn7F6/index-de16e4eac33d578e38d0d34d65255a86e69ab428022f08548e5fafd37044c0aa.m3u8",
+            "previewUrl": "https://storage.googleapis.com/komodo-280e0.appspot.com/IzFnGEbx3QOiQk1bOIlN0OBVwGx1/WpFT8CY7MbWyG50xn7F6/preview-de16e4eac33d578e38d0d34d65255a86e69ab428022f08548e5fafd37044c0aa.jpg",
+            "previewWidth": 1920,
+            "previewHeight": 1200
+        },
+        {
+            "id": "IXGhTosmvm8ZIv3xuHBQ",
+            "title": "Komodo Hello World Introduction! ",
+            "createdAt": "8/31/2022, 9:46:59 AM",
+            "htmlUrl": "https://komododecks.com/recordings/IXGhTosmvm8ZIv3xuHBQ",
+            "videoUrl": "https://storage.googleapis.com/komodo-280e0.appspot.com/f0tZfLY6wQSl1F15zC8lhsJJYsZ2/B9ObDzs6jrNF6YKxkdow/index-1bfad33edb967387cf0815c7e341f01861f0728f53b90da6306403168e77313f.m3u8",
+            "previewUrl": "https://storage.googleapis.com/komodo-280e0.appspot.com/f0tZfLY6wQSl1F15zC8lhsJJYsZ2/B9ObDzs6jrNF6YKxkdow/preview-1bfad33edb967387cf0815c7e341f01861f0728f53b90da6306403168e77313f.jpg",
+            "previewWidth": 1800,
+            "previewHeight": 1168
+        }
+    ]
+}

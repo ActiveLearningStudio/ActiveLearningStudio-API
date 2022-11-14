@@ -3,8 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Seeder;
 
-class UpdateTranslationEditorDragAndDrop extends Migration
+class UpdateBrightcoveSemanticsToH5PLibraries extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +14,9 @@ class UpdateTranslationEditorDragAndDrop extends Migration
      */
     public function up()
     {
-        //
         \Artisan::call('db:seed', [
-            '--class' => TranslationUpdateForDragAndDrop::class
+            '--class' => H5PBrightcoveVideoLib::class,
+            '--force' => true
         ]);
     }
 
@@ -26,6 +27,6 @@ class UpdateTranslationEditorDragAndDrop extends Migration
      */
     public function down()
     {
-        //
+        
     }
 }

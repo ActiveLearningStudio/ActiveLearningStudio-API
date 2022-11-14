@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateAdvancedFibSemanticsToH5PLibraries extends Migration
+class RunH5pVideoAddPreloadedJsSeeder extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,8 @@ class UpdateAdvancedFibSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PAdvancedFibSubmitButtonSeeder::class
+            '--class' => H5PVideoAddPreloadedJS::class,
+            '--force' => true
         ]);
     }
 
@@ -23,6 +24,6 @@ class UpdateAdvancedFibSemanticsToH5PLibraries extends Migration
      */
     public function down()
     {
-        
+        //
     }
 }

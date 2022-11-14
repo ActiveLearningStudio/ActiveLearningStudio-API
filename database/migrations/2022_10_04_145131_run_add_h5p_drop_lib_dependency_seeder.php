@@ -1,11 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Seeder;
 
-class UpdateBrightcoveSemanticsToH5PLibraries extends Migration
+class RunAddH5pDropLibDependencySeeder extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +12,8 @@ class UpdateBrightcoveSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PBrightcoveVideoLib::class
+            '--class' => AddH5PDropLibDependency::class,
+            '--force' => true
         ]);
     }
 
@@ -26,6 +24,6 @@ class UpdateBrightcoveSemanticsToH5PLibraries extends Migration
      */
     public function down()
     {
-        
+        //
     }
 }

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1\LtiTool;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\LtiTool\StoreLtiToolSetting;
-use App\Http\Requests\V1\LtiTool\UpdateLtiToolSetting;
+use App\Http\Requests\V1\LtiTool\StoreLtiToolSettingRequest;
+use App\Http\Requests\V1\LtiTool\UpdateLtiToolSettingRequest;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingCollection;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingResource;
 use App\Models\LtiTool\LtiToolSetting;
@@ -24,6 +24,7 @@ use Illuminate\View\View;
  * @group 21.   Admin/Lti Tool Settings
  * 
  * APIs for Lti tool settings on admin panel.
+ * The doc block for LTIToolSettingsController will be updated later.
  */
 class LtiToolSettingsController extends Controller
 {
@@ -90,16 +91,16 @@ class LtiToolSettingsController extends Controller
      * 
      * Creates the new lti tool setting in database
      * 
-     * @urlParam suborganization The Id of suborganization Example: 1
-     * 
-     * @param StoreLtiToolSetting $request
-     * @param Organization $suborganization
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * 
      * @return LtiToolSettingResource|Application|ResponseFactory|Response
      * 
+     * @param StoreLtiToolSettingRequest $request
+     * @param Organization $suborganization
+     * 
      * @throws GeneralException
      */
-    public function store(StoreLtiToolSetting $request, Organization $suborganization)
+    public function store(StoreLtiToolSettingRequest $request, Organization $suborganization)
     {
         $data = $request->only([
             'user_id',
@@ -126,25 +127,18 @@ class LtiToolSettingsController extends Controller
      * 
      * Update Lti Tool Setting
      * 
-     * @bodyParam tool_name string required Name of the tool Example: Safari Montage
-     * @bodyParam tool_url string required The URL of tool Example: https://partner.safarimontage.com/SAFARI/api/imsltisearch.php
-     * @bodyParam lti_version string required The version of LTI Example: LTI-1p0
-     * @bodyParam media_source_id string required The id of media source Example: Kaltura or safari Montage or Vimeo or Youtube
-     * @bodyParam tool_consumer_key string The unique key of tool consumer Example: consumer key
-     * @bodyParam tool_secret_key required_with:tool_consumer_key|unique The secret key of tool Example: secret key
-     * @bodyParam tool_content_selection_url string URL of selection tool Example: if not set, automatically set the tool_url
-     * @bodyParam user_id integer required Id of a user Example: 1
-     * @bodyParam organization_id integer required Id of an organization Example: 1
-     * 
-     * @param UpdateLtiToolSetting $request
-     * @param Organization $suborganization
-     * @param $id
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id required The Id of LTI tool Example: 1
      * 
      * @return Application|ResponseFactory|Response
      * 
+     * @param UpdateLtiToolSettingRequest $request
+     * @param Organization $suborganization
+     * @param $id
+     * 
      * @throws GeneralException
      */
-    public function update(UpdateLtiToolSetting $request, Organization $suborganization, $id)
+    public function update(UpdateLtiToolSettingRequest $request, Organization $suborganization, $id)
     {
         $data = $request->only([
             'user_id',
@@ -201,10 +195,7 @@ class LtiToolSettingsController extends Controller
      */
     public function getLTIToolTypeList(Organization $suborganization)
     {
-        $ltiToolType = $suborganization->mediaSources->where('media_type', 'Video');
-
-        // Will handle inside story CUR-4316
-        //$ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
+        $ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
         return new LtiToolSettingResource($ltiToolType);
     }
 }

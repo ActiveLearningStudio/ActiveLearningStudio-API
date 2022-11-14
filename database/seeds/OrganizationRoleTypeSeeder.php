@@ -14,27 +14,38 @@ class OrganizationRoleTypeSeeder extends Seeder
         DB::table('organization_role_types')->insertOrIgnore([
             'id' => 1,
             'name' => 'admin',
-            'display_name' => 'Administrator'
+            'display_name' => 'Administrator',
+            'organization_id' => 1
         ]);
 
         DB::table('organization_role_types')->insertOrIgnore([
             'id' => 2,
             'name' => 'course_creator',
-            'display_name' => 'Course Creator'
+            'display_name' => 'Course Creator',
+            'organization_id' => 1
         ]);
+
         // This maybe a redundant query, but is okay
-        $courseCreator = DB::table('organization_role_types')->select('id')->where('name', 'course_creator')->first();
-        
+        $courseCreator = DB::table('organization_role_types')
+                                ->select('id')
+                                ->where([
+                                    ['name', '=', 'course_creator'],
+                                    ['organization_id', '=', 1],
+                                ])
+                                ->first();
+
         DB::table('organization_role_types')->insertOrIgnore([
             'id' => 3,
             'name' => 'member',
-            'display_name' => 'Member'
+            'display_name' => 'Member',
+            'organization_id' => 1
         ]);
 
         DB::table('organization_role_types')->insertOrIgnore([
             'id' => 4,
             'name' => 'self_registered',
-            'display_name' => 'Self Registered'
+            'display_name' => 'Self Registered',
+            'organization_id' => 1
         ]);
 
         $orgUserRoles = DB::table('organization_user_roles')->count();
