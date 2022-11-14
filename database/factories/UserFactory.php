@@ -31,6 +31,6 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(User::class, function ($user, $faker) {
-    $organization = App\Models\Organization::find(1);
+    $organization = Organization::find(1);
     $organization->users()->attach($user, ['organization_role_type_id' => 12]);
 });
