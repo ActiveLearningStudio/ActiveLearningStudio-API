@@ -24,8 +24,8 @@ class VimeoAPISettingRequest extends FormRequest
     public function rules()
     {
         return [
-            'page' => 'required|string|max:50',
-            'per_page' => 'required|string|max:50',
+            'page' => 'required|integer|max:50',
+            'per_page' => 'required|integer|max:50',
             'query' => 'nullable|string|max:255',
             'organization_id' => 'required|exists:organizations,id'
         ];
