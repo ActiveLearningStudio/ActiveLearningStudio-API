@@ -43,7 +43,8 @@ class ProjectTest extends TestCase
             ->post(
                 '/api/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
-            )->assertSessionHasErrors('name');
+            )
+            ->assertSessionHasErrors('name');
     }
 
     /** @test  function for mandatory description*/
@@ -57,7 +58,8 @@ class ProjectTest extends TestCase
             ->post(
                 '/api/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
-            )->assertSessionHasErrors('description');
+            )
+            ->assertSessionHasErrors('description');
     }
 
     /** @test  function for mandatory thumb url*/
@@ -71,7 +73,8 @@ class ProjectTest extends TestCase
             ->post(
                 '/api/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
-            )->assertSessionHasErrors('thumb_url');
+            )
+            ->assertSessionHasErrors('thumb_url');
     }
 
     /** @test function for mandatory organization visibilty id*/
@@ -85,7 +88,8 @@ class ProjectTest extends TestCase
             ->post(
                 '/api/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
-                )->assertSessionHasErrors('organization_visibility_type_id');
+                )
+                ->assertSessionHasErrors('organization_visibility_type_id');
     }
 
     /** @test function for unauthenticated user create project*/
@@ -98,6 +102,7 @@ class ProjectTest extends TestCase
         $this->postJson(
             '/api/v1/suborganization/' . $project->organization_id . '/projects', 
             $project->toArray()
-        )->assertStatus(401);
+        )
+        ->assertStatus(401);
     }
 }

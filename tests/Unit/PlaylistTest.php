@@ -35,7 +35,8 @@ class PlaylistTest extends TestCase
             ->post(
                 '/api/v1/projects/' . $playlist->project_id . '/playlists',
                 $playlist->toArray()
-                )->assertSessionHasErrors('title');
+            )
+            ->assertSessionHasErrors('title');
     }
 
     /** @test function for unauthenticated user to create playlist*/
@@ -45,9 +46,10 @@ class PlaylistTest extends TestCase
         $playlist = factory('App\Models\Playlist')->make();
         // When unauthenticated user submits post request to create playlist endpoint
         $this->postJson(
-            '/api/v1/projects/' . $playlist->project_id . '/playlists',
-            $playlist->toArray()
-            )->assertStatus(401);
+                '/api/v1/projects/' . $playlist->project_id . '/playlists',
+                $playlist->toArray()
+            )
+            ->assertStatus(401);
     }
 
     /** @test function for authorized user to create playlist */
@@ -65,7 +67,7 @@ class PlaylistTest extends TestCase
                         ->put(
                             '/api/v1/projects/'.$playlist->project_id.'/playlists/'. $playlist->id,
                              $playlist->toArray()
-                            );
+                        );
         
         $response->assertStatus(200);
     }
