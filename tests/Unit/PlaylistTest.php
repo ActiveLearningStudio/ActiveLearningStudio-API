@@ -17,7 +17,7 @@ class PlaylistTest extends TestCase
         
         $response = $this->withSession(['banned' => false])
                         ->postJson(
-                            '/api/v1/projects/' . $playlist->project_id . '/playlists',
+                            '/v1/projects/' . $playlist->project_id . '/playlists',
                             $playlist->toArray()
                         );
         
@@ -33,7 +33,7 @@ class PlaylistTest extends TestCase
         
         $this->withSession(['banned' => false])
             ->post(
-                '/api/v1/projects/' . $playlist->project_id . '/playlists',
+                '/v1/projects/' . $playlist->project_id . '/playlists',
                 $playlist->toArray()
             )
             ->assertSessionHasErrors('title');
@@ -46,7 +46,7 @@ class PlaylistTest extends TestCase
         $playlist = factory('App\Models\Playlist')->make();
         // When unauthenticated user submits post request to create playlist endpoint
         $this->postJson(
-                '/api/v1/projects/' . $playlist->project_id . '/playlists',
+                '/v1/projects/' . $playlist->project_id . '/playlists',
                 $playlist->toArray()
             )
             ->assertStatus(401);
@@ -65,7 +65,7 @@ class PlaylistTest extends TestCase
         // When the user hit's the endpoint to update the playlist
         $response = $this->withSession(['banned' => false])
                         ->put(
-                            '/api/v1/projects/'.$playlist->project_id.'/playlists/'. $playlist->id,
+                            '/v1/projects/'.$playlist->project_id.'/playlists/'. $playlist->id,
                              $playlist->toArray()
                         );
         

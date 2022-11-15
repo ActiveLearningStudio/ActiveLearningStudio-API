@@ -21,7 +21,7 @@ class ProjectTest extends TestCase
         // Post request to the create project route should return 201 status
         $response = $this->withSession(['banned' => false])
                             ->postJson(
-                                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                                '/v1/suborganization/' . $project->organization_id . '/projects',
                                 $project->toArray()
                             );
         
@@ -41,7 +41,7 @@ class ProjectTest extends TestCase
         // API call should return the name validation error message
         $this->withSession(['banned' => false])
             ->post(
-                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                '/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
             )
             ->assertSessionHasErrors('name');
@@ -56,7 +56,7 @@ class ProjectTest extends TestCase
 
         $this->withSession(['banned' => false])
             ->post(
-                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                '/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
             )
             ->assertSessionHasErrors('description');
@@ -71,7 +71,7 @@ class ProjectTest extends TestCase
 
         $this->withSession(['banned' => false])
             ->post(
-                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                '/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
             )
             ->assertSessionHasErrors('thumb_url');
@@ -86,7 +86,7 @@ class ProjectTest extends TestCase
 
         $this->withSession(['banned' => false])
             ->post(
-                '/api/v1/suborganization/' . $project->organization_id . '/projects',
+                '/v1/suborganization/' . $project->organization_id . '/projects',
                 $project->toArray()
             )
             ->assertSessionHasErrors('organization_visibility_type_id');
@@ -100,7 +100,7 @@ class ProjectTest extends TestCase
         // When unauthenticated user submits post request to create project endpoint
         // He should be retrun the 401 authorization status code
         $this->postJson(
-                '/api/v1/suborganization/' . $project->organization_id . '/projects', 
+                '/v1/suborganization/' . $project->organization_id . '/projects', 
                 $project->toArray()
             )
             ->assertStatus(401);
