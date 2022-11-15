@@ -24,8 +24,8 @@ class KomodoAPISettingRequest extends FormRequest
     public function rules()
     {
         return [
-            'page' => 'required|string|max:50',
-            'per_page' => 'required|string|max:50',
+            'page' => 'nullable|integer',
+            'per_page' => 'nullable|integer',
             'search' => 'nullable|string|max:255',
             'organization_id' => 'required|exists:organizations,id'
         ];
