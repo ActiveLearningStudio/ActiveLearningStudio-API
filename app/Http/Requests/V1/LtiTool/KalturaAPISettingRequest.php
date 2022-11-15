@@ -24,8 +24,8 @@ class KalturaAPISettingRequest extends FormRequest
     public function rules()
     {
         return [
-            'pageSize' => 'required|string|max:50',
-            'pageIndex' => 'required|string|max:50',
+            'pageSize' => 'required|integer',
+            'pageIndex' => 'required|integer',
             'searchText' => 'nullable|string|max:255',
             'organization_id' => 'required|exists:organizations,id'
         ];
