@@ -41,8 +41,8 @@ RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --wi
 RUN docker-php-ext-install gd
 
 #New Relic
-RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-10.2.0.314-linux.tar.gz && \
-	tar -xzf newrelic-php5-10.2.0.314-linux.tar.gz
+RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-10.3.0.315-linux.tar.gz && \
+	tar -xzf newrelic-php5-10.3.0.315-linux.tar.gz
 
 
 # Change uid and gid of apache to docker user uid/gid
