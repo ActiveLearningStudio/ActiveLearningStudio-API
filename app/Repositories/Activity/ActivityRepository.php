@@ -271,6 +271,7 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $queryParams['query_education'] = '';
         $queryParams['query_tags'] = '';
         $queryParams['query_h5p'] = '';
+        $queryParams['query_h5p_version'] = false;
         $queryFrom = 0;
         $querySize = 10;
 
@@ -286,11 +287,11 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advSearch(:user_id, :query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advSearch(:user_id, :query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
 
             $queryParams['user_id'] = $authUser;
         } else {
-            $query = 'SELECT * FROM advSearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advSearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
         }
 
         $countsQuery = 'SELECT entity, count(1) FROM (' . $query . ')sq GROUP BY entity';
@@ -352,6 +353,9 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
 
                     $privateOrganizationIdsQueries = implode(' AND ', $privateOrganizationIdsQueries);
                     $organizationIdsShouldQueries[] = "(" . $privateOrganizationIdsQueries . ")";
+
+                    // Consider H5P version while filtering
+                    $queryParams['query_h5p_version'] = true;
                 }
 
                 $organizationIdsShouldQueries = implode(' OR ', $organizationIdsShouldQueries);

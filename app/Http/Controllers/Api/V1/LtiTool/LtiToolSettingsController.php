@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\V1\LtiTool;
 
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\LtiTool\StoreLtiToolSetting;
-use App\Http\Requests\V1\LtiTool\UpdateLtiToolSetting;
+use App\Http\Requests\V1\LtiTool\StoreLtiToolSettingRequest;
+use App\Http\Requests\V1\LtiTool\UpdateLtiToolSettingRequest;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingCollection;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingResource;
 use App\Models\LtiTool\LtiToolSetting;
@@ -21,8 +21,10 @@ use Illuminate\View\View;
 /**
  * @author        Asim Sarwar
  * Date           11-10-2021
- * @group 1008.   Admin/Lti Tool Settings *
+ * @group 21.   Admin/Lti Tool Settings
+ * 
  * APIs for Lti tool settings on admin panel.
+ * The doc block for LTIToolSettingsController will be updated later.
  */
 class LtiToolSettingsController extends Controller
 {
@@ -39,12 +41,18 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Get All LTI Tool Settings for listing.
+     * 
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
-     * @queryParam Organization $suborganization
-     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
-     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
-     * @responseFile responses/admin/lti-tool/lti-tool-settings
+     * 
+     * @urlParam $suborganization integer required Id of an organization Example: 1
+     * @queryParam start integer Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length integer Limit for getting the paginated records, Default 25. Example: 25
+     * 
      * @param Request $request
+     * @param Organization $suborganization
+     * 
+     * @responseFile responses/admin/lti-tool/lti-tool-settings
+     * 
      * @return LtiToolSettingCollection
      */
     public function index(Request $request, Organization $suborganization)
@@ -55,12 +63,19 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Get Lti Tool Setting
+     * 
      * Get the specified lti tool setting data.
+     * 
+     * @urlParam suborganization The Id of suborganization Example: 1
      * @urlParam id required The Id of a lti_tool_settings table Example: 1
-     * @urlParam Organization $suborganization
+     * 
      * @responseFile responses/admin/lti-tool/lti-tool-settings
-     * @return LtiToolSettingResource
+     * 
+     * @param Organization $suborganization
      * @param $id
+     * 
+     * @return LtiToolSettingResource
+     * 
      * @throws GeneralException
      */
     public function show(Organization $suborganization, $id)
@@ -71,13 +86,19 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Create Lti tool Setting
+     * 
      * Creates the new lti tool setting in database
-     * @param StoreLtiToolSetting $request
-     * @param Organization $suborganization
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @return LtiToolSettingResource|Application|ResponseFactory|Response
+     * 
+     * @param StoreLtiToolSettingRequest $request
+     * @param Organization $suborganization
+     * 
      * @throws GeneralException
      */
-    public function store(StoreLtiToolSetting $request, Organization $suborganization)
+    public function store(StoreLtiToolSettingRequest $request, Organization $suborganization)
     {
         $data = $request->only([
             'user_id',
@@ -100,14 +121,22 @@ class LtiToolSettingsController extends Controller
     }
 
     /**
+     * Lti Tool Setting
+     * 
      * Update Lti Tool Setting
-     * @param UpdateLtiToolSetting $request
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id required The Id of LTI tool Example: 1
+     * 
+     * @return Application|ResponseFactory|Response
+     * 
+     * @param UpdateLtiToolSettingRequest $request
      * @param Organization $suborganization
      * @param $id
-     * @return Application|ResponseFactory|Response
+     * 
      * @throws GeneralException
      */
-    public function update(UpdateLtiToolSetting $request, Organization $suborganization, $id)
+    public function update(UpdateLtiToolSettingRequest $request, Organization $suborganization, $id)
     {
         $data = $request->only([
             'user_id',
@@ -130,10 +159,18 @@ class LtiToolSettingsController extends Controller
     }
 
     /**
+     * Delete Lti Tool
+     * 
      * Delete Lti Tool Setting
+     * 
+     * @urlParam suborganization integer required Id of a suborganization Exp: 1
+     * @urlParam id integer required Id of LTI tool setting Exp: 1
+     * 
      * @param Organization $suborganization
      * @param $id
+     * 
      * @return Application|Factory|View
+     * 
      * @throws GeneralException
      */
     public function destroy(Organization $suborganization, $id)
@@ -142,14 +179,21 @@ class LtiToolSettingsController extends Controller
     }
 
     /**
-     * Get Tool Type For LTI Tool Settings
-     * @urlParam Organization $suborganization
-     * @responseFile responses/admin/lti-tool/lti-tool-settings
+     * Get LTI Tool Type List
+     *
+     * Get filter based media sources list for specified suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @responseFile responses/organization/filter-media-source.json
+     *
+     * @param Organization $suborganization
+     * 
      * @return LtiToolSettingResource
      */
     public function getLTIToolTypeList(Organization $suborganization)
     {
-        $ltiToolType = $suborganization->mediaSources->where('media_type', 'Video');
+        $ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
         return new LtiToolSettingResource($ltiToolType);
     }
 }

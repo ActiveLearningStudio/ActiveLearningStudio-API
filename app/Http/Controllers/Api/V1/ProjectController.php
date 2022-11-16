@@ -59,8 +59,11 @@ class ProjectController extends Controller
      *
      * Get a list of the projects of a user.
      *
-     * @urlParam required Organization $suborganization. Example: 1
-     * @queryParam optional GetProjectsRequest $request. Example: size, order_by_type, order_by_column8
+     * @urlParam suborganization required Id of an organization Example: 1
+     * @queryParam size integer Example: 10
+     * @queryParam order_by_type string Example: ASC OR DESC
+     * @queryParam order_by_column8 string Example: name, created_at
+     * 
      * @response array
      *
      * @param GetProjectsRequest $request
@@ -83,10 +86,12 @@ class ProjectController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search suborganization against Example: Vivensity
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: name
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: name
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
+     * @param Organization $suborganization
+     * 
      * @responseFile responses/project/projects.json
      *
      * @return Response
@@ -102,9 +107,14 @@ class ProjectController extends Controller
      * Get All Organization Team's Projects
      *
      * Get a list of the team's projects of an organization.
+     * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @responseFile responses/project/team-projects.json
      *
+     * @param Request $request
+     * @param Organization $suborganization
+     * 
+     * @responseFile responses/project/team-projects.json
+     * 
      * @return Response
      */
     public function getTeamProjects(Request $request, Organization $suborganization)
@@ -174,7 +184,11 @@ class ProjectController extends Controller
      * Get All Projects Detail
      *
      * Get a list of the projects of a user with detail.
+     * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
+     * @param Organization $suborganization
+     * 
      * @responseFile responses/project/projects-with-detail.json
      *
      * @return Response
@@ -200,9 +214,12 @@ class ProjectController extends Controller
      * Get Recent Projects
      *
      * Get a list of the recent projects of a user.
+     * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @responseFile responses/project/projects-with-detail.json
      *
+     * @param Organization $suborganization
      * @return Response
      */
     public function recent(Organization $suborganization)
@@ -219,14 +236,18 @@ class ProjectController extends Controller
      *
      * Get a list of the default projects.
      *
-     * @urlParam required Organization $suborganization. Example: 1
-     * @queryParam optional GetProjectsRequest $request. Example: size, order_by_type, order_by_column8
-     * @response array
-     *
+     * @urlParam suborganization required Id of an organization Example: 1
+     * @queryParam size integer Example: 10
+     * @queryParam order_by_type string Example: ASC OR DESC
+     * @queryParam order_by_column8 string Example: name, created_at
+     * 
      * @param GetProjectsRequest $request
-     * @urlParam Organization $suborganization
+     * @param Organization $suborganization
+     * 
      * @responseFile responses/project/projects-with-detail.json
      *
+     * @response array
+     * 
      * @return Response
      */
     public function default(GetProjectsRequest $request, Organization $suborganization)
@@ -264,6 +285,7 @@ class ProjectController extends Controller
      * }
      *
      * @param ProjectUploadThumbRequest $projectUploadThumbRequest
+     * @param Organization $suborganization
      * @return Response
      */
     public function uploadThumb(ProjectUploadThumbRequest $projectUploadThumbRequest, Organization $suborganization)
@@ -289,7 +311,7 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile 201 responses/project/project.json
      *
@@ -300,6 +322,7 @@ class ProjectController extends Controller
      * }
      *
      * @param ProjectRequest $projectRequest
+     * @param Organization $suborganization
      * @return Response
      */
     public function store(ProjectRequest $projectRequest, Organization $suborganization)
@@ -333,6 +356,7 @@ class ProjectController extends Controller
      *
      * @responseFile 201 responses/project/project.json
      *
+     * @param Organization $suborganization
      * @param Project $project
      * @return Response
      */
@@ -394,6 +418,7 @@ class ProjectController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param Project $project
      * @return Response
      */
@@ -435,6 +460,7 @@ class ProjectController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param Project $project
      * @return Response
      */
@@ -470,7 +496,7 @@ class ProjectController extends Controller
      * @bodyParam name string required Name of a project Example: Test Project
      * @bodyParam description string required Description of a project Example: This is a test project.
      * @bodyParam thumb_url string required Thumbnail Url of a project Example: https://images.pexels.com/photos/2832382
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile responses/project/project.json
      *
@@ -481,6 +507,7 @@ class ProjectController extends Controller
      * }
      *
      * @param ProjectUpdateRequest $projectUpdateRequest
+     * @param Organization $suborganization
      * @param Project $project
      * @return Response
      */
@@ -531,6 +558,7 @@ class ProjectController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param Project $project
      * @return Response
      */
@@ -613,9 +641,13 @@ class ProjectController extends Controller
      *
      * Reorder projects of a user.
      *
-     * @bodyParam projects array required projects of a user
-     * @responseFile responses/project/projects.json
+     * @bodyParam projects array required Projects of a user Example: [1, 2, 3]
+     * 
      * @param Request $request
+     * @param Organization $suborganization
+     * 
+     * @responseFile responses/project/projects.json
+     * 
      * @return Response
      */
     public function reorder(Request $request, Organization $suborganization)
@@ -645,8 +677,8 @@ class ProjectController extends Controller
      *
      * Update project's order.
      *
-     * @urlParam project_id int required Id of the project whose order is to be updated Example: 1
-     * @bodyParam order int required New order to set for the project Example: 1
+     * @urlParam project_id integer required Id of the project whose order is to be updated Example: 1
+     * @bodyParam order integer required New order to set for the project Example: 1
      *
      * @response {
      *   "message": "Project reorder has been successful."
@@ -724,11 +756,15 @@ class ProjectController extends Controller
      * Get All Favorite Projects of login user
      *
      * Get a list of the favorite projects of a user.
-     * @param Request $request
+     * 
      * @urlParam Organization $suborganization
+     * 
+     * @responseFile responses/project/projects.json
+     * 
+     * @param Request $request
      * @return Response
 
-     * @responseFile responses/project/projects.json
+     * 
      */
     public function getFavorite(GetProjectsRequest $request, Organization $suborganization)
     {
@@ -743,8 +779,7 @@ class ProjectController extends Controller
      *
      * Export the specified project of a user.
      *
-     * @param Request $request
-     * @urlParam Organization $suborganization
+     * @urlParam suborganization required The Id of an organization Example: 1
      * @urlParam project required The Id of a project Example: 1
      *
      * @response {
@@ -855,6 +890,8 @@ class ProjectController extends Controller
     }
 
     /**
+     * Get Projects by Ids
+     * 
      * Get the Projects by Ids
      *
      * @param Request $request

@@ -28,6 +28,14 @@ class OrganizationRoleType extends Model
     }
 
     /**
+     * The UI permissions that belong to the role.
+     */
+    public function uiModulePermissions()
+    {
+        return $this->belongsToMany('App\Models\UiModulePermission', 'organization_role_ui_permissions', 'organization_role_type_id', 'ui_module_permission_id')->withTimestamps();
+    }
+
+    /**
      * The users that belong to the role.
      */
     public function users()

@@ -13,12 +13,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-
-/**
- * @group 1003. Admin/Activity Items
- *
- * APIs for activity items on admin panel.
- */
 class ActivityItemController extends Controller
 {
     private $repository;

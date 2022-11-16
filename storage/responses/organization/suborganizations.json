@@ -35,7 +35,19 @@
                 "tertiary_color": "#515151",
                 "primary_font_family": "open sans",
                 "secondary_font_family": "open sans"
-            }
+            },
+            "allowed_visibility_type_id": [
+                {
+                    "id": 1,
+                    "name": "private",
+                    "display_name": "Private (only Me)"
+                },
+                {
+                    "id": 3,
+                    "name": "global",
+                    "display_name": "My Org + Parent and Child Org"
+                }
+            ]
         }
     ]
 }

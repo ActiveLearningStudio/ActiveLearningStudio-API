@@ -14,7 +14,8 @@ class UpdateEssaySemainticsToH5pLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PEssaysLibSubmitButtonSeeder::class
+            '--class' => H5PEssaysLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
         
     }

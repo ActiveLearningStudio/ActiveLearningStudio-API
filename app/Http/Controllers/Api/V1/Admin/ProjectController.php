@@ -13,12 +13,6 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-
-/**
- * @group 1004. Admin/Projects
- *
- * APIs for projects on admin panel.
- */
 class ProjectController extends Controller
 {
 

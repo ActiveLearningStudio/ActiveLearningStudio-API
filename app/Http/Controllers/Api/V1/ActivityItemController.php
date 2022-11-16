@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 /**
- * @group 7. Activity Item
+ * @group 8. Activity Item
  *
  * APIs for activity item management
  */
@@ -62,11 +62,13 @@ class ActivityItemController extends Controller
      *
      * Get a list of the activity items.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @responseFile responses/activity-item/activity-items.json
      *
      * @param Request $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function getItems(Request $request, Organization $suborganization)
@@ -134,13 +136,17 @@ class ActivityItemController extends Controller
      *
      * Create a new activity item.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam title string required The title of a activity item Example: Audio Recorder
      * @bodyParam description string required The description of a activity item Example: Record your voice and play back or download a .wav file of your recording.
-     * @bodyParam order int The order number of a activity item Example: 1
-     * @bodyParam activity_type_id int The Id of a activity type Example: 1
+     * @bodyParam order integer The order number of a activity item Example: 1
+     * @bodyParam activity_type_id integer The Id of a activity type Example: 1
      * @bodyParam type any required The type of a activity item Example: h5p
      * @bodyParam h5pLib any required The H5pLib of a activity item Example: H5P.AudioRecorder 1.0
      * @bodyParam image string The image url of a activity item Example: /storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png
+     * @bodyParam demo_activity_id string required The image url of a activity item Example: 1
+     * @bodyParam demo_video_id string string The image url of a activity item Example: 1
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
      * @responseFile 201 responses/activity-item/activity-item.json
      *
@@ -156,9 +162,9 @@ class ActivityItemController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param StoreActivityItem $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreActivityItem $request, Organization $suborganization)
@@ -182,13 +188,14 @@ class ActivityItemController extends Controller
      *
      * Get the specified activity item.
      *
-     * @urlParam activity_item required The Id of a activity item Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityItem integer required The Id of a activity item Example: 1
      *
      * @responseFile responses/activity-item/activity-item.json
      *
      * @param Organization $suborganization
      * @param ActivityItem $activityItem
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, ActivityItem $activityItem)
@@ -203,7 +210,8 @@ class ActivityItemController extends Controller
      *
      * Update the specified activity item.
      *
-     * @urlParam activity_item required The Id of a activity item Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityItem required The Id of a activity item Example: 1
      * @bodyParam title string required The title of a activity item Example: Audio Recorder
      * @bodyParam description string required The description of a activity item Example: Record your voice and play back or download a .wav file of your recording.
      * @bodyParam order int The order number of a activity item Example: 1
@@ -211,6 +219,9 @@ class ActivityItemController extends Controller
      * @bodyParam type any required The type of a activity item Example: h5p
      * @bodyParam h5pLib any required The H5pLib of a activity item Example: H5P.AudioRecorder 1.0
      * @bodyParam image string The image url of a activity item Example: /storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png
+     * @bodyParam demo_activity_id string required The image url of a activity item Example: 1
+     * @bodyParam demo_video_id string string The image url of a activity item Example: 1
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
      * @responseFile responses/activity-item/activity-item.json
      *
@@ -226,10 +237,10 @@ class ActivityItemController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param UpdateActivityItem $request
      * @param Organization $suborganization
      * @param ActivityItem $activityItem
-     * 
+     *
      * @return Response
      */
     public function update(UpdateActivityItem $request, Organization $suborganization, ActivityItem $activityItem)
@@ -253,7 +264,8 @@ class ActivityItemController extends Controller
      *
      * Remove the specified activity item.
      *
-     * @urlParam activity_item required The Id of a activity item Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityItem required The Id of a activity item Example: 1
      *
      * @response {
      *   "message": "Activity item has been deleted successfully."
@@ -267,7 +279,7 @@ class ActivityItemController extends Controller
      *
      * @param Organization $suborganization
      * @param ActivityItem $activityItem
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, ActivityItem $activityItem)

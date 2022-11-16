@@ -46,6 +46,8 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
         {
             $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
             $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query->orderBy('id', 'DESC');
         }
 
         if (isset($data['filter']) && $data['filter'] > 0) {
@@ -120,13 +122,17 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     }
 
     /**
-     * @param $userId integer, $orgId integer $mediaSourceId int
-     * @return mixed
+     * To get row record by org and tool type match
+     *
+     * @param $orgId integer
+     * @param $mediaSourcesId int
+     * @return object
+     * @throws GeneralException
      */
-    public function getRowRecordByUserOrgAndToolType($userId, $orgId, $mediaSourceId)
+    public function getRowRecordByOrgAndToolType($orgId, $mediaSourcesId)
     {
-        try {
-            return $this->model->where([['user_id','=', $userId],['organization_id','=', $orgId],['media_source_id','=', $mediaSourceId]])->first();
+        try {            
+            return $this->model->where([['organization_id','=', $orgId],['media_source_id','=', $mediaSourcesId]])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }

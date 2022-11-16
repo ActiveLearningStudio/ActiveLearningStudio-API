@@ -7,10 +7,12 @@ use App\Repositories\Organization\OrganizationRepositoryInterface;
 use App\Http\Resources\V1\OrganizationResource;
 use App\Http\Resources\V1\OrganizationRoleResource;
 use App\Http\Resources\V1\OrganizationVisibilityTypeResource;
+use App\Http\Resources\V1\UiModuleResource;
 use App\Http\Requests\V1\SuborganizationSave;
 use App\Http\Requests\V1\SuborganizationUpdate;
 use App\Http\Requests\V1\SuborganizationAddUser;
 use App\Http\Requests\V1\SuborganizationAddRole;
+use App\Http\Requests\V1\SuborganizationAddRoleUiPermissions;
 use App\Http\Requests\V1\SuborganizationUpdateUser;
 use App\Http\Requests\V1\SuborganizationInviteMember;
 use App\Http\Requests\V1\SuborganizationSearchRequest;
@@ -20,16 +22,19 @@ use App\Http\Requests\V1\SuborganizationDeleteUserRequest;
 use App\Http\Requests\V1\SuborganizationGetUsersRequest;
 use App\Http\Requests\V1\SuborganizationUpdateMediaSource;
 use App\Http\Requests\V1\SuborganizationUpdateRole;
+use App\Http\Requests\V1\SuborganizationUpdateRoleUiPermissions;
 use App\Http\Requests\V1\SuborganizationUploadFaviconRequest;
 use App\Http\Requests\V1\SuborganizationUserHasPermissionRequest;
+use App\Http\Requests\V1\ClassRoomIntegrationRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Models\MediaSource;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Organization;
-use App\Models\OrganizationRoleType;
 use App\Models\OrganizationUserRole;
 use App\Models\OrganizationVisibilityType;
+use App\Models\OrganizationRoleType;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\UiModule\UiModuleRepositoryInterface;
 
 /**
  * @authenticated
@@ -42,17 +47,24 @@ class SuborganizationController extends Controller
 {
     private $organizationRepository;
     private $userRepository;
+    private $uiModuleRepository;
 
     /**
      * SuborganizationController constructor.
      *
      * @param OrganizationRepositoryInterface $organizationRepository
      * @param UserRepositoryInterface $userRepository
+     * @param UiModuleRepositoryInterface $uiModuleRepository
      */
-    public function __construct(OrganizationRepositoryInterface $organizationRepository, UserRepositoryInterface $userRepository)
+    public function __construct(
+        OrganizationRepositoryInterface $organizationRepository,
+        UserRepositoryInterface $userRepository,
+        UiModuleRepositoryInterface $uiModuleRepository
+    )
     {
         $this->organizationRepository = $organizationRepository;
         $this->userRepository = $userRepository;
+        $this->uiModuleRepository = $uiModuleRepository;
     }
 
     /**
@@ -62,9 +74,9 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search suborganization against Example: Vivensity
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: name
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: name
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/suborganizations.json
      *
@@ -162,17 +174,14 @@ class SuborganizationController extends Controller
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
-     * @bodyParam parent_id int required Id of the parent organization Example: 1
+     * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
+     * @bodyParam parent_id integer required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
-     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam primary_color string primary font color Example: #515151
-     * @bodyParam secondary_color string primary font color Example: #515151
-     * @bodyParam tertiary_color string primary font color Example: #515151
-     * @bodyParam primary_font_family string primary font color Example: Open Sans
-     * @bodyParam secondary_font_family string primary font color Example: Open Sans
-     *
+     * @bodyParam primary_color string Primary font color Example: #515151
+     * @bodyParam secondary_color string Primary font color Example: #515151
+     * @bodyParam tertiary_color string Primary font color Example: #515151
+     * @bodyParam primary_font_family string Primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string Primary font color Example: Open Sans
      * @responseFile 201 responses/organization/suborganization.json
      *
      * @response 500 {
@@ -196,6 +205,7 @@ class SuborganizationController extends Controller
         $suborganization = $this->organizationRepository->createSuborganization($organization, $data, $authenticatedUser);
 
         if ($suborganization) {
+            $suborganization->allowedVisibilityTypes()->sync($data['visibility_type_id']);
             return response([
                 'suborganization' => new OrganizationResource($suborganization),
             ], 201);
@@ -243,17 +253,15 @@ class SuborganizationController extends Controller
      * @bodyParam admins array required Ids of the suborganization admin users Example: [1, 2]
      * @bodyParam noovo_client_id string Id of the noovo cms Example: oldcampus
      * @bodyParam users array required Array of the "user_id" and "role_id" for suborganization users Example: [[user_id => 5, 3], [user_id => 6, 2]]
-     * @bodyParam parent_id int required Id of the parent organization Example: 1
+     * @bodyParam visibility_type_id array required Array of the allowed visibility_type_id for the organization Example: [1, 2, 3, 4]
+     * @bodyParam parent_id integer required Id of the parent organization Example: 1
      * @bodyParam self_registration bool Enable/disable user self registration Example: false
-     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
-     * @bodyParam primary_color string primary font color Example: #515151
-     * @bodyParam secondary_color string primary font color Example: #515151
-     * @bodyParam tertiary_color string primary font color Example: #515151
-     * @bodyParam primary_font_family string primary font color Example: Open Sans
-     * @bodyParam secondary_font_family string primary font color Example: Open Sans
-     *
+     * @bodyParam primary_color string Primary font color Example: #515151
+     * @bodyParam secondary_color string Primary font color Example: #515151
+     * @bodyParam tertiary_color string Primary font color Example: #515151
+     * @bodyParam primary_font_family string Primary font color Example: Open Sans
+     * @bodyParam secondary_font_family string Primary font color Example: Open Sans
+     * 
      * @responseFile responses/organization/suborganization.json
      *
      * @response 500 {
@@ -291,6 +299,7 @@ class SuborganizationController extends Controller
         $is_updated = $this->organizationRepository->update($suborganization, $data);
 
         if ($is_updated) {
+            $suborganization->allowedVisibilityTypes()->sync($data['visibility_type_id']);
             $authenticatedUser = auth()->user();
             $updated_suborganization = new OrganizationResource($this->organizationRepository->fetchOrganizationData($authenticatedUser, $suborganization));
 
@@ -579,7 +588,7 @@ class SuborganizationController extends Controller
      * Remove the specified user from a particular organization.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @bodyParam user_id int required Id of the user to be removed Example: 1
+     * @bodyParam user_id integer required Id of the user to be removed Example: 1
      * @bodyParam preserve_data bool Whether to assign user data to admin or delete it Example: false
      *
      * @response {
@@ -640,10 +649,10 @@ class SuborganizationController extends Controller
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam page The pagination page no to show  Example: 1
      * @bodyParam query string Query to search suborganization users against Example: Leo
-     * @bodyParam size int Number of items to be displayed "per page" Example: 1
-     * @bodyParam role int Organization role type id to filter by Example: 1
-     * @bodyParam order_by_column string to sort data with specific column Example: name
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Number of items to be displayed "per page" Example: 1
+     * @bodyParam role integer Organization role type id to filter by Example: 1
+     * @bodyParam order_by_column string To sort data with specific column Example: name
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/organization/organization-users.json
      *
@@ -693,6 +702,31 @@ class SuborganizationController extends Controller
         $role = $suborganization->roles->where("id", $roleId);
         if ($role->first()) {
             return OrganizationRoleResource::collection($role);
+        }
+
+        return response([
+            'errors' => ['Role detail not found.'],
+        ], 404);
+    }
+
+    /**
+     * Get User Role UI Permissions For Suborganization
+     *
+     * Get detail of the user role UI permissions for suborganization.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam role required The Id of an organization role Example: 1
+     *
+     * @responseFile responses/organization/organization-role-ui-permissions.json
+     *
+     * @param Organization $suborganization
+     * @param OrganizationRoleType $role
+     * @return Response
+     */
+    public function getRoleUiPermissions(Organization $suborganization, OrganizationRoleType $role)
+    {
+        if ($role->organization_id === $suborganization->id) {
+            return UiModuleResource::collection($this->uiModuleRepository->getTopUIModules());
         }
 
         return response([
@@ -759,6 +793,53 @@ class SuborganizationController extends Controller
     }
 
     /**
+     * Add Suborganization Role With UI Permissions
+     *
+     * Add role for the specified suborganization with UI permissions
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam name string required Name of a suborganization role Example: member
+     * @bodyParam display_name string required Display name of a suborganization role Example: Member
+     * @bodyParam permissions array required Ids of the permissions to assign the role Example: [1, 2]
+     *
+     * @response {
+     *   "message": "Role has been added successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to add role."
+     *   ]
+     * }
+     *
+     * @param SuborganizationAddRoleUiPermissions $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function addRoleUiPermissions(
+        SuborganizationAddRoleUiPermissions $request,
+        Organization $suborganization
+    )
+    {
+        $this->authorize('addRole', $suborganization);
+
+        $data = $request->validated();
+
+        $role = $this->organizationRepository->addRoleUiPermissions($suborganization, $data);
+
+        if ($role) {
+            return response([
+                'message' => 'Role has been added successfully.',
+                'data' => $role,
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to add role.'],
+        ], 500);
+    }
+
+    /**
      * Update Suborganization Role
      *
      * Update role for the specified suborganization
@@ -803,6 +884,50 @@ class SuborganizationController extends Controller
 
         return response([
             'errors' => ['Failed to update role.'],
+        ], 500);
+    }
+
+    /**
+     * Update Suborganization Role UI Permissions
+     *
+     * Update role UI permissions for the specified suborganization
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam role_id integer required Id of a suborganization role Example: 1
+     * @bodyParam permissions array required Ids of the ui permissions to assign the role Example: [1, 2]
+     *
+     * @response {
+     *   "message": "Role UI permissions have been updated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update role UI permissions."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateRoleUiPermissions $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function updateRoleUiPermissions(
+        SuborganizationUpdateRoleUiPermissions $request,
+        Organization $suborganization
+    )
+    {
+        $this->authorize('updateRole', $suborganization);
+        $data = $request->validated();
+
+        $success = $this->organizationRepository->updateRoleUiPermissions($data);
+
+        if ($success) {
+            return response([
+                'message' => 'Role UI permissions have been updated successfully.',
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update role UI permissions.'],
         ], 500);
     }
 
@@ -925,7 +1050,7 @@ class SuborganizationController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam media_source_ids array required Ids of a media source type Example: 1
-     * @bodyParam h5p_library string optional name of H5p Library Example: H5P.AudioRecorder 1.0
+     * @bodyParam h5p_library string optional Name of H5p Library Example: H5P.AudioRecorder 1.0
      *
      * @responseFile responses/organization/update-media-source.json
      *
@@ -949,7 +1074,10 @@ class SuborganizationController extends Controller
         $postData = [];
         if (isset($request->media_source_ids)) {
             foreach ($request->media_source_ids as $row) {
-                $postData[$row['media_source_id']] = ['h5p_library' => (isset($row['h5p_library']))? $row['h5p_library'] : NULL];
+                $postData[$row['media_source_id']] = [
+                    'h5p_library' => (isset($row['h5p_library']))? $row['h5p_library'] : NULL,
+                    'lti_tool_settings_status' => (isset($row['lti_tool_settings_status']))? $row['lti_tool_settings_status'] : 0
+                ];
             }
         }
 
@@ -964,6 +1092,55 @@ class SuborganizationController extends Controller
 
         return response([
             'errors' => ['Failed to update media source.'],
+        ], 500);
+    }
+
+    /**
+     * Update Google/Microsoft Credentials in Suborganization
+     *
+     * Update the specified suborganization for a user to modify classroom access credentials.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam gcr_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam gcr_activity_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_client_id uuid Client id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id uuid Secret id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_tenant_id uuid Tenant id Example: 123e4567-e89b-12d3-a456-426614174000
+     * @bodyParam msteam_secret_id_expiry date Secret expiry date Example: 2022-09-29
+     * @bodyParam msteam_project_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_playlist_visibility bool Enable/disable google classroom Example: false
+     * @bodyParam msteam_activity_visibility bool Enable/disable google classroom Example: false
+     *
+     *@response 200 {
+     *   "success": [
+     *     "Fields are updated successfully."
+     *   ]
+     * }
+     * 
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update suborganization."
+     *   ]
+     * }
+     *
+     * @param ClassRoomIntegrationRequest $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function updateClassCredentials(ClassRoomIntegrationRequest $request, Organization $suborganization)
+    {
+        $data = $request->validated();
+        $isUpdated = $this->organizationRepository->update($suborganization, $data);
+        
+        if ($isUpdated) {
+            return response([
+                'success' => ["Fields are updated successfully."],
+            ], 200);
+        }
+
+        return response([
+            'errors' => ['Failed to update suborganization.'],
         ], 500);
     }
 }

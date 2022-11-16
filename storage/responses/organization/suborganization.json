@@ -34,6 +34,25 @@
             "tertiary_color": "#515151",
             "primary_font_family": "open sans",
             "secondary_font_family": "open sans"
-        }
+        },
+        "allowed_visibility_type_id": [
+            {
+                "id": 1,
+                "name": "private",
+                "display_name": "Private (only Me)"
+            },
+            {
+                "id": 3,
+                "name": "global",
+                "display_name": "My Org + Parent and Child Org"
+            }
+        ],
+        "msteam_client_id" : null,
+        "msteam_secret_id" : null,
+        "msteam_tenant_id" : null,
+        "msteam_secret_id_expiry": null,
+        "msteam_project_visibility": true,
+        "msteam_playlist_visibility": false,
+        "msteam_activity_visibility": false
     }
 }

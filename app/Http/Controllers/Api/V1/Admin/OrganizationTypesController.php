@@ -12,12 +12,6 @@ use App\Http\Requests\Admin\StoreOrganizationType;
 use App\Models\OrganizationType;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-
-/**
- * @group 1006. Admin/Organization Types
- *
- * APIs for organization types on admin panel.
- */
 class OrganizationTypesController extends Controller
 {
     private $organizationTypeRepository;

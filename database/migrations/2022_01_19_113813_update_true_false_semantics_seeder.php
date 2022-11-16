@@ -12,7 +12,8 @@ class UpdateTrueFalseSemanticsSeeder extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PTrueFalseSubmitButtonSeeder::class
+            '--class' => H5PTrueFalseSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 

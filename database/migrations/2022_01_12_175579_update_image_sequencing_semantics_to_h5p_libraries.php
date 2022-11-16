@@ -12,7 +12,8 @@ class UpdateImageSequencingSemanticsToH5PLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => H5PImageSequencingLibSubmitButtonSeeder::class
+            '--class' => H5PImageSequencingLibSubmitButtonSeeder::class,
+            '--force' => true
         ]);
     }
 

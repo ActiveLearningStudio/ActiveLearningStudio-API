@@ -83,7 +83,7 @@ class PlaylistController extends Controller
      *
      * @urlParam project required The Id of a project Example 1
      * @bodyParam title string required The title of a playlist Example: Math Playlist
-     * @bodyParam order int The order number of a playlist Example: 0
+     * @bodyParam order integer The order number of a playlist Example: 0
      *
      * @responseFile 201 responses/playlist/playlist.json
      *

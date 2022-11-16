@@ -8,7 +8,7 @@ use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 
 /**
- * @group 9. LMS Settings
+ * @group 30. User LMS Settings
  *
  * APIs for LMS settings used for publishing
  */
