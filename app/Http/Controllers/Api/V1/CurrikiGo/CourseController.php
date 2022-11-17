@@ -255,7 +255,7 @@ class CourseController extends Controller
                 'response_message' => 'New course has been created successfully!',
                 'data' => $outcome,
             ], 200);
-        } elseif ($outcome == 401 || $outcome == 403) {
+        } elseif ($outcome === 401 || $outcome === 403) {
             return response([
                 'response_code' => $outcome,
                 'response_message' => 'Canvas token is invalid, expired or missing permission to create a course',
