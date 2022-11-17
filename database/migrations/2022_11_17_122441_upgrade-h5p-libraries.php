@@ -14,7 +14,7 @@ class UpgradeH5pLibraries extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => UpgradeH5pLibrariesSeeder::class,
+            '--class' => UpgradeH5pLibrariesVersionsSeeder::class,
             '--force' => true
         ]);
     }

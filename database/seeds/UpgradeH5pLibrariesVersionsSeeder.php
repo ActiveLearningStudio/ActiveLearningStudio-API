@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-class UpgradeH5pLibrariesSeeder extends Seeder
+class UpgradeH5pLibrariesVersionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
