@@ -13,7 +13,10 @@ class UpgradeH5pLibraries extends Migration
      */
     public function up()
     {
-        //
+        \Artisan::call('db:seed', [
+            '--class' => UpgradeH5pLibrariesSeeder::class,
+            '--force' => true
+        ]);
     }
 
     /**
@@ -23,9 +26,6 @@ class UpgradeH5pLibraries extends Migration
      */
     public function down()
     {
-        \Artisan::call('db:seed', [
-            '--class' => upgradeH5pLibrariesSeeder::class,
-            '--force' => true
-        ]);
+       //
     }
 }
