@@ -21,6 +21,7 @@ use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
 use App\Jobs\PublishProject;
+use App\Jobs\PublishPlaylist;
 use App\Jobs\PublishIndependentActivity;
 use App\User;
 use Redirect;
@@ -295,4 +296,37 @@ class MicroSoftTeamController extends Controller
         ], 200);
         
     }
+
+    /**
+	 * Publish playlist
+	 *
+	 * Publish the playlist activities as an assignment
+	 *
+     * @urlParam Project $playlist required The Id of a playlist. Example: 9
+     * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
+     *
+     * @response  200 {
+     *   "message": [
+     *     "Your request to publish playlist [playlist->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
+     *   ]
+     * }
+     * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
+     * @param Playlist $playlist
+     * @return Response
+	 */
+    public function publishPlaylist(MSTeamCreateAssignmentRequest $createAssignmentRequest, Playlist $playlist)
+    {
+        $data = $createAssignmentRequest->validated();
+        
+        $classId = isset($data['classId']) ? $data['classId'] : '';
+        
+        // pushed publishing of playlist in background
+        PublishPlaylist::dispatch(auth()->user(), $playlist, $classId)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to publish playlist [$playlist->title] into MS Team has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+        
+    }  
 }
