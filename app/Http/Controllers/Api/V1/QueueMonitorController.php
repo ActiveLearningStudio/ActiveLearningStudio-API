@@ -11,9 +11,8 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-
 /**
- * @group 1007. Admin/Queues
+ * @group 27. Admin/Queues
  *
  * APIs for queues monitoring on admin panel.
  */
@@ -91,6 +90,8 @@ class QueueMonitorController extends Controller
 
     /**
      * Retry All Failed Jobs
+     * 
+     * Retry All Failed Jobs
      *
      * @response 200 {
      *   "message": "All failed jobs has been pushed back onto the queue!"
@@ -123,6 +124,8 @@ class QueueMonitorController extends Controller
     }
 
     /**
+     * Delete All Failed Jobs
+     * 
      * Delete All Failed Jobs
      *
      * @response 200 {

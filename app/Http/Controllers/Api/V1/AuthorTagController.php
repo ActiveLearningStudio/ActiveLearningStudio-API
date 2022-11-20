@@ -13,7 +13,7 @@ use App\Repositories\AuthorTag\AuthorTagRepositoryInterface;
 use Illuminate\Http\Response;
 
 /**
- * @group 7. Author Tag
+ * @group 23. Author Tag
  *
  * APIs for author tags management
  */
@@ -35,6 +35,8 @@ class AuthorTagController extends Controller
      *
      * Get a list of all author tags.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @responseFile responses/author-tag/author-tags.json
      *
      * @param SearchAuthorTagRequest $request
@@ -54,6 +56,7 @@ class AuthorTagController extends Controller
      *
      * Create a new author tag.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam name string required The name of a author tag Example: Grade A
      * @bodyParam order int The order number of a author tag item Example: 1
      *
@@ -91,6 +94,7 @@ class AuthorTagController extends Controller
      *
      * Get the specified author tag.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam authorTag required The Id of a Author Tag item Example: 1
      *
      * @responseFile responses/author-tag/author-tag.json
@@ -118,6 +122,7 @@ class AuthorTagController extends Controller
      *
      * Update the specified author tag.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam authorTag required The Id of a author tag Example: 1
      * @bodyParam name string required The name of a author tag Example: Audio
      * @bodyParam order int The order number of a author tag item Example: 1
@@ -158,6 +163,7 @@ class AuthorTagController extends Controller
      *
      * Remove the specified author tag.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam authorTag required The Id of a author tag item Example: 1
      *
      * @response {

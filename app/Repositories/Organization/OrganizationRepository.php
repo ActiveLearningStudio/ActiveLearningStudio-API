@@ -33,12 +33,16 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\Project\ProjectRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Repositories\Group\GroupRepositoryInterface;
+use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
+use App\Repositories\OrganizationRoleType\OrganizationRoleTypeRepositoryInterface;
 
 class OrganizationRepository extends BaseRepository implements OrganizationRepositoryInterface
 {
     private $userRepository;
     private $invitedOrganizationUserRepository;
     private $projectRepository;
+    private $uiOrganizationPermissionMappingRepository;
+    private $organizationRoleTypeRepository;
 
     /**
      * Organization Repository constructor.
@@ -47,17 +51,23 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      * @param UserRepositoryInterface $userRepository
      * @param InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository
      * @param ProjectRepositoryInterface $projectRepository
+     * @param UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository
+     * @param OrganizationRoleTypeRepositoryInterface $organizationRoleTypeRepository
      */
     public function __construct(
         Organization $model,
         UserRepositoryInterface $userRepository,
         InvitedOrganizationUserRepositoryInterface $invitedOrganizationUserRepository,
-        ProjectRepositoryInterface $projectRepository
+        ProjectRepositoryInterface $projectRepository,
+        UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository,
+        OrganizationRoleTypeRepositoryInterface $organizationRoleTypeRepository
     ) {
         $this->userRepository = $userRepository;
         parent::__construct($model);
         $this->invitedOrganizationUserRepository = $invitedOrganizationUserRepository;
         $this->projectRepository = $projectRepository;
+        $this->uiOrganizationPermissionMappingRepository = $uiOrganizationPermissionMappingRepository;
+        $this->organizationRoleTypeRepository = $organizationRoleTypeRepository;
     }
 
     /**
@@ -189,17 +199,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             foreach ($organizationUserRoles as $organizationUserRole) {
                 if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
-                    $subOrganizationUserRolesData['name'] = $organizationUserRole->name;
-                    $subOrganizationUserRolesData['display_name'] = $organizationUserRole->display_name;
-                    $subOrganizationUserRolesData['permissions'] = $organizationUserRole->permissions->pluck('id')->toArray();
                     $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
 
-                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+                    $role = $this->addRole($suborganization, $organizationUserRole);
 
                     if ($role) {
                         $organizationUserRoleUsers = $organizationUserRole->users()
-                            ->wherePivot('organization_id', $organization->id)
-                            ->get();
+                                                                          ->wherePivot('organization_id', $organization->id)
+                                                                          ->get();
 
                         foreach ($organizationUserRoleUsers as $organizationUserRoleUser) {
                             $userRoles[$organizationUserRoleUser->id] = ['organization_role_type_id' => $role->id];
@@ -210,12 +217,9 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
 
             foreach ($organizationUserRolesNonAdmin as $organizationUserRole) {
                 if (!isset($subOrganizationUserRoles[$organizationUserRole->id])) {
-                    $subOrganizationUserRolesData['name'] = $organizationUserRole->name;
-                    $subOrganizationUserRolesData['display_name'] = $organizationUserRole->display_name;
-                    $subOrganizationUserRolesData['permissions'] = $organizationUserRole->permissions->pluck('id')->toArray();
                     $subOrganizationUserRoles[$organizationUserRole->id] = $organizationUserRole->id;
 
-                    $role = $this->addRole($suborganization, $subOrganizationUserRolesData);
+                    $role = $this->addRole($suborganization, $organizationUserRole);
                 }
             }
 
@@ -412,11 +416,51 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
      * Add role for particular organization
      *
      * @param Organization $organization
+     * @param object $organizationRole
+     * @return Model
+     */
+    public function addRole($organization, $organizationRole)
+    {
+        try {
+            DB::beginTransaction();
+
+            $role = $organization->roles()->create([
+                'name' => $organizationRole->name,
+                'display_name' => $organizationRole->display_name,
+            ]);
+
+            $role->permissions()->attach($organizationRole->permissions->pluck('id')->toArray());
+
+            // assign ui role permissions
+            $organizationRoleUiPermissions = $organizationRole->uiModulePermissions()
+                                                          ->pluck('ui_module_permission_id')
+                                                          ->toArray();
+
+            $role->uiModulePermissions()->sync($organizationRoleUiPermissions);
+
+            DB::commit();
+
+            return $role;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            DB::rollBack();
+        }
+
+        return false;
+    }
+
+    /**
+     * Add role for particular organization with UI permissions
+     *
+     * @param Organization $organization
      * @param array $data
      * @return Model
      */
-    public function addRole($organization, $data)
+    public function addRoleUiPermissions($organization, $data)
     {
+        $organizationPermissionTypeIds = $this->uiOrganizationPermissionMappingRepository
+        ->getOrganizationPermissionTypeIds($data['permissions']);
+
         try {
             DB::beginTransaction();
 
@@ -425,7 +469,8 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
                 'display_name' => $data['display_name'],
             ]);
 
-            $role->permissions()->attach($data['permissions']);
+            $role->uiModulePermissions()->sync($data['permissions']);
+            $role->permissions()->sync($organizationPermissionTypeIds);
 
             DB::commit();
 
@@ -448,6 +493,26 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         $role = OrganizationRoleType::find($data['role_id']);
         return $role->permissions()->sync($data['permissions']);
+    }
+
+    /**
+     * Update role UI permissions for particular organization
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function updateRoleUiPermissions($data)
+    {
+        $role = $this->organizationRoleTypeRepository->find($data['role_id']);
+        $organizationPermissionTypeIds = $this->uiOrganizationPermissionMappingRepository
+                                        ->getOrganizationPermissionTypeIds($data['permissions']);
+
+        DB::transaction(function () use ($role, $data, $organizationPermissionTypeIds) {
+            $role->uiModulePermissions()->sync($data['permissions']);
+            $role->permissions()->sync($organizationPermissionTypeIds);
+        });
+
+        return true;
     }
 
     /**

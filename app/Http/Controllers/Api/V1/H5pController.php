@@ -51,6 +51,8 @@ class H5pController extends Controller
      *
      * Get a list of the H5Ps.
      *
+     * @param Request $request
+     * 
      * @return JsonResponse
      */
     public function index(Request $request)
@@ -79,6 +81,8 @@ class H5pController extends Controller
 
     /**
      * Create H5P Settings
+     * 
+     * Create H5P Settings in the database.
      *
      * @param Request $request
      * @return Response
@@ -116,6 +120,8 @@ class H5pController extends Controller
 
     /**
      * Store H5P
+     * 
+     * Store H5P Content
      *
      * @param Request $request
      * @return Response
@@ -301,6 +307,8 @@ class H5pController extends Controller
     }
 
     /**
+     * Get H5P Activity
+     * 
      * Get H5P based on Activity
      *
      * @urlParam activity required The Id of a activity Example: 1
@@ -356,6 +364,8 @@ class H5pController extends Controller
     }
 
     /**
+     * Get H5P Independent Activity
+     * 
      * Get H5P based on Independent Activity
      *
      * @urlParam independent_activity required The Id of an independent activity Example: 1

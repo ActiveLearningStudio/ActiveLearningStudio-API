@@ -106,6 +106,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         $queryParams['query_education'] = '';
         $queryParams['query_tags'] = '';
         $queryParams['query_h5p'] = '';
+        $queryParams['query_h5p_version'] = false;
         $queryFrom = 0;
         $querySize = 10;
 
@@ -121,11 +122,11 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         if ($authUser) {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
         } else {
-            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
-            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p)';
+            $query = 'SELECT * FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
+            $countsQuery = 'SELECT COUNT(*) AS total FROM advindependentactivitysearch(:query_text, :query_subject, :query_education, :query_tags, :query_h5p, :query_h5p_version)';
         }
 
         $queryWhere[] = "deleted_at IS NULL";
@@ -184,6 +185,9 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                     $privateOrganizationIdsQueries = implode(' AND ', $privateOrganizationIdsQueries);
                     $organizationIdsShouldQueries[] = "(" . $privateOrganizationIdsQueries . ")";
+
+                    // Consider H5P version while filtering
+                    $queryParams['query_h5p_version'] = true;
                 }
 
                 $organizationIdsShouldQueries = implode(' OR ', $organizationIdsShouldQueries);

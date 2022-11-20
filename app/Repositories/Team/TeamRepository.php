@@ -662,4 +662,25 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         }
         return false;
     }
+
+    /**
+     * @param Project $project
+     * @return bool
+     */
+    public function checkActivityCount($project)
+    {
+        $flag = 0;
+
+        if($project->playlists()->count() === 0) {
+            return $flag;
+        }
+        foreach ($project->playlists as $playlist) {
+            if ($playlist->activities()->count() > 0) {
+                $flag=1;
+                break;
+            }
+        }
+
+        return $flag;
+    }
 }

@@ -30,7 +30,7 @@ use App\Jobs\ExportProjecttoNoovo;
 use App\Services\NoovoCMSService;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 /**
- * @group 14. Team
+ * @group 22. Team
  *
  * APIs for team management
  */
@@ -249,7 +249,7 @@ class TeamController extends Controller
      *
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
-     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
+     * @bodyParam noovo_group_title string Title of a Noovo Group Example: Test_Group
      *
      * @responseFile 201 responses/team/team.json
      *
@@ -323,6 +323,7 @@ class TeamController extends Controller
      *
      * Invite a team member to the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam email string required The email of the user Example: abby@curriki.org
      *
      * @response {
@@ -376,6 +377,8 @@ class TeamController extends Controller
      *
      * Invite a bundle of users to the team.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam users array required The array of the users Example:
      * [{id: 1, first_name: Jean, last_name: Erik, name: "Jean Erik"}, {id: "Kairo@Seed.com", email: "Kairo@Seed.com"}]
      *
@@ -436,6 +439,7 @@ class TeamController extends Controller
      *
      * remove a team member to the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam id integer required The Id of the user Example: 1
      *
      * @response {
@@ -488,6 +492,7 @@ class TeamController extends Controller
      *
      * Add projects to the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam ids array required The list of the project Ids to add Example: [1]
      *
      * @response {
@@ -545,6 +550,7 @@ class TeamController extends Controller
      *
      * Remove a project from the team.
      *
+     * @urlParam team required The Id of a team Example: 1
      * @bodyParam id integer required The Id of the project to remove Example: 1
      *
      * @response {
@@ -595,6 +601,8 @@ class TeamController extends Controller
      *
      * Add members to a specified project of specified team.
      *
+     * @urlParam team required The Id of a team Example: 1
+     * @urlParam project required The Id of a project Example: 1
      * @bodyParam ids array required The list of the member Ids to add Example: [1]
      *
      * @response {
@@ -653,6 +661,8 @@ class TeamController extends Controller
      *
      * Remove member from a specified project of specified team.
      *
+     * @urlParam team required The Id of a team Example: 1
+     * @urlParam project required The Id of a project Example: 1
      * @bodyParam id integer required The Id of the member to remove Example: 1
      *
      * @response {
@@ -707,7 +717,7 @@ class TeamController extends Controller
      * @urlParam team required The Id of a team Example: 1
      * @bodyParam name string required Name of a team Example: Test Team
      * @bodyParam description string required Description of a team Example: This is a test team.
-     * @bodyParam noovo_group_title string title of a Noovo Group Example: Test_Group
+     * @bodyParam noovo_group_title string Title of a Noovo Group Example: Test_Group
      *
      * @responseFile responses/team/team.json
      *
@@ -758,9 +768,9 @@ class TeamController extends Controller
      * Update the specified user role of a team.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam team required The Id of a team Example: 1
-     * @bodyParam role_id inetger required id of a team role Example: 1
-     * @bodyParam user_id inetger required id of a user Example: 12
+     * @urlParam team required The id of a team Example: 1
+     * @bodyParam role_id inetger required The id of a team role Example: 1
+     * @bodyParam user_id inetger required The id of a user Example: 12
      *
      * @responseFile responses/team/team.json
      *
@@ -770,7 +780,8 @@ class TeamController extends Controller
      *   ]
      * }
      *
-     * @param TeamUpdateRequest $teamUpdateRequest
+     * @param TeamUpdateRequest $request
+     * @param Organization $suborganization
      * @param Team $team
      * @return Response
      */
@@ -811,6 +822,7 @@ class TeamController extends Controller
      *   ]
      * }
      *
+     * @param Organization $suborganization
      * @param Team $team
      * @return Response
      */
@@ -848,12 +860,7 @@ class TeamController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Indexing value is already set. Current indexing state of this team: CURRENT_STATE_OF_PROJECT_INDEX"
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
+     *     "Indexing value is already set. Current indexing state of this team: CURRENT_STATE_OF_PROJECT_INDEX",
      *     "Team must be finalized before requesting the indexing."
      *   ]
      * }
@@ -877,6 +884,7 @@ class TeamController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam team required The Id of a team Example: 1
+     * @urlParam project required The Id of a project Example: 1
      *
      * @response {
      *   "message": "Indexing request for this team has been made successfully!"
@@ -888,24 +896,26 @@ class TeamController extends Controller
      *
      * @response 500 {
      *   "errors": [
-     *     "Noovo Client id or group id is missing."
-     *   ]
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
+     *     "Noovo Client id or group id is missing.",
      *     "Team must be finalized before requesting the indexing."
      *   ]
      * }
      *
      * @param Request $request
-     * @param $suborganization
+     * @param Organization $suborganization
      * @param Team $team
-     * @param Team $project
+     * @param Project $project
      * @return Response
      */
     public function exportProjecttoNoovo(Request $request, Organization $suborganization, Team $team, Project $project)
     {
+        $checkActivityCount = $this->teamRepository->checkActivityCount($project);
+
+        if($checkActivityCount === 0) {
+            return response([
+                'message' =>  "No Activity Found.Please create atleast one activity.",
+            ], 500);
+        }
 
         $grade_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'educationLevels');
         $subject_name = $this->lmsSettingRepository->getActivityGrade($project->id, 'subjects');

@@ -22,6 +22,8 @@ class H5pOrganizationResource extends JsonResource
             'account_id' => $this->account_id,
             'api_key' => $this->api_key,
             'unit_path' => $this->unit_path,
+            'msteam_client_id' => $this->msteam_client_id,
+            'msteam_tenant_id' => $this->msteam_tenant_id,
         ];
     }
 }

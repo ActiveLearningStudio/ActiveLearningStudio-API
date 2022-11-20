@@ -13,7 +13,7 @@ use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use App\Repositories\CurrikiGo\Outcome\OutcomeRepositoryInterface;
 
 /**
- * @group 15. CurrikiGo Outcome
+ * @group 14. CurrikiGo Outcome
  *
  * APIs for generating outcomes against students' submissions.
  */
@@ -52,7 +52,7 @@ class OutcomeController extends Controller
         try {
             $service = new LearnerRecordStoreService();
             $submitted = $service->getSubmittedCurrikiStatements($data, 1);
-            
+
             if (count($submitted) > 0) {
                 // Get 'other' activity IRI from the statement
                 // that now has the unique context of the attempt.
@@ -76,7 +76,7 @@ class OutcomeController extends Controller
                             $response[] = new StudentResultResource($summary);
                         }
                     }
-                    
+
                     // Find any interacted/attempted interactions as well
                     $attempted = $service->getAttemptedStatements($data);
                     if ($attempted) {
@@ -88,7 +88,7 @@ class OutcomeController extends Controller
                             }
                         }
                     }
-                   
+
                     // Get Non-scoring Interactions
                     $nonScoringResponse = [];
                     $interacted = $service->getInteractedResultStatements($data);
@@ -102,7 +102,7 @@ class OutcomeController extends Controller
                             }
                         }
                     }
-                    // Since we usually do not have ending-point for most non-scoring items, and 
+                    // Since we usually do not have ending-point for most non-scoring items, and
                     // since normally the LRS will return the oldest statements first
                     // we want to reverse the order of the statements to show on the summary page
                     // so it's first in, first out.
@@ -140,7 +140,7 @@ class OutcomeController extends Controller
                     usort($response, function($a, $b) {
                         return $a['ending-point'] <=> $b['ending-point'];
                     });
-                    
+
                     return response([
                         'summary' => $response,
                         'non-scoring' => $nonScoringResponse
@@ -163,7 +163,7 @@ class OutcomeController extends Controller
     }
 
     /**
-     * Get Student Results Grouped Summary 
+     * Get Student Results Grouped Summary
      *
      * Fetch LRS statements based on parameters, and generate a student result summary
      *

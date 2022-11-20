@@ -105,6 +105,15 @@ interface OrganizationRepositoryInterface extends EloquentRepositoryInterface
      */
     public function addRole($organization, $data);
 
+    /**
+     * Add role for particular organization with UI permissions
+     *
+     * @param Organization $organization
+     * @param array $data
+     * @return Model
+     */
+    public function addRoleUiPermissions($organization, $data);
+
      /**
      * Update permissions for the specified role in particular suborganization
      *

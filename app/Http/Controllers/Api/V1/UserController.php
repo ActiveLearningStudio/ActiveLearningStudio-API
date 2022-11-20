@@ -105,6 +105,8 @@ class UserController extends Controller
      * @responseFile responses/user/users-for-team.json
      *
      * @param UserSearchRequest $userSearchRequest
+     * @param Organization $suborganization
+     * 
      * @return Response
      */
     public function getOrgUsers(UserSearchRequest $userSearchRequest, Organization $suborganization)
@@ -122,8 +124,8 @@ class UserController extends Controller
      * Check if organization user exist in specific organization or not.
      *
      * @urlParam  Organization $suborganization
-     * @bodyParam user_id inetger required user Id Example: 1
-     * @bodyParam organization_id inetger required organization Id Example: 1
+     * @bodyParam user_id inetger required User id Example: 1
+     * @bodyParam organization_id inetger required Organization Id Example: 1
      *
      * @response {
      *   "invited": true,
@@ -136,6 +138,7 @@ class UserController extends Controller
      * }
      *
      * @param UserCheckRequest $userCheckRequest
+     * @param Organization $suborganization
      * @return Response
      */
     public function checkOrgUser(UserCheckRequest $userCheckRequest, Organization $suborganization)
@@ -218,9 +221,33 @@ class UserController extends Controller
     /**
      * Create New Organization User
      *
-     * Create a new user in storage.
+     * Create a new organization user in storage.
      *
-     * @param Request $request
+     * @urlParam suborganization integer required The Id of an suborganization Example: 1
+     * @bodyParam first_name string required First name of a user Example: John
+     * @bodyParam last_name string required Last name of a user Example: Doe
+     * @bodyParam email string required Email of a user Example: doe@gmail.com
+     * @bodyParam password string required Password of a user
+     * @bodyParam role_id integer required Role Id of a user Example: 1
+     * @bodyParam organization_name string Organization name of a user Example: Curriki
+     * @bodyParam organization_type string Type of an organization Example: K-12
+     * @bodyParam website string Website url of a user Example: www.currikistudio.org
+     * @bodyParam job_title string Job title of a user Example: Developer
+     * @bodyParam address string Address of a user Example: 20660 Stevens Creek Blvd #332, Cupertino, CA 95014
+     * @bodyParam send_email boolean True or false for email sending Example: true
+     * @bodyParam message string Message that will send to admin
+     *
+     * @responseFile responses/user/user.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to create user."
+     *   ]
+     * }
+     *
+     * @param SuborganizationAddNewUser $addNewUserrequest
+     * @param Organization $suborganization
+     *
      * @return Response
      */
     public function addNewUser(SuborganizationAddNewUser $addNewUserrequest, Organization $suborganization)
@@ -279,13 +306,23 @@ class UserController extends Controller
      *
      * Update user detail in storage.
      *
-     * @param Request $request
+     * @responseFile responses/user/user.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to update user."
+     *   ]
+     * }
+     *
+     * @param SuborganizationUpdateUserDetail $addNewUserRequest
+     * @param Organization $suborganization
+     *
      * @return Response
      */
-    public function updateUserDetail(SuborganizationUpdateUserDetail $addNewUserrequest, Organization $suborganization)
+    public function updateUserDetail(SuborganizationUpdateUserDetail $addNewUserRequest, Organization $suborganization)
     {
         $this->authorize('updateUser', $suborganization);
-        $data = $addNewUserrequest->validated();
+        $data = $addNewUserRequest->validated();
 
         return \DB::transaction(function () use ($suborganization, $data) {
 
@@ -332,6 +369,12 @@ class UserController extends Controller
      * Get the authenticated user detail.
      *
      * @responseFile responses/user/user.json
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to get user detail."
+     *   ]
+     * }
      *
      * @return Response
      */
@@ -392,22 +435,7 @@ class UserController extends Controller
      * @bodyParam address string Address of a user Example: 20660 Stevens Creek Blvd #332, Cupertino, CA 95014
      * @bodyParam phone_number string Phone number of a user Example: +1234567890
      *
-     * @response {
-     *   "user": {
-     *     "id": 1,
-     *     "first_name": "John",
-     *     "last_name": "Doe",
-     *     "email": "john.doe@currikistudio.org",
-     *     "organization_name": "Curriki",
-     *     "organization_type": null,
-     *     "job_title": "Developer",
-     *     "address": "20660 Stevens Creek Blvd #332, Cupertino, CA 95014",
-     *     "phone_number": "+1234567890",
-     *     "website": "www.currikistudio.org",
-     *     "subscribed": true
-     *   },
-     *   "message": "Profile has been updated successfully."
-     * }
+     * @responseFile responses/user/user.json
      *
      * @response 500 {
      *   "errors": [
@@ -632,7 +660,9 @@ class UserController extends Controller
      *   ]
      * }
      *
+     * @param Request $request
      * @param $notification_id
+     *
      * @return Response
      */
     public function deleteNotification(Request $request, $notification_id)
@@ -727,6 +757,7 @@ class UserController extends Controller
      *
      * @responseFile responses/project/projects.json
      *
+     * @param SharedProjectRequest $request
      * @return Response
      */
     public function sharedProjects(SharedProjectRequest $request)
@@ -746,8 +777,8 @@ class UserController extends Controller
      *
      * Returns the paginated response of the users with basic reporting.
      *
-     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @bodyParam query for getting the search records by name and email. Example: Test
+     * @bodyParam size integer Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam query string For getting the search records by name and email. Example: Test
      *
      * @responseFile responses/admin/user/users_report.json
      *
@@ -764,9 +795,9 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @urlParam suborganization id of an organization. Example: 1
-     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     * @urlParam suborganization required Id of an organization. Example: 1
+     * @bodyParam size integer Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam days_limit Days limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/export-notifications.json
      *
@@ -786,12 +817,13 @@ class UserController extends Controller
      *
      * Get a list of the users exported project
      *
-     * @urlParam suborganization id of an organization. Example: 1
-     * @bodyParam size Limit for getting the paginated records, Default 25. Example: 25
-     * @bodyParam days_limit days Limit for getting the exported project records, Default 10. Example: ?days_limit=5
+     * @urlParam suborganization required Id of an organization. Example: 1
+     * @bodyParam size integer Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam days_limit Days limit for getting the exported project records, Default 10. Example: ?days_limit=5
      *
      * @responseFile responses/notifications/independent-activity-export-notifications.json
      *
+     * @param Organization $suborganization
      * @param Request $request
      * @return Response
      */
@@ -807,28 +839,19 @@ class UserController extends Controller
      *
      * @urlParam $notification_id string required Current id of a notification Example: 123
      *
-     * @response {
+     * @response 200{
      *   "message": "Notification has been deleted successfully."
      * }
      *
      * @response 500 {
      *   "errors": [
+     *     "Not an export notification.",
+     *     "Link has expired.",
      *     "Notification with provided id does not exists."
      *   ]
      * }
      *
-     *  @response 500 {
-     *   "errors": [
-     *     "Link has expired."
-     *   ]
-     * }
-     *
-     *  @response 500 {
-     *   "errors": [
-     *     "Not an export notification."
-     *   ]
-     * }
-     *
+     * @param Request $request
      * @param $notification_id
      * @return Response
      */

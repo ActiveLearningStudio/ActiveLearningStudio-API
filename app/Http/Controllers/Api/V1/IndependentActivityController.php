@@ -7,6 +7,7 @@ use App\Http\Requests\V1\IndependentActivityCreateRequest;
 use App\Http\Requests\V1\IndependentActivityEditRequest;
 use App\Http\Requests\V1\OrganizationIndependentActivityRequest;
 use App\Http\Requests\V1\MoveIndependentActivityIntoPlaylistRequest;
+use App\Http\Resources\V1\H5pOrganizationResource;
 use App\Http\Resources\V1\IndependentActivityResource;
 use App\Http\Resources\V1\IndependentActivityDetailResource;
 use App\Http\Resources\V1\H5pIndependentActivityResource;
@@ -14,6 +15,7 @@ use App\Jobs\CloneIndependentActivity;
 use App\Jobs\CopyIndependentActivityIntoPlaylist;
 use App\Jobs\MoveIndependentActivityIntoPlaylist;
 use App\Jobs\ConvertActvityIntoIndependentActivity;
+use App\Models\H5pBrightCoveVideoContents;
 use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
 use App\Models\Playlist;
@@ -42,7 +44,7 @@ use RecursiveIteratorIterator;
 use ZipArchive;
 
 /**
- * @group 5. Independent Activity
+ * @group 6. Independent Activity
  *
  * APIs for independent activity management
  */
@@ -80,9 +82,9 @@ class IndependentActivityController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search independent activity against Example: Video
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: title
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: title
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/independent-activity/independent-activities.json
      *
@@ -108,9 +110,9 @@ class IndependentActivityController extends Controller
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search independent activity against Example: Video
-     * @bodyParam size integer size to show per page records Example: 10
-     * @bodyParam order_by_column string to sort data with specific column Example: title
-     * @bodyParam order_by_type string to sort data in ascending or descending order Example: asc
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: title
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
      *
      * @responseFile responses/independent-activity/independent-activities.json
      *
@@ -173,13 +175,13 @@ class IndependentActivityController extends Controller
      * @bodyParam title string required The title of a activity Example: Science of Golf: Why Balls Have Dimples
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
-     * @bodyParam order int The order number of a activity Example: 2
-     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam order integer The order number of a activity Example: 2
+     * @bodyParam h5p_content_id integer The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
      * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
      * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
      * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile 201 responses/independent-activity/independent-activity.json
      *
@@ -260,13 +262,13 @@ class IndependentActivityController extends Controller
      * @bodyParam type string required The type of a activity Example: h5p
      * @bodyParam content string required The content of a activity Example:
      * @bodyParam shared bool The status of share of a activity Example: false
-     * @bodyParam order int The order number of a activity Example: 2
-     * @bodyParam h5p_content_id int The Id of H5p content Example: 59
+     * @bodyParam order integer The order number of a activity Example: 2
+     * @bodyParam h5p_content_id integer The Id of H5p content Example: 59
      * @bodyParam thumb_url string The image url of thumbnail Example: null
      * @bodyParam subject_id array The Ids of a subject Example: [1, 2]
      * @bodyParam education_level_id array The Ids of a education level Example: [1, 2]
      * @bodyParam author_tag_id array The Ids of a author tag Example: [1, 2]
-     * @bodyParam organization_visibility_type_id int required Id of the organization visibility type Example: 1
+     * @bodyParam organization_visibility_type_id integer required Id of the organization visibility type Example: 1
      *
      * @responseFile responses/independent-activity/independent-activity.json
      *
@@ -339,9 +341,14 @@ class IndependentActivityController extends Controller
 
     /**
      * Update H5P
+     * 
+     * Update H5P Content
+     * 
+     * @urlParam id required The Id of hp5 content Example: 1
      *
      * @param $request
      * @param int $id
+     * 
      * @return mixed
      * @throws H5PException
      */
@@ -736,18 +743,32 @@ class IndependentActivityController extends Controller
      */
     public function getH5pResourceSettings(IndependentActivity $independent_activity)
     {
-        $this->authorize('view', $independent_activity);
-
         if ($independent_activity->type === 'h5p') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
-            $editor = $h5p::$h5peditor;
+            $settings = $h5p::get_editor($content = null, 'preview');
             $content = $h5p->load_content($independent_activity->h5p_content_id);
+            $content['disable'] = config('laravel-h5p.h5p_preview_flag');
+            $embed = $h5p->get_embed($content, $settings);
+            $embed_code = $embed['embed'];
+            $settings = $embed['settings'];
+            $user_data = null;
+            $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+        }
+
+        $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $independent_activity->h5p_content_id)->first();
+
+        $brightcoveData = null;
+        if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
+            $bcAPISettingRepository = $this->bcAPISettingRepository->find($brightcoveContentData->brightcove_api_setting_id);
+            $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
         }
 
         return response([
-            'h5p' => $content,
-            'independent-activity' => new IndependentActivityResource($independent_activity)
+            'h5p' => $h5p_data,
+            'activity' => new IndependentActivityResource($independent_activity),
+            'organization' => new H5pOrganizationResource($independent_activity->organization),
+            'brightcoveData' => $brightcoveData,
         ], 200);
     }
 
@@ -845,6 +866,9 @@ class IndependentActivityController extends Controller
      *
      * @urlParam independent_activity required id, title, slug of an independent_activity
      *
+     * @param Request $request
+     * @param IndependentActivity $independent_activity
+     * 
      * @return download file download for the independent activity XAPI zip download
      */
     public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
@@ -886,7 +910,8 @@ class IndependentActivityController extends Controller
      * Import the specified independent activity of a user.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @param independent_activity
+     * @param IndependentActivityUploadImportRequest $IndependentActivityUploadImportRequest
+     * @param Organization $suborganization
      * @response {
      *   "message": "Your request to import independent activity has been received and is being processed."
      * }
