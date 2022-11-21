@@ -3,13 +3,11 @@
 namespace App\Models;
 
 use App\Models\Traits\GlobalScope;
-use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 
 class TeamRoleType extends Model
 {
-    use Searchable, CustomSearch, GlobalScope;
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
