@@ -13,7 +13,7 @@ use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use Illuminate\Http\Response;
 
 /**
- * @group 7. Education Level
+ * @group 24. Education Level
  *
  * APIs for education level management
  */
@@ -34,6 +34,8 @@ class EducationLevelController extends Controller
      * Get Education Level
      *
      * Get a list of all education level.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile responses/education-level/education-levels.json
      *
@@ -54,8 +56,9 @@ class EducationLevelController extends Controller
      *
      * Create a new education level.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam name string required The name of a education level Example: Grade A
-     * @bodyParam order int The order number of a education level item Example: 1
+     * @bodyParam order integer The order number of a education level item Example: 1
      *
      * @responseFile 201 responses/education-level/education-level.json
      *
@@ -91,6 +94,7 @@ class EducationLevelController extends Controller
      *
      * Get the specified education level.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam EducationLevel required The Id of a Education Level item Example: 1
      *
      * @responseFile responses/education-level/education-level.json
@@ -118,9 +122,10 @@ class EducationLevelController extends Controller
      *
      * Update the specified education level.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam educationLevel required The Id of a education level Example: 1
      * @bodyParam name string required The name of a education level Example: Grade A
-     * @bodyParam order int The order number of a education level item Example: 1
+     * @bodyParam order integer The order number of a education level item Example: 1
 
      * @responseFile responses/education-level/education-level.json
      *
@@ -158,6 +163,7 @@ class EducationLevelController extends Controller
      *
      * Remove the specified education level.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam educationLevel required The Id of a education level item Example: 1
      *
      * @response {

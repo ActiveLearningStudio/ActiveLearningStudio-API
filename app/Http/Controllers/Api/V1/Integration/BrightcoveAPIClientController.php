@@ -31,24 +31,35 @@ class BrightcoveAPIClientController extends Controller
     }
     
     /**
+     * All Brightcove Account List.
+     * 
      * Get All Brightcove Account List.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @param integer $suborganization
+     * 
      * @return BrightcoveAPISettingCollection
      */
     public function getAccountList($suborganization)
     {
-      $collections = $this->bcAPISettingRepository->getAccountListByOrg($suborganization);
-      return new BrightcoveAPISettingCollection($collections);    
+        $collections = $this->bcAPISettingRepository->getAccountListByOrg($suborganization);
+        return new BrightcoveAPISettingCollection($collections);    
     }
 
     /**
      * Get Brightcove Videos List
+     * 
      * Get the specified Brightcove API setting data.
+     *  
+     * @bodyParam id integer required Valid id of a brightcove api settings table Example: 1
+     * @bodyParam organization_id integer required Valid id of existing user organization Example: 1
+     * @bodyParam query_param string optional Valid brightcove query param Example: query=name=file&limit=0&offset=0
+     * 
      * @param Request $request
-     * @bodyParam id require Valid id of a brightcove api settings table Example: 1
-     * @bodyParam organization_id require Valid id of existing user organization  Example: 1
-     * @bodyParam query_param optional Valid brightcove query param Example: query=name=file&limit=0&offset=0
+     * 
      * @return BrightcoveAPISettingResource
+     * 
      * @throws GeneralException
      */
     public function getVideosList(Request $request)

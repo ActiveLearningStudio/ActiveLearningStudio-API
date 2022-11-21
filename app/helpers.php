@@ -281,19 +281,21 @@ if (!function_exists('formatDuration')) {
     }
 }
 
-if (!function_exists('getVideoMediaSourceIdsArray')) {
+if (!function_exists('getVideoMediaSources')) {
     /**     
-     * Get video media sources ids array
+     * Get video media sources array
      * @return array
      */
-    function getVideoMediaSourceIdsArray()
+    function getVideoMediaSources()
     {
         return [
-                    'youtube' => 2,
-                    'kaltura' => 3,
-                    'safari_montage' => 4,
-                    'brightcove' => 5,
-                    'vimeo' => 6
+                    'my_device' => 'My device',
+                    'youtube' => 'YouTube',
+                    'safari_montage' => 'Safari Montage',
+                    'kaltura' => 'Kaltura',                    
+                    'brightcove' => 'BrightCove',
+                    'vimeo' => 'Vimeo',
+                    'komodo' => 'Komodo'
                ];
     }
 }

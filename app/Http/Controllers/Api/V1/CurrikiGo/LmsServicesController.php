@@ -44,10 +44,15 @@ class LmsServicesController extends Controller
     }
 
     /**
+     * Login to Canvas
+     * 
      * Login to Canvas LMS
+     * 
+     * @urlParam lms required object of lms example: {"id": 1}
      *
      * @param Request $request
      * @param array $lms
+     * 
      * @return Response
      */
     public function login(Request $request, $lms) {
@@ -69,10 +74,15 @@ class LmsServicesController extends Controller
     }
 
     /**
+     * XApi File
+     * 
      * Download XApi File
+     * 
+     * @urlParam activity required Id of an activity Example: 1
      *
      * @param Request $request
      * @param Activity $activity
+     * 
      * @return download file
      */
     public function getXAPIFile(Request $request, Activity $activity) {
@@ -80,11 +90,14 @@ class LmsServicesController extends Controller
     }
 
     /**
+     * Canvas Teacher's data.
+     * 
      * Save Canvas Teacher's data.
      *
      * @param Request $request
      * @param GoogleClassroomRepositoryInterface $googleClassroomRepository
      * @param UserRepositoryInterface $userRepository
+     * 
      * @return Response message
      */
     public function saveLtiTeachersData(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository, UserRepositoryInterface $userRepository)

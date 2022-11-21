@@ -18,7 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 /**
- * @group 1005. Admin/LMS Settings
+ * @group 29. Admin/LMS Settings
  *
  * APIs for lms settings on admin panel.
  */
@@ -40,7 +40,7 @@ class LmsSettingsController extends Controller
      *
      * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
      *
-     * @queryParam Organization $suborganization
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
      * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
      *
@@ -60,8 +60,8 @@ class LmsSettingsController extends Controller
      *
      * Get the specified lms setting data.
      *
-     * @urlParam lms_setting required The Id of a lms setting Example: 1
-     * @urlParam Organization $suborganization
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id required The Id of a lms setting Example: 1
      *
      * @responseFile responses/admin/lms-setting/lms-setting.json
      *
@@ -80,6 +80,8 @@ class LmsSettingsController extends Controller
      *
      * Creates the new lms setting in database.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @response {
      *   "message": "Setting created successfully!",
      *   "data": ["Created Setting Data Array"]
@@ -108,7 +110,8 @@ class LmsSettingsController extends Controller
      *
      * Updates the lms setting in database.
      *
-     * @urlParam lms_setting required The Id of a lms setting Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id required The Id of a lms setting Example: 1
      *
      * @response {
      *   "message": "LMS setting data updated successfully!",
@@ -139,7 +142,8 @@ class LmsSettingsController extends Controller
      *
      * Deletes the lms setting from database.
      *
-     * @urlParam lms_setting required The Id of a lms setting Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id required The Id of a lms setting Example: 1
      *
      * @response {
      *   "message": "LMS setting deleted successfully!",

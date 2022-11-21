@@ -44,7 +44,14 @@ class Organization extends Model
         'secondary_color',
         'tertiary_color',
         'primary_font_family',
-        'secondary_font_family'
+        'secondary_font_family',
+        'msteam_client_id',
+        'msteam_secret_id',
+        'msteam_tenant_id',
+        'msteam_secret_id_expiry',
+        'msteam_project_visibility',
+        'msteam_playlist_visibility',
+        'msteam_activity_visibility'
     ];
 
     /**
@@ -162,7 +169,20 @@ class Organization extends Model
      */
     public function mediaSources()
     {
-        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')->withPivot('h5p_library');
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get the filter based media sources for the organization
+     */
+    public function filterBasedMediaSources()
+    {
+        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withTimestamps()
+                    ->wherePivot('lti_tool_settings_status', true);
     }
 
     /**
@@ -230,5 +250,13 @@ class Organization extends Model
     public function independentActivities()
     {
         return $this->hasMany('App\Models\IndependentActivity', 'organization_id');
+    }
+
+    /**
+     * Get the allowed visibility types for the organization.
+     */
+    public function allowedVisibilityTypes()
+    {
+        return $this->belongsToMany('App\Models\OrganizationVisibilityType', 'allowed_organization_visibility_types');
     }
 }

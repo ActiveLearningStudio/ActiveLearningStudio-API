@@ -14,13 +14,15 @@ use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 
 /**
- * @group 16. XAPI
+ * @group 16. XAPI Cron
  *
  * Cron job for XAPI extract
  */
 class ExtractXAPIJSONController extends Controller
 {
     /**
+     * xAPI extract job script
+     * 
      * Runs the xAPI extract job script
      *
      * @param  ActivityRepositoryInterface  $activityRepository
@@ -160,7 +162,7 @@ class ExtractXAPIJSONController extends Controller
                 $insertData['assignment_id'] = $activityId;
                 $insertData['assignment_name'] = $activityName;
 
-                //added submitted_id and attempt_id column for new summary page 
+                //added submitted_id and attempt_id column for new summary page
                 $insertData['submission_id'] = $groupingInfo['submission'];
                 $insertData['attempt_id'] = $groupingInfo['attempt'];
 
@@ -243,7 +245,7 @@ class ExtractXAPIJSONController extends Controller
                 $inserted = $lrsStatementsRepository->create($insertData);
 
                 if ($inserted) {
-                    //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms.. 
+                    //Capturing the custom verb "summary-curriki" for submit event with full summary rdbms..
                     if ($verb === 'summary-curriki' && !empty($interactionSummaryGlobal)) {
                         if (isset($interactionSummaryGlobal['response']) && !empty($interactionSummaryGlobal['response'])) {
                             $responseObject = (is_array(json_decode($interactionSummaryGlobal['response'], true)) ? json_decode($interactionSummaryGlobal['response'], true) : false);

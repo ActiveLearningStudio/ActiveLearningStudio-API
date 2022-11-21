@@ -40,6 +40,8 @@ class ActivityLayoutController extends Controller
      *
      * Get a list of the activity layouts.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @responseFile responses/activity-layout/activity-layouts.json
 
      * @param SearchActivityLayout $request
@@ -88,6 +90,7 @@ class ActivityLayoutController extends Controller
      *
      * Create a new activity layout.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam title string required The title of a activity layout Example: Audio Recorder
      * @bodyParam description string required The description of a activity layout Example: Record your voice and play back or download a .wav file of your recording.
      * @bodyParam order int The order number of a activity layout Example: 1
@@ -165,7 +168,8 @@ class ActivityLayoutController extends Controller
      *
      * Update the specified activity layout.
      *
-     * @urlParam activity_item required The Id of a activity layout Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityLayout required The Id of a activity layout Example: 1
      * @bodyParam title string required The title of a activity layout Example: Audio Recorder
      * @bodyParam description string required The description of a activity layout Example: Record your voice and play back or download a .wav file of your recording.
      * @bodyParam order int The order number of a activity layout Example: 1

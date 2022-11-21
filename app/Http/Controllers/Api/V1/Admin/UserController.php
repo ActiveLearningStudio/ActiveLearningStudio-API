@@ -18,12 +18,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
-/**
- * @group 1001. Admin/Users
- *
- * APIs for users on admin panel.
- */
 class UserController extends Controller
 {
     private $userRepository;
@@ -57,7 +51,7 @@ class UserController extends Controller
     }
 
     /**
-     * Get Specified User 
+     * Get Specified User
      *
      * Get the specified user data.
      *

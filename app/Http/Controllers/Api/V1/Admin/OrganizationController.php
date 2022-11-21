@@ -12,14 +12,6 @@ use App\Http\Requests\Admin\OrganizationRemoveUser;
 use App\Http\Resources\V1\Admin\UserResource;
 use App\Models\Organization;
 use App\User;
-
-/**
- * @authenticated
- *
- * @group  Admin Organization API
- *
- * Admin APIs for Organization
- */
 class OrganizationController extends Controller
 {
     private $organizationRepository;

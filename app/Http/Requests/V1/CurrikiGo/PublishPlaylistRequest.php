@@ -26,7 +26,9 @@ class PublishPlaylistRequest extends FormRequest
         return [
             'setting_id' => 'required|exists:lms_settings,id',
             'counter' => 'sometimes|integer',
-            'publisher_org' => 'int|nullable'
+            'publisher_org' => 'int|nullable',
+            'creation_type' => 'required|in:modules,assignments',
+            'canvas_course_id' => 'required|integer'
         ];
     }
 }

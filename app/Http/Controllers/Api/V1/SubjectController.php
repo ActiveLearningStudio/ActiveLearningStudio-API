@@ -13,7 +13,7 @@ use App\Repositories\Subject\SubjectRepositoryInterface;
 use Illuminate\Http\Response;
 
 /**
- * @group 7. Subject
+ * @group 25. Subject
  *
  * APIs for subject management
  */
@@ -35,6 +35,8 @@ class SubjectController extends Controller
      *
      * Get a list of all subjects.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * 
      * @responseFile responses/subject/subjects.json
      *
      * @param SearchSubjectRequest $request
@@ -52,8 +54,9 @@ class SubjectController extends Controller
      *
      * Create a new subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam name string required The name of a subject Example: English
-     * @bodyParam order int The order number of a subject item Example: 1
+     * @bodyParam order integer The order number of a subject item Example: 1
      *
      * @responseFile 201 responses/subject/subject.json
      *
@@ -65,7 +68,7 @@ class SubjectController extends Controller
      *
      * @param StoreSubjectRequest $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreSubjectRequest $request, Organization $suborganization)
@@ -89,13 +92,14 @@ class SubjectController extends Controller
      *
      * Get the specified subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam subject required The Id of a subject item Example: 1
      *
      * @responseFile responses/subject/subject.json
      *
      * @param Organization $suborganization
      * @param Subject $subject
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, Subject $subject)
@@ -116,9 +120,10 @@ class SubjectController extends Controller
      *
      * Update the specified subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam subject required The Id of a subject Example: 1
      * @bodyParam name string required The name of a subject Example: English
-     * @bodyParam order int The order number of a subject item Example: 1
+     * @bodyParam order integer The order number of a subject item Example: 1
 
      * @responseFile responses/subject/subject.json
      *
@@ -131,7 +136,7 @@ class SubjectController extends Controller
      * @param UpdateSubjectRequest $request
      * @param Organization $suborganization
      * @param Subject $subject
-     * 
+     *
      * @return Response
      */
     public function update(UpdateSubjectRequest $request, Organization $suborganization, Subject $subject)
@@ -155,6 +160,7 @@ class SubjectController extends Controller
      *
      * Remove the specified subject.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @urlParam subject required The Id of a subject item Example: 1
      *
      * @response {
@@ -169,7 +175,7 @@ class SubjectController extends Controller
      *
      * @param Organization $suborganization
      * @param Subject $subject
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, Subject $subject)
@@ -179,7 +185,7 @@ class SubjectController extends Controller
                 'message' => 'Invalid subject or organization',
             ], 400);
         }
-        
+
         $isDeleted = $this->subjectRepository->delete($subject->id);
 
         if ($isDeleted) {

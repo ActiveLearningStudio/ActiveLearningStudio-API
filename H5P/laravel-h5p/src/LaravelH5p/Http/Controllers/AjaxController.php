@@ -2,9 +2,12 @@
 
 namespace Djoudi\LaravelH5p\Http\Controllers;
 
+use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
+use App\Models\H5pBrightCoveVideoContents;
+use App\Models\Integration\BrightcoveAPISetting;
+use App\Repositories\Integration\BrightcoveAPISettingRepository;
 use Djoudi\LaravelH5p\Events\H5pEvent;
-use Djoudi\LaravelH5p\LaravelH5p;
 use H5PContentValidator;
 use H5PCore;
 use H5PEditorEndpoints;
@@ -12,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Exceptions\GeneralException;
 use stdClass;
 
 class AjaxController extends Controller
@@ -28,7 +30,7 @@ class AjaxController extends Controller
         // headers for CORS
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-        
+
         $machineName = $request->get('machineName');
         $major_version = $request->get('majorVersion');
         $minor_version = $request->get('minorVersion');
@@ -88,6 +90,24 @@ class AjaxController extends Controller
                 $machineName,
                 $majorVersion . '.' . $minorVersion
             ));
+
+         // brightcove settings css
+        if ($machineName === 'H5P.BrightcoveInteractiveVideo') {
+            $brightcoveApiSettingId = $request->get('brightcoveApiSettingId');
+            $contentId = $request->get('contentId');
+            if (empty($brightcoveApiSettingId)) {
+                $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $contentId)->first();
+                if ($brightcoveContentData) {
+                    $brightcoveApiSettingId = $brightcoveContentData->brightcove_api_setting_id;
+                }
+            }
+
+            if ($brightcoveApiSettingId) {
+                $brightcoveAPISettingRepository = new BrightcoveAPISettingRepository(new BrightcoveAPISetting());
+                $brightcoveAPISetting = $brightcoveAPISettingRepository->find($brightcoveApiSettingId);
+                $libraryData->css[] = config('app.url') . $brightcoveAPISetting->css_path;
+            }
+        }
         H5PCore::ajaxSuccess($libraryData, TRUE);
 
     }
@@ -128,6 +148,12 @@ class AjaxController extends Controller
 
     public function files(Request $request)
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            // headers for CORS
+            header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+            return;
+        }
         $fieldParam = json_decode($request->get('field'));
         if (json_last_error() === JSON_ERROR_NONE) {
             $filePath = $request->file('file');
@@ -135,10 +161,10 @@ class AjaxController extends Controller
             $editor = $h5p::$h5peditor;
             $token = csrf_token();
             // $editor->ajax->action(H5PEditorEndpoints::FILES, $request->get('_token'), $request->get('contentId'));
-            $editor->ajax->action(H5PEditorEndpoints::FILES, $token, $request->get('contentId'));     
+            $editor->ajax->action(H5PEditorEndpoints::FILES, $token, $request->get('contentId'));
         } else {
             throw new GeneralException('Invalid json format of field param!');
-        }        
+        }
     }
 
     public function filter(Request $request)
@@ -259,7 +285,7 @@ class AjaxController extends Controller
             $libraryData->title = $library['title'];
 
 
-            $libraries = $this->findLibraryDependencies($machineName, $library, $core, $parameters);
+            $libraries = $this->findLibraryDependencies($machineName, $library, $core, $parameters, $libraryData);
 
             // Temporarily disable asset aggregation
             $aggregateAssets = $core->aggregateAssets;
@@ -314,7 +340,7 @@ class AjaxController extends Controller
         return $libraryData;
     }
 
-    private function findLibraryDependencies($machineName, $library, $core, $parameters)
+    private function findLibraryDependencies($machineName, $library, $core, $parameters, $libraryData)
     {
         // Validate and filter against main library semantics.
         $validator = new H5PContentValidator($core->h5pF, $core);
@@ -329,6 +355,7 @@ class AjaxController extends Controller
 
         $validator->validateLibrary($params, (object) array('options' => array($params->library)));
 
+        $libraryData->filtered = json_encode($params->params);
         $dependencies = $validator->getDependencies();
 
         // Load addons for wysiwyg editors
@@ -341,7 +368,6 @@ class AjaxController extends Controller
                 $dependencies[$key]['library'] = $addon;
             }
         }
-
 
         // Order dependencies by weight
         $orderedDependencies = array();

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 /**
- * @group 6. Activity Type
+ * @group 9. Activity Type
  *
  * APIs for activity type management
  */
@@ -39,12 +39,14 @@ class ActivityTypeController extends Controller
      * Get Activity Types
      *
      * Get a list of the activity types.
+     * 
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      *
      * @responseFile responses/activity-type/activity-types.json
-     * 
+     *
      * @param Request $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function index(Request $request, Organization $suborganization)
@@ -96,21 +98,13 @@ class ActivityTypeController extends Controller
      *
      * Create a new activity type.
      *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam title string required The title of a activity type Example: Audio
-     * @bodyParam order int The order number of a activity type Example: 0
+     * @bodyParam order integer The order number of a activity type Example: 0
      * @bodyParam image string The image url of a activity type Example: /storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
-     * @response 201 {
-     *   "activityType": {
-     *     "id": 1,
-     *     "title": "Audio",
-     *     "order": 0,
-     *     "image": "/storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
-     *     "activityItems": [],
-     *     "created_at": "2020-09-25T16:29:35.000000Z",
-     *     "updated_at": "2020-09-25T16:29:35.000000Z"
-     *   }
-     * }
+     * @responseFile responses/activity-type/activity-type.json
      *
      * @response 500 {
      *   "errors": [
@@ -118,9 +112,9 @@ class ActivityTypeController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param StoreActivityType $request
      * @param Organization $suborganization
-     * 
+     *
      * @return Response
      */
     public function store(StoreActivityType $request, Organization $suborganization)
@@ -144,13 +138,14 @@ class ActivityTypeController extends Controller
      *
      * Get the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityType required The Id of a activity type Example: 1
      *
      * @responseFile responses/activity-type/activity-type.json
      *
      * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
+     *
      * @return Response
      */
     public function show(Organization $suborganization, ActivityType $activityType)
@@ -165,11 +160,12 @@ class ActivityTypeController extends Controller
      *
      * Get a list of activity items of the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam activityType integer required The Id of a activity type Example: 1
      *
      * @responseFile responses/activity-type/activity-items.json
      *
      * @param ActivityType $activityType
+     * 
      * @return Response
      */
     public function items(ActivityType $activityType)
@@ -184,10 +180,12 @@ class ActivityTypeController extends Controller
      *
      * Update the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityType required The Id of a activity type Example: 1
      * @bodyParam title string required The title of a activity type Example: Audio
-     * @bodyParam order int The order number of a activity type Example: 0
+     * @bodyParam order integer The order number of a activity type Example: 0
      * @bodyParam image string The image url of a activity type Example: /storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png
+     * @bodyParam organization_id integer The Id of an organization Example: 1
      *
      * @responseFile responses/activity-type/activity-type.json
      *
@@ -197,10 +195,10 @@ class ActivityTypeController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param UpdateActivityType $request
      * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
+     *
      * @return Response
      */
     public function update(UpdateActivityType $request, Organization $suborganization, ActivityType $activityType)
@@ -224,7 +222,8 @@ class ActivityTypeController extends Controller
      *
      * Remove the specified activity type.
      *
-     * @urlParam activity_type required The Id of a activity type Example: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam activityType required The Id of a activity type Example: 1
      *
      * @response {
      *   "message": "Activity type has been deleted successfully."
@@ -238,7 +237,7 @@ class ActivityTypeController extends Controller
      *
      * @param Organization $suborganization
      * @param ActivityType $activityType
-     * 
+     *
      * @return Response
      */
     public function destroy(Organization $suborganization, ActivityType $activityType)
