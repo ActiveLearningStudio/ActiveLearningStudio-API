@@ -12,7 +12,6 @@ use App\Models\Playlist;
 use App\User;
 use App\Notifications\PlaylistPublishNotification;
 
-
 class PublishPlaylist implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;

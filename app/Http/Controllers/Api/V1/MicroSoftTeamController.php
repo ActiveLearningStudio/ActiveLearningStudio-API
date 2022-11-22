@@ -302,7 +302,7 @@ class MicroSoftTeamController extends Controller
 	 *
 	 * Publish the playlist activities as an assignment
 	 *
-     * @urlParam Project $playlist required The Id of a playlist. Example: 9
+     * @urlParam Playlist playlist required The Id of a playlist. Example: 9
      * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
      *
      * @response  200 {
@@ -310,6 +310,7 @@ class MicroSoftTeamController extends Controller
      *     "Your request to publish playlist [playlist->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
      *   ]
      * }
+     * 
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
      * @param Playlist $playlist
      * @return Response
