@@ -170,7 +170,7 @@ class Organization extends Model
     public function mediaSources()
     {
         return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
-                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status', 'media_sources_show_status')
                     ->withTimestamps();
     }
 
@@ -180,7 +180,7 @@ class Organization extends Model
     public function filterBasedMediaSources()
     {
         return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
-                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status', 'media_sources_show_status')
                     ->withTimestamps()
                     ->wherePivot('lti_tool_settings_status', true);
     }
