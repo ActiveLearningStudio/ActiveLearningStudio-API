@@ -65,21 +65,6 @@ class PlaylistPublishNotification extends Notification
         ];
     }
 
-    
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
-
     /**
      * Return broadcast message type
      * @return string
