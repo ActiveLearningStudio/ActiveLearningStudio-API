@@ -302,7 +302,7 @@ class MicroSoftTeamController extends Controller
 	 *
 	 * Publish the playlist activities as an assignment
 	 *
-     * @urlParam Playlist playlist required The Id of a playlist. Example: 9
+     * @urlParam playlist required The Id of a playlist. Example: 9
      * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
      *
      * @response  200 {
