@@ -136,8 +136,11 @@ class LtiToolSettingsController extends Controller
             $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
             $response = $this->ltiToolSettingRepository->create($data);
             return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
-        } 
-        throw new GeneralException('You have already created these settings!');
+        } else {
+            $mediaName = $checkDuplicate->mediaSources->name;
+            throw new GeneralException('You have already created ' . $mediaName . ' settings!');
+        }
+        
     }
 
     /**
